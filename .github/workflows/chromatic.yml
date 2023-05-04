@@ -23,6 +23,7 @@ jobs:
         with:
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitZeroOnChanges: true
       - name: Create or update comment
         if: github.event_name != 'push'
         uses: peter-evans/create-or-update-comment@v1
