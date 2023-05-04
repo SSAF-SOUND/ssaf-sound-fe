@@ -2,34 +2,24 @@ name: story-book
 on:
   pull_request:
     branches:
-      - dev
+      - main
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: 'Use NodeJS 14'
-        uses: actions/setup-node@v2
+      - name: 'Use NodeJS 16'
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
       - name: 'Install Dependencies'
         run: yarn install
       - name: 'Deploy'
         id: chromatic
         uses: chromaui/action@v1
         with:
-          # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-      - name: Create or update comment
-        if: github.event_name != 'push'
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            Chromatic build-output:
-            - :clipboard: [buildUrl](${{steps.chromatic.outputs.buildUrl}})
-            - :tada: [Storybook preview](${{steps.chromatic.outputs.storybookUrl}})
-          edit-mode: replace
+          exitZeroOnChanges: true
