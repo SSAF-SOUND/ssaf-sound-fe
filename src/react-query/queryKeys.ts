@@ -1,6 +1,6 @@
-// export const queryKeys = {
-//   todos: (id) => ['aaa', {id} ],
-// };
+export const queryKeys = {
+  todos: (id: string) => ['todos', { id }],
+};
 
 // export const endpoints = {
 //   todos: {

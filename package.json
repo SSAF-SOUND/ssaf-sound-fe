@@ -42,8 +42,12 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-storybook": "^0.6.12",
+    "msw": "^1.2.1",
     "prettier": "^2.8.8",
     "react-error-boundary": "^4.0.4",
     "storybook": "^7.0.8"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

@@ -1,13 +1,20 @@
+import type { GetServerSideProps } from 'next/types';
+
 import { Inter } from 'next/font/google';
 import Head from 'next/head';
 
+import { dehydrate } from '@tanstack/react-query';
+
 import Counter from '~/components/Counter';
 import EmotionComponent from '~/components/EmotionComponent';
+import createQueryClient from '~/react-query/queryClient';
 import styles from '~/styles/Home.module.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home() {
+export default function Home({ dehydratedProps }: any) {
+  // console.log(dehydratedProps);
+
   return (
     <>
       <Head>
@@ -26,3 +33,23 @@ export default function Home() {
     </>
   );
 }
+
+const queryFn = async () => {
+  const res = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await res.json();
+  return data as any[];
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const queryClient = createQueryClient();
+  await queryClient.prefetchQuery(['todos'], queryFn);
+
+  const dehydratedProps = dehydrate(queryClient);
+
+  // console.log(dehydratedProps.queries[0].state.data);
+  return {
+    props: {
+      dehydratedProps,
+    },
+  };
+};

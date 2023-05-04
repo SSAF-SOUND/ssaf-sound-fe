@@ -1,7 +1,11 @@
 import { QueryClient } from '@tanstack/react-query';
 
-const createQueryClient = () =>
-  new QueryClient({
+let queryClient: QueryClient;
+
+const createQueryClient = () => {
+  if (queryClient) return queryClient;
+
+  queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: Infinity,
@@ -10,5 +14,8 @@ const createQueryClient = () =>
       },
     },
   });
+
+  return queryClient;
+};
 
 export default createQueryClient;
