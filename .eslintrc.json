@@ -32,12 +32,7 @@
     "import/order": [
       "error",
       {
-        "groups": [
-          "type",
-          "builtin",
-          "external",
-          "internal"
-        ],
+        "groups": ["type", "builtin", "external", "internal"],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true
@@ -50,9 +45,15 @@
             "position": "after"
           }
         ],
-        "pathGroupsExcludedImportTypes": [
-          "type"
-        ]
+        "pathGroupsExcludedImportTypes": ["type"],
+        "warnOnUnassignedImports": true
+      }
+    ],
+    "import/newline-after-import": [
+      "error",
+      {
+        "count": 1,
+        "considerComments": true
       }
     ]
   }
