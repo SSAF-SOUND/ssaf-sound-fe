@@ -20,13 +20,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: '캐싱'
+      - name: 'Cache node_modules'
         id: cache
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys:
+          restore-keys: |
             ${{ runner.os }}-node-
       - name: 'Install Dependencies'
         if: steps.cache.outputs.cache-hit != 'true'
@@ -43,7 +43,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Chromatic build-output
+            ### :tada: Storybook chromatic deployment results
             | Results | |
             | --- | --- |
             | Build result | [Link](${{steps.chromatic.outputs.buildUrl}}) |
