@@ -3,6 +3,11 @@ on:
   pull_request:
     branches:
       - main
+
+permissions:
+  pull-requests: write
+  issues: write
+
 jobs:
   chromatic-deployment:
     runs-on: ubuntu-latest
@@ -41,7 +46,7 @@ jobs:
             Chromatic build-output
             | Results | |
             | --- | --- |
-            | Build result | ${{steps.chromatic.outputs.buildUrl}} |
-            | Storybook preview | ${{steps.chromatic.outputs.storybookUrl}} |
+            | Build result | [Link](${{steps.chromatic.outputs.buildUrl}}) |
+            | Storybook preview | [Link](${{steps.chromatic.outputs.storybookUrl}}) |
             | Component count | ${{steps.chromatic.outputs.componentCount}} |
           edit-mode: replace
