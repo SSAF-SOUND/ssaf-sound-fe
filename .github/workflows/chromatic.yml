@@ -15,7 +15,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: '캐싱'
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFile('**/yarn.lock') }}
+          restore-keys:
+            ${{ runner.os }}-node-
       - name: 'Install Dependencies'
+        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install
       - name: 'Deploy'
         id: chromatic
