@@ -1,0 +1,46 @@
+name: bug
+description: 버그 제보
+title: '[BUG]: '
+labels: [bug]
+assignees: []
+body:
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: 버그가 발생한 브라우저 환경
+      multiple: true
+      options:
+        - 파이어폭스
+        - 크롬
+        - 사파리
+        - 마이크로소프트 엣지
+        - 기타
+  - type: textarea
+    attributes:
+      label: 소개
+      description: |
+        - 어떤 버그인지 설명해주세요. 
+        - (중요) 버그를 재연할 수 있는 과정을 알고 있다면 반드시 작성해주세요.
+        
+        예시:
+          새로고침시 에러가 발생해요.
+          
+          1. `/posts` 페이지에 접속한다.
+          2. 새로고침을 누른다.
+          3. 에러가 발생한다.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 스크린샷
+      description: |
+        (옵션) 버그가 발생한 화면 정보를 보여주세요.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 로그
+      description: |
+        (옵션) 버그 발생시 출력된 로그 정보가 있다면 작성해주세요.
+    validations:
+      required: false
