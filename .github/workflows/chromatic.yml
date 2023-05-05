@@ -1,10 +1,10 @@
-name: story-book
+name: storybook-chromatic-deployment
 on:
   pull_request:
     branches:
       - main
 jobs:
-  deploy:
+  chromatic-deployment:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
@@ -23,3 +23,16 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true
+      - name: Create or update comment
+        if: github.event_name != 'push'
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Chromatic build-output
+            | Results | |
+            | --- | --- |
+            | Build result | ${{steps.chromatic.outputs.buildUrl}} |
+            | Storybook preview | ${{steps.chromatic.outputs.storybookUrl}} |
+            | Component count | ${{steps.chromatic.outputs.componentCount}} |
+          edit-mode: replace
