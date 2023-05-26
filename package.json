@@ -1,5 +1,5 @@
 {
-  "name": "saff-sound-fe",
+  "name": "ssaf-sound-fe",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
+    "@emotion/babel-preset-css-prop": "^11.11.0",
     "@storybook/addon-a11y": "^7.0.8",
     "@storybook/addon-coverage": "^0.0.8",
     "@storybook/addon-essentials": "^7.0.8",
@@ -51,6 +52,7 @@
     "prettier": "^2.8.8",
     "react-error-boundary": "^4.0.4",
     "storybook": "^7.0.8",
+    "tsconfig-paths-webpack-plugin": "^4.0.1",
     "typescript": "5.0.4"
   },
   "msw": {
