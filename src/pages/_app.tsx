@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 
-import createQueryClient from '~/react-query/queryClient';
+import getQueryClient from '~/react-query/common/queryClient';
 import { store } from '~/store';
 import '~/styles/globals.css';
 
@@ -14,7 +14,7 @@ if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(createQueryClient);
+  const [queryClient] = useState(getQueryClient);
 
   return (
     <QueryClientProvider client={queryClient}>
