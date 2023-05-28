@@ -2,7 +2,7 @@ import type { FC, ReactNode } from 'react';
 
 import React from 'react';
 
-import { useAppDispatch, useAppSelector } from '~/hooks/redux';
+import { useAppDispatch, useAppSelector } from '~/store';
 import { incrementByAmount } from '~/store/reducers/counterSlice';
 
 interface CounterProps {
@@ -19,7 +19,11 @@ const Counter: FC<CounterProps> = ({}) => {
   return (
     <section>
       <h2>Redux Test - Counter: {value}</h2>
-      <button type="button" onClick={onClick} style={{ width: 100, height: 30, fontSize: 20 }}>
+      <button
+        type="button"
+        onClick={onClick}
+        style={{ width: 100, height: 30, fontSize: 20 }}
+      >
         +3
       </button>
     </section>

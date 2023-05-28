@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 
 import React, { Suspense } from 'react';
 
-import useIsClient from '~/hooks/ssr/useIsClient';
+import useIsClient from '~/hooks/useIsClient';
 
 export interface SSRSafeSuspenseProps
   extends ComponentPropsWithoutRef<typeof Suspense> {}
