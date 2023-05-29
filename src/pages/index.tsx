@@ -6,7 +6,6 @@ import Head from 'next/head';
 import { useQuery } from '@tanstack/react-query';
 
 import Counter from '~/components/Counter';
-import EmotionComponent from '~/components/EmotionComponent';
 import { prefetch } from '~/react-query/server/prefetch';
 import styles from '~/styles/Home.module.css';
 
@@ -26,9 +25,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        {/* Emotion */}
-        <EmotionComponent />
-
         {/* Redux */}
         <Counter />
       </main>
