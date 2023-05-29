@@ -3,17 +3,19 @@ import type { GetServerSideProps } from 'next/types';
 import { Inter } from 'next/font/google';
 import Head from 'next/head';
 
-import { dehydrate } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import Counter from '~/components/Counter';
 import EmotionComponent from '~/components/EmotionComponent';
-import createQueryClient from '~/react-query/queryClient';
+import { prefetch } from '~/react-query/server/prefetch';
 import styles from '~/styles/Home.module.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home({ dehydratedProps }: any) {
-  // console.log(dehydratedProps);
+export default function Home() {
+  const { data } = useQuery(['example'], queryFn);
+
+  console.log(data);
 
   return (
     <>
@@ -41,15 +43,16 @@ const queryFn = async () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const queryClient = createQueryClient();
-  await queryClient.prefetchQuery(['todos'], queryFn);
+  const dehydrate = prefetch({
+    queryKey: ['example'],
+    queryFn,
+  });
 
-  const dehydratedProps = dehydrate(queryClient);
+  const dehydratedState = await dehydrate();
 
-  // console.log(dehydratedProps.queries[0].state.data);
   return {
     props: {
-      dehydratedProps,
+      dehydratedState,
     },
   };
 };

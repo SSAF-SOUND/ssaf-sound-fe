@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 
 let queryClient: QueryClient;
 
-const createQueryClient = () => {
+const getQueryClient = () => {
   if (queryClient) return queryClient;
 
   queryClient = new QueryClient({
@@ -18,4 +18,4 @@ const createQueryClient = () => {
   return queryClient;
 };
 
-export default createQueryClient;
+export default getQueryClient;
