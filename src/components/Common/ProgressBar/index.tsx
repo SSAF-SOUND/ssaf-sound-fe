@@ -22,18 +22,25 @@ const calForegroundWidth = (min: number, now: number, max: number) => {
 const defaultForeground = '#0066ff';
 const defaultBackground = '#e0e0e0';
 
-const ProgressBar = ({
-  label = '',
-  min = 0,
-  now = min,
-  max = 100,
-  foregroundColor = defaultForeground,
-  backgroundColor = defaultBackground,
-  ...props
-}: ProgressBarProps) => {
+const ProgressBar = (props: ProgressBarProps) => {
+  const {
+    label,
+    min = 0,
+    now = min,
+    max = 100,
+    foregroundColor = defaultForeground,
+    backgroundColor = defaultBackground,
+    ...restProps
+  } = props;
+
   const width = calForegroundWidth(min, now, max);
+
   return (
-    <div style={{ backgroundColor: backgroundColor }} css={baseCss} {...props}>
+    <div
+      style={{ backgroundColor: backgroundColor }}
+      css={baseCss}
+      {...restProps}
+    >
       <div style={{ width, backgroundColor: foregroundColor }} css={barCss}>
         {label}
       </div>
