@@ -24,6 +24,7 @@
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
     "@emotion/babel-preset-css-prop": "^11.11.0",
+    "@faker-js/faker": "^8.0.2",
     "@storybook/addon-a11y": "^7.0.8",
     "@storybook/addon-coverage": "^0.0.8",
     "@storybook/addon-essentials": "^7.0.8",
