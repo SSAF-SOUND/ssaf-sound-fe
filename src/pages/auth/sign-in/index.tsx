@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import SignInButton from 'src/components/SignInButton';
-import Logo from '~/components/Common/Logo';
+import { Logo } from '~/components/Common';
 
 export default function SignInPage() {
   return (
