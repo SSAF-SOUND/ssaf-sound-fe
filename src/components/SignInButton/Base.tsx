@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
