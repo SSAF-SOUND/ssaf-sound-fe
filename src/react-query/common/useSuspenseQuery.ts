@@ -3,7 +3,7 @@ import type { UseQueryOptions } from '@tanstack/react-query/src/types';
 
 import { useQuery } from '@tanstack/react-query';
 
-export default function useSuspenseQuery<
+export const useSuspenseQuery = <
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
@@ -15,7 +15,7 @@ export default function useSuspenseQuery<
   > & {
     initialData?: () => undefined;
   }
-) {
+) => {
   options.suspense = true;
   const query = useQuery<TQueryFnData, TError, TData, TQueryKey>(options);
 
@@ -23,4 +23,4 @@ export default function useSuspenseQuery<
     ...query,
     data: query.data as NonNullable<typeof query.data>,
   };
-}
+};
