@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 
 import Counter from '~/components/Counter';
 import { prefetch } from '~/react-query/server/prefetch';
-import styles from '~/styles/Home.module.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,7 +23,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
+      <main className={`${inter.className}`}>
         {/* Redux */}
         <Counter />
       </main>

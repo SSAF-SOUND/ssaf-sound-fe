@@ -7,7 +7,6 @@ import { Provider as ReduxProvider } from 'react-redux';
 
 import getQueryClient from '~/react-query/common/queryClient';
 import { store } from '~/store';
-import '~/styles/globals.css';
 import GlobalStyles from '~/styles/GlobalStyles';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
