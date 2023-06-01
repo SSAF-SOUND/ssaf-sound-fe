@@ -2,12 +2,12 @@ import type { ComponentPropsWithoutRef } from 'react';
 
 import React, { Suspense } from 'react';
 
-import useIsClient from '~/hooks/ssr/useIsClient';
+import { useIsClient } from '~/hooks/useIsClient';
 
 export interface SSRSafeSuspenseProps
   extends ComponentPropsWithoutRef<typeof Suspense> {}
 
-export default function SSRSafeSuspense(props: SSRSafeSuspenseProps) {
+const SSRSafeSuspense = (props: SSRSafeSuspenseProps) => {
   const isClient = useIsClient();
 
   if (isClient) {
@@ -15,4 +15,6 @@ export default function SSRSafeSuspense(props: SSRSafeSuspenseProps) {
   }
 
   return <>{props.fallback}</>;
-}
+};
+
+export default SSRSafeSuspense;

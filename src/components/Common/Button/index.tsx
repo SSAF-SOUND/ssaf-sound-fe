@@ -17,12 +17,14 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   color?: ButtonColor;
 }
 
-const Button = ({
-  variant = 'text',
-  size = 'md',
-  color = 'primary',
-  ...props
-}: ButtonProps) => {
+const Button = (props: ButtonProps) => {
+  const {
+    variant = 'text',
+    size = 'md',
+    color = 'primary',
+    ...restProps
+  } = props;
+
   return (
     <button
       type="button"
@@ -32,7 +34,7 @@ const Button = ({
         variantsCss[variant],
         colorVarCss[color],
       ]}
-      {...props}
+      {...restProps}
     />
   );
 };

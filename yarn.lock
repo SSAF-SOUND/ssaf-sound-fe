@@ -1914,6 +1914,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "@faker-js/faker@npm:8.0.2"
+  checksum: cf73daf9a50397eb0b3f04a7ef3fbb6f54acc026b167707136a7e58a517fd805a46c9e8c5f017f3022f104a4ff984765daaeee2cb98b3c34646db05c2acad441
+  languageName: node
+  linkType: hard
+
 "@fal-works/esbuild-plugin-global-externals@npm:^2.1.2":
   version: 2.1.2
   resolution: "@fal-works/esbuild-plugin-global-externals@npm:2.1.2"
@@ -13783,51 +13790,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"saff-sound-fe@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "saff-sound-fe@workspace:."
-  dependencies:
-    "@emotion/babel-preset-css-prop": ^11.11.0
-    "@emotion/react": ^11.10.8
-    "@reduxjs/toolkit": ^1.9.5
-    "@storybook/addon-a11y": ^7.0.8
-    "@storybook/addon-coverage": ^0.0.8
-    "@storybook/addon-essentials": ^7.0.8
-    "@storybook/addon-interactions": ^7.0.8
-    "@storybook/addon-links": ^7.0.8
-    "@storybook/blocks": ^7.0.8
-    "@storybook/jest": ^0.1.0
-    "@storybook/nextjs": ^7.0.8
-    "@storybook/react": ^7.0.8
-    "@storybook/test-runner": ^0.10.0
-    "@storybook/testing-library": ^0.0.14-next.2
-    "@tanstack/react-query": ^4.29.5
-    "@tanstack/react-query-devtools": ^4.29.6
-    "@types/node": 18.16.3
-    "@types/prettier": ^2
-    "@types/react": 18.2.3
-    "@types/react-dom": 18.2.3
-    "@typescript-eslint/eslint-plugin": ^5.59.2
-    "@typescript-eslint/parser": ^5.59.2
-    chromatic: ^6.17.4
-    eslint: 8.39.0
-    eslint-config-next: 13.3.4
-    eslint-config-prettier: ^8.8.0
-    eslint-plugin-import: ^2.27.5
-    eslint-plugin-storybook: ^0.6.12
-    msw: ^1.2.1
-    next: 13.3.4
-    prettier: ^2.8.8
-    react: 18.2.0
-    react-dom: 18.2.0
-    react-error-boundary: ^4.0.4
-    react-redux: ^8.0.5
-    storybook: ^7.0.8
-    tsconfig-paths-webpack-plugin: ^4.0.1
-    typescript: 5.0.4
-  languageName: unknown
-  linkType: soft
-
 "sass-loader@npm:^12.4.0":
   version: 12.6.0
   resolution: "sass-loader@npm:12.6.0"
@@ -14279,6 +14241,52 @@ __metadata:
   checksum: 19d79aec211f09b99ec3099b5b2ae2f6e9cdefe50bc91ac4c69144b6d3928a640bb6ae5b3def70c2e85a2c3d9f5ec2719921e3a59d3ca3ef4b2fd1a4656a0df3
   languageName: node
   linkType: hard
+
+"ssaf-sound-fe@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "ssaf-sound-fe@workspace:."
+  dependencies:
+    "@emotion/babel-preset-css-prop": ^11.11.0
+    "@emotion/react": ^11.10.8
+    "@faker-js/faker": ^8.0.2
+    "@reduxjs/toolkit": ^1.9.5
+    "@storybook/addon-a11y": ^7.0.8
+    "@storybook/addon-coverage": ^0.0.8
+    "@storybook/addon-essentials": ^7.0.8
+    "@storybook/addon-interactions": ^7.0.8
+    "@storybook/addon-links": ^7.0.8
+    "@storybook/blocks": ^7.0.8
+    "@storybook/jest": ^0.1.0
+    "@storybook/nextjs": ^7.0.8
+    "@storybook/react": ^7.0.8
+    "@storybook/test-runner": ^0.10.0
+    "@storybook/testing-library": ^0.0.14-next.2
+    "@tanstack/react-query": ^4.29.5
+    "@tanstack/react-query-devtools": ^4.29.6
+    "@types/node": 18.16.3
+    "@types/prettier": ^2
+    "@types/react": 18.2.3
+    "@types/react-dom": 18.2.3
+    "@typescript-eslint/eslint-plugin": ^5.59.2
+    "@typescript-eslint/parser": ^5.59.2
+    chromatic: ^6.17.4
+    eslint: 8.39.0
+    eslint-config-next: 13.3.4
+    eslint-config-prettier: ^8.8.0
+    eslint-plugin-import: ^2.27.5
+    eslint-plugin-storybook: ^0.6.12
+    msw: ^1.2.1
+    next: 13.3.4
+    prettier: ^2.8.8
+    react: 18.2.0
+    react-dom: 18.2.0
+    react-error-boundary: ^4.0.4
+    react-redux: ^8.0.5
+    storybook: ^7.0.8
+    tsconfig-paths-webpack-plugin: ^4.0.1
+    typescript: 5.0.4
+  languageName: unknown
+  linkType: soft
 
 "ssri@npm:^9.0.0":
   version: 9.0.1

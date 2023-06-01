@@ -13,7 +13,7 @@ type QueryOption = { queryKey: QueryKey; queryFn: QueryFn };
  *   const dehydrate = prefetch({ queryKey, queryFn });
  *   const dehydratedState = await dehydrate();
  */
-export function prefetch(option: QueryOption | QueryOption[]) {
+export const prefetch = (option: QueryOption | QueryOption[]) => {
   const queryClient = new QueryClient();
   const options = Array.isArray(option) ? option : [option];
 
@@ -24,4 +24,4 @@ export function prefetch(option: QueryOption | QueryOption[]) {
   );
 
   return () => result.then(() => dehydrate(queryClient));
-}
+};
