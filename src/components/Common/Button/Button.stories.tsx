@@ -15,6 +15,7 @@ type Story = StoryObj<typeof Button>;
 export const Text: Story = {
   args: {
     children: 'Button',
+    variant: 'text',
   },
 };
 
