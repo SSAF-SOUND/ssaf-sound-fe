@@ -8,7 +8,7 @@ const meta: Meta<typeof UserRegister> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ width: 450, border: '1px solid black' }}>
+      <div style={{ maxWidth: 500, border: '1px solid black' }}>
         <Story />
       </div>
     ),

@@ -8,7 +8,7 @@ const meta: Meta<typeof SelectBox> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ width: 500 }}>
+      <div style={{ maxWidth: 500 }}>
         <Story />
       </div>
     ),

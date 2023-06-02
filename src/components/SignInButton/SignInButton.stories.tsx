@@ -6,13 +6,14 @@ const SignInButtonGroup = () => {
   return (
     <div
       style={{
+        maxWidth: 500,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         margin: '0 auto',
+        padding: '60px 0',
         gap: 10,
-        padding: 30,
         width: 350,
       }}
     >
