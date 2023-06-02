@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { HiOutlineArrowLeft } from 'react-icons/hi';
 
 import { ProgressBar } from '~/components/Common';
+import { createBoundClamp } from '~/utils';
 
 import { useSetPhase, usePhase, usePrevPhase } from './context';
 import { IsMember, Year, Campus, IsMajor, Nickname } from './Fields';
@@ -16,14 +17,17 @@ const fields = [
   () => <Nickname />,
 ];
 
+const phaseClamp = createBoundClamp([0, fields.length - 1]);
+
 const UserRegisterRoot = () => {
-  const phase = usePhase();
+  const unSafePhase = usePhase();
   const prevPhase = usePrevPhase();
   const setPhase = useSetPhase();
+  const phase = phaseClamp(unSafePhase);
 
   const Field = fields[phase];
   const handleClickBackwardButton = () => {
-    setPhase(Math.min(prevPhase, phase));
+    setPhase(Math.min(prevPhase, phase - 1));
   };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
@@ -39,7 +43,7 @@ const UserRegisterRoot = () => {
           css={backwardButtonCss}
           onClick={handleClickBackwardButton}
         >
-          <HiOutlineArrowLeft size={50} css={backwardIconCss} />
+          <HiOutlineArrowLeft size={30} css={backwardIconCss} />
         </button>
       </header>
       <div>
