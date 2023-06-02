@@ -5,7 +5,7 @@ import { HiOutlineArrowLeft } from 'react-icons/hi';
 
 import { ProgressBar } from '~/components/Common';
 
-import { useSetPhase, usePhase } from './context';
+import { useSetPhase, usePhase, usePrevPhase } from './context';
 import { IsMember, Year, Campus, IsMajor, Nickname } from './Fields';
 
 const fields = [
@@ -18,11 +18,12 @@ const fields = [
 
 const UserRegisterRoot = () => {
   const phase = usePhase();
+  const prevPhase = usePrevPhase();
   const setPhase = useSetPhase();
 
   const Field = fields[phase];
   const handleClickBackwardButton = () => {
-    setPhase(Math.max(0, phase - 1));
+    setPhase(Math.min(prevPhase, phase));
   };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
