@@ -1,11 +1,12 @@
-import { Noto_Sans_KR } from 'next/font/google';
+// import { Noto_Sans_KR } from 'next/font/google';
 
 import { css } from '@emotion/react';
 
-const sans = Noto_Sans_KR({
-  weight: ['400', '500', '700'],
-  subsets: ['latin'],
-});
+// const notoSansKR = Noto_Sans_KR({
+//   weight: ['400', '500', '700'],
+//   subsets: ['latin'],
+//   display: 'swap',
+// });
 
 const createFontStyleCss = (
   fontSize: number,
@@ -21,11 +22,16 @@ const createFontStyleCss = (
   });
 };
 
-export const fontCss = {
+const fontCss = {
   family: {
-    sans: css(sans.style),
+    // sans: notoSansKR.style,
+    sans: {
+      fontFamily: 'Noto Sans KR, sans-serif',
+    },
   },
   style: {
     // B12: createFontStyleCss(),
   },
 };
+
+export { fontCss };
