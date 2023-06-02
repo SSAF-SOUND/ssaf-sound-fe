@@ -39,7 +39,6 @@ const inputContainerCss = css({
 });
 
 const inputCss = css({
-  width: '100%',
   height: 50,
   borderRadius: 8,
   border: '1px solid #777777',
