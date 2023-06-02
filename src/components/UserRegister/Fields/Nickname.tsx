@@ -17,7 +17,7 @@ const Nickname = () => {
         <p css={inputAlertCss}>익명성을 해치는 닉네임을 피해주세요</p>
       </div>
 
-      <Button css={buttonCss} variant="filled">
+      <Button css={buttonCss} variant="filled" size="lg">
         확인
       </Button>
     </div>
