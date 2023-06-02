@@ -63,6 +63,7 @@ const cssVar = {
   baseColor: toCssVar('baseColor'),
   hoverColor: toCssVar('hoverColor'),
   activeColor: toCssVar('activeColor'),
+  focusColor: toCssVar('activeColor'),
 };
 
 const colorVarCss = {
@@ -70,11 +71,13 @@ const colorVarCss = {
     [cssVar.baseColor.varName]: '#0066ff',
     [cssVar.hoverColor.varName]: '#054cb4',
     [cssVar.activeColor.varName]: '#347ff5',
+    [cssVar.focusColor.varName]: '#94beff',
   }),
   secondary: css({
     [cssVar.baseColor.varName]: '#18c03d',
     [cssVar.hoverColor.varName]: '#0c9b2b',
     [cssVar.activeColor.varName]: '#29e352',
+    [cssVar.focusColor.varName]: '#8bffa7',
   }),
 };
 
@@ -88,6 +91,9 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     '&:active': {
       color: cssVar.activeColor.var,
     },
+    '&:focus': {
+      outline: `2px solid ${cssVar.focusColor.var}`,
+    },
   }),
   filled: css({
     backgroundColor: cssVar.baseColor.var,
@@ -97,6 +103,9 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     },
     '&:active': {
       backgroundColor: cssVar.activeColor.var,
+    },
+    '&:focus': {
+      outline: `2px solid ${cssVar.focusColor.var}`,
     },
   }),
   outlined: css({
@@ -110,6 +119,9 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     '&:active': {
       borderColor: cssVar.activeColor.var,
       color: cssVar.activeColor.var,
+    },
+    '&:focus': {
+      outline: `2px solid ${cssVar.focusColor.var}`,
     },
   }),
 };
