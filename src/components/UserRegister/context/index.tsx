@@ -9,20 +9,22 @@ const PrevPhaseContext = createContext(0);
 const SetPhaseContext = createContext<Dispatch<SetStateAction<number>>>(noop);
 
 interface UserRegisterProviderProps {
+  defaultPhase?: number;
   children: ReactNode;
 }
 
 export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
-  const { children } = props;
-  const [phase, _setPhase] = useState(0);
-  const [prevPhase, setPrevPhase] = useState(0);
-  const setPhase: typeof _setPhase = (param) => {
+  const { children, defaultPhase = 0 } = props;
+  const [phase, setPhase] = useState(defaultPhase);
+  const [prevPhase, setPrevPhase] = useState(defaultPhase);
+
+  const extendedSetPhase: typeof setPhase = (param) => {
     setPrevPhase(phase);
-    _setPhase(param);
+    setPhase(param);
   };
 
   return (
-    <SetPhaseContext.Provider value={setPhase}>
+    <SetPhaseContext.Provider value={extendedSetPhase}>
       <PrevPhaseContext.Provider value={prevPhase}>
         <PhaseContext.Provider value={phase}>{children}</PhaseContext.Provider>
       </PrevPhaseContext.Provider>

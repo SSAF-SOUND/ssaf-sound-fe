@@ -1,9 +1,14 @@
 import { UserRegisterProvider } from './context';
 import UserRegisterRoot from './Root';
 
-const UserRegister = () => {
+interface UserRegisterProps {
+  defaultPhase?: number;
+}
+
+const UserRegister = (props: UserRegisterProps) => {
+  const { defaultPhase } = props;
   return (
-    <UserRegisterProvider>
+    <UserRegisterProvider defaultPhase={defaultPhase}>
       <UserRegisterRoot />
     </UserRegisterProvider>
   );
