@@ -2,7 +2,7 @@ import { css, Global } from '@emotion/react';
 import React, { memo } from 'react';
 
 const GlobalStyles = memo(() => {
-  return <Global styles={resetCss} />;
+  return <Global styles={[resetCss, customBaseCss]} />;
 });
 
 GlobalStyles.displayName = 'GlobalStyles';
@@ -131,6 +131,17 @@ const resetCss = css`
   table {
     border-collapse: collapse;
     border-spacing: 0;
+  }
+`;
+
+const customBaseCss = css`
+  body {
+    min-width: 320px;
+  }
+
+  button {
+    outline: 0;
+    border: 0;
   }
 `;
 
