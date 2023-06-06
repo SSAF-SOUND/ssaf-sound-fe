@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { css } from '@emotion/react';
 import React from 'react';
 
-interface ProgressBarProps {
+export interface ProgressBarProps {
   children?: ReactNode;
   min?: number;
   now?: number;

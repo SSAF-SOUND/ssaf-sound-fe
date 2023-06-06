@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 
+import Layout from '~/components/Layout/MainLayout';
 import getQueryClient from '~/react-query/common/queryClient';
 import { store } from '~/store';
 import GlobalStyles from '~/styles/GlobalStyles';
@@ -22,7 +23,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <Hydrate state={pageProps.dehydratedState}>
         <ReduxProvider store={store}>
           <GlobalStyles />
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ReduxProvider>
       </Hydrate>
     </QueryClientProvider>
