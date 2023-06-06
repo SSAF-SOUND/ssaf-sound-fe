@@ -23,8 +23,11 @@ const Lunch = ({ data }: any) => {
             pathname: '/lunch',
             query: { date: 'today' },
           }}
-          css={[textCss, linkCss]}
-          style={router.query.date === 'today' ? { color: 'blue' } : undefined}
+          css={[
+            textCss,
+            linkCss,
+            router.query.date === 'today' ? highLightCss : undefined,
+          ]}
         >
           오늘
         </Link>
@@ -34,10 +37,11 @@ const Lunch = ({ data }: any) => {
             pathname: '/lunch',
             query: { date: 'tomorrow' },
           }}
-          css={[textCss, linkCss]}
-          style={
-            router.query.date === 'tomorrow' ? { color: 'blue' } : undefined
-          }
+          css={[
+            textCss,
+            linkCss,
+            router.query.date === 'tomorrow' ? highLightCss : undefined,
+          ]}
         >
           내일
         </Link>
@@ -67,6 +71,10 @@ const textCss = css({
 const linkCss = css({
   textDecoration: 'none',
   color: '#000',
+});
+
+const highLightCss = css({
+  color: 'blue',
 });
 
 export default Lunch;
