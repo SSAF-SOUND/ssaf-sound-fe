@@ -2,7 +2,7 @@ import type { ProgressBarProps } from '../Common/ProgressBar';
 
 import { css } from '@emotion/react';
 
-import ProgressBar from '../Common/ProgressBar';
+import { ProgressBar } from '../Common';
 
 interface Props extends ProgressBarProps {}
 const LikeProgress = (props: Props) => {
