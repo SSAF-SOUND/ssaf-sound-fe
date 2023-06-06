@@ -20,7 +20,6 @@ const VoteButton = (props: Props) => {
       onClick={() => {
         // fetch
       }}
-      // dynamic style에 대해 협으이할 필요
       style={{ backgroundColor: checked ? '#9ADFA1' : '#D1D1D1' }}
     >
       <span
@@ -42,11 +41,11 @@ const selfCss = css({
   height: '66px',
   top: '34px',
   left: '223px',
-  'border-radius': '100%',
+  borderRadius: '100%',
   display: 'flex',
-  'align-items': 'center',
-  'justify-content': 'center',
-  'flex-direction': 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexDirection: 'column',
   cursor: 'pointer',
 });
 
