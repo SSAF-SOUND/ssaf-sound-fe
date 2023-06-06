@@ -143,6 +143,10 @@ const customBaseCss = css`
     outline: 0;
     border: 0;
   }
+
+  * {
+    box-sizing: border-box;
+  }
 `;
 
 export default GlobalStyles;
