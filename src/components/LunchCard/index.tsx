@@ -7,32 +7,7 @@ import Order from './Order';
 import Place from './Place';
 import VoteButton from './VoteButton';
 
-interface Data {
-  lunchId?: string;
-  mainMenu: string;
-  extraMenu: string;
-  menuUrl?: string;
-  menuKcal?: string;
-  uploadAt?: Date;
-  // place는 정해지지 않았지만, 필요하다고 생각함.
-  place?: string;
-}
-
-export interface LunchCardProps extends Data {
-  checked?: boolean;
-  now?: number;
-  // fetch data
-}
-
-const baseCss = css({
-  position: 'relative',
-  width: 325,
-  height: 226,
-  backgroundColor: '#999999',
-  borderRadius: 10,
-});
-
-const LunchCard = (props: LunchCardProps) => {
+const LunchCard = (props: any) => {
   const { checked = false, place, mainMenu, extraMenu } = props;
   return (
     <div css={baseCss}>
@@ -44,5 +19,13 @@ const LunchCard = (props: LunchCardProps) => {
     </div>
   );
 };
+
+const baseCss = css({
+  position: 'relative',
+  width: 325,
+  height: 226,
+  backgroundColor: '#999999',
+  borderRadius: 10,
+});
 
 export default LunchCard;
