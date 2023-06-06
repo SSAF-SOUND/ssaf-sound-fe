@@ -9,14 +9,14 @@ const Menu = (props: Props) => {
   const { mainMenu, extraMenu } = props;
 
   return (
-    <div css={baseCss}>
+    <div css={selfCss}>
       <span css={mainCss}>{mainMenu}</span>
       <span css={extraCss}>{extraMenu}</span>
     </div>
   );
 };
 
-const baseCss = css({
+const selfCss = css({
   paddingTop: 70,
   paddingLeft: 27,
   display: 'flex',
