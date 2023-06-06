@@ -10,7 +10,7 @@ import VoteButton from './VoteButton';
 const LunchCard = (props: any) => {
   const { checked = false, place, mainMenu, extraMenu } = props;
   return (
-    <div css={baseCss}>
+    <div css={selfCss}>
       <VoteButton checked={checked} />
       <Order order={1} />
       <Place place="3층" />
@@ -20,7 +20,7 @@ const LunchCard = (props: any) => {
   );
 };
 
-const baseCss = css({
+const selfCss = css({
   position: 'relative',
   width: 325,
   height: 226,
