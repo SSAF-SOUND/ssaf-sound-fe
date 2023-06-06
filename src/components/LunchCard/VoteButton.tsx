@@ -15,7 +15,7 @@ const VoteButton = (props: Props) => {
 
   return (
     <button
-      css={baseCss}
+      css={selfCss}
       disabled={disabled}
       onClick={() => {
         // fetch
@@ -36,7 +36,7 @@ const VoteButton = (props: Props) => {
   );
 };
 
-const baseCss = css({
+const selfCss = css({
   position: 'absolute',
   width: '70px',
   height: '66px',
