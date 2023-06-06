@@ -7,6 +7,7 @@ const Place = ({ place }: Props) => {
   return <span css={placeCss}>{place}</span>;
 };
 
+// todo absolute -> 다른 방식으로
 const placeCss = css({
   position: 'absolute',
   top: 28,
