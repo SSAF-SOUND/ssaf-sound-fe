@@ -15,12 +15,11 @@ const VoteButton = (props: Props) => {
 
   return (
     <button
-      css={selfCss}
+      css={[selfCss, checked ? highLightCss : defaultCss]}
       disabled={disabled}
       onClick={() => {
         // fetch
       }}
-      style={{ backgroundColor: checked ? '#9ADFA1' : '#D1D1D1' }}
     >
       <span
         css={css`
@@ -47,6 +46,14 @@ const selfCss = css({
   justifyContent: 'center',
   flexDirection: 'column',
   cursor: 'pointer',
+});
+
+const highLightCss = css({
+  background: '#9ADFA1',
+});
+
+const defaultCss = css({
+  background: '#D1D1D1',
 });
 
 export default VoteButton;
