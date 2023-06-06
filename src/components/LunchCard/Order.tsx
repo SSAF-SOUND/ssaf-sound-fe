@@ -6,7 +6,7 @@ interface Props {
 
 const Order = ({ order }: Props) => {
   return (
-    <div css={[baseCss]}>
+    <div css={[selfCss]}>
       <span
         css={css`
           position: absolute;
@@ -23,14 +23,14 @@ const Order = ({ order }: Props) => {
   );
 };
 
-const baseCss = css({
+const selfCss = css({
   position: 'absolute',
   width: 0,
   height: 0,
-  'border-top-left-radius': '10px',
-  'border-top': '65px solid #ffa7a7',
-  'border-left': '0px solid transparent',
-  'border-right': '65px solid transparent',
+  borderTopLeftRadius: 10,
+  borderTop: '65px solid #ffa7a7',
+  borderLeft: '0px solid transparent',
+  borderRight: '65px solid transparent',
 });
 
 export default Order;
