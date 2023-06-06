@@ -8,7 +8,7 @@ interface Props extends ProgressBarProps {}
 const LikeProgress = (props: Props) => {
   const { now } = props;
   return (
-    <div css={baseCss}>
+    <div css={selfCss}>
       <span css={textCss}>{now}명이 좋아합니다.</span>
       <ProgressBar
         now={now}
@@ -19,7 +19,7 @@ const LikeProgress = (props: Props) => {
   );
 };
 
-const baseCss = css({
+const selfCss = css({
   margin: '25px 18px 0',
   display: 'flex',
   flexDirection: 'column',
