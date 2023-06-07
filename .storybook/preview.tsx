@@ -1,6 +1,17 @@
 import type { Preview } from '@storybook/react';
+import { Global, css } from '@emotion/react';
 
-import GlobalStyles from '../src/styles/GlobalStyles';
+import AppGlobalStyles from '../src/styles/GlobalStyles';
+
+const StorybookGlobalStyles = () => {
+  return (
+    <Global
+      styles={css`
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+      `}
+    />
+  );
+};
 
 const preview: Preview = {
   parameters: {
@@ -15,7 +26,8 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <div>
-        <GlobalStyles />
+        <StorybookGlobalStyles />
+        <AppGlobalStyles />
         <Story />
       </div>
     ),

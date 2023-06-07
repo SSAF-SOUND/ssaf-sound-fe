@@ -146,6 +146,7 @@ const customBaseCss = css`
 
   * {
     box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
   }
 `;
 
