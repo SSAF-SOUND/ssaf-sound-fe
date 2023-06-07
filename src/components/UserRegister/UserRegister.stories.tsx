@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { MainLayout } from '~/components/Layout';
+
 import UserRegister from './index';
 
 const meta: Meta<typeof UserRegister> = {
@@ -8,9 +10,13 @@ const meta: Meta<typeof UserRegister> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ maxWidth: 500, border: '1px solid black' }}>
+      <MainLayout
+        css={{
+          maxWidth: 500,
+        }}
+      >
         <Story />
-      </div>
+      </MainLayout>
     ),
   ],
   argTypes: {
