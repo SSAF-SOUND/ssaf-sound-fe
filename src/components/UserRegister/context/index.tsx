@@ -18,9 +18,9 @@ export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
   const [phase, setPhase] = useState(defaultPhase);
   const [prevPhase, setPrevPhase] = useState(defaultPhase);
 
-  const extendedSetPhase: typeof setPhase = (param) => {
+  const extendedSetPhase: typeof setPhase = (nextPhase) => {
     setPrevPhase(phase);
-    setPhase(param);
+    setPhase(nextPhase);
   };
 
   return (
@@ -35,6 +35,7 @@ export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
 export const usePhase = () => {
   return useContext(PhaseContext);
 };
+
 export const usePrevPhase = () => {
   return useContext(PrevPhaseContext);
 };
