@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 
 import { SelectBox } from '~/components/Common';
-import { useSetPhase } from '~/components/UserRegister/context';
+import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
 
 const campuses = ['서울', '대전', '광주', '구미', '부산'];
 
 const Campus = () => {
-  const setPhase = useSetPhase();
+  const setPhase = useSetPhaseContext();
   const handleValueChange = () => setPhase((p) => p + 1);
 
   return (

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { SelectBox } from '~/components/Common';
-import { useSetPhase } from '~/components/UserRegister/context';
+import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
 
 const years = Array(10)
@@ -9,7 +9,7 @@ const years = Array(10)
   .map((_, i) => `${i + 1}기`);
 
 const Year = () => {
-  const setPhase = useSetPhase();
+  const setPhase = useSetPhaseContext();
   const handleValueChange = () => setPhase((p) => p + 1);
 
   return (

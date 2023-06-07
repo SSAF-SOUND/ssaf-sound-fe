@@ -6,7 +6,7 @@ import { HiOutlineArrowLeft } from 'react-icons/hi';
 import { ProgressBar } from '~/components/Common';
 import { createBoundClamp } from '~/utils';
 
-import { useSetPhase, usePhase, usePrevPhase } from './context';
+import { useSetPhaseContext, usePhaseContext, usePrevPhaseContext } from './context';
 import { IsMember, Year, Campus, IsMajor, Nickname } from './Fields';
 
 const fields = [
@@ -20,9 +20,9 @@ const fields = [
 const phaseClamp = createBoundClamp([0, fields.length - 1]);
 
 const UserRegisterRoot = () => {
-  const unSafePhase = usePhase();
-  const prevPhase = usePrevPhase();
-  const setPhase = useSetPhase();
+  const unSafePhase = usePhaseContext();
+  const prevPhase = usePrevPhaseContext();
+  const setPhase = useSetPhaseContext();
   const phase = phaseClamp(unSafePhase);
 
   const Field = fields[phase];

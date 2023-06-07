@@ -32,14 +32,14 @@ export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
   );
 };
 
-export const usePhase = () => {
+export const usePhaseContext = () => {
   return useContext(PhaseContext);
 };
 
-export const usePrevPhase = () => {
+export const usePrevPhaseContext = () => {
   return useContext(PrevPhaseContext);
 };
 
-export const useSetPhase = () => {
+export const useSetPhaseContext = () => {
   return useContext(SetPhaseContext);
 };
