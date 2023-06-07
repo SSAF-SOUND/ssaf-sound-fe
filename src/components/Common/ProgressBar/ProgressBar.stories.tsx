@@ -21,13 +21,17 @@ type Story = StoryObj<typeof ProgressBar>;
 
 export const WithoutLabel: Story = {
   args: {
+    min: 0,
     now: 50,
+    max: 100,
   },
 };
 
 export const WithLabel: Story = {
   args: {
+    min: 0,
     now: 50,
+    max: 100,
     label: '50%',
   },
 };

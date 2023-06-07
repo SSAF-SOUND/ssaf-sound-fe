@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import React from 'react';
 
-import LunchLayout from '~/components/Layout/LunchLayout';
+import { LunchLayout } from '~/components/Layout';
 import LunchCard from '~/components/LunchCard';
 
 const Lunch = ({ data }: any) => {
