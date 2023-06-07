@@ -6,18 +6,16 @@ import { Logo } from '~/components/Common';
 export default function SignInPage() {
   return (
     <section>
-      <main>
-        <div css={logoContainerCss}>
-          <Logo />
-        </div>
+      <div css={logoContainerCss}>
+        <Logo />
+      </div>
 
-        <div css={buttonGroupCss}>
-          <SignInButton.Google />
-          <SignInButton.GitHub />
-          <SignInButton.Kakao />
-          <SignInButton.Apple />
-        </div>
-      </main>
+      <div css={buttonGroupCss}>
+        <SignInButton.Google />
+        <SignInButton.GitHub />
+        <SignInButton.Kakao />
+        <SignInButton.Apple />
+      </div>
     </section>
   );
 }
