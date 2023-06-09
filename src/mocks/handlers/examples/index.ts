@@ -1,5 +1,7 @@
 import { rest } from 'msw';
 
+import { API_URL, composeUrls } from '~/utils';
+
 import { mockTodos } from './data';
 
 const mockTodo = mockTodos[0];
@@ -16,7 +18,7 @@ interface GetTodoRouteParams {
 }
 
 const getTodo = rest.get<never, GetTodoRouteParams, GetTodoResponse>(
-  '/example-todos/:userId',
+  composeUrls(API_URL, '/example-todos/:userId'),
   (req, res, ctx) => {
     const { userId } = req.params;
     console.log(userId);

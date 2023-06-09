@@ -3,13 +3,14 @@ import type { ApiSuccessResponse } from '~/types';
 import { rest } from 'msw';
 
 import { endpoints } from '~/react-query/common/queryKeys';
+import { API_URL, composeUrls } from '~/utils';
 
 interface SignInData {
   accessToken: string;
 }
 
 const signIn = rest.post<never, never, ApiSuccessResponse<SignInData>>(
-  endpoints.auth.signIn(),
+  composeUrls(API_URL, endpoints.auth.signIn()),
   (req, res, ctx) => {
     return res(
       ctx.delay(500),
