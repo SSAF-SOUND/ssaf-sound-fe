@@ -7,7 +7,9 @@ import Order from './Order';
 import Place from './Place';
 import VoteButton from './VoteButton';
 
-const LunchCard = (props: any) => {
+export interface LunchCardProps extends Record<string, any> {}
+
+const LunchCard = (props: LunchCardProps) => {
   const { checked = false, place, mainMenu, extraMenu } = props;
   return (
     <div css={selfCss}>
