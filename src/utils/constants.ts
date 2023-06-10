@@ -1,2 +1,2 @@
-const FALLBACK = 'http://ssaf-sound-api.com';
+const FALLBACK = 'http://localhost';
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || FALLBACK;

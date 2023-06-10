@@ -9,9 +9,12 @@ export const noop: Noop = () => {};
  *   // http://example.com/url
  */
 export const composeUrls = (...urls: string[]) => {
-  return urls
+  const composed = urls
     .map((url) => url.trim().replace(/(^\/+)|(\/+$)/g, ''))
     .filter(Boolean)
     .join('/')
     .trim();
+
+  if (/^https?:\/\//.test(composed)) return composed;
+  return '/' + composed;
 };
