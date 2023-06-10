@@ -16,6 +16,7 @@ const signIn = rest.post<never, never, SignInApiData>(
         path: '/auth/reissue',
       }),
       ctx.delay(500),
+      ctx.status(200),
       ctx.json({
         statusCode: 200,
         data: {},
