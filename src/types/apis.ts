@@ -7,7 +7,7 @@ export interface ApiSuccessResponse<D> {
 export interface ApiErrorResponse {
   statusCode: number;
   message: string;
-  data: null;
+  data?: null;
 }
 
 export type ApiResponse<D> = ApiSuccessResponse<D> | ApiErrorResponse;

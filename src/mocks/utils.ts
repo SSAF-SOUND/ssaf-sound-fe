@@ -1,6 +1,8 @@
 import type { RestContext } from 'msw';
 import type { ApiErrorResponse, ApiSuccessResponse } from '~/types';
 
+import { ERRORS } from '~/utils';
+
 /**
  * - 성공 응답에 거의 `data`만 사용되기 때문에 만들었습니다.
  * - `resolver`의 반환값으로 사용하면 됩니다.
@@ -40,4 +42,12 @@ export const mockError = (
     ctx.status(isValidStatusCode ? statusCode : 400),
     ctx.json<ApiErrorResponse>({ statusCode, message }),
   ] as const;
+};
+
+export const mockExpiredTokenError = (ctx: RestContext) => {
+  return mockError(ctx, ERRORS.MESSAGE.EXPIRED_TOKEN);
+};
+
+export const mockInvalidTokenError = (ctx: RestContext) => {
+  return mockError(ctx, ERRORS.MESSAGE.INVALID_TOKEN);
 };
