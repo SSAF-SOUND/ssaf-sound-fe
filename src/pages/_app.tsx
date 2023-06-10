@@ -7,7 +7,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 
 import { MainLayout } from '~/components/Layout';
 import useMSW from '~/hooks/useMSW';
-import getQueryClient from '~/react-query/common/queryClient';
+import { getQueryClient } from '~/react-query/common';
 import { store } from '~/store';
 import GlobalStyles from '~/styles/GlobalStyles';
 

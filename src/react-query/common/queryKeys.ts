@@ -4,6 +4,8 @@ export const queryKeys = {
 
 export const endpoints = {
   auth: {
-    signIn: () => '/login',
+    signIn: () => '/auth/login' as const,
+    signOut: () => '/auth/logout' as const,
+    refresh: () => '/auth/reissue' as const,
   },
 };
