@@ -18,3 +18,9 @@ export const composeUrls = (...urls: string[]) => {
   if (/^https?:\/\//.test(composed)) return composed;
   return '/' + composed;
 };
+
+export const sleep = (ms: number) => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(0), ms);
+  });
+};
