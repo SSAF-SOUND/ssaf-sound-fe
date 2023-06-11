@@ -1,11 +1,11 @@
 export interface ApiSuccessResponse<D> {
-  statusCode: number;
+  code: string;
   message: string;
   data: D;
 }
 
 export interface ApiErrorResponse {
-  statusCode: number;
+  code: string;
   message: string;
   data?: null;
 }

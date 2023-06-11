@@ -13,15 +13,16 @@ export const mockSuccess = <D>(
   ctx: RestContext,
   data: D,
   message = '',
+  code = '',
   statusCode = 200
 ) => {
   const isValidStatusCode = statusCode >= 200 && statusCode < 400;
   return [
     ctx.status(isValidStatusCode ? statusCode : 200),
     ctx.json<ApiSuccessResponse<D>>({
-      statusCode,
-      message,
       data,
+      code,
+      message,
     }),
   ] as const;
 };
@@ -35,12 +36,13 @@ export const mockSuccess = <D>(
 export const mockError = (
   ctx: RestContext,
   message: string,
+  code = '',
   statusCode = 400
 ) => {
   const isValidStatusCode = statusCode >= 400 && statusCode < 600;
   return [
     ctx.status(isValidStatusCode ? statusCode : 400),
-    ctx.json<ApiErrorResponse>({ statusCode, message }),
+    ctx.json<ApiErrorResponse>({ code, message }),
   ] as const;
 };
 
