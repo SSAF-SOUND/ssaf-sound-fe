@@ -1,12 +1,11 @@
 const FALLBACK = 'http://localhost';
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || FALLBACK;
 
-export const ERRORS = {
-  MESSAGE: {
-    EXPIRED_TOKEN: 'Expired',
-    INVALID_TOKEN: 'Invalid',
-  },
+export const RESPONSE = {
+  MESSAGE: {},
   CODE: {
-    BAD_REQUEST: 400,
+    EXPIRED_TOKEN: '10000',
+    INVALID_TOKEN: '10001',
+    TOKEN_NOT_EXISTS: '10002',
   },
 } as const;
