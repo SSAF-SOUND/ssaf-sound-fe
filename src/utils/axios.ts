@@ -70,14 +70,13 @@ const configurePrivateAxiosInterceptors = (
       waitingQueue.add(requestConfig);
 
       return reissueTokenRequest
-        .then(() => retryFailedRequest())
-        .catch(() => Promise.reject(error))
         .finally(() => {
           waitingQueue.delete(requestConfig);
           if (!waitingQueue.size) {
             reissueTokenRequest = undefined;
           }
-        });
+        })
+        .then(() => retryFailedRequest());
     }
     // Edge Case
     // 만료 요청 N개를 보냄 -> N개 전부 실패 -> 가장 처음 실패한 만료요청에 대해서 토큰 재발급을 요청
