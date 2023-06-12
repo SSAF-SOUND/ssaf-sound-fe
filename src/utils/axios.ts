@@ -40,7 +40,7 @@ const configurePrivateAxiosInterceptors = (
    */
   privateAxios.interceptors.response.use(
     undefined,
-    async (error: AxiosError<ApiErrorResponse> | Error) => {
+    (error: AxiosError<ApiErrorResponse> | Error) => {
       const tag = `[In privateAxios response interceptor]`;
       if (!isAxiosError(error) || !error.response?.data || !error.config) {
         console.error(`${tag}: Unknown Error`);
