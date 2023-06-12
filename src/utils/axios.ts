@@ -1,7 +1,7 @@
-import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import type { InternalAxiosRequestConfig, AxiosError } from 'axios';
 import type { ApiErrorResponse } from '~/types';
 
-import axios, { AxiosError } from 'axios';
+import axios, { isAxiosError } from 'axios';
 
 import { reissueToken } from '~/services/auth';
 
@@ -42,11 +42,7 @@ const configurePrivateAxiosInterceptors = (
     undefined,
     async (error: AxiosError<ApiErrorResponse> | Error) => {
       const tag = `[In privateAxios response interceptor]`;
-      if (
-        !(error instanceof AxiosError) ||
-        !error.response?.data ||
-        !error.config
-      ) {
+      if (!isAxiosError(error) || !error.response?.data || !error.config) {
         console.error(`${tag}: Unknown Error`);
         return Promise.reject(error);
       }

@@ -1,6 +1,6 @@
 import type { ApiSuccessResponse } from '~/types';
 
-import { AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 
 import { endpoints } from '~/react-query/common';
 import { publicAxios } from '~/utils';
@@ -31,7 +31,7 @@ export const reissueToken = () => {
   return publicAxios
     .post(endpoint, {}, { withCredentials: true })
     .catch((error) => {
-      if (!(error instanceof AxiosError)) {
+      if (!isAxiosError(error)) {
         console.error(`${tag}: Unknown Error`);
         return Promise.reject(error);
       }
