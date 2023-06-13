@@ -12,8 +12,8 @@ import { RESPONSE } from '~/utils';
 export const mockSuccess = <D>(
   ctx: RestContext,
   data: D,
-  message = '',
   code = '',
+  message = '',
   statusCode = 200
 ) => {
   const isValidStatusCode = statusCode >= 200 && statusCode < 400;
@@ -28,15 +28,15 @@ export const mockSuccess = <D>(
 };
 
 /**
- * - 실패 응답에 거의 `message`만 사용되기 때문에 만들었습니다.
+ * - 실패 응답에 거의 `code`, `message`만 사용되기 때문에 만들었습니다.
  * - `resolver`의 반환값으로 사용하면 됩니다.
  * @example
- *   return res(...mockError(ctx, 'error-message'))
+ *   return res(...mockError(ctx, 'error-code', 'error-message'))
  */
 export const mockError = (
   ctx: RestContext,
-  message: string,
   code = '',
+  message = '',
   statusCode = 400
 ) => {
   const isValidStatusCode = statusCode >= 400 && statusCode < 600;
