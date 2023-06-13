@@ -7,9 +7,12 @@ import { Provider as ReduxProvider } from 'react-redux';
 
 import { MainLayout } from '~/components/Layout';
 import useMSW from '~/hooks/useMSW';
+import { initServerMocks } from '~/mocks';
 import { getQueryClient } from '~/react-query/common';
 import { store } from '~/store';
 import GlobalStyles from '~/styles/GlobalStyles';
+
+initServerMocks();
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(getQueryClient);
