@@ -11,17 +11,11 @@ export type UserRole = keyof typeof userRoles;
 export const role = (target: UserRole) => {
   const targetScore = userRoles[target];
   return {
-    hasHigherAuthority: (compare: UserRole) => {
+    hasHigherAuthorityThan: (compare: UserRole) => {
       return targetScore < userRoles[compare];
     },
-    hasHigherOrEqualAuthority: (compare: UserRole) => {
-      return targetScore <= userRoles[compare];
-    },
-    hasLowerAuthority: (compare: UserRole) => {
+    hasLowerAuthorityThan: (compare: UserRole) => {
       return targetScore > userRoles[compare];
-    },
-    hasLowerOrEqualAuthority: (compare: UserRole) => {
-      return targetScore >= userRoles[compare];
     },
   };
 };
