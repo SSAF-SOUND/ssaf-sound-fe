@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import type { NextPage, NextComponentType, NextPageContext } from 'next/types';
 import type { ReactElement } from 'react';
+import type { UserRole } from '~/services/member';
 
 type NextPageConfig = {
   auth: {
@@ -8,7 +9,7 @@ type NextPageConfig = {
      * - 페이지에 접근하기 위한 유저의 최소 권한입니다.
      * - 명시한 `role`보다 낮은 권한을 가진 유저는 페이지를 볼 수 없습니다.
      */
-    role: string;
+    role: UserRole;
     /**
      * - 유저 정보를 fetch하는 중에 보여줄 UI입니다.
      */
