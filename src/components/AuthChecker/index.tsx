@@ -1,5 +1,5 @@
 import type { NextPageAuthConfig } from 'next/types';
-import type { ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -28,7 +28,7 @@ const AuthChecker = (props: AuthCheckerProps) => {
       router.replace(auth.unauthorized);
     }
 
-    return auth.unauthorized;
+    return <>{auth.unauthorized}</>;
   }
 
   return <>{children}</>;
