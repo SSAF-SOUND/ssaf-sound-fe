@@ -1,20 +1,11 @@
 import type { GetServerSideProps } from 'next/types';
 
-import { Inter } from 'next/font/google';
 import Head from 'next/head';
-
-import { useQuery } from '@tanstack/react-query';
 
 import Counter from '~/components/Counter';
 import { prefetch } from '~/react-query/server/prefetch';
 
-const inter = Inter({ subsets: ['latin'] });
-
-export default function Home() {
-  const { data } = useQuery(['example'], queryFn);
-
-  console.log(data);
-
+const HomePage = () => {
   return (
     <>
       <Head>
@@ -23,13 +14,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${inter.className}`}>
+      <main>
         {/* Redux */}
         <Counter />
       </main>
     </>
   );
-}
+};
+
+export default HomePage;
 
 const queryFn = async () => {
   const res = await fetch('https://jsonplaceholder.typicode.com/todos');
