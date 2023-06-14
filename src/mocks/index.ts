@@ -1,7 +1,7 @@
 export async function initBrowserMocks() {
   if (typeof window !== 'undefined') {
     const { worker } = await import('./browser');
-    worker.start();
+    await worker.start();
   }
 }
 
