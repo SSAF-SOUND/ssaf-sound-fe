@@ -8,7 +8,7 @@ const createFontStyleCss = (
 ) => {
   return css({
     fontSize,
-    lineHeight,
+    lineHeight: `${lineHeight}px`,
     letterSpacing: `${letterSpacing}em`,
     fontWeight,
   });
@@ -17,10 +17,19 @@ const createFontStyleCss = (
 const BOLD = 700;
 const REGULAR = 400;
 
+const fallbacks =
+  '-apple-system, BlinkMacSystemFont, system-ui, Roboto, "Noto Sans KR", sans-serif';
+
 export const fontCss = {
   family: {
     sans: {
       fontFamily: 'Noto Sans KR, sans-serif',
+    },
+    pretendard: {
+      fontFamily: `Pretendard, ${fallbacks}`,
+    },
+    manrope: {
+      fontFamily: `Manrope, ${fallbacks}`,
     },
   },
   style: {
