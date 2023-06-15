@@ -1,6 +1,8 @@
+import type { CustomNextPage } from 'next/types';
+
 import UserRegister from '~/components/UserRegister';
 
-const Register = () => {
+const RegisterPage: CustomNextPage = () => {
   return (
     <div>
       <UserRegister />
@@ -8,4 +10,10 @@ const Register = () => {
   );
 };
 
-export default Register;
+RegisterPage.auth = {
+  role: 'user',
+  loading: <div>Loading</div>,
+  unauthorized: <div>Unauthorized</div>,
+};
+
+export default RegisterPage;

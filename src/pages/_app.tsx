@@ -1,10 +1,11 @@
-import type { AppProps } from 'next/app';
+import type { CustomAppProps } from 'next/app';
 
 import { QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 
+import AuthChecker from '~/components/AuthChecker';
 import { MainLayout } from '~/components/Layout';
 import useMSW from '~/hooks/useMSW';
 import { initServerMocks } from '~/mocks';
@@ -14,7 +15,7 @@ import GlobalStyles from '~/styles/GlobalStyles';
 
 initServerMocks();
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: CustomAppProps) {
   const [queryClient] = useState(getQueryClient);
   const isMSWReady = useMSW();
 
@@ -29,7 +30,13 @@ export default function App({ Component, pageProps }: AppProps) {
         <ReduxProvider store={store}>
           <GlobalStyles />
           <MainLayout>
-            <Component {...pageProps} />
+            {Component.auth ? (
+              <AuthChecker auth={Component.auth}>
+                <Component {...pageProps} />
+              </AuthChecker>
+            ) : (
+              <Component {...pageProps} />
+            )}
           </MainLayout>
         </ReduxProvider>
       </Hydrate>
