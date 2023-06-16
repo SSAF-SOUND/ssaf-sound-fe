@@ -28,7 +28,6 @@ const selfCss = css({
   minHeight: '100vh',
   margin: '0 auto',
   padding: `0 ${gutter.mainLayout / 2}px`,
-  boxShadow: '20px 20px 60px #bebebe, -20px -20px 60px #ffffff',
+  boxShadow: `20px 20px 40px #272b32, -20px -20px 40px #353a44;`,
 });
-
 export default MainLayout;
