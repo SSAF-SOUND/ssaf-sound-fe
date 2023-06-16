@@ -1,5 +1,3 @@
-import type { MouseEventHandler } from 'react';
-
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
