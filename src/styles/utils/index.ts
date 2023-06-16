@@ -4,3 +4,4 @@ export * from './fontCss';
 export * from './pxToRem';
 export * from './flex';
 export * from './constants';
+export * from './palettes';
