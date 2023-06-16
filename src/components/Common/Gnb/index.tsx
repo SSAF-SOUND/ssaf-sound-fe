@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { MdHome, MdArticle, MdGroupAdd, MdAccountCircle } from 'react-icons/md';
 
-import { flex, fontCss, gutter } from '~/styles/utils';
+import { flex, fontCss, palettes } from '~/styles/utils';
 
 const navItems = [
   {
@@ -84,7 +84,7 @@ const itemCss = css(
     width: '25%',
     height: 64,
     ':hover': {
-      color: '#599bff',
+      color: palettes.primary.default,
     },
     transition: 'color 200ms',
   },
@@ -101,9 +101,9 @@ const iconCss = css(
 const textCss = css(fontCss.style.B12);
 
 const iconHighlightCss = {
-  color: '#0066ff',
+  color: palettes.primary.dark,
   ':hover': {
-    color: '#0066ff',
+    color: palettes.primary.dark,
   },
 };
 
