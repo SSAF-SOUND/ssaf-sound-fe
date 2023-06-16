@@ -68,6 +68,7 @@ const baseCss = css(
     },
   },
   fontCss.style.B16,
+  fontCss.family.auto,
   flex('center', 'center', 'row')
 );
 
