@@ -1,71 +1,75 @@
-import type { ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { filter } from '~/styles/utils';
+import { filter, flex, fontCss, palettes } from '~/styles/utils';
+import { API_URL, composeUrls, publicAxios } from '~/utils';
+
+type Provider = 'google' | 'github' | 'kakao' | 'apple';
 
 interface BaseProps {
   icon: ReactNode;
-  backgroundColor: string;
-  textColor: string;
-  providerName: string;
-  signInUrl: string;
+  provider: Provider;
+  text: string;
 }
 
 const Base = (props: BaseProps) => {
-  const { icon, providerName, textColor, backgroundColor } = props;
+  const { icon, text, provider } = props;
   const router = useRouter();
 
-  const handleClick = () => {
+  const handleClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault();
+    /**
+     * LATER
+     *   localStorage.setItem('provider', 'github');
+     *   window.location.href = 'https://api.ssafsound.com/auth/google';
+     */
     // callbackUrl 저장 후 -> 로그인 플로우 완료 후 리다이렉션
     router.push('/auth/callback?code=777777');
   };
 
-  const buttonStyle = {
-    color: textColor,
-    backgroundColor,
-  };
-
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      style={buttonStyle}
-      css={selfCss}
-    >
+    <a onClick={handleClick} css={selfCss}>
       <div css={contentCss}>
-        <div css={iconContainerCss}>{icon}</div>
-        <div>{providerName} 로그인</div>
+        <div css={iconCss}>{icon}</div>
+        <div css={textCss}>{text}</div>
       </div>
-    </button>
+    </a>
   );
 };
 
-const iconWidth = 30;
-
-const selfCss = css({
-  borderRadius: 24,
-  width: '100%',
-  height: 50,
-  cursor: 'pointer',
-  filter: filter.signIn,
-});
+const selfCss = css(
+  {
+    width: '100%',
+    height: 48,
+    cursor: 'pointer',
+    backgroundColor: palettes.background,
+    color: palettes.white,
+    border: '1px solid',
+    borderColor: palettes.white,
+    borderRadius: 40,
+  },
+  flex('center', 'center', 'row')
+);
 
 const contentCss = css({
   position: 'relative',
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
-  gap: 40,
-  left: -iconWidth,
+  gap: 16,
 });
 
-const iconContainerCss = css({
-  width: iconWidth,
-  height: iconWidth,
-  borderRadius: 9999,
-});
+const iconCss = css(flex('center'));
+
+const textCss = css(
+  {
+    minWidth: 120,
+    textAlign: 'left',
+  },
+  fontCss.style.R16
+);
 
 export default Base;
