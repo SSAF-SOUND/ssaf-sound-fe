@@ -3376,7 +3376,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-slot@npm:1.0.2":
+"@radix-ui/react-slot@npm:1.0.2, @radix-ui/react-slot@npm:^1.0.2":
   version: 1.0.2
   resolution: "@radix-ui/react-slot@npm:1.0.2"
   dependencies:
@@ -16207,6 +16207,7 @@ __metadata:
     "@faker-js/faker": ^8.0.2
     "@radix-ui/react-accessible-icon": ^1.0.3
     "@radix-ui/react-select": ^1.2.2
+    "@radix-ui/react-slot": ^1.0.2
     "@reduxjs/toolkit": ^1.9.5
     "@storybook/addon-a11y": ^7.0.8
     "@storybook/addon-coverage": ^0.0.8
