@@ -71,6 +71,11 @@ export const SingleButton: ButtonStory = {
         disable: true,
       },
     },
+    asChild: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 

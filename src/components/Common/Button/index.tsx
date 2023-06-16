@@ -53,7 +53,6 @@ const Button = (props: ButtonProps) => {
 
 const baseCss = css(
   {
-    width: '100%',
     color: palettes.black,
     cursor: 'pointer',
     border: '2px solid transparent',
