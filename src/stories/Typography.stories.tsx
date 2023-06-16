@@ -8,7 +8,7 @@ interface TypographyProps {
 }
 
 const Typography = (props: TypographyProps) => {
-  const { language = 'ko', color = '#000000' } = props;
+  const { language = 'ko', color = '#ffffff' } = props;
   const text = language === 'ko' ? '쌉사운드' : 'SSAFSOUND';
   return (
     <div
