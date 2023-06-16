@@ -51,6 +51,7 @@ const selfCss = css(
     borderColor: palettes.white,
     borderRadius: 40,
   },
+  fontCss.family.auto,
   flex('center', 'center', 'row')
 );
 
