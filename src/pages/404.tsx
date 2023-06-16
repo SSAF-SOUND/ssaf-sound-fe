@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
@@ -9,7 +10,7 @@ import { flex, fontCss, palettes } from '~/styles/utils';
 const NotFoundPage = () => {
   return (
     <div css={selfCss}>
-      <div css={topBoxCss}>
+      <div css={topContainerCss}>
         <h2 css={titleCss}>잘못된 페이지예요!</h2>
         <Image src={characterLargeImage} alt="잘못된 페이지 이미지" />
         <div css={descriptionCss}>
@@ -17,12 +18,16 @@ const NotFoundPage = () => {
           <p>주소가 정확한지 확인해주세요.</p>
         </div>
       </div>
-      <div>
-        <Button css={css({ width: '100%' })}>메인 페이지로 돌아가기</Button>
+      <div css={bottomContainerCss}>
+        <Button asChild>
+          <Link href="/">메인 페이지로 돌아가기</Link>
+        </Button>
       </div>
     </div>
   );
 };
+
+export default NotFoundPage;
 
 const selfCss = css(
   {
@@ -32,10 +37,9 @@ const selfCss = css(
   flex('center', 'space-between')
 );
 
-const topBoxCss = css(flex('center', 'space-between', 'column', 34));
+const topContainerCss = css(flex('center', 'space-between', 'column', 34));
+const bottomContainerCss = css({ width: '100%' });
 
 const descriptionCss = css({ textAlign: 'center' }, fontCss.style.R14);
 
 const titleCss = css({ color: palettes.primary.default }, fontCss.style.B28);
-
-export default NotFoundPage;
