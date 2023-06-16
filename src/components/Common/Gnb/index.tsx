@@ -69,6 +69,8 @@ const selfCss = css({
   overflow: 'hidden',
   boxShadow: '0px -7px 18px rgba(0, 0, 0, 0.05)',
   padding: '0 20px',
+  background: palettes.white,
+  color: palettes.black,
 });
 
 const itemContainerCss = css(
