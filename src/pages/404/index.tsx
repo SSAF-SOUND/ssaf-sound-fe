@@ -32,7 +32,8 @@ export default NotFoundPage;
 const selfCss = css(
   {
     padding: '25vh 20px 15vh',
-    height: '100vh',
+    minHeight: '100vh',
+    height: 'max-content',
   },
   flex('center', 'space-between')
 );
