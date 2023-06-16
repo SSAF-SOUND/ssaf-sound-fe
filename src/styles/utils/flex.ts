@@ -56,7 +56,7 @@ export function flex(options?: FlexOptions): SerializedStyles;
 export function flex(
   alignItems: AlignItems | FlexOptions = '',
   justifyContent: JustifyContent = '',
-  flexDirection: FlexDirection = 'row',
+  flexDirection: FlexDirection = 'column',
   gap: Gap = 0,
   flexWrap: FlexWrap = 'nowrap'
 ) {
@@ -78,7 +78,7 @@ export function inlineFlex(options?: FlexOptions): SerializedStyles;
 export function inlineFlex(
   alignItems: AlignItems | FlexOptions = '',
   justifyContent: JustifyContent = '',
-  flexDirection: FlexDirection = 'row',
+  flexDirection: FlexDirection = 'column',
   gap: Gap = 0,
   flexWrap: FlexWrap = 'nowrap'
 ) {

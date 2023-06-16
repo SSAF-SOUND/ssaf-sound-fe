@@ -95,7 +95,7 @@ const iconCss = css(
   {
     fontSize: 24,
   },
-  flex('center', 'center')
+  flex('center', 'center', 'row')
 );
 
 const textCss = css(fontCss.style.B12);
