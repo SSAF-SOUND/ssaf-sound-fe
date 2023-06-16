@@ -1,7 +1,7 @@
 import { css, Global } from '@emotion/react';
 import React, { memo } from 'react';
 
-import { palettes } from '~/styles/utils';
+import { fontCss, palettes } from '~/styles/utils';
 
 const GlobalStyles = memo(() => {
   return <Global styles={[resetCss, customBaseCss]} />;
@@ -150,7 +150,8 @@ const customBaseCss = css`
 
   * {
     box-sizing: border-box;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: Manrope, Pretendard,
+      '-apple-system, BlinkMacSystemFont, system-ui, Roboto, "Noto Sans KR", sans-serif';
   }
 
   a {

@@ -22,8 +22,8 @@ const fallbacks =
 
 export const fontCss = {
   family: {
-    sans: {
-      fontFamily: 'Noto Sans KR, sans-serif',
+    auto: {
+      fontFamily: `Manrope, Pretendard, ${fallbacks}`,
     },
     pretendard: {
       fontFamily: `Pretendard, ${fallbacks}`,
