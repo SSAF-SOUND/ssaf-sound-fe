@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { fontCss } from '~/styles/utils';
+import { fontCss, palettes } from '~/styles/utils';
 
 interface TypographyProps {
   language?: 'ko' | 'en';
@@ -8,7 +8,7 @@ interface TypographyProps {
 }
 
 const Typography = (props: TypographyProps) => {
-  const { language = 'ko', color = '#ffffff' } = props;
+  const { language = 'ko', color = palettes.white } = props;
   const text = language === 'ko' ? '쌉사운드' : 'SSAFSOUND';
   return (
     <div
@@ -51,6 +51,6 @@ type TypographyStory = StoryObj<typeof Typography>;
 export const Default: TypographyStory = {
   args: {
     language: 'ko',
-    color: '#000000',
+    color: palettes.white,
   },
 };
