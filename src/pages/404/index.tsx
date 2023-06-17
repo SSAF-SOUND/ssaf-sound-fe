@@ -12,7 +12,7 @@ const NotFoundPage = () => {
     <div css={selfCss}>
       <div css={topContainerCss}>
         <h2 css={titleCss}>잘못된 페이지예요!</h2>
-        <Image src={characterLargeImage} alt="잘못된 페이지 이미지" />
+        <Image src={characterLargeImage} alt="잘못된 페이지 이미지" priority />
         <div css={descriptionCss}>
           <p>요청하신 페이지를 찾을 수 없습니다.</p>
           <p>주소가 정확한지 확인해주세요.</p>

@@ -11,7 +11,7 @@ const SignInPage = () => {
   return (
     <section css={selfCss}>
       <div css={logoContainerCss}>
-        <Image src={welcomeImage} alt="" />
+        <Image src={welcomeImage} alt="로그인 페이지 캐릭터 이미지" priority />
         <Logo size="lg" />
       </div>
 
