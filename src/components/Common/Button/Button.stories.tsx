@@ -14,30 +14,36 @@ const ButtonGroup = (props: ButtonGroupProps) => {
     'primary',
     'secondary',
     'grey',
+    'success',
     'warning',
     'error',
-    'white',
   ] as const;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div
+      style={{
+        fontFamily: 'Manrope',
+        display: 'grid',
+        gridTemplateColumns: `repeat(${colors.length}, 80px)`,
+        gridTemplateRows: `repeat(${sizes.length}, auto)`,
+        gap: 20,
+        justifyItems: 'center',
+      }}
+    >
+      {colors.map((color) => (
+        <span>{color}</span>
+      ))}
       {sizes.map((size) => {
         return (
-          <div key={size} style={{ display: 'flex', gap: 20 }}>
+          <>
             {colors.map((color) => {
               return (
-                <Button
-                  key={color}
-                  size={size}
-                  variant={variant}
-                  color={color}
-                  style={{ textTransform: 'capitalize' }}
-                >
-                  {color}
+                <Button key={color} size={size} variant={variant} color={color}>
+                  버튼
                 </Button>
               );
             })}
-          </div>
+          </>
         );
       })}
     </div>
@@ -57,7 +63,7 @@ type ButtonGroupStory = StoryObj<typeof ButtonGroup>;
 export const SingleButton: ButtonStory = {
   name: 'Button',
   args: {
-    children: 'Button',
+    children: '버튼',
     variant: 'filled',
     size: 'sm',
     color: 'primary',

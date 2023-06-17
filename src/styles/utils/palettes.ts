@@ -11,8 +11,8 @@ export const palettes = {
   },
   success: {
     default: '#43E26B',
-    dark: '#DDFFE6',
-    light: '#028E25',
+    dark: '#028E25',
+    light: '#DDFFE6',
   },
   warning: {
     default: '#FFBF69',

@@ -14,9 +14,9 @@ type ButtonColor =
   | 'primary'
   | 'secondary'
   | 'grey'
+  | 'success'
   | 'warning'
-  | 'error'
-  | 'white';
+  | 'error';
 
 export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   children?: ReactNode;
@@ -59,7 +59,7 @@ const baseCss = css(
     borderRadius: 10,
     padding: '0 10px',
     margin: 0,
-    transition: 'color 200ms, background-color 200ms',
+    transition: 'color 200ms, background-color 200ms, border-color 200ms',
     '&:disabled': {
       cursor: 'initial',
       pointerEvents: 'none',
@@ -78,106 +78,85 @@ const heightsCss: Record<ButtonSize, SerializedStyles> = {
 };
 
 const cssVar = {
-  baseColor: toCssVar('baseColor'),
-  hoverColor: toCssVar('hoverColor'),
-  activeColor: toCssVar('activeColor'),
-  focusColor: toCssVar('activeColor'),
+  mainColor: toCssVar('mainColor'),
+  mainLightColor: toCssVar('mainLightColor'),
+  mainDarkColor: toCssVar('mainDarkColor'),
 };
 
 const createButtonColorCss = (
-  base: string,
-  hover: string,
-  active: string,
-  focus: string
+  main: string,
+  mainLight: string,
+  mainDark: string
 ) => {
   return css({
-    [cssVar.baseColor.varName]: base,
-    [cssVar.hoverColor.varName]: hover,
-    [cssVar.activeColor.varName]: active,
-    [cssVar.focusColor.varName]: focus,
+    [cssVar.mainColor.varName]: main,
+    [cssVar.mainLightColor.varName]: mainLight,
+    [cssVar.mainDarkColor.varName]: mainDark,
   });
 };
 
 const colorVarCss = {
   primary: createButtonColorCss(
     palettes.primary.default,
-    palettes.primary.dark,
-    palettes.primary.default,
-    palettes.primary.light
+    palettes.primary.light,
+    palettes.primary.dark
   ),
   secondary: createButtonColorCss(
     palettes.secondary.default,
-    palettes.secondary.dark,
-    palettes.secondary.default,
-    palettes.secondary.light
+    palettes.secondary.light,
+    palettes.secondary.dark
   ),
-  grey: createButtonColorCss(
-    palettes.grey3,
-    palettes.grey2,
-    palettes.grey3,
-    palettes.grey4
-  ),
+  grey: createButtonColorCss(palettes.grey3, palettes.grey4, palettes.grey2),
   warning: createButtonColorCss(
     palettes.warning.default,
-    palettes.warning.dark,
-    palettes.warning.default,
-    palettes.warning.light
+    palettes.warning.light,
+    palettes.warning.dark
   ),
   error: createButtonColorCss(
     palettes.error.default,
-    palettes.error.dark,
-    palettes.error.default,
-    palettes.error.light
+    palettes.error.light,
+    palettes.error.dark
   ),
-  white: createButtonColorCss(
-    palettes.grey5,
-    palettes.grey3,
-    palettes.grey5,
-    palettes.white
+  success: createButtonColorCss(
+    palettes.success.default,
+    palettes.success.light,
+    palettes.success.dark
   ),
 };
 
 const variantsCss: Record<ButtonVariant, SerializedStyles> = {
   text: css({
     backgroundColor: 'transparent',
-    color: cssVar.baseColor.var,
-    '&:hover': {
-      color: cssVar.hoverColor.var,
+    color: cssVar.mainColor.var,
+    '&:hover': { color: cssVar.mainLightColor.var },
+    '&:focus': {
+      backgroundColor: cssVar.mainDarkColor.var,
+      color: palettes.white,
     },
     '&:active': {
-      color: cssVar.activeColor.var,
-    },
-    '&:focus': {
-      outline: `2px solid ${cssVar.focusColor.var}`,
+      backgroundColor: cssVar.mainColor.var,
+      color: palettes.white,
     },
   }),
   filled: css({
-    backgroundColor: cssVar.baseColor.var,
-    '&:hover': {
-      backgroundColor: cssVar.hoverColor.var,
-    },
+    backgroundColor: cssVar.mainColor.var,
+    '&:hover': { borderColor: palettes.white },
     '&:active': {
-      backgroundColor: cssVar.activeColor.var,
+      backgroundColor: cssVar.mainDarkColor.var,
+      color: palettes.white,
     },
-    '&:focus': {
-      outline: `3px solid ${cssVar.focusColor.var}`,
-    },
+    '&:focus': { outline: `3px solid ${cssVar.mainLightColor.var}` },
   }),
   outlined: css({
-    backgroundColor: 'transparent',
-    borderColor: cssVar.baseColor.var,
-    color: cssVar.baseColor.var,
-    '&:hover': {
-      borderColor: cssVar.hoverColor.var,
-      color: cssVar.hoverColor.var,
-    },
+    backgroundColor: palettes.white,
+    color: palettes.black,
+    '&:hover': { borderColor: cssVar.mainColor.var },
     '&:active': {
-      borderColor: cssVar.activeColor.var,
-      color: cssVar.activeColor.var,
+      backgroundColor: cssVar.mainDarkColor.var,
+      borderColor: 'transparent',
+      color: palettes.white,
     },
-    '&:focus': {
-      outline: `2px solid ${cssVar.focusColor.var}`,
-    },
+    '&:focus': { outline: `3px solid ${cssVar.mainColor.var}` },
   }),
 };
 
