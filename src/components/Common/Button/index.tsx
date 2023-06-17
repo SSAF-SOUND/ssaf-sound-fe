@@ -2,32 +2,44 @@ import type { SerializedStyles } from '@emotion/react';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
+import { Slot } from '@radix-ui/react-slot';
 import React from 'react';
 
+import { flex, fontCss, palettes } from '~/styles/utils';
 import { toCssVar } from '~/styles/utils/toCssVar';
 
 type ButtonVariant = 'text' | 'filled' | 'outlined';
 type ButtonSize = 'sm' | 'md' | 'lg';
-type ButtonColor = 'primary' | 'secondary';
+type ButtonColor =
+  | 'primary'
+  | 'secondary'
+  | 'grey'
+  | 'warning'
+  | 'error'
+  | 'white';
 
 export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   children?: ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
   color?: ButtonColor;
+  asChild?: boolean;
 }
 
 const Button = (props: ButtonProps) => {
   const {
-    variant = 'text',
+    variant = 'filled',
     size = 'md',
     color = 'primary',
+    asChild = false,
     ...restProps
   } = props;
 
+  const Component = asChild ? Slot : 'button';
+  if (Component === 'button') restProps.type = 'button';
+
   return (
-    <button
-      type="button"
+    <Component
       css={[
         baseCss,
         heightsCss[size],
@@ -39,19 +51,25 @@ const Button = (props: ButtonProps) => {
   );
 };
 
-const baseCss = css({
-  cursor: 'pointer',
-  border: '1px solid transparent',
-  borderRadius: 10,
-  padding: '0 10px',
-  margin: 0,
-  transition: 'color 200ms, background-color 200ms',
-  '&:disabled': {
-    cursor: 'initial',
-    pointerEvents: 'none',
-    opacity: 0.5,
+const baseCss = css(
+  {
+    color: palettes.black,
+    cursor: 'pointer',
+    border: '2px solid transparent',
+    borderRadius: 10,
+    padding: '0 10px',
+    margin: 0,
+    transition: 'color 200ms, background-color 200ms',
+    '&:disabled': {
+      cursor: 'initial',
+      pointerEvents: 'none',
+      opacity: 0.5,
+    },
   },
-});
+  fontCss.style.B16,
+  fontCss.family.auto,
+  flex('center', 'center', 'row')
+);
 
 const heightsCss: Record<ButtonSize, SerializedStyles> = {
   sm: css({ height: 32 }),
@@ -66,19 +84,57 @@ const cssVar = {
   focusColor: toCssVar('activeColor'),
 };
 
+const createButtonColorCss = (
+  base: string,
+  hover: string,
+  active: string,
+  focus: string
+) => {
+  return css({
+    [cssVar.baseColor.varName]: base,
+    [cssVar.hoverColor.varName]: hover,
+    [cssVar.activeColor.varName]: active,
+    [cssVar.focusColor.varName]: focus,
+  });
+};
+
 const colorVarCss = {
-  primary: css({
-    [cssVar.baseColor.varName]: '#0066ff',
-    [cssVar.hoverColor.varName]: '#054cb4',
-    [cssVar.activeColor.varName]: '#347ff5',
-    [cssVar.focusColor.varName]: '#94beff',
-  }),
-  secondary: css({
-    [cssVar.baseColor.varName]: '#18c03d',
-    [cssVar.hoverColor.varName]: '#0c9b2b',
-    [cssVar.activeColor.varName]: '#29e352',
-    [cssVar.focusColor.varName]: '#8bffa7',
-  }),
+  primary: createButtonColorCss(
+    palettes.primary.default,
+    palettes.primary.dark,
+    palettes.primary.default,
+    palettes.primary.light
+  ),
+  secondary: createButtonColorCss(
+    palettes.secondary.default,
+    palettes.secondary.dark,
+    palettes.secondary.default,
+    palettes.secondary.light
+  ),
+  grey: createButtonColorCss(
+    palettes.grey3,
+    palettes.grey2,
+    palettes.grey3,
+    palettes.grey4
+  ),
+  warning: createButtonColorCss(
+    palettes.warning.default,
+    palettes.warning.dark,
+    palettes.warning.default,
+    palettes.warning.light
+  ),
+  error: createButtonColorCss(
+    palettes.error.default,
+    palettes.error.dark,
+    palettes.error.default,
+    palettes.error.light
+  ),
+  white: createButtonColorCss(
+    palettes.grey5,
+    palettes.grey3,
+    palettes.grey5,
+    palettes.white
+  ),
 };
 
 const variantsCss: Record<ButtonVariant, SerializedStyles> = {
@@ -97,7 +153,6 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
   }),
   filled: css({
     backgroundColor: cssVar.baseColor.var,
-    color: '#fff',
     '&:hover': {
       backgroundColor: cssVar.hoverColor.var,
     },
@@ -105,7 +160,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       backgroundColor: cssVar.activeColor.var,
     },
     '&:focus': {
-      outline: `2px solid ${cssVar.focusColor.var}`,
+      outline: `3px solid ${cssVar.focusColor.var}`,
     },
   }),
   outlined: css({

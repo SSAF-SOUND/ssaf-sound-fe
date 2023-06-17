@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { MdHome, MdArticle, MdGroupAdd, MdAccountCircle } from 'react-icons/md';
 
-import { flexCss, fontCss, gutter } from '~/styles/utils';
+import { flex, fontCss, palettes } from '~/styles/utils';
 
 const navItems = [
   {
@@ -29,15 +29,17 @@ const navItems = [
   },
 ];
 
-interface GnbProps {}
+interface GnbProps {
+  className?: string;
+}
 
 const Gnb = (props: GnbProps) => {
+  const { className } = props;
   const router = useRouter();
   const { pathname } = router;
-  console.log(pathname);
 
   return (
-    <nav css={selfCss}>
+    <nav css={selfCss} className={className}>
       <div css={itemContainerCss}>
         {navItems.map((navItem) => {
           const { text, icon, href } = navItem;
@@ -60,14 +62,15 @@ const Gnb = (props: GnbProps) => {
 };
 
 const selfCss = css({
-  width: `calc(100% + ${gutter.mainLayout}px)`,
+  width: '100%',
   height: '100%',
   borderTopLeftRadius: 15,
   borderTopRightRadius: 15,
   overflow: 'hidden',
   boxShadow: '0px -7px 18px rgba(0, 0, 0, 0.05)',
-  marginLeft: -(gutter.mainLayout / 2),
   padding: '0 20px',
+  background: palettes.white,
+  color: palettes.black,
 });
 
 const itemContainerCss = css(
@@ -75,29 +78,35 @@ const itemContainerCss = css(
     width: '100%',
     height: '100%',
   },
-  flexCss('center', 'center')
+  flex('center', 'center', 'row', 10)
 );
 
 const itemCss = css(
   {
     width: '25%',
     height: 64,
-    gap: 4,
+    ':hover': {
+      color: palettes.primary.default,
+    },
+    transition: 'color 200ms',
   },
-  flexCss('center', 'center', 'column')
+  flex('center', 'center', 'column', 4)
 );
 
 const iconCss = css(
   {
     fontSize: 24,
   },
-  flexCss('center', 'center')
+  flex('center', 'center', 'row')
 );
 
 const textCss = css(fontCss.style.B12);
 
-const iconHighlightCss = css({
-  color: '#0066ff',
-});
+const iconHighlightCss = {
+  color: palettes.primary.dark,
+  ':hover': {
+    color: palettes.primary.dark,
+  },
+};
 
 export default Gnb;

@@ -10,7 +10,14 @@ interface ButtonGroupProps {
 const ButtonGroup = (props: ButtonGroupProps) => {
   const { variant } = props;
   const sizes = ['sm', 'md', 'lg'] as const;
-  const colors = ['primary', 'secondary'] as const;
+  const colors = [
+    'primary',
+    'secondary',
+    'grey',
+    'warning',
+    'error',
+    'white',
+  ] as const;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -40,7 +47,6 @@ const ButtonGroup = (props: ButtonGroupProps) => {
 const meta: Meta<typeof Button> = {
   title: 'Button',
   component: Button,
-  tags: ['autodocs'],
 };
 
 export default meta;
@@ -55,6 +61,21 @@ export const SingleButton: ButtonStory = {
     variant: 'filled',
     size: 'sm',
     color: 'primary',
+  },
+  argTypes: {
+    children: {
+      name: 'text',
+    },
+    className: {
+      table: {
+        disable: true,
+      },
+    },
+    asChild: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 
