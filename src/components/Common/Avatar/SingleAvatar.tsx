@@ -8,14 +8,21 @@ import { flex, fontCss } from '~/styles/utils';
 
 export interface AvatarProps extends ComponentPropsWithoutRef<'div'> {
   size?: AvatarSize;
-  major: boolean;
-  nickName: string;
+  major?: boolean;
+  nickName?: string;
+  isEmpty?: boolean;
 }
 type AvatarSize = 'sm' | 'md' | 'lg';
 type BackgroundColor = 'major' | 'nonMajor';
 
 const SingleAvatar = (props: AvatarProps) => {
-  const { major = false, size = 'sm', nickName = '샆사운드', ...rest } = props;
+  const {
+    major = false,
+    size = 'sm',
+    nickName = '샆사운드',
+    isEmpty = false,
+    ...rest
+  } = props;
   // 현재 설계상 major라는 이름으로 전공여부를 가지고오게되어 그대로 사용하기 위해 major라는 명칭을 사용하게 됨.
 
   return (
@@ -24,12 +31,15 @@ const SingleAvatar = (props: AvatarProps) => {
         selfCss,
         sizeCss[size],
         backgroundCss[major ? 'major' : 'nonMajor'],
+        isEmpty && emptyCss,
       ]}
       {...rest}
     >
-      <span css={[[textCss[size]], textCapitalizeCss]}>
-        {getFirstText(nickName)}
-      </span>
+      {isEmpty || (
+        <span css={[[textCss[size]], textCapitalizeCss]}>
+          {getFirstText(nickName)}
+        </span>
+      )}
     </div>
   );
 };
@@ -70,5 +80,10 @@ const backgroundCss: Record<BackgroundColor, SerializedStyles> = {
     backgroundColor: '#FFBF75',
   }),
 };
+
+const emptyCss = css({
+  backgroundColor: '#F0F0F0',
+  border: '1px dotted #292929',
+});
 
 export default SingleAvatar;
