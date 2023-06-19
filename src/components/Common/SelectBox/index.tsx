@@ -60,7 +60,7 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
   );
 };
 
-const triggerCss = css(fontCss.family.sans, {
+const triggerCss = css(fontCss.family.auto, {
   position: 'relative',
   width: '100%',
   backgroundColor: '#FFFFFF',
@@ -92,7 +92,7 @@ const viewportCss = css({
   backgroundColor: '#FFFFFF',
 });
 
-const itemCss = css(fontCss.family.sans, {
+const itemCss = css(fontCss.family.auto, {
   display: 'flex',
   alignItems: 'center',
   width: '100%',
