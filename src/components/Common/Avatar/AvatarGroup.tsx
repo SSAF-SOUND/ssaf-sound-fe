@@ -7,15 +7,15 @@ import { flex, fontCss } from '~/styles/utils';
 
 export interface AvatarGroupProps extends ComponentPropsWithoutRef<'div'> {
   children: ReactNode;
-  max?: number;
+  visibleCount?: number;
 }
 const AvatarGroup = (props: AvatarGroupProps) => {
-  const { children, max = 4, ...rest } = props;
+  const { children, visibleCount = 4, ...rest } = props;
 
   const validAvatars = Children.toArray(children).filter(isValidElement);
 
   const visibleAvatars = validAvatars
-    .slice(0, max)
+    .slice(0, visibleCount)
     .map((avatar, index, avatars) => {
       return cloneElement(avatar as ReactElement, {
         style: {
@@ -24,7 +24,7 @@ const AvatarGroup = (props: AvatarGroupProps) => {
       });
     });
 
-  const restAvatarsNumber = validAvatars.length - max;
+  const restAvatarsNumber = validAvatars.length - visibleCount;
 
   return (
     <div css={selfCss} {...rest}>
