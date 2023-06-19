@@ -16,6 +16,7 @@ export const SingleAvatar: AvatarStory = {
     size: 'sm',
     major: true,
     nickName: '전공자',
+    isEmpty: false,
   },
 };
 
