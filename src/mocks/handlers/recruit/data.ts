@@ -1,0 +1,26 @@
+export const data = {
+  '1': {
+    category: 'study',
+    title: 'string',
+    recruitStart: new Date('2023-06-01'),
+    recruitEnd: new Date('2023-06-30'),
+    content: 'string',
+    created_at: new Date('2023-06-01'),
+    modified_at: new Date('2023-06-05'),
+    deleted_recruit: false,
+    finished_recruit: false,
+    view: 100,
+  },
+  '2': {
+    category: 'project',
+    title: 'prject test',
+    recruitStart: new Date('2023-06-12'),
+    recruitEnd: new Date('2023-06-15'),
+    content: 'tttttt',
+    created_at: new Date('2023-06-07'),
+    modified_at: new Date('2023-06-05'),
+    deleted_recruit: false,
+    finished_recruit: true,
+    view: 100,
+  },
+};
