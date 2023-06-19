@@ -1,9 +1,11 @@
 import type { ReactNode, ComponentPropsWithoutRef, ReactElement } from 'react';
 
 import { css } from '@emotion/react';
-import { Children, cloneElement, isValidElement } from 'react';
+import { Children, isValidElement } from 'react';
 
 import { flex, fontCss } from '~/styles/utils';
+
+import SingleAvatar from './SingleAvatar';
 
 export interface AvatarGroupProps extends ComponentPropsWithoutRef<'div'> {
   children: ReactNode;
@@ -14,21 +16,17 @@ const AvatarGroup = (props: AvatarGroupProps) => {
 
   const validAvatars = Children.toArray(children).filter(isValidElement);
 
-  const visibleAvatars = validAvatars
-    .slice(0, visibleCount)
-    .map((avatar, index, avatars) => {
-      return cloneElement(avatar as ReactElement, {
-        style: {
-          zIndex: avatars.length - index,
-        },
-      });
-    });
+  const visibleAvatars = validAvatars.slice(0, visibleCount);
 
   const restAvatarsNumber = validAvatars.length - visibleCount;
+  const emptyAvatarsNumber = visibleCount - validAvatars.length;
 
   return (
     <div css={selfCss} {...rest}>
       {visibleAvatars}
+      {Array.from({ length: emptyAvatarsNumber }).map((_, i) => (
+        <SingleAvatar isEmpty key={i} />
+      ))}
       {restAvatarsNumber > 0 && <span css={textCss}>+{restAvatarsNumber}</span>}
     </div>
   );
