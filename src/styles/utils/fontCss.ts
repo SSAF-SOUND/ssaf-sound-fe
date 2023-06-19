@@ -35,6 +35,7 @@ export const fontCss = {
   style: {
     B32: createFontStyleCss(32, 50, -0.04, BOLD),
     B28: createFontStyleCss(28, 44, -0.04, BOLD),
+    B26: createFontStyleCss(26, 40, -0.04, BOLD),
     B24: createFontStyleCss(24, 36, -0.03, BOLD),
     B20: createFontStyleCss(20, 30, -0.03, BOLD),
     B18: createFontStyleCss(18, 26, -0.03, BOLD),
