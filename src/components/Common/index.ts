@@ -3,5 +3,7 @@ export { default as Gnb } from './Gnb';
 export { default as Logo } from './Logo';
 export { default as ProgressBar } from './ProgressBar';
 export { default as SelectBox } from './SelectBox';
+export { default as Icon } from './Icon';
+export { default as SsafyIcon } from './SsafyIcon';
 
 export { default as SSRSafeSuspense } from './SSRSafeSuspense';
