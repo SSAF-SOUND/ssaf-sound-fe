@@ -22,9 +22,9 @@ const tracks = {
   secondaryDefault: <SecondaryDefaultTrack />,
 };
 
-type TrackSize = 10 | 15 | 32 | 36 | 126;
+type TrackSize = 24 | 32 | 46 | 50 | 140;
 
-interface TrackProps {
+export interface TrackProps {
   name: keyof typeof tracks;
   label?: string;
   size?: TrackSize;
@@ -32,7 +32,7 @@ interface TrackProps {
 }
 
 const Track = (props: TrackProps) => {
-  const { name, label = name, size = 32, style = {} } = props;
+  const { name, label = name, size = 46, style = {} } = props;
   return (
     <div css={selfCss} style={{ height: size, ...style }}>
       <AccessibleIcon label={label}>{tracks[name]}</AccessibleIcon>
