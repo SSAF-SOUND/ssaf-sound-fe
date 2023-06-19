@@ -18,7 +18,7 @@ import { RiKakaoTalkFill } from 'react-icons/ri';
 
 import { inlineFlex } from '~/styles/utils';
 
-const icons = {
+export const icons = {
   board: <MdArticle />,
   recruit: <MdGroupAdd />,
   backward: <HiOutlineArrowLeft />,
@@ -32,7 +32,7 @@ const icons = {
   github: <AiFillGithub />,
   kakao: <RiKakaoTalkFill />,
   apple: <AiFillApple />,
-};
+} as const;
 
 interface IconProps {
   name: keyof typeof icons;
