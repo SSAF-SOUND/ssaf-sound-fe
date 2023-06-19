@@ -2,9 +2,10 @@ import { css, Global } from '@emotion/react';
 import React, { memo } from 'react';
 
 import { fontCss, palettes } from '~/styles/utils';
+import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 const GlobalStyles = memo(() => {
-  return <Global styles={[resetCss, customBaseCss]} />;
+  return <Global styles={[resetCss, customBaseCss, themeColorVarCss]} />;
 });
 
 GlobalStyles.displayName = 'GlobalStyles';
@@ -159,5 +160,20 @@ const customBaseCss = css`
     color: inherit;
   }
 `;
+
+const themeColorVarCss = css({
+  '[data-theme="primary"]': {
+    [themeColorVars.mainColor.varName]: palettes.primary.default,
+    [themeColorVars.mainLightColor.varName]: palettes.primary.light,
+    [themeColorVars.mainDarkColor.varName]: palettes.primary.dark,
+    [themeColorVars.mainDarkestColor.varName]: '',
+  },
+  '[data-theme="secondary"]': {
+    [themeColorVars.mainColor.varName]: palettes.secondary.default,
+    [themeColorVars.mainLightColor.varName]: palettes.secondary.light,
+    [themeColorVars.mainDarkColor.varName]: palettes.secondary.dark,
+    [themeColorVars.mainDarkestColor.varName]: '',
+  },
+});
 
 export default GlobalStyles;
