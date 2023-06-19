@@ -64,7 +64,7 @@ const sizeCss: Record<AvatarSize, SerializedStyles> = {
 const textCss: Record<AvatarSize, SerializedStyles> = {
   sm: css(fontCss.style.B12),
   md: css(fontCss.style.B14),
-  lg: css(fontCss.style.B24),
+  lg: css(fontCss.style.B26),
 };
 
 const textCapitalizeCss = css({
