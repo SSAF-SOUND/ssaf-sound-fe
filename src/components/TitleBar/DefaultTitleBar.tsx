@@ -20,9 +20,9 @@ interface DefaultTitleBarProps {
 const DefaultTitleBar = (props: DefaultTitleBarProps) => {
   const {
     title = '',
-    withoutBackward = true,
-    withoutTitle = true,
-    withoutClose = true,
+    withoutBackward = false,
+    withoutTitle = false,
+    withoutClose = false,
     onClickBackward,
     onClickClose,
     ...restProps
@@ -37,22 +37,30 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
     <Bar
       {...restProps}
       left={
-        withoutBackward && (
-          <IconButton
-            css={buttonCss}
-            onClick={onClickBackward || handleClickBackward}
-          >
-            <Icon name="backward" size={iconSize} />
-          </IconButton>
-        )
+        <IconButton
+          css={[buttonCss, withoutBackward && visuallyHiddenCss]}
+          onClick={onClickBackward || handleClickBackward}
+          aria-hidden={withoutBackward && 'true'}
+        >
+          <Icon name="backward" size={iconSize} />
+        </IconButton>
       }
-      center={withoutTitle && <div>{title}</div>}
+      center={
+        <div
+          css={withoutTitle && visuallyHiddenCss}
+          aria-hidden={withoutTitle && 'true'}
+        >
+          {title}
+        </div>
+      }
       right={
-        withoutClose && (
-          <IconButton css={buttonCss} onClick={onClickClose}>
-            <Icon name="close" size={iconSize} />
-          </IconButton>
-        )
+        <IconButton
+          css={[buttonCss, withoutClose && visuallyHiddenCss]}
+          onClick={onClickClose}
+          aria-hidden={withoutClose && 'true'}
+        >
+          <Icon name="close" size={iconSize} />
+        </IconButton>
       }
     />
   );
@@ -61,6 +69,11 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
 export default DefaultTitleBar;
 
 const iconSize = 28;
+
+const visuallyHiddenCss = css({
+  opacity: 0,
+  pointerEvents: 'none',
+});
 
 const buttonCss = css({
   padding: 4,
