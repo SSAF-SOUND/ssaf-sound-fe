@@ -25,6 +25,11 @@ export const FewItems: Story = {
       .fill(undefined)
       .map((_, i) => `Item${i}`),
     placeholder: '',
+    size: 'lg',
+    triggerTextAlign: 'center',
+    itemTextAlign: 'center',
+    theme: 'primary',
+    variant: 'normal',
   },
 };
 
@@ -34,5 +39,10 @@ export const ManyItems: Story = {
       .fill(undefined)
       .map((_, i) => `Item${i}`),
     placeholder: '',
+    size: 'lg',
+    triggerTextAlign: 'center',
+    itemTextAlign: 'center',
+    theme: 'primary',
+    variant: 'normal',
   },
 };
