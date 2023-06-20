@@ -89,7 +89,7 @@ interface IconProps {
 const Icon = (props: IconProps) => {
   const { name, label = name, size = 24, color = '', style = {} } = props;
   return (
-    <div css={selfCss} style={{ fontSize: size, color, ...style }}>
+    <div css={selfCss} style={{ fontSize: size, color, ...style }} data-icon="">
       <AccessibleIcon label={label}>{icons[name]}</AccessibleIcon>
     </div>
   );
