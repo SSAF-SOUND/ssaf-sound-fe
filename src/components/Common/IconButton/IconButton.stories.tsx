@@ -21,7 +21,7 @@ export default meta;
 
 type IconButtonStory = StoryObj<typeof IconButton>;
 
-export const Default: IconButtonStory = {
+export const Examples: IconButtonStory = {
   render: () => {
     const themes = ['white', 'black', 'primary', 'secondary'] as const;
     const backgroundColors = [
@@ -38,16 +38,17 @@ export const Default: IconButtonStory = {
     ];
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div css={{ display: 'flex', flexDirection: 'column' }}>
         {backgroundColors.map((backgroundColor) => {
           return (
             <div
-              style={{
+              css={{
                 height: 50,
                 display: 'flex',
                 gap: 20,
                 backgroundColor,
                 alignItems: 'center',
+                padding: '0 20px',
               }}
             >
               {themes.map((theme) => (
