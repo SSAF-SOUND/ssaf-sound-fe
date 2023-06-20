@@ -11,3 +11,17 @@ export const themeColorVars = {
   mainDarkenColor: toCssVar('mainDarkenColor'),
   mainDarkestColor: toCssVar('mainDarkestColor'),
 };
+
+export const createThemePalettes = (
+  main = '',
+  mainLight = '',
+  mainDark = '',
+  mainDarken = '',
+  mainDarkest = ''
+) => ({
+  [themeColorVars.mainColor.varName]: main,
+  [themeColorVars.mainLightColor.varName]: mainLight,
+  [themeColorVars.mainDarkColor.varName]: mainDark,
+  [themeColorVars.mainDarkenColor.varName]: mainDarken,
+  [themeColorVars.mainDarkestColor.varName]: mainDarkest,
+});

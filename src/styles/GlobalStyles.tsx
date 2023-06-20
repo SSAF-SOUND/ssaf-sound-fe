@@ -2,7 +2,10 @@ import { css, Global } from '@emotion/react';
 import React, { memo } from 'react';
 
 import { palettes } from '~/styles/utils';
-import { themeColorVars } from '~/styles/utils/themeColorVars';
+import {
+  createThemePalettes,
+  themeColorVars,
+} from '~/styles/utils/themeColorVars';
 
 const GlobalStyles = memo(() => {
   return <Global styles={[resetCss, customBaseCss, themeColorVarCss]} />;
@@ -162,19 +165,27 @@ const customBaseCss = css`
 `;
 
 const themeColorVarCss = css({
-  '[data-theme="primary"]': {
-    [themeColorVars.mainColor.varName]: palettes.primary.default,
-    [themeColorVars.mainLightColor.varName]: palettes.primary.light,
-    [themeColorVars.mainDarkColor.varName]: palettes.primary.dark,
-    [themeColorVars.mainDarkColor.varName]: palettes.primary.dark,
-    [themeColorVars.mainDarkestColor.varName]: '',
-  },
-  '[data-theme="secondary"]': {
-    [themeColorVars.mainColor.varName]: palettes.secondary.default,
-    [themeColorVars.mainLightColor.varName]: palettes.secondary.light,
-    [themeColorVars.mainDarkColor.varName]: palettes.secondary.dark,
-    [themeColorVars.mainDarkestColor.varName]: '',
-  },
+  '[data-theme="primary"]': createThemePalettes(
+    palettes.primary.default,
+    palettes.primary.light,
+    palettes.primary.dark,
+    palettes.primary.darken,
+    palettes.primary.darkest
+  ),
+  '[data-theme="secondary"]': createThemePalettes(
+    palettes.secondary.default,
+    palettes.secondary.light,
+    palettes.secondary.dark,
+    palettes.secondary.darken,
+    palettes.secondary.darkest
+  ),
+  '[data-theme="white"]': createThemePalettes(
+    palettes.white,
+    palettes.white,
+    palettes.grey4,
+    palettes.grey3,
+    palettes.grey2
+  ),
 });
 
 export default GlobalStyles;
