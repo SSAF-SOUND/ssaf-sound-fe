@@ -1,5 +1,4 @@
-import { AiFillApple, AiFillGithub, AiOutlineGoogle } from 'react-icons/ai';
-import { RiKakaoTalkFill } from 'react-icons/ri';
+import { Icon } from '~/components/Common';
 
 import Base from './Base';
 
@@ -7,28 +6,28 @@ const iconSize = 24;
 const SignInButton = {
   Google: () => (
     <Base
-      icon={<AiOutlineGoogle size={iconSize} />}
+      icon={<Icon name="google" size={iconSize} />}
       provider="google"
       text="Google 로그인"
     />
   ),
   GitHub: () => (
     <Base
-      icon={<AiFillGithub size={iconSize} />}
+      icon={<Icon name="github" size={iconSize} />}
       provider="github"
       text="GitHub 로그인"
     />
   ),
   Kakao: () => (
     <Base
-      icon={<RiKakaoTalkFill size={iconSize} />}
+      icon={<Icon name="kakao" size={iconSize} />}
       provider="kakao"
       text="Kakao 로그인"
     />
   ),
   Apple: () => (
     <Base
-      icon={<AiFillApple size={iconSize} />}
+      icon={<Icon name="apple" size={iconSize} />}
       provider="apple"
       text="Apple 로그인"
     />
