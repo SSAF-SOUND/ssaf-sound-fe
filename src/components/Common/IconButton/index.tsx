@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { colorMix, inlineFlex, palettes } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
-type IconTheme = 'primary' | 'secondary' | 'white';
+type IconTheme = 'primary' | 'secondary' | 'white' | 'black';
 
 interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
   theme?: IconTheme;
@@ -31,10 +31,10 @@ const selfCss = css(
       color: themeColorVars.mainColor.var,
     },
     ':focus-visible, :hover': {
-      backgroundColor: colorMix('20%', themeColorVars.mainDarkColor.var),
+      backgroundColor: colorMix('30%', themeColorVars.mainDarkColor.var),
     },
     ':active': {
-      backgroundColor: colorMix('30%', themeColorVars.mainLightColor.var),
+      backgroundColor: colorMix('50%', themeColorVars.mainDarkenColor.var),
     },
     ':disabled': {
       pointerEvents: 'none',

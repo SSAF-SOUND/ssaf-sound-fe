@@ -182,9 +182,16 @@ const themeColorVarCss = css({
   '[data-theme="white"]': createThemePalettes(
     palettes.white,
     palettes.white,
-    palettes.grey3,
+    palettes.grey4,
     palettes.grey2,
-    palettes.grey1
+    palettes.grey0
+  ),
+  '[data-theme="black"]': createThemePalettes(
+    palettes.grey0,
+    palettes.grey1,
+    palettes.grey0,
+    palettes.black,
+    palettes.black
   ),
 });
 
