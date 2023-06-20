@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { Bar, Icon, Logo } from '~/components/Common';
+import { Bar, Icon, IconButton, Logo } from '~/components/Common';
 import Dot from '~/components/Common/Dot';
 import { flex } from '~/styles/utils';
 
@@ -22,11 +22,15 @@ const TopBar = (props: TopBarProps) => {
         <div css={rightSelfCss}>
           <div css={rightIconContainerCss}>
             <Dot size="md" theme="secondary" />
-            <Icon name="notification" size={iconSize} />
+            <IconButton size={iconSize + 4}>
+              <Icon name="notification" size={iconSize} />
+            </IconButton>
           </div>
           <div css={rightIconContainerCss}>
             <Dot size="md" theme="secondary" />
-            <Icon name="chat" size={iconSize} />
+            <IconButton size={iconSize + 4}>
+              <Icon name="chat" size={iconSize} />
+            </IconButton>
           </div>
         </div>
       }
