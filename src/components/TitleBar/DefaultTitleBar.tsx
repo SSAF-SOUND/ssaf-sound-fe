@@ -30,7 +30,7 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
   } = props;
   const router = useRouter();
 
-  const handleClickBackward = () => {
+  const defaultHandleClickBackward = () => {
     router.back();
   };
 
@@ -41,7 +41,7 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
         <IconButton
           size={iconButtonSize}
           css={withoutBackward && visuallyHiddenCss}
-          onClick={onClickBackward || handleClickBackward}
+          onClick={onClickBackward || defaultHandleClickBackward}
           aria-hidden={withoutBackward && 'true'}
         >
           <Icon name="backward" size={iconSize} />
