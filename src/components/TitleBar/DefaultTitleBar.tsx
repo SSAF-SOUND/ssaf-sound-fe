@@ -6,6 +6,7 @@ import { css } from '@emotion/react';
 
 import { Bar, Icon } from '~/components/Common';
 import IconButton from '~/components/Common/IconButton';
+import { fontCss } from '~/styles/utils';
 
 interface DefaultTitleBarProps {
   title?: string;
@@ -38,7 +39,8 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
       {...restProps}
       left={
         <IconButton
-          css={[buttonCss, withoutBackward && visuallyHiddenCss]}
+          size={iconButtonSize}
+          css={withoutBackward && visuallyHiddenCss}
           onClick={onClickBackward || handleClickBackward}
           aria-hidden={withoutBackward && 'true'}
         >
@@ -46,16 +48,17 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
         </IconButton>
       }
       center={
-        <div
-          css={withoutTitle && visuallyHiddenCss}
+        <h2
+          css={[fontCss.style.R16, withoutTitle && visuallyHiddenCss]}
           aria-hidden={withoutTitle && 'true'}
         >
           {title}
-        </div>
+        </h2>
       }
       right={
         <IconButton
-          css={[buttonCss, withoutClose && visuallyHiddenCss]}
+          size={iconButtonSize}
+          css={withoutClose && visuallyHiddenCss}
           onClick={onClickClose}
           aria-hidden={withoutClose && 'true'}
         >
@@ -69,12 +72,9 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
 export default DefaultTitleBar;
 
 const iconSize = 28;
+const iconButtonSize = iconSize + 8;
 
 const visuallyHiddenCss = css({
   opacity: 0,
   pointerEvents: 'none',
-});
-
-const buttonCss = css({
-  padding: 4,
 });

@@ -3,11 +3,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PageLayout } from '~/stories/Layout';
 import { flex, palettes } from '~/styles/utils';
 
-import DefaultTitleBar from './DefaultTitleBar';
+import TitleBar from './index';
 
-const meta: Meta<typeof DefaultTitleBar> = {
+const meta: Meta<typeof TitleBar.Default> = {
   title: 'TitleBar',
-  component: DefaultTitleBar,
+  component: TitleBar.Default,
   decorators: [
     (Story) => (
       <PageLayout>
@@ -19,9 +19,10 @@ const meta: Meta<typeof DefaultTitleBar> = {
 
 export default meta;
 
-type DefaultTitleBarStory = StoryObj<typeof DefaultTitleBar>;
+type DefaultTitleBarStory = StoryObj<typeof TitleBar.Default>;
 
 export const Default: DefaultTitleBarStory = {
+  name: 'Default TitleBar',
   argTypes: {
     className: {
       table: {
@@ -47,7 +48,8 @@ export const Default: DefaultTitleBarStory = {
   },
 };
 
-export const Variations: DefaultTitleBarStory = {
+export const DefaultExamples: DefaultTitleBarStory = {
+  name: 'Default TitleBar Examples',
   render: () => {
     return (
       <div
@@ -56,11 +58,11 @@ export const Variations: DefaultTitleBarStory = {
           { '> *': { borderBottom: `1px solid ${palettes.background.grey}` } },
         ]}
       >
-        <DefaultTitleBar title="제목" />
-        <DefaultTitleBar title="제목" withoutClose />
-        <DefaultTitleBar title="제목" withoutBackward withoutTitle />
-        <DefaultTitleBar title="제목" withoutBackward />
-        <DefaultTitleBar withoutTitle withoutClose />
+        <TitleBar.Default title="제목" />
+        <TitleBar.Default title="제목" withoutClose />
+        <TitleBar.Default title="제목" withoutBackward withoutTitle />
+        <TitleBar.Default title="제목" withoutBackward />
+        <TitleBar.Default withoutTitle withoutClose />
       </div>
     );
   },
