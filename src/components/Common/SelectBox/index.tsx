@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import * as Select from '@radix-ui/react-select';
 
-import { flex, fontCss, palettes, toCssVar } from '~/styles/utils';
+import { flex, fontCss, palettes } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 type TextAlign = 'center' | 'left';
@@ -116,12 +116,18 @@ const triggerCss = {
   normal: css(fontCss.family.auto, {
     backgroundColor: palettes.white,
     borderRadius: 8,
+    ':focus': {
+      outline: `3px solid ${themeColorVars.mainColor.var}`,
+    },
   }),
   outlined: css({
     backgroundColor: 'transparent',
     border: `1px solid ${themeColorVars.mainColor.var}`,
     color: themeColorVars.mainColor.var,
     borderRadius: 16,
+    ':focus': {
+      outline: `3px solid ${themeColorVars.mainLightColor.var}`,
+    },
   }),
 };
 
@@ -175,7 +181,7 @@ const itemCss = {
   }),
   outlined: css({
     width: '100%',
-    color: palettes.white, // 나중에 blue black으로.
+    color: palettes.font.blueGrey,
     ':focus': {
       outline: 0,
       color: themeColorVars.mainColor.var,
