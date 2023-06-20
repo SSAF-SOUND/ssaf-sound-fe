@@ -30,6 +30,7 @@ export default IconButton;
 
 const selfCss = css(
   {
+    padding: 0,
     backgroundColor: 'inherit',
     borderRadius: '50%',
     cursor: 'pointer',

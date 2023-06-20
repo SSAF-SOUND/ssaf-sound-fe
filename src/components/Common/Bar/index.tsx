@@ -33,7 +33,7 @@ const selfCss = css(
   {
     height: 50,
     backgroundColor: palettes.background.default,
-    padding: '0 25px',
+    padding: '0 20px',
   },
   flex('center', 'space-between', 'row', 30)
 );
