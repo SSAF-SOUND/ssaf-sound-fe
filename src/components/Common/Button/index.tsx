@@ -59,7 +59,8 @@ const baseCss = css(
     borderRadius: 10,
     padding: '0 10px',
     margin: 0,
-    transition: 'color 200ms, background-color 200ms, border-color 200ms',
+    transition:
+      'color 200ms, background-color 200ms, border-color 200ms, outline 200ms',
     '&:disabled': {
       cursor: 'initial',
       pointerEvents: 'none',
@@ -129,7 +130,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     backgroundColor: 'transparent',
     color: cssVar.mainColor.var,
     '&:hover': { color: cssVar.mainLightColor.var },
-    '&:focus': {
+    '&:focus-visible': {
       backgroundColor: cssVar.mainDarkColor.var,
       color: palettes.white,
     },
@@ -145,7 +146,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       backgroundColor: cssVar.mainDarkColor.var,
       color: palettes.white,
     },
-    '&:focus': { outline: `3px solid ${cssVar.mainLightColor.var}` },
+    '&:focus-visible': { outline: `3px solid ${cssVar.mainLightColor.var}` },
   }),
   outlined: css({
     backgroundColor: palettes.white,
@@ -156,7 +157,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       borderColor: 'transparent',
       color: palettes.white,
     },
-    '&:focus': { outline: `3px solid ${cssVar.mainColor.var}` },
+    '&:focus-visible': { outline: `3px solid ${cssVar.mainColor.var}` },
   }),
 };
 
