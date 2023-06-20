@@ -1,3 +1,7 @@
+import type { MouseEventHandler } from 'react';
+
+import { useRouter } from 'next/router';
+
 import { css } from '@emotion/react';
 
 import { Bar, Icon } from '~/components/Common';
@@ -9,16 +13,26 @@ interface RecruitTitleBarProps {
   title: string;
   isSubmitDisabled?: boolean;
   className?: string;
+  onClickClose?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const RecruitTitleBar = (props: RecruitTitleBarProps) => {
-  const { title, isSubmitDisabled = false, ...restProps } = props;
+  const { title, isSubmitDisabled = false, onClickClose, ...restProps } = props;
+
+  const router = useRouter();
+
+  const defaultHandleClickClose = () => {
+    router.back();
+  };
 
   return (
     <Bar
       {...restProps}
       left={
-        <IconButton size={iconButtonSize} onClick={() => {}}>
+        <IconButton
+          size={iconButtonSize}
+          onClick={onClickClose || defaultHandleClickClose}
+        >
           <Icon name="close" size={iconSize} />
         </IconButton>
       }
