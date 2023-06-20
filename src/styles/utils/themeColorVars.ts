@@ -8,5 +8,6 @@ export const themeColorVars = {
   mainColor: toCssVar('mainColor'),
   mainLightColor: toCssVar('mainLightColor'),
   mainDarkColor: toCssVar('mainDarkColor'),
+  mainDarkenColor: toCssVar('mainDarkenColor'),
   mainDarkestColor: toCssVar('mainDarkestColor'),
 };

@@ -1,7 +1,7 @@
 import { css, Global } from '@emotion/react';
 import React, { memo } from 'react';
 
-import { fontCss, palettes } from '~/styles/utils';
+import { palettes } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 const GlobalStyles = memo(() => {
@@ -165,6 +165,7 @@ const themeColorVarCss = css({
   '[data-theme="primary"]': {
     [themeColorVars.mainColor.varName]: palettes.primary.default,
     [themeColorVars.mainLightColor.varName]: palettes.primary.light,
+    [themeColorVars.mainDarkColor.varName]: palettes.primary.dark,
     [themeColorVars.mainDarkColor.varName]: palettes.primary.dark,
     [themeColorVars.mainDarkestColor.varName]: '',
   },

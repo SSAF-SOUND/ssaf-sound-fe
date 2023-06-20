@@ -1,29 +1,32 @@
 export const palettes = {
   primary: {
-    default: '#98CEFF',
-    dark: '#61A3F3',
-    light: '#D0E5FF',
-    darkest: '#0C1B2E',
+    default: '#98CEFF', // FIGMA (default)
+    light: '#D0E5FF', // FIGMA (sub)
+    dark: '#61A3F3', // FIGMA (point)
+    darken: '#0C74F4', // FIGMA (strong)
+    darkest: '#0C1B2E', // FIGMA (dark)
   },
   secondary: {
     default: '#FFA4A4',
-    dark: '#FF7575',
     light: '#FFDEDE',
+    dark: '#FF7575',
+    darken: '#FF1E1E',
+    darkest: '#6F1818',
   },
   success: {
     default: '#43E26B',
-    dark: '#028E25',
     light: '#DDFFE6',
+    dark: '#028E25',
   },
   warning: {
     default: '#FFBF69',
-    dark: '#FF9911',
     light: '#FFE0B2',
+    dark: '#FF9911',
   },
   error: {
     default: '#FF4343',
-    dark: '#C60B00',
     light: '#FFD1CF',
+    dark: '#C60B00',
   },
   point: {
     orange: '#FFDF99',
@@ -38,7 +41,12 @@ export const palettes = {
   background: {
     default: '#2E323B',
     grey: '#4E525E',
-    lightGrey: '#757575',
+  },
+  //
+  font: {
+    default: '#FFFFFF',
+    grey: '#292929',
+    lightGrey: '#EBEBEB',
     blueGrey: '#8890A8',
   },
   //
