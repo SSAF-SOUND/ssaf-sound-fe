@@ -9,13 +9,20 @@ type IconTheme = 'primary' | 'secondary' | 'white' | 'black';
 
 interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
   theme?: IconTheme;
+  size?: number;
 }
 
 const IconButton = (props: IconButtonProps) => {
-  const { theme = 'white', ...restProps } = props;
+  const { theme = 'white', size = 'auto', ...restProps } = props;
 
   return (
-    <button type="button" css={selfCss} {...restProps} data-theme={theme} />
+    <button
+      type="button"
+      style={{ width: size, height: size }}
+      css={selfCss}
+      {...restProps}
+      data-theme={theme}
+    />
   );
 };
 
@@ -26,15 +33,15 @@ const selfCss = css(
     backgroundColor: 'inherit',
     borderRadius: '50%',
     cursor: 'pointer',
-    transition: 'background-color 200ms',
+    transition: 'background-color 200ms, color 200ms',
     '& [data-icon]': {
-      color: themeColorVars.mainColor.var,
+      color: themeColorVars.mainDarkColor.var,
     },
     ':focus-visible, :hover': {
-      backgroundColor: colorMix('30%', themeColorVars.mainDarkColor.var),
+      backgroundColor: colorMix('30%', themeColorVars.mainColor.var),
     },
     ':active': {
-      backgroundColor: colorMix('50%', themeColorVars.mainDarkenColor.var),
+      backgroundColor: colorMix('50%', themeColorVars.mainColor.var),
     },
     ':disabled': {
       pointerEvents: 'none',
