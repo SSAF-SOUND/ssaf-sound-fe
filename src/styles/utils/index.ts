@@ -5,3 +5,4 @@ export * from './pxToRem';
 export * from './flex';
 export * from './constants';
 export * from './palettes';
+export * from './colorMix';
