@@ -139,7 +139,7 @@ const resetCss = css`
 const customBaseCss = css`
   body {
     min-width: 320px;
-    background: ${palettes.background};
+    background: ${palettes.background.default};
     color: ${palettes.white};
   }
 
