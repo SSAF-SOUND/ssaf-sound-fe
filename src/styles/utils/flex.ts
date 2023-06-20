@@ -21,7 +21,7 @@ const flexCore = (
   alignItems: AlignItems | FlexOptions = '',
   justifyContent: JustifyContent = '',
   flexDirection: FlexDirection = 'row',
-  gap: Gap = 0,
+  gap: Gap = '',
   flexWrap: FlexWrap = 'nowrap'
 ) => {
   if (typeof alignItems === 'string') {
@@ -57,7 +57,7 @@ export function flex(
   alignItems: AlignItems | FlexOptions = '',
   justifyContent: JustifyContent = '',
   flexDirection: FlexDirection = 'column',
-  gap: Gap = 0,
+  gap: Gap = '',
   flexWrap: FlexWrap = 'nowrap'
 ) {
   const base = { display: 'flex' };
@@ -79,7 +79,7 @@ export function inlineFlex(
   alignItems: AlignItems | FlexOptions = '',
   justifyContent: JustifyContent = '',
   flexDirection: FlexDirection = 'column',
-  gap: Gap = 0,
+  gap: Gap = '',
   flexWrap: FlexWrap = 'nowrap'
 ) {
   const base = { display: 'inline-flex' };
