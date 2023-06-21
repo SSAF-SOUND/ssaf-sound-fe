@@ -3,24 +3,28 @@ import type { ReactNode } from 'react';
 import { css } from '@emotion/react';
 import React from 'react';
 
+import { flex, palettes } from '~/styles/utils';
+
+type ProgressBarSize = 'sm' | 'md' | 'lg';
+
 export interface ProgressBarProps {
-  children?: ReactNode;
   min?: number;
   now?: number;
   max?: number;
   label?: string;
   foregroundColor?: string;
   backgroundColor?: string;
+  size?: ProgressBarSize;
 }
 
-const calForegroundWidth = (min: number, now: number, max: number) => {
+const calculateForegroundWidth = (min: number, now: number, max: number) => {
   const width = ((now - min) / (max - min)) * 100;
   if (width <= 0) return '0%';
   return `${width}%`;
 };
 
-const defaultForeground = '#0066ff';
-const defaultBackground = '#e0e0e0';
+const defaultForeground = palettes.primary.default;
+const defaultBackground = palettes.white;
 
 const ProgressBar = (props: ProgressBarProps) => {
   const {
@@ -30,17 +34,13 @@ const ProgressBar = (props: ProgressBarProps) => {
     max = 100,
     foregroundColor = defaultForeground,
     backgroundColor = defaultBackground,
-    ...restProps
+    size = 'sm',
   } = props;
 
-  const width = calForegroundWidth(min, now, max);
+  const width = calculateForegroundWidth(min, now, max);
 
   return (
-    <div
-      style={{ backgroundColor: backgroundColor }}
-      css={baseCss}
-      {...restProps}
-    >
+    <div style={{ backgroundColor }} css={[selfCss, sizeCss[size]]}>
       <div style={{ width, backgroundColor: foregroundColor }} css={barCss}>
         {label}
       </div>
@@ -48,23 +48,34 @@ const ProgressBar = (props: ProgressBarProps) => {
   );
 };
 
-const baseCss = css({
-  display: 'flex',
-  alignItems: 'center',
-  overflow: 'hidden',
-  width: '100%',
-  height: 16,
-  borderRadius: 10,
-  backgroundColor: '#eee',
-});
-
-const barCss = css({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100%',
-  transition: 'width 200ms',
-  font: 'inherit',
-});
-
 export default ProgressBar;
+
+const sizeCss = {
+  sm: css({
+    height: 6,
+  }),
+  md: css({
+    height: 10,
+  }),
+  lg: css({
+    height: 16,
+  }),
+};
+
+const selfCss = css(
+  {
+    overflow: 'hidden',
+    width: '100%',
+    borderRadius: 10,
+  },
+  flex('center', '', 'row')
+);
+
+const barCss = css(
+  {
+    height: '100%',
+    transition: 'width 200ms',
+    font: 'inherit',
+  },
+  flex('center', 'center', 'row')
+);

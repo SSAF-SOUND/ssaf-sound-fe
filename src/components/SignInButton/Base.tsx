@@ -4,8 +4,9 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { filter, flex, fontCss, palettes } from '~/styles/utils';
+import { filter, flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 import { API_URL, composeUrls, publicAxios } from '~/utils';
+import { webStorage } from '~/utils/webStorage';
 
 type Provider = 'google' | 'github' | 'kakao' | 'apple';
 
@@ -21,9 +22,9 @@ const Base = (props: BaseProps) => {
 
   const handleClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
+    webStorage.setAuthProvider(provider);
     /**
      * LATER
-     *   localStorage.setItem('provider', 'github');
      *   window.location.href = 'https://api.ssafsound.com/auth/google';
      */
     // callbackUrl 저장 후 -> 로그인 플로우 완료 후 리다이렉션
@@ -45,7 +46,7 @@ const selfCss = css(
     width: '100%',
     height: 48,
     cursor: 'pointer',
-    backgroundColor: palettes.background,
+    backgroundColor: palettes.background.default,
     color: palettes.white,
     border: '1px solid',
     borderColor: palettes.white,
@@ -55,13 +56,10 @@ const selfCss = css(
   flex('center', 'center', 'row')
 );
 
-const contentCss = css({
-  position: 'relative',
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  gap: 16,
-});
+const contentCss = css(
+  { position: 'relative' },
+  inlineFlex('center', 'center', 'row', 16)
+);
 
 const iconCss = css(flex('center'));
 

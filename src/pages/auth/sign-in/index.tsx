@@ -1,9 +1,6 @@
-import Image from 'next/image';
-
 import { css } from '@emotion/react';
 
-import welcomeImage from '~/assets/images/welcome.png';
-import { Logo } from '~/components/Common';
+import { Logo, SsafyIcon } from '~/components/Common';
 import SignInButton from '~/components/SignInButton';
 import { flex } from '~/styles/utils';
 
@@ -11,7 +8,7 @@ const SignInPage = () => {
   return (
     <section css={selfCss}>
       <div css={logoContainerCss}>
-        <Image src={welcomeImage} alt="로그인 페이지 캐릭터 이미지" priority />
+        <SsafyIcon.LogoCharacter />
         <Logo size="lg" />
       </div>
 
@@ -31,9 +28,4 @@ const selfCss = css({ height: '100vh' }, flex('', 'center', 'column', '15vh'));
 
 const logoContainerCss = css(flex('center', 'center', 'column', 18));
 
-const buttonGroupCss = css({
-  display: 'flex',
-  padding: 30,
-  flexDirection: 'column',
-  gap: 10,
-});
+const buttonGroupCss = css({ padding: 30 }, flex('', '', 'column', 10));

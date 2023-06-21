@@ -3,8 +3,8 @@ import type { CSSProperties } from 'react';
 import { css } from '@emotion/react';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { AiFillApple, AiFillGithub, AiOutlineGoogle } from 'react-icons/ai';
-import { BsChatDots } from 'react-icons/bs';
 import { HiOutlineArrowLeft } from 'react-icons/hi';
+import { HiChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import { IoMdListBox } from 'react-icons/io';
 import { IoTriangle } from 'react-icons/io5';
 import {
@@ -14,11 +14,14 @@ import {
   MdBookmarkBorder,
   MdCalendarToday,
   MdChatBubbleOutline,
+  MdClose,
   MdControlPoint,
   MdCreate,
   MdGroup,
   MdGroupAdd,
   MdHome,
+  MdIosShare,
+  MdKeyboardArrowDown,
   MdMoreVert,
   MdNotifications,
   MdOutlineThumbUp,
@@ -45,7 +48,7 @@ export const icons = {
   like: <MdThumbUp />,
   [`like.outline`]: <MdOutlineThumbUp />,
 
-  chat: <BsChatDots />,
+  chat: <HiChatBubbleOvalLeftEllipsis />,
   [`chat.rect`]: <MdChatBubbleOutline />,
 
   triangle: <IoTriangle />,
@@ -64,6 +67,11 @@ export const icons = {
 
   checkbox: <TbSquareRoundedCheckFilled />,
 
+  close: <MdClose />,
+  share: <MdIosShare />,
+
+  [`chevron.down`]: <MdKeyboardArrowDown />,
+
   google: <AiOutlineGoogle />,
   github: <AiFillGithub />,
   kakao: <RiKakaoTalkFill />,
@@ -81,7 +89,7 @@ interface IconProps {
 const Icon = (props: IconProps) => {
   const { name, label = name, size = 24, color = '', style = {} } = props;
   return (
-    <div css={selfCss} style={{ fontSize: size, color, ...style }}>
+    <div css={selfCss} style={{ fontSize: size, color, ...style }} data-icon="">
       <AccessibleIcon label={label}>{icons[name]}</AccessibleIcon>
     </div>
   );
