@@ -22,7 +22,6 @@ const ButtonGroup = (props: ButtonGroupProps) => {
   return (
     <div
       style={{
-        fontFamily: 'Manrope',
         display: 'grid',
         gridTemplateColumns: `repeat(${colors.length}, 80px)`,
         gridTemplateRows: `repeat(${sizes.length}, auto)`,
@@ -31,7 +30,7 @@ const ButtonGroup = (props: ButtonGroupProps) => {
       }}
     >
       {colors.map((color) => (
-        <span>{color}</span>
+        <span key={color}>{color}</span>
       ))}
       {sizes.map((size) => {
         return (
@@ -44,6 +43,21 @@ const ButtonGroup = (props: ButtonGroupProps) => {
               );
             })}
           </>
+        );
+      })}
+
+      {/* Disabled */}
+      {colors.map((color) => {
+        return (
+          <Button
+            key={color}
+            size="md"
+            variant={variant}
+            color={color}
+            disabled
+          >
+            버튼
+          </Button>
         );
       })}
     </div>
