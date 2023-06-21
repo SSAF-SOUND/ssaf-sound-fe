@@ -14,4 +14,7 @@ export const endpoints = {
   user: {
     myInfo: () => '/members' as const,
   },
+  recruit: {
+    detail: () => '/recruit/detail' as const,
+  },
 };
