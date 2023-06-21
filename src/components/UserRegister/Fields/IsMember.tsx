@@ -23,7 +23,7 @@ const IsMember = () => {
         <Question.Row>SSAFY인 이신가요?</Question.Row>
       </Question>
 
-      <SsafyIcon.Track name="primaryDefault" size={170} />
+      <SsafyIcon.Track name="primaryDefault" size={160} />
 
       <div css={buttonGroupCss}>
         <Button
