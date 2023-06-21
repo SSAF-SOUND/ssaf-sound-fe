@@ -1,14 +1,10 @@
-import type { UserRole } from '~/services/member/utils';
+import type { UserInfo } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
 import { privateAxios } from '~/utils';
 
-export interface GetMyInfoData {
-  role: UserRole;
-}
-
-export type GetMyInfoApiData = ApiSuccessResponse<GetMyInfoData>;
+export type GetMyInfoApiData = ApiSuccessResponse<UserInfo>;
 
 export const getMyInfo = () => {
   const endpoint = endpoints.user.myInfo();
