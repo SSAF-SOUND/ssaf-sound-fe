@@ -22,12 +22,14 @@ const fields = [
 ];
 
 const phaseClamp = createBoundClamp([0, fields.length - 1]);
+const nicknamePhase = 4;
 
 const UserRegisterRoot = () => {
   const unSafePhase = usePhaseContext();
   const prevPhase = usePrevPhaseContext();
   const setPhase = useSetPhaseContext();
   const phase = phaseClamp(unSafePhase);
+  const isNicknamePhase = phase === nicknamePhase;
 
   const Field = fields[phase];
   const handleClickBackward = () => {
@@ -43,6 +45,7 @@ const UserRegisterRoot = () => {
       <TitleBar.Default
         withoutTitle
         withoutClose
+        withoutBackward={isNicknamePhase}
         onClickBackward={handleClickBackward}
         css={topBarCss}
       />
