@@ -8,5 +8,6 @@ export { default as Icon } from './Icon';
 export { default as SsafyIcon } from './SsafyIcon';
 export { default as Avatar } from './Avatar';
 export { default as Bar } from './Bar';
+export { default as TextInput } from './TextInput';
 
 export { default as SSRSafeSuspense } from './SSRSafeSuspense';
