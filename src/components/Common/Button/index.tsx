@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
 import React from 'react';
 
+import ButtonLoader from '~/components/Common/Button/ButtonLoader';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { toCssVar } from '~/styles/utils/toCssVar';
 
@@ -24,6 +25,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   size?: ButtonSize;
   color?: ButtonColor;
   asChild?: boolean;
+  loading?: boolean;
 }
 
 const Button = (props: ButtonProps) => {
@@ -32,14 +34,20 @@ const Button = (props: ButtonProps) => {
     size = 'md',
     color = 'primary',
     asChild = false,
+    loading = false,
+    disabled,
+    children,
     ...restProps
   } = props;
 
   const Component = asChild ? Slot : 'button';
   if (Component === 'button') restProps.type = 'button';
 
+  const isDisabled = disabled || loading;
+
   return (
     <Component
+      disabled={isDisabled}
       css={[
         baseCss,
         heightsCss[size],
@@ -47,9 +55,13 @@ const Button = (props: ButtonProps) => {
         colorVarCss[color],
       ]}
       {...restProps}
-    />
+    >
+      {loading ? <ButtonLoader color={loaderColor[variant]} /> : children}
+    </Component>
   );
 };
+
+export default Button;
 
 const baseCss = css(
   {
@@ -168,4 +180,8 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
   }),
 };
 
-export default Button;
+const loaderColor: Record<ButtonVariant, string> = {
+  text: colorMix('50%', cssVar.mainColor.var),
+  filled: '',
+  outlined: '',
+};

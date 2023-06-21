@@ -60,6 +60,22 @@ const ButtonGroup = (props: ButtonGroupProps) => {
           </Button>
         );
       })}
+
+      {/* Loading */}
+      {colors.map((color) => {
+        return (
+          <Button
+            style={{ width: 80 }}
+            key={color}
+            size="md"
+            variant={variant}
+            color={color}
+            loading
+          >
+            버튼
+          </Button>
+        );
+      })}
     </div>
   );
 };
@@ -67,21 +83,7 @@ const ButtonGroup = (props: ButtonGroupProps) => {
 const meta: Meta<typeof Button> = {
   title: 'Button',
   component: Button,
-};
-
-export default meta;
-
-type ButtonStory = StoryObj<typeof Button>;
-type ButtonGroupStory = StoryObj<typeof ButtonGroup>;
-
-export const SingleButton: ButtonStory = {
-  name: 'Button',
-  args: {
-    children: '버튼',
-    variant: 'filled',
-    size: 'sm',
-    color: 'primary',
-  },
+  tags: ['autodocs'],
   argTypes: {
     children: {
       name: 'text',
@@ -97,6 +99,23 @@ export const SingleButton: ButtonStory = {
       },
     },
   },
+};
+
+export default meta;
+
+type ButtonStory = StoryObj<typeof Button>;
+type ButtonGroupStory = StoryObj<typeof ButtonGroup>;
+
+export const SingleButton: ButtonStory = {
+  name: 'Button',
+  args: {
+    children: '버튼',
+    variant: 'filled',
+    size: 'sm',
+    color: 'primary',
+    loading: false,
+  },
+
 };
 
 export const Filled: ButtonGroupStory = {
