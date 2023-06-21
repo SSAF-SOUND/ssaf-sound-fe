@@ -30,11 +30,12 @@ interface SelectBoxProps<D = string> {
   placeholder?: string;
   onValueChange?: (value: string) => void;
   //
-  size: SelectBoxSize;
-  triggerTextAlign: TextAlign;
-  itemTextAlign: TextAlign;
-  variant: SelectBoxVariant;
-  theme: SelectBoxTheme;
+  triggerTextAlign?: TextAlign;
+  itemTextAlign?: TextAlign;
+  size?: SelectBoxSize;
+  variant?: SelectBoxVariant;
+  theme?: SelectBoxTheme;
+  id?: string;
 }
 
 const defaultTextAs = (item: any) => item;
@@ -47,16 +48,19 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     valueAs = defaultValueAs,
     onValueChange,
     //
-    size = 'lg',
-    triggerTextAlign = 'center',
-    itemTextAlign = 'center',
+    triggerTextAlign = 'left',
+    itemTextAlign = 'left',
+    size = 'sm',
     variant = 'normal',
     theme = 'primary',
+    //
+    id,
   } = props;
 
   return (
     <Select.Root onValueChange={onValueChange}>
       <Select.Trigger
+        id={id}
         css={[
           baseTriggerCss,
           triggerCss[variant],
