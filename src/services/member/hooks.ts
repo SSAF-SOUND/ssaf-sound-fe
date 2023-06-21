@@ -4,10 +4,18 @@ import { queryKeys } from '~/react-query/common';
 
 import { getMyInfo } from './apis';
 
-export const useMyInfo = () => {
+interface UseMyInfoOptions {
+  enabled?: boolean;
+}
+
+export const useMyInfo = (options: UseMyInfoOptions = {}) => {
+  const { enabled = true } = options;
+
   return useQuery({
     queryKey: queryKeys.user.myInfo(),
     queryFn: getMyInfo,
+    staleTime: Infinity,
+    enabled,
   });
 };
 

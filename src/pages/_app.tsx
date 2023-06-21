@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 
+import AutoSignIn from 'src/components/AutoSignIn';
 import AuthChecker from '~/components/AuthChecker';
 import { MainLayout } from '~/components/Layout';
 import useMSW from '~/hooks/useMSW';
@@ -29,6 +30,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
       <Hydrate state={pageProps.dehydratedState}>
         <ReduxProvider store={store}>
           <GlobalStyles />
+          <AutoSignIn />
           <MainLayout>
             {Component.auth ? (
               <AuthChecker auth={Component.auth}>

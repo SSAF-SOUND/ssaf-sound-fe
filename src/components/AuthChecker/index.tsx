@@ -1,9 +1,10 @@
 import type { NextPageAuthConfig } from 'next/types';
-import type { FC, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { role, useMyInfo } from '~/services/member';
+import { flex } from '~/styles/utils';
 
 export interface AuthCheckerProps {
   auth: NextPageAuthConfig;
@@ -14,14 +15,16 @@ const AuthChecker = (props: AuthCheckerProps) => {
   const { auth, children } = props;
 
   const router = useRouter();
-  const { data: myInfo, isLoading, isError } = useMyInfo();
+  const { data: myInfo, isInitialLoading, isError } = useMyInfo();
 
-  if (isLoading) {
+  if (isInitialLoading) {
     return auth.loading || <DefaultLoadingComponent />;
   }
 
   const isUnauthorized =
-    isError || role(myInfo.role).hasLowerAuthorityThan(auth.role);
+    isError ||
+    !myInfo ||
+    role(myInfo.memberRole).hasLowerAuthorityThan(auth.role);
 
   if (isUnauthorized) {
     if (typeof auth.unauthorized === 'string') {
@@ -34,6 +37,8 @@ const AuthChecker = (props: AuthCheckerProps) => {
   return <>{children}</>;
 };
 
-const DefaultLoadingComponent = () => <div>로딩중</div>;
+const DefaultLoadingComponent = () => (
+  <div css={flex('center', 'center')}>로딩중...</div>
+);
 
 export default AuthChecker;
