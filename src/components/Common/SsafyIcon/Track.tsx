@@ -13,16 +13,16 @@ import Uncertified from '~/assets/images/track-uncertified.svg';
 import { inlineFlex } from '~/styles/utils';
 
 const tracks = {
-  uncertified: <Uncertified />,
-  embedded: <EmbeddedTrack />,
-  python: <PythonTrack />,
-  java: <JavaTrack />,
-  mobile: <MobileTrack />,
-  primaryDefault: <PrimaryDefaultTrack />,
-  secondaryDefault: <SecondaryDefaultTrack />,
+  uncertified: Uncertified,
+  embedded: EmbeddedTrack,
+  python: PythonTrack,
+  java: JavaTrack,
+  mobile: MobileTrack,
+  primaryDefault: PrimaryDefaultTrack,
+  secondaryDefault: SecondaryDefaultTrack,
 };
 
-type TrackSize = 24 | 32 | 46 | 50 | 140 | 170;
+type TrackSize = 12 | 16 | 32 | 36 | 126 | 160;
 
 export interface TrackProps {
   name: keyof typeof tracks;
@@ -32,10 +32,13 @@ export interface TrackProps {
 }
 
 const Track = (props: TrackProps) => {
-  const { name, label = name, size = 46, style = {} } = props;
+  const { name, label = name, size = 32, style = {} } = props;
+  const SVGComponent = tracks[name];
   return (
-    <div css={selfCss} style={{ height: size, ...style }}>
-      <AccessibleIcon label={label}>{tracks[name]}</AccessibleIcon>
+    <div css={selfCss}>
+      <AccessibleIcon label={label}>
+        <SVGComponent style={{ height: size, ...style }} />
+      </AccessibleIcon>
     </div>
   );
 };
