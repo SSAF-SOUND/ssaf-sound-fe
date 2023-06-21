@@ -38,7 +38,9 @@ interface SelectBoxProps<D = string> {
   id?: string;
 }
 
+// eslint-disable-next-line
 const defaultTextAs = (item: any) => item;
+// eslint-disable-next-line
 const defaultValueAs = (item: any) => item;
 const SelectBox = <D,>(props: SelectBoxProps<D>) => {
   const {
