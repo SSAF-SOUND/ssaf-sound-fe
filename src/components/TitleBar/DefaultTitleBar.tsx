@@ -43,6 +43,7 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
           css={withoutBackward && visuallyHiddenCss}
           onClick={onClickBackward || defaultHandleClickBackward}
           aria-hidden={withoutBackward && 'true'}
+          disabled={withoutBackward}
         >
           <Icon name="backward" size={iconSize} />
         </IconButton>
@@ -61,6 +62,7 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
           css={withoutClose && visuallyHiddenCss}
           onClick={onClickClose}
           aria-hidden={withoutClose && 'true'}
+          disabled={withoutClose}
         >
           <Icon name="close" size={iconSize} />
         </IconButton>
