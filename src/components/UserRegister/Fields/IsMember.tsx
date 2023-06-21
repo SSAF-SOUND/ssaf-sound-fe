@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
 
-import { Button } from '~/components/Common';
+import { Button, SsafyIcon } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
+import { flex } from '~/styles/utils';
 
 const nicknamePhase = 4;
 
@@ -21,6 +22,8 @@ const IsMember = () => {
         <Question.Row>안녕하세요</Question.Row>
         <Question.Row>SSAFY인 이신가요?</Question.Row>
       </Question>
+
+      <SsafyIcon.Track name="primaryDefault" size={170} />
 
       <div css={buttonGroupCss}>
         <Button
@@ -44,18 +47,19 @@ const IsMember = () => {
   );
 };
 
-const selfCss = css({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  height: '100%',
-});
+const selfCss = css(
+  {
+    height: '100%',
+  },
+  flex('', 'space-between')
+);
 
-const buttonGroupCss = css({
-  display: 'flex',
-  width: '100%',
-  gap: 20,
-});
+const buttonGroupCss = css(
+  {
+    width: '100%',
+  },
+  flex('', '', 'row', 20)
+);
 
 const buttonCss = css({
   width: '100%',
