@@ -22,7 +22,7 @@ const tracks = {
   secondaryDefault: <SecondaryDefaultTrack />,
 };
 
-type TrackSize = 24 | 32 | 46 | 50 | 140;
+type TrackSize = 24 | 32 | 46 | 50 | 140 | 170;
 
 export interface TrackProps {
   name: keyof typeof tracks;
@@ -41,4 +41,4 @@ const Track = (props: TrackProps) => {
 };
 export default Track;
 
-const selfCss = css({ padding: 4 }, inlineFlex());
+const selfCss = css({ padding: 4 }, inlineFlex('center', 'center', 'row'));

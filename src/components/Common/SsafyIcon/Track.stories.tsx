@@ -29,7 +29,7 @@ export const TrackIcon: TrackIconStory = {
 
 export const AllTrackIcons: TrackIconStory = {
   render: () => {
-    const sizes = [24, 32, 46, 50, 140] as const;
+    const sizes = [24, 32, 46, 50, 140, 170] as const;
     const tracks = [
       'embedded',
       'python',
