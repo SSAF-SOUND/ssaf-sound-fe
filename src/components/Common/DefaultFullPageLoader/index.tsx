@@ -7,7 +7,7 @@ interface DefaultFullPageLoaderProps {
   text?: string;
 }
 
-const Index = (props: DefaultFullPageLoaderProps) => {
+const DefaultFullPageLoader = (props: DefaultFullPageLoaderProps) => {
   const { text = '' } = props;
   return (
     <div css={selfCss}>
@@ -27,4 +27,4 @@ const selfCss = css(
 
 const textCss = css(fontCss.family.auto);
 
-export default Index;
+export default DefaultFullPageLoader;
