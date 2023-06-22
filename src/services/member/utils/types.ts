@@ -7,18 +7,20 @@ export const userRoles = {
 };
 export type UserRole = keyof typeof userRoles;
 
-export type SsafyCampus = '서울' | '대전' | '광주' | '구미' | '부울경';
-export type SsafyYear =
-  | '1기'
-  | '2기'
-  | '3기'
-  | '4기'
-  | '5기'
-  | '6기'
-  | '7기'
-  | '8기'
-  | '9기'
-  | '10기';
+export interface SsafyInfo {
+  /**
+   * 1 ~ 10
+   */
+  year: number;
+  /**
+   * 서울 | 대전 | 광주 | 구미 | 부울경
+   */
+  campus: string;
+  isMajor: boolean;
+  certificationState: CertificationState;
+}
+
+export type CertificationState = 'UNCERTIFIED' | 'WAITING' | 'CERTIFIED';
 
 export interface UserBasicInfo {
   memberId: string;
@@ -28,8 +30,8 @@ export interface UserBasicInfo {
 
 export type UserSsafyInfo =
   | {
-      ssafyMember?: false;
-      ssafyInfo: undefined;
+      ssafyMember: null | false;
+      ssafyInfo?: undefined;
     }
   | {
       ssafyMember: true;
@@ -37,12 +39,3 @@ export type UserSsafyInfo =
     };
 
 export type UserInfo = UserBasicInfo & UserSsafyInfo;
-
-export interface SsafyInfo {
-  year: SsafyYear;
-  campus: SsafyCampus;
-  isMajor: boolean;
-  certificationState?: CertificationState;
-}
-
-export interface CertificationState {}
