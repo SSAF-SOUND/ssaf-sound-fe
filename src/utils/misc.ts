@@ -24,3 +24,5 @@ export const sleep = (ms: number) => {
     setTimeout(() => resolve(0), ms);
   });
 };
+
+export const isClient = typeof window !== 'undefined';

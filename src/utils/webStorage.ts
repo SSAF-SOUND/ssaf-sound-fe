@@ -1,3 +1,14 @@
+import { isClient, noop } from '~/utils/misc';
+
+const mockStorage = new Proxy(
+  {},
+  {
+    get: () => noop,
+  }
+) as Storage;
+
+const sessionStorage = isClient ? window.sessionStorage : mockStorage;
+
 const createWebStorage = () => {
   // Storage Key
   const AUTH_RETURN_PAGE_KEY = 'auth-return-page';
