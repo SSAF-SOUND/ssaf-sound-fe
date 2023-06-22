@@ -42,7 +42,7 @@ export const mockError = (
   const isValidStatusCode = statusCode >= 400 && statusCode < 600;
   return [
     ctx.status(isValidStatusCode ? statusCode : 400),
-    ctx.json<ApiErrorResponse>({ code, message }),
+    ctx.json<ApiErrorResponse>({ code, message, data: null }),
   ] as const;
 };
 
