@@ -7,12 +7,10 @@ import type { NextPage } from 'next/types';
 
 import { useRouter } from 'next/router';
 
-import { css } from '@emotion/react';
 import { useEffect } from 'react';
-import { BounceLoader } from 'react-spinners';
 
+import DefaultFullPageLoader from '~/components/Common/DefaultFullPageLoader';
 import { useSignIn } from '~/services/auth';
-import { flex, palettes } from '~/styles/utils';
 
 interface QueryParams {
   code: string;
@@ -46,22 +44,10 @@ const CallbackPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
     // eslint-disable-next-line
   }, []);
 
-  return (
-    <>
-      <div css={selfCss}>
-        <BounceLoader color={palettes.white} />
-        <p>로그인 중입니다</p>
-      </div>
-    </>
-  );
+  return <DefaultFullPageLoader text="로그인 중입니다." />;
 };
 
 export default CallbackPage;
-
-const selfCss = css(
-  { width: '100%', height: '100vh' },
-  flex('center', 'center', 'column', 10)
-);
 
 type Props = { provider: string };
 type Params = Props;
