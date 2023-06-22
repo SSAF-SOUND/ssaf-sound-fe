@@ -5,10 +5,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 
-import AutoSignIn from 'src/components/AutoSignIn';
 import AuthChecker from '~/components/AuthChecker';
+import Background from '~/components/Background';
 import { MainLayout } from '~/components/Layout';
-import useMSW from '~/hooks/useMSW';
+import { useMSW } from '~/hooks';
 import { initServerMocks } from '~/mocks';
 import { getQueryClient } from '~/react-query/common';
 import { store } from '~/store';
@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
       <Hydrate state={pageProps.dehydratedState}>
         <ReduxProvider store={store}>
           <GlobalStyles />
-          <AutoSignIn />
+          <Background />
           <MainLayout>
             {Component.auth ? (
               <AuthChecker auth={Component.auth}>
