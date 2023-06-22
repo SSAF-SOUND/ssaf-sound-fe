@@ -47,9 +47,7 @@ export const useAutoSignIn = () => {
   const { isAuthenticated } = useMyAccountStatus();
 
   const queryEnabled = !tried && !isAuthenticated;
-
-  // `enabled`가 `false`가 되면, 쿼리가 실패해도 `retry`를 트리거하지 않음.
-  useMyInfo({ enabled: queryEnabled });
+  useMyInfo({ enabled: queryEnabled, retry: false });
 
   if (queryEnabled) {
     setTried(true);
