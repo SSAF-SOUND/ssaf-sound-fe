@@ -59,8 +59,9 @@ export const useAutoSignIn = () => {
 export const useCheckRegisterRequired = () => {
   const router = useRouter();
   const { isRegisterRequired } = useMyAccountStatus();
+  const isRegisterPage = router.pathname === '/auth/register';
 
-  if (isRegisterRequired) {
+  if (!isRegisterPage && isRegisterRequired) {
     router.replace('/auth/register');
   }
 };
