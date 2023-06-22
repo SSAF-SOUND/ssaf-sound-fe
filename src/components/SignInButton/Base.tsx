@@ -24,8 +24,7 @@ const Base = (props: BaseProps) => {
      * LATER
      *   window.location.href = 'https://api.ssafsound.com/auth/google';
      */
-    // callbackUrl 저장 후 -> 로그인 플로우 완료 후 리다이렉션
-    router.push('/auth/callback?code=777777');
+    router.push(`/auth/callback/${provider}?code=777777`);
   };
 
   return (
