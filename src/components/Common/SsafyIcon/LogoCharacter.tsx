@@ -1,5 +1,3 @@
-import type { CSSProperties } from 'react';
-
 import { css } from '@emotion/react';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 
@@ -10,15 +8,14 @@ type LogoCharacterSize = 60;
 
 interface LogoCharacterProps {
   size?: LogoCharacterSize;
-  style?: CSSProperties;
 }
 
 const LogoCharacter = (props: LogoCharacterProps) => {
-  const { size = 60, style = {} } = props;
+  const { size = 60 } = props;
   return (
-    <div css={selfCss} style={{ height: size, ...style }}>
+    <div css={selfCss}>
       <AccessibleIcon label="logo-character">
-        <LogoCharacterSVG />
+        <LogoCharacterSVG style={{ height: size }} />
       </AccessibleIcon>
     </div>
   );
