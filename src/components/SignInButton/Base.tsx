@@ -4,9 +4,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { filter, flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
-import { API_URL, composeUrls, publicAxios } from '~/utils';
-import { webStorage } from '~/utils/webStorage';
+import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 type Provider = 'google' | 'github' | 'kakao' | 'apple';
 
@@ -22,7 +20,6 @@ const Base = (props: BaseProps) => {
 
   const handleClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
-    webStorage.setAuthProvider(provider);
     /**
      * LATER
      *   window.location.href = 'https://api.ssafsound.com/auth/google';
