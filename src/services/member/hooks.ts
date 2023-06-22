@@ -6,16 +6,18 @@ import { getMyInfo } from './apis';
 
 interface UseMyInfoOptions {
   enabled?: boolean;
+  retry?: number | boolean;
 }
 
 export const useMyInfo = (options: UseMyInfoOptions = {}) => {
-  const { enabled = true } = options;
+  const { enabled = true, retry } = options;
 
   return useQuery({
     queryKey: queryKeys.user.myInfo(),
     queryFn: getMyInfo,
     staleTime: Infinity,
     enabled,
+    retry,
   });
 };
 
