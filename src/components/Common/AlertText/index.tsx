@@ -10,13 +10,18 @@ interface AlertTextProps {
   children: ReactNode;
   className?: string;
   size?: AlertTextSize;
+  bold?: boolean;
 }
 
 const AlertText = (props: AlertTextProps) => {
-  const { children, className, size = 'sm' } = props;
+  const { children, className, size = 'sm', bold = false } = props;
 
   return (
-    <p role="alert" css={[selfCss, sizeCss[size]]} className={className}>
+    <p
+      role="alert"
+      css={[selfCss, sizeCss[size], bold && boldCss]}
+      className={className}
+    >
       {children}
     </p>
   );
@@ -36,3 +41,7 @@ const sizeCss = {
   md: css(fontCss.style.R16),
   lg: css(fontCss.style.R18),
 };
+
+const boldCss = css({
+  fontWeight: 700,
+});
