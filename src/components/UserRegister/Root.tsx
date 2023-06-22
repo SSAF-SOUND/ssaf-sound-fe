@@ -29,7 +29,6 @@ const UserRegisterRoot = () => {
   const prevPhase = usePrevPhaseContext();
   const setPhase = useSetPhaseContext();
   const phase = phaseClamp(unSafePhase);
-  const isNicknamePhase = phase === nicknamePhase;
 
   const Field = fields[phase];
   const handleClickBackward = () => {
@@ -45,9 +44,8 @@ const UserRegisterRoot = () => {
       <TitleBar.Default
         withoutTitle
         withoutClose
-        withoutBackward={isNicknamePhase}
         onClickBackward={handleClickBackward}
-        css={topBarCss}
+        css={titleBarCss}
       />
 
       <ProgressBar min={0} now={phase + 1} max={fields.length} />
@@ -71,7 +69,7 @@ const formCss = css({
   padding: '60px 0 30px',
 });
 
-const topBarCss = css({
+const titleBarCss = css({
   padding: 0,
   margin: '0 -5px 12px',
 });
