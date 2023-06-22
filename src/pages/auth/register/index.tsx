@@ -3,11 +3,7 @@ import type { CustomNextPage } from 'next/types';
 import UserRegister from '~/components/UserRegister';
 
 const RegisterPage: CustomNextPage = () => {
-  return (
-    <div>
-      <UserRegister />
-    </div>
-  );
+  return <UserRegister />;
 };
 
 RegisterPage.auth = {
