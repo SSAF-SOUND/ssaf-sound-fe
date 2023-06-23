@@ -67,7 +67,6 @@ const UserRegisterRoot = () => {
             console.log(value);
           })}
         >
-          <button>제출</button>
           <Field />
         </form>
       </FormProvider>

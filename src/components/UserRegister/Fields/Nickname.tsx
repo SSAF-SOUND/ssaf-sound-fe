@@ -21,14 +21,18 @@ const Nickname = () => {
   const {
     register,
     setValue,
+    setFocus,
     formState: { errors },
   } = useFormContext<UpdateMyInfoParams>();
   const nicknameFieldId = useId();
   const errorMessage = errors.nickname?.message;
-  const setRandomNickname = () => setValue(fieldName, createRandomNickname());
+  const setRandomNicknameAndFocusField = () => {
+    setValue(fieldName, createRandomNickname());
+    setFocus(fieldName);
+  };
 
   useEffect(() => {
-    setRandomNickname();
+    setRandomNicknameAndFocusField();
     // eslint-disable-next-line
   }, []);
 
@@ -44,7 +48,7 @@ const Nickname = () => {
       <div css={inputContainerCss}>
         <div css={refreshNicknameCss}>
           <p>랜덤 닉네임 생성</p>
-          <IconButton size={32} onClick={setRandomNickname}>
+          <IconButton size={32} onClick={setRandomNicknameAndFocusField}>
             <Icon name="refresh" size={28} />
           </IconButton>
         </div>
