@@ -48,6 +48,12 @@ const UserRegisterRoot = () => {
     setPhase(Math.min(prevPhase, phase - 1));
   };
 
+  const onSubmit = (value: UpdateMyInfoParams) => {
+    setError('nickname', {
+      message: '닉네임이 중복됩니다.',
+    });
+  };
+
   return (
     <div css={selfCss}>
       <TitleBar.Default
@@ -63,16 +69,28 @@ const UserRegisterRoot = () => {
       <FormProvider {...formMethods}>
         <form
           css={formCss}
-          onSubmit={handleSubmit((value) => {
-            console.log(value);
+          onSubmit={handleSubmit(onSubmit, (error) => {
+            console.log(error);
           })}
         >
           <Field />
+
+          {phase === nicknamePhase && (
+            <Button type="submit" css={buttonCss} variant="filled" size="lg">
+              확인
+            </Button>
+          )}
         </form>
       </FormProvider>
     </div>
   );
 };
+
+export default UserRegisterRoot;
+
+const buttonCss = css({
+  width: '100%',
+});
 
 const selfCss = css({
   display: 'flex',
@@ -81,14 +99,15 @@ const selfCss = css({
   padding: '10px 15px',
 });
 
-const formCss = css({
-  flexGrow: 1,
-  padding: '60px 0 30px',
-});
+const formCss = css(
+  {
+    flexGrow: 1,
+    padding: '60px 0 30px',
+  },
+  flex('', 'space-between', 'column')
+);
 
 const titleBarCss = css({
   padding: 0,
   margin: '0 -5px 12px',
 });
-
-export default UserRegisterRoot;

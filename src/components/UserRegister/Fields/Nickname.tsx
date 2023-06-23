@@ -66,13 +66,11 @@ const Nickname = () => {
         />
         {errorMessage && <AlertText>{errorMessage}</AlertText>}
       </div>
-
-      <Button type="submit" css={buttonCss} variant="filled" size="lg">
-        확인
-      </Button>
     </div>
   );
 };
+
+export default Nickname;
 
 const selfCss = css(
   {
@@ -89,10 +87,4 @@ const inputContainerCss = css(
   flex('', '', 'column', 10)
 );
 
-const buttonCss = css({
-  width: '100%',
-});
-
 const refreshNicknameCss = css(flex('center', 'flex-end', 'row', 8));
-
-export default Nickname;
