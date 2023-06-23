@@ -119,7 +119,7 @@ const baseTriggerCss = css(
 );
 
 const triggerCss = {
-  normal: css(fontCss.family.auto, {
+  normal: css({
     backgroundColor: palettes.white,
     borderRadius: 8,
     ':focus': {
@@ -158,10 +158,13 @@ const triggerIconCss = {
   }),
 };
 
-const contentCss = css({
-  width: 'var(--radix-select-trigger-width)',
-  maxHeight: 'var(--radix-select-content-available-height)',
-});
+const contentCss = css(
+  {
+    width: 'var(--radix-select-trigger-width)',
+    maxHeight: 'var(--radix-select-content-available-height)',
+  },
+  fontCss.family.auto
+);
 
 const viewportCss = {
   normal: css({
