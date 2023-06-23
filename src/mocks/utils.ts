@@ -1,7 +1,7 @@
 import type { RestContext } from 'msw';
 import type { ApiErrorResponse, ApiSuccessResponse } from '~/types';
 
-import { RESPONSE } from '~/utils';
+import { RESPONSE_CODE } from '~/utils';
 
 /**
  * - 성공 응답에 거의 `data`만 사용되기 때문에 만들었습니다.
@@ -47,9 +47,9 @@ export const mockError = (
 };
 
 export const mockExpiredTokenError = (ctx: RestContext) => {
-  return mockError(ctx, RESPONSE.CODE.EXPIRED_TOKEN);
+  return mockError(ctx, RESPONSE_CODE.EXPIRED_TOKEN);
 };
 
 export const mockInvalidTokenError = (ctx: RestContext) => {
-  return mockError(ctx, RESPONSE.CODE.INVALID_TOKEN);
+  return mockError(ctx, RESPONSE_CODE.INVALID_TOKEN);
 };

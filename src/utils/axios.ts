@@ -5,7 +5,7 @@ import axios, { isAxiosError } from 'axios';
 
 import { reissueToken } from '~/services/auth';
 
-import { API_URL, RESPONSE } from './constants';
+import { API_URL, RESPONSE_CODE } from './constants';
 
 export const publicAxios = axios.create({
   baseURL: API_URL,
@@ -89,6 +89,6 @@ const configurePrivateAxiosInterceptors = (
 };
 
 configurePrivateAxiosInterceptors(reissueToken, [
-  RESPONSE.CODE.EXPIRED_TOKEN,
-  RESPONSE.CODE.TOKEN_NOT_EXISTS,
+  RESPONSE_CODE.EXPIRED_TOKEN,
+  RESPONSE_CODE.TOKEN_NOT_EXISTS,
 ]);

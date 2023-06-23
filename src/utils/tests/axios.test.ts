@@ -4,7 +4,13 @@ import { rest } from 'msw';
 
 import { server } from '~/mocks/server';
 import { endpoints } from '~/react-query/common';
-import { API_URL, composeUrls, privateAxios, RESPONSE, sleep } from '~/utils';
+import {
+  API_URL,
+  composeUrls,
+  privateAxios,
+  RESPONSE_CODE,
+  sleep,
+} from '~/utils';
 
 const privatePath = '/private';
 
@@ -25,7 +31,7 @@ const setupMSW = (
         ctx.status(400),
         ctx.json<ApiErrorResponse>({
           message: '',
-          code: RESPONSE.CODE.EXPIRED_TOKEN,
+          code: RESPONSE_CODE.EXPIRED_TOKEN,
         })
       );
     }),
