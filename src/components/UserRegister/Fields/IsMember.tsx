@@ -1,7 +1,5 @@
-import type { UpdateMyInfoParams } from '~/services/member';
-
 import { css } from '@emotion/react';
-import { useFormContext } from 'react-hook-form';
+import { isBoolean } from 'is-what';
 
 import { Button, SsafyIcon } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
@@ -27,7 +25,7 @@ const IsMember = () => {
   };
 
   register(fieldName, {
-    required: true,
+    validate: (value) => isBoolean(value),
   });
 
   return (

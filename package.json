@@ -22,6 +22,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-query": "^4.29.5",
     "axios": "^1.4.0",
+    "is-what": "^4.1.15",
     "next": "13.3.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
