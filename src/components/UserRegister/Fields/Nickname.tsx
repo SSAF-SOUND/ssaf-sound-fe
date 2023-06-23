@@ -5,7 +5,7 @@ import { Button, Icon, IconButton } from '~/components/Common';
 import AlertText from '~/components/Common/AlertText';
 import TextInput from '~/components/Common/TextInput';
 import Question from '~/components/UserRegister/Question';
-import { getRandomNickname } from '~/services/member';
+import { createRandomNickname } from '~/services/member';
 import { flex } from '~/styles/utils';
 
 const Nickname = () => {
@@ -25,7 +25,7 @@ const Nickname = () => {
           <p>랜덤 닉네임 생성</p>
           <IconButton
             size={32}
-            onClick={() => console.log(getRandomNickname())}
+            onClick={() => console.log(createRandomNickname())}
           >
             <Icon name="refresh" size={28} />
           </IconButton>

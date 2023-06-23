@@ -29,6 +29,6 @@ const config: Config = {
   style: 'capital',
 };
 
-export const getRandomNickname = () => {
+export const createRandomNickname = () => {
   return uniqueNamesGenerator(config);
 };
