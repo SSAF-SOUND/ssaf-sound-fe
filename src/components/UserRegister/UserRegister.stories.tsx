@@ -7,7 +7,6 @@ import UserRegister from './index';
 const meta: Meta<typeof UserRegister> = {
   title: 'User Register',
   component: UserRegister,
-  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <MainLayout
