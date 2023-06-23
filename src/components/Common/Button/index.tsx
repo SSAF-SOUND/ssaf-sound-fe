@@ -42,7 +42,7 @@ const Button = (props: ButtonProps) => {
   } = props;
 
   const Component = asChild ? Slot : 'button';
-  if (Component === 'button') restProps.type = 'button';
+  if (Component === 'button') restProps.type = restProps.type || 'button';
 
   const isDisabled = disabled || loading;
 
