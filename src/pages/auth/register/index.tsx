@@ -2,7 +2,7 @@ import type { CustomNextPage } from 'next/types';
 
 import { useRouter } from 'next/router';
 
-import DefaultFullPageLoader from '~/components/Common/DefaultFullPageLoader';
+import { DefaultFullPageLoader } from '~/components/Common';
 import UserRegister from '~/components/UserRegister';
 import { useMyAccountStatus } from '~/services/member';
 

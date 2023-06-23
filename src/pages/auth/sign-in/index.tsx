@@ -2,8 +2,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Logo, SsafyIcon } from '~/components/Common';
-import DefaultFullPageLoader from '~/components/Common/DefaultFullPageLoader';
+import { Logo, SsafyIcon , DefaultFullPageLoader } from '~/components/Common';
 import SignInButton from '~/components/SignInButton';
 import { useMyAccountStatus } from '~/services/member';
 import { flex } from '~/styles/utils';
@@ -14,6 +13,7 @@ const SignInPage = () => {
 
   if (isAuthenticated) {
     router.replace('/main');
+    return <></>;
   }
 
   if (isChecking) {

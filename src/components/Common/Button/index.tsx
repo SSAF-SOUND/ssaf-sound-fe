@@ -5,9 +5,10 @@ import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
 import React from 'react';
 
-import ButtonLoader from '~/components/Common/Button/ButtonLoader';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { toCssVar } from '~/styles/utils/toCssVar';
+
+import ButtonLoader from './ButtonLoader';
 
 type ButtonVariant = 'text' | 'filled' | 'outlined';
 type ButtonSize = 'sm' | 'md' | 'lg';
