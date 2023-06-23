@@ -5,7 +5,8 @@ import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
 import React from 'react';
 
-import { flex, fontCss, palettes } from '~/styles/utils';
+import ButtonLoader from '~/components/Common/Button/ButtonLoader';
+import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { toCssVar } from '~/styles/utils/toCssVar';
 
 type ButtonVariant = 'text' | 'filled' | 'outlined';
@@ -24,6 +25,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   size?: ButtonSize;
   color?: ButtonColor;
   asChild?: boolean;
+  loading?: boolean;
 }
 
 const Button = (props: ButtonProps) => {
@@ -32,14 +34,20 @@ const Button = (props: ButtonProps) => {
     size = 'md',
     color = 'primary',
     asChild = false,
+    loading = false,
+    disabled,
+    children,
     ...restProps
   } = props;
 
   const Component = asChild ? Slot : 'button';
   if (Component === 'button') restProps.type = 'button';
 
+  const isDisabled = disabled || loading;
+
   return (
     <Component
+      disabled={isDisabled}
       css={[
         baseCss,
         heightsCss[size],
@@ -47,9 +55,13 @@ const Button = (props: ButtonProps) => {
         colorVarCss[color],
       ]}
       {...restProps}
-    />
+    >
+      {loading ? <ButtonLoader color={loaderColor[variant]} /> : children}
+    </Component>
   );
 };
+
+export default Button;
 
 const baseCss = css(
   {
@@ -62,9 +74,7 @@ const baseCss = css(
     transition:
       'color 200ms, background-color 200ms, border-color 200ms, outline 200ms',
     '&:disabled': {
-      cursor: 'initial',
       pointerEvents: 'none',
-      opacity: 0.5,
     },
   },
   fontCss.style.B16,
@@ -138,6 +148,9 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       backgroundColor: cssVar.mainColor.var,
       color: palettes.white,
     },
+    '&:disabled': {
+      color: colorMix('50%', cssVar.mainColor.var),
+    },
   }),
   filled: css({
     backgroundColor: cssVar.mainColor.var,
@@ -147,6 +160,9 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       color: palettes.white,
     },
     '&:focus-visible': { outline: `3px solid ${cssVar.mainLightColor.var}` },
+    '&:disabled': {
+      backgroundColor: colorMix('50%', cssVar.mainColor.var),
+    },
   }),
   outlined: css({
     backgroundColor: palettes.white,
@@ -158,7 +174,14 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       color: palettes.white,
     },
     '&:focus-visible': { outline: `3px solid ${cssVar.mainColor.var}` },
+    '&:disabled': {
+      backgroundColor: colorMix('50%', palettes.white),
+    },
   }),
 };
 
-export default Button;
+const loaderColor: Record<ButtonVariant, string> = {
+  text: colorMix('50%', cssVar.mainColor.var),
+  filled: '',
+  outlined: '',
+};

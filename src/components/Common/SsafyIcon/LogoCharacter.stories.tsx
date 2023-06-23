@@ -18,10 +18,5 @@ export const LogoCharacterIcon: LogoCharacterIconStory = {
         disable: true,
       },
     },
-    style: {
-      table: {
-        disable: true,
-      },
-    },
   },
 };

@@ -4,9 +4,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { filter, flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
-import { API_URL, composeUrls, publicAxios } from '~/utils';
-import { webStorage } from '~/utils/webStorage';
+import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 type Provider = 'google' | 'github' | 'kakao' | 'apple';
 
@@ -22,13 +20,11 @@ const Base = (props: BaseProps) => {
 
   const handleClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
-    webStorage.setAuthProvider(provider);
     /**
      * LATER
      *   window.location.href = 'https://api.ssafsound.com/auth/google';
      */
-    // callbackUrl 저장 후 -> 로그인 플로우 완료 후 리다이렉션
-    router.push('/auth/callback?code=777777');
+    router.push(`/auth/callback/${provider}?code=777777`);
   };
 
   return (

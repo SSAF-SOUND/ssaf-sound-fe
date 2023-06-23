@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { Button } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
+import { flex } from '~/styles/utils';
 
 const IsMajor = () => {
   const setPhase = useSetPhaseContext();
@@ -38,18 +39,19 @@ const IsMajor = () => {
   );
 };
 
-const selfCss = css({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  height: '100%',
-});
+const selfCss = css(
+  {
+    height: '100%',
+  },
+  flex('', 'space-between', 'column')
+);
 
-const buttonGroupCss = css({
-  display: 'flex',
-  width: '100%',
-  gap: 20,
-});
+const buttonGroupCss = css(
+  {
+    width: '100%',
+  },
+  flex('', '', 'row', 20)
+);
 
 const buttonCss = css({
   width: '100%',

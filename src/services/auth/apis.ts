@@ -7,13 +7,16 @@ import { publicAxios } from '~/utils';
 
 export interface SignInData {}
 export type SignInApiData = ApiSuccessResponse<SignInData>;
+export interface SignInParams {
+  code: string;
+  oauthName: string;
+}
 
-export const signIn = (code: string) => {
+export const signIn = (params: SignInParams) => {
   const endpoint = endpoints.auth.signIn();
+  const { code, oauthName } = params;
   return publicAxios
-    .post<SignInApiData>(endpoint, {
-      code,
-    })
+    .post<SignInApiData>(endpoint, params)
     .then((res) => res.data);
 };
 

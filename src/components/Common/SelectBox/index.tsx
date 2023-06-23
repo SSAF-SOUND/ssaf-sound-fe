@@ -30,14 +30,17 @@ interface SelectBoxProps<D = string> {
   placeholder?: string;
   onValueChange?: (value: string) => void;
   //
-  size: SelectBoxSize;
-  triggerTextAlign: TextAlign;
-  itemTextAlign: TextAlign;
-  variant: SelectBoxVariant;
-  theme: SelectBoxTheme;
+  triggerTextAlign?: TextAlign;
+  itemTextAlign?: TextAlign;
+  size?: SelectBoxSize;
+  variant?: SelectBoxVariant;
+  theme?: SelectBoxTheme;
+  id?: string;
 }
 
+// eslint-disable-next-line
 const defaultTextAs = (item: any) => item;
+// eslint-disable-next-line
 const defaultValueAs = (item: any) => item;
 const SelectBox = <D,>(props: SelectBoxProps<D>) => {
   const {
@@ -47,16 +50,19 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     valueAs = defaultValueAs,
     onValueChange,
     //
-    size = 'lg',
-    triggerTextAlign = 'center',
-    itemTextAlign = 'center',
+    triggerTextAlign = 'left',
+    itemTextAlign = 'left',
+    size = 'sm',
     variant = 'normal',
     theme = 'primary',
+    //
+    id,
   } = props;
 
   return (
     <Select.Root onValueChange={onValueChange}>
       <Select.Trigger
+        id={id}
         css={[
           baseTriggerCss,
           triggerCss[variant],

@@ -17,7 +17,7 @@ const TopBar = (props: TopBarProps) => {
   return (
     <Bar
       {...props}
-      left={<Logo navigateToHome />}
+      left={<Logo navigateToMainPage />}
       right={
         <div css={rightSelfCss}>
           <div css={rightIconContainerCss}>

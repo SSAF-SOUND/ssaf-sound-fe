@@ -8,6 +8,7 @@ import IconButton from './index';
 const meta: Meta<typeof IconButton> = {
   title: 'IconButton',
   component: IconButton,
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <div style={{ display: 'flex' }}>
@@ -15,11 +16,26 @@ const meta: Meta<typeof IconButton> = {
       </div>
     ),
   ],
+  argTypes: {},
 };
 
 export default meta;
 
 type IconButtonStory = StoryObj<typeof IconButton>;
+
+export const Default: IconButtonStory = {
+  render: (args) => {
+    return (
+      <IconButton {...args}>
+        <Icon name="close" size={28} />
+      </IconButton>
+    );
+  },
+  args: {
+    theme: 'white',
+    size: 40,
+  },
+};
 
 export const Examples: IconButtonStory = {
   render: () => {

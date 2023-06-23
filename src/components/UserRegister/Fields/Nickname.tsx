@@ -1,20 +1,42 @@
 import { css } from '@emotion/react';
+import { useId } from 'react';
 
-import { Button } from '~/components/Common';
+import { Button, Icon, IconButton } from '~/components/Common';
+import AlertText from '~/components/Common/AlertText';
+import TextInput from '~/components/Common/TextInput';
 import Question from '~/components/UserRegister/Question';
-import { fontCss } from '~/styles/utils';
+import { getRandomNickname } from '~/services/member';
+import { flex } from '~/styles/utils';
 
 const Nickname = () => {
+  const nicknameFieldId = useId();
+
   return (
     <div css={selfCss}>
-      <Question>
-        <Question.Row>닉네임을</Question.Row>
-        <Question.Row>설정해주세요</Question.Row>
-      </Question>
+      <label htmlFor={nicknameFieldId}>
+        <Question>
+          <Question.Row>닉네임을</Question.Row>
+          <Question.Row>입력해주세요</Question.Row>
+        </Question>
+      </label>
 
       <div css={inputContainerCss}>
-        <input type="text" css={inputCss} />
-        <p css={inputAlertCss}>익명성을 해치는 닉네임을 피해주세요</p>
+        <div css={refreshNicknameCss}>
+          <p>랜덤 닉네임 생성</p>
+          <IconButton
+            size={32}
+            onClick={() => console.log(getRandomNickname())}
+          >
+            <Icon name="refresh" size={28} />
+          </IconButton>
+        </div>
+        <TextInput
+          placeholder="James"
+          size="lg"
+          type="text"
+          id={nicknameFieldId}
+        />
+        <AlertText>닉네임이 중복됩니다.</AlertText>
       </div>
 
       <Button css={buttonCss} variant="filled" size="lg">
@@ -24,35 +46,25 @@ const Nickname = () => {
   );
 };
 
-const selfCss = css({
-  display: 'flex',
-  height: '100%',
-  flexDirection: 'column',
-});
+const selfCss = css(
+  {
+    height: '100%',
+  },
+  flex()
+);
 
-const inputContainerCss = css({
-  flexGrow: 1,
-  marginTop: 40,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 10,
-});
-
-const inputCss = css({
-  height: 50,
-  borderRadius: 8,
-  border: '1px solid #777777',
-  padding: '0 20px',
-  fontSize: 18,
-});
-
-const inputAlertCss = css(fontCss.family.sans, {
-  color: '#61A3F3',
-  fontSize: 16,
-});
+const inputContainerCss = css(
+  {
+    flexGrow: 1,
+    marginTop: 40,
+  },
+  flex('', '', 'column', 10)
+);
 
 const buttonCss = css({
   width: '100%',
 });
+
+const refreshNicknameCss = css(flex('center', 'flex-end', 'row', 8));
 
 export default Nickname;

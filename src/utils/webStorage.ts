@@ -1,12 +1,29 @@
+import { isClient, noop } from '~/utils/misc';
+
+const mockStorage = new Proxy(
+  {},
+  {
+    get: () => noop,
+  }
+) as Storage;
+
+const sessionStorage = isClient ? window.sessionStorage : mockStorage;
+
 const createWebStorage = () => {
-  const AUTH_PROVIDER_KEY = 'auth-provider';
+  // Storage Key
+  const AUTH_RETURN_PAGE_KEY = 'auth-return-page';
+
+  // Default Value
+  const DEFAULT_RETURN_PAGE = '/main';
 
   return {
-    setAuthProvider: (provider: string) => {
-      sessionStorage.setItem(AUTH_PROVIDER_KEY, provider);
+    setReturnPage: (returnPage: string) => {
+      sessionStorage.setItem(AUTH_RETURN_PAGE_KEY, returnPage);
     },
-    getAuthProvider: () => {
-      return sessionStorage.getItem(AUTH_PROVIDER_KEY);
+    getReturnPage: () => {
+      return (
+        sessionStorage.getItem(AUTH_RETURN_PAGE_KEY) ?? DEFAULT_RETURN_PAGE
+      );
     },
   };
 };

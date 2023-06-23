@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import SignInPage from '~/pages/auth/sign-in';
 import { PageLayout } from '~/stories/Layout';
 
-import NotFoundPage from './index';
-
-const meta: Meta<typeof NotFoundPage> = {
-  title: 'Page/404',
-  component: NotFoundPage,
+const meta: Meta<typeof SignInPage> = {
+  title: 'Page/SignIn',
+  component: SignInPage,
   decorators: [
     (Story) => (
       <PageLayout>
@@ -18,6 +17,6 @@ const meta: Meta<typeof NotFoundPage> = {
 
 export default meta;
 
-type SignInPageStory = StoryObj<typeof NotFoundPage>;
+type SignInPageStory = StoryObj<typeof SignInPage>;
 
 export const Default: SignInPageStory = {};

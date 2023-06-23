@@ -10,7 +10,7 @@ const MOCKING_MODE =
  * - 개발모드가 아니거나 `NEXT_PUBLIC_API_MOCKING !== 'enabled'`라면 항상 `true`입니다.
  * - 브라우저에서만 호출되므로 서버에서는 MSW를 따로 초기화해줘야 합니다.
  */
-const useMSW = () => {
+export const useMSW = () => {
   const [isMSWReady, setIsMSWReady] = useState(() => !MOCKING_MODE);
 
   useEffect(() => {
@@ -27,5 +27,3 @@ const useMSW = () => {
 
   return isMSWReady;
 };
-
-export default useMSW;

@@ -1,4 +1,4 @@
-import type { SignInApiData } from '~/services/auth';
+import type { SignInApiData, SignInParams } from '~/services/auth';
 
 import { rest } from 'msw';
 
@@ -13,7 +13,11 @@ import { API_URL, composeUrls } from '~/utils';
 
 const signIn = rest.post<never, never, SignInApiData>(
   composeUrls(API_URL, endpoints.auth.signIn()),
-  (req, res, ctx) => {
+  async (req, res, ctx) => {
+    const { oauthName, code } = (await req.json()) as SignInParams;
+    console.log('[oauthName]: ', oauthName);
+    console.log('[code]: ', code);
+
     issueTokens();
 
     return res(ctx.delay(500), ...mockSuccess(ctx, {}));

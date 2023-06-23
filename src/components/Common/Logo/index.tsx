@@ -10,18 +10,18 @@ export type LogoSize = 'sm' | 'lg';
 
 export interface LogoProps {
   size?: LogoSize;
-  navigateToHome?: boolean;
+  navigateToMainPage?: boolean;
 }
 
 const Logo = (props: LogoProps) => {
-  const { size = 'sm', navigateToHome = false } = props;
+  const { size = 'sm', navigateToMainPage = false } = props;
   const router = useRouter();
   const handleClick = () => {
-    if (navigateToHome) router.push('/');
+    if (navigateToMainPage) router.push('/main');
   };
 
   return (
-    <div css={[selfCss, navigateToHome && cursorCss]} onClick={handleClick}>
+    <div css={[selfCss, navigateToMainPage && cursorCss]} onClick={handleClick}>
       <AccessibleIcon.Root label="로고">
         <LogoSVG css={[svgBaseCss, svgCss[size]]} />
       </AccessibleIcon.Root>

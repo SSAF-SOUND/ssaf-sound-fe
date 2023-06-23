@@ -1,12 +1,16 @@
 import type { FormEventHandler } from 'react';
 
 import { css } from '@emotion/react';
-import { HiOutlineArrowLeft } from 'react-icons/hi';
 
 import { ProgressBar } from '~/components/Common';
+import TitleBar from '~/components/TitleBar';
 import { createBoundClamp } from '~/utils';
 
-import { useSetPhaseContext, usePhaseContext, usePrevPhaseContext } from './context';
+import {
+  useSetPhaseContext,
+  usePhaseContext,
+  usePrevPhaseContext,
+} from './context';
 import { IsMember, Year, Campus, IsMajor, Nickname } from './Fields';
 
 const fields = [
@@ -18,6 +22,7 @@ const fields = [
 ];
 
 const phaseClamp = createBoundClamp([0, fields.length - 1]);
+const nicknamePhase = 4;
 
 const UserRegisterRoot = () => {
   const unSafePhase = usePhaseContext();
@@ -26,7 +31,7 @@ const UserRegisterRoot = () => {
   const phase = phaseClamp(unSafePhase);
 
   const Field = fields[phase];
-  const handleClickBackwardButton = () => {
+  const handleClickBackward = () => {
     setPhase(Math.min(prevPhase, phase - 1));
   };
 
@@ -36,19 +41,15 @@ const UserRegisterRoot = () => {
 
   return (
     <div css={selfCss}>
-      {/* Top bar */}
-      <header>
-        <button
-          type="button"
-          css={backwardButtonCss}
-          onClick={handleClickBackwardButton}
-        >
-          <HiOutlineArrowLeft size={30} css={backwardIconCss} />
-        </button>
-      </header>
-      <div>
-        <ProgressBar min={0} now={phase + 1} max={fields.length} />
-      </div>
+      <TitleBar.Default
+        withoutTitle
+        withoutClose
+        onClickBackward={handleClickBackward}
+        css={titleBarCss}
+      />
+
+      <ProgressBar min={0} now={phase + 1} max={fields.length} />
+
       <form css={formCss} onSubmit={handleSubmit}>
         <Field />
       </form>
@@ -60,25 +61,17 @@ const selfCss = css({
   display: 'flex',
   flexDirection: 'column',
   height: '100vh',
-  padding: '20px 20px',
-  gap: 20,
+  padding: '10px 15px',
 });
 
 const formCss = css({
   flexGrow: 1,
-  padding: '50px 0',
+  padding: '60px 0 30px',
 });
 
-const backwardButtonCss = css({
-  cursor: 'pointer',
-  backgroundColor: 'transparent',
-  ':focus': {
-    outline: 'inset',
-  },
-});
-
-const backwardIconCss = css({
-  pointerEvents: 'none',
+const titleBarCss = css({
+  padding: 0,
+  margin: '0 -5px 12px',
 });
 
 export default UserRegisterRoot;

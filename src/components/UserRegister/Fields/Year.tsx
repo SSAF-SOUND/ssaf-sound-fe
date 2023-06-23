@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { SelectBox } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
+import { flex } from '~/styles/utils';
 
 const years = Array(10)
   .fill(undefined)
@@ -13,21 +14,22 @@ const Year = () => {
   const handleValueChange = () => setPhase((p) => p + 1);
 
   return (
-    <div css={selfCss}>
+    <label css={selfCss}>
       <Question>
         <Question.Row>SSAFY</Question.Row>
         <Question.Row>기수를 선택해주세요</Question.Row>
       </Question>
 
-      <SelectBox items={years} onValueChange={handleValueChange} />
-    </div>
+      <SelectBox
+        id="id"
+        items={years}
+        onValueChange={handleValueChange}
+        size="lg"
+      />
+    </label>
   );
 };
 
-const selfCss = css({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 40,
-});
+const selfCss = css(flex('', '', 'column', 40));
 
 export default Year;
