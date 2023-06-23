@@ -1,18 +1,16 @@
-import type { UpdateMyInfoParams } from '~/services/member';
-
 import { css } from '@emotion/react';
-import { useFormContext } from 'react-hook-form';
 
 import { Button } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
+import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
 
 const fieldName = 'isMajor';
 
 const IsMajor = () => {
+  const { register, setValue } = useUpdateMyInfoFormContext();
   const setPhase = useSetPhaseContext();
-  const { register, setValue } = useFormContext<UpdateMyInfoParams>();
 
   const handleClickYes = () => {
     setValue(fieldName, true);
@@ -54,6 +52,8 @@ const IsMajor = () => {
   );
 };
 
+export default IsMajor;
+
 const selfCss = css(
   {
     height: '100%',
@@ -71,5 +71,3 @@ const buttonGroupCss = css(
 const buttonCss = css({
   width: '100%',
 });
-
-export default IsMajor;

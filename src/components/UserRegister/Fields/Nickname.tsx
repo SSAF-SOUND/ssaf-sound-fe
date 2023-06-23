@@ -1,18 +1,12 @@
-import type { UpdateMyInfoParams } from '~/services/member';
-
 import { css } from '@emotion/react';
 import { useEffect, useId } from 'react';
-import { useFormContext } from 'react-hook-form';
 
-import {
-  Button,
-  Icon,
-  IconButton,
-  AlertText,
-  TextInput,
-} from '~/components/Common';
+import { Icon, IconButton, AlertText, TextInput } from '~/components/Common';
 import Question from '~/components/UserRegister/Question';
-import { createRandomNickname } from '~/services/member';
+import {
+  createRandomNickname,
+  useUpdateMyInfoFormContext,
+} from '~/services/member';
 import { flex } from '~/styles/utils';
 
 const fieldName = 'nickname';
@@ -23,7 +17,7 @@ const Nickname = () => {
     setValue,
     setFocus,
     formState: { errors },
-  } = useFormContext<UpdateMyInfoParams>();
+  } = useUpdateMyInfoFormContext();
   const nicknameFieldId = useId();
   const errorMessage = errors.nickname?.message;
   const setRandomNicknameAndFocusField = () => {

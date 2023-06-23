@@ -1,11 +1,9 @@
-import type { UpdateMyInfoParams } from '~/services/member';
-
 import { css } from '@emotion/react';
-import { useFormContext } from 'react-hook-form';
 
 import { SelectBox } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
+import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
 
 const years = Array(10)
@@ -16,7 +14,7 @@ const fieldName = 'semester';
 const filterNumericText = (value: string) => value.replace(/\D/g, '');
 
 const Year = () => {
-  const { register, setValue } = useFormContext<UpdateMyInfoParams>();
+  const { register, setValue } = useUpdateMyInfoFormContext();
   const setPhase = useSetPhaseContext();
   const handleValueChange = (value: string) => {
     setPhase((p) => p + 1);
@@ -43,6 +41,6 @@ const Year = () => {
   );
 };
 
-const selfCss = css(flex('', '', 'column', 40));
-
 export default Year;
+
+const selfCss = css(flex('', '', 'column', 40));

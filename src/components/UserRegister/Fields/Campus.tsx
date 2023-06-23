@@ -1,11 +1,9 @@
-import type { UpdateMyInfoParams } from '~/services/member';
-
 import { css } from '@emotion/react';
-import { useFormContext } from 'react-hook-form';
 
 import { SelectBox } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
+import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
 
 const campuses = ['서울', '대전', '광주', '구미', '부울경'];
@@ -13,7 +11,7 @@ const campuses = ['서울', '대전', '광주', '구미', '부울경'];
 const fieldName = 'campus';
 
 const Campus = () => {
-  const { setValue, register } = useFormContext<UpdateMyInfoParams>();
+  const { setValue, register } = useUpdateMyInfoFormContext();
   const setPhase = useSetPhaseContext();
   const handleValueChange = (value: string) => {
     setPhase((p) => p + 1);

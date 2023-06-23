@@ -4,20 +4,18 @@ import { isBoolean } from 'is-what';
 import { Button, SsafyIcon } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
+import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
 
 const nicknamePhase = 4;
 const fieldName = 'ssafyMember';
 
 const IsMember = () => {
-  const { register, setValue } = useFormContext<UpdateMyInfoParams>();
+  const { register, setValue } = useUpdateMyInfoFormContext();
   const setPhase = useSetPhaseContext();
   const handleClickYes = () => {
     setValue(fieldName, true);
-    setPhase((p) => {
-      console.log('phase', p);
-      return p + 1;
-    });
+    setPhase((p) => p + 1);
   };
   const handleClickNo = () => {
     setValue(fieldName, false);
@@ -59,6 +57,8 @@ const IsMember = () => {
   );
 };
 
+export default IsMember;
+
 const selfCss = css(
   {
     height: '100%',
@@ -76,5 +76,3 @@ const buttonGroupCss = css(
 const buttonCss = css({
   width: '100%',
 });
-
-export default IsMember;

@@ -1,10 +1,12 @@
 import type { UpdateMyInfoParams } from '~/services/member';
 
 import { css } from '@emotion/react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 
-import { ProgressBar } from '~/components/Common';
+import { Button, ProgressBar } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
+import { useUpdateMyInfoForm } from '~/services/member';
+import { flex } from '~/styles/utils';
 import { createBoundClamp } from '~/utils';
 
 import {
@@ -23,20 +25,11 @@ const fields = [
 ];
 
 const phaseClamp = createBoundClamp([0, fields.length - 1]);
-
-const defaultFormValues = {
-  ssafyMember: undefined,
-  nickname: undefined,
-  isMajor: undefined,
-  campus: undefined,
-  semester: undefined,
-};
+const nicknamePhase = 4;
 
 const UserRegisterRoot = () => {
-  const formMethods = useForm<UpdateMyInfoParams>({
-    defaultValues: defaultFormValues,
-  });
-  const { handleSubmit } = formMethods;
+  const formMethods = useUpdateMyInfoForm();
+  const { handleSubmit, setError } = formMethods;
 
   const unSafePhase = usePhaseContext();
   const prevPhase = usePrevPhaseContext();
