@@ -78,17 +78,7 @@ const configurePrivateAxiosInterceptors = (
         })
         .then(() => retryFailedRequest());
     }
-    // Edge Case
-    // 만료 요청 N개를 보냄 -> N개 전부 실패 -> 가장 처음 실패한 만료요청에 대해서 토큰 재발급을 요청
-    // -> 서버에서 토큰 재발급 완료 후 응답 객체 전송 -> 응답 객체가 도착하기 전에 만료된 토큰을 가진 N+1번째 요청이 보내지는 상황에서
-    // 큐에서 대기중인 요청들은 토큰 재발급 이후에 전부 재요청 처리됨.
-    // 뒤늦게 보낸 만료 요청에 대한 실패 결과가 도착하면 큐 사이즈가 이미 0이라서 reissueRequest는 undefined가 됨.
-    // 그러면 불필요한 재발급 요청을 1번 더 보내게됨.
-    // request interceptors에서 처리하기.
   );
 };
 
-configurePrivateAxiosInterceptors(reissueToken, [
-  RESPONSE_CODE.EXPIRED_TOKEN,
-  RESPONSE_CODE.TOKEN_NOT_EXISTS,
-]);
+configurePrivateAxiosInterceptors(reissueToken, [RESPONSE_CODE.EXPIRED_TOKEN]);
