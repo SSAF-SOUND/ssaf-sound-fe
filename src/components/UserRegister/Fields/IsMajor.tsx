@@ -1,15 +1,30 @@
+import type { UpdateMyInfoParams } from '~/services/member';
+
 import { css } from '@emotion/react';
+import { useFormContext } from 'react-hook-form';
 
 import { Button } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
 import { flex } from '~/styles/utils';
 
+const fieldName = 'isMajor';
+
 const IsMajor = () => {
   const setPhase = useSetPhaseContext();
-  const handleClickButton = () => {
+  const { register, setValue } = useFormContext<UpdateMyInfoParams>();
+
+  const handleClickYes = () => {
+    setValue(fieldName, true);
     setPhase((p) => p + 1);
   };
+
+  const handleClickNo = () => {
+    setValue(fieldName, false);
+    setPhase((p) => p + 1);
+  };
+
+  register(fieldName);
 
   return (
     <div css={selfCss}>
@@ -22,7 +37,7 @@ const IsMajor = () => {
           size="lg"
           variant="filled"
           css={buttonCss}
-          onClick={handleClickButton}
+          onClick={handleClickYes}
         >
           네
         </Button>
@@ -30,7 +45,7 @@ const IsMajor = () => {
           size="lg"
           variant="outlined"
           css={buttonCss}
-          onClick={handleClickButton}
+          onClick={handleClickNo}
         >
           아니오
         </Button>

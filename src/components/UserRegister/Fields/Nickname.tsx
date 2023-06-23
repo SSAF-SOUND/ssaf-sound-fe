@@ -1,15 +1,36 @@
-import { css } from '@emotion/react';
-import { useId } from 'react';
+import type { UpdateMyInfoParams } from '~/services/member';
 
-import { Button, Icon, IconButton } from '~/components/Common';
-import AlertText from '~/components/Common/AlertText';
-import TextInput from '~/components/Common/TextInput';
+import { css } from '@emotion/react';
+import { useEffect, useId } from 'react';
+import { useFormContext } from 'react-hook-form';
+
+import {
+  Button,
+  Icon,
+  IconButton,
+  AlertText,
+  TextInput,
+} from '~/components/Common';
 import Question from '~/components/UserRegister/Question';
 import { createRandomNickname } from '~/services/member';
 import { flex } from '~/styles/utils';
 
+const fieldName = 'nickname';
+
 const Nickname = () => {
+  const {
+    register,
+    setValue,
+    formState: { errors },
+  } = useFormContext<UpdateMyInfoParams>();
   const nicknameFieldId = useId();
+  const errorMessage = errors.nickname?.message;
+  const setRandomNickname = () => setValue(fieldName, createRandomNickname());
+
+  useEffect(() => {
+    setRandomNickname();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div css={selfCss}>
@@ -23,10 +44,7 @@ const Nickname = () => {
       <div css={inputContainerCss}>
         <div css={refreshNicknameCss}>
           <p>랜덤 닉네임 생성</p>
-          <IconButton
-            size={32}
-            onClick={() => console.log(createRandomNickname())}
-          >
+          <IconButton size={32} onClick={setRandomNickname}>
             <Icon name="refresh" size={28} />
           </IconButton>
         </div>
@@ -35,11 +53,17 @@ const Nickname = () => {
           size="lg"
           type="text"
           id={nicknameFieldId}
+          {...register(fieldName, {
+            required: true,
+            validate: (value) =>
+              (value.length >= 1 && value.length <= 11) ||
+              '닉네임의 길이는 1 ~ 11 사이여야 합니다.',
+          })}
         />
-        <AlertText>닉네임이 중복됩니다.</AlertText>
+        {errorMessage && <AlertText>{errorMessage}</AlertText>}
       </div>
 
-      <Button css={buttonCss} variant="filled" size="lg">
+      <Button type="submit" css={buttonCss} variant="filled" size="lg">
         확인
       </Button>
     </div>

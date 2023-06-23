@@ -1,6 +1,7 @@
-import type { FormEventHandler } from 'react';
+import type { UpdateMyInfoParams } from '~/services/member';
 
 import { css } from '@emotion/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { ProgressBar } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
@@ -22,21 +23,29 @@ const fields = [
 ];
 
 const phaseClamp = createBoundClamp([0, fields.length - 1]);
-const nicknamePhase = 4;
+
+const defaultFormValues = {
+  ssafyMember: undefined,
+  nickname: undefined,
+  isMajor: undefined,
+  campus: undefined,
+  semester: undefined,
+};
 
 const UserRegisterRoot = () => {
+  const formMethods = useForm<UpdateMyInfoParams>({
+    defaultValues: defaultFormValues,
+  });
+  const { handleSubmit } = formMethods;
+
   const unSafePhase = usePhaseContext();
   const prevPhase = usePrevPhaseContext();
   const setPhase = useSetPhaseContext();
   const phase = phaseClamp(unSafePhase);
-
   const Field = fields[phase];
+
   const handleClickBackward = () => {
     setPhase(Math.min(prevPhase, phase - 1));
-  };
-
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
   };
 
   return (
@@ -44,15 +53,24 @@ const UserRegisterRoot = () => {
       <TitleBar.Default
         withoutTitle
         withoutClose
+        withoutBackward={phase === 0}
         onClickBackward={handleClickBackward}
         css={titleBarCss}
       />
 
       <ProgressBar min={0} now={phase + 1} max={fields.length} />
 
-      <form css={formCss} onSubmit={handleSubmit}>
-        <Field />
-      </form>
+      <FormProvider {...formMethods}>
+        <form
+          css={formCss}
+          onSubmit={handleSubmit((value) => {
+            console.log(value);
+          })}
+        >
+          <button>제출</button>
+          <Field />
+        </form>
+      </FormProvider>
     </div>
   );
 };

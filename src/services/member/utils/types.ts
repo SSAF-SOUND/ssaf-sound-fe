@@ -11,7 +11,7 @@ export interface SsafyInfo {
   /**
    * 1 ~ 10
    */
-  year: number;
+  semester: number;
   /**
    * 서울 | 대전 | 광주 | 구미 | 부울경
    */
@@ -23,7 +23,7 @@ export interface SsafyInfo {
 export type CertificationState = 'UNCERTIFIED' | 'WAITING' | 'CERTIFIED';
 
 export interface UserBasicInfo {
-  memberId: string;
+  memberId: number;
   memberRole: UserRole;
   nickname: string;
 }
