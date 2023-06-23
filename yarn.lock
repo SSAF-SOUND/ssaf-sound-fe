@@ -15054,6 +15054,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.45.0":
+  version: 7.45.0
+  resolution: "react-hook-form@npm:7.45.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 3e35253f0efb0f77f5036c74f85cbdd425adb2fad20a14fc692d573fe552b3d9b7e7ac22193cd767f265fa292c33383d8721cfbdcc5ae41910a35a1ba3655f66
+  languageName: node
+  linkType: hard
+
 "react-icons@npm:^4.9.0":
   version: 4.9.0
   resolution: "react-icons@npm:4.9.0"
@@ -16336,6 +16345,7 @@ __metadata:
     react-dom: 18.2.0
     react-error-boundary: ^4.0.4
     react-hot-toast: ^2.4.1
+    react-hook-form: ^7.45.0
     react-icons: ^4.9.0
     react-redux: ^8.0.5
     react-spinners: ^0.13.8
