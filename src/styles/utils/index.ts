@@ -4,6 +4,7 @@ export * from './filter';
 export * from './flex';
 export * from './fontCss';
 export * from './palettes';
+export * from './position';
 export * from './pxToRem';
 export * from './themeColorVars';
 export * from './toCssVar';
