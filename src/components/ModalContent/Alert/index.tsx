@@ -35,30 +35,34 @@ const Alert = (props: AlertProps) => {
     onClickAction,
   } = props;
 
+  const hasText = Boolean(actionText || cancelText);
+
   return (
     <div css={selfCss}>
       <div css={descriptionCss}>
         {title && <Modal.Title css={titleCss}>{title}</Modal.Title>}
         {description && <Modal.Description>{description}</Modal.Description>}
       </div>
-      <div css={buttonGroupCss}>
-        {cancelText && (
-          <Modal.Close
-            onClick={onClickCancel}
-            css={[buttonCss, fontCss.style.R16]}
-          >
-            {cancelText}
-          </Modal.Close>
-        )}
-        {actionText && (
-          <Modal.Close
-            onClick={onClickAction}
-            css={[buttonCss, fontCss.style.B16]}
-          >
-            {actionText}
-          </Modal.Close>
-        )}
-      </div>
+      {hasText && (
+        <div css={buttonGroupCss}>
+          {cancelText && (
+            <Modal.Close
+              onClick={onClickCancel}
+              css={[buttonCss, fontCss.style.R16]}
+            >
+              {cancelText}
+            </Modal.Close>
+          )}
+          {actionText && (
+            <Modal.Close
+              onClick={onClickAction}
+              css={[buttonCss, fontCss.style.B16]}
+            >
+              {actionText}
+            </Modal.Close>
+          )}
+        </div>
+      )}
     </div>
   );
 };
