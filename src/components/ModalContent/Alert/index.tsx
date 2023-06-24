@@ -7,8 +7,17 @@ import { Modal } from '~/components/Common';
 import { flex, fontCss, palettes } from '~/styles/utils';
 import { position } from '~/styles/utils/position';
 
-interface AlertProps {
+export interface AlertProps {
+  /**
+   * - 짧은 정보 텍스트
+   * - `fontSize`는 16입니다.
+   */
   title?: ReactNode;
+  /**
+   * - 긴 정보 텍스트
+   * - `fontSize`는 14입니다.
+   * - `title`이 없는 경우 `fontSize`가 16이 됩니다.
+   */
   description?: ReactNode;
   actionText?: string;
   cancelText?: string;
