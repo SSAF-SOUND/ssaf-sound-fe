@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { ReactElement } from 'react';
+import type { AnyFunction } from '~/types';
 
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { Button } from '~/components/Common';
+import Alert from '~/components/ModalContent/Alert';
 import { flex, fontCss, palettes, position } from '~/styles/utils';
 
 import Modal from './index';
@@ -104,6 +107,30 @@ export const ControlledModal: ModalStory = {
   },
 };
 
+export const GlobalModal: ModalStory = {
+  /**
+   * 이 `GlobalModal`을 `_app.tsx`에서 마운트시키고,
+   * 다른곳에서 전역 상태를 변경함으로써 모달을 컨트롤합니다.
+   *
+   * 리덕스의 상태 값은 `plain object`만 사용하는걸 권장하기 때문에
+   * `store`에 함수나 리액트 컴포넌트 같은걸 가급적 저장하지 말아야 합니다.
+   *
+   * 따라서, 동적으로 데이터나 핸들러가 변경되는 모달 콘텐츠는 웬만하면 로컬 모달(이전 두가지 스토리)로 구현하는게 좋습니다.
+   */
+  render: function GlobalModal() {
+    const { modalContentId, open } = useAppSelector((state) => state.modal);
+    const { openModal, closeModal } = useAppDispatch();
+    const modalContent = modalContents[modalContentId];
+
+    return (
+      <>
+        <p>DOCS에서 ShowCode 눌러서 코드를 봐주세요</p>
+        <Modal open={open} content={modalContent} />
+      </>
+    );
+  },
+};
+
 const selfCss = css(flex('flex-start', 'center', 'column', 10));
 
 const contentCss = css([
@@ -124,3 +151,27 @@ const contentCss = css([
     },
   },
 ]);
+
+interface ModalStore {
+  open: boolean;
+  modalContentId: string;
+}
+const useAppSelector = (fn: (state: { modal: ModalStore }) => void) => {
+  return {
+    open: false,
+    modalContentId: '1',
+  };
+};
+const useAppDispatch = () => {
+  return {
+    openModal: () => {},
+    closeModal: () => {},
+  };
+};
+
+const modalContents: Record<string, ReactElement> = new Proxy(
+  {},
+  {
+    get: () => <></>,
+  }
+);
