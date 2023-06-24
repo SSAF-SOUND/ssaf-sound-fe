@@ -5,7 +5,7 @@ import { Button, Modal } from '~/components/Common';
 import Alert from './index';
 
 const meta: Meta<typeof Alert> = {
-  title: 'Modal/Alert',
+  title: 'Modal/Modal Content/Alert',
   component: Alert,
   tags: ['autodocs'],
   argTypes: {
