@@ -42,9 +42,9 @@ export const fontCss = {
     B16: createFontStyleCss(16, 26, -0.03, BOLD),
     B14: createFontStyleCss(14, 24, -0.03, BOLD),
     B12: createFontStyleCss(12, 18, -0.03, BOLD),
-    R32: createFontStyleCss(32, 50, -0.04, REGULAR),
 
     R40: createFontStyleCss(40, 56, -0.04, REGULAR),
+    R32: createFontStyleCss(32, 50, -0.04, REGULAR),
     R28: createFontStyleCss(28, 44, -0.04, REGULAR),
     R24: createFontStyleCss(24, 36, -0.03, REGULAR),
     R20: createFontStyleCss(20, 30, -0.03, REGULAR),
