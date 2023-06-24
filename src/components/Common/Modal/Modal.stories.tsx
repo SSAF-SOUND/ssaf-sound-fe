@@ -26,27 +26,32 @@ export const UncontrolledModal: ModalStory = {
     const dataArr = ['A', 'B', 'C', 'D'];
 
     return (
-      <div css={selfCss}>
-        {dataArr.map((data) => (
-          <Modal
-            key={data}
-            trigger={<Button>Remove {data}</Button>}
-            content={
-              <div css={contentCss}>
-                <Modal.Title>Title: {data}를 삭제합니다.</Modal.Title>
-                <Modal.Description>Description</Modal.Description>
+      <>
+        <p css={{ marginBottom: 10 }}>
+          DOCS에서 ShowCode 눌러서 코드를 봐주세요
+        </p>
+        <div css={selfCss}>
+          {dataArr.map((data) => (
+            <Modal
+              key={data}
+              trigger={<Button>Remove {data}</Button>}
+              content={
+                <div css={contentCss}>
+                  <Modal.Title>Title: {data}를 삭제합니다.</Modal.Title>
+                  <Modal.Description>Description</Modal.Description>
 
-                <div>
-                  <Modal.Close>취소</Modal.Close>
-                  <Modal.Close onClick={() => console.log(`${data} 삭제`)}>
-                    삭제
-                  </Modal.Close>
+                  <div>
+                    <Modal.Close>취소</Modal.Close>
+                    <Modal.Close onClick={() => console.log(`${data} 삭제`)}>
+                      삭제
+                    </Modal.Close>
+                  </div>
                 </div>
-              </div>
-            }
-          />
-        ))}
-      </div>
+              }
+            />
+          ))}
+        </div>
+      </>
     );
   },
 };
@@ -59,50 +64,55 @@ export const ControlledModal: ModalStory = {
     const [selectedData, setSelectedData] = useState('');
 
     return (
-      <div css={selfCss}>
-        {dataArr.map((data) => (
-          <Button
-            key={data}
-            color="secondary"
-            onClick={() => {
-              setOpen(true);
-              setSelectedData(data);
-            }}
-          >
-            Remove {data}
-          </Button>
-        ))}
+      <>
+        <p css={{ marginBottom: 10 }}>
+          DOCS에서 ShowCode 눌러서 코드를 봐주세요
+        </p>
+        <div css={selfCss}>
+          {dataArr.map((data) => (
+            <Button
+              key={data}
+              color="secondary"
+              onClick={() => {
+                setOpen(true);
+                setSelectedData(data);
+              }}
+            >
+              Remove {data}
+            </Button>
+          ))}
 
-        <Modal
-          open={open}
-          onEscapeKeyDown={() => setOpen(false)}
-          onPointerDownOutside={() => setOpen(false)}
-          content={
-            <div css={contentCss}>
-              <Modal.Title>Title: {selectedData}를 삭제합니다.</Modal.Title>
-              <Modal.Description>Description</Modal.Description>
+          <Modal
+            open={open}
+            onEscapeKeyDown={() => setOpen(false)}
+            onPointerDownOutside={() => setOpen(false)}
+            content={
+              <div css={contentCss}>
+                <Modal.Title>Title: {selectedData}를 삭제합니다.</Modal.Title>
+                <Modal.Description>Description</Modal.Description>
 
-              <div>
-                <Modal.Close
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                >
-                  취소
-                </Modal.Close>
-                <Modal.Close
-                  onClick={() => {
-                    setOpen(false);
-                    console.log(`${selectedData} 삭제`);
-                  }}
-                >
-                  삭제
-                </Modal.Close>
+                <div>
+                  <Modal.Close
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  >
+                    취소
+                  </Modal.Close>
+                  <Modal.Close
+                    onClick={() => {
+                      setOpen(false);
+                      console.log(`${selectedData} 삭제`);
+                    }}
+                  >
+                    삭제
+                  </Modal.Close>
+                </div>
               </div>
-            </div>
-          }
-        />
-      </div>
+            }
+          />
+        </div>
+      </>
     );
   },
 };
