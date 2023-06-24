@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { Modal, VisuallyHidden } from '~/components/Common';
 import { flex, fontCss, palettes, position } from '~/styles/utils';
 
-import BottomMenuButton from './BottomMenuButton';
+import { BottomMenuButton } from './BottomMenuButton';
 
 interface BottomMenuBaseProps {
   title: string;

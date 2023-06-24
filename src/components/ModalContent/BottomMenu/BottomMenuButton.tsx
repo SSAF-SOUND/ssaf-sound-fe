@@ -10,7 +10,7 @@ interface BottomMenuButtonProps extends ComponentPropsWithoutRef<'button'> {
   bold?: boolean;
 }
 
-const BottomMenuButton = (props: BottomMenuButtonProps) => {
+export const BottomMenuCloseButton = (props: BottomMenuButtonProps) => {
   const { children, bold = false, ...restProps } = props;
   return (
     <Modal.Close css={[buttonCss, bold && boldCss]} {...restProps}>
@@ -19,7 +19,14 @@ const BottomMenuButton = (props: BottomMenuButtonProps) => {
   );
 };
 
-export default BottomMenuButton;
+export const BottomMenuButton = (props: BottomMenuButtonProps) => {
+  const { children, bold = false, ...restProps } = props;
+  return (
+    <button css={[buttonCss, bold && boldCss]} {...restProps}>
+      {children}
+    </button>
+  );
+};
 
 const buttonHeight = 60;
 const buttonCss = css(
