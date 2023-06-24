@@ -35,12 +35,12 @@ const ModalCore = (props: ModalCoreProps) => {
       {portal ? (
         <Dialog.Portal>
           <Dialog.Overlay css={overlayCss.black} />
-          <Dialog.Content asChild>{content}</Dialog.Content>
+          <Dialog.Content>{content}</Dialog.Content>
         </Dialog.Portal>
       ) : (
         <>
           <Dialog.Overlay css={overlayCss.black} />
-          <Dialog.Content asChild>{content}</Dialog.Content>
+          <Dialog.Content>{content}</Dialog.Content>
         </>
       )}
     </Dialog.Root>
