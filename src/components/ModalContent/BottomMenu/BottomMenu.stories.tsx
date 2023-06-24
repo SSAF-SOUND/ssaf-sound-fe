@@ -16,7 +16,27 @@ export default meta;
 type BottomMenuModalContentStory = StoryObj<typeof BottomMenu>;
 
 export const Default: BottomMenuModalContentStory = {
-  args: {},
+  args: {
+    title: 'Menu',
+    buttonElements: (
+      <>
+        <BottomMenu.Button
+          onClick={() => {
+            console.log('Clicked Button 1');
+          }}
+        >
+          Button 1
+        </BottomMenu.Button>
+        <BottomMenu.Button
+          onClick={() => {
+            console.log('Clicked Button 2');
+          }}
+        >
+          Button 2
+        </BottomMenu.Button>
+      </>
+    ),
+  },
   render: (args) => {
     return (
       <div>

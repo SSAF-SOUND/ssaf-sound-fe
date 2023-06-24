@@ -3,25 +3,26 @@ import type { ReactElement } from 'react';
 import { css } from '@emotion/react';
 
 import { Modal, VisuallyHidden } from '~/components/Common';
-import BottomMenuButton from '~/components/ModalContent/BottomMenu/BottomMenuButton';
 import { flex, fontCss, palettes, position } from '~/styles/utils';
 
+import BottomMenuButton from './BottomMenuButton';
+
 interface BottomMenuBaseProps {
-  title?: string;
-  buttons?: ReactElement;
+  title: string;
+  buttonElements: ReactElement;
 }
 
 const BottomMenuBase = (props: BottomMenuBaseProps) => {
-  const { title = 'Menu', buttons } = props;
+  const { title, buttonElements } = props;
   return (
     <div css={selfCss}>
       <div css={buttonContainerCss}>
-        {title && <Modal.Title css={titleCss}>{title}</Modal.Title>}
-        {buttons}
+        <Modal.Title css={titleCss}>{title}</Modal.Title>
+        {buttonElements}
       </div>
 
       <div css={buttonContainerCss}>
-        <BottomMenuButton>
+        <BottomMenuButton css={closeButtonCss}>
           <VisuallyHidden>닫기 버튼</VisuallyHidden>
         </BottomMenuButton>
       </div>
@@ -39,7 +40,7 @@ const selfCss = css(
     padding: 12,
     bottom: 20,
   },
-  position.x('center'),
+  position.x('center', 'fixed'),
   flex('', '', 'column', 8),
   fontCss.family.auto
 );
@@ -64,3 +65,7 @@ const buttonContainerCss = css(
   },
   flex('center', 'center', 'column')
 );
+
+const closeButtonCss = css({
+  borderTop: 0,
+});

@@ -1,17 +1,22 @@
-import type { ReactNode } from 'react';
+import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
 import { Modal } from '~/components/Common';
 import { fontCss, palettes } from '~/styles/utils';
 
-interface BottomMenuButtonProps {
+interface BottomMenuButtonProps extends ComponentPropsWithoutRef<'button'> {
   children: ReactNode;
+  bold?: boolean;
 }
 
 const BottomMenuButton = (props: BottomMenuButtonProps) => {
-  const { children } = props;
-  return <Modal.Close css={buttonCss}>{children}</Modal.Close>;
+  const { children, bold = false, ...restProps } = props;
+  return (
+    <Modal.Close css={[buttonCss, bold && boldCss]} {...restProps}>
+      {children}
+    </Modal.Close>
+  );
 };
 
 export default BottomMenuButton;
@@ -26,14 +31,17 @@ const buttonCss = css(
     borderTop: `1px solid ${palettes.background.grey}`,
     color: palettes.primary.darken,
     ':hover': {
-      backgroundColor: palettes.grey5,
-    },
-    ':active': {
       backgroundColor: palettes.grey4,
     },
-    ':focus-visible': {
+    ':active': {
       backgroundColor: palettes.grey5,
+    },
+    ':focus-visible': {
+      backgroundColor: palettes.grey4,
     },
   },
   fontCss.style.R18
 );
+const boldCss = css({
+  fontWeight: 700,
+});
