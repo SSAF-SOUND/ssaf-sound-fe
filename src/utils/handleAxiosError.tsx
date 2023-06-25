@@ -22,9 +22,23 @@ interface HandleAxiosErrorOptions {
    */
   showServerMessage: boolean;
   /**
-   * - `statusCode`값이 `400 ~ 499` (=클라이언트 오류)일 때  수행할 함수입니다.
+   * - `statusCode`값이 `400 ~ 499` (=클라이언트 오류)일 때 수행할 함수입니다.
    */
   onClientError: (error: ApiErrorResponse) => void;
+  /**
+   * - `statusCode`값이 `500 ~ 599` (=서버 오류)일 때 수행할 함수입니다.
+   * - 주어지지 않으면 기본 핸들러 함수를 사용합니다.
+   */
+  onServerError: (error: ApiErrorResponse) => void;
+  /**
+   * - 서버 에러만 처리하고 싶은 경우에 사용합니다.
+   * - `axios`의 `catch`블럭에서 서버 에러만 처리하고, 클라이언트 에러는 컴포넌트 안에서 처리하고자 할 때 사용합니다.
+   */
+  rejectOnClientError: boolean;
+  /**
+   * - 서버 에러 검사를 건너 뛰고 싶은 경우에 사용합니다.
+   */
+  skipServerError: boolean;
 }
 
 export const handleAxiosError = (
@@ -33,9 +47,12 @@ export const handleAxiosError = (
 ) => {
   const {
     tag = '',
-    clientMessageOnServerError = '서버에서 알 수 없는 오류가 발생했습니다.',
-    showServerMessage = process.env.NODE_ENV === 'development',
+    clientMessageOnServerError,
+    showServerMessage,
     onClientError,
+    onServerError,
+    rejectOnClientError = false,
+    skipServerError = false,
   } = options;
 
   if (!isAxiosError<ApiErrorResponse>(error) || !error.response) {
@@ -49,21 +66,27 @@ export const handleAxiosError = (
   const statusCode = error.response.status;
 
   /* Server Error */
-  if (statusCode >= 500) {
-    toast((t) => (
-      <Toast.ServerError
-        t={t}
-        clientMessage={clientMessageOnServerError}
-        serverMessage={error.response?.data?.message}
-        showServerMessage={showServerMessage}
-      />
-    ));
-
-    return;
+  if (!skipServerError || (statusCode && statusCode >= 500)) {
+    if (onServerError) {
+      onServerError(error.response.data);
+    } else {
+      toast((t) => (
+        <Toast.ServerError
+          t={t}
+          clientMessage={clientMessageOnServerError}
+          serverMessage={error.response?.data?.message}
+          showServerMessage={showServerMessage}
+        />
+      ));
+    }
   }
 
   /* Client Error */
   if (400 <= statusCode && statusCode < 500) {
+    if (rejectOnClientError) {
+      Promise.reject(error);
+      return;
+    }
     onClientError?.(error.response.data);
   }
 };
