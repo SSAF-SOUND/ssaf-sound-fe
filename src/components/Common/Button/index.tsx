@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { toCssVar } from '~/styles/utils/toCssVar';
@@ -29,7 +29,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   loading?: boolean;
 }
 
-const Button = (props: ButtonProps) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
     variant = 'filled',
     size = 'md',
@@ -48,6 +48,7 @@ const Button = (props: ButtonProps) => {
 
   return (
     <Component
+      ref={ref}
       disabled={isDisabled}
       css={[
         baseCss,
@@ -60,7 +61,9 @@ const Button = (props: ButtonProps) => {
       {loading ? <ButtonLoader color={loaderColor[variant]} /> : children}
     </Component>
   );
-};
+});
+
+Button.displayName = 'Button';
 
 export default Button;
 
