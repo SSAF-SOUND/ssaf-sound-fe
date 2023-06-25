@@ -29,3 +29,13 @@ export const updateMyInfo = (params: UpdateMyInfoParams) => {
     .patch<UpdateMyInfoApiData>(endpoint, params)
     .then((res) => res.data.data);
 };
+
+export interface ValidateNicknameParams {
+  nickname: string;
+}
+
+export const validateNickname = (params: ValidateNicknameParams) => {
+  const endpoint = endpoints.user.nickname();
+
+  return privateAxios.post(endpoint, params).then((res) => res.data);
+};
