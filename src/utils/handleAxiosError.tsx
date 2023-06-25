@@ -47,8 +47,8 @@ export const handleAxiosError = (
 ) => {
   const {
     tag = '',
-    clientMessageOnServerError,
-    showServerMessage,
+    clientMessageOnServerError = '서버에서 알 수 없는 오류가 발생하였습니다',
+    showServerMessage = process.env.NODE_ENV === 'development',
     onClientError,
     onServerError,
     rejectOnClientError = false,
