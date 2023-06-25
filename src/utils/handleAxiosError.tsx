@@ -31,11 +31,6 @@ interface HandleAxiosErrorOptions {
    */
   onServerError: (error: ApiErrorResponse) => void;
   /**
-   * - 서버 에러만 처리하고 싶은 경우에 사용합니다.
-   * - `axios`의 `catch`블럭에서 서버 에러만 처리하고, 클라이언트 에러는 컴포넌트 안에서 처리하고자 할 때 사용합니다.
-   */
-  rejectOnClientError: boolean;
-  /**
    * - 서버 에러 검사를 건너 뛰고 싶은 경우에 사용합니다.
    */
   skipServerError: boolean;
@@ -51,7 +46,6 @@ export const handleAxiosError = (
     showServerMessage = process.env.NODE_ENV === 'development',
     onClientError,
     onServerError,
-    rejectOnClientError = false,
     skipServerError = false,
   } = options;
 
@@ -66,7 +60,7 @@ export const handleAxiosError = (
   const statusCode = error.response.status;
 
   /* Server Error */
-  if (!skipServerError || (statusCode && statusCode >= 500)) {
+  if (!skipServerError && statusCode && statusCode >= 500) {
     if (onServerError) {
       onServerError(error.response.data);
     } else {
@@ -83,10 +77,6 @@ export const handleAxiosError = (
 
   /* Client Error */
   if (400 <= statusCode && statusCode < 500) {
-    if (rejectOnClientError) {
-      Promise.reject(error);
-      return;
-    }
     onClientError?.(error.response.data);
   }
 };
