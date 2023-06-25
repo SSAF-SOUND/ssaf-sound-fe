@@ -13,6 +13,7 @@ export const endpoints = {
   },
   user: {
     myInfo: () => '/members' as const,
+    nickname: () => '/members/nickname' as const,
   },
   recruit: {
     detail: () => '/recruit/detail' as const,
