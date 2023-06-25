@@ -2,7 +2,7 @@ import type { UpdateMyInfoParams } from './apis';
 
 import { useRouter } from 'next/router';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 
@@ -81,4 +81,10 @@ export const useUpdateMyInfoForm = () => {
 
 export const useUpdateMyInfoFormContext = () => {
   return useFormContext<UpdateMyInfoParams>();
+};
+
+export const useUpdateMyInfo = () => {
+  return useMutation({
+    mutationFn: updateMyInfo,
+  });
 };

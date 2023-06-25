@@ -26,6 +26,6 @@ export const updateMyInfo = (params: UpdateMyInfoParams) => {
   const endpoint = endpoints.user.myInfo();
 
   return privateAxios
-    .post<UpdateMyInfoApiData>(endpoint, params)
+    .patch<UpdateMyInfoApiData>(endpoint, params)
     .then((res) => res.data.data);
 };
