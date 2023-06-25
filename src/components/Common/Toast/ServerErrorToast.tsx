@@ -43,6 +43,7 @@ const selfCss = css(
     cursor: 'pointer',
     transition: 'transform 200ms',
     padding: 10,
+    paddingLeft: 6,
     margin: '-4px -10px', // 기본 스타일때문에.
     ':hover': {
       transform: 'translate3d(0, -2px, 0)',
@@ -53,5 +54,5 @@ const selfCss = css(
   },
   fontCss.family.auto,
   fontCss.style.B12,
-  flex('center', 'space-between', 'row', 4)
+  flex('center', 'space-between', 'row', 8)
 );

@@ -29,7 +29,7 @@ interface HandleAxiosErrorOptions {
 
 export const handleAxiosError = (
   error: unknown,
-  options: Partial<HandleAxiosErrorOptions>
+  options: Partial<HandleAxiosErrorOptions> = {}
 ) => {
   const {
     tag = '',
