@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { Modal, VisuallyHidden } from '~/components/Common';
 import { flex, fontCss, palettes, position } from '~/styles/utils';
 
-import { BottomMenuButton } from './BottomMenuButton';
+import { BottomMenuCloseButton } from './BottomMenuButton';
 
 interface BottomMenuBaseProps {
   title: string;
@@ -22,9 +22,9 @@ const BottomMenuBase = (props: BottomMenuBaseProps) => {
       </div>
 
       <div css={buttonContainerCss}>
-        <BottomMenuButton css={closeButtonCss}>
+        <BottomMenuCloseButton css={closeButtonCss}>
           <VisuallyHidden>닫기 버튼</VisuallyHidden>
-        </BottomMenuButton>
+        </BottomMenuCloseButton>
       </div>
     </div>
   );
