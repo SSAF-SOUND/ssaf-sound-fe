@@ -36,6 +36,8 @@ interface SelectBoxProps<D = string> {
   size?: SelectBoxSize;
   variant?: SelectBoxVariant;
   theme?: SelectBoxTheme;
+  triggerPaddingX?: number;
+  itemPaddingX?: number;
   //
   id?: string;
   focusOnMount?: boolean;
@@ -58,6 +60,8 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     size = 'sm',
     variant = 'normal',
     theme = 'primary',
+    triggerPaddingX = undefined,
+    itemPaddingX = undefined,
     //
     id,
     focusOnMount = false,
@@ -84,6 +88,7 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
           sizeCss[size],
         ]}
         data-theme={theme}
+        style={{ paddingLeft: triggerPaddingX, paddingRight: triggerPaddingX }}
       >
         <Select.Value placeholder={placeholder} />
         <Select.Icon
@@ -104,6 +109,10 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
               <Select.Item
                 key={value}
                 value={value}
+                style={{
+                  paddingLeft: itemPaddingX,
+                  paddingRight: itemPaddingX,
+                }}
                 css={[
                   itemCss[variant],
                   paddingCss[variant],
