@@ -3,6 +3,7 @@ import type { CustomAppProps } from 'next/app';
 import { QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { Provider as ReduxProvider } from 'react-redux';
 
 import AuthChecker from '~/components/AuthChecker';
@@ -31,6 +32,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
         <ReduxProvider store={store}>
           <GlobalStyles />
           <Background />
+          <Toaster />
           <MainLayout>
             {Component.auth ? (
               <AuthChecker auth={Component.auth}>
