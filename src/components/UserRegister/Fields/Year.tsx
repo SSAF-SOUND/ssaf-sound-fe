@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
-import { isNumber } from 'is-what';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import { SelectBox } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
@@ -22,9 +21,7 @@ const Year = () => {
     setPhase((p) => p + 1);
     setValue(fieldName, Number(value));
   };
-  register(fieldName, {
-    validate: (value) => isNumber(value),
-  });
+  register(fieldName);
 
   useEffect(() => {
     setFocus(fieldName);

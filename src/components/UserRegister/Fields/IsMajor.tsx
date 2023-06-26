@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { isBoolean } from 'is-what';
 
 import { Button } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
@@ -23,9 +22,7 @@ const IsMajor = () => {
     setPhase((p) => p + 1);
   };
 
-  register(fieldName, {
-    validate: (value) => isBoolean(value),
-  });
+  register(fieldName);
 
   return (
     <div css={selfCss}>

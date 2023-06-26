@@ -18,9 +18,7 @@ const Campus = () => {
     setValue(fieldName, value);
   };
 
-  register(fieldName, {
-    required: true,
-  });
+  register(fieldName);
 
   return (
     <label css={selfCss}>
