@@ -2,24 +2,27 @@ import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
 import { Button, SsafyIcon } from '~/components/Common';
-import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
 import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
 
-const nicknamePhase = 4;
 const fieldName = 'ssafyMember';
 
-const IsMember = () => {
+interface IsMemberProps {
+  onTrue: () => void;
+  onFalse: () => void;
+}
+
+const IsMember = (props: IsMemberProps) => {
+  const { onTrue, onFalse } = props;
   const { register, setValue } = useUpdateMyInfoFormContext();
-  const setPhase = useSetPhaseContext();
   const handleClickYes = () => {
     setValue(fieldName, true);
-    setPhase((p) => p + 1);
+    onTrue();
   };
   const handleClickNo = () => {
     setValue(fieldName, false);
-    setPhase(nicknamePhase);
+    onFalse();
   };
 
   register(fieldName, {

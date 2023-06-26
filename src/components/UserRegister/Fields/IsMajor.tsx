@@ -1,25 +1,29 @@
 import { css } from '@emotion/react';
 
 import { Button } from '~/components/Common';
-import { useSetPhaseContext } from '~/components/UserRegister/context';
 import Question from '~/components/UserRegister/Question';
 import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
 
 const fieldName = 'isMajor';
 
-const IsMajor = () => {
+interface IsMajorProps {
+  onTrue: () => void;
+  onFalse: () => void;
+}
+
+const IsMajor = (props: IsMajorProps) => {
+  const { onTrue, onFalse } = props;
   const { register, setValue } = useUpdateMyInfoFormContext();
-  const setPhase = useSetPhaseContext();
 
   const handleClickYes = () => {
     setValue(fieldName, true);
-    setPhase((p) => p + 1);
+    onTrue();
   };
 
   const handleClickNo = () => {
     setValue(fieldName, false);
-    setPhase((p) => p + 1);
+    onFalse();
   };
 
   register(fieldName);
