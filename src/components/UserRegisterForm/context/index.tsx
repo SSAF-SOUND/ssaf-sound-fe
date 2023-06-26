@@ -1,6 +1,12 @@
 import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 
-import { createContext, useContext, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 
 import { noop } from '~/utils';
 
@@ -26,7 +32,10 @@ const UserRegisterContext = createContext<
   | undefined
 >(undefined);
 
-const PhaseContext = createContext(0);
+const PhaseContext = createContext({
+  phase: 0,
+  prevPhase: 0,
+});
 const SetPhaseContext = createContext<Dispatch<SetStateAction<number>>>(noop);
 
 interface UserRegisterProviderProps {
@@ -35,18 +44,28 @@ interface UserRegisterProviderProps {
 
 export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
   const { children } = props;
+  const [prevPhase, setPrevPhase] = useState(0);
   const [phase, setPhase] = useState(0);
-  const increasePhase = () => setPhase((p) => p + 1);
+
+  const extendedSetPhase: typeof setPhase = useCallback(
+    (nextPhase) => {
+      setPrevPhase(phase);
+      setPhase(nextPhase);
+    },
+    [phase]
+  );
 
   const userRegister = useMemo(() => {
+    const increasePhase = () => extendedSetPhase((p) => p + 1);
     const nicknamePhase = 4;
+
     return {
       fields: [
         {
           id: fieldIds.isMember,
           Component: () => (
             <IsMember
-              onFalse={() => setPhase(nicknamePhase)}
+              onFalse={() => extendedSetPhase(nicknamePhase)}
               onTrue={increasePhase}
             />
           ),
@@ -72,22 +91,31 @@ export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
       ],
       fieldIds,
     };
-  }, []);
+  }, [extendedSetPhase]);
+
+  const phaseValue = useMemo(() => {
+    return {
+      phase,
+      prevPhase,
+    };
+  }, [phase, prevPhase]);
 
   return (
     <UserRegisterContext.Provider value={userRegister}>
-      <SetPhaseContext.Provider value={setPhase}>
-        <PhaseContext.Provider value={phase}>{children}</PhaseContext.Provider>
+      <SetPhaseContext.Provider value={extendedSetPhase}>
+        <PhaseContext.Provider value={phaseValue}>
+          {children}
+        </PhaseContext.Provider>
       </SetPhaseContext.Provider>
     </UserRegisterContext.Provider>
   );
 };
 
-export const usePhaseContext = () => {
+export const usePhase = () => {
   return useContext(PhaseContext);
 };
 
-export const useSetPhaseContext = () => {
+export const useSetPhase = () => {
   return useContext(SetPhaseContext);
 };
 

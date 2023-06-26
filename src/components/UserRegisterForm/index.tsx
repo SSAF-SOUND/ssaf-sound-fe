@@ -12,7 +12,7 @@ import {
 } from '~/services/member';
 import { flex } from '~/styles/utils';
 
-import { usePhaseContext, useUserRegister } from './context';
+import { usePhase, useUserRegister } from './context';
 
 const UserRegisterForm = () => {
   const { fields } = useUserRegister();
@@ -21,7 +21,7 @@ const UserRegisterForm = () => {
   const { mutate: updateMyInfo } = useUpdateMyInfo();
   const formMethods = useUpdateMyInfoForm();
   const { handleSubmit, setError } = formMethods;
-  const phase = usePhaseContext();
+  const { phase } = usePhase();
   const FieldComponent = fields[phase].Component;
 
   const onSubmit = async (value: UpdateMyInfoParams) => {
