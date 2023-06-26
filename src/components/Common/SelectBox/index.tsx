@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import * as Select from '@radix-ui/react-select';
+import { useEffect, useRef } from 'react';
 
 import { flex, fontCss, palettes } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
@@ -35,7 +36,9 @@ interface SelectBoxProps<D = string> {
   size?: SelectBoxSize;
   variant?: SelectBoxVariant;
   theme?: SelectBoxTheme;
+  //
   id?: string;
+  focusOnMount?: boolean;
 }
 
 // eslint-disable-next-line
@@ -57,12 +60,22 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     theme = 'primary',
     //
     id,
+    focusOnMount = false,
   } = props;
+
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (focusOnMount) triggerRef.current?.focus();
+
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Select.Root onValueChange={onValueChange}>
       <Select.Trigger
         id={id}
+        ref={triggerRef}
         css={[
           baseTriggerCss,
           triggerCss[variant],
