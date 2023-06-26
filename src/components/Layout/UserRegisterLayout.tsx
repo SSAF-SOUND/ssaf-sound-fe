@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { UserRegisterProvider } from '~/components/UserRegister/context';
+import { UserRegisterProvider } from '~/components/UserRegisterForm/context';
 
 interface UserRegisterLayoutProps {
   children: ReactNode;

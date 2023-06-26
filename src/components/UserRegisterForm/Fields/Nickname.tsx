@@ -11,7 +11,6 @@ import {
   VisuallyHidden,
 } from '~/components/Common';
 import { Alert } from '~/components/ModalContent';
-import Question from '~/components/UserRegister/Question';
 import {
   createRandomNickname,
   nicknameValidator,
@@ -19,6 +18,8 @@ import {
   useValidateNickname,
 } from '~/services/member';
 import { flex, palettes } from '~/styles/utils';
+
+import Question from '../Question';
 
 const fieldName = 'nickname';
 

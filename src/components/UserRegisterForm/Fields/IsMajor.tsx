@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
 
 import { Button } from '~/components/Common';
-import Question from '~/components/UserRegister/Question';
 import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
+
+import Question from '../Question';
 
 const fieldName = 'isMajor';
 
