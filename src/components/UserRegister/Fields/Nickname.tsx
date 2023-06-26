@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { isAxiosError } from 'axios';
 import { useEffect, useId, useRef, useState } from 'react';
 
 import {
@@ -31,7 +30,7 @@ const isValidWhiteSpace = (value: string) => {
 };
 
 const isValidFormat = (value: string) => {
-  return !/[^\w가-힣 ]/.test(value);
+  return !/[^\w 가-힣]/.test(value);
 };
 
 const Nickname = () => {
@@ -73,7 +72,7 @@ const Nickname = () => {
         onSuccess: () => {
           setIsValidNickname(true);
         },
-        onError: (error) => {
+        onError: () => {
           setIsValidNickname(false);
         },
         onSettled: () => {
@@ -113,14 +112,14 @@ const Nickname = () => {
           {...register(fieldName, {
             validate: (value) => {
               if (!isValidLength(value)) {
-                return '닉네임의 길이는 1 ~ 11 사이여야 합니다.';
+                return '길이는 1 ~ 11 사이여야 합니다.';
               }
 
               if (!isValidWhiteSpace(value)) {
                 return '공백문자를 연달아 사용하거나, 처음과 마지막에 사용할 수 없습니다.';
               }
 
-              return isValidFormat(value) || '올바른 닉네임이 아닙니다.';
+              return isValidFormat(value) || '한글, 영문, 숫자, _, 공백만 사용할 수 있습니다.';
             },
           })}
         />
