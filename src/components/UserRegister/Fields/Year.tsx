@@ -1,4 +1,6 @@
 import { css } from '@emotion/react';
+import { isNumber } from 'is-what';
+import { useEffect, useRef } from 'react';
 
 import { SelectBox } from '~/components/Common';
 import { useSetPhaseContext } from '~/components/UserRegister/context';
@@ -14,14 +16,19 @@ const fieldName = 'semester';
 const filterNumericText = (value: string) => value.replace(/\D/g, '');
 
 const Year = () => {
-  const { register, setValue } = useUpdateMyInfoFormContext();
+  const { register, setValue, setFocus } = useUpdateMyInfoFormContext();
   const setPhase = useSetPhaseContext();
   const handleValueChange = (value: string) => {
     setPhase((p) => p + 1);
     setValue(fieldName, Number(value));
   };
+  register(fieldName, {
+    validate: (value) => isNumber(value),
+  });
 
-  register(fieldName);
+  useEffect(() => {
+    setFocus(fieldName);
+  }, [setFocus]);
 
   return (
     <label css={selfCss}>
@@ -36,6 +43,7 @@ const Year = () => {
         onValueChange={handleValueChange}
         valueAs={filterNumericText}
         size="lg"
+        focusOnMount
       />
     </label>
   );

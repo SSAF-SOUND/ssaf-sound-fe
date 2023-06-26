@@ -18,7 +18,9 @@ const Campus = () => {
     setValue(fieldName, value);
   };
 
-  register(fieldName);
+  register(fieldName, {
+    required: true,
+  });
 
   return (
     <label css={selfCss}>
@@ -32,6 +34,7 @@ const Campus = () => {
         textAs={(value) => `${value} 캠퍼스`}
         onValueChange={handleValueChange}
         size="lg"
+        focusOnMount
       />
     </label>
   );
