@@ -1,11 +1,17 @@
 import type { UpdateMyInfoParams } from '~/services/member';
 
+import { useRouter } from 'next/router';
+
 import { css } from '@emotion/react';
 import { FormProvider } from 'react-hook-form';
 
-import { Button, ProgressBar } from '~/components/Common';
+import { ProgressBar } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
-import { useUpdateMyInfoForm } from '~/services/member';
+import {
+  useSetMyInfo,
+  useUpdateMyInfo,
+  useUpdateMyInfoForm,
+} from '~/services/member';
 import { flex } from '~/styles/utils';
 import { createBoundClamp } from '~/utils';
 
@@ -25,9 +31,11 @@ const fields = [
 ];
 
 const phaseClamp = createBoundClamp([0, fields.length - 1]);
-const nicknamePhase = 4;
 
 const UserRegisterRoot = () => {
+  const router = useRouter();
+  const setMyInfo = useSetMyInfo();
+  const { mutate: updateMyInfo } = useUpdateMyInfo();
   const formMethods = useUpdateMyInfoForm();
   const { handleSubmit, setError } = formMethods;
   const unSafePhase = usePhaseContext();
@@ -40,9 +48,16 @@ const UserRegisterRoot = () => {
     setPhase(Math.min(prevPhase, phase - 1));
   };
 
-  const onSubmit = (value: UpdateMyInfoParams) => {
-    setError('nickname', {
-      message: '닉네임이 중복됩니다.',
+  const onSubmit = async (value: UpdateMyInfoParams) => {
+    updateMyInfo(value, {
+      onSuccess: (value) => {
+        setMyInfo(value);
+        router.push('/main');
+      },
+      onError: (error) => {
+        // LATER
+        console.error(error);
+      },
     });
   };
 
