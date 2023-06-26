@@ -69,7 +69,7 @@ const UserRegisterRoot = () => {
         withoutBackward={phase === 0}
         onClickBackward={handleClickBackward}
         css={titleBarCss}
-      />
+        />
 
       <ProgressBar min={0} now={phase + 1} max={fields.length} />
 
