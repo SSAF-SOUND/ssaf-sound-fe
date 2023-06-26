@@ -15,11 +15,7 @@ import {
 import { flex } from '~/styles/utils';
 import { createBoundClamp } from '~/utils';
 
-import {
-  useSetPhaseContext,
-  usePhaseContext,
-  usePrevPhaseContext,
-} from './context';
+import { useSetPhaseContext, usePhaseContext } from './context';
 import { IsMember, Year, Campus, IsMajor, Nickname } from './Fields';
 
 const fields = [
@@ -39,12 +35,13 @@ const UserRegisterRoot = () => {
   const formMethods = useUpdateMyInfoForm();
   const { handleSubmit, setError } = formMethods;
   const unSafePhase = usePhaseContext();
-  const prevPhase = usePrevPhaseContext();
   const setPhase = useSetPhaseContext();
   const phase = phaseClamp(unSafePhase);
   const Field = fields[phase];
 
   const handleClickBackward = () => {
+    // prevPhase
+    const prevPhase = 1;
     setPhase(Math.min(prevPhase, phase - 1));
   };
 
@@ -69,7 +66,7 @@ const UserRegisterRoot = () => {
         withoutBackward={phase === 0}
         onClickBackward={handleClickBackward}
         css={titleBarCss}
-        />
+      />
 
       <ProgressBar min={0} now={phase + 1} max={fields.length} />
 
