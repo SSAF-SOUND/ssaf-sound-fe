@@ -17,7 +17,7 @@ import {
   useUpdateMyInfoFormContext,
   useValidateNickname,
 } from '~/services/member';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, palettes } from '~/styles/utils';
 
 const fieldName = 'nickname';
 const isValidLength = (value: string) => {
@@ -34,6 +34,7 @@ const isValidFormat = (value: string) => {
 };
 
 const Nickname = () => {
+  const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [isValidNickname, setIsValidNickname] = useState(false);
   const { mutate: validateNickname, isLoading: isValidatingNickname } =
     useValidateNickname();
@@ -52,6 +53,9 @@ const Nickname = () => {
   const errorMessage = errors.nickname?.message;
   const submittable = isValidNickname && !dirtyFields.nickname;
 
+  const closeSubmitModal = () => setSubmitModalOpen(false);
+  const openSubmitModal = () => setSubmitModalOpen(true);
+
   const handleCreateRandomNickname = () => {
     setValue(fieldName, createRandomNickname(), {
       shouldDirty: true,
@@ -61,8 +65,11 @@ const Nickname = () => {
 
   const handleValidateNickname = async () => {
     const nickname = getValues(fieldName);
-    const isValidNickname = await trigger(fieldName);
-    if (!isValidNickname) {
+    const passClientValidate = await trigger(fieldName);
+    if (!passClientValidate) return;
+
+    if (submittable) {
+      openSubmitModal();
       return;
     }
 
@@ -71,6 +78,7 @@ const Nickname = () => {
       {
         onSuccess: () => {
           setIsValidNickname(true);
+          openSubmitModal();
         },
         onError: () => {
           setIsValidNickname(false);
@@ -119,26 +127,31 @@ const Nickname = () => {
                 return '공백문자를 연달아 사용하거나, 처음과 마지막에 사용할 수 없습니다.';
               }
 
-              return isValidFormat(value) || '한글, 영문, 숫자, _, 공백만 사용할 수 있습니다.';
+              return (
+                isValidFormat(value) ||
+                '한글, 영문, 숫자, _, 공백만 사용할 수 있습니다.'
+              );
             },
           })}
         />
         {errorMessage && <AlertText>{errorMessage}</AlertText>}
-        {submittable && (
-          <p css={[{ color: palettes.success.default }, fontCss.style.R14]}>
-            사용 가능한 닉네임입니다.
-          </p>
-        )}
       </div>
 
-      {submittable ? (
+      <Button
+        type="button"
+        css={buttonCss}
+        size="lg"
+        onClick={handleValidateNickname}
+        loading={isValidatingNickname}
+      >
+        확인
+      </Button>
+      {submittable && (
         <>
           <Modal
-            trigger={
-              <Button css={buttonCss} size="lg">
-                확인
-              </Button>
-            }
+            open={submitModalOpen}
+            onEscapeKeyDown={closeSubmitModal}
+            onPointerDownOutside={closeSubmitModal}
             content={
               <Alert
                 title="알림"
@@ -153,27 +166,16 @@ const Nickname = () => {
                 }
                 actionText="확인"
                 cancelText="취소"
-                onClickAction={() => {
-                  submitButtonRef.current?.click();
-                }}
+                onClickAction={() => submitButtonRef.current?.click()}
+                onClickCancel={closeSubmitModal}
               />
             }
           />
+
           <VisuallyHidden>
-            <button type="submit" ref={submitButtonRef} />
+            <button type="submit" ref={submitButtonRef} aria-hidden />
           </VisuallyHidden>
         </>
-      ) : (
-        <Button
-          type="button"
-          css={buttonCss}
-          size="lg"
-          onClick={handleValidateNickname}
-          loading={isValidatingNickname}
-          disabled={!dirtyFields.nickname}
-        >
-          닉네임 검사
-        </Button>
       )}
     </div>
   );
