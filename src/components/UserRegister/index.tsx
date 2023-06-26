@@ -1,10 +1,10 @@
 import { UserRegisterProvider } from './context';
-import UserRegisterRoot from './Root';
+import UserRegisterForm from './UserRegisterForm';
 
 const UserRegister = () => {
   return (
     <UserRegisterProvider>
-      <UserRegisterRoot />
+      <UserRegisterForm />
     </UserRegisterProvider>
   );
 };

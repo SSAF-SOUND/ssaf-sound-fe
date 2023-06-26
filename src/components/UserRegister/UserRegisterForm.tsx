@@ -23,7 +23,7 @@ import {
 
 // const phaseClamp = createBoundClamp([0, fields.length - 1]);
 
-const UserRegisterRoot = () => {
+const UserRegisterForm = () => {
   const { fields } = useUserRegister();
   const router = useRouter();
   const setMyInfo = useSetMyInfo();
@@ -55,34 +55,30 @@ const UserRegisterRoot = () => {
       },
     });
   };
+  // <TitleBar.Default
+  //   withoutTitle
+  //   withoutClose
+  //   // withoutBackward={phase === 0}
+  //   onClickBackward={handleClickBackward}
+  //   css={titleBarCss}
+  // />
+  // <ProgressBar min={0} now={phase + 1} max={fields.length} />
 
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        withoutTitle
-        withoutClose
-        // withoutBackward={phase === 0}
-        onClickBackward={handleClickBackward}
-        css={titleBarCss}
-      />
-
-      {/*<ProgressBar min={0} now={phase + 1} max={fields.length} />*/}
-
+    <form
+      css={formCss}
+      onSubmit={handleSubmit(onSubmit, (error) => {
+        console.log(error);
+      })}
+    >
       <FormProvider {...formMethods}>
-        <form
-          css={formCss}
-          onSubmit={handleSubmit(onSubmit, (error) => {
-            console.log(error);
-          })}
-        >
-          <FieldComponent />
-        </form>
+        <FieldComponent />
       </FormProvider>
-    </div>
+    </form>
   );
 };
 
-export default UserRegisterRoot;
+export default UserRegisterForm;
 
 const selfCss = css({
   display: 'flex',
