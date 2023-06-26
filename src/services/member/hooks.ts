@@ -1,8 +1,9 @@
 import type { UpdateMyInfoParams } from './apis';
+import type { UserInfo } from '~/services/member/utils';
 
 import { useRouter } from 'next/router';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 
@@ -25,6 +26,16 @@ export const useMyInfo = (options: UseMyInfoOptions = {}) => {
     enabled,
     retry,
   });
+};
+
+export const useSetMyInfo = () => {
+  const queryClient = useQueryClient();
+  const queryKey = queryKeys.user.myInfo();
+  const setMyInfo = (payload: UserInfo) => {
+    queryClient.setQueryData<UserInfo>(queryKey, payload);
+  };
+
+  return setMyInfo;
 };
 
 /**
@@ -71,7 +82,7 @@ export const useUpdateMyInfoForm = () => {
   return useForm<UpdateMyInfoParams>({
     defaultValues: {
       ssafyMember: undefined,
-      nickname: "",
+      nickname: '',
       isMajor: undefined,
       campus: undefined,
       semester: undefined,
