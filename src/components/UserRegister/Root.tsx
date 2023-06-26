@@ -30,7 +30,6 @@ const nicknamePhase = 4;
 const UserRegisterRoot = () => {
   const formMethods = useUpdateMyInfoForm();
   const { handleSubmit, setError } = formMethods;
-
   const unSafePhase = usePhaseContext();
   const prevPhase = usePrevPhaseContext();
   const setPhase = useSetPhaseContext();
@@ -67,12 +66,6 @@ const UserRegisterRoot = () => {
           })}
         >
           <Field />
-
-          {phase === nicknamePhase && (
-            <Button type="submit" css={buttonCss} variant="filled" size="lg">
-              확인
-            </Button>
-          )}
         </form>
       </FormProvider>
     </div>
@@ -80,10 +73,6 @@ const UserRegisterRoot = () => {
 };
 
 export default UserRegisterRoot;
-
-const buttonCss = css({
-  width: '100%',
-});
 
 const selfCss = css({
   display: 'flex',
