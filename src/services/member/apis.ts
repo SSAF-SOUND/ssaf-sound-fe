@@ -17,9 +17,9 @@ export type UpdateMyInfoApiData = ApiSuccessResponse<UserInfo>;
 export interface UpdateMyInfoParams {
   nickname: string;
   ssafyMember: boolean;
-  campus: string;
-  semester: number;
-  isMajor: boolean;
+  campus?: string;
+  semester?: number;
+  isMajor?: boolean;
 }
 
 export const updateMyInfo = (params: UpdateMyInfoParams) => {
