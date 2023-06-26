@@ -71,7 +71,7 @@ export const useUpdateMyInfoForm = () => {
   return useForm<UpdateMyInfoParams>({
     defaultValues: {
       ssafyMember: undefined,
-      nickname: undefined,
+      nickname: "",
       isMajor: undefined,
       campus: undefined,
       semester: undefined,
