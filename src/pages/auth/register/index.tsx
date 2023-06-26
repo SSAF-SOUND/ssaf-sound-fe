@@ -3,6 +3,7 @@ import type { CustomNextPage } from 'next/types';
 import { useRouter } from 'next/router';
 
 import { DefaultFullPageLoader } from '~/components/Common';
+import UserRegisterLayout from '~/components/Layout/UserRegisterLayout';
 import UserRegister from '~/components/UserRegister';
 import { useMyAccountStatus } from '~/services/member';
 
@@ -14,7 +15,11 @@ const RegisterPage: CustomNextPage = () => {
     router.replace('/main');
   }
 
-  return <UserRegister />;
+  return (
+    <UserRegisterLayout>
+      <UserRegister />
+    </UserRegisterLayout>
+  );
 };
 
 RegisterPage.auth = {
