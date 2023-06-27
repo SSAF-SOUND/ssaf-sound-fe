@@ -16,20 +16,8 @@ import IsMember from '../Fields/IsMember';
 import Nickname from '../Fields/Nickname';
 import Year from '../Fields/Year';
 
-export const fieldIds = {
-  isMember: Symbol(),
-  year: Symbol(),
-  campus: Symbol(),
-  isMajor: Symbol(),
-  nickname: Symbol(),
-};
-
 const UserRegisterContext = createContext<
-  | {
-      fields: { id: symbol; Component: FC }[];
-      fieldIds: typeof fieldIds;
-    }
-  | undefined
+  { fields: { Component: FC }[] } | undefined
 >(undefined);
 
 const PhaseContext = createContext({
@@ -62,7 +50,6 @@ export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
     return {
       fields: [
         {
-          id: fieldIds.isMember,
           Component: () => (
             <IsMember
               onFalse={() => extendedSetPhase(nicknamePhase)}
@@ -71,25 +58,20 @@ export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
           ),
         },
         {
-          id: fieldIds.year,
           Component: () => <Year onSelect={increasePhase} />,
         },
         {
-          id: fieldIds.campus,
           Component: () => <Campus onSelect={increasePhase} />,
         },
         {
-          id: fieldIds.isMajor,
           Component: () => (
             <IsMajor onFalse={increasePhase} onTrue={increasePhase} />
           ),
         },
         {
-          id: fieldIds.nickname,
           Component: () => <Nickname />,
         },
       ],
-      fieldIds,
     };
   }, [extendedSetPhase]);
 
