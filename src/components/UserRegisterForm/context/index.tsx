@@ -70,7 +70,7 @@ export const UserRegisterFormProvider = (
         ),
       },
       {
-        Component: (props) => <Nickname {...props} />,
+        Component: () => <Nickname />,
       },
     ];
 

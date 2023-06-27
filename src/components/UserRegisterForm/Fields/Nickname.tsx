@@ -24,12 +24,7 @@ import Question from '../Question';
 
 const fieldName = 'nickname';
 
-interface NicknameProps {
-  isMutating?: boolean;
-}
-
-const Nickname = (props: NicknameProps) => {
-  const { isMutating = false } = props;
+const Nickname = () => {
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [isValidNickname, setIsValidNickname] = useState(false);
   const { mutate: validateNickname, isLoading: isValidatingNickname } =
@@ -44,14 +39,14 @@ const Nickname = (props: NicknameProps) => {
     getValues,
     trigger,
     setError,
-    formState: { errors, dirtyFields },
+    formState: { errors, dirtyFields, isSubmitting },
   } = useUpdateMyInfoFormContext();
   const nicknameFieldId = useId();
   const errorMessage = errors.nickname?.message;
   const submittable = isValidNickname && !dirtyFields.nickname;
   const isButtonDisabled = !isValidNickname && !dirtyFields.nickname;
-  const isButtonLoading = isValidatingNickname || isMutating;
-  console.log(errors);
+  const isButtonLoading = isValidatingNickname || isSubmitting;
+
   const closeSubmitModal = () => setSubmitModalOpen(false);
   const openSubmitModal = () => setSubmitModalOpen(true);
 

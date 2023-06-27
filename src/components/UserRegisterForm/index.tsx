@@ -18,7 +18,8 @@ const UserRegisterForm = () => {
   const fields = useUserRegisterFormFields();
   const router = useRouter();
   const setMyInfo = useSetMyInfo();
-  const { mutate: updateMyInfo, isLoading: isMutating } = useUpdateMyInfo();
+  const { mutateAsync: updateMyInfo, isLoading: isMutating } =
+    useUpdateMyInfo();
   const formMethods = useUpdateMyInfoForm();
   const { handleSubmit, setError } = formMethods;
 
@@ -26,10 +27,10 @@ const UserRegisterForm = () => {
   const FieldComponent = fields[phase].Component;
 
   const onSubmit = async (value: UpdateMyInfoParams) => {
-    updateMyInfo(value, {
+    await updateMyInfo(value, {
       onSuccess: (value) => {
         setMyInfo(value);
-        router.push('/main');
+        // router.push('/main');
       },
       onError: (error) => {
         // LATER
