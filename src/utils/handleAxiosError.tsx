@@ -24,12 +24,12 @@ interface HandleAxiosErrorOptions {
   /**
    * - `statusCode`값이 `400 ~ 499` (=클라이언트 오류)일 때 수행할 함수입니다.
    */
-  onClientError: (error: ApiErrorResponse) => void;
+  onClientError: (response: ApiErrorResponse) => void;
   /**
    * - `statusCode`값이 `500 ~ 599` (=서버 오류)일 때 수행할 함수입니다.
    * - 주어지지 않으면 기본 핸들러 함수를 사용합니다.
    */
-  onServerError: (error: ApiErrorResponse) => void;
+  onServerError: (response: ApiErrorResponse) => void;
   /**
    * - 서버 에러 검사를 건너 뛰고 싶은 경우에 사용합니다.
    */
