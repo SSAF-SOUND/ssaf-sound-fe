@@ -1,4 +1,4 @@
-import type { SsafyInfo, UserBasicInfo, UserInfo } from './utils/types';
+import type { UserInfo } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
