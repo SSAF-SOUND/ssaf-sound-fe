@@ -12,15 +12,16 @@ import {
 } from '~/services/member';
 import { flex } from '~/styles/utils';
 
-import { usePhase, useUserRegister } from './context';
+import { usePhase, useUserRegisterFormFields } from './context';
 
 const UserRegisterForm = () => {
-  const { fields } = useUserRegister();
+  const fields = useUserRegisterFormFields();
   const router = useRouter();
   const setMyInfo = useSetMyInfo();
   const { mutate: updateMyInfo } = useUpdateMyInfo();
   const formMethods = useUpdateMyInfoForm();
   const { handleSubmit, setError } = formMethods;
+
   const { phase } = usePhase();
   const FieldComponent = fields[phase].Component;
 

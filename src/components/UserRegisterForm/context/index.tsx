@@ -10,27 +10,26 @@ import {
 
 import { noop } from '~/utils';
 
-import Campus from '../Fields/Campus';
-import IsMajor from '../Fields/IsMajor';
-import IsMember from '../Fields/IsMember';
-import Nickname from '../Fields/Nickname';
-import Year from '../Fields/Year';
+import { IsMember, Year, Campus, IsMajor, Nickname } from '../Fields';
 
-const UserRegisterContext = createContext<
-  { fields: { Component: FC }[] } | undefined
+const UserRegisterFormFieldsContext = createContext<
+  { Component: FC }[] | undefined
 >(undefined);
 
 const PhaseContext = createContext({
   phase: 0,
   prevPhase: 0,
 });
+
 const SetPhaseContext = createContext<Dispatch<SetStateAction<number>>>(noop);
 
-interface UserRegisterProviderProps {
+interface UserRegisterFormProviderProps {
   children: ReactNode;
 }
 
-export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
+export const UserRegisterFormProvider = (
+  props: UserRegisterFormProviderProps
+) => {
   const { children } = props;
   const [prevPhase, setPrevPhase] = useState(0);
   const [phase, setPhase] = useState(0);
@@ -43,36 +42,34 @@ export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
     [phase]
   );
 
-  const userRegister = useMemo(() => {
+  const fields = useMemo(() => {
     const increasePhase = () => extendedSetPhase((p) => p + 1);
     const nicknamePhase = 4;
 
-    return {
-      fields: [
-        {
-          Component: () => (
-            <IsMember
-              onFalse={() => extendedSetPhase(nicknamePhase)}
-              onTrue={increasePhase}
-            />
-          ),
-        },
-        {
-          Component: () => <Year onSelect={increasePhase} />,
-        },
-        {
-          Component: () => <Campus onSelect={increasePhase} />,
-        },
-        {
-          Component: () => (
-            <IsMajor onFalse={increasePhase} onTrue={increasePhase} />
-          ),
-        },
-        {
-          Component: () => <Nickname />,
-        },
-      ],
-    };
+    return [
+      {
+        Component: () => (
+          <IsMember
+            onFalse={() => extendedSetPhase(nicknamePhase)}
+            onTrue={increasePhase}
+          />
+        ),
+      },
+      {
+        Component: () => <Year onSelect={increasePhase} />,
+      },
+      {
+        Component: () => <Campus onSelect={increasePhase} />,
+      },
+      {
+        Component: () => (
+          <IsMajor onFalse={increasePhase} onTrue={increasePhase} />
+        ),
+      },
+      {
+        Component: () => <Nickname />,
+      },
+    ];
   }, [extendedSetPhase]);
 
   const phaseValue = useMemo(() => {
@@ -83,13 +80,13 @@ export const UserRegisterProvider = (props: UserRegisterProviderProps) => {
   }, [phase, prevPhase]);
 
   return (
-    <UserRegisterContext.Provider value={userRegister}>
+    <UserRegisterFormFieldsContext.Provider value={fields}>
       <SetPhaseContext.Provider value={extendedSetPhase}>
         <PhaseContext.Provider value={phaseValue}>
           {children}
         </PhaseContext.Provider>
       </SetPhaseContext.Provider>
-    </UserRegisterContext.Provider>
+    </UserRegisterFormFieldsContext.Provider>
   );
 };
 
@@ -101,13 +98,25 @@ export const useSetPhase = () => {
   return useContext(SetPhaseContext);
 };
 
-export const useUserRegister = () => {
-  const contextValue = useContext(UserRegisterContext);
+export const useUserRegisterFormFields = () => {
+  const contextValue = useContext(UserRegisterFormFieldsContext);
   if (contextValue === undefined) {
     throw new Error(
-      'useUserRegister는 UserRegisterContext.Provider 내부에서 호출해야 합니다.'
+      'useUserRegisterFields는 UserRegisterFormFieldsContext.Provider 내부에서 호출해야 합니다.'
     );
   }
 
   return contextValue;
+};
+
+export const withUserRegisterFormProvider = <T extends object>(
+  Component: FC<T>
+) => {
+  return function WithUserRegisterFormProvider(props: T) {
+    return (
+      <UserRegisterFormProvider>
+        <Component {...props} />
+      </UserRegisterFormProvider>
+    );
+  };
 };

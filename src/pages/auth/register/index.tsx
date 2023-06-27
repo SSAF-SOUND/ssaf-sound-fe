@@ -3,7 +3,7 @@ import type { CustomNextPage } from 'next/types';
 import { useRouter } from 'next/router';
 
 import { DefaultFullPageLoader } from '~/components/Common';
-import UserRegisterLayout from '~/components/Layout/UserRegisterLayout';
+import { UserRegisterLayout } from '~/components/Layout';
 import UserRegisterForm from '~/components/UserRegisterForm';
 import { useMyAccountStatus } from '~/services/member';
 
