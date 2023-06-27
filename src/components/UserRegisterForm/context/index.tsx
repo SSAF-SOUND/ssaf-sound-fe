@@ -12,8 +12,11 @@ import { noop } from '~/utils';
 
 import { IsMember, Year, Campus, IsMajor, Nickname } from '../Fields';
 
+type FieldComponent = FC<{ isMutating?: boolean }>;
+type UserRegisterFormFields = { Component: FieldComponent }[];
+
 const UserRegisterFormFieldsContext = createContext<
-  { Component: FC }[] | undefined
+  UserRegisterFormFields | undefined
 >(undefined);
 
 const PhaseContext = createContext({
@@ -42,11 +45,11 @@ export const UserRegisterFormProvider = (
     [phase]
   );
 
-  const fields = useMemo(() => {
+  const userRegisterFormFields = useMemo(() => {
     const increasePhase = () => extendedSetPhase((p) => p + 1);
     const nicknamePhase = 4;
 
-    return [
+    const fields: UserRegisterFormFields = [
       {
         Component: () => (
           <IsMember
@@ -67,9 +70,11 @@ export const UserRegisterFormProvider = (
         ),
       },
       {
-        Component: () => <Nickname />,
+        Component: (props) => <Nickname {...props} />,
       },
     ];
+
+    return fields;
   }, [extendedSetPhase]);
 
   const phaseValue = useMemo(() => {
@@ -80,7 +85,7 @@ export const UserRegisterFormProvider = (
   }, [phase, prevPhase]);
 
   return (
-    <UserRegisterFormFieldsContext.Provider value={fields}>
+    <UserRegisterFormFieldsContext.Provider value={userRegisterFormFields}>
       <SetPhaseContext.Provider value={extendedSetPhase}>
         <PhaseContext.Provider value={phaseValue}>
           {children}

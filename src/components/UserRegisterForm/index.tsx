@@ -18,7 +18,7 @@ const UserRegisterForm = () => {
   const fields = useUserRegisterFormFields();
   const router = useRouter();
   const setMyInfo = useSetMyInfo();
-  const { mutate: updateMyInfo } = useUpdateMyInfo();
+  const { mutate: updateMyInfo, isLoading: isMutating } = useUpdateMyInfo();
   const formMethods = useUpdateMyInfoForm();
   const { handleSubmit, setError } = formMethods;
 
@@ -39,14 +39,9 @@ const UserRegisterForm = () => {
   };
 
   return (
-    <form
-      css={formCss}
-      onSubmit={handleSubmit(onSubmit, (error) => {
-        console.log(error);
-      })}
-    >
+    <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
       <FormProvider {...formMethods}>
-        <FieldComponent />
+        <FieldComponent isMutating={isMutating} />
       </FormProvider>
     </form>
   );

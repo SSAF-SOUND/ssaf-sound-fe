@@ -23,7 +23,12 @@ import Question from '../Question';
 
 const fieldName = 'nickname';
 
-const Nickname = () => {
+interface NicknameProps {
+  isMutating?: boolean;
+}
+
+const Nickname = (props: NicknameProps) => {
+  const { isMutating = false } = props;
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [isValidNickname, setIsValidNickname] = useState(false);
   const { mutate: validateNickname, isLoading: isValidatingNickname } =
@@ -42,6 +47,8 @@ const Nickname = () => {
   const nicknameFieldId = useId();
   const errorMessage = errors.nickname?.message;
   const submittable = isValidNickname && !dirtyFields.nickname;
+  const isButtonDisabled = !isValidNickname && !dirtyFields.nickname;
+  const isButtonLoading = isValidatingNickname || isMutating;
 
   const closeSubmitModal = () => setSubmitModalOpen(false);
   const openSubmitModal = () => setSubmitModalOpen(true);
@@ -78,6 +85,11 @@ const Nickname = () => {
         },
       }
     );
+  };
+
+  const triggerSubmit = () => {
+    submitButtonRef.current?.click();
+    closeSubmitModal();
   };
 
   useEffect(() => {
@@ -119,10 +131,12 @@ const Nickname = () => {
         css={buttonCss}
         size="lg"
         onClick={handleValidateNickname}
-        loading={isValidatingNickname}
+        loading={isButtonLoading}
+        disabled={isButtonDisabled}
       >
         확인
       </Button>
+
       {submittable && (
         <>
           <Modal
@@ -143,7 +157,7 @@ const Nickname = () => {
                 }
                 actionText="확인"
                 cancelText="취소"
-                onClickAction={() => submitButtonRef.current?.click()}
+                onClickAction={triggerSubmit}
                 onClickCancel={closeSubmitModal}
               />
             }
