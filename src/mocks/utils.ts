@@ -1,7 +1,7 @@
-import type { RestContext } from 'msw';
+import type { RestContext, DefaultBodyType } from 'msw';
 import type { ApiErrorResponse, ApiSuccessResponse } from '~/types';
 
-import { RESPONSE_CODE } from '~/utils';
+import { rest } from 'msw';
 
 /**
  * - 성공 응답에 거의 `data`만 사용되기 때문에 만들었습니다.
@@ -46,10 +46,54 @@ export const mockError = (
   ] as const;
 };
 
-export const mockExpiredTokenError = (ctx: RestContext) => {
-  return mockError(ctx, RESPONSE_CODE.EXPIRED_TOKEN);
+/**
+ * - Mock handler 자체를 만드는 유틸리티입니다.
+ * - 요청 ~ 응답 사이에 별다른 로직을 수행하지 않는 핸들러를 만들 때 사용합니다.
+ * - 기본 `delay`는 500ms 입니다.
+ */
+export const restSuccess = <D extends DefaultBodyType>(
+  method: 'get' | 'post' | 'patch' | 'delete',
+  url: string,
+  { delay = 500, data = {} }: { delay?: number; data?: D } = {}
+) => {
+  return rest[method](url, (req, res, ctx) => {
+    return res(ctx.delay(delay), ctx.json({ data }));
+  });
 };
 
-export const mockInvalidTokenError = (ctx: RestContext) => {
-  return mockError(ctx, RESPONSE_CODE.INVALID_TOKEN);
+/**
+ * - Mock handler 자체를 만드는 유틸리티입니다.
+ * - 요청 ~ 응답 사이에 별다른 로직을 수행하지 않는 핸들러를 만들 때 사용합니다.
+ * - 기본 `delay`는 500ms 입니다.
+ */
+export const restError = <D extends DefaultBodyType>(
+  method: 'get' | 'post' | 'patch' | 'delete',
+  url: string,
+  {
+    delay = 500,
+    message = '에러가 발생하였습니다.',
+    status = 400,
+    code = '400',
+    data = {},
+  }: {
+    delay?: number;
+    message?: string;
+    code?: string;
+    status?: number;
+    data?: D;
+  } = {}
+) => {
+  const safeStatus = status >= 400 && status < 600 ? status : 400;
+
+  return rest[method](url, (req, res, ctx) => {
+    return res(
+      ctx.delay(delay),
+      ctx.status(safeStatus),
+      ctx.json({
+        code,
+        message,
+        data,
+      })
+    );
+  });
 };
