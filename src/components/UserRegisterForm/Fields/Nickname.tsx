@@ -73,18 +73,18 @@ const Nickname = () => {
         onSuccess: () => {
           setIsValidNickname(true);
           openSubmitModal();
+          resetField(fieldName, { defaultValue: nickname });
         },
-        onError: (e) => {
-          handleAxiosError(e, {
-            onClientError: () => {
+        onError: (error) => {
+          handleAxiosError(error, {
+            onClientError: (response) => {
               setIsValidNickname(false);
-              // form의 errors는 필드 유효성 관련이 아니라면 세팅되지 않음.
-              // 이후에 유저에게 알려주기
+              resetField(fieldName, { defaultValue: nickname });
+              setError(fieldName, {
+                message: response.message,
+              });
             },
           });
-        },
-        onSettled: () => {
-          resetField(fieldName, { defaultValue: nickname });
         },
       }
     );
@@ -117,6 +117,12 @@ const Nickname = () => {
           </IconButton>
         </div>
         <TextInput
+          onKeyDown={(e) => {
+            // Enter Key를 통한 Submit 방지
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
           placeholder="James"
           size="lg"
           type="text"
