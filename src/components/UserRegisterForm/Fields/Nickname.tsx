@@ -18,6 +18,7 @@ import {
   useValidateNickname,
 } from '~/services/member';
 import { flex, palettes } from '~/styles/utils';
+import { handleAxiosError } from '~/utils';
 
 import Question from '../Question';
 
@@ -42,6 +43,7 @@ const Nickname = (props: NicknameProps) => {
     resetField,
     getValues,
     trigger,
+    setError,
     formState: { errors, dirtyFields },
   } = useUpdateMyInfoFormContext();
   const nicknameFieldId = useId();
@@ -49,7 +51,7 @@ const Nickname = (props: NicknameProps) => {
   const submittable = isValidNickname && !dirtyFields.nickname;
   const isButtonDisabled = !isValidNickname && !dirtyFields.nickname;
   const isButtonLoading = isValidatingNickname || isMutating;
-
+  console.log(errors);
   const closeSubmitModal = () => setSubmitModalOpen(false);
   const openSubmitModal = () => setSubmitModalOpen(true);
 
@@ -77,8 +79,14 @@ const Nickname = (props: NicknameProps) => {
           setIsValidNickname(true);
           openSubmitModal();
         },
-        onError: () => {
-          setIsValidNickname(false);
+        onError: (e) => {
+          handleAxiosError(e, {
+            onClientError: () => {
+              setIsValidNickname(false);
+              // form의 errors는 필드 유효성 관련이 아니라면 세팅되지 않음.
+              // 이후에 유저에게 알려주기
+            },
+          });
         },
         onSettled: () => {
           resetField(fieldName, { defaultValue: nickname });
