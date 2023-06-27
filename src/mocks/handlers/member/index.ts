@@ -48,7 +48,7 @@ const updateMyInfo = rest.patch<
   );
 });
 
-export const validateNickname = rest.post(
+const validateNickname = rest.post(
   composeUrls(API_URL, endpoints.user.nickname()),
   (req, res, ctx) => {
     return res(
@@ -59,4 +59,4 @@ export const validateNickname = rest.post(
   }
 );
 
-export const memberHandlers = [getMyInfo, updateMyInfo];
+export const memberHandlers = [getMyInfo, updateMyInfo, validateNickname];
