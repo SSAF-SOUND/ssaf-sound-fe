@@ -44,15 +44,16 @@ export const useSetMyInfo = () => {
  * - `isChecking`: 유저의 로그인 여부를 검사중인 상태
  */
 export const useMyAccountStatus = () => {
-  const { data, isFetching } = useMyInfo({ enabled: false });
-  const isAuthenticated = !!data;
-  const isRegisterRequired = isAuthenticated && data.ssafyMember == null;
+  const { data: myInfo, isFetching } = useMyInfo({ enabled: false });
+  const isAuthenticated = !!myInfo;
+  const isRegisterRequired = isAuthenticated && myInfo.ssafyMember == null;
   const isChecking = !isAuthenticated && isFetching;
 
   return {
     isAuthenticated,
     isRegisterRequired,
     isChecking,
+    myInfo,
   };
 };
 

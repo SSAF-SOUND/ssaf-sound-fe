@@ -11,38 +11,42 @@ import {
   useUpdateMyInfoForm,
 } from '~/services/member';
 import { flex } from '~/styles/utils';
+import { customToast, handleAxiosError } from '~/utils';
+import { routes } from '~/utils/routes';
 
 import { usePhase, useUserRegisterFormFields } from './context';
 
 const UserRegisterForm = () => {
-  const fields = useUserRegisterFormFields();
   const router = useRouter();
+  const fields = useUserRegisterFormFields();
   const setMyInfo = useSetMyInfo();
-  const { mutateAsync: updateMyInfo, isLoading: isMutating } =
-    useUpdateMyInfo();
+  const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
   const formMethods = useUpdateMyInfoForm();
-  const { handleSubmit, setError } = formMethods;
+  const { handleSubmit } = formMethods;
 
   const { phase } = usePhase();
   const FieldComponent = fields[phase].Component;
 
-  const onSubmit = async (value: UpdateMyInfoParams) => {
+  const onValid = async (value: UpdateMyInfoParams) => {
     await updateMyInfo(value, {
       onSuccess: (value) => {
         setMyInfo(value);
-        // router.push('/main');
+        router.replace(routes.certification.ssafy());
       },
       onError: (error) => {
-        // LATER
-        console.error(error);
+        handleAxiosError(error, {
+          onClientError: (error) => {
+            customToast.clientError(error.message);
+          },
+        });
       },
     });
   };
 
   return (
-    <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
+    <form css={formCss} onSubmit={handleSubmit(onValid)}>
       <FormProvider {...formMethods}>
-        <FieldComponent isMutating={isMutating} />
+        <FieldComponent />
       </FormProvider>
     </form>
   );

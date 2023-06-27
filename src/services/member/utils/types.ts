@@ -20,7 +20,11 @@ export interface SsafyInfo {
   certificationState: CertificationState;
 }
 
-export type CertificationState = 'UNCERTIFIED' | 'WAITING' | 'CERTIFIED';
+export enum CertificationState {
+  UNCERTIFIED = 'UNCERTIFIED',
+  WAITING = 'WAITING',
+  CERTIFIED = 'CERTIFIED',
+}
 
 export interface UserBasicInfo {
   memberId: number;

@@ -12,9 +12,7 @@ import { noop } from '~/utils';
 
 import { IsMember, Year, Campus, IsMajor, Nickname } from '../Fields';
 
-type FieldComponent = FC<{ isMutating?: boolean }>;
-type UserRegisterFormFields = { Component: FieldComponent }[];
-
+type UserRegisterFormFields = { Component: FC }[];
 const UserRegisterFormFieldsContext = createContext<
   UserRegisterFormFields | undefined
 >(undefined);
