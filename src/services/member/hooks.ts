@@ -32,7 +32,7 @@ export const useMyInfo = (options: UseMyInfoOptions = {}) => {
 export const useSetMyInfo = () => {
   const queryClient = useQueryClient();
   const queryKey = queryKeys.user.myInfo();
-  const setMyInfo = (payload: UserInfo) => {
+  const setMyInfo = (payload?: UserInfo) => {
     queryClient.setQueryData<UserInfo>(queryKey, payload);
   };
 
