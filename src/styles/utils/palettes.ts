@@ -24,7 +24,7 @@ export const palettes = {
     dark: '#FF9911',
   },
   error: {
-    default: '#FF4343',
+    default: '#FF5C5C',
     light: '#FFD1CF',
     dark: '#C60B00',
   },

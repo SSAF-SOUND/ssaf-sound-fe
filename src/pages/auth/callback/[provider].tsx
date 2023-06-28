@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import DefaultFullPageLoader from '~/components/Common/DefaultFullPageLoader';
+import { DefaultFullPageLoader } from '~/components/Common';
 import { useSignIn } from '~/services/auth';
 
 interface QueryParams {

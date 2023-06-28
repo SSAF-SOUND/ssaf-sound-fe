@@ -1,15 +1,33 @@
 import { css } from '@emotion/react';
 
 import { Button } from '~/components/Common';
-import { useSetPhaseContext } from '~/components/UserRegister/context';
-import Question from '~/components/UserRegister/Question';
+import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
 
-const IsMajor = () => {
-  const setPhase = useSetPhaseContext();
-  const handleClickButton = () => {
-    setPhase((p) => p + 1);
+import Question from '../Question';
+
+const fieldName = 'isMajor';
+
+interface IsMajorProps {
+  onTrue: () => void;
+  onFalse: () => void;
+}
+
+const IsMajor = (props: IsMajorProps) => {
+  const { onTrue, onFalse } = props;
+  const { register, setValue } = useUpdateMyInfoFormContext();
+
+  const handleClickYes = () => {
+    setValue(fieldName, true);
+    onTrue();
   };
+
+  const handleClickNo = () => {
+    setValue(fieldName, false);
+    onFalse();
+  };
+
+  register(fieldName);
 
   return (
     <div css={selfCss}>
@@ -22,7 +40,7 @@ const IsMajor = () => {
           size="lg"
           variant="filled"
           css={buttonCss}
-          onClick={handleClickButton}
+          onClick={handleClickYes}
         >
           네
         </Button>
@@ -30,7 +48,7 @@ const IsMajor = () => {
           size="lg"
           variant="outlined"
           css={buttonCss}
-          onClick={handleClickButton}
+          onClick={handleClickNo}
         >
           아니오
         </Button>
@@ -38,6 +56,8 @@ const IsMajor = () => {
     </div>
   );
 };
+
+export default IsMajor;
 
 const selfCss = css(
   {
@@ -56,5 +76,3 @@ const buttonGroupCss = css(
 const buttonCss = css({
   width: '100%',
 });
-
-export default IsMajor;

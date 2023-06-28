@@ -1,15 +1,28 @@
 import { css } from '@emotion/react';
 
 import { SelectBox } from '~/components/Common';
-import { useSetPhaseContext } from '~/components/UserRegister/context';
-import Question from '~/components/UserRegister/Question';
+import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
+
+import Question from '../Question';
 
 const campuses = ['서울', '대전', '광주', '구미', '부울경'];
 
-const Campus = () => {
-  const setPhase = useSetPhaseContext();
-  const handleValueChange = () => setPhase((p) => p + 1);
+const fieldName = 'campus';
+
+interface CampusProps {
+  onSelect: () => void;
+}
+
+const Campus = (props: CampusProps) => {
+  const { onSelect } = props;
+  const { setValue, register } = useUpdateMyInfoFormContext();
+  const handleValueChange = (value: string) => {
+    setValue(fieldName, value);
+    onSelect();
+  };
+
+  register(fieldName);
 
   return (
     <label css={selfCss}>
@@ -23,6 +36,7 @@ const Campus = () => {
         textAs={(value) => `${value} 캠퍼스`}
         onValueChange={handleValueChange}
         size="lg"
+        focusOnMount
       />
     </label>
   );

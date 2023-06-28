@@ -1,6 +1,6 @@
 import cookie from 'js-cookie';
 
-import { RESPONSE } from '~/utils';
+import { RESPONSE_CODE } from '~/utils';
 
 export const ACCESS_TOKEN_KEY = 'msw-access-token';
 export const REFRESH_TOKEN_KEY = 'msw-refresh-token';
@@ -28,14 +28,14 @@ const checkTokenError = (token: string | undefined) => {
 
   if (token === EXPIRED_TOKEN_VALUE) {
     return {
-      code: RESPONSE.CODE.EXPIRED_TOKEN,
+      code: RESPONSE_CODE.EXPIRED_TOKEN,
       message: '',
       data: {},
     };
   }
 
   return {
-    code: RESPONSE.CODE.INVALID_TOKEN,
+    code: RESPONSE_CODE.INVALID_TOKEN,
     message: '',
     data: {},
   };

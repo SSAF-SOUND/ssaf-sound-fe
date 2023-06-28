@@ -4,8 +4,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Bar, Icon } from '~/components/Common';
-import IconButton from '~/components/Common/IconButton';
+import { Bar, Icon , IconButton } from '~/components/Common';
 import { fontCss } from '~/styles/utils';
 
 interface DefaultTitleBarProps {

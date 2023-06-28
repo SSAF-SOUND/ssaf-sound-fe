@@ -1,11 +1,15 @@
+import type { UpdateMyInfoParams } from './apis';
+import type { UserInfo } from '~/services/member/utils';
+
 import { useRouter } from 'next/router';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useForm, useFormContext } from 'react-hook-form';
 
 import { queryKeys } from '~/react-query/common';
 
-import { getMyInfo } from './apis';
+import { getMyInfo, updateMyInfo, validateNickname } from './apis';
 
 interface UseMyInfoOptions {
   enabled?: boolean;
@@ -22,6 +26,16 @@ export const useMyInfo = (options: UseMyInfoOptions = {}) => {
     enabled,
     retry,
   });
+};
+
+export const useSetMyInfo = () => {
+  const queryClient = useQueryClient();
+  const queryKey = queryKeys.user.myInfo();
+  const setMyInfo = (payload: UserInfo) => {
+    queryClient.setQueryData<UserInfo>(queryKey, payload);
+  };
+
+  return setMyInfo;
 };
 
 /**
@@ -62,4 +76,32 @@ export const useCheckRegisterRequired = () => {
   if (!isRegisterPage && isRegisterRequired) {
     router.replace('/auth/register');
   }
+};
+
+export const useUpdateMyInfoForm = () => {
+  return useForm<UpdateMyInfoParams>({
+    defaultValues: {
+      ssafyMember: undefined,
+      nickname: '',
+      isMajor: undefined,
+      campus: undefined,
+      semester: undefined,
+    },
+  });
+};
+
+export const useUpdateMyInfoFormContext = () => {
+  return useFormContext<UpdateMyInfoParams>();
+};
+
+export const useUpdateMyInfo = () => {
+  return useMutation({
+    mutationFn: updateMyInfo,
+  });
+};
+
+export const useValidateNickname = () => {
+  return useMutation({
+    mutationFn: validateNickname,
+  });
 };

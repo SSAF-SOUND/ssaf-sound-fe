@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { BounceLoader } from 'react-spinners';
 
 import TopBar from 'src/components/TopBar';
-import DefaultFullPageLoader from '~/components/Common/DefaultFullPageLoader';
+import { DefaultFullPageLoader } from '~/components/Common';
 import Counter from '~/components/Counter';
 import TitleBar from '~/components/TitleBar';
 import { prefetch } from '~/react-query/server/prefetch';

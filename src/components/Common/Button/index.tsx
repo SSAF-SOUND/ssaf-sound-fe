@@ -3,11 +3,12 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-import ButtonLoader from '~/components/Common/Button/ButtonLoader';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { toCssVar } from '~/styles/utils/toCssVar';
+
+import ButtonLoader from './ButtonLoader';
 
 type ButtonVariant = 'text' | 'filled' | 'outlined';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -28,7 +29,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   loading?: boolean;
 }
 
-const Button = (props: ButtonProps) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
     variant = 'filled',
     size = 'md',
@@ -41,12 +42,13 @@ const Button = (props: ButtonProps) => {
   } = props;
 
   const Component = asChild ? Slot : 'button';
-  if (Component === 'button') restProps.type = 'button';
+  if (Component === 'button') restProps.type = restProps.type || 'button';
 
   const isDisabled = disabled || loading;
 
   return (
     <Component
+      ref={ref}
       disabled={isDisabled}
       css={[
         baseCss,
@@ -59,7 +61,9 @@ const Button = (props: ButtonProps) => {
       {loading ? <ButtonLoader color={loaderColor[variant]} /> : children}
     </Component>
   );
-};
+});
+
+Button.displayName = 'Button';
 
 export default Button;
 

@@ -1,3 +1,4 @@
+export * from './createRandomNickname';
+export * from './nicknameValidator';
 export * from './role';
-export * from './nickname';
 export * from './types';

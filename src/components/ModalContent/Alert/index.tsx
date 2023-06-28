@@ -35,15 +35,19 @@ const Alert = (props: AlertProps) => {
     onClickAction,
   } = props;
 
-  const hasText = Boolean(actionText || cancelText);
+  const hasButtonText = Boolean(actionText || cancelText);
 
   return (
     <div css={selfCss}>
       <div css={descriptionCss}>
         {title && <Modal.Title css={titleCss}>{title}</Modal.Title>}
-        {description && <Modal.Description>{description}</Modal.Description>}
+        {description && (
+          <Modal.Description asChild>
+            <div css={!title && fontCss.style.R16}>{description}</div>
+          </Modal.Description>
+        )}
       </div>
-      {hasText && (
+      {hasButtonText && (
         <div css={buttonGroupCss}>
           {cancelText && (
             <Modal.Close
@@ -83,15 +87,12 @@ const descriptionCss = css(
   {
     padding: 18,
     color: palettes.black,
-    '> *:first-child': fontCss.style.R16,
   },
   fontCss.style.R14,
   flex('center', 'center')
 );
 
-const titleCss = css({
-  fontWeight: '700 !important',
-});
+const titleCss = css(fontCss.style.B16);
 
 const buttonGroupCss = css(flex('center', '', 'row'), {
   borderTop: `0.5px solid ${palettes.background.grey}`,

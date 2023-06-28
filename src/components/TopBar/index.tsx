@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 
-import { Bar, Icon, IconButton, Logo } from '~/components/Common';
-import Dot from '~/components/Common/Dot';
+import { Bar, Icon, IconButton, Logo , Dot } from '~/components/Common';
 import { flex } from '~/styles/utils';
 
 interface TopBarProps {
