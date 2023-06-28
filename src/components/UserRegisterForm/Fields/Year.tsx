@@ -2,10 +2,10 @@ import { css } from '@emotion/react';
 import { useEffect } from 'react';
 
 import { SelectBox } from '~/components/Common';
-import { useSetPhaseContext } from '~/components/UserRegister/context';
-import Question from '~/components/UserRegister/Question';
 import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
+
+import Question from '../Question';
 
 const years = Array(10)
   .fill(undefined)
@@ -14,12 +14,16 @@ const years = Array(10)
 const fieldName = 'semester';
 const filterNumericText = (value: string) => value.replace(/\D/g, '');
 
-const Year = () => {
+interface YearProps {
+  onSelect: () => void;
+}
+
+const Year = (props: YearProps) => {
+  const { onSelect } = props;
   const { register, setValue, setFocus } = useUpdateMyInfoFormContext();
-  const setPhase = useSetPhaseContext();
   const handleValueChange = (value: string) => {
-    setPhase((p) => p + 1);
     setValue(fieldName, Number(value));
+    onSelect();
   };
   register(fieldName);
 

@@ -11,7 +11,6 @@ import {
   VisuallyHidden,
 } from '~/components/Common';
 import { Alert } from '~/components/ModalContent';
-import Question from '~/components/UserRegister/Question';
 import {
   createRandomNickname,
   nicknameValidator,
@@ -19,6 +18,9 @@ import {
   useValidateNickname,
 } from '~/services/member';
 import { flex, palettes } from '~/styles/utils';
+import { handleAxiosError } from '~/utils';
+
+import Question from '../Question';
 
 const fieldName = 'nickname';
 
@@ -36,11 +38,14 @@ const Nickname = () => {
     resetField,
     getValues,
     trigger,
-    formState: { errors, dirtyFields },
+    setError,
+    formState: { errors, dirtyFields, isSubmitting },
   } = useUpdateMyInfoFormContext();
   const nicknameFieldId = useId();
   const errorMessage = errors.nickname?.message;
   const submittable = isValidNickname && !dirtyFields.nickname;
+  const isButtonDisabled = !isValidNickname && !dirtyFields.nickname;
+  const isButtonLoading = isValidatingNickname || isSubmitting;
 
   const closeSubmitModal = () => setSubmitModalOpen(false);
   const openSubmitModal = () => setSubmitModalOpen(true);
@@ -69,14 +74,25 @@ const Nickname = () => {
           setIsValidNickname(true);
           openSubmitModal();
         },
-        onError: () => {
-          setIsValidNickname(false);
+        onError: (e) => {
+          handleAxiosError(e, {
+            onClientError: () => {
+              setIsValidNickname(false);
+              // form의 errors는 필드 유효성 관련이 아니라면 세팅되지 않음.
+              // 이후에 유저에게 알려주기
+            },
+          });
         },
         onSettled: () => {
           resetField(fieldName, { defaultValue: nickname });
         },
       }
     );
+  };
+
+  const triggerSubmit = () => {
+    submitButtonRef.current?.click();
+    closeSubmitModal();
   };
 
   useEffect(() => {
@@ -118,10 +134,12 @@ const Nickname = () => {
         css={buttonCss}
         size="lg"
         onClick={handleValidateNickname}
-        loading={isValidatingNickname}
+        loading={isButtonLoading}
+        disabled={isButtonDisabled}
       >
         확인
       </Button>
+
       {submittable && (
         <>
           <Modal
@@ -142,7 +160,7 @@ const Nickname = () => {
                 }
                 actionText="확인"
                 cancelText="취소"
-                onClickAction={() => submitButtonRef.current?.click()}
+                onClickAction={triggerSubmit}
                 onClickCancel={closeSubmitModal}
               />
             }
