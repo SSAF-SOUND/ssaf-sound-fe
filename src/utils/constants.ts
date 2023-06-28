@@ -1,7 +1,7 @@
 const FALLBACK = 'http://localhost';
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || FALLBACK;
 
-export enum RESPONSE_CODE {
+export enum ResponseCode {
   //
   TOKEN_NOT_EXISTS = '401',
 
