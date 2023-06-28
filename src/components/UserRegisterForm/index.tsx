@@ -34,8 +34,8 @@ const UserRegisterForm = () => {
       await router.replace(routes.certification.ssafy());
     } catch (error) {
       handleAxiosError(error, {
-        onClientError: (error) => {
-          customToast.clientError(error.message);
+        onClientError: (response) => {
+          customToast.clientError(response.message);
         },
       });
     }

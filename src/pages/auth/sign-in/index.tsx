@@ -2,22 +2,24 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Logo, SsafyIcon , DefaultFullPageLoader } from '~/components/Common';
+import { Logo, SsafyIcon, DefaultFullPageLoader } from '~/components/Common';
 import SignInButton from '~/components/SignInButton';
 import { useMyAccountStatus } from '~/services/member';
 import { flex } from '~/styles/utils';
+import { routes } from '~/utils/routes';
 
 const SignInPage = () => {
   const { isAuthenticated, isChecking } = useMyAccountStatus();
   const router = useRouter();
+  const loaderText = '유저 정보를 확인중입니다.';
 
   if (isAuthenticated) {
-    router.replace('/main');
-    return <></>;
+    router.replace(routes.main());
+    return <DefaultFullPageLoader text={loaderText} />;
   }
 
   if (isChecking) {
-    return <DefaultFullPageLoader text="유저 정보를 확인중입니다." />;
+    return <DefaultFullPageLoader text={loaderText} />;
   }
 
   return (

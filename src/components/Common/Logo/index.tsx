@@ -5,6 +5,7 @@ import * as AccessibleIcon from '@radix-ui/react-accessible-icon';
 
 import LogoSVG from '~/assets/images/logo.svg';
 import { inlineFlex } from '~/styles/utils';
+import { routes } from '~/utils/routes';
 
 export type LogoSize = 'sm' | 'lg';
 
@@ -17,7 +18,7 @@ const Logo = (props: LogoProps) => {
   const { size = 'sm', navigateToMainPage = false } = props;
   const router = useRouter();
   const handleClick = () => {
-    if (navigateToMainPage) router.push('/main');
+    if (navigateToMainPage) router.push(routes.main());
   };
 
   return (

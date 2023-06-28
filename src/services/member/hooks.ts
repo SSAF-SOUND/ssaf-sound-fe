@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 
 import { queryKeys } from '~/react-query/common';
+import { routes } from '~/utils/routes';
 
 import { getMyInfo, updateMyInfo, validateNickname } from './apis';
 
@@ -71,11 +72,12 @@ export const useAutoSignIn = () => {
 
 export const useCheckRegisterRequired = () => {
   const router = useRouter();
+  const userRegisterRoute = routes.userRegister();
   const { isRegisterRequired } = useMyAccountStatus();
-  const isRegisterPage = router.pathname === '/auth/register';
+  const isRegisterPage = router.pathname === userRegisterRoute;
 
   if (!isRegisterPage && isRegisterRequired) {
-    router.replace('/auth/register');
+    router.replace(userRegisterRoute);
   }
 };
 
