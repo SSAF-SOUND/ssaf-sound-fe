@@ -1,5 +1,7 @@
 import type { UserInfo } from '~/services/member';
 
+import { CertificationState } from '~/services/member';
+
 const initialUserInfo: UserInfo = {
   memberId: 434,
   memberRole: 'user',
@@ -13,7 +15,7 @@ const ssafyUserInfo: UserInfo = {
     semester: 1,
     campus: '구미',
     isMajor: false,
-    certificationState: 'UNCERTIFIED',
+    certificationState: CertificationState.UNCERTIFIED,
   },
 };
 

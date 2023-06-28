@@ -10,7 +10,9 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { getQueryClient } from '../src/react-query/common';
 import { store } from '../src/store';
 
-initialize();
+initialize({
+  onUnhandledRequest: "bypass"
+});
 
 const StorybookGlobalStyles = () => {
   return <Global styles={css``} />;

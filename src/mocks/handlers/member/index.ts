@@ -60,7 +60,7 @@ const validateNickname = rest.post(
   }
 );
 
-export const duplicatedNicknameError = restError(
+export const validateNicknameError = restError(
   'post',
   composeUrls(API_URL, endpoints.user.nickname()),
   {

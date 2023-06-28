@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { duplicatedNicknameError } from '~/mocks/handlers';
+import { validateNicknameError } from '~/mocks/handlers';
 import UserRegisterPage from '~/pages/auth/register';
 import { PageLayout } from '~/stories/Layout';
 
@@ -22,11 +22,11 @@ type UserRegisterPageStory = StoryObj<typeof UserRegisterPage>;
 
 export const Success: UserRegisterPageStory = {};
 
-export const DuplicatedNicknameError: UserRegisterPageStory = {
+export const NicknameValidationError: UserRegisterPageStory = {
   parameters: {
     msw: {
       handlers: {
-        member: [duplicatedNicknameError],
+        member: [validateNicknameError],
       },
     },
   },
