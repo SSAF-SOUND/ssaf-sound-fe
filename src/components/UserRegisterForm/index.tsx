@@ -23,9 +23,8 @@ const UserRegisterForm = () => {
   const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
   const formMethods = useUpdateMyInfoForm();
   const { handleSubmit } = formMethods;
-
-  const { phase } = usePhase();
-  const FieldComponent = fields[phase].Component;
+  const { currentPhase } = usePhase();
+  const FieldComponent = fields[currentPhase].Component;
 
   const onValid = async (value: UpdateMyInfoParams) => {
     try {

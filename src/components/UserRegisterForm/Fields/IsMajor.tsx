@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { isBoolean } from 'is-what';
 
 import { Button } from '~/components/Common';
 import { useUpdateMyInfoFormContext } from '~/services/member';
@@ -27,7 +28,9 @@ const IsMajor = (props: IsMajorProps) => {
     onFalse();
   };
 
-  register(fieldName);
+  register(fieldName, {
+    validate: (value) => isBoolean(value),
+  });
 
   return (
     <div css={selfCss}>
