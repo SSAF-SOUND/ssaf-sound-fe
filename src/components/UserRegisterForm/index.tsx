@@ -28,19 +28,17 @@ const UserRegisterForm = () => {
   const FieldComponent = fields[phase].Component;
 
   const onValid = async (value: UpdateMyInfoParams) => {
-    await updateMyInfo(value, {
-      onSuccess: (value) => {
-        setMyInfo(value);
-        router.replace(routes.certification.ssafy());
-      },
-      onError: (error) => {
-        handleAxiosError(error, {
-          onClientError: (error) => {
-            customToast.clientError(error.message);
-          },
-        });
-      },
-    });
+    try {
+      const response = await updateMyInfo(value);
+      setMyInfo(response);
+      await router.replace(routes.certification.ssafy());
+    } catch (error) {
+      handleAxiosError(error, {
+        onClientError: (error) => {
+          customToast.clientError(error.message);
+        },
+      });
+    }
   };
 
   return (
