@@ -7,14 +7,15 @@ const initialUserInfo: UserInfo = {
   memberRole: 'user',
   nickname: 'mechanic',
   ssafyMember: null,
+  isMajor: false,
 };
 const ssafyUserInfo: UserInfo = {
   ...initialUserInfo,
   ssafyMember: true,
+  isMajor: false,
   ssafyInfo: {
     semester: 1,
     campus: '구미',
-    isMajor: false,
     certificationState: CertificationState.UNCERTIFIED,
   },
 };

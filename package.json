@@ -11,7 +11,8 @@
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
     "coverage": "test-storybook --coverage",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "type": "tsc --noEmit --incremental --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.10.8",

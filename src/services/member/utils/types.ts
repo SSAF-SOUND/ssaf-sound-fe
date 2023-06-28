@@ -16,7 +16,6 @@ export interface SsafyInfo {
    * 서울 | 대전 | 광주 | 구미 | 부울경
    */
   campus: string;
-  isMajor: boolean;
   certificationState: CertificationState;
 }
 
@@ -30,6 +29,7 @@ export interface UserBasicInfo {
   memberId: number;
   memberRole: UserRole;
   nickname: string;
+  isMajor: boolean;
 }
 
 export type UserSsafyInfo =
