@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Track from './Track';
+import { MajorType } from '~/services/member';
+
+import Track, { TrackSize } from './Track';
 
 const meta: Meta<typeof Track> = {
   title: 'Icon/SSAFY/Track',
@@ -12,7 +14,7 @@ export default meta;
 type TrackIconStory = StoryObj<typeof Track>;
 
 export const TrackIcon: TrackIconStory = {
-  args: { name: 'mobile', size: 32 },
+  args: { name: MajorType.MOBILE, size: TrackSize.SM1 },
   argTypes: {
     label: {
       table: {
@@ -29,15 +31,11 @@ export const TrackIcon: TrackIconStory = {
 
 export const AllTrackIcons: TrackIconStory = {
   render: () => {
-    const sizes = [12, 16, 32, 36, 126, 160] as const;
+    const sizes = Object.values(TrackSize);
     const tracks = [
-      'embedded',
-      'python',
-      'java',
-      'mobile',
+      ...Object.values(MajorType),
+      'fallback',
       'uncertified',
-      'primaryDefault',
-      'secondaryDefault',
     ] as const;
     return (
       <div>
@@ -45,7 +43,7 @@ export const AllTrackIcons: TrackIconStory = {
           <div key={track} style={{ display: 'flex', gap: 10 }}>
             {sizes.map((size) => (
               <div key={size}>
-                <Track name={track} size={size} />
+                <Track name={track} size={size} theme={'primary'}/>
               </div>
             ))}
           </div>

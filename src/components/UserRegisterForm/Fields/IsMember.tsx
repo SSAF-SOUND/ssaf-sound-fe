@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
 import { Button, SsafyIcon } from '~/components/Common';
+import { TrackSize } from '~/components/Common/SsafyIcon/Track';
 import { useUpdateMyInfoFormContext } from '~/services/member';
 import { flex } from '~/styles/utils';
 
@@ -37,7 +38,7 @@ const IsMember = (props: IsMemberProps) => {
         <Question.Row>SSAFY인 이신가요?</Question.Row>
       </Question>
 
-      <SsafyIcon.Track name="primaryDefault" size={160} />
+      <SsafyIcon.Track size={TrackSize.LG2} />
 
       <div css={buttonGroupCss}>
         <Button
