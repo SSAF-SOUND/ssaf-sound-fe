@@ -8,7 +8,7 @@ import {
   API_URL,
   composeUrls,
   privateAxios,
-  RESPONSE_CODE,
+  ResponseCode,
   sleep,
 } from '~/utils';
 
@@ -31,7 +31,7 @@ const setupMSW = (
         ctx.status(400),
         ctx.json<ApiErrorResponse>({
           message: '',
-          code: RESPONSE_CODE.EXPIRED_TOKEN,
+          code: ResponseCode.EXPIRED_TOKEN,
         })
       );
     }),

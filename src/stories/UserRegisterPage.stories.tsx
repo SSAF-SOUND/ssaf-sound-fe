@@ -1,18 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { duplicatedNicknameError } from '~/mocks/handlers';
+import { useEffect } from 'react';
+
+import { validateNicknameError } from '~/mocks/handlers';
+import { userInfo } from '~/mocks/handlers/member/data';
 import UserRegisterPage from '~/pages/auth/register';
+import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof UserRegisterPage> = {
   title: 'Page/UserRegister',
   component: UserRegisterPage,
   decorators: [
-    (Story) => (
-      <PageLayout>
-        <Story />
-      </PageLayout>
-    ),
+    (Story) => {
+      const setMyInfo = useSetMyInfo();
+
+      useEffect(() => {
+        setMyInfo(userInfo.initialUserInfo);
+      }, []);
+
+      return (
+        <PageLayout>
+          <Story />
+        </PageLayout>
+      );
+    },
   ],
 };
 
@@ -22,11 +34,11 @@ type UserRegisterPageStory = StoryObj<typeof UserRegisterPage>;
 
 export const Success: UserRegisterPageStory = {};
 
-export const DuplicatedNicknameError: UserRegisterPageStory = {
+export const NicknameValidationError: UserRegisterPageStory = {
   parameters: {
     msw: {
       handlers: {
-        member: [duplicatedNicknameError],
+        member: [validateNicknameError],
       },
     },
   },

@@ -1,4 +1,5 @@
 import { isClient, noop } from '~/utils/misc';
+import { routes } from '~/utils/routes';
 
 const mockStorage = new Proxy(
   {},
@@ -14,7 +15,7 @@ const createWebStorage = () => {
   const AUTH_RETURN_PAGE_KEY = 'auth-return-page';
 
   // Default Value
-  const DEFAULT_RETURN_PAGE = '/main';
+  const DEFAULT_RETURN_PAGE = routes.main();
 
   return {
     setReturnPage: (returnPage: string) => {

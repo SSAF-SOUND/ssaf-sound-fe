@@ -1,19 +1,23 @@
 import type { UserInfo } from '~/services/member';
 
+import { CertificationState, MajorType } from '~/services/member';
+
 const initialUserInfo: UserInfo = {
   memberId: 434,
   memberRole: 'user',
   nickname: 'mechanic',
   ssafyMember: null,
+  isMajor: false,
 };
 const ssafyUserInfo: UserInfo = {
   ...initialUserInfo,
   ssafyMember: true,
+  isMajor: false,
   ssafyInfo: {
     semester: 1,
     campus: '구미',
-    isMajor: false,
-    certificationState: 'UNCERTIFIED',
+    majorType: undefined,
+    certificationState: CertificationState.UNCERTIFIED,
   },
 };
 

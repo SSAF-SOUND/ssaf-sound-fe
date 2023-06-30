@@ -11,6 +11,8 @@ import { useEffect } from 'react';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import { useSignIn } from '~/services/auth';
+import { customToast, handleAxiosError } from '~/utils';
+import { routes } from '~/utils/routes';
 
 interface QueryParams {
   code: string;
@@ -33,11 +35,15 @@ const CallbackPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
       { code, oauthName: provider },
       {
         onSuccess: () => {
-          router.replace('/');
+          router.replace(routes.root());
         },
-        onError: () => {
-          // TODO: ERROR MESSAGE 추가
-          router.replace('/auth/sign-in');
+        onError: (error) => {
+          handleAxiosError(error, {
+            onClientError: (response) => {
+              customToast.clientError(response.message);
+            },
+          });
+          router.replace(routes.signIn());
         },
       }
     );

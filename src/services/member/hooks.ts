@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useForm, useFormContext } from 'react-hook-form';
 
 import { queryKeys } from '~/react-query/common';
+import { routes } from '~/utils/routes';
 
 import { getMyInfo, updateMyInfo, validateNickname } from './apis';
 
@@ -31,7 +32,7 @@ export const useMyInfo = (options: UseMyInfoOptions = {}) => {
 export const useSetMyInfo = () => {
   const queryClient = useQueryClient();
   const queryKey = queryKeys.user.myInfo();
-  const setMyInfo = (payload: UserInfo) => {
+  const setMyInfo = (payload?: UserInfo) => {
     queryClient.setQueryData<UserInfo>(queryKey, payload);
   };
 
@@ -44,15 +45,16 @@ export const useSetMyInfo = () => {
  * - `isChecking`: 유저의 로그인 여부를 검사중인 상태
  */
 export const useMyAccountStatus = () => {
-  const { data, isFetching } = useMyInfo({ enabled: false });
-  const isAuthenticated = !!data;
-  const isRegisterRequired = isAuthenticated && data.ssafyMember == null;
+  const { data: myInfo, isFetching } = useMyInfo({ enabled: false });
+  const isAuthenticated = !!myInfo;
+  const isRegisterRequired = isAuthenticated && myInfo.ssafyMember == null;
   const isChecking = !isAuthenticated && isFetching;
 
   return {
     isAuthenticated,
     isRegisterRequired,
     isChecking,
+    myInfo,
   };
 };
 
@@ -70,11 +72,12 @@ export const useAutoSignIn = () => {
 
 export const useCheckRegisterRequired = () => {
   const router = useRouter();
+  const userRegisterRoute = routes.userRegister();
   const { isRegisterRequired } = useMyAccountStatus();
-  const isRegisterPage = router.pathname === '/auth/register';
+  const isRegisterPage = router.pathname === userRegisterRoute;
 
   if (!isRegisterPage && isRegisterRequired) {
-    router.replace('/auth/register');
+    router.replace(userRegisterRoute);
   }
 };
 

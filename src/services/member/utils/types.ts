@@ -7,25 +7,41 @@ export const userRoles = {
 };
 export type UserRole = keyof typeof userRoles;
 
-export interface SsafyInfo {
-  /**
-   * 1 ~ 10
-   */
+export interface SsafyBasicInfo {
+  /** 1 ~ 10 */
   semester: number;
-  /**
-   * 서울 | 대전 | 광주 | 구미 | 부울경
-   */
+
+  /** 서울 | 대전 | 광주 | 구미 | 부울경 */
   campus: string;
-  isMajor: boolean;
-  certificationState: CertificationState;
 }
 
-export type CertificationState = 'UNCERTIFIED' | 'WAITING' | 'CERTIFIED';
+export type SsafyInfo =
+  | (SsafyBasicInfo & {
+      majorType?: undefined;
+      certificationState: CertificationState.UNCERTIFIED;
+    })
+  | (SsafyBasicInfo & {
+      majorType?: MajorType;
+      certificationState: CertificationState.CERTIFIED;
+    });
+
+export enum CertificationState {
+  UNCERTIFIED = 'UNCERTIFIED',
+  CERTIFIED = 'CERTIFIED',
+}
+
+export enum MajorType {
+  PYTHON = 'python',
+  EMBEDDED = 'embedded',
+  JAVA = 'java',
+  MOBILE = 'mobile',
+}
 
 export interface UserBasicInfo {
   memberId: number;
   memberRole: UserRole;
   nickname: string;
+  isMajor: boolean;
 }
 
 export type UserSsafyInfo =

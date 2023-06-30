@@ -6,7 +6,6 @@ import { ProgressBar } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
 import {
   usePhase,
-  useSetPhase,
   useUserRegisterFormFields,
   withUserRegisterFormProvider,
 } from '~/components/UserRegisterForm/context';
@@ -17,23 +16,19 @@ interface UserRegisterLayoutProps {
 
 const UserRegisterLayout = (props: UserRegisterLayoutProps) => {
   const { children } = props;
-  const { phase, prevPhase } = usePhase();
-  const setPhase = useSetPhase();
+  const { currentPhase, popPhase } = usePhase();
   const fields = useUserRegisterFormFields();
-
-  const handleClickBackward = () =>
-    setPhase(prevPhase < phase ? prevPhase : Math.max(phase - 1, 0));
 
   return (
     <div css={selfCss}>
       <TitleBar.Default
         withoutTitle
         withoutClose
-        withoutBackward={phase === 0}
-        onClickBackward={handleClickBackward}
+        withoutBackward={currentPhase === 0}
+        onClickBackward={popPhase}
         css={titleBarCss}
       />
-      <ProgressBar min={0} now={phase + 1} max={fields.length} />
+      <ProgressBar min={0} now={currentPhase + 1} max={fields.length} />
       {children}
     </div>
   );
