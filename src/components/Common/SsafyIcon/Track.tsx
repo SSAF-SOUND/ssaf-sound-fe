@@ -37,7 +37,7 @@ const Track = <T extends keyof typeof tracks>(props: TrackProps<T>) => {
   const TrackComponent = tracks[name];
 
   return (
-    <div css={selfCss} style={{ ...containerStyle }}>
+    <div css={selfCss}>
       <AccessibleIcon label={label}>
         <TrackComponent style={{ height: size, ...style }} theme={theme} />
       </AccessibleIcon>
