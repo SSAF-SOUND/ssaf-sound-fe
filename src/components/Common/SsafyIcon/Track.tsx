@@ -22,20 +22,27 @@ const tracks = {
   secondaryDefault: SecondaryDefaultTrack,
 };
 
-type TrackSize = 12 | 16 | 32 | 36 | 126 | 160;
+export type TrackSize = 10 | 12 | 15 | 16 | 32 | 36 | 126 | 160;
 
 export interface TrackProps {
   name: keyof typeof tracks;
   label?: string;
   size?: TrackSize;
   style?: CSSProperties;
+  containerStyle?: CSSProperties;
 }
 
 const Track = (props: TrackProps) => {
-  const { name, label = name, size = 32, style = {} } = props;
+  const {
+    name,
+    label = name,
+    size = 32,
+    style = {},
+    containerStyle = {},
+  } = props;
   const SVGComponent = tracks[name];
   return (
-    <div css={selfCss}>
+    <div css={selfCss} style={{ ...containerStyle }}>
       <AccessibleIcon label={label}>
         <SVGComponent style={{ height: size, ...style }} />
       </AccessibleIcon>
