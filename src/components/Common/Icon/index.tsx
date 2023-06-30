@@ -78,8 +78,9 @@ export const icons = {
   apple: <AiFillApple />,
 } as const;
 
-interface IconProps {
-  name: keyof typeof icons;
+export type IconNames = keyof typeof icons;
+export interface IconProps {
+  name: IconNames;
   size?: number;
   label?: string;
   color?: string;
