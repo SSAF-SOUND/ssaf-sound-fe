@@ -1,15 +1,8 @@
-import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
+import type { FC, ReactNode } from 'react';
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
 import { useStack } from '~/hooks/useStack';
-import { noop } from '~/utils';
 
 import { IsMember, Year, Campus, IsMajor, Nickname } from '../Fields';
 

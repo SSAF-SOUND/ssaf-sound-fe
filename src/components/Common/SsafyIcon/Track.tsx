@@ -10,8 +10,11 @@ import JavaTrack from '~/assets/images/track-java.svg';
 import MobileTrack from '~/assets/images/track-mobile.svg';
 import PythonTrack from '~/assets/images/track-python.svg';
 import Uncertified from '~/assets/images/track-uncertified.svg';
-import { MajorType } from '~/services/member';
+import { MajorType } from '~/services/member/utils';
 import { inlineFlex } from '~/styles/utils';
+
+// MajorType을 ~/services/member 에서 가져오면 참조 오류가 발생하는데 이유를 잘 모르겠습니다.
+// import 구문 옆에다 주석 달면 린트 오류가 발생해서 여기 적어둡니다.
 
 export interface TrackProps<Track extends keyof typeof tracks> {
   /**
