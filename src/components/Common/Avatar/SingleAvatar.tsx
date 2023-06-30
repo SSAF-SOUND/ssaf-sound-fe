@@ -36,7 +36,7 @@ const SingleAvatar = (props: AvatarProps) => {
       {...rest}
     >
       {isEmpty || (
-        <span css={[[textCss[size]], textCapitalizeCss]}>
+        <span css={[[textCss[size]], textCapitalizeCss, fontStyleCss]}>
           {getFirstText(nickName)}
         </span>
       )}
@@ -55,9 +55,11 @@ const selfCss = css(
   flex('center', 'center', 'row')
 );
 
+const fontStyleCss = fontCss.family.manrope;
+
 const sizeCss: Record<AvatarSize, SerializedStyles> = {
-  sm: css({ width: 20, height: 20 }),
-  md: css({ width: 30, height: 30 }),
+  sm: css({ width: 12, height: 12 }),
+  md: css({ width: 18, height: 18 }),
   lg: css({ width: 40, height: 40 }),
 };
 
