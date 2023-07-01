@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import { css } from '@emotion/react';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { AiFillApple, AiFillGithub, AiOutlineGoogle } from 'react-icons/ai';
+import { BiImageAdd } from 'react-icons/bi';
 import { HiOutlineArrowLeft } from 'react-icons/hi';
 import { HiChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import { IoMdListBox } from 'react-icons/io';
@@ -71,6 +72,8 @@ export const icons = {
   share: <MdIosShare />,
 
   [`chevron.down`]: <MdKeyboardArrowDown />,
+
+  image: <BiImageAdd />,
 
   google: <AiOutlineGoogle />,
   github: <AiFillGithub />,
