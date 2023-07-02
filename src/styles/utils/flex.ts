@@ -7,7 +7,7 @@ type FlexDirection = CSSProperties['flexDirection'];
 type JustifyContent = CSSProperties['justifyContent'];
 type AlignItems = CSSProperties['alignItems'];
 type Gap = CSSProperties['gap'];
-type FlexWrap = CSSProperties['flexWrap'];
+type FlexWrap = CSSProperties['flexWrap'] | undefined;
 
 interface FlexOptions {
   items?: AlignItems;
@@ -22,7 +22,7 @@ const flexCore = (
   justifyContent: JustifyContent = '',
   flexDirection: FlexDirection = 'row',
   gap: Gap = '',
-  flexWrap: FlexWrap = 'nowrap'
+  flexWrap: FlexWrap
 ) => {
   if (typeof alignItems === 'string') {
     return css({
@@ -58,7 +58,7 @@ export function flex(
   justifyContent: JustifyContent = '',
   flexDirection: FlexDirection = 'column',
   gap: Gap = '',
-  flexWrap: FlexWrap = 'nowrap'
+  flexWrap?: FlexWrap
 ) {
   const base = { display: 'flex' };
   return css(
@@ -80,7 +80,7 @@ export function inlineFlex(
   justifyContent: JustifyContent = '',
   flexDirection: FlexDirection = 'column',
   gap: Gap = '',
-  flexWrap: FlexWrap = 'nowrap'
+  flexWrap?: FlexWrap
 ) {
   const base = { display: 'inline-flex' };
   return css(
