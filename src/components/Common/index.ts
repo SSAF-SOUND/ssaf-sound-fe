@@ -11,7 +11,10 @@ export { default as Logo } from './Logo';
 export { default as ProgressBar } from './ProgressBar';
 export { default as SelectBox } from './SelectBox';
 export { default as SkillStack } from './SkillStack';
+
 export { default as SsafyIcon } from './SsafyIcon';
+export * from './SsafyIcon';
+
 export { default as TextInput } from './TextInput';
 export { default as Modal } from './Modal';
 export { default as VisuallyHidden } from './VisuallyHidden';

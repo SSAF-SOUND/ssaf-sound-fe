@@ -3,7 +3,8 @@ import type { CSSProperties } from 'react';
 import { css } from '@emotion/react';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { AiFillApple, AiFillGithub, AiOutlineGoogle } from 'react-icons/ai';
-import { HiOutlineArrowLeft } from 'react-icons/hi';
+import { BiImageAdd } from 'react-icons/bi';
+import { HiMinus, HiOutlineArrowLeft, HiPlus } from 'react-icons/hi';
 import { HiChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import { IoMdListBox } from 'react-icons/io';
 import { IoTriangle } from 'react-icons/io5';
@@ -56,6 +57,8 @@ export const icons = {
 
   [`circle.plus`]: <MdControlPoint />,
   [`circle.minus`]: <MdRemoveCircleOutline />,
+  plus: <HiPlus />,
+  minus: <HiMinus />,
 
   notification: <MdNotifications />,
   more: <MdMoreVert />,
@@ -71,6 +74,8 @@ export const icons = {
   share: <MdIosShare />,
 
   [`chevron.down`]: <MdKeyboardArrowDown />,
+
+  image: <BiImageAdd />,
 
   google: <AiOutlineGoogle />,
   github: <AiFillGithub />,
