@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { css } from '@emotion/react';
+import { Slot } from '@radix-ui/react-slot';
 
 import { colorMix, inlineFlex, palettes } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
@@ -10,14 +11,22 @@ type IconTheme = 'primary' | 'secondary' | 'white' | 'black';
 interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
   theme?: IconTheme;
   size?: number;
+  asChild?: boolean;
 }
 
 const IconButton = (props: IconButtonProps) => {
-  const { theme = 'white', size = 'auto', ...restProps } = props;
+  const {
+    theme = 'white',
+    size = 'auto',
+    asChild = false,
+    ...restProps
+  } = props;
+
+  const Component = asChild ? Slot : 'button';
+  if (Component === 'button') restProps.type = restProps.type || 'button';
 
   return (
-    <button
-      type="button"
+    <Component
       style={{ width: size, height: size }}
       css={selfCss}
       {...restProps}
