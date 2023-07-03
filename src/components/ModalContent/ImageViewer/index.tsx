@@ -11,11 +11,11 @@ import ViewerMain from './ViewerMain';
 interface ImageViewerProps extends ViewerHeaderProps, ViewerMainProps {}
 
 const ImageViewer = (props: ImageViewerProps) => {
-  const { src, alt, onClickClose } = props;
+  const { src, alt, ...viewerHeaderProps } = props;
 
   return (
     <div css={selfCss}>
-      <ViewerHeader onClickClose={onClickClose} />
+      <ViewerHeader {...viewerHeaderProps} />
       <ViewerMain src={src} alt={alt} />
     </div>
   );
