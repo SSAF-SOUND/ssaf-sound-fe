@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 
 import { Icon, IconButton, Modal } from '~/components/Common';
 import Thumbnail from '~/components/Editor/Thumbnail';
@@ -82,7 +82,7 @@ const ThumbnailBar = (props: ThumbnailBarProps) => {
   );
 };
 
-export default ThumbnailBar;
+export default memo(ThumbnailBar);
 
 const selfCss = css(
   {
