@@ -13,8 +13,7 @@ export default meta;
 
 type ButtonStory = StoryObj<typeof DatePicker>;
 
-export const SingleButton: ButtonStory = {
-  name: 'DatePicker',
+export const Default: ButtonStory = {
   args: {
     theme: 'primary',
   },
