@@ -15,10 +15,13 @@ import {
 
 import cn from './classnames';
 
-interface DatePickerProps {
+type CustomCalendarProps = Pick<
+  CalendarProps,
+  'value' | 'onChange' | 'minDate' | 'maxDate' | 'minDetail' | 'maxDetail'
+>;
+
+interface DatePickerProps extends CustomCalendarProps {
   theme?: 'primary' | 'secondary';
-  value?: CalendarProps['value'];
-  onChange?: CalendarProps['onChange'];
 }
 
 /* constants */
@@ -53,7 +56,6 @@ const DatePicker = (props: DatePickerProps) => {
         next2Label={null}
         prev2Label={null}
         formatDay={formatDay}
-        minDate={new Date()}
       />
     </div>
   );
