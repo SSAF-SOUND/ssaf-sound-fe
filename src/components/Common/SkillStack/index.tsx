@@ -1,9 +1,9 @@
-import type { StacksType } from './stacks';
+import type { SkillType } from '~/services/recruit';
 
 import { SkillStacks } from './stacks';
 
 export interface SkillStackProps {
-  stack: StacksType;
+  stack: SkillType;
 }
 const SkillStack = (props: SkillStackProps) => {
   const { stack } = props;

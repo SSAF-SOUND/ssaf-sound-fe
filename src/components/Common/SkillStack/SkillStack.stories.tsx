@@ -4,22 +4,22 @@ import type { Meta } from '@storybook/react';
 import SkillStack from './index';
 
 const stacks = [
-  'react',
-  'javaScript',
-  'typeScript',
-  'vue',
-  'svelt',
-  'nextJs',
-  'java',
-  'node',
-  'spring',
-  'django',
-  'android',
-  'ios',
-  'swift',
-  'flutter',
-  'xd',
-  'figma',
+  'React',
+  'JavaScript',
+  'TypeScript',
+  'Vue',
+  'Svelte',
+  'NextJs',
+  'Java',
+  'Node',
+  'Spring',
+  'Django',
+  'Android',
+  'IOS',
+  'Swift',
+  'Flutter',
+  'XD',
+  'Figma',
 ];
 const meta: Meta<typeof SkillStack> = {
   title: 'SkillStack',
@@ -36,7 +36,7 @@ const meta: Meta<typeof SkillStack> = {
 export default meta;
 
 export const Single = (props: SkillStackProps) => {
-  const { stack = 'react' } = props;
+  const { stack = 'React' } = props;
   return <SkillStack stack={stack} />;
 };
 
