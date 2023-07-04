@@ -9,7 +9,7 @@ import Next from '~/assets/stacks/next.svg';
 import NodeJs from '~/assets/stacks/nodeJs.svg';
 import React from '~/assets/stacks/react.svg';
 import Spring from '~/assets/stacks/spring.svg';
-import Svelte from '~/assets/stacks/svelt.svg';
+import Svelte from '~/assets/stacks/svelte.svg';
 import Swift from '~/assets/stacks/swift.svg';
 import TypeScript from '~/assets/stacks/typeScript.svg';
 import Vue from '~/assets/stacks/vue.svg';
