@@ -9,7 +9,7 @@ import Next from '~/assets/stacks/next.svg';
 import NodeJs from '~/assets/stacks/nodeJs.svg';
 import React from '~/assets/stacks/react.svg';
 import Spring from '~/assets/stacks/spring.svg';
-import Svelt from '~/assets/stacks/svelt.svg';
+import Svelte from '~/assets/stacks/svelt.svg';
 import Swift from '~/assets/stacks/swift.svg';
 import TypeScript from '~/assets/stacks/typeScript.svg';
 import Vue from '~/assets/stacks/vue.svg';
@@ -20,7 +20,7 @@ export const SkillStacks = {
   JavaScript: <JavaScript />,
   TypeScript: <TypeScript />,
   Vue: <Vue />,
-  Svelte: <Svelt />,
+  Svelte: <Svelte />,
   NextJs: <Next />,
   // ---- 프론트
   Java: <Java />,
