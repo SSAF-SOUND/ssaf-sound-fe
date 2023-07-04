@@ -33,6 +33,7 @@ export const palettes = {
     green: '#C6FD8C',
     purple: '#E7B9FF',
     darkPurple: '#CC6EFE',
+    cyan: '#86FFF8',
   },
   //
   major: '#71E498',
@@ -41,6 +42,7 @@ export const palettes = {
   background: {
     default: '#2E323B',
     grey: '#4E525E',
+    dark: '#3D4353',
   },
   //
   font: {
