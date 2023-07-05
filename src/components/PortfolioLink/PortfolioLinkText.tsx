@@ -29,5 +29,5 @@ const selfCss = css({
 });
 
 const emptyTextCss = css({
-  opacity: 0.3,
+  opacity: 0.5,
 });

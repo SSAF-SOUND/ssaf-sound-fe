@@ -18,6 +18,6 @@ const emptyHrefCss = css({
   [`[${PortfolioLinkDataAttrKeys.BASE}]:not([${PortfolioLinkDataAttrKeys.HREF}]) &,
    [${PortfolioLinkDataAttrKeys.BASE}][${PortfolioLinkDataAttrKeys.HREF}=""] &`]:
     {
-      opacity: 0.3,
+      opacity: 0.5,
     },
 });
