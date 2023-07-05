@@ -13,8 +13,10 @@ interface PortfolioLinkInputGroupInputProps
   inputType: PortfolioLinkInputGroupInputType;
 }
 
-const defaultHrefInputPlaceholder = 'URL입력';
-const defaultTextInputPlaceholder = 'Link 제목 입력';
+const defaultPlaceholder: Record<PortfolioLinkInputGroupInputType, string> = {
+  href: 'URL입력',
+  text: 'Link 제목 입력',
+};
 
 const PortfolioLinkInputGroupInput = forwardRef<
   HTMLInputElement,
@@ -23,12 +25,12 @@ const PortfolioLinkInputGroupInput = forwardRef<
   const {
     inputType,
     className,
-    placeholder = inputType === 'href'
-      ? defaultHrefInputPlaceholder
-      : defaultTextInputPlaceholder,
+    placeholder = defaultPlaceholder[inputType],
     ...restProps
   } = props;
+
   const inputId = useId();
+
   return (
     <div css={selfCss} className={className}>
       {inputType === 'href' && (
@@ -41,8 +43,8 @@ const PortfolioLinkInputGroupInput = forwardRef<
         css={inputCss}
         id={inputId}
         spellCheck={false}
-        {...restProps}
         ref={ref}
+        {...restProps}
       />
     </div>
   );

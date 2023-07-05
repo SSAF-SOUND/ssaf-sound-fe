@@ -6,6 +6,8 @@ import PortfolioLink from '~/components/PortfolioLink';
 import { PortfolioLinkDataAttrKeys } from '~/components/PortfolioLink/dataAttrs';
 import { flex } from '~/styles/utils';
 
+import { PortfolioLinkInputGroupRootDataAttrKeys } from './dataAttrs';
+
 interface PortfolioLinkInputGroupRootProps {
   viewHref?: string;
   viewText?: string;
@@ -19,7 +21,7 @@ const PortfolioLinkInputGroupRoot = (
 
   return (
     <PortfolioLink.Root tabIndex={0} asChild css={selfCss} href={viewHref}>
-      <div data-portfolio-link-input-group={true}>
+      <div {...dataAttrs}>
         <div css={viewLayerCss}>
           <PortfolioLink.Icon />
           <PortfolioLink.Text>{viewText}</PortfolioLink.Text>
@@ -29,6 +31,8 @@ const PortfolioLinkInputGroupRoot = (
     </PortfolioLink.Root>
   );
 };
+
+const dataAttrs = { [PortfolioLinkInputGroupRootDataAttrKeys.BASE]: true };
 
 export default PortfolioLinkInputGroupRoot;
 
@@ -43,7 +47,7 @@ const selfCss = css({
 
 const viewLayerCss = css(
   {
-    '[data-portfolio-link-input-group]:focus-within &': {
+    [`[${PortfolioLinkInputGroupRootDataAttrKeys.BASE}]:focus-within &`]: {
       display: 'none',
     },
   },
