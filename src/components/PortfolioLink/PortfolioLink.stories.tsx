@@ -24,12 +24,25 @@ export const Default = {
   args: {
     link: 'https://example.com/',
     text: '입력',
+    color: '#FFF',
   },
-  render: ({ text, link }: { text: string; link: string }) => {
+  render: ({
+    text,
+    link,
+    color,
+  }: {
+    text: string;
+    link: string;
+    color?: string;
+  }) => {
     return (
       <>
         <div>
-          <PortfolioLink.Root href={link} onClick={(e) => e.preventDefault()}>
+          <PortfolioLink.Root
+            color={color}
+            href={link}
+            onClick={(e) => e.preventDefault()}
+          >
             <PortfolioLink.Icon />
             <PortfolioLink.Text>{text}</PortfolioLink.Text>
           </PortfolioLink.Root>
