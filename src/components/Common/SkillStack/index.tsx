@@ -4,11 +4,13 @@ import { SkillStacks } from './stacks';
 
 export interface SkillStackProps {
   stack: SkillType;
+  size?: number;
 }
 const SkillStack = (props: SkillStackProps) => {
-  const { stack } = props;
+  const { stack, size = 24 } = props;
+  const SkillIcon = SkillStacks[stack];
 
-  return SkillStacks[stack];
+  return <SkillIcon style={{ height: size }} />;
 };
 
 export default SkillStack;

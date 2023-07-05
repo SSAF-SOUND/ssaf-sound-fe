@@ -16,23 +16,23 @@ import Vue from '~/assets/stacks/vue.svg';
 import XD from '~/assets/stacks/xd.svg';
 
 export const SkillStacks = {
-  React: <React />,
-  JavaScript: <JavaScript />,
-  TypeScript: <TypeScript />,
-  Vue: <Vue />,
-  Svelte: <Svelte />,
-  NextJs: <Next />,
+  React: React,
+  JavaScript: JavaScript,
+  TypeScript: TypeScript,
+  Vue: Vue,
+  Svelte: Svelte,
+  NextJs: Next,
   // ---- 프론트
-  Java: <Java />,
-  NodeJs: <NodeJs />,
-  Spring: <Spring />,
-  Django: <Django />,
+  Java: Java,
+  NodeJs: NodeJs,
+  Spring: Spring,
+  Django: Django,
   // ---- 백엔드
-  Android: <Android />,
-  IOS: <Ios />,
-  Swift: <Swift />,
-  Flutter: <Flutter />,
+  Android: Android,
+  IOS: Ios,
+  Swift: Swift,
+  Flutter: Flutter,
   // ---- 모바일
-  XD: <XD />,
-  Figma: <Figma />,
+  XD: XD,
+  Figma: Figma,
 };
