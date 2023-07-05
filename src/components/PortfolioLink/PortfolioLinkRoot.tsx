@@ -6,6 +6,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { colorCssVar } from '~/components/PortfolioLink/cssVar';
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
+import { classnames as cn } from './classnames';
 import { PortfolioLinkDataAttrKeys } from './dataAttrs';
 
 interface PortfolioLinkRootProps extends ComponentPropsWithoutRef<'a'> {
@@ -15,20 +16,25 @@ interface PortfolioLinkRootProps extends ComponentPropsWithoutRef<'a'> {
 }
 
 const PortfolioLinkRoot = (props: PortfolioLinkRootProps) => {
-  const { asChild = false, href, color = palettes.white, ...restProps } = props;
+  const {
+    asChild = false,
+    color = palettes.white,
+    href = '',
+    className,
+    ...restProps
+  } = props;
   const Component = asChild ? Slot : 'a';
-
-  const dataAttrs = {
-    [PortfolioLinkDataAttrKeys.BASE]: true,
-    [PortfolioLinkDataAttrKeys.HREF]: href,
-  };
-
   const style = { [colorCssVar.varName]: color };
+  const dataAttrs = { [PortfolioLinkDataAttrKeys.HREF]: href };
+  const classNames = [cn.root, className].filter(Boolean).join(' ');
 
   return (
     <Component
       style={style}
+      className={classNames}
       href={asChild ? undefined : href}
+      target={asChild ? undefined : '_blank'}
+      rel={asChild ? undefined : 'noreferrer noopener'}
       css={selfCss}
       {...dataAttrs}
       {...restProps}

@@ -9,9 +9,6 @@ const meta: Meta<typeof PortfolioLink> = {
     Root: {
       description: '`Anchor` 태그의 역할',
     },
-    Icon: {
-      description: '아이콘',
-    },
     Text: {
       description: '링크 텍스트',
     },
@@ -38,12 +35,7 @@ export const Default = {
     return (
       <>
         <div>
-          <PortfolioLink.Root
-            color={color}
-            href={link}
-            onClick={(e) => e.preventDefault()}
-          >
-            <PortfolioLink.Icon />
+          <PortfolioLink.Root color={color} href={link}>
             <PortfolioLink.Text>{text}</PortfolioLink.Text>
           </PortfolioLink.Root>
         </div>
