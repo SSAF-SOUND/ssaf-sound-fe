@@ -9,18 +9,25 @@ import { flex } from '~/styles/utils';
 import { PortfolioLinkInputGroupRootDataAttrKeys } from './dataAttrs';
 
 interface PortfolioLinkInputGroupRootProps {
+  children: ReactNode;
+  color?: string;
   viewHref?: string;
   viewText?: string;
-  children: ReactNode;
 }
 
 const PortfolioLinkInputGroupRoot = (
   props: PortfolioLinkInputGroupRootProps
 ) => {
-  const { children, viewHref = '', viewText = '' } = props;
+  const { children, color, viewHref = '', viewText = '' } = props;
 
   return (
-    <PortfolioLink.Root tabIndex={0} asChild css={selfCss} href={viewHref}>
+    <PortfolioLink.Root
+      color={color}
+      tabIndex={0}
+      asChild
+      css={selfCss}
+      href={viewHref}
+    >
       <div {...dataAttrs}>
         <div css={viewLayerCss}>
           <PortfolioLink.Icon />
