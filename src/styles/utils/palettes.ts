@@ -33,6 +33,7 @@ export const palettes = {
     green: '#C6FD8C',
     purple: '#E7B9FF',
     darkPurple: '#CC6EFE',
+    recruit: '#86FFF8',
   },
   //
   major: '#71E498',

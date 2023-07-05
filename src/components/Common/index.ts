@@ -18,6 +18,7 @@ export * from './SsafyIcon';
 
 export { default as TextInput } from './TextInput';
 export { default as Modal } from './Modal';
+export { default as Toggle } from './Toggle';
 export { default as VisuallyHidden } from './VisuallyHidden';
 export { default as Toast } from './Toast';
 

@@ -199,6 +199,13 @@ const themeColorVarCss = css({
     palettes.black,
     palettes.black
   ),
+  '[data-theme="recruit"]': createThemePalettes(
+    palettes.point.recruit,
+    palettes.point.recruit,
+    palettes.point.recruit,
+    palettes.point.recruit,
+    palettes.point.recruit
+  ),
 });
 
 export default GlobalStyles;
