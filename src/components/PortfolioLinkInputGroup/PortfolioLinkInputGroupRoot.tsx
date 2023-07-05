@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import PortfolioLink from '~/components/PortfolioLink';
+import { PortfolioLinkDataAttrKeys } from '~/components/PortfolioLink/dataAttrs';
 import { flex } from '~/styles/utils';
 
 interface PortfolioLinkInputGroupRootProps {
@@ -32,6 +33,9 @@ const PortfolioLinkInputGroupRoot = (
 export default PortfolioLinkInputGroupRoot;
 
 const selfCss = css({
+  ':not(:focus-within)': {
+    cursor: 'pointer',
+  },
   ':active': {
     background: 'inherit',
   },
@@ -46,8 +50,12 @@ const viewLayerCss = css(
   flex('center', 'center', 'row', 12)
 );
 
-const inputLayerCss = css({
-  '*:not(:focus-within) > &': {
-    display: 'none',
+const inputLayerCss = css(
+  {
+    margin: '0 -10px',
+    [`[${PortfolioLinkDataAttrKeys.BASE}]:not(:focus-within) > &`]: {
+      display: 'none',
+    },
   },
-});
+  flex('center', 'space-between', 'row', 10, 'nowrap')
+);
