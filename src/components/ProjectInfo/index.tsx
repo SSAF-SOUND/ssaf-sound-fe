@@ -71,7 +71,7 @@ const ProjectInfo = (props: ProjectProps) => {
 export default ProjectInfo;
 
 const selfCss = css({
-  background: palettes.background.dark,
+  background: palettes.background.grey,
   color: palettes.white,
 
   '[data-theme="highLight"]': {
