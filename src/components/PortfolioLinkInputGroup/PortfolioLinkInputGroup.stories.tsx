@@ -1,6 +1,5 @@
 import type { Meta } from '@storybook/react';
 
-import { Source } from '@storybook/blocks';
 import { useState } from 'react';
 
 import PortfolioLinkInputGroup from './index';
@@ -10,7 +9,12 @@ const meta: Meta<typeof PortfolioLinkInputGroup> = {
   tags: ['autodocs'],
   argTypes: {
     Root: {
-      description: '`viewHref` prop은 ',
+      description:
+        '`viewHref`는 미리보기 엘리먼트의 `href`값입니다. \n\n `viewText`값은 미리보기 엘리먼트의 `text`값입니다.',
+    },
+    Input: {
+      description:
+        '`inputType`으로 `href input`인지 `text input`인지 선택할 수 있습니다.',
     },
   },
 };
