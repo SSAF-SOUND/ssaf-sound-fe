@@ -64,7 +64,7 @@ const viewLayerCss = css(
 const inputLayerCss = css(
   {
     margin: '0 -10px',
-    [`[${PortfolioLinkDataAttrKeys.BASE}]:not(:focus-within) > &`]: {
+    [`[${PortfolioLinkDataAttrKeys.BASE}]:not(:focus-within) &`]: {
       display: 'none',
     },
   },
