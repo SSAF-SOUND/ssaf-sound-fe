@@ -3,13 +3,13 @@ import type { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import PortfolioLink from '~/components/PortfolioLink';
-import { PortfolioLinkDataAttrKeys } from '~/components/PortfolioLink/dataAttrs';
 import { flex } from '~/styles/utils';
 
-import { PortfolioLinkInputGroupRootDataAttrKeys } from './dataAttrs';
+import { classnames as cn } from './classnames';
 
 interface PortfolioLinkInputGroupRootProps {
   children: ReactNode;
+  className?: string;
   color?: string;
   viewHref?: string;
   viewText?: string;
@@ -18,19 +18,20 @@ interface PortfolioLinkInputGroupRootProps {
 const PortfolioLinkInputGroupRoot = (
   props: PortfolioLinkInputGroupRootProps
 ) => {
-  const { children, color, viewHref = '', viewText = '' } = props;
+  const { children, className, color, viewHref = '', viewText = '' } = props;
+  const classNames = [className, cn.root].filter(Boolean).join(' ');
 
   return (
     <PortfolioLink.Root
       color={color}
       tabIndex={0}
       asChild
+      className={classNames}
       css={selfCss}
       href={viewHref}
     >
-      <div {...dataAttrs}>
+      <div>
         <div css={viewLayerCss}>
-          <PortfolioLink.Icon />
           <PortfolioLink.Text>{viewText}</PortfolioLink.Text>
         </div>
         <div css={inputLayerCss}>{children}</div>
@@ -38,8 +39,6 @@ const PortfolioLinkInputGroupRoot = (
     </PortfolioLink.Root>
   );
 };
-
-const dataAttrs = { [PortfolioLinkInputGroupRootDataAttrKeys.BASE]: true };
 
 export default PortfolioLinkInputGroupRoot;
 
@@ -54,7 +53,7 @@ const selfCss = css({
 
 const viewLayerCss = css(
   {
-    [`[${PortfolioLinkInputGroupRootDataAttrKeys.BASE}]:focus-within &`]: {
+    [`.${cn.root}:focus-within &`]: {
       display: 'none',
     },
   },
@@ -64,7 +63,7 @@ const viewLayerCss = css(
 const inputLayerCss = css(
   {
     margin: '0 -10px',
-    [`[${PortfolioLinkDataAttrKeys.BASE}]:not(:focus-within) &`]: {
+    [`.${cn.root}:not(:focus-within) &`]: {
       display: 'none',
     },
   },
