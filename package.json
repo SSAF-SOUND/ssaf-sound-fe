@@ -28,6 +28,7 @@
     "is-what": "^4.1.15",
     "next": "13.3.4",
     "react": "18.2.0",
+    "react-calendar": "^4.3.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.0",
     "react-hot-toast": "^2.4.1",

@@ -2,6 +2,7 @@ export { default as AlertText } from './AlertText';
 export { default as Avatar } from './Avatar';
 export { default as Bar } from './Bar';
 export { default as Button } from './Button';
+export { default as DatePicker } from './DatePicker';
 export { default as DefaultFullPageLoader } from './DefaultFullPageLoader';
 export { default as Dot } from './Dot';
 export { default as Gnb } from './Gnb';

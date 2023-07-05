@@ -4,7 +4,13 @@ import { css } from '@emotion/react';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
 import { AiFillApple, AiFillGithub, AiOutlineGoogle } from 'react-icons/ai';
 import { BiImageAdd } from 'react-icons/bi';
-import { HiMinus, HiOutlineArrowLeft, HiPlus } from 'react-icons/hi';
+import {
+  HiMinus,
+  HiOutlineArrowLeft,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+  HiPlus,
+} from 'react-icons/hi';
 import { HiChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
 import { IoMdListBox } from 'react-icons/io';
 import { IoTriangle } from 'react-icons/io5';
@@ -74,6 +80,8 @@ export const icons = {
   share: <MdIosShare />,
 
   [`chevron.down`]: <MdKeyboardArrowDown />,
+  [`chevron.right`]: <HiOutlineChevronRight />,
+  [`chevron.left`]: <HiOutlineChevronLeft />,
 
   image: <BiImageAdd />,
 
