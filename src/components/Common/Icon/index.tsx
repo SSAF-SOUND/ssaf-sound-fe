@@ -29,6 +29,7 @@ import {
   MdHome,
   MdIosShare,
   MdKeyboardArrowDown,
+  MdLink,
   MdMoreVert,
   MdNotifications,
   MdOutlineThumbUp,
@@ -84,6 +85,7 @@ export const icons = {
   [`chevron.left`]: <HiOutlineChevronLeft />,
 
   image: <BiImageAdd />,
+  link: <MdLink />,
 
   google: <AiOutlineGoogle />,
   github: <AiFillGithub />,
