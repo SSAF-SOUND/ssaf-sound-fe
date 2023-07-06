@@ -2,7 +2,11 @@ import type { RecruitCategory } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
-import { fontCss } from '~/styles/utils';
+import {
+  fontCss,
+  getRecruitThemeByCategory,
+  themeColorVars,
+} from '~/styles/utils';
 import { getDateDiff } from '~/utils';
 
 export interface DdayProps {
@@ -18,12 +22,14 @@ const Dday = (props: DdayProps) => {
   const dDay = isAbleDate ? `D - ${diff}` : '모집 완료';
 
   return (
-    <span css={[textCss]} data-recruitTheme={category}>
+    <span css={[textCss]} data-theme={getRecruitThemeByCategory(category)}>
       {dDay}
     </span>
   );
 };
 
-const textCss = css(fontCss.style.B20);
+const textCss = css(fontCss.style.B20, {
+  color: themeColorVars.mainColor.var,
+});
 
 export default Dday;
