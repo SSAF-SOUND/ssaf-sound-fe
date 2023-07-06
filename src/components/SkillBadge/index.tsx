@@ -1,4 +1,5 @@
-import type { SkillIconProps } from '../Common/SkillIcon';
+import type { ComponentPropsWithoutRef } from 'react';
+import type { SkillType } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
@@ -6,8 +7,9 @@ import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 import { SkillIcon } from '../Common';
 
-interface SkillBadgeProps extends Omit<SkillIconProps, 'size'> {
+interface SkillBadgeProps extends ComponentPropsWithoutRef<'span'> {
   isActive?: boolean;
+  name: SkillType;
 }
 
 const SkillBadge = (props: SkillBadgeProps) => {
@@ -15,9 +17,7 @@ const SkillBadge = (props: SkillBadgeProps) => {
   return (
     <span css={[selfCss, isActive && activeCss]}>
       <SkillIcon name={name} size={SKILL_BADGE_ICON_SIZE} />
-      <span css={textCss}>
-        {name.replace(/^[a-z]/, (char) => char.toUpperCase())}
-      </span>
+      <span css={textCss}>{name}</span>
     </span>
   );
 };
