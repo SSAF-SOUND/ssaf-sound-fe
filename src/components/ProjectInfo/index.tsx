@@ -7,7 +7,7 @@ import { palettes } from '~/styles/utils';
 import Info from './Info';
 import Personnel from './Personnel';
 import { PROJECT_INFO } from './utils';
-import { SkillStack } from '../Common';
+import { SkillIcon } from '../Common';
 
 interface ProjectProps {
   recruitStart: string;
@@ -61,7 +61,7 @@ const ProjectInfo = (props: ProjectProps) => {
       </Info>
       <Info {...PROJECT_INFO.stack}>
         {skills.map((skill) => (
-          <SkillStack stack={skill.name} key={skill.skillId} />
+          <SkillIcon name={skill.name} key={skill.skillId} />
         ))}
       </Info>
     </div>
@@ -74,7 +74,8 @@ const selfCss = css({
   background: palettes.background.grey,
   color: palettes.white,
 
+  /** 추후에 수정할게요! */
   '[data-theme="highLight"]': {
-    color: palettes.point.cyan,
+    color: palettes.point.recruit,
   },
 });

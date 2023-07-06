@@ -10,14 +10,14 @@ export type InfoType = '모집 인원' | '모집 기간' | '기술 스택';
 // 위의 type들 나중에 types로 이전할 예정
 type PeriodType = string[];
 
-interface InfoTypes {
+interface InfoConstantsTypes {
   icon: IconNames;
   title: InfoType;
   id: ProjectInfoIds;
 }
 
 export type ProjectInfoIds = 'personnel' | 'period' | 'stack';
-export const PROJECT_INFO: Record<ProjectInfoIds, InfoTypes> = {
+export const PROJECT_INFO: Record<ProjectInfoIds, InfoConstantsTypes> = {
   personnel: {
     id: 'personnel',
     icon: 'group',
