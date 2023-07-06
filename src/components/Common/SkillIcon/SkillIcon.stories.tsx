@@ -1,7 +1,7 @@
-import type { SkillStackProps } from './index';
+import type { SkillIconProps } from './index';
 import type { Meta } from '@storybook/react';
 
-import SkillStack from './index';
+import SkillIcon from './index';
 
 const stacks = [
   'React',
@@ -22,30 +22,24 @@ const stacks = [
   'Figma',
 ] as const;
 
-const meta: Meta<typeof SkillStack> = {
-  title: 'Icon/SkillStack',
-  component: SkillStack,
+const meta: Meta<typeof SkillIcon> = {
+  title: 'Icon/Skill',
+  component: SkillIcon,
   tags: ['autodocs'],
-  argTypes: {
-    stack: {
-      options: stacks,
-      control: { type: 'select' },
-    },
-  },
 };
 
 export default meta;
 
-export const Single = (props: SkillStackProps) => {
-  const { stack = 'React', size } = props;
-  return <SkillStack stack={stack} size={size} />;
+export const Single = (props: SkillIconProps) => {
+  const { name = 'React', size } = props;
+  return <SkillIcon name={name} size={size} />;
 };
 
 export const All = () => {
   return (
     <div style={{ display: 'flex', width: '200px', flexWrap: 'wrap' }}>
       {stacks.map((s) => (
-        <SkillStack stack={s} key={s} size={24} />
+        <SkillIcon name={s} key={s} size={24} />
       ))}
     </div>
   );

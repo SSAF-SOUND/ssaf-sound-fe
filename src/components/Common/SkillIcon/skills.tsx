@@ -15,7 +15,7 @@ import TypeScript from '~/assets/stacks/typeScript.svg';
 import Vue from '~/assets/stacks/vue.svg';
 import XD from '~/assets/stacks/xd.svg';
 
-export const SkillStacks = {
+export const Skills = {
   React: React,
   JavaScript: JavaScript,
   TypeScript: TypeScript,
