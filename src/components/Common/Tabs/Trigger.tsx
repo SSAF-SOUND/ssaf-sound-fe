@@ -4,10 +4,10 @@ import type { TabsTriggerProps } from '@radix-ui/react-tabs';
 import { css } from '@emotion/react';
 import * as Tabs from '@radix-ui/react-tabs';
 
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss, palettes, themeColorVars } from '~/styles/utils';
 
 export interface TriggerProps extends TabsTriggerProps {
-  color?: TriggerColorProps;
+  theme?: TriggerColorProps;
   variant?: TriggerVariantProps;
 }
 
@@ -15,10 +15,11 @@ export type TriggerColorProps = 'default' | 'primary' | 'secondary';
 export type TriggerVariantProps = 'default' | 'fit';
 
 const Trigger = (props: TriggerProps) => {
-  const { children, color = 'default', variant = 'default', ...rest } = props;
+  const { children, theme = 'primary', variant = 'default', ...rest } = props;
   return (
     <Tabs.Trigger
-      css={[triggerCss, colorCss[color], variantCss[variant]]}
+      data-theme={theme}
+      css={[triggerCss, variantCss[variant]]}
       {...rest}
     >
       {children}
@@ -28,29 +29,14 @@ const Trigger = (props: TriggerProps) => {
 
 const triggerCss = css(flex('center', 'center', 'row'), fontCss.style.B20, {
   background: 'inherit',
+  borderBottom: '2px solid transparent',
   '&[data-state="active"]': {
-    boxShadow: 'inset 0 -1px 0 0 currentColor, 0 1px 0 0 currentColor',
+    borderBottomColor: themeColorVars.mainColor.var,
+    color: themeColorVars.mainColor.var,
+    zIndex: 2,
   },
   color: palettes.font.blueGrey,
 });
-
-const colorCss: Record<TriggerColorProps, SerializedStyles> = {
-  primary: css({
-    '&[data-state="active"]': {
-      color: palettes.primary.default,
-    },
-  }),
-  secondary: css({
-    '&[data-state="active"]': {
-      color: palettes.secondary.default,
-    },
-  }),
-  default: css({
-    '&[data-state="active"]': {
-      color: palettes.white,
-    },
-  }),
-};
 
 const variantCss: Record<TriggerVariantProps, SerializedStyles> = {
   default: css({
