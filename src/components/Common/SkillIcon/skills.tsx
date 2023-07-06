@@ -9,32 +9,30 @@ import Next from '~/assets/stacks/next.svg';
 import NodeJs from '~/assets/stacks/nodeJs.svg';
 import React from '~/assets/stacks/react.svg';
 import Spring from '~/assets/stacks/spring.svg';
-import Svelt from '~/assets/stacks/svelt.svg';
+import Svelte from '~/assets/stacks/svelte.svg';
 import Swift from '~/assets/stacks/swift.svg';
 import TypeScript from '~/assets/stacks/typeScript.svg';
 import Vue from '~/assets/stacks/vue.svg';
 import XD from '~/assets/stacks/xd.svg';
 
-export const SkillStacks = {
-  react: <React />,
-  javaScript: <JavaScript />,
-  typeScript: <TypeScript />,
-  vue: <Vue />,
-  svelt: <Svelt />,
-  nextJs: <Next />,
+export const Skills = {
+  React: React,
+  JavaScript: JavaScript,
+  TypeScript: TypeScript,
+  Vue: Vue,
+  Svelte: Svelte,
+  NextJs: Next,
   // ---- 프론트
-  java: <Java />,
-  node: <NodeJs />,
-  spring: <Spring />,
-  django: <Django />,
+  Java: Java,
+  NodeJs: NodeJs,
+  Spring: Spring,
+  Django: Django,
   // ---- 백엔드
-  android: <Android />,
-  ios: <Ios />,
-  swift: <Swift />,
-  flutter: <Flutter />,
+  Android: Android,
+  IOS: Ios,
+  Swift: Swift,
+  Flutter: Flutter,
   // ---- 모바일
-  xd: <XD />,
-  figma: <Figma />,
+  XD: XD,
+  Figma: Figma,
 };
-
-export type StacksType = keyof typeof SkillStacks;

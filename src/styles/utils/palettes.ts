@@ -41,7 +41,7 @@ export const palettes = {
   //
   background: {
     default: '#2E323B',
-    grey: '#4E525E',
+    grey: '#3D4353',
   },
   //
   font: {

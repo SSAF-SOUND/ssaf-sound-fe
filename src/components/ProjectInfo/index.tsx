@@ -1,11 +1,13 @@
-import type { LimitType, SkillsType } from './utils';
+import type { LimitType, SkillsType } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
 import { palettes } from '~/styles/utils';
 
 import Info from './Info';
+import Personnel from './Personnel';
 import { PROJECT_INFO } from './utils';
+import { SkillIcon } from '../Common';
 
 interface ProjectProps {
   recruitStart: string;
@@ -34,18 +36,34 @@ const ProjectInfo = (props: ProjectProps) => {
         skillId: 1,
       },
       {
-        name: 'IOS',
+        name: 'NextJs',
         skillId: 2,
+      },
+      {
+        name: 'IOS',
+        skillId: 3,
       },
     ],
   } = props;
   // 임시
+
   return (
     <div css={selfCss}>
-      <Info {...PROJECT_INFO.PERSONNEL} content={limits} />
+      <Info {...PROJECT_INFO.personnel}>
+        {/* 데이터 어떤식으로 넘어오는지 여쭈어보고 수ㅇㅖ정 */}
+        <Personnel type="기획/디자인" max={6} recruitedNumber={2} />
+      </Info>
       {/* content type을 배열로 한정짓고 싶어서 배열로 진행 */}
-      <Info {...PROJECT_INFO.PERIOD} content={[recruitStart, recruitEnd]} />
-      <Info {...PROJECT_INFO.STACK} content={skills} />
+      <Info {...PROJECT_INFO.period}>
+        <span>{recruitStart.replaceAll('-', '/')}</span>
+        <span> ~ </span>
+        <span data-theme="highLight">{recruitEnd.replaceAll('-', '/')}</span>
+      </Info>
+      <Info {...PROJECT_INFO.stack}>
+        {skills.map((skill) => (
+          <SkillIcon name={skill.name} key={skill.skillId} />
+        ))}
+      </Info>
     </div>
   );
 };
@@ -53,9 +71,11 @@ const ProjectInfo = (props: ProjectProps) => {
 export default ProjectInfo;
 
 const selfCss = css({
-  // width: 390,
-  // height: 104,
-  // w, h는 페이지 작업을 할때 같이 레이아웃 잡으며 수정할 예정
-  background: palettes.white,
-  color: palettes.font.grey,
+  background: palettes.background.grey,
+  color: palettes.white,
+
+  /** 추후에 수정할게요! */
+  '[data-theme="highLight"]': {
+    color: palettes.point.recruit,
+  },
 });

@@ -11,7 +11,7 @@ export { default as IconButton } from './IconButton';
 export { default as Logo } from './Logo';
 export { default as ProgressBar } from './ProgressBar';
 export { default as SelectBox } from './SelectBox';
-export { default as SkillStack } from './SkillStack';
+export { default as SkillIcon } from './SkillIcon';
 
 export { default as SsafyIcon } from './SsafyIcon';
 export * from './SsafyIcon';

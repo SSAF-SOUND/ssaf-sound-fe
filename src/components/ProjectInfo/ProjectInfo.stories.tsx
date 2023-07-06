@@ -6,14 +6,7 @@ const meta: Meta<typeof ProjectInfo> = {
   title: 'ProjectInfo',
   component: ProjectInfo,
   tags: ['autodocs'],
-  argTypes: {
-    recruitStart: {
-      control: 'date',
-    },
-    recruitEnd: {
-      control: 'date',
-    },
-  },
+  argTypes: {},
 };
 
 export default meta;

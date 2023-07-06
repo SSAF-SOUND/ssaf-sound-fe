@@ -1,5 +1,6 @@
-import type { InfoType } from './utils';
+import type { InfoType, ProjectInfoIds } from './utils';
 import type { IconNames } from '../Common/Icon';
+import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
@@ -7,24 +8,22 @@ import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 import { Icon } from '../Common';
 
-interface InfoProps<T> {
+interface InfoProps {
   icon: IconNames;
   title: InfoType;
-  content: T[];
-  parser?: (arr: T[]) => string;
+  id: ProjectInfoIds;
+  children: ReactNode;
 }
 
-const Info = <T,>(props: InfoProps<T>) => {
-  const { icon, title, parser, content } = props;
+const Info = (props: InfoProps) => {
+  const { icon, title, id, children } = props;
   return (
     <div css={selfCss}>
       <span css={titleBoxCss}>
         <Icon name={icon} size={13} />
         <span css={textCss}>{title}</span>
       </span>
-      <span css={[textCss, title === '기술 스택' && highlightCss]}>
-        {parser?.(content)}
-      </span>
+      <span css={[textCss, id === 'stack' && highlightCss]}>{children}</span>
     </div>
   );
 };
@@ -34,6 +33,9 @@ const selfCss = css(flex('', '', 'row', 30));
 
 const textCss = css(fontCss.style.R14);
 const titleBoxCss = css(inlineFlex('center', 'center', 'row', 6));
-const highlightCss = css({ color: palettes.secondary.default });
+const highlightCss = css(
+  { color: palettes.secondary.default },
+  flex('', '', 'row', 2)
+);
 
 export default Info;
