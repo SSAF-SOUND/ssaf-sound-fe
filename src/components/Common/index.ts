@@ -23,3 +23,4 @@ export { default as VisuallyHidden } from './VisuallyHidden';
 export { default as Toast } from './Toast';
 
 export { default as SSRSafeSuspense } from './SSRSafeSuspense';
+export { default as Tabs } from './Tabs';
