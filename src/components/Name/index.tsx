@@ -35,7 +35,7 @@ const Name = (props: NameProps) => {
   return (
     <span css={[selfCss, gapCss[size]]}>
       <Avatar size={size} nickName={nickname} major={isMajor} />
-      <span css={[[textCss[size]]]}>{nickname}</span>
+      <span css={[textCss[size], fontCss.family.auto]}>{nickname}</span>
       {ssafyMember ? (
         <SsafyIcon.Track
           // 메이저 타입이 존재하지 않으면 fallback
