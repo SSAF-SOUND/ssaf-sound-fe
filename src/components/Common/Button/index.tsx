@@ -5,14 +5,19 @@ import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
 import React, { forwardRef } from 'react';
 
-import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
-import { toCssVar } from '~/styles/utils/toCssVar';
+import {
+  colorMix,
+  flex,
+  fontCss,
+  palettes,
+  themeColorVars,
+} from '~/styles/utils';
 
 import ButtonLoader from './ButtonLoader';
 
 type ButtonVariant = 'text' | 'filled' | 'outlined';
 type ButtonSize = 'sm' | 'md' | 'lg';
-type ButtonColor =
+type ButtonTheme =
   | 'primary'
   | 'secondary'
   | 'grey'
@@ -24,7 +29,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   children?: ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  color?: ButtonColor;
+  theme?: ButtonTheme;
   asChild?: boolean;
   loading?: boolean;
 }
@@ -33,7 +38,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
     variant = 'filled',
     size = 'md',
-    color = 'primary',
+    theme = 'primary',
     asChild = false,
     loading = false,
     disabled,
@@ -48,14 +53,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 
   return (
     <Component
+      data-theme={theme}
       ref={ref}
       disabled={isDisabled}
-      css={[
-        baseCss,
-        heightsCss[size],
-        variantsCss[variant],
-        colorVarCss[color],
-      ]}
+      css={[baseCss, heightsCss[size], variantsCss[variant]]}
       {...restProps}
     >
       {loading ? <ButtonLoader color={loaderColor[variant]} /> : children}
@@ -92,92 +93,47 @@ const heightsCss: Record<ButtonSize, SerializedStyles> = {
   lg: css({ height: 56 }),
 };
 
-const cssVar = {
-  mainColor: toCssVar('mainColor'),
-  mainLightColor: toCssVar('mainLightColor'),
-  mainDarkColor: toCssVar('mainDarkColor'),
-};
-
-const createButtonColorCss = (
-  main: string,
-  mainLight: string,
-  mainDark: string
-) => {
-  return css({
-    [cssVar.mainColor.varName]: main,
-    [cssVar.mainLightColor.varName]: mainLight,
-    [cssVar.mainDarkColor.varName]: mainDark,
-  });
-};
-
-const colorVarCss = {
-  primary: createButtonColorCss(
-    palettes.primary.default,
-    palettes.primary.light,
-    palettes.primary.dark
-  ),
-  secondary: createButtonColorCss(
-    palettes.secondary.default,
-    palettes.secondary.light,
-    palettes.secondary.dark
-  ),
-  grey: createButtonColorCss(palettes.grey3, palettes.grey4, palettes.grey2),
-  warning: createButtonColorCss(
-    palettes.warning.default,
-    palettes.warning.light,
-    palettes.warning.dark
-  ),
-  error: createButtonColorCss(
-    palettes.error.default,
-    palettes.error.light,
-    palettes.error.dark
-  ),
-  success: createButtonColorCss(
-    palettes.success.default,
-    palettes.success.light,
-    palettes.success.dark
-  ),
-};
-
 const variantsCss: Record<ButtonVariant, SerializedStyles> = {
   text: css({
     backgroundColor: 'transparent',
-    color: cssVar.mainColor.var,
-    '&:hover': { color: cssVar.mainLightColor.var },
+    color: themeColorVars.mainColor.var,
+    '&:hover': { color: themeColorVars.mainLightColor.var },
     '&:focus-visible': {
-      backgroundColor: cssVar.mainDarkColor.var,
+      backgroundColor: themeColorVars.mainDarkColor.var,
       color: palettes.white,
     },
     '&:active': {
-      backgroundColor: cssVar.mainColor.var,
+      backgroundColor: themeColorVars.mainColor.var,
       color: palettes.white,
     },
     '&:disabled': {
-      color: colorMix('50%', cssVar.mainColor.var),
+      color: colorMix('50%', themeColorVars.mainColor.var),
     },
   }),
   filled: css({
-    backgroundColor: cssVar.mainColor.var,
+    backgroundColor: themeColorVars.mainColor.var,
     '&:hover': { borderColor: palettes.white },
     '&:active': {
-      backgroundColor: cssVar.mainDarkColor.var,
+      backgroundColor: themeColorVars.mainDarkColor.var,
       color: palettes.white,
     },
-    '&:focus-visible': { outline: `3px solid ${cssVar.mainLightColor.var}` },
+    '&:focus-visible': {
+      outline: `3px solid ${themeColorVars.mainLightColor.var}`,
+    },
     '&:disabled': {
-      backgroundColor: colorMix('50%', cssVar.mainColor.var),
+      backgroundColor: colorMix('50%', themeColorVars.mainColor.var),
     },
   }),
   outlined: css({
     backgroundColor: palettes.white,
     color: palettes.black,
-    '&:hover': { borderColor: cssVar.mainColor.var },
+    '&:hover': { borderColor: themeColorVars.mainColor.var },
     '&:active': {
-      backgroundColor: cssVar.mainDarkColor.var,
+      backgroundColor: themeColorVars.mainDarkColor.var,
       borderColor: 'transparent',
       color: palettes.white,
     },
-    '&:focus-visible': { outline: `3px solid ${cssVar.mainColor.var}` },
+    '&:focus-visible': { outline: `3px solid ${themeColorVars.mainColor.var}` },
     '&:disabled': {
       backgroundColor: colorMix('50%', palettes.white),
     },
@@ -185,7 +141,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
 };
 
 const loaderColor: Record<ButtonVariant, string> = {
-  text: colorMix('50%', cssVar.mainColor.var),
+  text: colorMix('50%', themeColorVars.mainColor.var),
   filled: '',
   outlined: '',
 };

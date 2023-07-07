@@ -185,6 +185,26 @@ const themeColorVarCss = css({
     palettes.secondary.darken,
     palettes.secondary.darkest
   ),
+  '[data-theme="grey"]': createThemePalettes(
+    palettes.grey3,
+    palettes.grey4,
+    palettes.grey2
+  ),
+  '[data-theme="success"]': createThemePalettes(
+    palettes.success.default,
+    palettes.success.light,
+    palettes.success.dark
+  ),
+  '[data-theme="warning"]': createThemePalettes(
+    palettes.warning.default,
+    palettes.warning.light,
+    palettes.warning.dark
+  ),
+  '[data-theme="error"]': createThemePalettes(
+    palettes.error.default,
+    palettes.error.light,
+    palettes.error.dark
+  ),
   '[data-theme="white"]': createThemePalettes(
     palettes.white,
     palettes.white,
