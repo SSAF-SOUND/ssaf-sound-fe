@@ -37,7 +37,7 @@ const ButtonGroup = (props: ButtonGroupProps) => {
           <>
             {colors.map((color) => {
               return (
-                <Button key={color} size={size} variant={variant} color={color}>
+                <Button key={color} size={size} variant={variant} theme={color}>
                   버튼
                 </Button>
               );
@@ -53,7 +53,7 @@ const ButtonGroup = (props: ButtonGroupProps) => {
             key={color}
             size="md"
             variant={variant}
-            color={color}
+            theme={color}
             disabled
           >
             버튼
@@ -69,7 +69,7 @@ const ButtonGroup = (props: ButtonGroupProps) => {
             key={color}
             size="md"
             variant={variant}
-            color={color}
+            theme={color}
             loading
           >
             버튼
@@ -115,7 +115,6 @@ export const SingleButton: ButtonStory = {
     color: 'primary',
     loading: false,
   },
-
 };
 
 export const Filled: ButtonGroupStory = {
