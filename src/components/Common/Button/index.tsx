@@ -15,7 +15,7 @@ import {
 
 import ButtonLoader from './ButtonLoader';
 
-type ButtonVariant = 'text' | 'filled' | 'outlined';
+type ButtonVariant = 'text' | 'filled' | 'outlined' | 'literal';
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonTheme =
   | 'primary'
@@ -138,10 +138,27 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       backgroundColor: colorMix('50%', palettes.white),
     },
   }),
+  literal: css({
+    backgroundColor: 'transparent',
+    color: palettes.white,
+    '&:hover': {
+      color: themeColorVars.mainColor.var,
+    },
+    '&:active': {
+      color: themeColorVars.mainDarkColor.var,
+    },
+    '&:focus-visible': {
+      color: themeColorVars.mainLightColor.var,
+    },
+    '&:disabled': {
+      color: palettes.font.blueGrey,
+    },
+  }),
 };
 
 const loaderColor: Record<ButtonVariant, string> = {
   text: colorMix('50%', themeColorVars.mainColor.var),
   filled: '',
   outlined: '',
+  literal: palettes.font.blueGrey,
 };
