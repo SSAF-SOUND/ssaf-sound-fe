@@ -5,12 +5,13 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { Bar, Button, Icon } from '~/components/Common';
-import { colorMix, fontCss, inlineFlex, palettes } from '~/styles/utils';
+import { fontCss } from '~/styles/utils';
 
 import IconButton from '../Common/IconButton';
 
 interface RecruitFormTitleBarProps {
   title: string;
+  submitButtonText: string;
   isSubmitting?: boolean;
   isSubmitDisabled?: boolean;
   onClickClose?: MouseEventHandler<HTMLButtonElement>;
@@ -20,6 +21,7 @@ interface RecruitFormTitleBarProps {
 const RecruitFormTitleBar = (props: RecruitFormTitleBarProps) => {
   const {
     title,
+    submitButtonText,
     isSubmitDisabled = false,
     isSubmitting = false,
     onClickClose,
@@ -54,7 +56,7 @@ const RecruitFormTitleBar = (props: RecruitFormTitleBarProps) => {
           loading={isSubmitting}
           disabled={isSubmitButtonDisabled}
         >
-          완료
+          {submitButtonText}
         </Button>
       }
     />
@@ -77,7 +79,6 @@ const titleCss = css(
 const submitButtonCss = css(
   {
     padding: 6,
-    width: 44,
   },
   fontCss.style.R16
 );
