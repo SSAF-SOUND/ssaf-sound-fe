@@ -144,11 +144,11 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     '&:hover': {
       color: themeColorVars.mainColor.var,
     },
-    '&:active': {
-      color: themeColorVars.mainDarkColor.var,
-    },
     '&:focus-visible': {
       color: themeColorVars.mainLightColor.var,
+    },
+    '&:active': {
+      color: themeColorVars.mainDarkColor.var,
     },
     '&:disabled': {
       color: palettes.font.blueGrey,
