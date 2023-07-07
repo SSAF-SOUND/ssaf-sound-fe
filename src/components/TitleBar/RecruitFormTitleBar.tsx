@@ -4,20 +4,29 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Bar, Icon } from '~/components/Common';
-import { colorMix, fontCss, palettes } from '~/styles/utils';
+import { Bar, Button, Icon } from '~/components/Common';
+import { colorMix, fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 import IconButton from '../Common/IconButton';
 
-interface RecruitTitleBarProps {
+interface RecruitFormTitleBarProps {
   title: string;
+  isSubmitting?: boolean;
   isSubmitDisabled?: boolean;
-  className?: string;
   onClickClose?: MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 }
 
-const RecruitTitleBar = (props: RecruitTitleBarProps) => {
-  const { title, isSubmitDisabled = false, onClickClose, ...restProps } = props;
+const RecruitFormTitleBar = (props: RecruitFormTitleBarProps) => {
+  const {
+    title,
+    isSubmitDisabled = false,
+    isSubmitting = false,
+    onClickClose,
+    ...restProps
+  } = props;
+
+  const isSubmitButtonDisabled = isSubmitDisabled || isSubmitting;
 
   const router = useRouter();
 
@@ -38,15 +47,21 @@ const RecruitTitleBar = (props: RecruitTitleBarProps) => {
       }
       center={<h2 css={titleCss}>{title}</h2>}
       right={
-        <button type="submit" css={submitButtonCss} disabled={isSubmitDisabled}>
+        <Button
+          variant="literal"
+          type="submit"
+          css={submitButtonCss}
+          loading={isSubmitting}
+          disabled={isSubmitButtonDisabled}
+        >
           완료
-        </button>
+        </Button>
       }
     />
   );
 };
 
-export default RecruitTitleBar;
+export default RecruitFormTitleBar;
 
 const iconSize = 28;
 const iconButtonSize = iconSize + 8;
@@ -61,25 +76,8 @@ const titleCss = css(
 
 const submitButtonCss = css(
   {
-    cursor: 'pointer',
     padding: 6,
-    background: 'inherit',
-    transition: 'color 200ms',
-    borderRadius: 8,
-    color: palettes.white,
-    ':focus-visible': {
-      backgroundColor: colorMix('20%', palettes.white),
-    },
-    ':hover': {
-      color: palettes.primary.light,
-    },
-    ':active': {
-      color: palettes.primary.dark,
-    },
-    ':disabled': {
-      pointerEvents: 'none',
-      color: palettes.font.blueGrey,
-    },
+    width: 44,
   },
   fontCss.style.R16
 );
