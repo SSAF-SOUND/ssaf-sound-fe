@@ -128,3 +128,7 @@ export const Outlined: ButtonGroupStory = {
 export const Text: ButtonGroupStory = {
   render: () => <ButtonGroup variant="text" />,
 };
+
+export const Literal: ButtonGroupStory = {
+  render: () => <ButtonGroup variant="literal" />,
+};
