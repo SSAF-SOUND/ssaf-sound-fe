@@ -121,6 +121,10 @@ export const Filled: ButtonGroupStory = {
   render: () => <ButtonGroup variant="filled" />,
 };
 
+export const Outlined: ButtonGroupStory = {
+  render: () => <ButtonGroup variant="outlined" />,
+};
+
 export const Inverse: ButtonGroupStory = {
   render: () => <ButtonGroup variant="inverse" />,
 };
