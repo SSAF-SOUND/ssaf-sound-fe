@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 
+import { useRecruitFormContext } from '~/components/RecruitForm/utils';
 import {
   colorMix,
   flex,
@@ -9,7 +10,6 @@ import {
   themeColorVars,
 } from '~/styles/utils';
 
-import { useRecruitFormContext } from '../useRecruitFormContext';
 
 export interface CategoryProps {
   className?: string;
