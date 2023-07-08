@@ -6,11 +6,12 @@ export interface SkillIconProps {
   name: SkillType;
   size?: number;
 }
+
 const SkillIcon = (props: SkillIconProps) => {
   const { name, size = 24 } = props;
-  const SkillIcon = Skills[name];
+  const SkillSVG = Skills[name];
 
-  return <SkillIcon style={{ height: size }} />;
+  return <SkillSVG style={{ height: size }} />;
 };
 
 export default SkillIcon;
