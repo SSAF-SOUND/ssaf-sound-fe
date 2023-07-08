@@ -1,4 +1,4 @@
-import type { RecruitFormValues } from './type';
+import type { RecruitFormValues } from './utils';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
