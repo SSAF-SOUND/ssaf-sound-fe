@@ -5,6 +5,8 @@ export interface RecruitFormValues {
     project: Participants[];
   };
   endDate: string;
+  title: string;
+  content: string;
 }
 
 export type Participants = {
