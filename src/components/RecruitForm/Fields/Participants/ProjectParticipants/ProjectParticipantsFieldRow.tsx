@@ -1,5 +1,5 @@
 import type {
-  Participant,
+  Participants,
   RecruitFormValues,
 } from '~/components/RecruitForm/utils';
 
@@ -36,10 +36,10 @@ interface FieldRowProps {
 const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
   const { index, canRemoveField, remove } = props;
   const { register, setValue } = useRecruitFormContext();
-  const participant = useWatch<RecruitFormValues>({
+  const participants = useWatch<RecruitFormValues>({
     name: `${fieldArrayName}.${index}`,
-  }) as Participant;
-  const { part, count } = participant;
+  }) as Participants;
+  const { part, count } = participants;
   const partFieldName = `${fieldArrayName}.${index}.part` as const;
   const countFieldName = `${fieldArrayName}.${index}.count` as const;
   const style = { zIndex: maxZIndex - index };

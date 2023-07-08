@@ -1,12 +1,16 @@
 export interface RecruitFormValues {
-    category: string;
-    participants: {
-        study: Participant[];
-        project: Participant[];
-    };
+  category: string;
+  participants: {
+    study: Participants[];
+    project: Participants[];
+  };
 }
 
-export type Participant = {
-    part: string;
-    count: number;
+export type Participants = {
+  part: string;
+  count: number;
 };
+
+export type a = {
+  s: string;
+}
