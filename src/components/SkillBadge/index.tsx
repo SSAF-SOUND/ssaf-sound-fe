@@ -14,12 +14,20 @@ interface SkillBadgeProps extends ToggleProps {
 
 const SkillBadge = (props: SkillBadgeProps) => {
   const { name = 'React' } = props;
+  const displayName = nameMapper[name] ?? name;
+
   return (
     <Toggle.Root css={[selfCss]}>
       <SkillIcon name={name} size={SKILL_BADGE_ICON_SIZE} />
-      <span css={textCss}>{name}</span>
+      <span css={textCss}>{displayName}</span>
     </Toggle.Root>
   );
+};
+
+const nameMapper: Partial<Record<SkillType, string>> = {
+  IOS: 'iOS',
+  NextJs: 'Nextjs',
+  NodeJs: 'Nodejs',
 };
 
 const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
