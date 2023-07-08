@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import SubmitBar from '~/components/RecruitForm/SubmitBar';
 
-import { Category, Participants, EndDate, Title } from './Fields';
+import { Category, Participants, EndDate, Title, Content } from './Fields';
 
 interface RecruitFormOptions {
   // SubmitBar
@@ -68,6 +68,7 @@ const RecruitForm = (props: RecruitFormProps) => {
         <Participants />
         <EndDate />
         <Title />
+        <Content />
       </form>
     </FormProvider>
   );
