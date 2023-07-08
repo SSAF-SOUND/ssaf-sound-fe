@@ -27,6 +27,9 @@ const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
   borderRadius: 16,
   cursor: 'pointer',
   border: `1px solid ${palettes.white}`,
+  color: palettes.white,
+  transition: 'color 200ms, background-color 200ms, border-color 200ms',
+  backgroundColor: 'transparent',
   '&:hover': {
     borderColor: palettes.primary.dark,
     color: palettes.primary.dark,
@@ -34,6 +37,7 @@ const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
   '&[data-state="on"]': {
     background: palettes.primary.darkest,
     borderColor: palettes.primary.darkest,
+    color: palettes.white,
   },
 });
 
