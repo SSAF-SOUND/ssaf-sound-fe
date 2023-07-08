@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { TextInput } from '~/components/Common';
 import { useRecruitFormContext } from '~/components/RecruitForm/utils';
-import { fontCss } from '~/styles/utils';
+import { fontCss, palettes } from '~/styles/utils';
 
 const fieldName = 'title';
 const maxTitleLength = 30;
@@ -44,6 +44,10 @@ const inputCss = css(
   {
     width: '100%',
     borderRadius: 0,
+    outline: 0,
+    border: `1px solid ${palettes.grey3}`,
+    borderBottom: 0,
+    '&:focus': {},
   },
   fontCss.style.R18
 );
