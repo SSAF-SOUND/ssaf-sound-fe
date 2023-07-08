@@ -10,7 +10,6 @@ import {
   themeColorVars,
 } from '~/styles/utils';
 
-
 export interface CategoryProps {
   className?: string;
   isProjectDisabled?: boolean;
@@ -28,7 +27,7 @@ export const Category = (props: CategoryProps) => {
 
   const {
     setValue,
-    formState: { defaultValues },
+    formState: { defaultValues: { category: defaultCategory } = {} },
   } = useRecruitFormContext();
 
   const onValueChange = (value: string) => setValue(fieldName, value);
@@ -36,7 +35,7 @@ export const Category = (props: CategoryProps) => {
   return (
     <div className={className}>
       <RadioGroup.Root
-        defaultValue={defaultValues?.category}
+        defaultValue={defaultCategory}
         css={radioGroupCss}
         onValueChange={onValueChange}
       >
