@@ -1,3 +1,5 @@
+import type { ReactQuillProps } from 'react-quill';
+
 import dynamic from 'next/dynamic';
 
 import { css } from '@emotion/react';
@@ -16,13 +18,16 @@ const ReactQuill = dynamic(import('react-quill'), {
   loading: () => <p>로딩중</p>,
 });
 
-interface EditorProps {
+interface EditorProps
+  extends Pick<
+    ReactQuillProps,
+    'value' | 'onChange' | 'defaultValue' | 'placeholder'
+  > {
   withCustomToolbar?: boolean;
 }
 
 const Editor = (props: EditorProps) => {
-  const { withCustomToolbar = true } = props;
-  const [value, setValue] = useState('');
+  const { withCustomToolbar = true, ...restProps } = props;
   const [images, setImages] = useState<Blob[]>([]);
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const hasThumbnails = !!thumbnails.length;
@@ -46,13 +51,7 @@ const Editor = (props: EditorProps) => {
 
   return (
     <div css={selfCss}>
-      <ReactQuill
-        modules={modules}
-        value={value}
-        onChange={setValue}
-        placeholder={'placeholder'}
-        formats={formats}
-      />
+      <ReactQuill {...restProps} modules={modules} formats={formats} />
 
       {hasThumbnails && (
         <div css={thumbnailBarCss}>
