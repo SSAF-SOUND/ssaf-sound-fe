@@ -8,6 +8,8 @@ export interface RecruitFormValues {
   title: string;
   content: string;
   skills: Record<string, boolean>;
+  questionToApplicants: string;
+  contact: string;
 }
 
 export type Participants = {

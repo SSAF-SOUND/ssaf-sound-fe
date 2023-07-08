@@ -11,6 +11,8 @@ import {
   Title,
   Content,
   Skills,
+  QuestionToApplicants,
+  Contact,
 } from './Fields';
 import SubmitBar from './SubmitBar';
 
@@ -48,6 +50,8 @@ const defaultValues = {
   skills: {},
   title: '',
   content: '',
+  questionToApplicants: '',
+  contact: '',
 };
 
 const RecruitForm = (props: RecruitFormProps) => {
@@ -79,6 +83,8 @@ const RecruitForm = (props: RecruitFormProps) => {
         <Skills />
         <Title />
         <Content />
+        <QuestionToApplicants />
+        <Contact />
       </form>
     </FormProvider>
   );

@@ -18,6 +18,25 @@ export type SkillType =
   | 'IOS'
   | 'Flutter';
 
+export enum SkillName {
+  REACT = 'React',
+  JAVASCRIPT = 'JavaScript',
+  TYPESCRIPT = 'TypeScript',
+  VUE = 'Vue',
+  SVELTE = 'Svelte',
+  NEXTJS = 'NextJs',
+  NODEJS = 'NodeJs',
+  JAVA = 'Java',
+  SPRING = 'Spring',
+  SWIFT = 'Swift',
+  ANDROID = 'Android',
+  FIGMA = 'Figma',
+  XD = 'XD',
+  DJANGO = 'Django',
+  IOS = 'IOS',
+  FLUTTER = 'Flutter',
+}
+
 export type RecruitType = '프론트엔드' | '백엔드' | '기획/디자인';
 
 export interface LimitType {
