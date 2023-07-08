@@ -16,9 +16,12 @@ const ReactQuill = dynamic(import('react-quill'), {
   loading: () => <p>로딩중</p>,
 });
 
-interface EditorProps {}
+interface EditorProps {
+  withCustomToolbar?: boolean;
+}
 
 const Editor = (props: EditorProps) => {
+  const { withCustomToolbar = true } = props;
   const [value, setValue] = useState('');
   const [images, setImages] = useState<Blob[]>([]);
   const [thumbnails, setThumbnails] = useState<string[]>([]);
@@ -57,16 +60,18 @@ const Editor = (props: EditorProps) => {
         </div>
       )}
 
-      <div css={bottomToolbarCss}>
-        <IconButton
-          type="button"
-          size={28}
-          theme="black"
-          onClick={handleImageUpload}
-        >
-          <Icon name="image" label="사진 첨부" size={18} />
-        </IconButton>
-      </div>
+      {withCustomToolbar && (
+        <div css={bottomToolbarCss}>
+          <IconButton
+            type="button"
+            size={28}
+            theme="black"
+            onClick={handleImageUpload}
+          >
+            <Icon name="image" label="사진 첨부" size={18} />
+          </IconButton>
+        </div>
+      )}
     </div>
   );
 };
