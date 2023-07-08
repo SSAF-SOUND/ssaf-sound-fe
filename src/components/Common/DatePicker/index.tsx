@@ -17,7 +17,13 @@ import cn from './classnames';
 
 type CustomCalendarProps = Pick<
   CalendarProps,
-  'value' | 'onChange' | 'minDate' | 'maxDate' | 'minDetail' | 'maxDetail'
+  | 'value'
+  | 'onChange'
+  | 'minDate'
+  | 'maxDate'
+  | 'minDetail'
+  | 'maxDetail'
+  | 'defaultValue'
 >;
 
 interface DatePickerProps extends CustomCalendarProps {
