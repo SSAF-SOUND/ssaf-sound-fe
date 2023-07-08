@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 
 import { Icon, IconButton } from '~/components/Common';
+import { classnames as cn } from '~/components/Editor/classnames';
 import ThumbnailBar from '~/components/Editor/ThumbnailBar';
 import { fontCss, palettes } from '~/styles/utils';
 
@@ -21,6 +22,7 @@ const Editor = (props: EditorProps) => {
   const [value, setValue] = useState('');
   const [images, setImages] = useState<Blob[]>([]);
   const [thumbnails, setThumbnails] = useState<string[]>([]);
+  const hasThumbnails = !!thumbnails.length;
 
   const handleImageUpload = useCallback(() => {
     imageHandler({
@@ -49,9 +51,11 @@ const Editor = (props: EditorProps) => {
         formats={formats}
       />
 
-      <div css={thumbnailBarCss}>
-        <ThumbnailBar thumbnails={thumbnails} />
-      </div>
+      {hasThumbnails && (
+        <div css={thumbnailBarCss}>
+          <ThumbnailBar thumbnails={thumbnails} />
+        </div>
+      )}
 
       <div css={bottomToolbarCss}>
         <IconButton
@@ -93,17 +97,19 @@ const formats = [
 
 export default Editor;
 
-const editorContainerSelector = '.ql-container';
-const editorSelector = '.ql-editor';
-const editorBorder = '0.571429px rgb(204, 204, 204) solid';
+const editorBorder = `1px ${palettes.grey3} solid`;
 
 const selfCss = css({
   backgroundColor: palettes.white,
   color: 'black',
-  [`& ${editorContainerSelector}`]: {
+  [`& .${cn.toolbar}`]: {
+    border: editorBorder,
+  },
+  [`& .${cn.editorContainer}`]: {
+    border: editorBorder,
     borderBottom: 0,
   },
-  [`& ${editorSelector}`]: {
+  [`& .${cn.editor}`]: {
     fontFamily: fontCss.family.auto.fontFamily,
     height: 300,
     '::before': {
