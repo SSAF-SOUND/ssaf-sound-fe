@@ -50,7 +50,7 @@ const IsMember = (props: IsMemberProps) => {
         </Button>
         <Button
           size="lg"
-          variant="outlined"
+          variant="inverse"
           css={buttonCss}
           onClick={handleClickNo}
         >
