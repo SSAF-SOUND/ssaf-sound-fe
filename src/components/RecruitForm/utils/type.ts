@@ -7,6 +7,7 @@ export interface RecruitFormValues {
   endDate: string;
   title: string;
   content: string;
+  skills: Record<string, boolean>;
 }
 
 export type Participants = {

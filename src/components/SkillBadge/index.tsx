@@ -13,11 +13,11 @@ interface SkillBadgeProps extends ToggleProps {
 }
 
 const SkillBadge = (props: SkillBadgeProps) => {
-  const { name = 'React' } = props;
+  const { name = 'React', ...restProps } = props;
   const displayName = nameMapper[name] ?? name;
 
   return (
-    <Toggle.Root css={[selfCss]}>
+    <Toggle.Root css={[selfCss]} {...restProps}>
       <SkillIcon name={name} size={SKILL_BADGE_ICON_SIZE} />
       <span css={textCss}>{displayName}</span>
     </Toggle.Root>

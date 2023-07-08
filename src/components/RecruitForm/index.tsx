@@ -2,9 +2,17 @@ import type { RecruitFormValues } from './utils';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import SubmitBar from '~/components/RecruitForm/SubmitBar';
+import { SkillName } from '~/services/recruit';
 
-import { Category, Participants, EndDate, Title, Content } from './Fields';
+import {
+  Category,
+  Participants,
+  EndDate,
+  Title,
+  Content,
+  Skills,
+} from './Fields';
+import SubmitBar from './SubmitBar';
 
 interface RecruitFormOptions {
   // SubmitBar
@@ -37,6 +45,7 @@ const defaultValues = {
     ],
   },
   endDate: '',
+  skills: {},
   title: '',
   content: '',
 };
@@ -67,6 +76,7 @@ const RecruitForm = (props: RecruitFormProps) => {
         />
         <Participants />
         <EndDate />
+        <Skills />
         <Title />
         <Content />
       </form>
