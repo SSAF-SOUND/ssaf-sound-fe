@@ -4,13 +4,10 @@ export interface RecruitFormValues {
     study: Participants[];
     project: Participants[];
   };
+  endDate: string;
 }
 
 export type Participants = {
   part: string;
   count: number;
 };
-
-export type a = {
-  s: string;
-}
