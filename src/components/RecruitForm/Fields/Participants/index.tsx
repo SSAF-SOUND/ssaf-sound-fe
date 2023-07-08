@@ -1,13 +1,22 @@
-import type { RecruitFormValues } from '~/components/RecruitForm/type';
+import type { RecruitFormValues } from '~/components/RecruitForm/utils';
 
 import { useWatch } from 'react-hook-form';
 
+import StudyParticipants from './/StudyParticipants';
 import ProjectParticipants from './ProjectParticipants';
 
-export interface ParticipantsProps {}
+export const Participants = () => {
+  const category = useWatch<RecruitFormValues>({
+    name: 'category'
+  });
 
-export const Participants = (props: ParticipantsProps) => {
-  const { category } = useWatch<RecruitFormValues>();
-
-  return <div>{category === '프로젝트' ? <ProjectParticipants /> : <></>}</div>;
+  return (
+    <div>
+      {category === '프로젝트' ? (
+        <ProjectParticipants />
+      ) : (
+        <StudyParticipants />
+      )}
+    </div>
+  );
 };
