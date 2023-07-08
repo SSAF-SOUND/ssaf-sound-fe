@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import SubmitBar from '~/components/RecruitForm/SubmitBar';
 
-import { Category } from './Fields';
+import { Category, Participants } from './Fields';
 
 interface RecruitFormOptions {
   // SubmitBar
@@ -22,6 +22,20 @@ interface RecruitFormProps {
 
 const defaultValues = {
   category: '프로젝트',
+  participants: {
+    project: [
+      {
+        part: '',
+        count: 1,
+      },
+    ],
+    study: [
+      {
+        part: '스터디',
+        count: 1,
+      },
+    ],
+  },
 };
 
 const RecruitForm = (props: RecruitFormProps) => {
@@ -48,6 +62,7 @@ const RecruitForm = (props: RecruitFormProps) => {
           isProjectDisabled={isProjectDisabled}
           isStudyDisabled={isStudyDisabled}
         />
+        <Participants />
       </form>
     </FormProvider>
   );
