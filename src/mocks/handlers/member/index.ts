@@ -17,8 +17,8 @@ const getMyInfo = rest.get<never, never, GetMyInfoApiData | ApiErrorResponse>(
   (req, res, ctx) => {
     return res(
       ctx.delay(500),
-      ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
-      // ...mockSuccess<UserInfo>(ctx, userInfo.ssafyUserInfo),
+      // ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
+      ...mockSuccess<UserInfo>(ctx, userInfo.ssafyUserInfo),
       // ...mockSuccess<UserInfo>(ctx, userInfo.nonSsafyUserInfo)
       // ...mockError(ctx, 'code', 'message', 404),
     );
