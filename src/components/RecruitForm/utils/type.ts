@@ -7,12 +7,14 @@ export interface RecruitFormValues {
   endDate: string;
   title: string;
   content: string;
-  skills: Record<string, boolean>;
+  skills: Partial<Record<string, boolean>>;
   questionToApplicants: string;
   contact: string;
 }
 
 export type Participants = {
+  /** 스터디 | 프론트엔드 | 백엔드 | 앱 | 기획/디자인 */
   part: string;
+  /** 1 ~ 20 */
   count: number;
 };
