@@ -1,8 +1,11 @@
 import type { RecruitFormValues } from './utils';
+import type { SubmitHandler } from 'react-hook-form';
 
+import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { SkillName } from '~/services/recruit';
+import { noop } from '~/utils';
 
 import {
   Category,
@@ -15,6 +18,7 @@ import {
   Contact,
 } from './Fields';
 import SubmitBar from './SubmitBar';
+import { populateDefaultValues } from './utils';
 
 interface RecruitFormOptions {
   // SubmitBar
@@ -27,35 +31,17 @@ interface RecruitFormOptions {
 }
 
 interface RecruitFormProps {
+  onSubmit?: SubmitHandler<RecruitFormValues>;
+  defaultValues?: RecruitFormValues;
   options?: Partial<RecruitFormOptions>;
 }
 
-const defaultValues = {
-  category: '프로젝트',
-  participants: {
-    project: [
-      {
-        part: '',
-        count: 1,
-      },
-    ],
-    study: [
-      {
-        part: '스터디',
-        count: 1,
-      },
-    ],
-  },
-  endDate: '',
-  skills: {},
-  title: '',
-  content: '',
-  questionToApplicants: '',
-  contact: '',
-};
-
 const RecruitForm = (props: RecruitFormProps) => {
-  const { options = {} } = props;
+  const {
+    options = {},
+    onSubmit = noop,
+    defaultValues = defaultRecruitFormValues,
+  } = props;
 
   const {
     barTitle = '',
@@ -65,14 +51,14 @@ const RecruitForm = (props: RecruitFormProps) => {
   } = options;
 
   const methods = useForm<RecruitFormValues>({
-    defaultValues,
+    defaultValues: useMemo(() => populateDefaultValues(defaultValues), []),
   });
+
   const { handleSubmit } = methods;
-  const onValid = (value: unknown) => console.log(value);
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onValid)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <SubmitBar title={barTitle} submitButtonText={submitButtonText} />
         <Category
           isProjectDisabled={isProjectDisabled}
@@ -88,6 +74,20 @@ const RecruitForm = (props: RecruitFormProps) => {
       </form>
     </FormProvider>
   );
+};
+
+const defaultRecruitFormValues: RecruitFormValues = {
+  category: '',
+  participants: {
+    project: [],
+    study: [],
+  },
+  endDate: '',
+  skills: {},
+  title: '',
+  content: '',
+  questionToApplicants: '',
+  contact: '',
 };
 
 export default RecruitForm;
