@@ -37,6 +37,8 @@ export enum SkillName {
   FLUTTER = 'Flutter',
 }
 
+export const SkillNameSet = new Set<string>(Object.values(SkillName));
+
 export type RecruitType = '프론트엔드' | '백엔드' | '기획/디자인';
 
 export interface LimitType {

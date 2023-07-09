@@ -8,3 +8,4 @@ export * from './routes';
 export * from './toWebp';
 export { default as customToast } from './customToast';
 export * from './date';
+export * from './defaultify';

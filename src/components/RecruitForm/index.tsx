@@ -27,35 +27,12 @@ interface RecruitFormOptions {
 }
 
 interface RecruitFormProps {
+  defaultValues?: RecruitFormValues;
   options?: Partial<RecruitFormOptions>;
 }
 
-const defaultValues = {
-  category: '프로젝트',
-  participants: {
-    project: [
-      {
-        part: '',
-        count: 1,
-      },
-    ],
-    study: [
-      {
-        part: '스터디',
-        count: 1,
-      },
-    ],
-  },
-  endDate: '',
-  skills: {},
-  title: '',
-  content: '',
-  questionToApplicants: '',
-  contact: '',
-};
-
 const RecruitForm = (props: RecruitFormProps) => {
-  const { options = {} } = props;
+  const { options = {}, defaultValues = defaultRecruitFormValues } = props;
 
   const {
     barTitle = '',
@@ -67,6 +44,7 @@ const RecruitForm = (props: RecruitFormProps) => {
   const methods = useForm<RecruitFormValues>({
     defaultValues,
   });
+
   const { handleSubmit } = methods;
   const onValid = (value: unknown) => console.log(value);
 
@@ -88,6 +66,30 @@ const RecruitForm = (props: RecruitFormProps) => {
       </form>
     </FormProvider>
   );
+};
+
+const defaultRecruitFormValues: RecruitFormValues = {
+  category: '프로젝트',
+  participants: {
+    project: [
+      {
+        part: '',
+        count: 1,
+      },
+    ],
+    study: [
+      {
+        part: '스터디',
+        count: 1,
+      },
+    ],
+  },
+  endDate: '',
+  skills: {},
+  title: '',
+  content: '',
+  questionToApplicants: '',
+  contact: '',
 };
 
 export default RecruitForm;
