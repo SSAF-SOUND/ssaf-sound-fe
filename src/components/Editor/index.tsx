@@ -92,7 +92,7 @@ const formats = [
   'header',
   'bold',
   'underline',
-  'ordered',
+  'list',
   'bullet',
   'link',
   'code',
