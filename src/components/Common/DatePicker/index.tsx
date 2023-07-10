@@ -32,7 +32,15 @@ interface DatePickerProps extends CustomCalendarProps {
 
 /* constants */
 const tileSize = 44;
+const tileGap = 4;
+const tileCountPerRow = 7;
+const datePickerPadding = 8;
 const navigationHeight = 44;
+const datePickerSize =
+  tileSize * tileCountPerRow +
+  tileGap * (tileCountPerRow - 1) +
+  datePickerPadding * 2;
+
 const formatDay: CalendarProps['formatDay'] = (locale, date) =>
   date.getDate().toString();
 
@@ -114,7 +122,7 @@ const monthViewWeekdayContainerCss = css(
 );
 
 const monthViewTileContainerCss = css({
-  gap: 4,
+  gap: tileGap,
   justifyContent: 'center',
 });
 
@@ -153,8 +161,7 @@ const monthViewNeighboringTileCss = css({
 
 const datePickerCss = css({
   background: palettes.white,
-  width: 350,
-  // minHeight: 382,
+  width: datePickerSize,
   padding: 8,
   borderRadius: 12,
   '& button': {
