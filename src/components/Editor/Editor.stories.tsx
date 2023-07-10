@@ -46,7 +46,11 @@ export const LengthTest = () => {
   };
 
   return (
-    <>
+    <div>
+      <div css={lengthCss}>
+        <p style={lengthStyle(textLength)}>Text Length: {textLength}</p>
+        <p style={lengthStyle(htmlLength)}>Html Length: {htmlLength}</p>
+      </div>
       <div>
         <Editor
           onChange={(value, _, __, editor) => {
@@ -55,23 +59,18 @@ export const LengthTest = () => {
           }}
         />
       </div>
-
-      <div css={lengthCss}>
-        <p style={lengthStyle(textLength)}>Text Length: {textLength}</p>
-        <p style={lengthStyle(htmlLength)}>Html Length: {htmlLength}</p>
-      </div>
-    </>
+    </div>
   );
 };
 
 const lengthCss = css(
   {
     width: '100%',
-    marginTop: 20,
+    padding: '10px 0',
     '& > *': {
       transition: 'color 300ms',
     },
   },
-  flex('', 'center', 'column', 20),
-  fontCss.style.B18
+  flex('center', '', 'column', 10),
+  fontCss.style.B16
 );
