@@ -172,7 +172,6 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     '&:disabled': {
       color: colorMix('50%', palettes.white),
       borderColor: colorMix('50%', palettes.white),
-      backgroundColor: colorMix('50%', 'transparent'),
     },
   }),
 };
