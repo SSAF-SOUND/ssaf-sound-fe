@@ -72,7 +72,7 @@ export const ControlledModal: ModalStory = {
           {dataArr.map((data) => (
             <Button
               key={data}
-              color="secondary"
+              theme="secondary"
               onClick={() => {
                 setOpen(true);
                 setSelectedData(data);

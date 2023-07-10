@@ -13,13 +13,21 @@ interface SkillBadgeProps extends ToggleProps {
 }
 
 const SkillBadge = (props: SkillBadgeProps) => {
-  const { name = 'React' } = props;
+  const { name = 'React', ...restProps } = props;
+  const displayName = nameMapper[name] ?? name;
+
   return (
-    <Toggle.Root css={[selfCss]}>
+    <Toggle.Root css={[selfCss]} {...restProps}>
       <SkillIcon name={name} size={SKILL_BADGE_ICON_SIZE} />
-      <span css={textCss}>{name}</span>
+      <span css={textCss}>{displayName}</span>
     </Toggle.Root>
   );
+};
+
+const nameMapper: Partial<Record<SkillType, string>> = {
+  IOS: 'iOS',
+  NextJs: 'Nextjs',
+  NodeJs: 'Nodejs',
 };
 
 const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
@@ -27,6 +35,9 @@ const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
   borderRadius: 16,
   cursor: 'pointer',
   border: `1px solid ${palettes.white}`,
+  color: palettes.white,
+  transition: 'color 200ms, background-color 200ms, border-color 200ms',
+  backgroundColor: 'transparent',
   '&:hover': {
     borderColor: palettes.primary.dark,
     color: palettes.primary.dark,
@@ -34,6 +45,7 @@ const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
   '&[data-state="on"]': {
     background: palettes.primary.darkest,
     borderColor: palettes.primary.darkest,
+    color: palettes.white,
   },
 });
 

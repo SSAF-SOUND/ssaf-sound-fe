@@ -41,6 +41,8 @@ interface SelectBoxProps<D = string> {
   //
   id?: string;
   focusOnMount?: boolean;
+  className?: string;
+  value?: string;
 }
 
 // eslint-disable-next-line
@@ -65,6 +67,8 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     //
     id,
     focusOnMount = false,
+    className,
+    value,
   } = props;
 
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -76,7 +80,7 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
   }, []);
 
   return (
-    <Select.Root onValueChange={onValueChange}>
+    <Select.Root onValueChange={onValueChange} value={value}>
       <Select.Trigger
         id={id}
         ref={triggerRef}
@@ -87,6 +91,7 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
           textAlignCss[triggerTextAlign],
           sizeCss[size],
         ]}
+        className={className}
         data-theme={theme}
         style={{ paddingLeft: triggerPaddingX, paddingRight: triggerPaddingX }}
       >
@@ -144,7 +149,7 @@ const triggerCss = {
   normal: css({
     backgroundColor: palettes.white,
     borderRadius: 8,
-    ':focus': {
+    '&:focus-visible': {
       outline: `3px solid ${themeColorVars.mainColor.var}`,
     },
   }),
@@ -153,7 +158,7 @@ const triggerCss = {
     border: `1px solid ${themeColorVars.mainColor.var}`,
     color: themeColorVars.mainColor.var,
     borderRadius: 16,
-    ':focus': {
+    '&:focus-visible': {
       outline: `3px solid ${themeColorVars.mainLightColor.var}`,
     },
   }),
@@ -205,7 +210,7 @@ const itemCss = {
     backgroundColor: palettes.white,
     color: palettes.black,
     '& + &': { borderTop: `1px solid ${palettes.grey3}` },
-    ':focus': {
+    '&:focus': {
       outline: 0,
       backgroundColor: themeColorVars.mainLightColor.var,
     },
@@ -213,7 +218,7 @@ const itemCss = {
   outlined: css({
     width: '100%',
     color: palettes.font.blueGrey,
-    ':focus': {
+    '&:focus': {
       outline: 0,
       color: themeColorVars.mainColor.var,
     },
@@ -241,7 +246,7 @@ const itemTextAlignCss = {
 
 const sizeCss = {
   sm: css({ height: 30 }, fontCss.style.B12),
-  md: css({ height: 38 }, fontCss.style.R14),
+  md: css({ height: 36 }, fontCss.style.R14),
   lg: css({ height: 44 }, fontCss.style.R16),
 };
 

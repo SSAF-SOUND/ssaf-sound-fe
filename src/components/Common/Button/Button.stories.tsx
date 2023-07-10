@@ -9,7 +9,6 @@ interface ButtonGroupProps {
 
 const ButtonGroup = (props: ButtonGroupProps) => {
   const { variant } = props;
-  const sizes = ['sm', 'md', 'lg'] as const;
   const colors = [
     'primary',
     'secondary',
@@ -24,7 +23,6 @@ const ButtonGroup = (props: ButtonGroupProps) => {
       style={{
         display: 'grid',
         gridTemplateColumns: `repeat(${colors.length}, 80px)`,
-        gridTemplateRows: `repeat(${sizes.length}, auto)`,
         gap: 20,
         justifyItems: 'center',
       }}
@@ -32,17 +30,11 @@ const ButtonGroup = (props: ButtonGroupProps) => {
       {colors.map((color) => (
         <span key={color}>{color}</span>
       ))}
-      {sizes.map((size) => {
+      {colors.map((color) => {
         return (
-          <>
-            {colors.map((color) => {
-              return (
-                <Button key={color} size={size} variant={variant} color={color}>
-                  버튼
-                </Button>
-              );
-            })}
-          </>
+          <Button size="sm" key={color} variant={variant} theme={color}>
+            버튼
+          </Button>
         );
       })}
 
@@ -51,9 +43,9 @@ const ButtonGroup = (props: ButtonGroupProps) => {
         return (
           <Button
             key={color}
-            size="md"
+            size="sm"
             variant={variant}
-            color={color}
+            theme={color}
             disabled
           >
             버튼
@@ -67,9 +59,9 @@ const ButtonGroup = (props: ButtonGroupProps) => {
           <Button
             style={{ width: 80 }}
             key={color}
-            size="md"
+            size="sm"
             variant={variant}
-            color={color}
+            theme={color}
             loading
           >
             버튼
@@ -115,7 +107,6 @@ export const SingleButton: ButtonStory = {
     color: 'primary',
     loading: false,
   },
-
 };
 
 export const Filled: ButtonGroupStory = {
@@ -126,6 +117,14 @@ export const Outlined: ButtonGroupStory = {
   render: () => <ButtonGroup variant="outlined" />,
 };
 
+export const Inverse: ButtonGroupStory = {
+  render: () => <ButtonGroup variant="inverse" />,
+};
+
 export const Text: ButtonGroupStory = {
   render: () => <ButtonGroup variant="text" />,
+};
+
+export const Literal: ButtonGroupStory = {
+  render: () => <ButtonGroup variant="literal" />,
 };
