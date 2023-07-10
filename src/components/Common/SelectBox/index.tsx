@@ -95,7 +95,9 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
         data-theme={theme}
         style={{ paddingLeft: triggerPaddingX, paddingRight: triggerPaddingX }}
       >
-        <Select.Value placeholder={placeholder} />
+        <div css={valueCss}>
+          <Select.Value placeholder={placeholder} />
+        </div>
         <Select.Icon
           css={[baseTriggerIconCss, triggerIconCss[variant], iconSizeCss[size]]}
         />
@@ -142,6 +144,7 @@ const baseTriggerCss = css(
     width: '100%',
     position: 'relative',
   },
+  flex('center', 'flex-start', 'row'),
   fontCss.family.auto
 );
 
@@ -164,15 +167,16 @@ const triggerCss = {
   }),
 };
 
+const valueCss = css({
+  flexGrow: 1,
+});
+
 const baseTriggerIconCss = css({
   userSelect: 'none',
-  position: 'absolute',
-  transform: 'translate3d(0, -50%, 0)',
-  top: '50%',
   color: themeColorVars.mainDarkColor.var,
   transition: 'transform 200ms',
   '[data-state="open"] &': {
-    transform: 'translate3d(0, -50%, 0) rotate(180deg)',
+    transform: 'rotate(180deg)',
   },
 });
 
@@ -197,6 +201,7 @@ const viewportCss = {
   normal: css({
     borderRadius: 8,
     backgroundColor: palettes.white,
+    border: `1px solid ${palettes.grey3}`,
   }),
   outlined: css({
     borderRadius: 16,
