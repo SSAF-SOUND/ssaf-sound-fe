@@ -31,15 +31,9 @@ interface DatePickerProps extends CustomCalendarProps {
 }
 
 /* constants */
-const tileSize = 44;
-const tileGap = 4;
-const tileCountPerRow = 7;
-const datePickerPadding = 8;
+const tileMinSize = 34;
+const tileMaxSize = 44;
 const navigationHeight = 44;
-const datePickerSize =
-  tileSize * tileCountPerRow +
-  tileGap * (tileCountPerRow - 1) +
-  datePickerPadding * 2;
 
 const formatDay: CalendarProps['formatDay'] = (locale, date) =>
   date.getDate().toString();
@@ -93,7 +87,7 @@ const navigationLabelCss = css(
 
 const navigationCss = css(
   {
-    padding: '0 8px',
+    paddingLeft: 8,
     height: navigationHeight,
     marginBottom: 4,
     gap: 10,
@@ -122,17 +116,21 @@ const monthViewWeekdayContainerCss = css(
 );
 
 const monthViewTileContainerCss = css({
-  gap: tileGap,
-  justifyContent: 'center',
+  display: 'grid !important',
+  gridTemplateColumns: `repeat(7, max(${tileMinSize}px, min(10vw, ${tileMaxSize}px)))`,
+  gridAutoRows: `max(${tileMinSize}px, min(10vw, ${tileMaxSize}px))`,
+  alignItems: 'center',
+  rowGap: 6,
+  columnGap: 4,
 });
 
 const monthViewTileCss = css(
   {
     backgroundColor: palettes.white,
     cursor: 'pointer',
+    width: '100%',
+    height: '100%',
     padding: 0,
-    width: tileSize,
-    height: tileSize,
     borderRadius: '50%',
     flex: 'unset !important',
     color: palettes.font.grey,
@@ -161,7 +159,6 @@ const monthViewNeighboringTileCss = css({
 
 const datePickerCss = css({
   background: palettes.white,
-  width: datePickerSize,
   padding: 8,
   borderRadius: 12,
   '& button': {
