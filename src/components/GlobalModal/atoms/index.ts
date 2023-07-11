@@ -3,7 +3,6 @@ import type { ComponentProps } from 'react';
 import type Modal from '~/components/Common/Modal';
 
 import { atom } from 'jotai';
-import { atomWithReset, RESET } from 'jotai/utils';
 
 // modal open & close
 const isOpenAtom = atom(false);
