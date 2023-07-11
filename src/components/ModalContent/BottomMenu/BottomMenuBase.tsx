@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import type { MouseEventHandler, ReactElement } from 'react';
 
 import { css } from '@emotion/react';
 
@@ -10,10 +10,11 @@ import { BottomMenuCloseButton } from './BottomMenuButton';
 interface BottomMenuBaseProps {
   title: string;
   buttonElements: ReactElement;
+  onClickDefaultCloseButton?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const BottomMenuBase = (props: BottomMenuBaseProps) => {
-  const { title, buttonElements } = props;
+  const { title, buttonElements, onClickDefaultCloseButton } = props;
   return (
     <div css={selfCss}>
       <div css={buttonContainerCss}>
@@ -22,7 +23,10 @@ const BottomMenuBase = (props: BottomMenuBaseProps) => {
       </div>
 
       <div css={buttonContainerCss}>
-        <BottomMenuCloseButton css={closeButtonCss}>
+        <BottomMenuCloseButton
+          css={closeButtonCss}
+          onClick={onClickDefaultCloseButton}
+        >
           <VisuallyHidden>닫기 버튼</VisuallyHidden>
         </BottomMenuCloseButton>
       </div>
