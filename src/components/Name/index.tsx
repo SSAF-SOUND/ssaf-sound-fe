@@ -1,46 +1,45 @@
 import type { SerializedStyles } from '@emotion/react';
+import type { UserSsafyInfo, UserBasicInfo } from '~/services/member/utils';
 
 import { css } from '@emotion/react';
 
+import { MajorType } from '~/services/member/utils';
 import { fontCss, inlineFlex } from '~/styles/utils';
 
-import { Avatar, SsafyIcon } from '../Common';
+import { Avatar, SsafyIcon, TrackSize } from '../Common';
 
-interface NameProps {
-  nickname: string;
-  ssafyMember: boolean;
+type BasicInfo = Pick<UserBasicInfo, 'isMajor' | 'nickname'>;
+export type NameProps = {
+  userSsafyInfo: UserSsafyInfo;
   size?: NameSize;
-
-  // 타입 임시
-  certificationState?: null | 'UNCERTIFIED' | 'WAITING' | 'CERTIFIED';
-  isMajor?: boolean;
-  majorType?: 'uncertified' | 'embedded' | 'python' | 'java' | 'mobile' | null;
-}
+} & BasicInfo;
 
 type NameSize = 'sm' | 'md' | 'lg';
-type TrackSize = 10 | 15 | 32;
 
 const Name = (props: NameProps) => {
   const {
     size = 'lg',
-    nickname = 'Kimmie',
-    ssafyMember = true,
-    isMajor = true,
-    majorType = 'mobile',
+    nickname = '쌒사운드',
+    isMajor,
+    userSsafyInfo = {
+      ssafyMember: true,
+      ssafyInfo: {
+        majorType: MajorType['MOBILE'],
+        certificationState: true,
+      },
+    },
   } = props;
 
-  const defaultImage = 'primaryDefault';
-  const hasMajorType = !!majorType;
+  const { ssafyMember, ssafyInfo } = userSsafyInfo;
 
   return (
     <span css={[selfCss, gapCss[size]]}>
       <Avatar size={size} nickName={nickname} major={isMajor} />
-      <span css={[[textCss[size]], fontCss.family.pretendard]}>{nickname}</span>
+      <span css={[textCss[size], fontCss.family.auto]}>{nickname}</span>
       {ssafyMember && (
         <SsafyIcon.Track
-          name={hasMajorType ? majorType : defaultImage}
+          name={ssafyInfo?.majorType || 'fallback'}
           size={trackSize[size]}
-          containerStyle={{ padding: 0 }}
         />
       )}
     </span>
@@ -68,9 +67,9 @@ const textCss: Record<NameSize, SerializedStyles> = {
 };
 
 const trackSize: Record<NameSize, TrackSize> = {
-  sm: 10,
-  md: 15,
-  lg: 32,
+  sm: TrackSize['SM1'],
+  md: TrackSize['SM2'],
+  lg: TrackSize['SM3'],
 };
 
 export default Name;
