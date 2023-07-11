@@ -42,6 +42,7 @@ export const Track = (props: TrackProps) => {
         size="lg"
         focusOnMount
         onValueChange={handleChangeTrack}
+        itemPaddingX={40}
       />
     </div>
   );

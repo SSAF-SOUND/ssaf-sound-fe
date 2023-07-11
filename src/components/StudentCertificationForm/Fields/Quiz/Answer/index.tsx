@@ -5,16 +5,18 @@ import { useWatch } from 'react-hook-form';
 
 import { AlertText, Button, TextInput } from '~/components/Common';
 import { useStudentCertificationFormContext } from '~/components/StudentCertificationForm/utils';
+import { flex } from '~/styles/utils';
 
 const fieldName = 'answer';
 const maxLength = 20;
 
 interface AnswerProps {
   fieldId: string;
+  className?: string;
 }
 
 const Answer = (props: AnswerProps) => {
-  const { fieldId } = props;
+  const { fieldId, className } = props;
   const {
     register,
     formState: { isSubmitting, errors },
@@ -25,7 +27,7 @@ const Answer = (props: AnswerProps) => {
   }) as string;
 
   return (
-    <>
+    <div className={className}>
       <div>
         <TextInput
           css={textInputCss}
@@ -55,7 +57,7 @@ const Answer = (props: AnswerProps) => {
       >
         확인
       </Button>
-    </>
+    </div>
   );
 };
 

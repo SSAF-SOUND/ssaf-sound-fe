@@ -10,68 +10,68 @@ const QuestionMap = (props: QuestionMapProps) => {
   switch (year) {
     case 1:
       return (
-        <p>
+        <span>
           SSAFY는 <Blank length={2} />
           이다!
-        </p>
+        </span>
       );
     case 2:
       return (
-        <p>
+        <span>
           SSAFY는 <Blank length={2} /> 다!
-        </p>
+        </span>
       );
     case 3:
       return (
-        <p>
+        <span>
           SSAFY는 <Blank length={2} /> 다!
-        </p>
+        </span>
       );
     case 4:
       return (
-        <p>
+        <span>
           사기로 <Blank length={2} />
           ~~
-        </p>
+        </span>
       );
     case 5:
       return (
-        <p>
+        <span>
           오기로 <Blank length={2} />
           !!
-        </p>
+        </span>
       );
     case 6:
       return (
-        <p>
+        <span>
           열정6기 <Blank length={3} />~<Blank length={2} />
-        </p>
+        </span>
       );
     case 7:
       return (
-        <p>
+        <span>
           <Blank length={2} />
           7기
-        </p>
+        </span>
       );
     case 8:
       return (
-        <p>
+        <span>
           <Blank length={3} />기
-        </p>
+        </span>
       );
     case 9:
       return (
-        <p>
+        <span>
           <Blank length={5} />~ 9기
-        </p>
+        </span>
       );
     case 10:
       return (
-        <p>
+        <span>
           <Blank length={2} />
           Up!
-        </p>
+        </span>
       );
     default:
       throw new Error(`잘못된 기수가 입력되었습니다. year: ${year}`);
