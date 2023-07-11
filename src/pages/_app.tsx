@@ -8,6 +8,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 
 import AuthChecker from '~/components/AuthChecker';
 import Background from '~/components/Background';
+import { GlobalModal } from '~/components/GlobalModal';
 import { MainLayout } from '~/components/Layout';
 import { useMSW } from '~/hooks';
 import { initServerMocks } from '~/mocks';
@@ -43,6 +44,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
             )}
           </MainLayout>
         </ReduxProvider>
+        <GlobalModal />
       </Hydrate>
     </QueryClientProvider>
   );
