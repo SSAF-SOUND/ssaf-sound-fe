@@ -5,11 +5,11 @@ import { useId, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { SelectBox } from '~/components/Common';
-import Blank from '~/components/StudentCertificationForm/Fields/Quiz/Question/Blank';
 import { useStudentCertificationFormContext } from '~/components/StudentCertificationForm/utils';
 import { years } from '~/services/member';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
+import Blank from './Blank';
 import QuestionMap from './QuestionMap';
 
 const fieldName = 'year';

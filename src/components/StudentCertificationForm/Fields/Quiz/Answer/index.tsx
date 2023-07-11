@@ -5,7 +5,6 @@ import { useWatch } from 'react-hook-form';
 
 import { AlertText, Button, TextInput } from '~/components/Common';
 import { useStudentCertificationFormContext } from '~/components/StudentCertificationForm/utils';
-import { flex } from '~/styles/utils';
 
 const fieldName = 'answer';
 const maxLength = 20;
