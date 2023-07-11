@@ -23,7 +23,7 @@ const Answer = (props: AnswerProps) => {
 
   const answer = useWatch<StudentCertificationFormValues>({
     name: fieldName,
-  }) as string;
+  }) as string | undefined;
 
   return (
     <div className={className}>
@@ -51,7 +51,7 @@ const Answer = (props: AnswerProps) => {
         css={buttonCss}
         size="lg"
         loading={isSubmitting}
-        disabled={!answer.length}
+        disabled={!answer?.length}
         type="submit"
       >
         확인

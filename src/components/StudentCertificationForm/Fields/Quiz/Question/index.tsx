@@ -18,7 +18,7 @@ const Question = () => {
   const selectBoxId = useId();
   const {
     setValue,
-    formState: { defaultValues: { year: defaultYear } = {} },
+    formState: { defaultValues: { year: defaultYear = 1 } = {} },
   } = useStudentCertificationFormContext();
   const items = useMemo(() => years.map(String), []);
 
