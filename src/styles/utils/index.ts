@@ -8,4 +8,3 @@ export * from './position';
 export * from './pxToRem';
 export * from './themeColorVars';
 export * from './toCssVar';
-export * from './getRecruitThemeByCategory';
