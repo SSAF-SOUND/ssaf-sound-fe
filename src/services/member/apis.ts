@@ -1,4 +1,4 @@
-import type { UserInfo } from './utils/types';
+import type { UserInfo, MajorType } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
@@ -38,4 +38,23 @@ export const validateNickname = (params: ValidateNicknameParams) => {
   const endpoint = endpoints.user.nickname();
 
   return privateAxios.post(endpoint, params).then((res) => res.data);
+};
+
+export interface CertifyStudentParams {
+  majorType: MajorType;
+  semester: number;
+  answer: string;
+}
+
+export type CertifyStudentApiData = ApiSuccessResponse<{
+  possible: boolean;
+  certificationInquiryCount: number;
+}>;
+
+export const certifyStudent = (params: CertifyStudentParams) => {
+  const endpoint = endpoints.user.studentCertification();
+
+  return privateAxios
+    .post<CertifyStudentApiData>(endpoint, params)
+    .then((res) => res.data.data);
 };
