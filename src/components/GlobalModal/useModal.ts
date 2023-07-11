@@ -28,11 +28,12 @@ export const useModal = () => {
       options: Partial<OpenModalOptions> = {}
     ) => {
       const { onEscapeKeyDown, onPointerDownOutside } = options;
-      __openModal();
+      if (onEscapeKeyDown) __setOnEscapeKeyDown(() => onEscapeKeyDown);
+      if (onPointerDownOutside)
+        __setOnPointerDownOutside(() => onPointerDownOutside);
       __setModalId(id);
       __setModalProps(modalProps);
-      if (onEscapeKeyDown) __setOnEscapeKeyDown(onEscapeKeyDown);
-      if (onPointerDownOutside) __setOnPointerDownOutside(onPointerDownOutside);
+      __openModal();
     },
     [
       __openModal,
