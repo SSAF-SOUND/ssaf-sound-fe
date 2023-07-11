@@ -28,9 +28,8 @@ export const useModal = () => {
       options: Partial<OpenModalOptions> = {}
     ) => {
       const { onEscapeKeyDown, onPointerDownOutside } = options;
-      if (onEscapeKeyDown) __setOnEscapeKeyDown(() => onEscapeKeyDown);
-      if (onPointerDownOutside)
-        __setOnPointerDownOutside(() => onPointerDownOutside);
+      __setOnEscapeKeyDown(() => onEscapeKeyDown);
+      __setOnPointerDownOutside(() => onPointerDownOutside);
       __setModalId(id);
       __setModalProps(modalProps);
       __openModal();
