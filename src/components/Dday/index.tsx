@@ -2,11 +2,8 @@ import type { RecruitCategory } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
-import {
-  fontCss,
-  getRecruitThemeByCategory,
-  themeColorVars,
-} from '~/styles/utils';
+import { getRecruitThemeByCategory } from '~/services/recruit';
+import { fontCss, themeColorVars } from '~/styles/utils';
 import { getDateDiff } from '~/utils';
 
 export interface DdayProps {
