@@ -1,10 +1,7 @@
 import { useId } from 'react';
 
-import { Answer } from '~/components/StudentCertificationForm/Fields/Quiz/Answer';
-
+import Answer from './Answer';
 import Question from './Question';
-
-const maxTries = 3;
 
 export const Quiz = () => {
   const answerId = useId();
