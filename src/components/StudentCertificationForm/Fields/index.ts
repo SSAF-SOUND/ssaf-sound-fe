@@ -1,2 +1,2 @@
 export * from './Track';
-export * from './Answer';
+export * from './Quiz';

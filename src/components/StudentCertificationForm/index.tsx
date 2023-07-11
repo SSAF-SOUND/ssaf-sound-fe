@@ -3,7 +3,7 @@ import type { SubmitHandler } from 'react-hook-form';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Answer } from './Fields';
+import { Quiz } from './Fields';
 
 interface StudentCertificationFormProps {
   onSubmit?: SubmitHandler<StudentCertificationFormValues>;
@@ -19,7 +19,7 @@ const StudentCertificationForm = (props: StudentCertificationFormProps) => {
   return (
     <FormProvider {...methods}>
       <form>
-        <Answer  />
+        <Quiz />
       </form>
     </FormProvider>
   );

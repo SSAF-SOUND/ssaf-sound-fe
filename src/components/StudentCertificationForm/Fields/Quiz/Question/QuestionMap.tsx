@@ -1,10 +1,10 @@
 import Blank from './Blank';
 
-interface QuestionProps {
+interface QuestionMapProps {
   year: number;
 }
 
-const Question = (props: QuestionProps) => {
+const QuestionMap = (props: QuestionMapProps) => {
   const { year } = props;
 
   switch (year) {
@@ -78,4 +78,4 @@ const Question = (props: QuestionProps) => {
   }
 };
 
-export default Question;
+export default QuestionMap;
