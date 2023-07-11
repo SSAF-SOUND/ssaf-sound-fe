@@ -36,15 +36,11 @@ const Name = (props: NameProps) => {
     <span css={[selfCss, gapCss[size]]}>
       <Avatar size={size} nickName={nickname} major={isMajor} />
       <span css={[textCss[size], fontCss.family.auto]}>{nickname}</span>
-      {ssafyMember ? (
+      {ssafyMember && (
         <SsafyIcon.Track
-          // 메이저 타입이 존재하지 않으면 fallback
           name={ssafyInfo?.majorType || 'fallback'}
           size={trackSize[size]}
         />
-      ) : (
-        // ssafyMember가 아니라면 미인증
-        <SsafyIcon.Track name={'uncertified'} size={trackSize[size]} />
       )}
     </span>
   );
