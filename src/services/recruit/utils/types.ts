@@ -49,3 +49,5 @@ export interface SkillsType {
   name: SkillType;
   skillId: number;
 }
+
+export type RecruitCategoryType = 'study' | 'project';
