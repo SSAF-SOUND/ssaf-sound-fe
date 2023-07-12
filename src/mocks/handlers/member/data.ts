@@ -1,6 +1,6 @@
 import type { UserInfo } from '~/services/member';
 
-import { CertificationState } from '~/services/member';
+import { CertificationState, SsafyTrack } from '~/services/member';
 
 const initialUserInfo: UserInfo = {
   memberId: 434,
@@ -9,15 +9,27 @@ const initialUserInfo: UserInfo = {
   ssafyMember: null,
   isMajor: false,
 };
-const ssafyUserInfo: UserInfo = {
+const certifiedSsafyUserInfo: UserInfo = {
   ...initialUserInfo,
   ssafyMember: true,
   isMajor: false,
   ssafyInfo: {
     semester: 1,
     campus: '구미',
-    majorTrack: undefined,
+    certificationState: CertificationState.CERTIFIED,
+    majorTrack: SsafyTrack.EMBEDDED,
+  },
+};
+
+const uncertifiedSsafyUserInfo: UserInfo = {
+  ...initialUserInfo,
+  ssafyMember: true,
+  isMajor: false,
+  ssafyInfo: {
+    semester: 1,
+    campus: '구미',
     certificationState: CertificationState.UNCERTIFIED,
+    majorTrack: null,
   },
 };
 
@@ -29,6 +41,7 @@ const nonSsafyUserInfo: UserInfo = {
 
 export const userInfo = {
   initialUserInfo,
-  ssafyUserInfo,
+  certifiedSsafyUserInfo,
+  uncertifiedSsafyUserInfo,
   nonSsafyUserInfo,
 };
