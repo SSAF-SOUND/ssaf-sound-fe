@@ -37,17 +37,20 @@ export const getRecruitDetail = () => {
 export type GetRecruitsApiData = ApiSuccessResponse<RecruitsParams>;
 
 export interface RecruitsParams {
+  recruits: RecruitParams[];
+  currentPage: number;
+  totalPages: number;
+  lastPage: boolean;
+}
+
+export interface RecruitParams {
   recruitId: number;
   title: string;
   finishedRecruit: boolean;
   recruitEnd: string;
   skills: SkillsType[];
   participants: RecruitParticipantParams[];
-  currentPage: number;
-  totalPages: number;
-  lastPage: boolean;
 }
-
 export interface RecruitParticipantParams {
   recruitType: RecruitType;
   limit: number;
