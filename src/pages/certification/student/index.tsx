@@ -4,16 +4,18 @@ import type { StudentCertificationFormValues } from '~/components/StudentCertifi
 import router from 'next/router';
 
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import DelayedRedirection from '~/components/DelayedRedirection';
 import { useModal } from '~/components/GlobalModal';
+import PreviewCertifiedMyInfo from '~/components/PreviewCertifiedMyInfo';
 import StudentCertificationForm from '~/components/StudentCertificationForm';
 import {
   CertificationState,
   useCertifyStudent,
   useMyInfo,
+  useSetMyInfo,
 } from '~/services/member';
 import {
   customToast,
@@ -29,17 +31,18 @@ const maxAttempts = 3;
 const StudentCertificationPage: CustomNextPage = () => {
   const { data } = useMyInfo();
   const myInfo = data as NonNullable<typeof data>;
-  const [certificationSuccess, setCertificationSuccess] = useState(false);
+  const setMyInfo = useSetMyInfo();
   const { openModal, closeModal } = useModal();
   const { mutateAsync: certifyStudent } = useCertifyStudent();
+  const [certificationSuccess, setCertificationSuccess] = useState(false);
 
-  useEffect(() => {
-    if (certificationSuccess) {
-      setTimeout(() => {
-        router.replace(routes.main());
-      }, 2000);
-    }
-  }, [certificationSuccess]);
+  if (certificationSuccess) {
+    return (
+      <DelayedRedirection to={routes.main()} seconds={3}>
+        <PreviewCertifiedMyInfo userInfo={myInfo} />
+      </DelayedRedirection>
+    );
+  }
 
   if (
     !myInfo.ssafyMember ||
@@ -78,7 +81,7 @@ const StudentCertificationPage: CustomNextPage = () => {
     );
   };
 
-  const handleCorrectAnswer = () => {
+  const handleCorrectAnswer = (onClickAction?: () => void) => {
     openModal(
       'alert',
       {
@@ -87,6 +90,7 @@ const StudentCertificationPage: CustomNextPage = () => {
         actionText: '확인',
         onClickAction: () => {
           closeModal();
+          onClickAction?.();
           setCertificationSuccess(true);
         },
       },
@@ -102,15 +106,26 @@ const StudentCertificationPage: CustomNextPage = () => {
     try {
       const { certificationInquiryCount, possible } = await certifyStudent({
         answer,
-        majorType: track,
+        majorTrack: track,
         semester: year,
       });
 
       if (!possible) {
         handleIncorrectAnswer(maxAttempts - certificationInquiryCount);
-      } else {
-        handleCorrectAnswer();
+        return;
       }
+
+      handleCorrectAnswer(() => {
+        setMyInfo({
+          ...myInfo,
+          ssafyInfo: {
+            ...myInfo?.ssafyInfo,
+            certificationState: CertificationState.CERTIFIED,
+            semester: year,
+            majorTrack: track,
+          },
+        });
+      });
     } catch (err) {
       handleAxiosError(err, {
         onClientError: ({ code, message }) => {
@@ -127,18 +142,12 @@ const StudentCertificationPage: CustomNextPage = () => {
 
   return (
     <div css={selfCss}>
-      {certificationSuccess ? (
-        <DelayedRedirection to={routes.main()} seconds={3}>
-          <>캐릭터 프로필 컴포넌트</>
-        </DelayedRedirection>
-      ) : (
-        <StudentCertificationForm
-          onSubmit={onSubmit}
-          defaultValues={{
-            year: myInfo.ssafyInfo.semester,
-          }}
-        />
-      )}
+      <StudentCertificationForm
+        onSubmit={onSubmit}
+        defaultValues={{
+          year: myInfo.ssafyInfo.semester,
+        }}
+      />
     </div>
   );
 };
