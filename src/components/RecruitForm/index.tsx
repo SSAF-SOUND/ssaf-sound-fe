@@ -32,7 +32,7 @@ interface RecruitFormOptions {
 
 interface RecruitFormProps {
   onSubmit?: SubmitHandler<RecruitFormValues>;
-  defaultValues?: RecruitFormValues;
+  defaultValues?: Partial<RecruitFormValues>;
   options?: Partial<RecruitFormOptions>;
 }
 

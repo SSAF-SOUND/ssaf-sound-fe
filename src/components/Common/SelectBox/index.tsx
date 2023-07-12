@@ -43,6 +43,7 @@ interface SelectBoxProps<D = string> {
   focusOnMount?: boolean;
   className?: string;
   value?: string;
+  defaultValue?: string;
 }
 
 // eslint-disable-next-line
@@ -69,6 +70,7 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     focusOnMount = false,
     className,
     value,
+    defaultValue,
   } = props;
 
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -80,7 +82,11 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
   }, []);
 
   return (
-    <Select.Root onValueChange={onValueChange} value={value}>
+    <Select.Root
+      onValueChange={onValueChange}
+      value={value}
+      defaultValue={defaultValue}
+    >
       <Select.Trigger
         id={id}
         ref={triggerRef}
@@ -232,7 +238,7 @@ const itemCss = {
 
 const paddingCss = {
   normal: css({
-    padding: '0 30px',
+    padding: '0 20px',
   }),
   outlined: css({
     padding: '0px 16px',

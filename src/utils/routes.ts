@@ -8,6 +8,9 @@ export const routes = {
 
   //
   certification: {
-    ssafy: () => '/certification/ssafy',
+    ssafy: () => '/certification/student',
   },
+
+  //
+  unauthorized: () => '/unauthorized',
 };

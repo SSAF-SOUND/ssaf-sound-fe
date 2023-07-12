@@ -6,17 +6,26 @@ import { SkillNameSet } from '~/services/recruit';
 import { defaultify } from '~/utils';
 import { pickBy } from '~/utils/object';
 
-export const populateDefaultValues = (unsafeValues: RecruitFormValues) => {
+export const populateDefaultValues = (
+  unsafeValues: Partial<RecruitFormValues> = {}
+) => {
   const {
-    category,
-    participants: { project, study },
-    skills,
-    endDate,
+    category = '',
+    participants: { project = [], study = [] } = {},
+    skills = {},
+    endDate = '',
+    title = '',
+    content = '',
+    contact = '',
+    questionToApplicants = '',
   } = unsafeValues;
 
   const tomorrow = dayjs().add(1, 'day');
   const safeValues: RecruitFormValues = {
-    ...unsafeValues,
+    title,
+    content,
+    contact,
+    questionToApplicants,
     category: defaultify(category, [
       (v) => !['프로젝트', '스터디'].includes(v),
     ]).to(defaultCategory),

@@ -10,7 +10,12 @@ import { useForm, useFormContext } from 'react-hook-form';
 import { queryKeys } from '~/react-query/common';
 import { routes } from '~/utils/routes';
 
-import { getMyInfo, updateMyInfo, validateNickname } from './apis';
+import {
+  certifyStudent,
+  getMyInfo,
+  updateMyInfo,
+  validateNickname,
+} from './apis';
 
 interface UseMyInfoOptions {
   enabled?: boolean;
@@ -106,5 +111,11 @@ export const useUpdateMyInfo = () => {
 export const useValidateNickname = () => {
   return useMutation({
     mutationFn: validateNickname,
+  });
+};
+
+export const useCertifyStudent = () => {
+  return useMutation({
+    mutationFn: certifyStudent,
   });
 };

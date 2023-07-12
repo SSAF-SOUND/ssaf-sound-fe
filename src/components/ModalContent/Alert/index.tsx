@@ -43,7 +43,9 @@ const Alert = (props: AlertProps) => {
         {title && <Modal.Title css={titleCss}>{title}</Modal.Title>}
         {description && (
           <Modal.Description asChild>
-            <div css={!title && fontCss.style.R16}>{description}</div>
+            <div css={[{ textAlign: 'center' }, !title && fontCss.style.R16]}>
+              {description}
+            </div>
           </Modal.Description>
         )}
       </div>
@@ -89,7 +91,7 @@ const descriptionCss = css(
     color: palettes.black,
   },
   fontCss.style.R14,
-  flex('center', 'center')
+  flex('center', 'center', 'column', 4)
 );
 
 const titleCss = css(fontCss.style.B16);

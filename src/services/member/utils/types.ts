@@ -17,11 +17,11 @@ export interface SsafyBasicInfo {
 
 export type SsafyInfo =
   | (SsafyBasicInfo & {
-      majorType?: undefined;
+      majorTrack?: undefined;
       certificationState: CertificationState.UNCERTIFIED;
     })
   | (SsafyBasicInfo & {
-      majorType?: MajorType;
+      majorTrack?: SsafyTrack;
       certificationState: CertificationState.CERTIFIED;
     });
 
@@ -30,7 +30,7 @@ export enum CertificationState {
   CERTIFIED = 'CERTIFIED',
 }
 
-export enum MajorType {
+export enum SsafyTrack {
   PYTHON = 'python',
   EMBEDDED = 'embedded',
   JAVA = 'java',
