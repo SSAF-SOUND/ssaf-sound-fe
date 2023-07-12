@@ -9,13 +9,14 @@ import { fontCss, inlineFlex } from '~/styles/utils';
 
 export type NameProps = {
   userInfo: UserInfo;
+  withAvatar?: boolean;
   size?: NameSize;
 };
 
 type NameSize = 'sm' | 'md' | 'lg';
 
 const Name = (props: NameProps) => {
-  const { size = 'sm', userInfo } = props;
+  const { size = 'sm', withAvatar = true, userInfo } = props;
   const {
     // basic info
     nickname,
@@ -31,7 +32,7 @@ const Name = (props: NameProps) => {
 
   return (
     <span css={selfCss}>
-      <Avatar size={size} userInfo={userInfo} />
+      {withAvatar && <Avatar size={size} userInfo={userInfo} />}
       <span css={[textBaseCss, textCss[size], fontCss.family.auto]}>
         {nickname}
       </span>

@@ -50,7 +50,8 @@ export const Default: NameStory = {
   },
 
   render: (args: NameStoryArgs) => {
-    const { nickname, isMajor, certificationState, track, size } = args;
+    const { nickname, isMajor, certificationState, track, size, ...restArgs } =
+      args;
     const ssafyInfo =
       certificationState === CertificationState.CERTIFIED
         ? {
@@ -72,7 +73,7 @@ export const Default: NameStory = {
       },
     };
 
-    return <Name userInfo={user} size={size} />;
+    return <Name userInfo={user} size={size} {...restArgs} />;
   },
 };
 
