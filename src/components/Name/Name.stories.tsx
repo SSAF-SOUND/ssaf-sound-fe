@@ -1,6 +1,8 @@
+import type { NameProps } from './index';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { SsafyTrack, CertificationState } from '~/services/member/utils';
+import { userInfo } from '~/mocks/handlers/member/data';
+import { CertificationState, SsafyTrack } from '~/services/member';
 
 import Name from './index';
 
@@ -8,43 +10,76 @@ const meta: Meta<typeof Name> = {
   title: 'Name',
   component: Name,
   tags: ['autodocs'],
-  argTypes: {},
+  argTypes: {
+    userInfo: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 export default meta;
 
-type NameStory = StoryObj<typeof Name>;
+type NameStory = StoryObj<NameStoryArgs>;
+interface NameStoryArgs {
+  nickname: string;
+  isMajor: boolean;
+  certificationState: CertificationState;
+  track: SsafyTrack;
+  size: NameProps['size'];
+}
 
-export const NameStory: NameStory = {
-  name: 'Name',
+export const Default: NameStory = {
+  args: {
+    nickname: 'Kimee',
+    isMajor: false,
+    certificationState: CertificationState.UNCERTIFIED,
+    track: SsafyTrack.EMBEDDED,
+    size: 'sm',
+  },
+  argTypes: {
+    certificationState: {
+      control: 'radio',
+      options: Object.values(CertificationState),
+    },
+    track: {
+      control: 'radio',
+      options: Object.values(SsafyTrack),
+    },
+  },
+
+  render: (args: NameStoryArgs) => {
+    const { nickname, isMajor, certificationState, track, size } = args;
+    const ssafyInfo =
+      certificationState === CertificationState.CERTIFIED
+        ? {
+            certificationState,
+            majorTrack: track,
+          }
+        : {
+            certificationState,
+            majorTrack: null,
+          };
+
+    const user = {
+      ...userInfo.certifiedSsafyUserInfo,
+      nickname,
+      isMajor,
+      ssafyInfo: {
+        ...userInfo.certifiedSsafyUserInfo.ssafyInfo,
+        ...ssafyInfo,
+      },
+    };
+
+    return <Name userInfo={user} size={size} />;
+  },
 };
 
 export const Certified = () => {
-  return (
-    <Name
-      userSsafyInfo={{
-        ssafyMember: true,
-        ssafyInfo: {
-          majorTrack: SsafyTrack.MOBILE,
-          certificationState: CertificationState.CERTIFIED,
-          semester: 2,
-          campus: '서울',
-        },
-      }}
-      nickname="쌒사운드"
-      isMajor={true}
-    />
-  );
+  return <Name userInfo={userInfo.certifiedSsafyUserInfo} />;
 };
 
 export const UnCertified = () => {
-  return (
-    <Name
-      userSsafyInfo={{
-        ssafyMember: false,
-      }}
-      nickname="쌒사운드"
-      isMajor={false}
-    />
-  );
+  return <Name userInfo={userInfo.uncertifiedSsafyUserInfo} />;
 };

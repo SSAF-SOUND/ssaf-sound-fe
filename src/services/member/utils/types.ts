@@ -17,12 +17,12 @@ export interface SsafyBasicInfo {
 
 export type SsafyInfo =
   | (SsafyBasicInfo & {
-      majorTrack?: undefined;
       certificationState: CertificationState.UNCERTIFIED;
+      majorTrack: null;
     })
   | (SsafyBasicInfo & {
-      majorTrack?: SsafyTrack;
       certificationState: CertificationState.CERTIFIED;
+      majorTrack: SsafyTrack;
     });
 
 export enum CertificationState {

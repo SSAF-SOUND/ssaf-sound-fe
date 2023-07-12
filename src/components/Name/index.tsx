@@ -1,44 +1,44 @@
 import type { SerializedStyles } from '@emotion/react';
-import type { UserSsafyInfo, UserBasicInfo } from '~/services/member/utils';
+import type { UserInfo } from '~/services/member/utils';
 
 import { css } from '@emotion/react';
 
-import { SsafyTrack } from '~/services/member/utils';
+import { Avatar, SsafyIcon, TrackSize } from '~/components/Common';
+import { CertificationState } from '~/services/member/utils';
 import { fontCss, inlineFlex } from '~/styles/utils';
 
-import { Avatar, SsafyIcon, TrackSize } from '../Common';
-
-type BasicInfo = Pick<UserBasicInfo, 'isMajor' | 'nickname'>;
 export type NameProps = {
-  userSsafyInfo: UserSsafyInfo;
+  userInfo: UserInfo;
   size?: NameSize;
-} & BasicInfo;
+};
 
 type NameSize = 'sm' | 'md' | 'lg';
 
 const Name = (props: NameProps) => {
+  const { size = 'sm', userInfo } = props;
   const {
-    size = 'lg',
-    nickname = '쌒사운드',
+    // basic info
     isMajor,
-    userSsafyInfo = {
-      ssafyMember: true,
-      ssafyInfo: {
-        majorTrack: SsafyTrack['MOBILE'],
-        certificationState: true,
-      },
-    },
-  } = props;
+    nickname,
+    ssafyMember,
 
-  const { ssafyMember, ssafyInfo } = userSsafyInfo;
+    // ssafy info
+    ssafyInfo,
+  } = userInfo;
+
+  const showBadge =
+    ssafyMember &&
+    ssafyInfo?.certificationState === CertificationState.CERTIFIED;
+
+  // case 1: ssafyMember && uncertified (
 
   return (
     <span css={[selfCss, gapCss[size]]}>
       <Avatar size={size} nickName={nickname} major={isMajor} />
       <span css={[textCss[size], fontCss.family.auto]}>{nickname}</span>
-      {ssafyMember && (
+      {showBadge && (
         <SsafyIcon.Track
-          name={ssafyInfo?.majorTrack || 'fallback'}
+          name={ssafyInfo.majorTrack || 'fallback'}
           size={trackSize[size]}
         />
       )}

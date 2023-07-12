@@ -12,36 +12,27 @@ import PythonTrack from '~/assets/images/track-python.svg';
 import Uncertified from '~/assets/images/track-uncertified.svg';
 import { SsafyTrack } from '~/services/member/utils';
 import { inlineFlex } from '~/styles/utils';
+import { defaultify } from '~/utils';
 
-// MajorType을 ~/services/member 에서 가져오면 참조 오류가 발생하는데 이유를 잘 모르겠습니다.
+// SsafyTrack을 ~/services/member 에서 가져오면 참조 오류가 발생하는데 이유를 잘 모르겠습니다.
 // import 구문 옆에다 주석 달면 린트 오류가 발생해서 여기 적어둡니다.
 
 export interface TrackProps<Track extends keyof typeof tracks> {
-  /**
-   * API 명세에 `null`이 들어올 수 있다고 되어있는데
-   * 만약 그렇다면 `fetcher`에서 `null`을 `undefined`로 변환할 예정입니다.
-   */
   name?: Track;
-  label?: string;
   size?: TrackSize;
   style?: CSSProperties;
   theme?: Track extends 'fallback' | undefined ? FallbackTheme : undefined;
 }
 
 const Track = <T extends keyof typeof tracks>(props: TrackProps<T>) => {
-  const {
-    name = 'fallback',
-    label = name,
-    size = TrackSize.SM1,
-    style = {},
-    theme,
-  } = props;
+  const { name = 'fallback', size = TrackSize.SM1, style = {}, theme } = props;
+  const safeName = defaultify(name, [null]).to('fallback') as NonNullable<T>;
 
-  const TrackComponent = tracks[name];
+  const TrackComponent = tracks[safeName];
 
   return (
     <div css={selfCss}>
-      <AccessibleIcon label={label}>
+      <AccessibleIcon label={safeName}>
         <TrackComponent style={{ height: size, ...style }} theme={theme} />
       </AccessibleIcon>
     </div>
