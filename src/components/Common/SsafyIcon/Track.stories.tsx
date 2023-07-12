@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { MajorType } from '~/services/member';
+import { SsafyTrack } from '~/services/member';
 
 import Track, { TrackSize } from './Track';
 
@@ -14,7 +14,7 @@ export default meta;
 type TrackIconStory = StoryObj<typeof Track>;
 
 export const TrackIcon: TrackIconStory = {
-  args: { name: MajorType.MOBILE, size: TrackSize.SM1 },
+  args: { name: SsafyTrack.MOBILE, size: TrackSize.SM1 },
   argTypes: {
     label: {
       table: {
@@ -33,7 +33,7 @@ export const AllTrackIcons: TrackIconStory = {
   render: () => {
     const sizes = Object.values(TrackSize);
     const tracks = [
-      ...Object.values(MajorType),
+      ...Object.values(SsafyTrack),
       'fallback',
       'uncertified',
     ] as const;

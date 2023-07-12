@@ -3,7 +3,7 @@ import { useId, useMemo } from 'react';
 
 import { SelectBox } from '~/components/Common';
 import { useStudentCertificationFormContext } from '~/components/StudentCertificationForm/utils';
-import { MajorType } from '~/services/member/utils';
+import { SsafyTrack } from '~/services/member/utils';
 import { flex, fontCss } from '~/styles/utils';
 import { capitalize } from '~/utils';
 
@@ -17,10 +17,10 @@ export const Track = (props: TrackProps) => {
   const { onSelect } = props;
   const { setValue, register } = useStudentCertificationFormContext();
   const selectBoxId = useId();
-  const items = useMemo(() => Object.values(MajorType), []);
+  const items = useMemo(() => Object.values(SsafyTrack), []);
 
   const handleChangeTrack = (value: string) => {
-    setValue(fieldName, value as MajorType);
+    setValue(fieldName, value as SsafyTrack);
     onSelect();
   };
 

@@ -1,7 +1,7 @@
-import type { MajorType, SsafyInfo } from '~/services/member';
+import type { SsafyTrack, SsafyInfo } from '~/services/member';
 
 export interface StudentCertificationFormValues {
-  track: MajorType;
+  track: SsafyTrack;
   year: SsafyInfo['semester'];
   answer: string;
 }

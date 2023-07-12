@@ -10,7 +10,7 @@ import JavaTrack from '~/assets/images/track-java.svg';
 import MobileTrack from '~/assets/images/track-mobile.svg';
 import PythonTrack from '~/assets/images/track-python.svg';
 import Uncertified from '~/assets/images/track-uncertified.svg';
-import { MajorType } from '~/services/member/utils';
+import { SsafyTrack } from '~/services/member/utils';
 import { inlineFlex } from '~/styles/utils';
 
 // MajorType을 ~/services/member 에서 가져오면 참조 오류가 발생하는데 이유를 잘 모르겠습니다.
@@ -63,10 +63,10 @@ const FallbackTrack = (props: {
 };
 
 const tracks = {
-  [MajorType.EMBEDDED]: EmbeddedTrack,
-  [MajorType.PYTHON]: PythonTrack,
-  [MajorType.JAVA]: JavaTrack,
-  [MajorType.MOBILE]: MobileTrack,
+  [SsafyTrack.EMBEDDED]: EmbeddedTrack,
+  [SsafyTrack.PYTHON]: PythonTrack,
+  [SsafyTrack.JAVA]: JavaTrack,
+  [SsafyTrack.MOBILE]: MobileTrack,
   fallback: FallbackTrack, // 인증 O, 트랙 선택 X
 
   //

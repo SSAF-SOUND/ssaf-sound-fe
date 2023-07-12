@@ -1,4 +1,4 @@
-import type { UserInfo, MajorType } from './utils/types';
+import type { UserInfo, SsafyTrack } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
@@ -41,7 +41,7 @@ export const validateNickname = (params: ValidateNicknameParams) => {
 };
 
 export interface CertifyStudentParams {
-  majorType: MajorType;
+  majorType: SsafyTrack;
   semester: number;
   answer: string;
 }
