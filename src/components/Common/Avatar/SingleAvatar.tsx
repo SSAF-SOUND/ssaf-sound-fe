@@ -1,36 +1,34 @@
 import type { SerializedStyles } from '@emotion/react';
 import type { ComponentPropsWithoutRef } from 'react';
+import type { UserInfo } from '~/services/member';
 
 import { css } from '@emotion/react';
 import React from 'react';
 
 import { flex, fontCss, palettes } from '~/styles/utils';
 
-export interface AvatarProps extends ComponentPropsWithoutRef<'div'> {
-  nickName?: string;
-  major?: boolean;
+export interface SingleAvatarProps extends ComponentPropsWithoutRef<'div'> {
   size?: AvatarSize;
-  isEmpty?: boolean;
+  userInfo?: UserInfo;
 }
 type AvatarSize = 'sm' | 'md' | 'lg';
 
-const SingleAvatar = (props: AvatarProps) => {
-  const {
-    nickName = '',
-    major = false,
-    size = 'sm',
-    isEmpty = false,
-    ...rest
-  } = props;
+const SingleAvatar = (props: SingleAvatarProps) => {
+  const { size = 'sm', userInfo, ...restProps } = props;
 
   return (
     <div
-      css={[selfCss, sizeCss[size], major && majorCss, isEmpty && emptyCss]}
-      {...rest}
+      css={[
+        selfCss,
+        sizeCss[size],
+        userInfo?.isMajor && majorCss,
+        !userInfo && emptyCss,
+      ]}
+      {...restProps}
     >
-      {isEmpty || (
+      {userInfo && (
         <span css={[textCss[size], textCapitalizeCss, lineHeightCss]}>
-          {getFirstText(nickName)}
+          {getFirstText(userInfo.nickname)}
         </span>
       )}
     </div>
