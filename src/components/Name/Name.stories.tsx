@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Name from './index';
+import { SsafyTrack, CertificationState } from '~/services/member/utils';
 
-import { MajorType, CertificationState } from '~/services/member/utils';
+import Name from './index';
 
 const meta: Meta<typeof Name> = {
   title: 'Name',
@@ -25,7 +25,7 @@ export const Certified = () => {
       userSsafyInfo={{
         ssafyMember: true,
         ssafyInfo: {
-          majorType: MajorType['MOBILE'],
+          majorTrack: SsafyTrack.MOBILE,
           certificationState: CertificationState.CERTIFIED,
           semester: 2,
           campus: '서울',

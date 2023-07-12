@@ -3,7 +3,7 @@ import type { UserSsafyInfo, UserBasicInfo } from '~/services/member/utils';
 
 import { css } from '@emotion/react';
 
-import { MajorType } from '~/services/member/utils';
+import { SsafyTrack } from '~/services/member/utils';
 import { fontCss, inlineFlex } from '~/styles/utils';
 
 import { Avatar, SsafyIcon, TrackSize } from '../Common';
@@ -24,7 +24,7 @@ const Name = (props: NameProps) => {
     userSsafyInfo = {
       ssafyMember: true,
       ssafyInfo: {
-        majorType: MajorType['MOBILE'],
+        majorTrack: SsafyTrack['MOBILE'],
         certificationState: true,
       },
     },
@@ -38,7 +38,7 @@ const Name = (props: NameProps) => {
       <span css={[textCss[size], fontCss.family.auto]}>{nickname}</span>
       {ssafyMember && (
         <SsafyIcon.Track
-          name={ssafyInfo?.majorType || 'fallback'}
+          name={ssafyInfo?.majorTrack || 'fallback'}
           size={trackSize[size]}
         />
       )}
