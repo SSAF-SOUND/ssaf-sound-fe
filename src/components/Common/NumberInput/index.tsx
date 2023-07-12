@@ -1,43 +1,81 @@
-import type { ComponentPropsWithoutRef, RefObject } from 'react';
+import type { ComponentPropsWithoutRef, MouseEvent } from 'react';
 
 import { css } from '@emotion/react';
-import { forwardRef, useRef } from 'react';
+import { forwardRef, memo, useRef } from 'react';
 
 import { Icon, IconButton } from '~/components/Common';
 import { useComposedRefs } from '~/hooks/useComposedRefs';
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
+type ChangeInputAmountHandler = (
+  e: MouseEvent<HTMLButtonElement>,
+  inputNode: HTMLInputElement
+) => void;
+
 interface NumberInputProps extends ComponentPropsWithoutRef<'input'> {
-  onClickMinus?: () => void;
-  onClickPlus?: () => void;
+  onClickMinus?: ChangeInputAmountHandler;
+  onClickPlus?: ChangeInputAmountHandler;
 }
 
 const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
-  (props: NumberInputProps, ref) => {
-    const { onClickMinus, onClickPlus, className, ...restProps } = props;
+  (props, ref) => {
+    const {
+      onClickMinus,
+      onClickPlus,
+      className,
+      value,
+      max,
+      min,
+      step,
+      ...restProps
+    } = props;
     const ourRef = useRef<HTMLInputElement>(null);
     const composedRefs = useComposedRefs(ref, ourRef);
 
+    const handleClickMinus = (e: MouseEvent<HTMLButtonElement>) => {
+      const $input = ourRef.current;
+      if (!$input) return;
+      if (onClickMinus) {
+        onClickMinus(e, $input);
+        return;
+      }
+      if (value !== undefined) return;
+      $input.valueAsNumber = Math.max(
+        $input.valueAsNumber - (Number(step) || 1),
+        Number(min || -Infinity)
+      );
+    };
+
+    const handleClickPlus = (e: MouseEvent<HTMLButtonElement>) => {
+      const $input = ourRef.current;
+      if (!$input) return;
+      if (onClickPlus) {
+        onClickPlus(e, $input);
+        return;
+      }
+      if (value !== undefined) return;
+      $input.valueAsNumber = Math.min(
+        $input.valueAsNumber + (Number(step) || 1),
+        Number(max || Infinity)
+      );
+    };
+
     return (
       <div css={selfCss} className={className}>
-        <IconButton
-          css={iconButtonCss}
-          size={24}
-          onClick={onClickMinus || changeInputAmount(-1, ourRef)}
-        >
+        <IconButton css={iconButtonCss} size={24} onClick={handleClickMinus}>
           <Icon name="minus" size={14} />
         </IconButton>
         <input
           css={[inputCss, hideBrowserStyleCss]}
           {...restProps}
           ref={composedRefs}
+          value={value}
+          max={max}
+          min={min}
+          step={step}
           type="number"
         />
-        <IconButton
-          css={iconButtonCss}
-          size={24}
-          onClick={onClickPlus || changeInputAmount(1, ourRef)}
-        >
+        <IconButton css={iconButtonCss} size={24} onClick={handleClickPlus}>
           <Icon name="plus" size={14} />
         </IconButton>
       </div>
@@ -47,14 +85,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
 NumberInput.displayName = 'NumberInput';
 
-const changeInputAmount =
-  (amount: number, ref: RefObject<HTMLInputElement>) => () => {
-    if (ref.current) {
-      ref.current.valueAsNumber += amount;
-    }
-  };
-
-export default NumberInput;
+export default memo(NumberInput);
 
 const selfCss = css(
   {

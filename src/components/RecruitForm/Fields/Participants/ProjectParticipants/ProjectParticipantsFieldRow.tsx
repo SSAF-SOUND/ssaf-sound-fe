@@ -67,6 +67,7 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
         size="md"
         value={part}
         onValueChange={handleChangePart}
+        triggerPaddingX={20}
       />
       <NumberInput
         css={fieldCss}
