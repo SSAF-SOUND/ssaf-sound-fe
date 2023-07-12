@@ -7,6 +7,7 @@ import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import { DefaultFullPageLoader } from '~/components/Common';
+import DelayedRedirection from '~/components/DelayedRedirection';
 import { useModal } from '~/components/GlobalModal';
 import StudentCertificationForm from '~/components/StudentCertificationForm';
 import {
@@ -49,21 +50,32 @@ const StudentCertificationPage: CustomNextPage = () => {
   }
 
   const handleIncorrectAnswer = (remainChances: number) => {
-    openModal('alert', {
-      title: '알림',
-      actionText: '확인',
-      description: (
-        <>
-          <p>정답이 아닙니다.</p>
-          <p>
-            {remainChances > 0
-              ? `인증 기회가 ${remainChances}번 남았습니다.`
-              : 'SSAFY 재학생 인증에 실패하셨습니다.'}
-          </p>
-        </>
-      ),
-      onClickAction: closeModal,
-    });
+    const canContinue = remainChances > 0;
+    openModal(
+      'alert',
+      {
+        title: '알림',
+        actionText: '확인',
+        description: (
+          <>
+            <p>정답이 아닙니다.</p>
+            <p>
+              {canContinue
+                ? `인증 기회가 ${remainChances}번 남았습니다.`
+                : 'SSAFY 재학생 인증에 실패하셨습니다.'}
+            </p>
+          </>
+        ),
+        onClickAction: () => {
+          closeModal();
+          if (!canContinue) router.replace(routes.main());
+        },
+      },
+      {
+        onEscapeKeyDown: noop,
+        onPointerDownOutside: noop,
+      }
+    );
   };
 
   const handleCorrectAnswer = () => {
@@ -71,11 +83,11 @@ const StudentCertificationPage: CustomNextPage = () => {
       'alert',
       {
         title: '알림',
-        description: <>인증 완료되었습니다!</>,
+        description: '인증 완료되었습니다!',
         actionText: '확인',
         onClickAction: () => {
           closeModal();
-          router.replace(routes.certification.ssafy());
+          setCertificationSuccess(true);
         },
       },
       {
@@ -97,6 +109,7 @@ const StudentCertificationPage: CustomNextPage = () => {
       if (!possible) {
         handleIncorrectAnswer(maxAttempts - certificationInquiryCount);
       } else {
+        handleCorrectAnswer();
       }
     } catch (err) {
       handleAxiosError(err, {
@@ -115,7 +128,9 @@ const StudentCertificationPage: CustomNextPage = () => {
   return (
     <div css={selfCss}>
       {certificationSuccess ? (
-        <></>
+        <DelayedRedirection to={routes.main()} seconds={3}>
+          <>캐릭터 프로필 컴포넌트</>
+        </DelayedRedirection>
       ) : (
         <StudentCertificationForm
           onSubmit={onSubmit}
