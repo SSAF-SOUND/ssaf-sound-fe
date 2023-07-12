@@ -83,3 +83,11 @@ export const Certified = () => {
 export const UnCertified = () => {
   return <Name userInfo={userInfo.uncertifiedSsafyUserInfo} />;
 };
+
+export const LongName = () => {
+  const user = {
+    ...userInfo.certifiedSsafyUserInfo,
+    nickname: '한글한글한글한글한글한',
+  };
+  return <Name userInfo={user} size="lg" />;
+};

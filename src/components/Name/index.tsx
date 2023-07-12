@@ -33,7 +33,9 @@ const Name = (props: NameProps) => {
   return (
     <span css={[selfCss, gapCss[size]]}>
       <Avatar size={size} nickName={nickname} major={isMajor} />
-      <span css={[textCss[size], fontCss.family.auto]}>{nickname}</span>
+      <span css={[textBaseCss, textCss[size], fontCss.family.auto]}>
+        {nickname}
+      </span>
       {showBadge && (
         <SsafyIcon.Track
           name={ssafyInfo.majorTrack || 'fallback'}
@@ -57,6 +59,11 @@ const gapCss: Record<NameSize, SerializedStyles> = {
     gap: 5,
   }),
 };
+
+const textBaseCss = css({
+  maxWidth: 230,
+  wordBreak: 'break-word',
+});
 
 const textCss: Record<NameSize, SerializedStyles> = {
   sm: css(fontCss.style.B12),
