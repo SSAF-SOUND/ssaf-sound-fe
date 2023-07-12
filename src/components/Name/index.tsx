@@ -30,8 +30,6 @@ const Name = (props: NameProps) => {
     ssafyMember &&
     ssafyInfo?.certificationState === CertificationState.CERTIFIED;
 
-  // case 1: ssafyMember && uncertified (
-
   return (
     <span css={[selfCss, gapCss[size]]}>
       <Avatar size={size} nickName={nickname} major={isMajor} />
@@ -67,9 +65,9 @@ const textCss: Record<NameSize, SerializedStyles> = {
 };
 
 const trackSize: Record<NameSize, TrackSize> = {
-  sm: TrackSize['SM1'],
-  md: TrackSize['SM2'],
-  lg: TrackSize['SM3'],
+  sm: TrackSize.SM1,
+  md: TrackSize.SM2,
+  lg: TrackSize.SM3,
 };
 
 export default Name;

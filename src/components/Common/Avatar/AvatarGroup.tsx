@@ -1,4 +1,4 @@
-import type { ReactNode, ComponentPropsWithoutRef, ReactElement } from 'react';
+import type { ReactNode, ComponentPropsWithoutRef } from 'react';
 
 import { css } from '@emotion/react';
 import { Children, isValidElement } from 'react';

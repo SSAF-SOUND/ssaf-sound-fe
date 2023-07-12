@@ -18,7 +18,7 @@ export interface SsafyBasicInfo {
 export type SsafyInfo =
   | (SsafyBasicInfo & {
       certificationState: CertificationState.UNCERTIFIED;
-      majorTrack: null;
+      majorTrack?: null | undefined;
     })
   | (SsafyBasicInfo & {
       certificationState: CertificationState.CERTIFIED;
