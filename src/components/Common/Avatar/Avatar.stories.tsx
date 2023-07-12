@@ -39,9 +39,11 @@ export const SingleAvatar: AvatarStory = {
     empty: false,
   },
   render: (args: AvatarStoryProps) => {
+    const { size, empty } = args;
     return (
       <Avatar
-        userInfo={args.empty ? undefined : userInfo.certifiedSsafyUserInfo}
+        userInfo={empty ? undefined : userInfo.certifiedSsafyUserInfo}
+        size={size}
       />
     );
   },

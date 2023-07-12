@@ -4,7 +4,7 @@ import type { ReactNode, ComponentPropsWithoutRef } from 'react';
 import { css } from '@emotion/react';
 import { Children, isValidElement } from 'react';
 
-import { flex, fontCss } from '~/styles/utils';
+import { fontCss, inlineFlex } from '~/styles/utils';
 
 import SingleAvatar from './SingleAvatar';
 
@@ -29,7 +29,7 @@ const AvatarGroup = (props: AvatarGroupProps) => {
     <div css={selfCss} {...rest}>
       {visibleAvatars}
       {Array.from({ length: emptyAvatarsCount }).map((_, i) => (
-        <SingleAvatar css={avatarCss} key={i} size={avatarSize} />
+        <SingleAvatar key={i} size={avatarSize} />
       ))}
       {restAvatarsCount > 0 && (
         <span css={[textCss, textSizeCss[avatarSize]]}>
@@ -40,9 +40,11 @@ const AvatarGroup = (props: AvatarGroupProps) => {
   );
 };
 
-const selfCss = css(flex('center', 'center', 'row'), fontCss.family.auto);
-
-const avatarCss = css({ marginLeft: -4 });
+const selfCss = css(
+  { '> div': { marginLeft: -4 } },
+  inlineFlex('center', 'center', 'row'),
+  fontCss.family.auto
+);
 
 const textCss = css({ marginLeft: 4 });
 const textSizeCss = {
