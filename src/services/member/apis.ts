@@ -41,7 +41,7 @@ export const validateNickname = (params: ValidateNicknameParams) => {
 };
 
 export interface CertifyStudentParams {
-  majorType: SsafyTrack;
+  majorTrack: SsafyTrack;
   semester: number;
   answer: string;
 }
