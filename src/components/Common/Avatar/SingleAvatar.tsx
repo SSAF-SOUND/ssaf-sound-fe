@@ -29,7 +29,7 @@ const SingleAvatar = (props: AvatarProps) => {
       {...rest}
     >
       {isEmpty || (
-        <span css={[textCss[size], textCapitalizeCss]}>
+        <span css={[textCss[size], textCapitalizeCss, lineHeightCss]}>
           {getFirstText(nickName)}
         </span>
       )}
@@ -56,10 +56,12 @@ const sizeCss: Record<AvatarSize, SerializedStyles> = {
   lg: css({ width: 40, height: 40 }),
 };
 
+const lineHeightCss = css({ lineHeight: 1 });
+
 const textCss: Record<AvatarSize, SerializedStyles> = {
   sm: css(fontCss.style.B12),
   md: css(fontCss.style.B14),
-  lg: css(fontCss.style.B24),
+  lg: css(fontCss.style.B28),
 };
 
 const textCapitalizeCss = css({

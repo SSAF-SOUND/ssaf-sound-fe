@@ -31,7 +31,7 @@ const Name = (props: NameProps) => {
     ssafyInfo?.certificationState === CertificationState.CERTIFIED;
 
   return (
-    <span css={[selfCss, gapCss[size]]}>
+    <span css={selfCss}>
       <Avatar size={size} nickName={nickname} major={isMajor} />
       <span css={[textBaseCss, textCss[size], fontCss.family.auto]}>
         {nickname}
@@ -46,19 +46,7 @@ const Name = (props: NameProps) => {
   );
 };
 
-const selfCss = css(inlineFlex('center', '', 'row'));
-
-const gapCss: Record<NameSize, SerializedStyles> = {
-  sm: css({
-    gap: 2,
-  }),
-  md: css({
-    gap: 4,
-  }),
-  lg: css({
-    gap: 5,
-  }),
-};
+const selfCss = css(inlineFlex('center', '', 'row', 2));
 
 const textBaseCss = css({
   maxWidth: 230,
