@@ -18,7 +18,6 @@ const Name = (props: NameProps) => {
   const { size = 'sm', userInfo } = props;
   const {
     // basic info
-    isMajor,
     nickname,
     ssafyMember,
 
@@ -32,7 +31,7 @@ const Name = (props: NameProps) => {
 
   return (
     <span css={selfCss}>
-      <Avatar size={size} nickName={nickname} major={isMajor} />
+      <Avatar size={size} userInfo={userInfo} />
       <span css={[textBaseCss, textCss[size], fontCss.family.auto]}>
         {nickname}
       </span>
