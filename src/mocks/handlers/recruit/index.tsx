@@ -1,6 +1,6 @@
 import type {
   GetRecruitDetailApiData,
-  GetRecruitDetailData,
+  RecruitDetailParams,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -14,21 +14,21 @@ const getRecruitDetail = rest.get<never, never, GetRecruitDetailApiData>(
   (req, res, ctx) => {
     return res(
       ctx.delay(500),
-      ...mockSuccess<GetRecruitDetailData>(ctx, {
+      ...mockSuccess<RecruitDetailParams>(ctx, {
         category: 'study',
         title: '커뮤니티 웹 프로젝트',
         recruitStart: '2023-06-01',
         recruitEnd: '2023-06-30',
         content: 'string',
-        created_at: '2023-06-01',
-        modified_at: '2023-06-05',
-        deleted_recruit: false,
-        finished_recruit: false,
+        createdAt: '2023-06-01',
+        modifiedAt: '2023-06-05',
+        deletedRecruit: false,
+        finishedRecruit: false,
         view: 100,
         skills: [
           {
             skillId: 1,
-            name: 'Spring Boot',
+            name: 'Spring',
           },
           {
             skillId: 2,
