@@ -1,4 +1,5 @@
 import type { SubmitHandler } from 'react-hook-form';
+import type { UserRegisterFormValues } from '~/components/UserRegisterForm/utils';
 
 import { css } from '@emotion/react';
 import { useMemo } from 'react';
@@ -18,8 +19,8 @@ import { flex } from '~/styles/utils';
 import { noop } from '~/utils';
 
 interface UserRegisterFormProps {
-  onSubmit?: SubmitHandler<any>;
-  defaultValues?: Partial<any>;
+  onSubmit?: SubmitHandler<UserRegisterFormValues>;
+  defaultValues?: Partial<UserRegisterFormValues>;
 }
 
 const UserRegisterForm = (props: UserRegisterFormProps) => {
@@ -41,8 +42,8 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
     return [
       () => (
         <IsMember
-          onTrue={() => pushPhase(majorPhase)}
-          onFalse={pushNextPhase}
+          onTrue={pushNextPhase}
+          onFalse={() => pushPhase(majorPhase)}
         />
       ),
       () => <Year onSelect={pushNextPhase} />,

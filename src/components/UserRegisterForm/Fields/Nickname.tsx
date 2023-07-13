@@ -11,16 +11,14 @@ import {
   VisuallyHidden,
 } from '~/components/Common';
 import { Alert } from '~/components/ModalContent';
+import { useUserRegisterFormContext } from '~/components/UserRegisterForm/utils';
 import {
   createRandomNickname,
   nicknameValidator,
-  useUpdateMyInfoFormContext,
   useValidateNickname,
 } from '~/services/member';
-import { flex, palettes } from '~/styles/utils';
+import { flex, fontCss, palettes } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
-
-import Question from '../Question';
 
 const fieldName = 'nickname';
 
@@ -40,7 +38,7 @@ const Nickname = () => {
     trigger,
     setError,
     formState: { errors, dirtyFields, isSubmitting },
-  } = useUpdateMyInfoFormContext();
+  } = useUserRegisterFormContext();
   const nicknameFieldId = useId();
   const errorMessage = errors.nickname?.message;
   const submittable = isValidNickname && !dirtyFields.nickname;
@@ -103,10 +101,10 @@ const Nickname = () => {
   return (
     <div css={selfCss}>
       <label htmlFor={nicknameFieldId}>
-        <Question>
-          <Question.Row>닉네임을</Question.Row>
-          <Question.Row>입력해주세요</Question.Row>
-        </Question>
+        <div css={fontCss.style.B28}>
+          <p>닉네임을</p>
+          <p>입력해주세요</p>
+        </div>
       </label>
 
       <div css={inputContainerCss}>
