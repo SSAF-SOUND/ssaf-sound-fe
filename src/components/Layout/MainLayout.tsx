@@ -29,5 +29,6 @@ const selfCss = css({
   margin: '0 auto',
   padding: `0 ${gutter.mainLayout / 2}px`,
   boxShadow: `20px 20px 40px #272b32, -20px -20px 40px #353a44;`,
+  overflow: 'hidden',
 });
 export default MainLayout;
