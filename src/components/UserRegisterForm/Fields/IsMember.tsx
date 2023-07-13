@@ -29,7 +29,7 @@ const IsMember = (props: IsMemberProps) => {
   });
 
   return (
-    <div css={selfCss}>
+    <>
       <div css={fontCss.style.B28}>
         <p>안녕하세요</p>
         <p>SSAFY인 이신가요?</p>
@@ -50,18 +50,11 @@ const IsMember = (props: IsMemberProps) => {
           아니오
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 
 export default IsMember;
-
-const selfCss = css(
-  {
-    height: '100%',
-  },
-  flex('', 'space-between')
-);
 
 const buttonGroupCss = css(
   {
