@@ -37,7 +37,6 @@ const Year = (props: YearProps) => {
       </div>
 
       <SelectBox
-        id="id"
         items={years}
         onValueChange={handleValueChange}
         valueAs={filterNumericText}

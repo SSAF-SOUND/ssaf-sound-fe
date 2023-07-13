@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
 import { Button } from '~/components/Common';
-import { useUserRegisterFormContext } from "~/components/UserRegisterForm/utils";
+import { useUserRegisterFormContext } from '~/components/UserRegisterForm/utils';
 import { flex, fontCss } from '~/styles/utils';
 
 const fieldName = 'isMajor';
@@ -31,7 +31,7 @@ const IsMajor = (props: IsMajorProps) => {
   });
 
   return (
-    <div css={selfCss}>
+    <>
       <p css={fontCss.style.B28}>전공자이신가요?</p>
 
       <div css={buttonGroupCss}>
@@ -47,18 +47,11 @@ const IsMajor = (props: IsMajorProps) => {
           아니오
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 
 export default IsMajor;
-
-const selfCss = css(
-  {
-    height: '100%',
-  },
-  flex('', 'space-between', 'column')
-);
 
 const buttonGroupCss = css(
   {

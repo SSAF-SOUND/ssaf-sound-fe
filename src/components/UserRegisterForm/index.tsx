@@ -83,8 +83,8 @@ export default UserRegisterForm;
 const selfCss = css({
   display: 'flex',
   flexDirection: 'column',
-  height: '100vh',
-  padding: '10px 15px',
+  minHeight: '100vh',
+  padding: '10px 0',
 });
 
 const formCss = css(
