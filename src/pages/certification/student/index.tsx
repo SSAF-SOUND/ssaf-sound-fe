@@ -1,7 +1,8 @@
 import type { CustomNextPage } from 'next/types';
 import type { StudentCertificationFormValues } from '~/components/StudentCertificationForm/utils';
+import type { UserInfo } from '~/services/member';
 
-import router from 'next/router';
+import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { useState } from 'react';
@@ -29,8 +30,8 @@ const loaderText = '유저 정보를 확인하는 중입니다.';
 const maxAttempts = 3;
 
 const StudentCertificationPage: CustomNextPage = () => {
-  const { data } = useMyInfo();
-  const myInfo = data as NonNullable<typeof data>;
+  const router = useRouter();
+  const { data: myInfo } = useMyInfo();
   const setMyInfo = useSetMyInfo();
   const { openModal, closeModal } = useModal();
   const { mutateAsync: certifyStudent } = useCertifyStudent();
@@ -39,13 +40,13 @@ const StudentCertificationPage: CustomNextPage = () => {
   if (certificationSuccess) {
     return (
       <DelayedRedirection to={routes.main()} seconds={3}>
-        <PreviewCertifiedMyInfo userInfo={myInfo} />
+        <PreviewCertifiedMyInfo userInfo={myInfo as NonNullable<UserInfo>} />
       </DelayedRedirection>
     );
   }
 
   if (
-    !myInfo.ssafyMember ||
+    !myInfo?.ssafyMember ||
     myInfo.ssafyInfo.certificationState === CertificationState.CERTIFIED
   ) {
     router.replace(routes.unauthorized());
