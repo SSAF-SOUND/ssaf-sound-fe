@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import SkillBadge from './index';
 
 const meta: Meta<typeof SkillBadge> = {
-  title: 'SkillBadge',
+  title: 'Input/SkillBadge',
   component: SkillBadge,
   tags: ['autodocs'],
   argTypes: {},

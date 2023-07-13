@@ -5,7 +5,7 @@ import { PageLayout } from '~/stories/Layout';
 import TopBar from './index';
 
 const meta: Meta<typeof TopBar> = {
-  title: 'TopBar',
+  title: 'Bar/TopBar',
   component: TopBar,
   decorators: [
     (Story) => (

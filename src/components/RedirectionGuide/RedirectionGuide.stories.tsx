@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { PageLayout } from '~/stories/Layout';
-import { disableArgs } from '~/stories/utils';
 
 import RedirectionGuide from './index';
 
 const meta: Meta<typeof RedirectionGuide> = {
-  title: 'RedirectionGuide',
+  title: 'System/RedirectionGuide',
   component: RedirectionGuide,
   tags: ['autodocs'],
   decorators: [

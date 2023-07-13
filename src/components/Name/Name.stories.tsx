@@ -7,7 +7,7 @@ import { CertificationState, SsafyTrack } from '~/services/member';
 import Name from './index';
 
 const meta: Meta<typeof Name> = {
-  title: 'Name',
+  title: 'Profile/Name',
   component: Name,
   tags: ['autodocs'],
   argTypes: {

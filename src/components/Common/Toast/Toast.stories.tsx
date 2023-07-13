@@ -7,7 +7,7 @@ import { Button } from '~/components/Common';
 import ServerErrorToast from './ServerErrorToast';
 
 const meta: Meta = {
-  title: 'Toast',
+  title: 'Toast/Toast',
   decorators: [
     (Story) => {
       return (

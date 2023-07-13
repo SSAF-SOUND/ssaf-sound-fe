@@ -73,7 +73,7 @@ const ButtonGroup = (props: ButtonGroupProps) => {
 };
 
 const meta: Meta<typeof Button> = {
-  title: 'Button',
+  title: 'Button/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import ProjectInfo from './index';
 
 const meta: Meta<typeof ProjectInfo> = {
-  title: 'ProjectInfo',
+  title: 'Recruit/ProjectInfo',
   component: ProjectInfo,
   tags: ['autodocs'],
   argTypes: {},

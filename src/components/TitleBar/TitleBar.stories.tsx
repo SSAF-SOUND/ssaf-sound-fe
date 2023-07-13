@@ -8,7 +8,7 @@ import { flex, palettes } from '~/styles/utils';
 import TitleBar from './index';
 
 const meta: Meta<typeof TitleBar.Default> = {
-  title: 'TitleBar',
+  title: 'Bar/TitleBar',
   decorators: [
     (Story) => (
       <PageLayout>

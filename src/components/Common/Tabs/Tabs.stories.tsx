@@ -27,7 +27,7 @@ export const TabsComponent = (props: Props) => {
 };
 
 const meta: Meta = {
-  title: 'Tabs',
+  title: 'Tabs/Tabs',
   component: TabsComponent,
 };
 

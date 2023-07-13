@@ -3,7 +3,7 @@ import type { Meta } from '@storybook/react';
 import NumberInput from './index';
 
 const meta: Meta<typeof NumberInput> = {
-  title: 'NumberInput',
+  title: 'Input/NumberInput',
   component: NumberInput,
   tags: ['autodocs'],
   argTypes: {

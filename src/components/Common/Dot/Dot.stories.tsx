@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Dot from './index';
 
 const meta: Meta<typeof Dot> = {
-  title: 'Dot',
+  title: 'Notification/Dot',
   component: Dot,
 };
 

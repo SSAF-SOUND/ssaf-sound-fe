@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Dday from './index';
 
 const meta: Meta<typeof Dday> = {
-  title: 'Dday',
+  title: 'Recruit/Dday',
   component: Dday,
   tags: ['autodocs'],
   argTypes: {

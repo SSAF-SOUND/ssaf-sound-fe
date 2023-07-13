@@ -104,6 +104,7 @@ const selfCss = css(
     borderRadius: 16,
     color: palettes.font.blueGrey,
     padding: 0,
+    cursor: 'pointer',
     [`&${toggleOn}`]: {
       borderColor: themeColorVars.mainColor.var,
     },

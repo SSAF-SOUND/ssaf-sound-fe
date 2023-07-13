@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import RecruitForm from './index';
 
 const meta: Meta<typeof RecruitForm> = {
-  title: 'RecruitForm',
+  title: 'Recruit/RecruitForm',
   component: RecruitForm,
 };
 

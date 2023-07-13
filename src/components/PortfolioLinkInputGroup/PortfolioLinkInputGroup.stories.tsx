@@ -5,7 +5,7 @@ import { useState } from 'react';
 import PortfolioLinkInputGroup from './index';
 
 const meta: Meta<typeof PortfolioLinkInputGroup> = {
-  title: 'PortfolioLinkInputGroup',
+  title: 'Profile/PortfolioLinkInputGroup',
   tags: ['autodocs'],
   argTypes: {
     Root: {
