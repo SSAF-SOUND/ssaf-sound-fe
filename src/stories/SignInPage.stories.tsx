@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
 
 import SignInPage from '~/pages/auth/sign-in';
-import { getQueryClient, queryKeys } from '~/react-query/common';
+import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof SignInPage> = {
@@ -11,8 +11,15 @@ const meta: Meta<typeof SignInPage> = {
   component: SignInPage,
   decorators: [
     (Story) => {
+      const setMyInfo = useSetMyInfo();
       useEffect(() => {
-        getQueryClient().resetQueries(queryKeys.user.myInfo());
+        // eslint-disable-next-line
+        // @ts-ignore
+        setMyInfo(null);
+        // - `undefined`가 직렬화 불가능한 데이터라서 그런지, 아예 update 시도 자체를 안 합니다.
+        // - `removeQueries`나 `resetQueries`는 스토리북에서 페이지 전환시, 다른 페이지에서도 `reset`이 트리거되는 버그가 있어서 사용할 수 없어요.
+        // - 여기선 `undefined`대신 `null`을 세팅했습니다.
+        // - `null`은 디폴트 값 할당을 트리거하지 않기 때문에, 디폴트 값 할당을 의도한 경우엔 세팅하면 안됩니다.
       }, []);
 
       return (
