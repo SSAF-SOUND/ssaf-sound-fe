@@ -8,6 +8,7 @@ import { palettes } from '../src/styles/utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { getQueryClient } from '../src/react-query/common';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { GlobalModal } from '../src/components/GlobalModal';
 
 initialize({
   onUnhandledRequest: 'bypass',
@@ -46,6 +47,7 @@ const preview: Preview = {
     (Story) => (
       <QueryClientProvider client={getQueryClient()}>
         <ReactQueryDevtools initialIsOpen />
+        <GlobalModal />
         <div>
           <StorybookGlobalStyles />
           <AppGlobalStyles />

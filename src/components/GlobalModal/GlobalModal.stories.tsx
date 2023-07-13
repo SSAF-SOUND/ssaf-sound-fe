@@ -55,8 +55,7 @@ export const BasicExample = () => {
         })}
       </div>
 
-      {/* 이 모달은 `_app.tsx`에서 한번만 렌더링합니다. */}
-      <GlobalModal />
+      {/* `GlobalModal`은 `_app.tsx`에서 한번만 렌더링합니다. */}
     </>
   );
 };
@@ -86,8 +85,7 @@ export const OnlyCloseWhenActionIsPressed = () => {
     <>
       <Button onClick={handleOpenModal}>트리거 버튼</Button>
 
-      {/* 이 모달은 `_app.tsx`에서 한번만 렌더링합니다. */}
-      <GlobalModal />
+      {/* `GlobalModal`은 `_app.tsx`에서 한번만 렌더링합니다. */}
     </>
   );
 };
@@ -123,8 +121,7 @@ export const ModalInModal = () => {
         <Button onClick={handleOpenModal}>트리거 버튼</Button>
       </div>
 
-      {/* 이 모달은 `_app.tsx`에서 한번만 렌더링합니다. */}
-      <GlobalModal />
+      {/* `GlobalModal`은 `_app.tsx`에서 한번만 렌더링합니다. */}
     </>
   );
 };
