@@ -1,55 +1,90 @@
-import type { UpdateMyInfoParams } from '~/services/member';
-
-import { useRouter } from 'next/router';
+import type { SubmitHandler } from 'react-hook-form';
 
 import { css } from '@emotion/react';
-import { FormProvider } from 'react-hook-form';
+import { useMemo } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
+import { ProgressBar } from '~/components/Common';
+import TitleBar from '~/components/TitleBar';
 import {
-  useSetMyInfo,
-  useUpdateMyInfo,
-  useUpdateMyInfoForm,
-} from '~/services/member';
+  Campus,
+  IsMajor,
+  IsMember,
+  Nickname,
+  Year,
+} from '~/components/UserRegisterForm/Fields';
+import { useStack } from '~/hooks';
 import { flex } from '~/styles/utils';
-import { customToast, handleAxiosError } from '~/utils';
-import { routes } from '~/utils/routes';
+import { noop } from '~/utils';
 
-import { usePhase, useUserRegisterFormFields } from './context';
+interface UserRegisterFormProps {
+  onSubmit?: SubmitHandler<any>;
+  defaultValues?: Partial<any>;
+}
 
-const UserRegisterForm = () => {
-  const router = useRouter();
-  const fields = useUserRegisterFormFields();
-  const setMyInfo = useSetMyInfo();
-  const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
-  const formMethods = useUpdateMyInfoForm();
-  const { handleSubmit } = formMethods;
-  const { currentPhase } = usePhase();
-  const FieldComponent = fields[currentPhase].Component;
+const UserRegisterForm = (props: UserRegisterFormProps) => {
+  const { onSubmit = noop, defaultValues } = props;
+  const methods = useForm({
+    defaultValues,
+  });
 
-  const onValid = async (value: UpdateMyInfoParams) => {
-    try {
-      const response = await updateMyInfo(value);
-      setMyInfo(response);
-      await router.replace(routes.certification.ssafy());
-    } catch (error) {
-      handleAxiosError(error, {
-        onClientError: (response) => {
-          customToast.clientError(response.message);
-        },
-      });
-    }
-  };
+  const {
+    push: pushPhase,
+    pop: popPhase,
+    top: currentPhase,
+  } = useStack([0], { defaultTop: 0 });
+
+  const { handleSubmit } = methods;
+  const FieldComponents = useMemo(() => {
+    const majorPhase = 3;
+    const pushNextPhase = () => pushPhase(currentPhase + 1);
+    return [
+      () => (
+        <IsMember
+          onTrue={() => pushPhase(majorPhase)}
+          onFalse={pushNextPhase}
+        />
+      ),
+      () => <Year onSelect={pushNextPhase} />,
+      () => <Campus onSelect={pushNextPhase} />,
+      () => <IsMajor onFalse={pushNextPhase} onTrue={pushNextPhase} />,
+      () => <Nickname />,
+    ];
+  }, [pushPhase, currentPhase]);
+
+  const FieldComponent = FieldComponents[currentPhase];
 
   return (
-    <form css={formCss} onSubmit={handleSubmit(onValid)}>
-      <FormProvider {...formMethods}>
-        <FieldComponent />
+    <div css={selfCss}>
+      <FormProvider {...methods}>
+        <TitleBar.Default
+          withoutTitle
+          withoutClose
+          withoutBackward={currentPhase === 0}
+          onClickBackward={popPhase}
+          css={titleBarCss}
+        />
+        <ProgressBar
+          min={0}
+          now={currentPhase + 1}
+          max={FieldComponents.length}
+        />
+        <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
+          <FieldComponent />
+        </form>
       </FormProvider>
-    </form>
+    </div>
   );
 };
 
 export default UserRegisterForm;
+
+const selfCss = css({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100vh',
+  padding: '10px 15px',
+});
 
 const formCss = css(
   {
@@ -58,3 +93,8 @@ const formCss = css(
   },
   flex('', 'space-between', 'column')
 );
+
+const titleBarCss = css({
+  padding: 0,
+  margin: '0 -5px 12px',
+});
