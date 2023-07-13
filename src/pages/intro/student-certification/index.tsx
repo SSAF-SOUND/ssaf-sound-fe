@@ -65,7 +65,7 @@ const StudentCertificationIntroPage = () => {
         </div>
 
         <div css={buttonLayerCss}>
-          {!alreadyCertified ? (
+          {alreadyCertified ? (
             <Button
               size="lg"
               disabled
