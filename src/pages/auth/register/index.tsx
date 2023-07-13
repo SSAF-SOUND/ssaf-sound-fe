@@ -40,7 +40,11 @@ const RegisterPage: CustomNextPage = () => {
   //   }
   // };
 
-  return <UserRegisterForm />;
+  return (
+    <div css={{ padding: '0 15px' }}>
+      <UserRegisterForm />
+    </div>
+  );
 };
 
 RegisterPage.auth = {

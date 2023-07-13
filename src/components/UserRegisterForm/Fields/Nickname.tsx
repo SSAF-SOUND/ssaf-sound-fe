@@ -183,12 +183,7 @@ export default Nickname;
 
 const buttonCss = css({ width: '100%' });
 
-const selfCss = css(
-  {
-    height: '100%',
-  },
-  flex()
-);
+const selfCss = css({ flexGrow: 1 }, flex());
 
 const inputContainerCss = css(
   {
