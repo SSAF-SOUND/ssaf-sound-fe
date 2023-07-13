@@ -2,16 +2,14 @@ import { css } from '@emotion/react';
 import { useEffect } from 'react';
 
 import { SelectBox } from '~/components/Common';
-import { useUpdateMyInfoFormContext } from '~/services/member';
-import { flex } from '~/styles/utils';
-
-import Question from '../Question';
+import { useUserRegisterFormContext } from '~/components/UserRegisterForm/utils';
+import { flex, fontCss } from '~/styles/utils';
 
 const years = Array(10)
   .fill(undefined)
   .map((_, i) => `${i + 1}기`);
 
-const fieldName = 'semester';
+const fieldName = 'year';
 const filterNumericText = (value: string) => value.replace(/\D/g, '');
 
 interface YearProps {
@@ -20,7 +18,7 @@ interface YearProps {
 
 const Year = (props: YearProps) => {
   const { onSelect } = props;
-  const { register, setValue, setFocus } = useUpdateMyInfoFormContext();
+  const { register, setValue, setFocus } = useUserRegisterFormContext();
   const handleValueChange = (value: string) => {
     setValue(fieldName, Number(value));
     onSelect();
@@ -33,10 +31,10 @@ const Year = (props: YearProps) => {
 
   return (
     <label css={selfCss}>
-      <Question>
-        <Question.Row>SSAFY</Question.Row>
-        <Question.Row>기수를 선택해주세요</Question.Row>
-      </Question>
+      <div css={fontCss.style.B28}>
+        <p>SSAFY</p>
+        <p>기수를 선택해주세요</p>
+      </div>
 
       <SelectBox
         id="id"
