@@ -3,7 +3,6 @@ import type { CustomNextPage } from 'next/types';
 import { useRouter } from 'next/router';
 
 import { DefaultFullPageLoader } from '~/components/Common';
-import { UserRegisterLayout } from '~/components/Layout';
 import UserRegisterForm from '~/components/UserRegisterForm';
 import { CertificationState, useMyAccountStatus } from '~/services/member';
 import { routes } from '~/utils/routes';
@@ -27,11 +26,21 @@ const RegisterPage: CustomNextPage = () => {
     return <DefaultFullPageLoader text={loaderText} />;
   }
 
-  return (
-    <UserRegisterLayout>
-      <UserRegisterForm />
-    </UserRegisterLayout>
-  );
+  // const onSubmit = async (value: UpdateMyInfoParams) => {
+  //   try {
+  //     const response = await updateMyInfo(value);
+  //     setMyInfo(response);
+  //     await router.replace(routes.certification.ssafy());
+  //   } catch (error) {
+  //     handleAxiosError(error, {
+  //       onClientError: (response) => {
+  //         customToast.clientError(response.message);
+  //       },
+  //     });
+  //   }
+  // };
+
+  return <UserRegisterForm />;
 };
 
 RegisterPage.auth = {
