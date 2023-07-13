@@ -38,7 +38,7 @@ export const useSetMyInfo = () => {
   const queryClient = useQueryClient();
   const queryKey = queryKeys.user.myInfo();
   const setMyInfo = (
-    updater: UserInfo | ((payload?: UserInfo) => UserInfo)
+    updater?: UserInfo | ((payload?: UserInfo) => UserInfo)
   ) => {
     queryClient.setQueryData<UserInfo>(queryKey, updater);
   };
