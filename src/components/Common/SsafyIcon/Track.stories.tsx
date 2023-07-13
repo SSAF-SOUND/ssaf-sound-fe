@@ -16,11 +16,6 @@ type TrackIconStory = StoryObj<typeof Track>;
 export const TrackIcon: TrackIconStory = {
   args: { name: SsafyTrack.MOBILE, size: TrackSize.SM1 },
   argTypes: {
-    label: {
-      table: {
-        disable: true,
-      },
-    },
     style: {
       table: {
         disable: true,
@@ -43,7 +38,7 @@ export const AllTrackIcons: TrackIconStory = {
           <div key={track} style={{ display: 'flex', gap: 10 }}>
             {sizes.map((size) => (
               <div key={size}>
-                <Track name={track} size={size} theme={'primary'}/>
+                <Track name={track} size={size} theme={'primary'} />
               </div>
             ))}
           </div>

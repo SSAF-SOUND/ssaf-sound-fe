@@ -1,44 +1,44 @@
 import type { SerializedStyles } from '@emotion/react';
-import type { UserSsafyInfo, UserBasicInfo } from '~/services/member/utils';
+import type { UserInfo } from '~/services/member/utils';
 
 import { css } from '@emotion/react';
 
-import { SsafyTrack } from '~/services/member/utils';
+import { Avatar, SsafyIcon, TrackSize } from '~/components/Common';
+import { CertificationState } from '~/services/member/utils';
 import { fontCss, inlineFlex } from '~/styles/utils';
 
-import { Avatar, SsafyIcon, TrackSize } from '../Common';
-
-type BasicInfo = Pick<UserBasicInfo, 'isMajor' | 'nickname'>;
 export type NameProps = {
-  userSsafyInfo: UserSsafyInfo;
+  userInfo: UserInfo;
+  withAvatar?: boolean;
   size?: NameSize;
-} & BasicInfo;
+};
 
 type NameSize = 'sm' | 'md' | 'lg';
 
 const Name = (props: NameProps) => {
+  const { size = 'sm', withAvatar = true, userInfo } = props;
   const {
-    size = 'lg',
-    nickname = '쌒사운드',
-    isMajor,
-    userSsafyInfo = {
-      ssafyMember: true,
-      ssafyInfo: {
-        majorTrack: SsafyTrack['MOBILE'],
-        certificationState: true,
-      },
-    },
-  } = props;
+    // basic info
+    nickname,
+    ssafyMember,
 
-  const { ssafyMember, ssafyInfo } = userSsafyInfo;
+    // ssafy info
+    ssafyInfo,
+  } = userInfo;
+
+  const showBadge =
+    ssafyMember &&
+    ssafyInfo?.certificationState === CertificationState.CERTIFIED;
 
   return (
-    <span css={[selfCss, gapCss[size]]}>
-      <Avatar size={size} nickName={nickname} major={isMajor} />
-      <span css={[textCss[size], fontCss.family.auto]}>{nickname}</span>
-      {ssafyMember && (
+    <span css={selfCss}>
+      {withAvatar && <Avatar size={size} userInfo={userInfo} />}
+      <span css={[textBaseCss, textCss[size], fontCss.family.auto]}>
+        {nickname}
+      </span>
+      {showBadge && (
         <SsafyIcon.Track
-          name={ssafyInfo?.majorTrack || 'fallback'}
+          name={ssafyInfo.majorTrack || 'fallback'}
           size={trackSize[size]}
         />
       )}
@@ -46,19 +46,12 @@ const Name = (props: NameProps) => {
   );
 };
 
-const selfCss = css(inlineFlex('center', '', 'row'));
+const selfCss = css(inlineFlex('center', '', 'row', 2));
 
-const gapCss: Record<NameSize, SerializedStyles> = {
-  sm: css({
-    gap: 2,
-  }),
-  md: css({
-    gap: 4,
-  }),
-  lg: css({
-    gap: 5,
-  }),
-};
+const textBaseCss = css({
+  maxWidth: 230,
+  wordBreak: 'break-word',
+});
 
 const textCss: Record<NameSize, SerializedStyles> = {
   sm: css(fontCss.style.B12),
@@ -67,9 +60,9 @@ const textCss: Record<NameSize, SerializedStyles> = {
 };
 
 const trackSize: Record<NameSize, TrackSize> = {
-  sm: TrackSize['SM1'],
-  md: TrackSize['SM2'],
-  lg: TrackSize['SM3'],
+  sm: TrackSize.SM1,
+  md: TrackSize.SM2,
+  lg: TrackSize.SM3,
 };
 
 export default Name;

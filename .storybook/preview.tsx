@@ -7,6 +7,9 @@ import { authHandlers, memberHandlers } from '../src/mocks/handlers';
 import { palettes } from '../src/styles/utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { getQueryClient } from '../src/react-query/common';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { GlobalModal } from '../src/components/GlobalModal';
+import { Toaster } from 'react-hot-toast';
 
 initialize({
   onUnhandledRequest: 'bypass',
@@ -44,6 +47,9 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={getQueryClient()}>
+        <Toaster />
+        <ReactQueryDevtools initialIsOpen />
+        <GlobalModal />
         <div>
           <StorybookGlobalStyles />
           <AppGlobalStyles />
