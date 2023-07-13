@@ -114,6 +114,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     backgroundColor: themeColorVars.mainColor.var,
     '&:hover': { borderColor: palettes.white },
     '&:active': {
+      borderColor: 'transparent',
       backgroundColor: themeColorVars.mainDarkColor.var,
       color: palettes.white,
     },
