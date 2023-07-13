@@ -88,12 +88,23 @@ export const certifyStudent = restSuccess<CertifyStudentApiData['data']>(
   {
     data: {
       certificationInquiryCount: 2,
+      possible: true,
+    },
+  }
+);
+
+export const certifyStudentIncorrectError = restSuccess<CertifyStudentApiData['data']>(
+  'post',
+  composeUrls(API_URL, endpoints.user.studentCertification()),
+  {
+    data: {
+      certificationInquiryCount: 2,
       possible: false,
     },
   }
 );
 
-export const certifyStudentError = restError(
+export const certifyStudentAttemptsCountError = restError(
   'post',
   composeUrls(API_URL, endpoints.user.studentCertification()),
   {
