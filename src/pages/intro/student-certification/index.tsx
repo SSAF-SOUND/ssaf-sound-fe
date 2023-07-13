@@ -71,11 +71,11 @@ const StudentCertificationIntroPage = () => {
               disabled
               onClick={() => router.push(routes.main())}
             >
-              이미 인증된 상태입니다
+              이미 인증된 계정입니다
             </Button>
           ) : (
             <Button size="lg" asChild>
-              <Link href={routes.certification.ssafy()}>
+              <Link href={routes.certification.student()}>
                 SSAFY 재학생 인증하기
               </Link>
             </Button>
