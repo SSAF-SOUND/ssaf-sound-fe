@@ -13,7 +13,7 @@ import {
 } from '~/components/Common';
 import RollingAllTracks from '~/components/RollingAllTracks';
 import { CertificationState, useMyInfo } from '~/services/member';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss, paddingX, palettes } from '~/styles/utils';
 import { routes } from '~/utils';
 
 const loadingText = '유저 정보를 불러오는 중입니다.';
@@ -49,7 +49,11 @@ const StudentCertificationIntroPage = () => {
       </div>
 
       <RollingAllTracks
-        css={{ width: 'auto', margin: '0 -10px', overflow: 'hidden' }}
+        css={{
+          width: 'auto',
+          margin: `0 -${paddingX.mainLayout}px`,
+          overflow: 'hidden',
+        }}
         seconds={15}
         gap={15}
       />
