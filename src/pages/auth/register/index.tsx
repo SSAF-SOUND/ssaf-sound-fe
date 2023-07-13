@@ -1,10 +1,19 @@
 import type { CustomNextPage } from 'next/types';
+import type { UserRegisterFormValues } from '~/components/UserRegisterForm/utils';
 
 import { useRouter } from 'next/router';
 
+import { useState } from 'react';
+
 import { DefaultFullPageLoader } from '~/components/Common';
 import UserRegisterForm from '~/components/UserRegisterForm';
-import { CertificationState, useMyAccountStatus } from '~/services/member';
+import {
+  CertificationState,
+  useMyAccountStatus,
+  useSetMyInfo,
+  useUpdateMyInfo,
+} from '~/services/member';
+import { customToast, handleAxiosError } from '~/utils';
 import { routes } from '~/utils/routes';
 
 const loaderText = '유저 정보를 확인하는 중입니다.';
@@ -12,37 +21,38 @@ const loaderText = '유저 정보를 확인하는 중입니다.';
 const RegisterPage: CustomNextPage = () => {
   const router = useRouter();
   const { isRegisterRequired, myInfo } = useMyAccountStatus();
+  const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
+  const [shouldCheckUserInfo, setShouldCheckUserInfo] = useState(true);
+  const setMyInfo = useSetMyInfo();
 
-  if (!isRegisterRequired) {
-    if (
-      myInfo &&
-      myInfo.ssafyInfo?.certificationState === CertificationState.UNCERTIFIED
-    ) {
-      router.replace(routes.certification.ssafy());
-    } else {
-      router.replace(routes.main());
-    }
-
+  if (shouldCheckUserInfo && !isRegisterRequired) {
+    router.replace(routes.main());
     return <DefaultFullPageLoader text={loaderText} />;
   }
 
-  // const onSubmit = async (value: UpdateMyInfoParams) => {
-  //   try {
-  //     const response = await updateMyInfo(value);
-  //     setMyInfo(response);
-  //     await router.replace(routes.certification.ssafy());
-  //   } catch (error) {
-  //     handleAxiosError(error, {
-  //       onClientError: (response) => {
-  //         customToast.clientError(response.message);
-  //       },
-  //     });
-  //   }
-  // };
+  const onSubmit = async (value: UserRegisterFormValues) => {
+    setShouldCheckUserInfo(false);
+
+    try {
+      const response = await updateMyInfo(value);
+      setMyInfo(response);
+      await router.replace(
+        response.ssafyMember
+          ? routes.intro.studentCertification()
+          : routes.main()
+      );
+    } catch (error) {
+      handleAxiosError(error, {
+        onClientError: (response) => {
+          customToast.clientError(response.message);
+        },
+      });
+    }
+  };
 
   return (
     <div css={{ padding: '0 15px' }}>
-      <UserRegisterForm />
+      <UserRegisterForm onSubmit={onSubmit} />
     </div>
   );
 };

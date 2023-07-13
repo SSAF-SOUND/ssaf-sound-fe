@@ -1,11 +1,9 @@
-import type { UpdateMyInfoParams } from './apis';
 import type { UserInfo } from '~/services/member/utils';
 
 import { useRouter } from 'next/router';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useForm, useFormContext } from 'react-hook-form';
 
 import { queryKeys } from '~/react-query/common';
 import { routes } from '~/utils/routes';
@@ -86,22 +84,6 @@ export const useCheckRegisterRequired = () => {
   if (!isRegisterPage && isRegisterRequired) {
     router.replace(userRegisterRoute);
   }
-};
-
-export const useUpdateMyInfoForm = () => {
-  return useForm<UpdateMyInfoParams>({
-    defaultValues: {
-      ssafyMember: undefined,
-      nickname: '',
-      isMajor: undefined,
-      campus: undefined,
-      semester: undefined,
-    },
-  });
-};
-
-export const useUpdateMyInfoFormContext = () => {
-  return useFormContext<UpdateMyInfoParams>();
 };
 
 export const useUpdateMyInfo = () => {
