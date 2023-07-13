@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useEffect } from 'react';
 
 import SignInPage from '~/pages/auth/sign-in';
-import { useSetMyInfo } from '~/services/member';
+import { getQueryClient, queryKeys } from '~/react-query/common';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof SignInPage> = {
@@ -11,10 +11,10 @@ const meta: Meta<typeof SignInPage> = {
   component: SignInPage,
   decorators: [
     (Story) => {
-      const setMyInfo = useSetMyInfo();
       useEffect(() => {
-        setMyInfo(undefined);
+        getQueryClient().resetQueries(queryKeys.user.myInfo());
       }, []);
+
       return (
         <PageLayout>
           <Story />
