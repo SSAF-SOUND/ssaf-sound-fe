@@ -12,8 +12,11 @@ type RedirectionGuideTheme = 'primary' | 'secondary';
 
 interface RedirectionGuideProps {
   theme?: RedirectionGuideTheme;
+  /** 여러 줄을 사용하고 싶은 경우엔, `React.Fragment`와 `p`엘리먼트를 사용해서 전달 */
   title: ReactNode;
+  /** 여러 줄을 사용하고 싶은 경우엔, `React.Fragment`와 `p`엘리먼트를 사용해서 전달 */
   description: ReactNode;
+  /** 기본값은 `<SsafyIcon.Track name="fallback" size={TrackSize.LG2} />`의 */
   indicator?: ReactNode;
   redirectionTo: LinkProps['href'];
   redirectionText: string;
