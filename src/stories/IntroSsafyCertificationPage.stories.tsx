@@ -48,7 +48,7 @@ export const Default: IntroStudentCertificationPageStory = {
   },
   parameters: {
     msw: {
-      handler: {
+      handlers: {
         member: [],
       },
     },
