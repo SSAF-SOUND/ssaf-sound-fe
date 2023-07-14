@@ -9,7 +9,7 @@ import type { ApiSuccessResponse } from '~/types';
 import { endpoints } from '~/react-query/common';
 import { privateAxios } from '~/utils';
 
-export interface RecruitDetailParams {
+export interface RecruitDetail {
   category: RecruitCategoryType;
   title: string;
   recruitStart: string;
@@ -24,7 +24,7 @@ export interface RecruitDetailParams {
   limits: LimitType[];
 }
 
-export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetailParams>;
+export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetail>;
 
 export const getRecruitDetail = () => {
   const endpoint = endpoints.recruit.detail();
@@ -34,24 +34,24 @@ export const getRecruitDetail = () => {
 // 추후 보완할 예정입니다!
 // Recruits 전체를 불러오는 부분입니다
 
-export type GetRecruitsApiData = ApiSuccessResponse<RecruitsParams>;
+export type GetRecruitsApiData = ApiSuccessResponse<Recruits>;
 
-export interface RecruitsParams {
-  recruits: RecruitParams[];
+export interface Recruits {
+  recruits: RecruitSummary[];
   currentPage: number;
   totalPages: number;
   lastPage: boolean;
 }
 
-export interface RecruitParams {
+export interface RecruitSummary {
   recruitId: number;
   title: string;
   finishedRecruit: boolean;
   recruitEnd: string;
   skills: SkillsType[];
-  participants: RecruitParticipantParams[];
+  participants: RecruitParticipant[];
 }
-export interface RecruitParticipantParams {
+export interface RecruitParticipant {
   recruitType: RecruitType;
   limit: number;
   members: {
