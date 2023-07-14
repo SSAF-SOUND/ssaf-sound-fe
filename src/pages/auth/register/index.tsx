@@ -37,11 +37,7 @@ const RegisterPage: CustomNextPage = () => {
     try {
       const response = await updateMyInfo(value);
       setMyInfo(response);
-      await router.replace(
-        response.ssafyMember
-          ? routes.intro.studentCertification()
-          : routes.main()
-      );
+      await router.replace(routes.intro.studentCertification());
     } catch (error) {
       handleAxiosError(error, {
         onClientError: (response) => {
