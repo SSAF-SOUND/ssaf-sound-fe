@@ -161,5 +161,5 @@ StudentCertificationPage.auth = {
 };
 
 const selfCss = css({
-  padding: '0 20px',
+  padding: '10px 15px',
 });

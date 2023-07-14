@@ -3,12 +3,12 @@ import type { UserRegisterFormValues } from '~/components/UserRegisterForm/utils
 
 import { useRouter } from 'next/router';
 
+import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import UserRegisterForm from '~/components/UserRegisterForm';
 import {
-  CertificationState,
   useMyAccountStatus,
   useSetMyInfo,
   useUpdateMyInfo,
@@ -20,7 +20,7 @@ const loaderText = '유저 정보를 확인하는 중입니다.';
 
 const RegisterPage: CustomNextPage = () => {
   const router = useRouter();
-  const { isRegisterRequired, myInfo } = useMyAccountStatus();
+  const { isRegisterRequired } = useMyAccountStatus();
   const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
   const [shouldCheckUserInfo, setShouldCheckUserInfo] = useState(true);
   const setMyInfo = useSetMyInfo();
@@ -51,7 +51,7 @@ const RegisterPage: CustomNextPage = () => {
   };
 
   return (
-    <div css={{ padding: '0 15px' }}>
+    <div css={selfCss}>
       <UserRegisterForm onSubmit={onSubmit} />
     </div>
   );
@@ -64,3 +64,5 @@ RegisterPage.auth = {
 };
 
 export default RegisterPage;
+
+const selfCss = css({ padding: '10px 15px' });
