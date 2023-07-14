@@ -2,7 +2,8 @@ import type {
   GetMyInfoApiData,
   UpdateMyInfoParams,
   UserInfo,
- CertifyStudentApiData } from '~/services/member';
+  CertifyStudentApiData,
+} from '~/services/member';
 import type { ApiErrorResponse } from '~/types';
 
 import { rest } from 'msw';
@@ -18,7 +19,7 @@ const getMyInfo = rest.get<never, never, GetMyInfoApiData | ApiErrorResponse>(
     return res(
       ctx.delay(500),
       // ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
-      ...mockSuccess<UserInfo>(ctx, userInfo.ssafyUserInfo)
+      ...mockSuccess<UserInfo>(ctx, userInfo.certifiedSsafyUserInfo)
       // ...mockSuccess<UserInfo>(ctx, userInfo.nonSsafyUserInfo)
       // ...mockError(ctx, 'code', 'message', 404),
     );
@@ -35,7 +36,7 @@ const updateMyInfo = rest.patch<
   let response;
 
   if (body.ssafyMember) {
-    response = userInfo.ssafyUserInfo;
+    response = userInfo.certifiedSsafyUserInfo;
   } else {
     response = userInfo.nonSsafyUserInfo;
   }
