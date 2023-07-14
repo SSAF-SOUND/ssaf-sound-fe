@@ -9,10 +9,12 @@ import { API_URL, ResponseCode } from './constants';
 
 export const publicAxios = axios.create({
   baseURL: API_URL,
+  // withCredentials: true, 
 });
 
 export const privateAxios = axios.create({
   baseURL: API_URL,
+  // withCredentials: true,
 });
 
 const configurePrivateAxiosInterceptors = (
