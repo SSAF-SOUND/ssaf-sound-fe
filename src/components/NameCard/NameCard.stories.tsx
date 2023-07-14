@@ -8,7 +8,7 @@ import { disableArgs } from '~/stories/utils';
 import NameCard from './index';
 
 const meta: Meta<typeof NameCard> = {
-  title: 'NameCard',
+  title: 'Profile/NameCard',
   component: NameCard,
   tags: ['autodocs'],
   argTypes: {

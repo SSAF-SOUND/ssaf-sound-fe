@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import Gnb from './index';
 
 const meta: Meta<typeof Gnb> = {
-  title: 'Gnb',
+  title: 'Navigation/Gnb',
   component: Gnb,
 };
 

@@ -3,7 +3,7 @@ import type { Meta } from '@storybook/react';
 import PortfolioLink from './index';
 
 const meta: Meta<typeof PortfolioLink> = {
-  title: 'PortfolioLink',
+  title: 'Profile/PortfolioLink',
   tags: ['autodocs'],
   argTypes: {
     Root: {

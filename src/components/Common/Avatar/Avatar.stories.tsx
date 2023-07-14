@@ -16,7 +16,7 @@ const disableArgsTypes = disableArgs.reduce((acc, cur) => {
 }, {});
 
 const meta: Meta = {
-  title: 'Avatar',
+  title: 'Profile/Avatar',
   component: Avatar,
   argTypes: {
     ...disableArgsTypes,

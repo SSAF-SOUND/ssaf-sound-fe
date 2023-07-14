@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { css } from '@emotion/react';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { PageLayout } from '~/stories/Layout';
 import { flex, fontCss, palettes } from '~/styles/utils';
@@ -9,7 +9,7 @@ import { flex, fontCss, palettes } from '~/styles/utils';
 import Editor from './index';
 
 const meta: Meta<typeof Editor> = {
-  title: 'Editor',
+  title: 'Input/Editor',
   component: Editor,
   decorators: [
     (Story) => {
