@@ -84,7 +84,6 @@ const selfCss = css({
   display: 'flex',
   flexDirection: 'column',
   minHeight: pageMinHeight,
-  padding: '10px 0',
 });
 
 const formCss = css(
