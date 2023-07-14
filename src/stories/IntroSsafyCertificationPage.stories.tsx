@@ -23,21 +23,26 @@ const meta: Meta<typeof IntroStudentCertificationPage> = {
 
 export default meta;
 
-type IntroStudentCertificationPageStory = StoryObj<{ certified: boolean }>;
+type IntroStudentCertificationPageStory = StoryObj<{
+  certified: boolean;
+  ssafyMember: boolean;
+}>;
 
 export const Default: IntroStudentCertificationPageStory = {
-  args: { certified: false },
+  args: { certified: false, ssafyMember: false },
   render: function Render(args) {
-    const { certified } = args;
+    const { certified, ssafyMember } = args;
     const setMyInfo = useSetMyInfo();
 
     useEffect(() => {
-      setMyInfo(
-        certified
-          ? userInfo.uncertifiedSsafyUserInfo
-          : userInfo.certifiedSsafyUserInfo
-      );
-    }, [certified]);
+      const myInfo = !ssafyMember
+        ? userInfo.nonSsafyUserInfo
+        : certified
+        ? userInfo.certifiedSsafyUserInfo
+        : userInfo.uncertifiedSsafyUserInfo;
+
+      setMyInfo(myInfo);
+    }, [certified, setMyInfo, ssafyMember]);
 
     return <IntroStudentCertificationPage />;
   },
