@@ -62,7 +62,7 @@ const selfCss = css(
 const textBoxCss = css(flex('center', 'center'));
 const nickNameCss = css(fontCss.style.B16, fontCss.family.auto, {
   lineHeight: '18px',
-  maxWidth: '85px',
+  maxWidth: 85,
   textAlign: 'center',
   color: palettes.white,
 });
