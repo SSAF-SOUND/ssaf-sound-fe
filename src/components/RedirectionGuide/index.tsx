@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { css } from '@emotion/react';
 
 import { Button, SsafyIcon, TrackSize } from '~/components/Common';
-import { flex, fontCss, themeColorVars } from '~/styles/utils';
+import { flex, fontCss, pageMinHeight, themeColorVars } from '~/styles/utils';
 
 type RedirectionGuideTheme = 'primary' | 'secondary';
 
@@ -54,7 +54,7 @@ export default RedirectionGuide;
 
 const selfCss = css(
   {
-    minHeight: '100vh',
+    minHeight: pageMinHeight,
     height: 'max-content',
   },
   flex('center', 'space-between')
