@@ -5,7 +5,7 @@ import { PageLayout } from '~/stories/Layout';
 import RollingAllTracks from './index';
 
 const meta: Meta<typeof RollingAllTracks> = {
-  title: 'RollingAllTracks',
+  title: 'Certification/RollingAllTracks',
   component: RollingAllTracks,
   decorators: [
     (Story) => (
