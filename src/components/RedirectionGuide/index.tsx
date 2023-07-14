@@ -55,7 +55,7 @@ export default RedirectionGuide;
 const selfCss = css(
   {
     minHeight: pageMinHeight,
-    height: 'max-content',
+    height: '100vh',
   },
   flex('center', 'space-between')
 );

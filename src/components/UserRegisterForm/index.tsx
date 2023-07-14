@@ -21,10 +21,11 @@ import { noop } from '~/utils';
 interface UserRegisterFormProps {
   onSubmit?: SubmitHandler<UserRegisterFormValues>;
   defaultValues?: Partial<UserRegisterFormValues>;
+  className?: string;
 }
 
 const UserRegisterForm = (props: UserRegisterFormProps) => {
-  const { onSubmit = noop, defaultValues } = props;
+  const { onSubmit = noop, defaultValues, className } = props;
   const methods = useForm({
     defaultValues,
   });
@@ -56,7 +57,7 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
   const FieldComponent = FieldComponents[currentPhase];
 
   return (
-    <div css={selfCss}>
+    <div css={selfCss} className={className}>
       <FormProvider {...methods}>
         <TitleBar.Default
           withoutTitle

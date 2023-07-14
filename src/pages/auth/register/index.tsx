@@ -13,6 +13,7 @@ import {
   useSetMyInfo,
   useUpdateMyInfo,
 } from '~/services/member';
+import { flex } from '~/styles/utils';
 import { customToast, handleAxiosError } from '~/utils';
 import { routes } from '~/utils/routes';
 
@@ -52,7 +53,7 @@ const RegisterPage: CustomNextPage = () => {
 
   return (
     <div css={selfCss}>
-      <UserRegisterForm onSubmit={onSubmit} />
+      <UserRegisterForm onSubmit={onSubmit} css={formCss} />
     </div>
   );
 };
@@ -65,4 +66,5 @@ RegisterPage.auth = {
 
 export default RegisterPage;
 
-const selfCss = css({ padding: '10px 15px' });
+const selfCss = css({ minHeight: '100vh', padding: '10px 15px' }, flex());
+const formCss = css({ flexGrow: 1 });
