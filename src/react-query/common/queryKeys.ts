@@ -17,6 +17,8 @@ export const endpoints = {
     studentCertification: () => '/members/ssafy-certification' as const,
   },
   recruit: {
+    // todo 이름, 파라미터 수정
+    data: () => '/recruits' as const,
     detail: () => '/recruit/detail' as const,
   },
 };
