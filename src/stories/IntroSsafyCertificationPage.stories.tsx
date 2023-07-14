@@ -29,7 +29,7 @@ type IntroStudentCertificationPageStory = StoryObj<{
 }>;
 
 export const Default: IntroStudentCertificationPageStory = {
-  args: { certified: false, ssafyMember: false },
+  args: { certified: false, ssafyMember: true },
   render: function Render(args) {
     const { certified, ssafyMember } = args;
     const setMyInfo = useSetMyInfo();
@@ -45,5 +45,12 @@ export const Default: IntroStudentCertificationPageStory = {
     }, [certified, setMyInfo, ssafyMember]);
 
     return <IntroStudentCertificationPage />;
+  },
+  parameters: {
+    msw: {
+      handler: {
+        member: [],
+      },
+    },
   },
 };
