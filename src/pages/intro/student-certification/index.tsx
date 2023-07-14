@@ -1,5 +1,3 @@
-import type { UserInfo } from '~/services/member';
-
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -22,13 +20,13 @@ const StudentCertificationIntroPage = () => {
   const router = useRouter();
   const { data: myInfo } = useMyInfo();
 
-  if (!myInfo?.ssafyMember) {
+  if (!myInfo) {
     router.replace(routes.unauthorized());
     return <DefaultFullPageLoader text={loadingText} />;
   }
 
-  const alreadyCertified =
-    myInfo.ssafyInfo.certificationState === CertificationState.CERTIFIED;
+  const uncertified =
+    myInfo.ssafyInfo?.certificationState === CertificationState.UNCERTIFIED;
 
   return (
     <div css={selfCss}>
@@ -65,19 +63,21 @@ const StudentCertificationIntroPage = () => {
         </div>
 
         <div css={buttonLayerCss}>
-          {alreadyCertified ? (
+          {uncertified ? (
+            <Button size="lg" asChild>
+              <Link href={routes.certification.student()}>
+                SSAFY 재학생 인증하기
+              </Link>
+            </Button>
+          ) : (
             <Button
               size="lg"
               disabled
               onClick={() => router.push(routes.main())}
             >
-              이미 인증된 계정입니다
-            </Button>
-          ) : (
-            <Button size="lg" asChild>
-              <Link href={routes.certification.student()}>
-                SSAFY 재학생 인증하기
-              </Link>
+              {myInfo.ssafyMember
+                ? 'SSAFY 학생만 인증할 수 있습니다'
+                : '이미 인증된 계정입니다'}
             </Button>
           )}
 
