@@ -38,6 +38,8 @@ export const palettes = {
   //
   major: '#71E498',
   nonMajor: '#FFBF75',
+  majorDark: '#3B564E',
+  nonMajorDark: '#584E47',
   //
   background: {
     default: '#2E323B',
