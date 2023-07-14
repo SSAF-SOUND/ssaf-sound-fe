@@ -17,10 +17,9 @@ const meta: Meta<typeof SignInPage> = {
         // @ts-ignore
         setMyInfo(null);
         // - `undefined`가 직렬화 불가능한 데이터라서 그런지, 아예 update 시도 자체를 안 합니다.
-        // - `removeQueries`나 `resetQueries`는 스토리북에서 페이지 전환시, 다른 페이지에서도 `reset`이 트리거되는 버그가 있어서 사용할 수 없어요.
-        // - 여기선 `undefined`대신 `null`을 세팅했습니다.
-        // - `null`은 디폴트 값 할당을 트리거하지 않기 때문에, 디폴트 값 할당을 의도한 경우엔 세팅하면 안됩니다.
-      }, []);
+        // - `removeQueries`나 `resetQueries`는 스토리 전환시, 다른 스토리에서도 `reset`이 트리거되는 버그가 있어서 사용할 수 없어요.
+        // - 여기선 `undefined`대신 `null`을 세팅했지만, `null`은 디폴트 값 할당을 트리거하지 않기 때문에, 디폴트 값 할당을 의도한 경우엔 사용하면 안됩니다.
+      }, [setMyInfo]);
 
       return (
         <PageLayout>
@@ -29,6 +28,13 @@ const meta: Meta<typeof SignInPage> = {
       );
     },
   ],
+  parameters: {
+    msw: {
+      handlers: {
+        member: [],
+      },
+    },
+  },
 };
 
 export default meta;
