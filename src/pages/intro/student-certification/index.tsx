@@ -76,8 +76,8 @@ const StudentCertificationIntroPage = () => {
               onClick={() => router.push(routes.main())}
             >
               {myInfo.ssafyMember
-                ? 'SSAFY 학생만 인증할 수 있습니다'
-                : '이미 인증된 계정입니다'}
+                ? '이미 인증된 계정입니다'
+                : 'SSAFY 학생만 인증할 수 있습니다'}
             </Button>
           )}
 
