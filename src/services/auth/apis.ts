@@ -14,7 +14,7 @@ export interface SignInParams {
 
 export const signIn = (params: SignInParams) => {
   const endpoint = endpoints.auth.signIn();
-  const { code, oauthName } = params;
+
   return publicAxios
     .post<SignInApiData>(endpoint, params)
     .then((res) => res.data);

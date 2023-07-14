@@ -7,7 +7,8 @@ export const queryKeys = {
 
 export const endpoints = {
   auth: {
-    signIn: () => '/auth/login' as const,
+    provider: (provider: string) => `/auth/${provider}` as const,
+    signIn: () => '/auth/callback' as const,
     signOut: () => '/auth/logout' as const,
     refresh: () => '/auth/reissue' as const,
   },
