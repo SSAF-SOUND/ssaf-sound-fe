@@ -15,7 +15,7 @@ import {
   Year,
 } from '~/components/UserRegisterForm/Fields';
 import { useStack } from '~/hooks';
-import { flex } from '~/styles/utils';
+import { flex, pageMinHeight } from '~/styles/utils';
 import { noop } from '~/utils';
 
 interface UserRegisterFormProps {
@@ -83,7 +83,7 @@ export default UserRegisterForm;
 const selfCss = css({
   display: 'flex',
   flexDirection: 'column',
-  minHeight: '100vh',
+  minHeight: pageMinHeight,
   padding: '10px 0',
 });
 

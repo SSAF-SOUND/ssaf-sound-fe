@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import TitleBar from '~/components/TitleBar';
 import { useStack } from '~/hooks';
-import { flex } from '~/styles/utils';
+import { flex, pageMinHeight } from '~/styles/utils';
 import { noop } from '~/utils';
 
 import { Quiz, Track } from './Fields';
@@ -68,12 +68,7 @@ const defaultStudentCertificationFormValues: Partial<StudentCertificationFormVal
 
 export default StudentCertificationForm;
 
-const selfCss = css(
-  {
-    minHeight: '100vh',
-  },
-  flex()
-);
+const selfCss = css({ minHeight: pageMinHeight }, flex());
 
 const titleBarCss = css({
   padding: 0,
