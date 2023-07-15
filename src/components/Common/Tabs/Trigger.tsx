@@ -11,7 +11,7 @@ export interface TriggerProps extends TabsTriggerProps {
   variant?: TriggerVariantProps;
 }
 
-export type TriggerColorProps = 'default' | 'primary' | 'secondary';
+export type TriggerColorProps = 'white' | 'primary' | 'secondary';
 export type TriggerVariantProps = 'default' | 'fit';
 
 const Trigger = (props: TriggerProps) => {
