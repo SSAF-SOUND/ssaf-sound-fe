@@ -3,6 +3,7 @@ export * from './constants';
 export * from './filter';
 export * from './flex';
 export * from './fontCss';
+export * from './globalVars';
 export * from './palettes';
 export * from './position';
 export * from './pxToRem';

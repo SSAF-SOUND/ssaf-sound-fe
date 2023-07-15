@@ -1,14 +1,15 @@
 import { css, Global } from '@emotion/react';
 import React, { memo } from 'react';
 
-import { palettes } from '~/styles/utils';
-import {
-  createThemePalettes,
-  themeColorVars,
-} from '~/styles/utils/themeColorVars';
+import { globalVars, palettes } from '~/styles/utils';
+import { createThemePalettes } from '~/styles/utils/themeColorVars';
 
 const GlobalStyles = memo(() => {
-  return <Global styles={[resetCss, customBaseCss, themeColorVarCss]} />;
+  return (
+    <Global
+      styles={[resetCss, customBaseCss, themeColorVarCss, globalVarCss]}
+    />
+  );
 });
 
 GlobalStyles.displayName = 'GlobalStyles';
@@ -226,6 +227,12 @@ const themeColorVarCss = css({
     palettes.point.recruit,
     palettes.point.recruit
   ),
+});
+
+const globalVarCss = css({
+  ':root': {
+    [globalVars.mainLayoutPaddingX.varName]: '10px',
+  },
 });
 
 export default GlobalStyles;
