@@ -2,14 +2,8 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import { Gnb } from '~/components/Common';
-import TopBar from '~/components/TopBar';
-import {
-  globalVars,
-  pageMaxWidth,
-  pageMinWidth,
-  position,
-} from '~/styles/utils';
+import NavigationGroup from '~/components/NavigationGroup';
+import { globalVars, pageMaxWidth, pageMinWidth } from '~/styles/utils';
 
 // 임시 레이아웃입니다.
 // 개발 단계에서, 보기 편하게 하기 위해서 넣어놨어요!
@@ -24,12 +18,7 @@ const MainLayout = (props: MainLayoutProps) => {
   const { children, className, withNavigation = false } = props;
   return (
     <div css={selfCss} className={className}>
-      {withNavigation && (
-        <>
-          <TopBar css={[barCss, position.y('start', 'fixed')]} />
-          <Gnb css={[barCss, position.y('end', 'fixed')]} />
-        </>
-      )}
+      {withNavigation && <NavigationGroup />}
       <main>{children}</main>
     </div>
   );
@@ -45,11 +34,4 @@ const selfCss = css({
   padding: `0 ${globalVars.mainLayoutPaddingX.var}`,
   boxShadow: `20px 20px 40px #272b32, -20px -20px 40px #353a44;`,
   overflow: 'hidden',
-});
-
-const barCss = css({
-  minWidth: pageMinWidth,
-  maxWidth: pageMaxWidth,
-  width: '100%',
-  marginLeft: -globalVars.mainLayoutPaddingX.var,
 });
