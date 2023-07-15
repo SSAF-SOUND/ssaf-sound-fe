@@ -2,32 +2,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { useMemo } from 'react';
 import { MdHome, MdArticle, MdGroupAdd, MdAccountCircle } from 'react-icons/md';
 
-import { flex, fontCss, palettes } from '~/styles/utils';
-
-const navItems = [
-  {
-    text: '홈',
-    icon: <MdHome />,
-    href: '/',
-  },
-  {
-    text: '게시판',
-    icon: <MdArticle />,
-    href: '/boards',
-  },
-  {
-    text: '리쿠르팅',
-    icon: <MdGroupAdd />,
-    href: '/recruit',
-  },
-  {
-    text: '프로필',
-    icon: <MdAccountCircle />,
-    href: '/profile',
-  },
-];
+import { flex, fontCss, gnbHeight, palettes } from '~/styles/utils';
+import { routes } from '~/utils';
 
 interface GnbProps {
   className?: string;
@@ -35,6 +14,31 @@ interface GnbProps {
 
 const Gnb = (props: GnbProps) => {
   const { className } = props;
+  const navItems = useMemo(
+    () => [
+      {
+        text: '홈',
+        icon: <MdHome />,
+        href: routes.main(),
+      },
+      {
+        text: '게시판',
+        icon: <MdArticle />,
+        href: '/boards',
+      },
+      {
+        text: '리쿠르팅',
+        icon: <MdGroupAdd />,
+        href: '/recruit',
+      },
+      {
+        text: '프로필',
+        icon: <MdAccountCircle />,
+        href: '/profile',
+      },
+    ],
+    []
+  );
   const router = useRouter();
   const { pathname } = router;
 
@@ -43,7 +47,7 @@ const Gnb = (props: GnbProps) => {
       <div css={itemContainerCss}>
         {navItems.map((navItem) => {
           const { text, icon, href } = navItem;
-          const isActive = href === pathname;
+          const isActive = pathname.startsWith(href);
 
           return (
             <Link
@@ -63,7 +67,6 @@ const Gnb = (props: GnbProps) => {
 
 const selfCss = css({
   width: '100%',
-  height: '100%',
   borderTopLeftRadius: 15,
   borderTopRightRadius: 15,
   overflow: 'hidden',
@@ -74,17 +77,14 @@ const selfCss = css({
 });
 
 const itemContainerCss = css(
-  {
-    width: '100%',
-    height: '100%',
-  },
+  { width: '100%' },
   flex('center', 'center', 'row', 10)
 );
 
 const itemCss = css(
   {
     width: '25%',
-    height: 64,
+    height: gnbHeight,
     ':hover': {
       color: palettes.primary.default,
     },
