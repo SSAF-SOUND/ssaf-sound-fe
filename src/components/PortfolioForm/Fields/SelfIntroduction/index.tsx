@@ -53,4 +53,7 @@ export const SelfIntroduction = (props: SelfIntroductionProps) => {
   );
 };
 
-const labelCss = css({ color: palettes.font.lightGrey }, fontCss.style.R14);
+const labelCss = css(
+  { color: palettes.font.lightGrey, marginBottom: 10 },
+  fontCss.style.R14
+);
