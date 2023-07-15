@@ -4,7 +4,12 @@ import { css } from '@emotion/react';
 
 import { Gnb } from '~/components/Common';
 import TopBar from '~/components/TopBar';
-import { paddingX, pageMaxWidth, pageMinWidth, position } from '~/styles/utils';
+import {
+  globalVars,
+  pageMaxWidth,
+  pageMinWidth,
+  position,
+} from '~/styles/utils';
 
 // 임시 레이아웃입니다.
 // 개발 단계에서, 보기 편하게 하기 위해서 넣어놨어요!
@@ -37,7 +42,7 @@ const selfCss = css({
   maxWidth: pageMaxWidth,
   minHeight: '100vh',
   margin: '0 auto',
-  padding: `0 ${paddingX.mainLayout}px`,
+  padding: `0 ${globalVars.mainLayoutPaddingX.var}`,
   boxShadow: `20px 20px 40px #272b32, -20px -20px 40px #353a44;`,
   overflow: 'hidden',
 });
@@ -46,5 +51,5 @@ const barCss = css({
   minWidth: pageMinWidth,
   maxWidth: pageMaxWidth,
   width: '100%',
-  marginLeft: -paddingX.mainLayout,
+  marginLeft: -globalVars.mainLayoutPaddingX.var,
 });
