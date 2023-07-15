@@ -24,6 +24,7 @@ import {
   MdClose,
   MdControlPoint,
   MdCreate,
+  MdDescription,
   MdGroup,
   MdGroupAdd,
   MdHome,
@@ -35,6 +36,7 @@ import {
   MdOutlineThumbUp,
   MdRefresh,
   MdRemoveCircleOutline,
+  MdSettings,
   MdThumbUp,
 } from 'react-icons/md';
 import { RiKakaoTalkFill } from 'react-icons/ri';
@@ -86,6 +88,8 @@ export const icons = {
 
   image: <BiImageAdd />,
   link: <MdLink />,
+  setting: <MdSettings />,
+  document: <MdDescription />,
 
   google: <AiOutlineGoogle />,
   github: <AiFillGithub />,
