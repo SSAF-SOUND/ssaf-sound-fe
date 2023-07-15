@@ -187,9 +187,14 @@ const themeColorVarCss = css({
     palettes.secondary.darkest
   ),
   '[data-theme="grey"]': createThemePalettes(
-    palettes.grey3,
-    palettes.grey4,
-    palettes.grey2
+    palettes.grey.default,
+    palettes.grey.light,
+    palettes.grey.dark
+  ),
+  '[data-theme="recruit"]': createThemePalettes(
+    palettes.recruit.default,
+    palettes.recruit.light,
+    palettes.recruit.dark
   ),
   '[data-theme="success"]': createThemePalettes(
     palettes.success.default,
@@ -219,13 +224,6 @@ const themeColorVarCss = css({
     palettes.grey0,
     palettes.black,
     palettes.black
-  ),
-  '[data-theme="recruit"]': createThemePalettes(
-    palettes.point.recruit,
-    palettes.point.recruit,
-    palettes.point.recruit,
-    palettes.point.recruit,
-    palettes.point.recruit
   ),
 });
 
