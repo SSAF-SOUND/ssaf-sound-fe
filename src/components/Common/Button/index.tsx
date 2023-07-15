@@ -23,7 +23,13 @@ type ButtonTheme =
   | 'grey'
   | 'success'
   | 'warning'
-  | 'error';
+  | 'error'
+  | 'recruit';
+
+type CustomColor = Pick<
+  Record<keyof typeof themeColorVars, string>,
+  'mainColor' | 'mainDarkColor' | 'mainLightColor'
+>;
 
 export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   children?: ReactNode;
@@ -32,6 +38,7 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   theme?: ButtonTheme;
   asChild?: boolean;
   loading?: boolean;
+  customColor?: CustomColor;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
@@ -43,6 +50,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     loading = false,
     disabled,
     children,
+    style,
+    customColor,
     ...restProps
   } = props;
 
@@ -51,8 +60,18 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
 
   const isDisabled = disabled || loading;
 
+  const styleWithCustomColor = customColor
+    ? {
+        ...style,
+        [themeColorVars.mainColor.var]: customColor.mainColor,
+        [themeColorVars.mainLightColor.var]: customColor.mainLightColor,
+        [themeColorVars.mainDarkColor.var]: customColor.mainDarkColor,
+      }
+    : style;
+
   return (
     <Component
+      style={styleWithCustomColor}
       data-theme={theme}
       ref={ref}
       disabled={isDisabled}
