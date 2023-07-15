@@ -4,12 +4,12 @@ import Border from './Border';
 import List from './List';
 import Trigger from './Trigger';
 
-const Tabs = Object.assign({
+const Tabs = {
   Root,
   Content,
   List,
   Trigger,
   Border,
-});
+};
 
 export default Tabs;
