@@ -31,7 +31,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
         <GlobalStyles />
         <Background />
         <Toaster />
-        <MainLayout>
+        <MainLayout withNavigation={Component.navigation}>
           {Component.auth ? (
             <AuthChecker auth={Component.auth}>
               <Component {...pageProps} />
