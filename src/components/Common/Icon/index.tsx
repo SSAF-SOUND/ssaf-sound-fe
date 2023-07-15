@@ -107,7 +107,7 @@ export interface IconProps {
   className?: string;
 }
 
-const Icon = (props: IconProps) => {
+export const Icon = (props: IconProps) => {
   const {
     name,
     label = name,
@@ -129,5 +129,3 @@ const Icon = (props: IconProps) => {
 };
 
 const selfCss = css(inlineFlex());
-
-export default Icon;

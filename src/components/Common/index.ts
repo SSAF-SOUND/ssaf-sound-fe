@@ -7,7 +7,7 @@ export { default as DatePicker } from './DatePicker';
 export { default as DefaultFullPageLoader } from './DefaultFullPageLoader';
 export { default as Dot } from './Dot';
 export { default as Gnb } from './Gnb';
-export { default as Icon } from './Icon';
+export * from './Icon';
 export { default as IconButton } from './IconButton';
 export { default as Logo } from './Logo';
 export { default as Modal } from './Modal';
