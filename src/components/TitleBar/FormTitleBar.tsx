@@ -9,7 +9,7 @@ import { fontCss } from '~/styles/utils';
 
 import IconButton from '../Common/IconButton';
 
-interface RecruitFormTitleBarProps {
+interface FormTitleBarProps {
   title: string;
   submitButtonText: string;
   isSubmitting?: boolean;
@@ -18,7 +18,7 @@ interface RecruitFormTitleBarProps {
   className?: string;
 }
 
-const RecruitFormTitleBar = (props: RecruitFormTitleBarProps) => {
+const FormTitleBar = (props: FormTitleBarProps) => {
   const {
     title,
     submitButtonText,
@@ -63,7 +63,7 @@ const RecruitFormTitleBar = (props: RecruitFormTitleBarProps) => {
   );
 };
 
-export default RecruitFormTitleBar;
+export default FormTitleBar;
 
 const iconSize = 28;
 const iconButtonSize = iconSize + 8;

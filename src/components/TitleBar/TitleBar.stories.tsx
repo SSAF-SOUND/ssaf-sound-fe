@@ -21,7 +21,7 @@ const meta: Meta<typeof TitleBar.Default> = {
 export default meta;
 
 type DefaultTitleBarStory = StoryObj<typeof TitleBar.Default>;
-type RecruitFormTitleBarStory = StoryObj<typeof TitleBar.RecruitForm>;
+type FormTitleBarStory = StoryObj<typeof TitleBar.Form>;
 
 export const Default: DefaultTitleBarStory = {
   args: {
@@ -49,8 +49,7 @@ export const DefaultExamples: DefaultTitleBarStory = {
   },
 };
 
-export const Recruit: RecruitFormTitleBarStory = {
-  name: 'RecruitForm',
+export const Form: FormTitleBarStory = {
   args: {
     title: '리쿠르팅 등록하기',
     isSubmitDisabled: false,
@@ -58,28 +57,27 @@ export const Recruit: RecruitFormTitleBarStory = {
     submitButtonText: '완료',
   },
   render: (args) => {
-    return <TitleBar.RecruitForm {...args} />;
+    return <TitleBar.Form {...args} />;
   },
 };
 
-export const RecruitExamples: RecruitFormTitleBarStory = {
-  name: 'RecruitForm Examples',
+export const FormExamples: FormTitleBarStory = {
   render: () => {
     const title = '리쿠르팅 등록하기';
     const submitButtonText = '완료';
     return (
       <div css={exampleCss}>
-        <TitleBar.RecruitForm
+        <TitleBar.Form
           title={title}
           isSubmitDisabled={false}
           submitButtonText={submitButtonText}
         />
-        <TitleBar.RecruitForm
+        <TitleBar.Form
           title={title}
           isSubmitDisabled={true}
           submitButtonText={submitButtonText}
         />
-        <TitleBar.RecruitForm
+        <TitleBar.Form
           title={title}
           isSubmitting={true}
           submitButtonText={submitButtonText}
