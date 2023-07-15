@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
-import { Bar, Icon, IconButton, Logo , Dot } from '~/components/Common';
-import { flex } from '~/styles/utils';
+import { Bar, Icon, IconButton, Logo, Dot } from '~/components/Common';
+import { flex, topBarHeight } from '~/styles/utils';
 
 interface TopBarProps {
   className?: string;
@@ -15,6 +15,7 @@ const TopBar = (props: TopBarProps) => {
    */
   return (
     <Bar
+      css={selfCss}
       {...props}
       left={<Logo navigateToMainPage />}
       right={
@@ -43,6 +44,7 @@ const iconSize = 28;
 const iconContainerGap = 4;
 const iconContainerWidth = iconSize + iconContainerGap + 10;
 
+const selfCss = css({ width: '100%', height: topBarHeight });
 const rightSelfCss = css(flex('center', '', 'row', 10));
 const rightIconContainerCss = css(
   { minWidth: iconContainerWidth },
