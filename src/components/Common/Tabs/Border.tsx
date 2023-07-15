@@ -2,8 +2,14 @@ import { css } from '@emotion/react';
 
 import { palettes } from '~/styles/utils';
 
-const Border = () => {
-  return <div css={selfCss} />;
+import { tabsZIndex } from './zIndex';
+
+interface BorderProps {
+  className?: string;
+}
+
+const Border = (props: BorderProps) => {
+  return <div css={selfCss} {...props} />;
 };
 
 const selfCss = css({
@@ -12,7 +18,7 @@ const selfCss = css({
   height: 2,
   width: '100%',
   backgroundColor: palettes.font.blueGrey,
-  zIndex: 1,
+  zIndex: tabsZIndex.border,
 });
 
 export default Border;
