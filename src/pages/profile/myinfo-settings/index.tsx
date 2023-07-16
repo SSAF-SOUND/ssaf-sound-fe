@@ -32,10 +32,10 @@ const MyInfoSettingsPage: CustomNextPage = () => {
       <Nav heading="내 정보" css={{ marginBottom: 40 }}>
         <LinkItem href={''}>닉네임 수정</LinkItem>
         <LinkItem href={''}>학생 인증</LinkItem>
-        <li css={itemCss}>
+        <div css={itemCss}>
           <span>내 프로필 공개</span>
           <ProfileVisibilityToggle />
-        </li>
+        </div>
       </Nav>
 
       <Nav heading="SSAFY 정보" css={{ marginBottom: 40 }}>
@@ -71,7 +71,7 @@ const Nav = (props: NavProps) => {
   return (
     <nav css={[expandCss]} className={className}>
       <h3 css={headingCss}>{heading}</h3>
-      <ul>{children}</ul>
+      <div>{children}</div>
     </nav>
   );
 };
@@ -83,12 +83,10 @@ interface LinkItemProps {
 const LinkItem = (props: LinkItemProps) => {
   const { children, href } = props;
   return (
-    <li>
-      <Link href={href} css={[itemCss, itemStateCss]}>
-        <span>{children}</span>
-        <Icon name="chevron.right" size={20} />
-      </Link>
-    </li>
+    <Link href={href} css={[itemCss, itemStateCss]}>
+      <span>{children}</span>
+      <Icon name="chevron.right" size={20} />
+    </Link>
   );
 };
 
