@@ -17,6 +17,7 @@ export interface ToggleStyleProps {
 }
 
 export interface ToggleCoreProps {
+  id?: string;
   pressed?: boolean;
   defaultPressed?: boolean;
   onPressedChange?: (pressed: boolean) => void;
