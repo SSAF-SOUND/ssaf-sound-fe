@@ -16,6 +16,14 @@ export const routes = {
     studentCertification: () => '/intro/student-certification',
   },
 
+  profile: {
+    detail: (id: number) => `/profile/${id}`,
+    edit: {
+      portfolio: () => '/profile/portfolio/edit',
+    },
+    myInfoSettings: () => '/profile/myinfo-settings',
+  },
+
   //
   unauthorized: () => '/unauthorized',
 };
