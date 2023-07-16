@@ -13,9 +13,10 @@ import { customToast, routes } from '~/utils';
 
 const PortfolioEditPage: CustomNextPage = () => {
   const onInvalidSubmit: PortfolioFormProps['onInvalidSubmit'] = (errors) => {
+    const linkError = errors?.links?.find?.(Boolean);
     const errorMessage =
-      errors?.links?.[0]?.link?.message ||
-      errors?.links?.[0]?.linkText?.message ||
+      linkError?.link?.message ||
+      linkError?.linkText?.message ||
       errors?.selfIntroduction?.message;
 
     if (errorMessage) customToast.clientError(errorMessage);
