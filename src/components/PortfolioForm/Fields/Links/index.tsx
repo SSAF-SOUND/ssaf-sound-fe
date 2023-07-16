@@ -33,7 +33,7 @@ export const Links = (props: LinksProps) => {
   };
 
   return (
-    <div css={selfCss} className={className}>
+    <div className={className}>
       <p css={labelCss}>
         ③ 더 담고 싶으신 내용을 <strong css={highlightCss}>Link</strong>로
         남겨주세요 :)
@@ -61,11 +61,15 @@ export const Links = (props: LinksProps) => {
   );
 };
 
-const selfCss = css({});
 const labelCss = css({ marginBottom: 20 }, fontCss.style.R14);
 const highlightCss = css({ color: palettes.recruit.default });
 const linkFieldArrayCss = css(
-  { maxWidth: 450, margin: '0 auto 20px' },
+  {
+    minWidth: 260,
+    width: 'max(min(60vw, 450px), 260px)',
+    maxWidth: 450,
+    margin: '0 auto 20px',
+  },
   flex('center', 'center', 'row', 15, 'wrap')
 );
 const addFieldButtonCss = css({

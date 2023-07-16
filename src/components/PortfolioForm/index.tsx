@@ -63,7 +63,7 @@ const PortfolioForm = (props: PortfolioFormProps) => {
 
         <SelfIntroduction css={{ marginBottom: 72 }} />
         <Skills css={{ marginBottom: 86 }} />
-        <Links css={{ padding: '0 0 80px 0' }} />
+        <Links css={{ paddingBottom: 400 }} />
       </form>
     </FormProvider>
   );
