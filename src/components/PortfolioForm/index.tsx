@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { PortfolioFormValues } from '~/components/PortfolioForm/utils';
 
@@ -20,6 +21,7 @@ interface PortfolioFormOptions {}
 
 export interface PortfolioFormProps {
   className?: string;
+  skillsContainerStyle?: CSSProperties;
   onValidSubmit?: SubmitHandler<PortfolioFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<PortfolioFormValues>;
   defaultValues?: Partial<PortfolioFormValues>;
@@ -29,6 +31,7 @@ export interface PortfolioFormProps {
 const PortfolioForm = (props: PortfolioFormProps) => {
   const {
     className,
+    skillsContainerStyle,
     options = {},
     onValidSubmit = noop,
     onInvalidSubmit = noop,
@@ -62,7 +65,10 @@ const PortfolioForm = (props: PortfolioFormProps) => {
         </section>
 
         <SelfIntroduction css={{ marginBottom: 72 }} />
-        <Skills css={{ marginBottom: 86 }} />
+        <Skills
+          css={{ marginBottom: 86 }}
+          skillsContainerStyle={skillsContainerStyle}
+        />
         <Links css={{ paddingBottom: 400 }} />
       </form>
     </FormProvider>

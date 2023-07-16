@@ -2,9 +2,11 @@ import type { CustomNextPage } from 'next/types';
 import type { PortfolioFormProps } from '~/components/PortfolioForm';
 
 import { css } from '@emotion/react';
+import { useMemo } from 'react';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import PortfolioForm from '~/components/PortfolioForm';
+import { globalVars } from '~/styles/utils';
 import { customToast, routes } from '~/utils';
 
 // TODO
@@ -26,9 +28,17 @@ const PortfolioEditPage: CustomNextPage = () => {
     console.log(value);
   };
 
+  const skillsContainerStyle = useMemo(() => {
+    return {
+      width: 'auto',
+      margin: `0 calc(-1 * (${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var}))`,
+    };
+  }, []);
+
   return (
     <div css={selfCss}>
       <PortfolioForm
+        skillsContainerStyle={skillsContainerStyle}
         onInvalidSubmit={onInvalidSubmit}
         onValidSubmit={onValidSubmit}
       />
@@ -43,6 +53,7 @@ PortfolioEditPage.auth = {
   unauthorized: routes.unauthorized(),
 };
 
+const selfPaddingX = '15px';
 const selfCss = css({
-  padding: '0 15px',
+  padding: `0 ${selfPaddingX}`,
 });

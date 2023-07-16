@@ -1,3 +1,5 @@
+import type { CSSProperties} from 'react';
+
 import { css } from '@emotion/react';
 import { useId, useRef, useState } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
@@ -14,10 +16,11 @@ const fieldName = 'skills';
 
 interface SkillsProps {
   className?: string;
+  skillsContainerStyle?: CSSProperties;
 }
 
 export const Skills = (props: SkillsProps) => {
-  const { className } = props;
+  const { className, skillsContainerStyle } = props;
   const selectedOrderRef = useRef<number>(1);
   const { register } = usePortfolioFormContext();
 
@@ -41,7 +44,7 @@ export const Skills = (props: SkillsProps) => {
         disablePadding={true}
       >
         <div css={selectedSkillsCss}>
-          <TransformComponent>
+          <TransformComponent wrapperStyle={skillsContainerStyle}>
             <SelectedSkills />
           </TransformComponent>
           <Checkbox
