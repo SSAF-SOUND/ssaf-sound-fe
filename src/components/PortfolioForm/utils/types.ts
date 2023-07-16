@@ -4,7 +4,7 @@ export interface PortfolioFormValues {
   links: Link[];
 }
 
-interface Link {
+export interface Link {
   linkText: string;
   link: string;
 }

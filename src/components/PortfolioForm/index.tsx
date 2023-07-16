@@ -8,11 +8,12 @@ import TitleBar from '~/components/TitleBar';
 import { fontCss, palettes } from '~/styles/utils';
 import { noop } from '~/utils';
 
-import { SelfIntroduction, Skills } from './Fields';
+import { Links, SelfIntroduction, Skills } from './Fields';
 
 interface PortfolioFormOptions {}
 
 interface PortfolioFormProps {
+  className?: string;
   onValidSubmit?: SubmitHandler<PortfolioFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<PortfolioFormValues>;
   defaultValues?: Partial<PortfolioFormValues>;
@@ -21,6 +22,7 @@ interface PortfolioFormProps {
 
 const PortfolioForm = (props: PortfolioFormProps) => {
   const {
+    className,
     options = {},
     onValidSubmit = noop,
     onInvalidSubmit = noop,
@@ -39,6 +41,7 @@ const PortfolioForm = (props: PortfolioFormProps) => {
     <FormProvider {...methods}>
       <form
         css={selfCss}
+        className={className}
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
         <TitleBar.Form
@@ -53,8 +56,8 @@ const PortfolioForm = (props: PortfolioFormProps) => {
         </section>
 
         <SelfIntroduction css={{ marginBottom: 72 }} />
-        <Skills />
-        {/* Links */}
+        <Skills css={{ marginBottom: 86 }} />
+        <Links css={{ padding: '0 0 80px 0' }} />
       </form>
     </FormProvider>
   );

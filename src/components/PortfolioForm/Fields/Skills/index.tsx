@@ -12,7 +12,12 @@ import Checkbox from './Checkbox';
 
 const fieldName = 'skills';
 
-export const Skills = () => {
+interface SkillsProps {
+  className?: string;
+}
+
+export const Skills = (props: SkillsProps) => {
+  const { className } = props;
   const selectedOrderRef = useRef<number>(1);
   const { register } = usePortfolioFormContext();
 
@@ -23,7 +28,7 @@ export const Skills = () => {
   register(fieldName);
 
   return (
-    <div css={selfCss}>
+    <div css={selfCss} className={className}>
       <label htmlFor={showSkillSelectButtonsTriggerId} css={labelCss}>
         ② 사용하시는 기술스택을 자유롭게 골라주세요
       </label>
