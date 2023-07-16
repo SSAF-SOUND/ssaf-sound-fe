@@ -14,6 +14,7 @@ import {
 } from '~/components/PortfolioForm/utils';
 import PortfolioLinkInputGroup from '~/components/PortfolioLinkInputGroup';
 import { inlineFlex } from '~/styles/utils';
+import { regex } from '~/utils';
 
 const fieldArrayName = 'links';
 const maxLinkTextLength = 20;
@@ -27,6 +28,7 @@ const validateLink = (value: string) => {
   if (!value.length) return '링크는 필수로 입력해야 합니다.';
   if (value.length > 500)
     return `링크 길이는 최대 ${maxLinkLength}자 까지 가능합니다.`;
+  if (regex.url.test(value)) return '유효하지 않은 링크 형식입니다.';
 };
 
 interface LinkFieldProps {
