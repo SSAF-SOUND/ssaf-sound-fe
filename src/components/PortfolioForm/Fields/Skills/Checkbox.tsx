@@ -43,7 +43,7 @@ const selfCss = css({
   borderRadius: '50%',
   padding: 0,
   color: palettes.recruit.default,
-  backgroundColor: 'transparent',
+  backgroundColor: palettes.background.default,
   border: `1.5px solid ${palettes.font.blueGrey}`,
 });
 
