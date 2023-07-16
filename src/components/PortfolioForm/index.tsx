@@ -5,14 +5,20 @@ import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import TitleBar from '~/components/TitleBar';
-import { fontCss, palettes } from '~/styles/utils';
+import {
+  fontCss,
+  pageMaxWidth,
+  pageMinWidth,
+  palettes,
+  position,
+} from '~/styles/utils';
 import { noop } from '~/utils';
 
 import { Links, SelfIntroduction, Skills } from './Fields';
 
 interface PortfolioFormOptions {}
 
-interface PortfolioFormProps {
+export interface PortfolioFormProps {
   className?: string;
   onValidSubmit?: SubmitHandler<PortfolioFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<PortfolioFormValues>;
@@ -45,12 +51,12 @@ const PortfolioForm = (props: PortfolioFormProps) => {
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
         <TitleBar.Form
-          css={{ marginBottom: 24 }}
+          css={titleBarCss}
           title="포트폴리오 입력"
           submitButtonText="완료"
         />
 
-        <section css={{ marginBottom: 40 }}>
+        <section css={{ marginTop: 74, marginBottom: 40 }}>
           <h2 css={headingCss}>My Portfolio</h2>
           <p>나만의 포트폴리오를 꾸며보세요!</p>
         </section>
@@ -65,5 +71,20 @@ const PortfolioForm = (props: PortfolioFormProps) => {
 
 export default PortfolioForm;
 
-const selfCss = css(fontCss.family.auto);
+const selfCss = css({ position: 'relative' }, fontCss.family.auto);
+const titleBarCss = css(
+  {
+    width: '100%',
+    maxWidth: pageMaxWidth,
+    minWidth: pageMinWidth,
+    padding: '0 25px',
+    zIndex: 1,
+    [`@media screen and (max-width: ${pageMinWidth}px)`]: position.xy(
+      'start',
+      'start',
+      'fixed'
+    ),
+  },
+  position.xy('center', 'start', 'fixed')
+);
 const headingCss = css({ color: palettes.primary.default }, fontCss.style.B32);
