@@ -13,6 +13,9 @@ const fieldName = 'selfIntroduction';
 const maxLength = 500;
 const errorMessage = `자기소개는 ${maxLength}자 이하로 작성해야 합니다.`;
 
+// 에러 메세지가 있는 경우에 유효하지 않음
+const validateSelfIntroduction = (error?: string) => () => !error || error;
+
 interface SelfIntroductionProps {
   className?: string;
 }
@@ -25,6 +28,7 @@ export const SelfIntroduction = (props: SelfIntroductionProps) => {
     errors,
     defaultValues: { selfIntroduction: defaultSelfIntroduction = '' } = {},
   } = useFormState<PortfolioFormValues>();
+
   const alertText = errors?.selfIntroduction?.message;
 
   const handleInputChange: EditorProps['onChange'] = (value, d, s, editor) => {
@@ -35,10 +39,15 @@ export const SelfIntroduction = (props: SelfIntroductionProps) => {
       return;
     }
 
+    // 여기서 수동으로 설정하는 에러는 `Form`유효성에 영향을 미치지 않으므로
+    // 여기서 직접 수동으로 에러 메세지를 세팅해주고, `register` 호출할 때 에러 메세지가 존재하는 경우 폼 제출이 불가능하도록
+    // 한번 더 세팅해줘야 합니다.
     setError(fieldName, { message: errorMessage });
   };
 
-  register(fieldName);
+  register(fieldName, {
+    validate: validateSelfIntroduction(alertText),
+  });
 
   return (
     <div className={className}>
