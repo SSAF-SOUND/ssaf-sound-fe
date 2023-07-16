@@ -1,6 +1,6 @@
 export interface PortfolioFormValues {
   selfIntroduction: string;
-  skills: Record<string, boolean>;
+  skills: Record<string, number | undefined>;
   links: Link[];
 }
 

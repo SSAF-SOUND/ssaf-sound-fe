@@ -8,7 +8,7 @@ import TitleBar from '~/components/TitleBar';
 import { fontCss, palettes } from '~/styles/utils';
 import { noop } from '~/utils';
 
-import { SelfIntroduction } from './Fields';
+import { SelfIntroduction, Skills } from './Fields';
 
 interface PortfolioFormOptions {}
 
@@ -46,13 +46,14 @@ const PortfolioForm = (props: PortfolioFormProps) => {
           title="포트폴리오 입력"
           submitButtonText="완료"
         />
+
         <section css={{ marginBottom: 40 }}>
           <h2 css={headingCss}>My Portfolio</h2>
           <p>나만의 포트폴리오를 꾸며보세요!</p>
         </section>
 
         <SelfIntroduction css={{ marginBottom: 72 }} />
-        {/* Skills */}
+        <Skills />
         {/* Links */}
       </form>
     </FormProvider>
