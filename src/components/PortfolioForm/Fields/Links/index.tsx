@@ -8,7 +8,7 @@ import LinkField from '~/components/PortfolioForm/Fields/Links/LinkField';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 
 const fieldArrayName = 'links';
-const maxFieldLength = 10;
+const maxFieldArrayLength = 10;
 
 interface LinksProps {
   className?: string;
@@ -19,9 +19,9 @@ export const Links = (props: LinksProps) => {
 
   const { append, fields, remove } = useFieldArray<PortfolioFormValues>({
     name: fieldArrayName,
-    // NOTE: max-field-array-length 반영하기
+    rules: { maxLength: maxFieldArrayLength },
   });
-  const canAddField = fields.length < maxFieldLength;
+  const canAddField = fields.length < maxFieldArrayLength;
 
   const handleAddField = () => {
     if (canAddField) {
@@ -65,7 +65,7 @@ const selfCss = css({});
 const labelCss = css({ marginBottom: 20 }, fontCss.style.R14);
 const highlightCss = css({ color: palettes.recruit.default });
 const linkFieldArrayCss = css(
-  { marginBottom: 20 },
+  { maxWidth: 450, margin: '0 auto 20px' },
   flex('center', 'center', 'row', 15, 'wrap')
 );
 const addFieldButtonCss = css({
