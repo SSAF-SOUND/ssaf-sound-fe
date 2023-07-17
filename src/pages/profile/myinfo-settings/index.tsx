@@ -9,8 +9,14 @@ import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';
 import { useSignOut } from '~/services/auth';
 import { CertificationState, useMyInfo } from '~/services/member';
-import { fontCss, globalVars, pageMinHeight, palettes } from '~/styles/utils';
-import { handleAxiosError, routes } from '~/utils';
+import {
+  fontCss,
+  globalVars,
+  pageMinHeight,
+  palettes,
+  titleBarHeight,
+} from '~/styles/utils';
+import { EditableMyInfoFields, handleAxiosError, routes } from '~/utils';
 
 const MyInfoSettingsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
@@ -39,18 +45,16 @@ const MyInfoSettingsPage: CustomNextPage = () => {
 
   return (
     <div css={selfCss}>
-      <TitleBar.Default
-        css={{ marginBottom: 30 }}
-        title="프로필 설정"
-        withoutClose
-      />
+      <TitleBar.Default title="프로필 설정" withoutClose />
 
       <nav css={[expandCss, { marginBottom: 40 }]}>
         <MyInfoSettings.NavTitle css={navTitleCss}>
           내 정보
         </MyInfoSettings.NavTitle>
 
-        <MyInfoSettings.NavItem href={routes.profile.edit.nickname()}>
+        <MyInfoSettings.NavItem
+          href={routes.profile.edit.myInfo(EditableMyInfoFields.NICKNAME)}
+        >
           닉네임 수정
         </MyInfoSettings.NavItem>
         {!isCertified && (
@@ -68,24 +72,41 @@ const MyInfoSettingsPage: CustomNextPage = () => {
         </MyInfoSettings.NavItem>
       </nav>
 
-      <nav css={[expandCss, { marginBottom: 40 }]}>
-        <MyInfoSettings.NavTitle css={navTitleCss}>
-          SSAFY 정보
-        </MyInfoSettings.NavTitle>
+      {myInfo?.ssafyMember && (
+        <nav css={[expandCss, { marginBottom: 40 }]}>
+          <MyInfoSettings.NavTitle css={navTitleCss}>
+            SSAFY 정보
+          </MyInfoSettings.NavTitle>
 
-        <MyInfoSettings.NavItem href={routes.profile.edit.year()}>
-          SSAFY 기수
-        </MyInfoSettings.NavItem>
-        <MyInfoSettings.NavItem href={routes.profile.edit.campus()}>
-          SSAFY 캠퍼스
-        </MyInfoSettings.NavItem>
-        <MyInfoSettings.NavItem href={routes.profile.edit.isMajor()}>
-          SSAFY 전공자
-        </MyInfoSettings.NavItem>
-        <MyInfoSettings.NavItem href={routes.profile.edit.track()}>
-          SSAFY 트랙
-        </MyInfoSettings.NavItem>
-      </nav>
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.SSAFY_MEMBER)}
+          >
+            SSAFY 멤버 여부
+          </MyInfoSettings.NavItem>
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.YEAR)}
+          >
+            SSAFY 기수
+          </MyInfoSettings.NavItem>
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.CAMPUS)}
+          >
+            SSAFY 캠퍼스
+          </MyInfoSettings.NavItem>
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.IS_MAJOR)}
+          >
+            SSAFY 전공자
+          </MyInfoSettings.NavItem>
+          {isCertified && (
+            <MyInfoSettings.NavItem
+              href={routes.profile.edit.myInfo(EditableMyInfoFields.TRACK)}
+            >
+              SSAFY 트랙
+            </MyInfoSettings.NavItem>
+          )}
+        </nav>
+      )}
 
       <div css={[expandCss, separatorCss, { marginBottom: 20 }]} />
 
@@ -142,9 +163,10 @@ MyInfoSettingsPage.auth = {
 };
 
 const selfPaddingX = '15px';
+const selfPaddingY = `${titleBarHeight + 30}px`;
 const totalPaddingX = `calc(${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var})`;
 const selfCss = css({
-  padding: `0 ${selfPaddingX}`,
+  padding: `${selfPaddingY} ${selfPaddingX}`,
   minHeight: pageMinHeight,
   height: '100vh',
 });
