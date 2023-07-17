@@ -1,14 +1,15 @@
 import { css, Global } from '@emotion/react';
 import React, { memo } from 'react';
 
-import { palettes } from '~/styles/utils';
-import {
-  createThemePalettes,
-  themeColorVars,
-} from '~/styles/utils/themeColorVars';
+import { globalVars, palettes } from '~/styles/utils';
+import { createThemePalettes } from '~/styles/utils/themeColorVars';
 
 const GlobalStyles = memo(() => {
-  return <Global styles={[resetCss, customBaseCss, themeColorVarCss]} />;
+  return (
+    <Global
+      styles={[resetCss, customBaseCss, themeColorVarCss, globalVarCss]}
+    />
+  );
 });
 
 GlobalStyles.displayName = 'GlobalStyles';
@@ -186,9 +187,14 @@ const themeColorVarCss = css({
     palettes.secondary.darkest
   ),
   '[data-theme="grey"]': createThemePalettes(
-    palettes.grey3,
-    palettes.grey4,
-    palettes.grey2
+    palettes.grey.default,
+    palettes.grey.light,
+    palettes.grey.dark
+  ),
+  '[data-theme="recruit"]': createThemePalettes(
+    palettes.recruit.default,
+    palettes.recruit.light,
+    palettes.recruit.dark
   ),
   '[data-theme="success"]': createThemePalettes(
     palettes.success.default,
@@ -219,13 +225,12 @@ const themeColorVarCss = css({
     palettes.black,
     palettes.black
   ),
-  '[data-theme="recruit"]': createThemePalettes(
-    palettes.point.recruit,
-    palettes.point.recruit,
-    palettes.point.recruit,
-    palettes.point.recruit,
-    palettes.point.recruit
-  ),
+});
+
+const globalVarCss = css({
+  ':root': {
+    [globalVars.mainLayoutPaddingX.varName]: '10px',
+  },
 });
 
 export default GlobalStyles;

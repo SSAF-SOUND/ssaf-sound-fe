@@ -4,16 +4,24 @@ import type { ApiErrorResponse } from '~/types';
 import axios, { isAxiosError } from 'axios';
 
 import { reissueToken } from '~/services/auth';
+import { webStorage } from '~/utils/webStorage';
 
-import { API_URL, ResponseCode } from './constants';
+import { API_URL, isDevMode, ResponseCode } from './constants';
 
 export const publicAxios = axios.create({
   baseURL: API_URL,
+  withCredentials: isDevMode,
 });
 
 export const privateAxios = axios.create({
   baseURL: API_URL,
+  withCredentials: isDevMode,
 });
+
+const devPlugin = (config: InternalAxiosRequestConfig) => {
+  if (isDevMode)
+    config.headers.Authorization = `Bearer ${webStorage.getAccessToken()}`;
+};
 
 const configurePrivateAxiosInterceptors = (
   reissueToken: () => Promise<unknown>,
@@ -28,6 +36,8 @@ const configurePrivateAxiosInterceptors = (
    * - 토큰 재발급에 실패하면, 대기중인 요청을 서버에 보내지 않고 즉시 실패시킵니다.
    */
   privateAxios.interceptors.request.use((config) => {
+    devPlugin(config);
+
     if (reissueTokenRequest === undefined) return config;
     return reissueTokenRequest.then(() => config);
   });

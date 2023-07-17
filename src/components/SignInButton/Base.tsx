@@ -1,10 +1,12 @@
-import type { MouseEventHandler, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
+import { endpoints } from '~/react-query/common';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
+import { API_URL, composeUrls } from '~/utils';
 
 type Provider = 'google' | 'github' | 'kakao' | 'apple';
 
@@ -16,19 +18,12 @@ interface BaseProps {
 
 const Base = (props: BaseProps) => {
   const { icon, text, provider } = props;
-  const router = useRouter();
-
-  const handleClick: MouseEventHandler<HTMLAnchorElement> = (e) => {
-    e.preventDefault();
-    /**
-     * LATER
-     *   window.location.href = 'https://api.ssafsound.com/auth/google';
-     */
-    router.push(`/auth/callback/${provider}?code=777777`);
-  };
 
   return (
-    <a onClick={handleClick} css={selfCss}>
+    <a
+      href={composeUrls(API_URL, endpoints.auth.provider(provider))}
+      css={selfCss}
+    >
       <div css={contentCss}>
         <div css={iconCss}>{icon}</div>
         <div css={textCss}>{text}</div>

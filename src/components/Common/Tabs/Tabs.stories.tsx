@@ -13,6 +13,7 @@ export const TabsComponent = (props: Props) => {
   return (
     <Tabs.Root defaultValue="프로젝트">
       <Tabs.List>
+        <Tabs.Border />
         <Tabs.Trigger value="프로젝트" data-theme={theme} {...rest}>
           프로젝트
         </Tabs.Trigger>

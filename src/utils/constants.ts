@@ -1,5 +1,6 @@
 const FALLBACK = 'http://localhost';
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || FALLBACK;
+export const isDevMode = process.env.NODE_ENV === 'development';
 
 export enum ResponseCode {
   //

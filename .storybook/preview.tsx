@@ -43,6 +43,7 @@ const preview: Preview = {
         member: memberHandlers,
       },
     },
+    layout: 'fullscreen',
   },
   decorators: [
     (Story) => (

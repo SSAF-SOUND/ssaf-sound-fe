@@ -31,6 +31,8 @@ const CallbackPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
   const { mutate: signIn } = useSignIn();
 
   useEffect(() => {
+    if (!code) return;
+
     signIn(
       { code, oauthName: provider },
       {
@@ -47,8 +49,7 @@ const CallbackPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
         },
       }
     );
-    // eslint-disable-next-line
-  }, []);
+  }, [code, provider, router, signIn]);
 
   return <DefaultFullPageLoader text="로그인 중입니다." />;
 };
