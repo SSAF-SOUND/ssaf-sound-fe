@@ -1,25 +1,24 @@
 import type { CustomNextPage } from 'next/types';
-import type { ReactNode } from 'react';
-
-import Link from 'next/link';
 
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { DefaultFullPageLoader, Icon, Toggle } from '~/components/Common';
+import { DefaultFullPageLoader, Toggle } from '~/components/Common';
+import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';
-import {
-  colorMix,
-  flex,
-  fontCss,
-  globalVars,
-  pageMinHeight,
-  palettes,
-} from '~/styles/utils';
-import { routes } from '~/utils';
+import { useSignOut } from '~/services/auth';
+import { fontCss, globalVars, pageMinHeight, palettes } from '~/styles/utils';
+import { handleAxiosError, routes } from '~/utils';
 
 const MyInfoSettingsPage: CustomNextPage = () => {
-  const handleSignOut = () => {};
+  const { mutateAsync: signOut, isLoading: isSigningOut } = useSignOut();
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
 
   return (
     <div css={selfCss}>
@@ -29,64 +28,48 @@ const MyInfoSettingsPage: CustomNextPage = () => {
         withoutClose
       />
 
-      <Nav heading="내 정보" css={{ marginBottom: 40 }}>
-        <LinkItem href={''}>닉네임 수정</LinkItem>
-        <LinkItem href={''}>학생 인증</LinkItem>
-        <div css={itemCss}>
+      <nav css={[expandCss, { marginBottom: 40 }]}>
+        <MyInfoSettings.NavTitle css={navTitleCss}>
+          내 정보
+        </MyInfoSettings.NavTitle>
+
+        <MyInfoSettings.NavItem>닉네임 수정</MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem>학생 인증</MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem
+          withStateCss={false}
+          withIcon={false}
+          asLink={false}
+        >
           <span>내 프로필 공개</span>
           <ProfileVisibilityToggle />
-        </div>
-      </Nav>
+        </MyInfoSettings.NavItem>
+      </nav>
 
-      <Nav heading="SSAFY 정보" css={{ marginBottom: 40 }}>
-        <LinkItem href={''}>SSAFY 기수</LinkItem>
-        <LinkItem href={''}>SSAFY 캠퍼스</LinkItem>
-        <LinkItem href={''}>SSAFY 전공자</LinkItem>
-        <LinkItem href={''}>SSAFY 트랙</LinkItem>
-      </Nav>
+      <nav css={[expandCss, { marginBottom: 40 }]}>
+        <MyInfoSettings.NavTitle css={navTitleCss}>
+          SSAFY 정보
+        </MyInfoSettings.NavTitle>
+        <MyInfoSettings.NavItem>SSAFY 기수</MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem>SSAFY 캠퍼스</MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem>SSAFY 전공자</MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem>SSAFY 트랙</MyInfoSettings.NavItem>
+      </nav>
 
       <div css={[expandCss, separatorCss, { marginBottom: 20 }]} />
 
       <div css={expandCss}>
         <button
           type="button"
-          css={[itemCss, itemStateCss, signOutButtonCss]}
+          css={signOutButtonCss}
           onClick={handleSignOut}
+          disabled={isSigningOut}
         >
-          <span>로그아웃</span>
-          <Icon name="chevron.right" size={20} />
+          <MyInfoSettings.NavItem asLink={false}>
+            로그아웃
+          </MyInfoSettings.NavItem>
         </button>
       </div>
     </div>
-  );
-};
-
-interface NavProps {
-  className?: string;
-  heading: string;
-  children: ReactNode;
-}
-const Nav = (props: NavProps) => {
-  const { heading, children, className } = props;
-  return (
-    <nav css={[expandCss]} className={className}>
-      <h3 css={headingCss}>{heading}</h3>
-      <div>{children}</div>
-    </nav>
-  );
-};
-
-interface LinkItemProps {
-  children: string;
-  href: string;
-}
-const LinkItem = (props: LinkItemProps) => {
-  const { children, href } = props;
-  return (
-    <Link href={href} css={[itemCss, itemStateCss]}>
-      <span>{children}</span>
-      <Icon name="chevron.right" size={20} />
-    </Link>
   );
 };
 
@@ -127,44 +110,22 @@ const expandCss = css({
   margin: `0 calc(-1 * ${totalPaddingX})`,
 });
 
-const headingCss = css(
-  {
-    padding: `0 ${totalPaddingX}`,
-    marginBottom: 10,
-    color: palettes.font.blueGrey,
-  },
-  fontCss.style.B14
-);
-
-const itemCss = css(
-  { padding: '8px 25px', outline: 0 },
-  flex('center', 'space-between', 'row'),
-  fontCss.style.B18
-);
-
-const itemStateCss = css({
-  transition: 'background-color 200ms',
-  ':hover, :focus-visible': {
-    backgroundColor: palettes.background.grey,
-  },
-  ':active': {
-    backgroundColor: palettes.majorDark,
-  },
-  ':disabled': {
-    pointerEvents: 'none',
-    color: colorMix('50%', palettes.white),
-  },
-});
-
 const separatorCss = css({
   width: 'auto',
   height: 1,
   backgroundColor: palettes.font.blueGrey,
 });
 
+const navTitleCss = css({ padding: `0 ${totalPaddingX}` });
+
 const signOutButtonCss = css({
   width: '100%',
   color: palettes.white,
+  padding: 0,
   cursor: 'pointer',
   backgroundColor: palettes.background.default,
+  transition: 'background-color 200ms',
+  ':focus-visible': {
+    backgroundColor: palettes.background.grey,
+  },
 });
