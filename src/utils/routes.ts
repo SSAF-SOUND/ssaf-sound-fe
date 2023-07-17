@@ -19,19 +19,26 @@ export const routes = {
   profile: {
     self: () => '/profile',
     detail: (id: number) => `${routes.profile.self()}/${id}`,
+
+    myInfoSettings: () => `${routes.profile.self()}/myinfo-settings`,
+
     edit: {
-      // ssafy info
-      nickname: () => `${routes.profile.self()}/nickname/edit`,
-      year: () => `${routes.profile.self()}/year/edit`,
-      campus: () => `${routes.profile.self()}/campus/edit`,
-      isMajor: () => `${routes.profile.self()}/isMajor/edit`,
-      track: () => `${routes.profile.self()}/track/edit`,
+      myInfo: (field: EditableMyInfoFields) =>
+        `${routes.profile.myInfoSettings()}/edit?field=${field}`,
 
       portfolio: () => `${routes.profile.self()}/portfolio/edit`,
     },
-    myInfoSettings: () => `${routes.profile.self()}/myinfo-settings`,
   },
 
   //
   unauthorized: () => '/unauthorized',
 };
+
+export enum EditableMyInfoFields {
+  SSAFY_MEMBER = 'ssafyMember',
+  NICKNAME = 'nickname',
+  YEAR = 'year',
+  CAMPUS = 'campus',
+  IS_MAJOR = 'isMajor',
+  TRACK = 'track',
+}
