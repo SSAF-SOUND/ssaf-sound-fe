@@ -20,7 +20,13 @@ const signIn = rest.post<never, never, SignInApiData>(
 
     issueTokens();
 
-    return res(ctx.delay(500), ...mockSuccess(ctx, {}));
+    return res(
+      ctx.delay(500),
+      ...mockSuccess(ctx, {
+        accessToken: '5aa41b81-7551-4fa5-842f-0d7063b5340d',
+        refreshToken: 'f58c0fee-1799-4635-8ad9-193f9c5ef08c',
+      })
+    );
   }
 );
 
