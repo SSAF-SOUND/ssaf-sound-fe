@@ -37,7 +37,7 @@ const NavItem = (props: NavItemProps) => {
 export default NavItem;
 
 const itemCss = css(
-  { padding: '8px 25px', outline: 0 },
+  { height: 46, padding: '0 25px', outline: 0 },
   flex('center', 'space-between', 'row'),
   fontCss.style.B18
 );

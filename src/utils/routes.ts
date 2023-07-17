@@ -17,11 +17,19 @@ export const routes = {
   },
 
   profile: {
-    detail: (id: number) => `/profile/${id}`,
+    self: () => '/profile',
+    detail: (id: number) => `${routes.profile.self()}/${id}`,
     edit: {
-      portfolio: () => '/profile/portfolio/edit',
+      // ssafy info
+      nickname: () => `${routes.profile.self()}/nickname/edit`,
+      year: () => `${routes.profile.self()}/year/edit`,
+      campus: () => `${routes.profile.self()}/campus/edit`,
+      isMajor: () => `${routes.profile.self()}/isMajor/edit`,
+      track: () => `${routes.profile.self()}/track/edit`,
+
+      portfolio: () => `${routes.profile.self()}/portfolio/edit`,
     },
-    myInfoSettings: () => '/profile/myinfo-settings',
+    myInfoSettings: () => `${routes.profile.self()}/myinfo-settings`,
   },
 
   //

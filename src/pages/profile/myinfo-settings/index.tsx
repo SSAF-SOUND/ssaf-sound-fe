@@ -4,27 +4,44 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { DefaultFullPageLoader, Toggle } from '~/components/Common';
+import { useModal } from '~/components/GlobalModal';
 import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';
 import { useSignOut } from '~/services/auth';
+import { CertificationState, useMyInfo } from '~/services/member';
 import { fontCss, globalVars, pageMinHeight, palettes } from '~/styles/utils';
 import { handleAxiosError, routes } from '~/utils';
 
 const MyInfoSettingsPage: CustomNextPage = () => {
-  const { mutateAsync: signOut, isLoading: isSigningOut } = useSignOut();
+  const { data: myInfo } = useMyInfo();
+  const isCertified =
+    myInfo?.ssafyInfo?.certificationState === CertificationState.CERTIFIED;
+  const { openModal, closeModal } = useModal();
+  const { mutate: signOut, isLoading: isSigningOut } = useSignOut();
   const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (err) {
-      handleAxiosError(err);
-    }
+    signOut(undefined, {
+      onError: (err) => {
+        handleAxiosError(err);
+      },
+    });
+  };
+
+  const openSignOutAlertModal = () => {
+    openModal('alert', {
+      title: '알림',
+      description: `${myInfo?.nickname}님 로그아웃 하시겠습니까?`,
+      cancelText: '취소',
+      actionText: '로그아웃',
+      onClickAction: handleSignOut,
+      onClickCancel: closeModal,
+    });
   };
 
   return (
     <div css={selfCss}>
       <TitleBar.Default
         css={{ marginBottom: 30 }}
-        title="내정보 설정"
+        title="프로필 설정"
         withoutClose
       />
 
@@ -33,8 +50,14 @@ const MyInfoSettingsPage: CustomNextPage = () => {
           내 정보
         </MyInfoSettings.NavTitle>
 
-        <MyInfoSettings.NavItem>닉네임 수정</MyInfoSettings.NavItem>
-        <MyInfoSettings.NavItem>학생 인증</MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem href={routes.profile.edit.nickname()}>
+          닉네임 수정
+        </MyInfoSettings.NavItem>
+        {!isCertified && (
+          <MyInfoSettings.NavItem href={routes.certification.student()}>
+            학생 인증
+          </MyInfoSettings.NavItem>
+        )}
         <MyInfoSettings.NavItem
           withStateCss={false}
           withIcon={false}
@@ -49,10 +72,19 @@ const MyInfoSettingsPage: CustomNextPage = () => {
         <MyInfoSettings.NavTitle css={navTitleCss}>
           SSAFY 정보
         </MyInfoSettings.NavTitle>
-        <MyInfoSettings.NavItem>SSAFY 기수</MyInfoSettings.NavItem>
-        <MyInfoSettings.NavItem>SSAFY 캠퍼스</MyInfoSettings.NavItem>
-        <MyInfoSettings.NavItem>SSAFY 전공자</MyInfoSettings.NavItem>
-        <MyInfoSettings.NavItem>SSAFY 트랙</MyInfoSettings.NavItem>
+
+        <MyInfoSettings.NavItem href={routes.profile.edit.year()}>
+          SSAFY 기수
+        </MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem href={routes.profile.edit.campus()}>
+          SSAFY 캠퍼스
+        </MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem href={routes.profile.edit.isMajor()}>
+          SSAFY 전공자
+        </MyInfoSettings.NavItem>
+        <MyInfoSettings.NavItem href={routes.profile.edit.track()}>
+          SSAFY 트랙
+        </MyInfoSettings.NavItem>
       </nav>
 
       <div css={[expandCss, separatorCss, { marginBottom: 20 }]} />
@@ -61,7 +93,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
         <button
           type="button"
           css={signOutButtonCss}
-          onClick={handleSignOut}
+          onClick={openSignOutAlertModal}
           disabled={isSigningOut}
         >
           <MyInfoSettings.NavItem asLink={false}>
