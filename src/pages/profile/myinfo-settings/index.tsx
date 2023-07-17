@@ -106,13 +106,24 @@ const MyInfoSettingsPage: CustomNextPage = () => {
 };
 
 const ProfileVisibilityToggle = () => {
-  const [isPrivate, setIsPrivate] = useState(false);
-  const toggleText = isPrivate ? '공개' : '비공개';
-  const handlePressedChange = () => setIsPrivate((p) => !p);
+  const { openModal, closeModal } = useModal();
+  const [isPublic, setIsPublic] = useState(false);
+  const toggleText = isPublic ? '공개' : '비공개';
+  const handlePressedChange = () => {
+    if (isPublic) {
+      openModal('alert', {
+        title: '알림',
+        description: '포트폴리오 및 프로젝트, 스터디 정보가 비공개됩니다.',
+        actionText: '확인',
+        onClickAction: closeModal,
+      });
+    }
+    setIsPublic((p) => !p);
+  };
 
   return (
     <Toggle
-      pressed={isPrivate}
+      pressed={isPublic}
       onPressedChange={handlePressedChange}
       padding="3px 5px"
       thumbSize={20}
