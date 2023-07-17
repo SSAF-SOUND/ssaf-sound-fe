@@ -15,6 +15,9 @@ const meta: Meta<typeof ProfilePage> = {
       </PageLayout>
     ),
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

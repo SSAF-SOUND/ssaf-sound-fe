@@ -43,13 +43,12 @@ const preview: Preview = {
         member: memberHandlers,
       },
     },
-    layout: 'fullscreen',
   },
   decorators: [
     (Story) => (
       <QueryClientProvider client={getQueryClient()}>
         <Toaster />
-        <ReactQueryDevtools initialIsOpen />
+        <ReactQueryDevtools initialIsOpen position={"bottom-left"} />
         <GlobalModal />
         <div>
           <StorybookGlobalStyles />
