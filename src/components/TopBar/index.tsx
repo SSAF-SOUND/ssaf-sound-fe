@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { Bar, Icon, IconButton, Logo, Dot } from '~/components/Common';
-import { flex, topBarHeight, fixTopCenter } from '~/styles/utils';
+import { flex, topBarHeight, fixTopCenter, zIndex } from '~/styles/utils';
 
 interface TopBarProps {
   className?: string;
@@ -47,7 +47,7 @@ const iconContainerWidth = iconSize + iconContainerGap + 10;
 const selfCss = css(
   {
     padding: '0 25px',
-    zIndex: 1,
+    zIndex: zIndex.fixed.normal,
     height: topBarHeight,
   },
   fixTopCenter

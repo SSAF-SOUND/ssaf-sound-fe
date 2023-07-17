@@ -5,13 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { Bar, Button, Icon } from '~/components/Common';
-import {
-  fixTopCenter,
-  fontCss,
-  pageMaxWidth,
-  pageMinWidth,
-  position,
-} from '~/styles/utils';
+import { fixTopCenter, fontCss, zIndex } from '~/styles/utils';
 
 import IconButton from '../Common/IconButton';
 
@@ -78,7 +72,7 @@ const iconButtonSize = iconSize + 8;
 const selfCss = css(
   {
     padding: '0 25px',
-    zIndex: 1,
+    zIndex: zIndex.fixed.normal,
   },
   fixTopCenter
 );
