@@ -18,7 +18,7 @@ import { defaultify } from '~/utils';
 // import 구문 옆에다 주석 달면 린트 오류가 발생해서 여기 적어둡니다.
 
 export interface TrackProps<Track extends keyof typeof tracks> {
-  name?: Track;
+  name?: Track | null;
   size?: TrackSize;
   style?: CSSProperties;
   theme?: Track extends 'fallback' | undefined ? FallbackTheme : undefined;

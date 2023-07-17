@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import TitleBar from '~/components/TitleBar';
 import { useStack } from '~/hooks';
-import { flex } from '~/styles/utils';
+import { flex, pageMinHeight } from '~/styles/utils';
 import { noop } from '~/utils';
 
 import { Quiz, Track } from './Fields';
@@ -15,12 +15,14 @@ import { Quiz, Track } from './Fields';
 interface StudentCertificationFormProps {
   onSubmit?: SubmitHandler<StudentCertificationFormValues>;
   defaultValues?: Partial<StudentCertificationFormValues>;
+  className?: string;
 }
 
 const StudentCertificationForm = (props: StudentCertificationFormProps) => {
   const {
     onSubmit = noop,
     defaultValues = defaultStudentCertificationFormValues,
+    className,
   } = props;
   const methods = useForm<StudentCertificationFormValues>({
     defaultValues,
@@ -42,7 +44,7 @@ const StudentCertificationForm = (props: StudentCertificationFormProps) => {
   const FieldComponent = FieldComponents[currentPhase];
 
   return (
-    <div css={selfCss}>
+    <div css={selfCss} className={className}>
       <FormProvider {...methods}>
         <TitleBar.Default
           css={titleBarCss}
@@ -68,12 +70,7 @@ const defaultStudentCertificationFormValues: Partial<StudentCertificationFormVal
 
 export default StudentCertificationForm;
 
-const selfCss = css(
-  {
-    minHeight: '100vh',
-  },
-  flex()
-);
+const selfCss = css({ minHeight: pageMinHeight }, flex());
 
 const titleBarCss = css({
   padding: 0,

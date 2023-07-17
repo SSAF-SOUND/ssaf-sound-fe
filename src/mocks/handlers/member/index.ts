@@ -1,16 +1,17 @@
 import type {
+  CertifyStudentApiData,
   GetMyInfoApiData,
   UpdateMyInfoParams,
   UserInfo,
-  CertifyStudentApiData,
 } from '~/services/member';
 import type { ApiErrorResponse } from '~/types';
 
 import { rest } from 'msw';
 
 import { userInfo } from '~/mocks/handlers/member/data';
-import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
+import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
+import { CertificationState } from '~/services/member';
 import { API_URL, composeUrls, ResponseCode } from '~/utils';
 
 const getMyInfo = rest.get<never, never, GetMyInfoApiData | ApiErrorResponse>(
@@ -18,8 +19,9 @@ const getMyInfo = rest.get<never, never, GetMyInfoApiData | ApiErrorResponse>(
   (req, res, ctx) => {
     return res(
       ctx.delay(500),
-      // ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
-      ...mockSuccess<UserInfo>(ctx, userInfo.certifiedSsafyUserInfo)
+      ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
+      // ...mockSuccess<UserInfo>(ctx, userInfo.certifiedSsafyUserInfo)
+      // ...mockSuccess<UserInfo>(ctx, userInfo.uncertifiedSsafyUserInfo)
       // ...mockSuccess<UserInfo>(ctx, userInfo.nonSsafyUserInfo)
       // ...mockError(ctx, 'code', 'message', 404),
     );
@@ -33,19 +35,30 @@ const updateMyInfo = rest.patch<
 >(composeUrls(API_URL, endpoints.user.myInfo()), async (req, res, ctx) => {
   const body = (await req.json()) as UpdateMyInfoParams;
 
-  let response;
+  const restInfo = body.ssafyMember
+    ? ({
+        ssafyMember: true,
+        ssafyInfo: {
+          campus: body.campus as string,
+          semester: body.semester as number,
+          certificationState: CertificationState.UNCERTIFIED,
+          majorTrack: null,
+        },
+      } as const)
+    : ({ ssafyMember: false } as const);
 
-  if (body.ssafyMember) {
-    response = userInfo.certifiedSsafyUserInfo;
-  } else {
-    response = userInfo.nonSsafyUserInfo;
-  }
-  response.nickname = body.nickname;
+  const response: UserInfo = {
+    memberId: 973,
+    memberRole: 'user',
+    nickname: body.nickname,
+    isMajor: body.isMajor,
+    ...restInfo,
+  };
 
   return res(
     ctx.delay(500),
     ...mockSuccess(ctx, response)
-    // ...mockError(ctx, '400'),
+    // ...mockError(ctx, '400', '오류가 발생했습니다.')
   );
 });
 
@@ -75,11 +88,23 @@ export const certifyStudent = restSuccess<CertifyStudentApiData['data']>(
   {
     data: {
       certificationInquiryCount: 2,
+      possible: true,
+    },
+  }
+);
+
+export const certifyStudentIncorrectError = restSuccess<CertifyStudentApiData['data']>(
+  'post',
+  composeUrls(API_URL, endpoints.user.studentCertification()),
+  {
+    data: {
+      certificationInquiryCount: 2,
       possible: false,
     },
   }
 );
-export const certifyStudentError = restError(
+
+export const certifyStudentAttemptsCountError = restError(
   'post',
   composeUrls(API_URL, endpoints.user.studentCertification()),
   {

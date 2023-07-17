@@ -8,7 +8,12 @@ export const routes = {
 
   //
   certification: {
-    ssafy: () => '/certification/student',
+    student: () => '/certification/student',
+  },
+
+  //
+  intro: {
+    studentCertification: () => '/intro/student-certification',
   },
 
   //

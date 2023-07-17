@@ -2,10 +2,8 @@ import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
 import { Button, SsafyIcon, TrackSize } from '~/components/Common';
-import { useUpdateMyInfoFormContext } from '~/services/member';
-import { flex } from '~/styles/utils';
-
-import Question from '../Question';
+import { useUserRegisterFormContext } from '~/components/UserRegisterForm/utils';
+import { flex, fontCss } from '~/styles/utils';
 
 const fieldName = 'ssafyMember';
 
@@ -16,12 +14,12 @@ interface IsMemberProps {
 
 const IsMember = (props: IsMemberProps) => {
   const { onTrue, onFalse } = props;
-  const { register, setValue } = useUpdateMyInfoFormContext();
-  const handleClickYes = () => {
+  const { register, setValue } = useUserRegisterFormContext();
+  const handleTrue = () => {
     setValue(fieldName, true);
     onTrue();
   };
-  const handleClickNo = () => {
+  const handleFalse = () => {
     setValue(fieldName, false);
     onFalse();
   };
@@ -31,44 +29,32 @@ const IsMember = (props: IsMemberProps) => {
   });
 
   return (
-    <div css={selfCss}>
-      <Question>
-        <Question.Row>안녕하세요</Question.Row>
-        <Question.Row>SSAFY인 이신가요?</Question.Row>
-      </Question>
+    <>
+      <div css={fontCss.style.B28}>
+        <p>안녕하세요</p>
+        <p>SSAFY인 이신가요?</p>
+      </div>
 
       <SsafyIcon.Track size={TrackSize.LG2} />
 
       <div css={buttonGroupCss}>
-        <Button
-          size="lg"
-          variant="filled"
-          css={buttonCss}
-          onClick={handleClickYes}
-        >
+        <Button size="lg" variant="filled" css={buttonCss} onClick={handleTrue}>
           네
         </Button>
         <Button
           size="lg"
           variant="inverse"
           css={buttonCss}
-          onClick={handleClickNo}
+          onClick={handleFalse}
         >
           아니오
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 
 export default IsMember;
-
-const selfCss = css(
-  {
-    height: '100%',
-  },
-  flex('', 'space-between')
-);
 
 const buttonGroupCss = css(
   {

@@ -8,12 +8,12 @@ import { useEffect } from 'react';
 interface DelayedRedirectionProps {
   children: ReactNode;
   to: UrlObject | string;
-  seconds: number;
+  seconds?: number;
   replace?: boolean;
 }
 
 const DelayedRedirection = (props: DelayedRedirectionProps) => {
-  const { children, to, seconds, replace = false } = props;
+  const { children, to, seconds = 3, replace = false } = props;
   const router = useRouter();
 
   useEffect(() => {

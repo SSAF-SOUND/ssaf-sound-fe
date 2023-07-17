@@ -1,3 +1,5 @@
-export const gutter = {
-  mainLayout: 20
+export const paddingX = {
+  mainLayout: 10,
 };
+
+export const pageMinHeight = 700;

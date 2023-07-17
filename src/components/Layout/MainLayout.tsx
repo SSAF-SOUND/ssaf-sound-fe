@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import { gutter } from '~/styles/utils';
+import { paddingX } from '~/styles/utils';
 
 // 임시 레이아웃입니다.
 // 개발 단계에서, 보기 편하게 하기 위해서 넣어놨어요!
@@ -27,7 +27,8 @@ const selfCss = css({
   maxWidth: 576,
   minHeight: '100vh',
   margin: '0 auto',
-  padding: `0 ${gutter.mainLayout / 2}px`,
+  padding: `0 ${paddingX.mainLayout}px`,
   boxShadow: `20px 20px 40px #272b32, -20px -20px 40px #353a44;`,
+  overflow: 'hidden',
 });
 export default MainLayout;

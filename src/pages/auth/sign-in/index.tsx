@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { Logo, SsafyIcon, DefaultFullPageLoader } from '~/components/Common';
 import SignInButton from '~/components/SignInButton';
 import { useMyAccountStatus } from '~/services/member';
-import { flex } from '~/styles/utils';
+import { flex, pageMinHeight } from '~/styles/utils';
 import { routes } from '~/utils/routes';
 
 const SignInPage = () => {
@@ -41,7 +41,14 @@ const SignInPage = () => {
 
 export default SignInPage;
 
-const selfCss = css({ height: '100vh' }, flex('', 'center', 'column', '15vh'));
+const selfCss = css(
+  {
+    height: '100vh',
+    minHeight: pageMinHeight,
+    padding: '60px 0',
+  },
+  flex('', 'center', 'column', '15vh')
+);
 
 const logoContainerCss = css(flex('center', 'center', 'column', 18));
 

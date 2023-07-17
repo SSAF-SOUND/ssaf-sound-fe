@@ -1,36 +1,56 @@
 import type { CustomNextPage } from 'next/types';
+import type { UserRegisterFormValues } from '~/components/UserRegisterForm/utils';
 
 import { useRouter } from 'next/router';
 
+import { css } from '@emotion/react';
+import { useState } from 'react';
+
 import { DefaultFullPageLoader } from '~/components/Common';
-import { UserRegisterLayout } from '~/components/Layout';
 import UserRegisterForm from '~/components/UserRegisterForm';
-import { CertificationState, useMyAccountStatus } from '~/services/member';
+import {
+  useMyAccountStatus,
+  useSetMyInfo,
+  useUpdateMyInfo,
+} from '~/services/member';
+import { flex } from '~/styles/utils';
+import { customToast, handleAxiosError } from '~/utils';
 import { routes } from '~/utils/routes';
 
 const loaderText = '유저 정보를 확인하는 중입니다.';
 
 const RegisterPage: CustomNextPage = () => {
   const router = useRouter();
-  const { isRegisterRequired, myInfo } = useMyAccountStatus();
+  const { isRegisterRequired } = useMyAccountStatus();
+  const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
+  const [shouldCheckUserInfo, setShouldCheckUserInfo] = useState(true);
+  const setMyInfo = useSetMyInfo();
 
-  if (!isRegisterRequired) {
-    if (
-      myInfo &&
-      myInfo.ssafyInfo?.certificationState === CertificationState.UNCERTIFIED
-    ) {
-      router.replace(routes.certification.ssafy());
-    } else {
-      router.replace(routes.main());
-    }
-
+  if (shouldCheckUserInfo && !isRegisterRequired) {
+    router.replace(routes.main());
     return <DefaultFullPageLoader text={loaderText} />;
   }
 
+  const onSubmit = async (value: UserRegisterFormValues) => {
+    setShouldCheckUserInfo(false);
+
+    try {
+      const response = await updateMyInfo(value);
+      setMyInfo(response);
+      await router.replace(routes.intro.studentCertification());
+    } catch (error) {
+      handleAxiosError(error, {
+        onClientError: (response) => {
+          customToast.clientError(response.message);
+        },
+      });
+    }
+  };
+
   return (
-    <UserRegisterLayout>
-      <UserRegisterForm />
-    </UserRegisterLayout>
+    <div css={selfCss}>
+      <UserRegisterForm onSubmit={onSubmit} css={formCss} />
+    </div>
   );
 };
 
@@ -41,3 +61,6 @@ RegisterPage.auth = {
 };
 
 export default RegisterPage;
+
+const selfCss = css({ minHeight: '100vh', padding: '10px 15px' }, flex());
+const formCss = css({ flexGrow: 1 });
