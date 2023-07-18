@@ -4,8 +4,15 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Bar, Icon , IconButton } from '~/components/Common';
-import { fontCss } from '~/styles/utils';
+import { Bar, Icon, IconButton } from '~/components/Common';
+import {
+  fixTopCenter,
+  fontCss,
+  pageMaxWidth,
+  pageMinWidth,
+  position,
+  zIndex,
+} from '~/styles/utils';
 
 interface DefaultTitleBarProps {
   title?: string;
@@ -36,6 +43,7 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
   return (
     <Bar
       {...restProps}
+      css={selfCss}
       left={
         <IconButton
           size={iconButtonSize}
@@ -74,6 +82,14 @@ export default DefaultTitleBar;
 
 const iconSize = 28;
 const iconButtonSize = iconSize + 8;
+
+const selfCss = css(
+  {
+    padding: '0 25px',
+    zIndex: zIndex.fixed.normal,
+  },
+  fixTopCenter
+);
 
 const visuallyHiddenCss = css({
   opacity: 0,

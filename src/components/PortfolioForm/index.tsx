@@ -6,13 +6,7 @@ import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import TitleBar from '~/components/TitleBar';
-import {
-  fontCss,
-  pageMaxWidth,
-  pageMinWidth,
-  palettes,
-  position,
-} from '~/styles/utils';
+import { fontCss, palettes } from '~/styles/utils';
 import { noop } from '~/utils';
 
 import { Links, SelfIntroduction, Skills } from './Fields';
@@ -53,11 +47,7 @@ const PortfolioForm = (props: PortfolioFormProps) => {
         className={className}
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
-        <TitleBar.Form
-          css={titleBarCss}
-          title="포트폴리오 입력"
-          submitButtonText="완료"
-        />
+        <TitleBar.Form title="포트폴리오 입력" submitButtonText="완료" />
 
         <section css={{ marginTop: 74, marginBottom: 40 }}>
           <h2 css={headingCss}>My Portfolio</h2>
@@ -78,19 +68,5 @@ const PortfolioForm = (props: PortfolioFormProps) => {
 export default PortfolioForm;
 
 const selfCss = css({ position: 'relative' }, fontCss.family.auto);
-const titleBarCss = css(
-  {
-    width: '100%',
-    maxWidth: pageMaxWidth,
-    minWidth: pageMinWidth,
-    padding: '0 25px',
-    zIndex: 1,
-    [`@media screen and (max-width: ${pageMinWidth}px)`]: position.xy(
-      'start',
-      'start',
-      'fixed'
-    ),
-  },
-  position.xy('center', 'start', 'fixed')
-);
+
 const headingCss = css({ color: palettes.primary.default }, fontCss.style.B32);

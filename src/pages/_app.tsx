@@ -14,7 +14,7 @@ import { initServerMocks } from '~/mocks';
 import { getQueryClient } from '~/react-query/common';
 import GlobalStyles from '~/styles/GlobalStyles';
 
-initServerMocks();
+if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') initServerMocks();
 
 export default function App({ Component, pageProps }: CustomAppProps) {
   const [queryClient] = useState(getQueryClient);

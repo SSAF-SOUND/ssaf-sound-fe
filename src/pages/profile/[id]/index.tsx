@@ -1,10 +1,11 @@
 import type { CustomNextPage } from 'next/types';
 
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Button, SsafyIcon, Tabs, TrackSize } from '~/components/Common';
+import { Button, Icon, SsafyIcon, Tabs, TrackSize } from '~/components/Common';
 import { Profile } from '~/components/Profile';
 import { useMyInfo } from '~/services/member';
 import {
@@ -15,6 +16,7 @@ import {
   palettes,
   topBarHeight,
 } from '~/styles/utils';
+import { routes } from '~/utils';
 
 const ProfilePage: CustomNextPage = () => {
   const router = useRouter();
@@ -32,7 +34,9 @@ const ProfilePage: CustomNextPage = () => {
       <div css={myInfoCss}>
         NameCard
         {/* <NameCard />  */}
-        {/* <Icon name="setting" /> */}
+        <Link href={routes.profile.myInfoSettings()}>
+          <Icon name="setting" size={28} />
+        </Link>
       </div>
 
       {mine && (
@@ -127,7 +131,10 @@ const selfCss = css({
   padding: `${topBarHeight + 30}px ${selfPaddingX}px ${gnbHeight}px`,
 });
 
-const myInfoCss = css({ marginBottom: 44 });
+const myInfoCss = css(
+  { marginBottom: 44 },
+  flex('center', 'space-between', 'row')
+);
 
 const shortcutCss = css({ marginBottom: 50 }, flex('', 'center', 'column', 8));
 

@@ -1,6 +1,7 @@
 export * from './colorMix';
 export * from './constants';
 export * from './filter';
+export * from './fixedPosition';
 export * from './flex';
 export * from './fontCss';
 export * from './globalVars';

@@ -20,7 +20,7 @@ export const privateAxios = axios.create({
 
 const devPlugin = (config: InternalAxiosRequestConfig) => {
   if (isDevMode)
-    config.headers.Authorization = `Bearer ${webStorage.getAccessToken()}`;
+    config.headers.Authorization = `Bearer ${webStorage.DEV__getAccessToken()}`;
 };
 
 const configurePrivateAxiosInterceptors = (

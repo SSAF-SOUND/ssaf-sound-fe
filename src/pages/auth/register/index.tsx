@@ -34,8 +34,12 @@ const RegisterPage: CustomNextPage = () => {
   const onSubmit = async (value: UserRegisterFormValues) => {
     setShouldCheckUserInfo(false);
 
+    const { year, ...restValue } = value;
     try {
-      const response = await updateMyInfo(value);
+      const response = await updateMyInfo({
+        ...restValue,
+        semester: year,
+      });
       setMyInfo(response);
       await router.replace(routes.intro.studentCertification());
     } catch (error) {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { Bar, Button, Icon } from '~/components/Common';
-import { fontCss } from '~/styles/utils';
+import { fixTopCenter, fontCss, zIndex } from '~/styles/utils';
 
 import IconButton from '../Common/IconButton';
 
@@ -38,6 +38,7 @@ const FormTitleBar = (props: FormTitleBarProps) => {
 
   return (
     <Bar
+      css={selfCss}
       {...restProps}
       left={
         <IconButton
@@ -67,6 +68,14 @@ export default FormTitleBar;
 
 const iconSize = 28;
 const iconButtonSize = iconSize + 8;
+
+const selfCss = css(
+  {
+    padding: '0 25px',
+    zIndex: zIndex.fixed.normal,
+  },
+  fixTopCenter
+);
 
 const titleCss = css(
   {

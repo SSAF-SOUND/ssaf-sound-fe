@@ -17,6 +17,7 @@ export interface ToggleStyleProps {
 }
 
 export interface ToggleCoreProps {
+  id?: string;
   pressed?: boolean;
   defaultPressed?: boolean;
   onPressedChange?: (pressed: boolean) => void;
@@ -104,8 +105,12 @@ const selfCss = css(
     borderRadius: 16,
     color: palettes.font.blueGrey,
     padding: 0,
+    transition: 'outline 100ms',
     [`&${toggleOn}`]: {
       borderColor: themeColorVars.mainColor.var,
+    },
+    ':focus-visible': {
+      outline: `3px solid ${themeColorVars.mainLightColor.var}`,
     },
   },
   inlineFlex('center', 'flex-start', 'row')
