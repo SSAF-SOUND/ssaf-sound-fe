@@ -36,11 +36,15 @@ const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
   cursor: 'pointer',
   border: `1px solid ${palettes.white}`,
   color: palettes.white,
-  transition: 'color 200ms, background-color 200ms, border-color 200ms',
+  transition:
+    'color 200ms, background-color 200ms, border-color 200ms, outline 200ms',
   backgroundColor: 'transparent',
   '&:hover': {
     borderColor: palettes.primary.dark,
     color: palettes.primary.dark,
+  },
+  '&:focus-visible': {
+    outline: `3px solid ${palettes.primary.light}`,
   },
   '&[data-state="on"]': {
     background: palettes.primary.darkest,

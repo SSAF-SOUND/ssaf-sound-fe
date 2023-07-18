@@ -18,7 +18,7 @@ const ReactQuill = dynamic(import('react-quill'), {
   loading: () => <p>로딩중</p>,
 });
 
-interface EditorProps
+export interface EditorProps
   extends Pick<
     ReactQuillProps,
     'value' | 'onChange' | 'defaultValue' | 'placeholder'

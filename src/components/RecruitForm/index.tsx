@@ -4,7 +4,6 @@ import type { SubmitHandler } from 'react-hook-form';
 import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { SkillName } from '~/services/recruit';
 import { noop } from '~/utils';
 
 import {

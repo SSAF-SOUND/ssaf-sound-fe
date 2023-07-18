@@ -11,7 +11,7 @@ interface SubmitBarProps {
 const SubmitBar = (props: SubmitBarProps) => {
   const { title, submitButtonText, onClickClose } = props;
   return (
-    <TitleBar.RecruitForm
+    <TitleBar.Form
       title={title}
       submitButtonText={submitButtonText}
       onClickClose={onClickClose}
