@@ -12,7 +12,20 @@ import { handleAxiosError } from '~/utils';
 
 const fieldName = 'nickname';
 
-const Nickname = () => {
+interface NicknameProps {
+  initialNickname?: string;
+  className?: string;
+  withLabelText?: boolean;
+  buttonText?: string;
+}
+
+const Nickname = (props: NicknameProps) => {
+  const {
+    initialNickname = '',
+    className,
+    withLabelText = true,
+    buttonText = '확인',
+  } = props;
   const [isValidNickname, setIsValidNickname] = useState(false);
   const { mutate: validateNickname, isLoading: isValidatingNickname } =
     useValidateNickname();
@@ -29,13 +42,20 @@ const Nickname = () => {
   const { closeModal } = useModal();
   const nicknameFieldId = useId();
   const { openNicknameReconfirmModal } = useNicknameReconfirmModal();
-  const submittable = isValidNickname && !dirtyFields.nickname;
-  const isButtonDisabled = !isValidNickname && !dirtyFields.nickname;
+  const submittable =
+    isValidNickname && !dirtyFields.nickname && !initialNickname;
+  const isButtonDisabled =
+    (!isValidNickname && !dirtyFields.nickname) || !!initialNickname;
   const isButtonLoading = isValidatingNickname || isSubmitting;
 
-  const handleOpenReconfirmModal = () => {
+  const submitForm = () => {
+    submitButtonRef.current?.click();
+    closeModal();
+  };
+
+  const handleOpenReconfirmModal = (nickname: string) => {
     openNicknameReconfirmModal({
-      nickname: getValues(fieldName),
+      nickname,
       onClickAction: submitForm,
     });
   };
@@ -46,7 +66,7 @@ const Nickname = () => {
     if (!passClientValidation) return;
 
     if (submittable) {
-      handleOpenReconfirmModal();
+      handleOpenReconfirmModal(nickname);
       return;
     }
 
@@ -55,7 +75,7 @@ const Nickname = () => {
       {
         onSuccess: () => {
           setIsValidNickname(true);
-          handleOpenReconfirmModal();
+          handleOpenReconfirmModal(nickname);
           resetField(fieldName, { defaultValue: nickname });
         },
         onError: (error) => {
@@ -73,24 +93,21 @@ const Nickname = () => {
     );
   };
 
-  const submitForm = () => {
-    submitButtonRef.current?.click();
-    closeModal();
-  };
-
   useEffect(() => {
-    resetField(fieldName, { defaultValue: '' });
+    resetField(fieldName, { defaultValue: initialNickname });
     setFocus(fieldName);
-  }, [resetField, setFocus]);
+  }, [initialNickname, resetField, setFocus]);
 
   return (
-    <div css={selfCss}>
-      <label htmlFor={nicknameFieldId}>
-        <div css={fontCss.style.B28}>
-          <p>닉네임을</p>
-          <p>입력해주세요</p>
-        </div>
-      </label>
+    <div css={selfCss} className={className}>
+      {withLabelText && (
+        <label htmlFor={nicknameFieldId}>
+          <div css={fontCss.style.B28}>
+            <p>닉네임을</p>
+            <p>입력해주세요</p>
+          </div>
+        </label>
+      )}
 
       <NicknameField
         id={nicknameFieldId}
@@ -106,7 +123,7 @@ const Nickname = () => {
         loading={isButtonLoading}
         disabled={isButtonDisabled}
       >
-        확인
+        {buttonText}
       </Button>
 
       {submittable && (
