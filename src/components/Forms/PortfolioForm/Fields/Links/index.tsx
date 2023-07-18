@@ -1,10 +1,10 @@
-import type { PortfolioFormValues } from '~/components/PortfolioForm/utils';
+import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils';
 
 import { css } from '@emotion/react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Button, Icon } from '~/components/Common';
-import LinkField from '~/components/PortfolioForm/Fields/Links/LinkField';
+import LinkField from '~/components/Forms/PortfolioForm/Fields/Links/LinkField';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 
 const fieldArrayName = 'links';

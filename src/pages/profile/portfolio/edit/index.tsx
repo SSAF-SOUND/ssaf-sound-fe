@@ -1,11 +1,11 @@
 import type { CustomNextPage } from 'next/types';
-import type { PortfolioFormProps } from '~/components/PortfolioForm';
+import type { PortfolioFormProps } from 'src/components/Forms/PortfolioForm';
 
 import { css } from '@emotion/react';
 import { useMemo } from 'react';
 
+import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import { DefaultFullPageLoader } from '~/components/Common';
-import PortfolioForm from '~/components/PortfolioForm';
 import { globalVars } from '~/styles/utils';
 import { customToast, routes } from '~/utils';
 

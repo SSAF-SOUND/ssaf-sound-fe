@@ -1,4 +1,4 @@
-import type { PortfolioFormValues } from '~/components/PortfolioForm/utils/types';
+import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils/types';
 
 import { useFormContext } from 'react-hook-form';
 

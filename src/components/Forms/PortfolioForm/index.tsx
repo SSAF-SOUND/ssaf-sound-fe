@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
-import type { PortfolioFormValues } from '~/components/PortfolioForm/utils';
+import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils';
 
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';

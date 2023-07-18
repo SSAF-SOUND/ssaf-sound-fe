@@ -2,7 +2,7 @@ import type { UseFieldArrayRemove } from 'react-hook-form';
 import type {
   Link,
   PortfolioFormValues,
-} from '~/components/PortfolioForm/utils';
+} from '~/components/Forms/PortfolioForm/utils';
 
 import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
@@ -11,7 +11,7 @@ import { Icon, IconButton } from '~/components/Common';
 import {
   linkColors,
   usePortfolioFormContext,
-} from '~/components/PortfolioForm/utils';
+} from '~/components/Forms/PortfolioForm/utils';
 import PortfolioLinkInputGroup from '~/components/PortfolioLinkInputGroup';
 import { inlineFlex } from '~/styles/utils';
 import { regex } from '~/utils';

@@ -1,11 +1,11 @@
 import type { MutableRefObject } from 'react';
-import type { PortfolioFormValues } from '~/components/PortfolioForm/utils';
+import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils';
 import type { SkillName } from '~/services/recruit';
 
 import { useWatch } from 'react-hook-form';
 import { useTransformContext } from 'react-zoom-pan-pinch';
 
-import { usePortfolioFormContext } from '~/components/PortfolioForm/utils';
+import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import SkillBadge from '~/components/SkillBadge';
 
 const fieldName = 'skills';

@@ -4,9 +4,9 @@ import { css } from '@emotion/react';
 import { useId, useRef, useState } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
-import SelectedSkills from '~/components/PortfolioForm/Fields/Skills/SelectedSkills';
-import SkillSelectButton from '~/components/PortfolioForm/Fields/Skills/SkillSelectButton';
-import { usePortfolioFormContext } from '~/components/PortfolioForm/utils';
+import SelectedSkills from '~/components/Forms/PortfolioForm/Fields/Skills/SelectedSkills';
+import SkillSelectButton from '~/components/Forms/PortfolioForm/Fields/Skills/SkillSelectButton';
+import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import { SkillName } from '~/services/recruit';
 import { flex, fontCss, palettes, position } from '~/styles/utils';
 

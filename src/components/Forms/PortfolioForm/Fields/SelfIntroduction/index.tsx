@@ -1,12 +1,12 @@
 import type { EditorProps } from '~/components/Editor';
-import type { PortfolioFormValues } from '~/components/PortfolioForm/utils';
+import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils';
 
 import { css } from '@emotion/react';
 import { useFormState } from 'react-hook-form';
 
 import { AlertText } from '~/components/Common';
 import Editor from '~/components/Editor';
-import { usePortfolioFormContext } from '~/components/PortfolioForm/utils';
+import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import { fontCss, palettes } from '~/styles/utils';
 
 const fieldName = 'selfIntroduction';
