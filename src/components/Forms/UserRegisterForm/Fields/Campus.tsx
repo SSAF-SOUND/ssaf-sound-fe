@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { SelectBox } from '~/components/Common';
-import { useUserRegisterFormContext } from '~/components/UserRegisterForm/utils';
+import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { flex, fontCss } from '~/styles/utils';
 
 const campuses = ['서울', '대전', '광주', '구미', '부울경'];

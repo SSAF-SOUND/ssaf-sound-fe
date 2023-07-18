@@ -1,19 +1,19 @@
 import type { SubmitHandler } from 'react-hook-form';
-import type { UserRegisterFormValues } from '~/components/UserRegisterForm/utils';
+import type { UserRegisterFormValues } from '~/components/Forms/UserRegisterForm/utils';
 
 import { css } from '@emotion/react';
 import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ProgressBar } from '~/components/Common';
-import TitleBar from '~/components/TitleBar';
 import {
   Campus,
   IsMajor,
   IsMember,
   Nickname,
   Year,
-} from '~/components/UserRegisterForm/Fields';
+} from '~/components/Forms/UserRegisterForm/Fields';
+import TitleBar from '~/components/TitleBar';
 import { useStack } from '~/hooks';
 import { flex, pageMinHeight } from '~/styles/utils';
 import { noop } from '~/utils';

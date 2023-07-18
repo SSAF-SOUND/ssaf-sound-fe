@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
 import { Button, SsafyIcon, TrackSize } from '~/components/Common';
-import { useUserRegisterFormContext } from '~/components/UserRegisterForm/utils';
+import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { flex, fontCss } from '~/styles/utils';
 
 const fieldName = 'ssafyMember';

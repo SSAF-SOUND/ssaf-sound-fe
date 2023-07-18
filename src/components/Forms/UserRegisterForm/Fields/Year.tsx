@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useEffect } from 'react';
 
 import { SelectBox } from '~/components/Common';
-import { useUserRegisterFormContext } from '~/components/UserRegisterForm/utils';
+import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { flex, fontCss } from '~/styles/utils';
 
 const years = Array(10)

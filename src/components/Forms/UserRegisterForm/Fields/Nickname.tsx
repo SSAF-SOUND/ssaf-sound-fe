@@ -10,8 +10,8 @@ import {
   Modal,
   VisuallyHidden,
 } from '~/components/Common';
+import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { Alert } from '~/components/ModalContent';
-import { useUserRegisterFormContext } from '~/components/UserRegisterForm/utils';
 import {
   createRandomNickname,
   nicknameValidator,
