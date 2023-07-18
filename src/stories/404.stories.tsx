@@ -17,6 +17,6 @@ const meta: Meta<typeof NotFoundPage> = {
 
 export default meta;
 
-type SignInPageStory = StoryObj<typeof NotFoundPage>;
+type NotFoundPageStory = StoryObj<typeof NotFoundPage>;
 
-export const Default: SignInPageStory = {};
+export const Default: NotFoundPageStory = {};
