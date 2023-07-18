@@ -14,8 +14,12 @@ export const endpoints = {
   },
   user: {
     myInfo: () => '/members' as const,
-    nickname: () => '/members/nickname' as const,
     studentCertification: () => '/members/ssafy-certification' as const,
+
+    ssafyBasicInfo: () => '/members/default-information' as const,
+    nickname: () => '/members/nickname' as const,
+    isMajor: () => '/members/major' as const,
+    track: () => '/members/major-track' as const,
   },
   recruit: {
     // todo 이름, 파라미터 수정

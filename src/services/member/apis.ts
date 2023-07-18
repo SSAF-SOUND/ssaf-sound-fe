@@ -30,6 +30,47 @@ export const updateMyInfo = (params: UpdateMyInfoParams) => {
     .then((res) => res.data.data);
 };
 
+export interface UpdateSsafyInfoParams {
+  ssafyMember: boolean;
+  semester: null | number;
+  campus: null | string;
+}
+
+export const updateSsafyInfo = (params: UpdateSsafyInfoParams) => {
+  const endpoint = endpoints.user.ssafyBasicInfo();
+
+  return privateAxios.patch(endpoint, params).then((res) => res.data);
+};
+
+export interface UpdateIsMajorParams {
+  isMajor: boolean;
+}
+
+export const updateIsMajor = (params: UpdateIsMajorParams) => {
+  const endpoint = endpoints.user.isMajor();
+
+  return privateAxios.patch(endpoint, params).then((res) => res.data);
+};
+
+export interface UpdateTrackParams {
+  track: string;
+}
+
+export const updateTrack = (params: UpdateTrackParams) => {
+  const endpoint = endpoints.user.track();
+
+  return privateAxios.patch(endpoint, params).then((res) => res.data);
+};
+
+export interface UpdateNicknameParams {
+  nickname: string;
+}
+export const updateNickname = (params: UpdateNicknameParams) => {
+  const endpoint = endpoints.user.nickname();
+
+  return privateAxios.patch(endpoint, params).then((res) => res.data);
+};
+
 export interface ValidateNicknameParams {
   nickname: string;
 }
