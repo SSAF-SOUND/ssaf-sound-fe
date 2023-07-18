@@ -21,10 +21,9 @@ export const routes = {
     detail: (id: number) => `${routes.profile.self()}/${id}`,
 
     myInfoSettings: () => `${routes.profile.self()}/myinfo-settings`,
-
     edit: {
       myInfo: (field: EditableMyInfoFields) =>
-        `${routes.profile.myInfoSettings()}/edit?field=${field}`,
+        `${routes.profile.myInfoSettings()}/${field}/edit`,
 
       portfolio: () => `${routes.profile.self()}/portfolio/edit`,
     },
@@ -35,10 +34,8 @@ export const routes = {
 };
 
 export enum EditableMyInfoFields {
-  SSAFY_MEMBER = 'ssafyMember',
+  SSAFY_BASIC_INFO = 'ssafy-basic-info', // 기수, 캠퍼스, 멤버여부(학생 인증시 못바꿈)
   NICKNAME = 'nickname',
-  YEAR = 'year',
-  CAMPUS = 'campus',
-  IS_MAJOR = 'isMajor',
-  TRACK = 'track',
+  IS_MAJOR = 'is-major',
+  TRACK = 'track', // 인증된 상태에서만 바꿀 수 있음
 }
