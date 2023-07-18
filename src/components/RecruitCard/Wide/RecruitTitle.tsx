@@ -13,9 +13,9 @@ const selfCss = css([
   fontCss.family.auto,
   fontCss.style.B20,
   {
-    maxWidth: '75%',
+    width: '100%',
     lineHeight: '22px',
-    wordBreak: 'keep-all',
+    wordBreak: 'break-all',
   },
   lineClamp(2),
 ]);
