@@ -81,7 +81,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
           </MyInfoSettings.NavTitle>
 
           <MyInfoSettings.NavItem
-            href={routes.profile.edit.myInfo(EditableMyInfoFields.SSAFY_INFO)}
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.SSAFY_BASIC_INFO)}
           >
             SSAFY 기본 정보
           </MyInfoSettings.NavItem>
