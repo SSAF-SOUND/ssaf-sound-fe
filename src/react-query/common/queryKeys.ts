@@ -3,6 +3,10 @@ export const queryKeys = {
   user: {
     myInfo: () => [...queryKeys.auth(), 'myInfo'],
   },
+  meta: {
+    self: () => ['meta'],
+    campuses: () => [...queryKeys.meta.self(), 'campuses'],
+  },
 };
 
 export const endpoints = {
@@ -25,5 +29,9 @@ export const endpoints = {
     // todo 이름, 파라미터 수정
     data: () => '/recruits' as const,
     detail: () => '/recruit/detail' as const,
+  },
+  meta: {
+    campuses: () => '/meta/campuses' as const,
+    skills: () => '/meta/skills' as const,
   },
 };
