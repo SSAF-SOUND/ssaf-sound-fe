@@ -1,5 +1,5 @@
 import type { CustomNextPage } from 'next/types';
-import type { StudentCertificationFormValues } from '~/components/StudentCertificationForm/utils';
+import type { StudentCertificationFormValues } from '~/components/Forms/StudentCertificationForm/utils';
 import type { UserInfo } from '~/services/member';
 
 import { useRouter } from 'next/router';
@@ -7,11 +7,11 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
+import StudentCertificationForm from 'src/components/Forms/StudentCertificationForm';
 import { DefaultFullPageLoader } from '~/components/Common';
 import DelayedRedirection from '~/components/DelayedRedirection';
 import { useModal } from '~/components/GlobalModal';
 import PreviewCertifiedMyInfo from '~/components/PreviewCertifiedMyInfo';
-import StudentCertificationForm from '~/components/StudentCertificationForm';
 import {
   CertificationState,
   useCertifyStudent,

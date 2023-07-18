@@ -1,11 +1,11 @@
-import type { StudentCertificationFormValues } from '~/components/StudentCertificationForm/utils';
+import type { StudentCertificationFormValues } from '~/components/Forms/StudentCertificationForm/utils';
 
 import { css } from '@emotion/react';
 import { useId, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { SelectBox } from '~/components/Common';
-import { useStudentCertificationFormContext } from '~/components/StudentCertificationForm/utils';
+import { useStudentCertificationFormContext } from '~/components/Forms/StudentCertificationForm/utils';
 import { years } from '~/services/member';
 import { flex, fontCss, palettes } from '~/styles/utils';
 

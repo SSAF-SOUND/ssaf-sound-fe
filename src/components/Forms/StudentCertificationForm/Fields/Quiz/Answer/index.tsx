@@ -1,10 +1,10 @@
-import type { StudentCertificationFormValues } from '~/components/StudentCertificationForm/utils';
+import type { StudentCertificationFormValues } from '~/components/Forms/StudentCertificationForm/utils';
 
 import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
 
 import { AlertText, Button, TextInput } from '~/components/Common';
-import { useStudentCertificationFormContext } from '~/components/StudentCertificationForm/utils';
+import { useStudentCertificationFormContext } from '~/components/Forms/StudentCertificationForm/utils';
 
 const fieldName = 'answer';
 const maxLength = 20;

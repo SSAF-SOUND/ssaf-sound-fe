@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useId, useMemo } from 'react';
 
 import { SelectBox } from '~/components/Common';
-import { useStudentCertificationFormContext } from '~/components/StudentCertificationForm/utils';
+import { useStudentCertificationFormContext } from '~/components/Forms/StudentCertificationForm/utils';
 import { SsafyTrack } from '~/services/member/utils';
 import { flex, fontCss } from '~/styles/utils';
 import { capitalize } from '~/utils';
