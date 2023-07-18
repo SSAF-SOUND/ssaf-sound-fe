@@ -54,7 +54,7 @@ const ModalCore = (props: ModalCoreProps) => {
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
       {portal ? (
         <Dialog.Portal>
-          <Dialog.Overlay css={overlayCss.black} />
+          <Dialog.Overlay css={[overlayCss, overlayColorCss.black]} />
           <Dialog.Content
             css={contentCss}
             onEscapeKeyDown={onEscapeKeyDown}
@@ -65,7 +65,7 @@ const ModalCore = (props: ModalCoreProps) => {
         </Dialog.Portal>
       ) : (
         <>
-          <Dialog.Overlay css={overlayCss.black} />
+          <Dialog.Overlay css={[overlayCss, overlayColorCss.black]} />
           <Dialog.Content
             css={contentCss}
             onEscapeKeyDown={onEscapeKeyDown}
@@ -81,21 +81,19 @@ const ModalCore = (props: ModalCoreProps) => {
 
 export default ModalCore;
 
-const overlayBaseCss = css({
+const overlayCss = css({
   position: 'fixed',
   inset: 0,
   zIndex: zIndex.fixed.modalOverlay,
 });
 
-const overlayCss = {
-  black: css([
-    overlayBaseCss,
-    { backgroundColor: colorMix('50%', palettes.black) },
-  ]),
+const overlayColorCss = {
+  black: css({ backgroundColor: colorMix('50%', palettes.black) }),
   // 추가할 오버레이 색상이 있다면, 여기에 추가하고 prop 으로 분기처리 하거나,
   // overlayStyle prop 만들어서 스타일 덮어쓸 생각입니다.
 };
 
-const contentCss = {
+const contentCss = css({
+  position: 'relative',
   zIndex: zIndex.fixed.modalContent,
-};
+});
