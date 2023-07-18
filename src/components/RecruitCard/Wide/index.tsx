@@ -13,11 +13,12 @@ import RecruitTitle from './RecruitTitle';
 import WithMyBadge from './WithMyBadge';
 import RecruitCardSkills from '../Common/RecruitSkills';
 
-export interface RecruitCardProps extends RecruitSummary {
+export interface RecruitCardProps {
   category?: RecruitCategoryType;
   withBadge?: boolean;
   children?: ReactNode;
   withMessage?: boolean;
+  recruitSummary: RecruitSummary;
 }
 
 const RecruitCard = (props: RecruitCardProps) => {
@@ -35,15 +36,13 @@ const RecruitCard = (props: RecruitCardProps) => {
 
 const RecruitCardImpl = (props: RecruitCardProps) => {
   const {
-    recruitId,
-    title,
-    recruitEnd,
-    skills,
-    participants,
-    category = 'project',
+    recruitSummary,
     withBadge = true,
     withMessage,
+    category = 'project',
   } = props;
+
+  const { recruitId, title, recruitEnd, skills, participants } = recruitSummary;
 
   const categoryIsProject = category === 'project';
 
