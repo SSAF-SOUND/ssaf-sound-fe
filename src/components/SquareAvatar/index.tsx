@@ -8,12 +8,14 @@ import VacantSquareAvatar from './Vacant';
 import { SsafyIcon } from '../Common';
 import { TrackSize } from '../Common/SsafyIcon/Track';
 
-export type SquareAvatarProps = UserInfo;
-
+export interface SquareAvatarProps {
+  userInfo?: UserInfo;
+}
 const SquareAvatar = (props: SquareAvatarProps) => {
-  if (!props?.memberId) return <VacantSquareAvatar />;
+  const { userInfo } = props;
+  if (!userInfo) return <VacantSquareAvatar />;
 
-  const { isMajor, nickname, ssafyMember, ssafyInfo } = props;
+  const { isMajor, nickname, ssafyMember, ssafyInfo } = userInfo;
 
   return (
     <div css={[selfCss, backgroundCss[isMajor ? 'major' : 'nonMajor']]}>
