@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
 import { TextInput } from '~/components/Common';
-import { useRecruitFormContext } from '~/components/RecruitForm/utils';
+import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { fontCss, palettes } from '~/styles/utils';
 
 const fieldName = 'title';

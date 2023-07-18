@@ -1,4 +1,4 @@
-import type { RecruitFormValues } from '~/components/RecruitForm/utils';
+import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { DatePicker } from '~/components/Common';
-import { useRecruitFormContext } from '~/components/RecruitForm/utils';
+import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
 
 const fieldName = 'endDate';

@@ -1,9 +1,9 @@
-import type { RecruitFormValues } from '~/components/RecruitForm/utils';
+import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 
 import { useWatch } from 'react-hook-form';
 
-import StudyParticipants from './/StudyParticipants';
 import ProjectParticipants from './ProjectParticipants';
+import StudyParticipants from './StudyParticipants';
 
 export const Participants = () => {
   const category = useWatch<RecruitFormValues>({

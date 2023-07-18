@@ -1,13 +1,13 @@
 import type {
   Participants,
   RecruitFormValues,
-} from '~/components/RecruitForm/utils';
+} from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
 
 import { NumberInput } from '~/components/Common';
-import { useRecruitFormContext } from '~/components/RecruitForm/utils';
+import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { createBoundClamp } from '~/utils';
 
 const minCount = 1;

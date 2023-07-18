@@ -1,14 +1,14 @@
 import type {
   Participants,
   RecruitFormValues,
-} from '~/components/RecruitForm/utils';
+} from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
 import { memo } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { Icon, IconButton, NumberInput, SelectBox } from '~/components/Common';
-import { parts, useRecruitFormContext } from '~/components/RecruitForm/utils';
+import { parts, useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
 import { createBoundClamp } from '~/utils';
 

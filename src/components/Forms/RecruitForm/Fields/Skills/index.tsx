@@ -1,4 +1,4 @@
-import { useRecruitFormContext } from '~/components/RecruitForm/utils';
+import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import SkillBadge from '~/components/SkillBadge';
 import { SkillName } from '~/services/recruit';
 

@@ -1,10 +1,10 @@
-import type { RecruitFormValues } from '~/components/RecruitForm/utils';
+import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Button, Icon } from '~/components/Common';
-import { parts } from '~/components/RecruitForm/utils';
+import { parts } from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
 
 import ProjectParticipantsFieldRow from './ProjectParticipantsFieldRow';

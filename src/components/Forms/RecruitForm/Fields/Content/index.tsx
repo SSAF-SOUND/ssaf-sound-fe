@@ -1,5 +1,5 @@
 import Editor from '~/components/Editor';
-import { useRecruitFormContext } from '~/components/RecruitForm/utils';
+import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 
 const fieldName = 'content';
 const maxLength = 3000;
