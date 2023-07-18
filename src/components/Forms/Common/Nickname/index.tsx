@@ -1,3 +1,5 @@
+import type { KeyboardEventHandler } from 'react';
+
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { useFormContext } from 'react-hook-form';
@@ -23,6 +25,12 @@ const Nickname = (props: NicknameProps) => {
     setFocus(fieldName);
   };
 
+  const preventSubmitOnEnterKeyDown: KeyboardEventHandler<
+    HTMLInputElement
+  > = (e) => {
+    if (e.key === 'Enter') e.preventDefault();
+  };
+
   return (
     <div className={className}>
       <div css={refreshNicknameCss}>
@@ -33,9 +41,7 @@ const Nickname = (props: NicknameProps) => {
       </div>
       <TextInput
         id={id}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') e.preventDefault();
-        }}
+        onKeyDown={preventSubmitOnEnterKeyDown}
         placeholder="James"
         size="lg"
         type="text"
