@@ -40,7 +40,7 @@ export const signOut = () => {
     const queryClient = getQueryClient();
 
     if (queryClient) {
-      await queryClient.refetchQueries(queryKeys.auth());
+      await queryClient.removeQueries(queryKeys.auth());
       // NOTE: WebStorage 에 저장한 유저 정보도 모두 삭제해야합니다.
     }
   });

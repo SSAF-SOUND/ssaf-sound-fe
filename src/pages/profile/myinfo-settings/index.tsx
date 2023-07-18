@@ -1,5 +1,7 @@
 import type { CustomNextPage } from 'next/types';
 
+import { useRouter } from 'next/router';
+
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
@@ -22,17 +24,17 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
   const isCertified =
     myInfo?.ssafyInfo?.certificationState === CertificationState.CERTIFIED;
+  const router = useRouter();
   const { openModal, closeModal } = useModal();
   const { mutate: signOut, isLoading: isSigningOut } = useSignOut();
-  const handleSignOut = async () => {
+  const handleSignOut = () => {
     signOut(undefined, {
-      onError: (err) => {
-        handleAxiosError(err);
-      },
+      onSuccess: () => router.push(routes.main()),
+      onError: (err) => handleAxiosError(err),
     });
   };
 
-  const openSignOutAlertModal = () => {
+  const openSignOutReconfirmModal = () => {
     openModal('alert', {
       title: '알림',
       description: `${myInfo?.nickname}님 로그아웃 하시겠습니까?`,
@@ -79,19 +81,9 @@ const MyInfoSettingsPage: CustomNextPage = () => {
           </MyInfoSettings.NavTitle>
 
           <MyInfoSettings.NavItem
-            href={routes.profile.edit.myInfo(EditableMyInfoFields.SSAFY_MEMBER)}
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.SSAFY_INFO)}
           >
-            SSAFY 멤버 여부
-          </MyInfoSettings.NavItem>
-          <MyInfoSettings.NavItem
-            href={routes.profile.edit.myInfo(EditableMyInfoFields.YEAR)}
-          >
-            SSAFY 기수
-          </MyInfoSettings.NavItem>
-          <MyInfoSettings.NavItem
-            href={routes.profile.edit.myInfo(EditableMyInfoFields.CAMPUS)}
-          >
-            SSAFY 캠퍼스
+            SSAFY 기본 정보
           </MyInfoSettings.NavItem>
           <MyInfoSettings.NavItem
             href={routes.profile.edit.myInfo(EditableMyInfoFields.IS_MAJOR)}
@@ -114,7 +106,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
         <button
           type="button"
           css={signOutButtonCss}
-          onClick={openSignOutAlertModal}
+          onClick={openSignOutReconfirmModal}
           disabled={isSigningOut}
         >
           <MyInfoSettings.NavItem asLink={false}>
