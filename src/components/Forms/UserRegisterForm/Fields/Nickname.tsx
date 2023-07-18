@@ -3,10 +3,11 @@ import { useEffect, useId, useRef, useState } from 'react';
 
 import { Button, VisuallyHidden } from '~/components/Common';
 import NicknameField from '~/components/Forms/Common/Nickname';
+import { useNicknameReconfirmModal } from '~/components/Forms/Common/Nickname/utils';
 import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { useModal } from '~/components/GlobalModal';
 import { useValidateNickname } from '~/services/member';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
 const fieldName = 'nickname';
@@ -25,39 +26,27 @@ const Nickname = () => {
     setError,
     formState: { dirtyFields, isSubmitting },
   } = useUserRegisterFormContext();
-  const { openModal, closeModal } = useModal();
+  const { closeModal } = useModal();
   const nicknameFieldId = useId();
-
+  const { openNicknameReconfirmModal } = useNicknameReconfirmModal();
   const submittable = isValidNickname && !dirtyFields.nickname;
   const isButtonDisabled = !isValidNickname && !dirtyFields.nickname;
   const isButtonLoading = isValidatingNickname || isSubmitting;
 
-  const handleOpenModal = () => {
-    openModal('alert', {
-      title: '알림',
-      description: (
-        <p>
-          닉네임을{' '}
-          <strong style={{ color: palettes.primary.darken }}>
-            {getValues(fieldName)}
-          </strong>
-          (으)로 설정하시겠습니까?
-        </p>
-      ),
-      actionText: '확인',
-      cancelText: '취소',
+  const handleOpenReconfirmModal = () => {
+    openNicknameReconfirmModal({
+      nickname: getValues(fieldName),
       onClickAction: submitForm,
-      onClickCancel: closeModal,
     });
   };
 
   const handleValidateNickname = async () => {
     const nickname = getValues(fieldName);
-    const passClientValidate = await trigger(fieldName);
-    if (!passClientValidate) return;
+    const passClientValidation = await trigger(fieldName);
+    if (!passClientValidation) return;
 
     if (submittable) {
-      handleOpenModal();
+      handleOpenReconfirmModal();
       return;
     }
 
@@ -66,7 +55,7 @@ const Nickname = () => {
       {
         onSuccess: () => {
           setIsValidNickname(true);
-          handleOpenModal();
+          handleOpenReconfirmModal();
           resetField(fieldName, { defaultValue: nickname });
         },
         onError: (error) => {
