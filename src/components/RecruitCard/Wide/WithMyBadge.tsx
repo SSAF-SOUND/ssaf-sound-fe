@@ -20,7 +20,7 @@ const WithMyBadge = (props: WithBadgeProps) => {
 
 const selfCss = css(
   {
-    maxWidth: '75%',
+    width: '75%',
   },
   flex('flex-start', '', 'column', 3)
 );
