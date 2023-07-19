@@ -31,7 +31,10 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   const { mutate: signOut, isLoading: isSigningOut } = useSignOut();
   const handleSignOut = () => {
     signOut(undefined, {
-      onSuccess: () => router.push(routes.main()),
+      onSuccess: () => {
+        closeModal();
+        router.push(routes.main());
+      },
       onError: (err) => handleAxiosError(err),
     });
   };
