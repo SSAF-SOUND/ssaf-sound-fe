@@ -1,21 +1,19 @@
-import type { ReactElement } from 'react';
+import type { ComponentPropsWithoutRef, ReactElement } from 'react';
 
 import { css } from '@emotion/react';
 
 import { flex, fontCss, palettes } from '~/styles/utils';
 
-interface LabelProps {
+interface LabelProps extends ComponentPropsWithoutRef<'label'> {
   name: string;
-  htmlFor?: string;
-  className?: string;
   customNameElement?: ReactElement;
   children: ReactElement;
 }
 
 const Label = (props: LabelProps) => {
-  const { name, htmlFor, className, customNameElement, children } = props;
+  const { name, customNameElement, children, ...restProps } = props;
   return (
-    <label css={selfCss} className={className} htmlFor={htmlFor}>
+    <label css={selfCss} {...restProps}>
       {customNameElement || <span css={labelCss}>{name}</span>}
       {children}
     </label>
