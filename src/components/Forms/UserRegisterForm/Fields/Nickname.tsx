@@ -111,6 +111,7 @@ const Nickname = (props: NicknameProps) => {
 
       <NicknameField
         id={nicknameFieldId}
+        initialNickname={initialNickname}
         css={inputContainerCss}
         fieldName={fieldName}
       />

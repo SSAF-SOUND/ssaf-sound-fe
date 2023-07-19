@@ -20,9 +20,9 @@ const getMyInfo = rest.get<never, never, GetMyInfoApiData | ApiErrorResponse>(
     return res(
       ctx.delay(500),
       // ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
-      // ...mockSuccess<UserInfo>(ctx, userInfo.certifiedSsafyUserInfo)
+      ...mockSuccess<UserInfo>(ctx, userInfo.certifiedSsafyUserInfo)
       // ...mockSuccess<UserInfo>(ctx, userInfo.uncertifiedSsafyUserInfo)
-      ...mockSuccess<UserInfo>(ctx, userInfo.nonSsafyUserInfo)
+      // ...mockSuccess<UserInfo>(ctx, userInfo.nonSsafyUserInfo)
       // ...mockError(ctx, 'code', 'message', 404),
     );
   }
@@ -82,6 +82,19 @@ export const validateNicknameError = restError(
   }
 );
 
+export const updateNickname = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.nickname())
+);
+
+export const updateNicknameError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.nickname()),
+  {
+    message: '유효하지 않은 닉네임입니다.',
+  }
+);
+
 export const certifyStudent = restSuccess<CertifyStudentApiData['data']>(
   'post',
   composeUrls(API_URL, endpoints.user.studentCertification()),
@@ -117,4 +130,5 @@ export const memberHandlers = [
   updateMyInfo,
   validateNickname,
   certifyStudent,
+  updateNickname,
 ];

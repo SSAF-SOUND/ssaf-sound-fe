@@ -10,12 +10,13 @@ import { flex } from '~/styles/utils';
 
 interface NicknameProps {
   fieldName: string;
+  initialNickname: string;
   className?: string;
   id?: string;
 }
 
 const Nickname = (props: NicknameProps) => {
-  const { fieldName, className, id } = props;
+  const { fieldName, className, id, initialNickname } = props;
   const { register, setFocus, setValue } = useFormContext();
 
   const handleCreateRandomNickname = () => {
@@ -25,9 +26,9 @@ const Nickname = (props: NicknameProps) => {
     setFocus(fieldName);
   };
 
-  const preventSubmitOnEnterKeyDown: KeyboardEventHandler<
-    HTMLInputElement
-  > = (e) => {
+  const preventSubmitOnEnterKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    e
+  ) => {
     if (e.key === 'Enter') e.preventDefault();
   };
 
@@ -47,7 +48,7 @@ const Nickname = (props: NicknameProps) => {
         type="text"
         autoComplete="off"
         {...register(fieldName, {
-          validate: nicknameValidator,
+          validate: (value) => nicknameValidator(value, initialNickname),
         })}
       />
       <ErrorMessage
