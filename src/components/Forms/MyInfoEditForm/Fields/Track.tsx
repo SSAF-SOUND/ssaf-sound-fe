@@ -26,9 +26,11 @@ export const Track = () => {
   return (
     <div css={selfCss}>
       <SelectBox
+        focusOnMount
         defaultValue={defaultTrack}
         size="lg"
-        items={tracks.map((track) => capitalize(track))}
+        items={tracks}
+        textAs={(value) => capitalize(value)}
         onValueChange={handleChangeTrack}
       />
     </div>

@@ -23,30 +23,47 @@ enum IsSsafyMember {
   NO = '아니오',
 }
 
+const resolveSsafyMemberFieldValue = (value?: boolean) => {
+  if (!isBoolean(value)) return value;
+  return value ? IsSsafyMember.YES : IsSsafyMember.NO;
+};
+
 export const SsafyBasicInfo = () => {
   const { data: campuses } = useCampuses();
   const { data: years } = useYears();
-  const { register, setValue } = useMyInfoEditFormContext();
+  const {
+    register,
+    setValue,
+    formState: { defaultValues = {} },
+  } = useMyInfoEditFormContext();
+  const { ssafyBasicInfo: { campus: defaultCampus, year: defaultYear } = {} } =
+    defaultValues;
+
   const ssafyMemberSelectBoxId = useId();
   const yearSelectBoxId = useId();
   const campusSelectBoxId = useId();
 
   const ssafyMember = useWatch<MyInfoEditFormValues>({
     name: ssafyMemberFieldName,
-    defaultValue: false,
-  }) as boolean;
+  }) as boolean | undefined;
 
   const handleSelectSsafyMember = (value: string) => {
     const fieldValue = value === IsSsafyMember.YES;
-    setValue(ssafyMemberFieldName, fieldValue);
+    setValue(ssafyMemberFieldName, fieldValue, {
+      shouldDirty: true,
+    });
   };
 
   const handleSelectYear = (value: string) => {
-    setValue(yearFieldName, Number(extractNumericText(value)));
+    setValue(yearFieldName, Number(extractNumericText(value)), {
+      shouldDirty: true,
+    });
   };
 
   const handleSelectCampus = (value: string) => {
-    setValue(campusFieldName, value);
+    setValue(campusFieldName, value, {
+      shouldDirty: true,
+    });
   };
 
   register(ssafyMemberFieldName, {
@@ -84,7 +101,7 @@ export const SsafyBasicInfo = () => {
         <SelectBox
           id={ssafyMemberSelectBoxId}
           size="lg"
-          value={ssafyMember ? IsSsafyMember.YES : IsSsafyMember.NO}
+          value={resolveSsafyMemberFieldValue(ssafyMember)}
           items={Object.values(IsSsafyMember)}
           onValueChange={handleSelectSsafyMember}
         />
@@ -96,6 +113,7 @@ export const SsafyBasicInfo = () => {
         style={{ zIndex: 2 }}
       >
         <SelectBox
+          defaultValue={String(defaultYear)}
           disabled={!ssafyMember}
           id={yearSelectBoxId}
           size="lg"
@@ -111,6 +129,7 @@ export const SsafyBasicInfo = () => {
         style={{ zIndex: 1 }}
       >
         <SelectBox
+          defaultValue={defaultCampus}
           disabled={!ssafyMember}
           id={campusSelectBoxId}
           size="lg"

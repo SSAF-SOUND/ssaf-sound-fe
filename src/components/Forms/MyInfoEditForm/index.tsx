@@ -37,7 +37,10 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
     defaultValues,
   });
 
-  const { handleSubmit } = methods;
+  const {
+    handleSubmit,
+    formState: { isDirty },
+  } = methods;
 
   return (
     <FormProvider {...methods}>
@@ -59,7 +62,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
         {field === 'track' && <Track />}
 
         {field !== 'nickname' && (
-          <Button size="lg" type="submit">
+          <Button size="lg" type="submit" disabled={!isDirty}>
             수정 완료
           </Button>
         )}

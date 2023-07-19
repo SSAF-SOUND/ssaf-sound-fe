@@ -3,6 +3,7 @@ import type { CustomNextPage } from 'next/types';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { isBoolean } from 'is-what';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
@@ -14,7 +15,7 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
   const router = useRouter();
   const { data: myInfo } = useMyInfo();
 
-  if (!myInfo) {
+  if (!myInfo || !isBoolean(myInfo.ssafyMember)) {
     router.replace(routes.unauthorized());
     return <DefaultFullPageLoader />;
   }
@@ -28,7 +29,7 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
           ssafyBasicInfo: {
             campus: myInfo.ssafyInfo?.campus,
             year: myInfo.ssafyInfo?.semester,
-            ssafyMember: myInfo.ssafyMember ?? undefined,
+            ssafyMember: myInfo.ssafyMember,
           },
         }}
         onValidSubmit={(v) => {
@@ -52,4 +53,3 @@ const selfCss = css(
 );
 
 const formCss = css({ flexGrow: 1, padding: '60px 0 30px' });
-

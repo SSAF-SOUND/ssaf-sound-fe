@@ -20,7 +20,7 @@ export const IsMajor = () => {
 
   const onIsMajorChange = (value: string) => {
     const isMajorValue = value === Major.MAJOR;
-    setValue(fieldName, isMajorValue);
+    setValue(fieldName, isMajorValue, { shouldDirty: true });
   };
 
   register(fieldName, {
@@ -30,6 +30,7 @@ export const IsMajor = () => {
   return (
     <div css={selfCss}>
       <SelectBox
+        focusOnMount
         defaultValue={defaultIsMajor ? Major.MAJOR : Major.NON_MAJOR}
         size="lg"
         items={Object.values(Major)}

@@ -8,11 +8,7 @@ import { useMyInfo } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 
-interface MyInfoSettingsIsMajorEditPageProps {}
-
-const MyInfoSettingsIsMajorEditPage = (
-  props: MyInfoSettingsIsMajorEditPageProps
-) => {
+const MyInfoSettingsIsMajorEditPage = () => {
   const router = useRouter();
   const { data: myInfo } = useMyInfo();
 
