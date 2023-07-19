@@ -21,7 +21,6 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
 
   return (
     <div css={selfCss}>
-      <div css={{ marginBottom: 40 }} />
       <MyInfoEditForm
         css={formCss}
         field="nickname"
@@ -48,4 +47,5 @@ const selfCss = css(
   flex()
 );
 
-const formCss = css({ flexGrow: 1 });
+const formCss = css({ flexGrow: 1, padding: '60px 0 30px' });
+
