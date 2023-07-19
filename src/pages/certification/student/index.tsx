@@ -18,7 +18,7 @@ import {
   useMyInfo,
   useSetMyInfo,
 } from '~/services/member';
-import { flex } from '~/styles/utils';
+import { flex, titleBarHeight } from '~/styles/utils';
 import {
   customToast,
   handleAxiosError,
@@ -165,7 +165,7 @@ StudentCertificationPage.auth = {
 const selfCss = css(
   {
     minHeight: '100vh',
-    padding: '10px 15px',
+    padding: `${titleBarHeight}px 15px`,
   },
   flex()
 );

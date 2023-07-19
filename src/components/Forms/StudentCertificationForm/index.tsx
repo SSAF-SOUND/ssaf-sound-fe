@@ -47,7 +47,6 @@ const StudentCertificationForm = (props: StudentCertificationFormProps) => {
     <div css={selfCss} className={className}>
       <FormProvider {...methods}>
         <TitleBar.Default
-          css={titleBarCss}
           title="SSAFY 재학생 인증"
           withoutBackward={currentPhase === 0}
           withoutClose
@@ -71,10 +70,6 @@ const defaultStudentCertificationFormValues: Partial<StudentCertificationFormVal
 export default StudentCertificationForm;
 
 const selfCss = css({ minHeight: pageMinHeight }, flex());
-
-const titleBarCss = css({
-  padding: 0,
-});
 
 const formCss = css(
   {
