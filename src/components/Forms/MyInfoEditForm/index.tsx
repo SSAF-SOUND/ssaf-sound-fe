@@ -21,17 +21,28 @@ const titleMap: Record<MyInfoEditFormFields, string> = {
   track: 'SSAFY 트랙',
 };
 
+interface MyInfoEditFormPropsOptions {
+  forceSsafyMemberToTrue: boolean;
+}
+
 export interface MyInfoEditFormProps {
   field: MyInfoEditFormFields;
   defaultValues: PartialDeep<MyInfoEditFormValues>;
   onValidSubmit: SubmitHandler<MyInfoEditFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<MyInfoEditFormValues>;
   className?: string;
+  options?: Partial<MyInfoEditFormPropsOptions>;
 }
 
 const MyInfoEditForm = (props: MyInfoEditFormProps) => {
-  const { field, defaultValues, onValidSubmit, onInvalidSubmit, className } =
-    props;
+  const {
+    field,
+    defaultValues,
+    onValidSubmit,
+    onInvalidSubmit,
+    className,
+    options: { forceSsafyMemberToTrue } = {},
+  } = props;
 
   const methods = useForm<MyInfoEditFormValues>({
     defaultValues,
@@ -49,7 +60,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
         className={className}
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
-        <TitleBar.Default title={titleMap[field]} withoutClose  />
+        <TitleBar.Default title={titleMap[field]} withoutClose />
         {field === 'nickname' && (
           <Nickname
             buttonText="수정 완료"
@@ -57,7 +68,9 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
             withLabelText={false}
           />
         )}
-        {field === 'ssafyBasicInfo' && <SsafyBasicInfo />}
+        {field === 'ssafyBasicInfo' && (
+          <SsafyBasicInfo forceSsafyMemberToTrue={forceSsafyMemberToTrue} />
+        )}
         {field === 'isMajor' && <IsMajor />}
         {field === 'track' && <Track />}
 

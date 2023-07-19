@@ -8,7 +8,6 @@ import { useWatch } from 'react-hook-form';
 import { SelectBox } from '~/components/Common';
 import Label from '~/components/Common/Label';
 import { useMyInfoEditFormContext } from '~/components/Forms/MyInfoEditForm/utils';
-import campus from '~/components/Forms/UserRegisterForm/Fields/Campus';
 import { extractNumericText } from '~/services/member';
 import { useCampuses, useYears } from '~/services/meta';
 import { flex } from '~/styles/utils';
@@ -28,13 +27,21 @@ const resolveSsafyMemberFieldValue = (value?: boolean) => {
   return value ? IsSsafyMember.YES : IsSsafyMember.NO;
 };
 
-export const SsafyBasicInfo = () => {
+interface SsafyBasicInfoProps {
+  forceSsafyMemberToTrue?: boolean;
+}
+
+export const SsafyBasicInfo = (props: SsafyBasicInfoProps) => {
+  const { forceSsafyMemberToTrue = false } = props;
   const { data: campuses } = useCampuses();
   const { data: years } = useYears();
   const {
     register,
     setValue,
-    formState: { defaultValues = {} },
+    formState: {
+      defaultValues = {},
+      dirtyFields: { ssafyBasicInfo: isSsafyBasicInfoDirty },
+    },
   } = useMyInfoEditFormContext();
   const { ssafyBasicInfo: { campus: defaultCampus, year: defaultYear } = {} } =
     defaultValues;
@@ -67,13 +74,19 @@ export const SsafyBasicInfo = () => {
   };
 
   register(ssafyMemberFieldName, {
-    validate: (value) => isBoolean(value),
+    validate: (value) => {
+      if (forceSsafyMemberToTrue && !value) {
+        return 'SSAFY 학생 인증 상태이므로, SSAFY인 여부를 바꿀 수 없습니다.';
+      }
+      if (!isBoolean(value)) return 'SSAFY인 여부는 필수 요소입니다.';
+      return !!isSsafyBasicInfoDirty;
+    },
   });
 
   register(yearFieldName, {
-    validate: (value, formValues) => {
-      if (formValues.ssafyBasicInfo.ssafyMember) {
-        if (value === undefined) return '기수를 선택해주세요.';
+    validate: (value) => {
+      if (ssafyMember && !value) {
+        return '기수를 선택해주세요.';
       }
 
       return true;
@@ -81,9 +94,9 @@ export const SsafyBasicInfo = () => {
   });
 
   register(campusFieldName, {
-    validate: (value, formValues) => {
-      if (formValues.ssafyBasicInfo.ssafyMember) {
-        if (value === undefined) return '캠퍼스를 선택해주세요.';
+    validate: (value) => {
+      if (ssafyMember && !value) {
+        return '캠퍼스를 선택해주세요.';
       }
 
       return true;
@@ -99,8 +112,9 @@ export const SsafyBasicInfo = () => {
         style={{ zIndex: 3 }}
       >
         <SelectBox
-          id={ssafyMemberSelectBoxId}
           size="lg"
+          id={ssafyMemberSelectBoxId}
+          disabled={forceSsafyMemberToTrue}
           value={resolveSsafyMemberFieldValue(ssafyMember)}
           items={Object.values(IsSsafyMember)}
           onValueChange={handleSelectSsafyMember}
