@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 import { SelectBox } from '~/components/Common';
 import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
+import { extractNumericText } from '~/services/member';
 import { flex, fontCss } from '~/styles/utils';
 
 const years = Array(10)
@@ -10,7 +11,6 @@ const years = Array(10)
   .map((_, i) => `${i + 1}기`);
 
 const fieldName = 'year';
-const filterNumericText = (value: string) => value.replace(/\D/g, '');
 
 interface YearProps {
   onSelect: () => void;
@@ -39,7 +39,7 @@ const Year = (props: YearProps) => {
       <SelectBox
         items={years}
         onValueChange={handleValueChange}
-        valueAs={filterNumericText}
+        valueAs={extractNumericText}
         size="lg"
         focusOnMount
       />
