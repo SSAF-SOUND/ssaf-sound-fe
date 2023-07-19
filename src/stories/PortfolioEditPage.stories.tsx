@@ -13,6 +13,9 @@ const meta: Meta<typeof PortfolioEditPage> = {
       </PageLayout>
     ),
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

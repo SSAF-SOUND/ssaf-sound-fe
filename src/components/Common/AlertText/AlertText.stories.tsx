@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import AlertText from './index';
 
 const meta: Meta<typeof AlertText> = {
-  title: 'AlertText',
+  title: 'System/AlertText',
   component: AlertText,
   argTypes: {
     children: {

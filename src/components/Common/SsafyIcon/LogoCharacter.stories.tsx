@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import LogoCharacter from './LogoCharacter';
 
 const meta: Meta<typeof LogoCharacter> = {
-  title: 'Icon/SSAFY/Logo',
+  title: 'Icon/SSAFY/LogoCharacter',
   component: LogoCharacter,
 };
 

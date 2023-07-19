@@ -26,6 +26,9 @@ const meta: Meta<typeof UserRegisterPage> = {
       );
     },
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

@@ -26,7 +26,7 @@ const SignInButtonGroup = () => {
 };
 
 const meta: Meta<typeof SignInButtonGroup> = {
-  title: 'SignIn Button',
+  title: 'Button/SignIn Button',
   component: SignInButtonGroup,
 };
 
