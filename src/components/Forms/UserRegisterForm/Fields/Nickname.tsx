@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { useEffect, useId, useRef, useState } from 'react';
+import { useWatch } from 'react-hook-form';
 
 import { Button, VisuallyHidden } from '~/components/Common';
 import NicknameField from '~/components/Forms/Common/Nickname';
@@ -34,18 +35,18 @@ const Nickname = (props: NicknameProps) => {
   const {
     setFocus,
     resetField,
-    getValues,
     trigger,
     setError,
     formState: { dirtyFields, isSubmitting },
   } = useUserRegisterFormContext();
+  const nickname = useWatch({ name: fieldName });
   const { closeModal } = useModal();
   const nicknameFieldId = useId();
   const { openNicknameReconfirmModal } = useNicknameReconfirmModal();
   const submittable =
-    isValidNickname && !dirtyFields.nickname && !initialNickname;
+    isValidNickname && !dirtyFields.nickname && nickname !== initialNickname;
   const isButtonDisabled =
-    (!isValidNickname && !dirtyFields.nickname) || !!initialNickname;
+    (!isValidNickname && !dirtyFields.nickname) || nickname === initialNickname;
   const isButtonLoading = isValidatingNickname || isSubmitting;
 
   const submitForm = () => {
@@ -61,7 +62,6 @@ const Nickname = (props: NicknameProps) => {
   };
 
   const handleValidateNickname = async () => {
-    const nickname = getValues(fieldName);
     const passClientValidation = await trigger(fieldName);
     if (!passClientValidation) return;
 
