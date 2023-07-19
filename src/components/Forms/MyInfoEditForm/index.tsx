@@ -10,7 +10,7 @@ import { Nickname } from '~/components/Forms/UserRegisterForm/Fields';
 import TitleBar from '~/components/TitleBar';
 import { flex, pageMinHeight } from '~/styles/utils';
 
-import { SsafyBasicInfo } from './Fields';
+import { SsafyBasicInfo, IsMajor } from './Fields';
 
 type MyInfoEditFormFields = keyof MyInfoEditFormValues;
 
@@ -55,7 +55,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
           />
         )}
         {field === 'ssafyBasicInfo' && <SsafyBasicInfo />}
-        {field === 'isMajor' && <></>}
+        {field === 'isMajor' && <IsMajor />}
         {field === 'track' && <></>}
 
         {field !== 'nickname' && (
