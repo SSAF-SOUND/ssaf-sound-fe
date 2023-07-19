@@ -11,7 +11,11 @@ const isValidFormat = (value: string) => {
   return !/[^\w 가-힣]/.test(value);
 };
 
-export const nicknameValidator = (value: string) => {
+export const nicknameValidator = (value: string, initialNickname: string) => {
+  if (value === initialNickname) {
+    return false;
+  }
+
   if (!isValidLength(value)) {
     return '길이는 1 ~ 11 사이여야 합니다.';
   }
