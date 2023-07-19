@@ -102,7 +102,33 @@ export const updateIsMajor = restSuccess(
 
 export const updateIsMajorError = restError(
   'patch',
-  composeUrls(API_URL, endpoints.user.isMajor())
+  composeUrls(API_URL, endpoints.user.isMajor()),
+  {
+    message: '오류가 발생했습니다.',
+  }
+);
+
+export const updateSsafyBasicInfo = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.ssafyBasicInfo())
+);
+
+export const updateSsafyBasicInfoError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.ssafyBasicInfo()),
+  {
+    message: '오류가 발생했습니다.',
+  }
+);
+
+export const updateTrack = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.track())
+);
+
+export const updateTrackError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.track())
 );
 
 export const certifyStudent = restSuccess<CertifyStudentApiData['data']>(
@@ -142,4 +168,6 @@ export const memberHandlers = [
   certifyStudent,
   updateNickname,
   updateIsMajor,
+  updateSsafyBasicInfo,
+  updateTrack,
 ];

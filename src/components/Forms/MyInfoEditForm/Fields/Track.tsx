@@ -16,11 +16,16 @@ export const Track = () => {
   } = useMyInfoEditFormContext();
 
   const handleChangeTrack = (value: string) => {
-    setValue(fieldName, value);
+    setValue(fieldName, value, {
+      shouldDirty: true,
+    });
   };
 
   register(fieldName, {
     required: true,
+    validate: (value) => {
+      return defaultTrack !== value;
+    },
   });
 
   return (
