@@ -11,7 +11,11 @@ import { routes } from '~/utils/routes';
 import {
   certifyStudent,
   getMyInfo,
+  updateIsMajor,
   updateMyInfo,
+  updateNickname,
+  updateSsafyBasicInfo,
+  updateTrack,
   validateNickname,
 } from './apis';
 
@@ -89,6 +93,30 @@ export const useCheckRegisterRequired = () => {
 export const useUpdateMyInfo = () => {
   return useMutation({
     mutationFn: updateMyInfo,
+  });
+};
+
+export const useUpdateNickname = () => {
+  return useMutation({
+    mutationFn: updateNickname,
+  });
+};
+
+export const useUpdateIsMajor = () => {
+  return useMutation({
+    mutationFn: updateIsMajor,
+  });
+};
+
+export const useUpdateSsafyBasicInfo = () => {
+  return useMutation({
+    mutationFn: updateSsafyBasicInfo,
+  });
+};
+
+export const useUpdateTrack = () => {
+  return useMutation({
+    mutationFn: updateTrack,
   });
 };
 
