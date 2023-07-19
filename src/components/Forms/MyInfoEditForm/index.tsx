@@ -21,7 +21,7 @@ const titleMap: Record<MyInfoEditFormFields, string> = {
   track: 'SSAFY 트랙',
 };
 
-interface MyInfoEditFormProps {
+export interface MyInfoEditFormProps {
   field: MyInfoEditFormFields;
   defaultValues: PartialDeep<MyInfoEditFormValues>;
   onValidSubmit: SubmitHandler<MyInfoEditFormValues>;
@@ -39,7 +39,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
 
   const {
     handleSubmit,
-    formState: { isDirty },
+    formState: { isDirty, isSubmitting },
   } = methods;
 
   return (
@@ -49,7 +49,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
         className={className}
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
-        <TitleBar.Default title={titleMap[field]} withoutClose />
+        <TitleBar.Default title={titleMap[field]} withoutClose  />
         {field === 'nickname' && (
           <Nickname
             buttonText="수정 완료"
@@ -62,7 +62,12 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
         {field === 'track' && <Track />}
 
         {field !== 'nickname' && (
-          <Button size="lg" type="submit" disabled={!isDirty}>
+          <Button
+            size="lg"
+            type="submit"
+            disabled={!isDirty}
+            loading={isSubmitting}
+          >
             수정 완료
           </Button>
         )}

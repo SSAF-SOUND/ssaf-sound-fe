@@ -24,7 +24,10 @@ export const IsMajor = () => {
   };
 
   register(fieldName, {
-    validate: (value) => isBoolean(value),
+    validate: (value) => {
+      if (!isBoolean(value)) return '전공자 여부는 필수로 선택해야 합니다.';
+      return defaultIsMajor !== value;
+    },
   });
 
   return (

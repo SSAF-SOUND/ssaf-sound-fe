@@ -95,6 +95,16 @@ export const updateNicknameError = restError(
   }
 );
 
+export const updateIsMajor = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.isMajor())
+);
+
+export const updateIsMajorError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.isMajor())
+);
+
 export const certifyStudent = restSuccess<CertifyStudentApiData['data']>(
   'post',
   composeUrls(API_URL, endpoints.user.studentCertification()),
@@ -131,4 +141,5 @@ export const memberHandlers = [
   validateNickname,
   certifyStudent,
   updateNickname,
+  updateIsMajor,
 ];
