@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import * as Select from '@radix-ui/react-select';
 import { useEffect, useRef } from 'react';
 
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 type TextAlign = 'center' | 'left';
@@ -44,6 +44,7 @@ interface SelectBoxProps<D = string> {
   className?: string;
   value?: string;
   defaultValue?: string;
+  disabled?: boolean;
 }
 
 // eslint-disable-next-line
@@ -71,6 +72,7 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     className,
     value,
     defaultValue,
+    disabled,
   } = props;
 
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -86,6 +88,7 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
       onValueChange={onValueChange}
       value={value}
       defaultValue={defaultValue}
+      disabled={disabled}
     >
       <Select.Trigger
         id={id}
@@ -161,6 +164,9 @@ const triggerCss = {
     '&:focus-visible': {
       outline: `3px solid ${themeColorVars.mainColor.var}`,
     },
+    '&:disabled': {
+      backgroundColor: colorMix('50%', palettes.white),
+    },
   }),
   outlined: css({
     backgroundColor: 'transparent',
@@ -169,6 +175,9 @@ const triggerCss = {
     borderRadius: 16,
     '&:focus-visible': {
       outline: `3px solid ${themeColorVars.mainLightColor.var}`,
+    },
+    '&:disabled': {
+      borderColor: colorMix('50%', themeColorVars.mainColor.var),
     },
   }),
 };
@@ -183,6 +192,9 @@ const baseTriggerIconCss = css({
   transition: 'transform 200ms',
   '[data-state="open"] &': {
     transform: 'rotate(180deg)',
+  },
+  '[data-disabled] &': {
+    color: colorMix('50%', themeColorVars.mainDarkColor.var),
   },
 });
 
