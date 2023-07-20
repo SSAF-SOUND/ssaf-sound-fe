@@ -7,6 +7,7 @@ export * from './handleAxiosError';
 export * from './misc';
 export * from './number';
 export * from './object';
+export * from './regex';
 export * from './routes';
 export * from './string';
 export * from './toWebp';

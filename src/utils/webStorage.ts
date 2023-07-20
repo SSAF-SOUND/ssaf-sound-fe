@@ -1,3 +1,5 @@
+import type { Tokens } from '~/services/auth';
+
 import { isClient, noop } from '~/utils/misc';
 import { routes } from '~/utils/routes';
 
@@ -16,8 +18,8 @@ const createWebStorage = () => {
   const AUTH_RETURN_PAGE_KEY = 'auth-return-page';
 
   // `devMode`에서만 사용합니다.
-  const ACCESS_TOKEN_KEY = 'accessToken';
-  const REFRESH_TOKEN_KEY = 'refreshToken';
+  const DEV__ACCESS_TOKEN_KEY = 'accessToken';
+  const DEV__REFRESH_TOKEN_KEY = 'refreshToken';
 
   // Default Value
   const DEFAULT_RETURN_PAGE = routes.main();
@@ -31,11 +33,19 @@ const createWebStorage = () => {
         sessionStorage.getItem(AUTH_RETURN_PAGE_KEY) ?? DEFAULT_RETURN_PAGE
       );
     },
-    getAccessToken: () => {
-      return localStorage.getItem(ACCESS_TOKEN_KEY);
+    DEV__setTokens: (tokens: Tokens) => {
+      localStorage.setItem(DEV__ACCESS_TOKEN_KEY, tokens.accessToken);
+      localStorage.setItem(DEV__REFRESH_TOKEN_KEY, tokens.refreshToken);
     },
-    getRefreshToken: () => {
-      return localStorage.getItem(REFRESH_TOKEN_KEY);
+    DEV__getAccessToken: () => {
+      return localStorage.getItem(DEV__ACCESS_TOKEN_KEY);
+    },
+    DEV__getRefreshToken: () => {
+      return localStorage.getItem(DEV__REFRESH_TOKEN_KEY);
+    },
+    DEV__removeTokens: () => {
+      localStorage.removeItem(DEV__ACCESS_TOKEN_KEY);
+      localStorage.removeItem(DEV__REFRESH_TOKEN_KEY);
     },
   };
 };

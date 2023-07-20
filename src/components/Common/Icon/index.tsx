@@ -21,6 +21,7 @@ import {
   MdBookmarkBorder,
   MdCalendarToday,
   MdChatBubbleOutline,
+  MdCheck,
   MdClose,
   MdControlPoint,
   MdCreate,
@@ -77,6 +78,7 @@ export const icons = {
 
   refresh: <MdRefresh />,
 
+  check: <MdCheck />,
   checkbox: <TbSquareRoundedCheckFilled />,
 
   close: <MdClose />,

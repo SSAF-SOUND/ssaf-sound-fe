@@ -2,39 +2,63 @@ import type { ApiSuccessResponse } from '~/types';
 
 import { isAxiosError } from 'axios';
 
-import { endpoints } from '~/react-query/common';
+import { endpoints, getQueryClient, queryKeys } from '~/react-query/common';
 import { isDevMode, publicAxios, webStorage } from '~/utils';
 
-export interface SignInData {}
-export type SignInApiData = ApiSuccessResponse<SignInData>;
+export interface Tokens {
+  accessToken: string;
+  refreshToken: string;
+}
+export type SignInApiData = ApiSuccessResponse<Tokens>;
 export interface SignInParams {
   code: string;
   oauthName: string;
 }
 
+const signInDevPlugin = (tokens: Tokens) => {
+  webStorage.DEV__setTokens(tokens);
+};
+
 export const signIn = (params: SignInParams) => {
   const endpoint = endpoints.auth.signIn();
 
-  return publicAxios
-    .post<SignInApiData>(endpoint, params)
-    .then((res) => res.data);
+  return publicAxios.post<SignInApiData>(endpoint, params).then((res) => {
+    const tokens = res.data.data;
+    signInDevPlugin(tokens);
+    return tokens;
+  });
 };
 
 export const signOut = () => {
   const endpoint = endpoints.auth.signOut();
 
-  return publicAxios.post(endpoint, {});
+  return publicAxios.post(endpoint, null).then(async () => {
+    if (isDevMode) {
+      webStorage.DEV__removeTokens();
+    }
+
+    const queryClient = getQueryClient();
+
+    if (queryClient) {
+      await queryClient.refetchQueries(queryKeys.auth());
+      // NOTE: WebStorage 에 저장한 유저 정보도 모두 삭제해야합니다.
+    }
+  });
 };
 
 export const reissueToken = () => {
   const endpoint = endpoints.auth.refresh();
   const tag = '[In reissueToken api request]';
   const config = isDevMode
-    ? { headers: { Authorization: `Bearer ${webStorage.getRefreshToken()}` } }
+    ? {
+        headers: {
+          Authorization: `Bearer ${webStorage.DEV__getRefreshToken()}`,
+        },
+      }
     : {};
 
   // 인터셉터 내부에서 무한루프가 발생할 수 있으니 publicAxios 사용
-  return publicAxios.post(endpoint, null, config).catch((error) => {
+  return publicAxios.post(endpoint, null, config).catch(async (error) => {
     if (!isAxiosError(error)) {
       console.error(`${tag}: Unknown Error`);
       return Promise.reject(error);
@@ -47,11 +71,8 @@ export const reissueToken = () => {
         return Promise.reject(error);
       } else {
         console.error(`${tag}: Client Error`);
-        // 필요하다면, 쿠키 삭제도 고려. (로그아웃 요청을 다시 보낼지, 이 응답에서 서버가 삭제시킬지는 논의 필요)
-        //
-        // NOTE: 삭제해야할 클라이언트 상태들이 있다면 삭제하기
-        // console.log(store.dispatch(resetStoreAction()));
-        // console.log(getQueryClient().clear());
+
+        await signOut();
         return Promise.reject(error);
       }
     }

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { css } from '@emotion/react';
 
 import PortfolioLink from '~/components/PortfolioLink';
-import { flex } from '~/styles/utils';
+import { flex, visuallyHidden } from '~/styles/utils';
 
 import { classnames as cn } from './classnames';
 
@@ -53,9 +53,7 @@ const selfCss = css({
 
 const viewLayerCss = css(
   {
-    [`.${cn.root}:focus-within &`]: {
-      display: 'none',
-    },
+    [`.${cn.root}:focus-within &`]: visuallyHidden,
   },
   flex('center', 'center', 'row', 12)
 );
@@ -63,9 +61,7 @@ const viewLayerCss = css(
 const inputLayerCss = css(
   {
     margin: '0 -10px',
-    [`.${cn.root}:not(:focus-within) &`]: {
-      display: 'none',
-    },
+    [`.${cn.root}:not(:focus-within) &`]: visuallyHidden,
   },
   flex('center', 'space-between', 'row', 10, 'nowrap')
 );

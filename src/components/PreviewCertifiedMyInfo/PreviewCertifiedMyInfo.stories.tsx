@@ -7,7 +7,7 @@ import { disableArgs } from '~/stories/utils';
 import PreviewCertifiedMyInfo from './index';
 
 const meta: Meta<typeof PreviewCertifiedMyInfo> = {
-  title: 'PreviewCertifiedMyInfo',
+  title: 'Certification/PreviewCertifiedMyInfo',
   component: PreviewCertifiedMyInfo,
   tags: ['autodocs'],
   decorators: [

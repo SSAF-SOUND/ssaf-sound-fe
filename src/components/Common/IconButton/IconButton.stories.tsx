@@ -6,7 +6,7 @@ import { palettes } from '~/styles/utils';
 import IconButton from './index';
 
 const meta: Meta<typeof IconButton> = {
-  title: 'IconButton',
+  title: 'Button/IconButton',
   component: IconButton,
   tags: ['autodocs'],
   decorators: [

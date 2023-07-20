@@ -1,13 +1,13 @@
 import type { CustomNextPage } from 'next/types';
-import type { UserRegisterFormValues } from '~/components/UserRegisterForm/utils';
+import type { UserRegisterFormValues } from '~/components/Forms/UserRegisterForm/utils';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
+import UserRegisterForm from 'src/components/Forms/UserRegisterForm';
 import { DefaultFullPageLoader } from '~/components/Common';
-import UserRegisterForm from '~/components/UserRegisterForm';
 import {
   useMyAccountStatus,
   useSetMyInfo,
@@ -34,8 +34,12 @@ const RegisterPage: CustomNextPage = () => {
   const onSubmit = async (value: UserRegisterFormValues) => {
     setShouldCheckUserInfo(false);
 
+    const { year, ...restValue } = value;
     try {
-      const response = await updateMyInfo(value);
+      const response = await updateMyInfo({
+        ...restValue,
+        semester: year,
+      });
       setMyInfo(response);
       await router.replace(routes.intro.studentCertification());
     } catch (error) {

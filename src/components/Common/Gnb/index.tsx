@@ -5,7 +5,13 @@ import { css } from '@emotion/react';
 import { useMemo } from 'react';
 import { MdHome, MdArticle, MdGroupAdd, MdAccountCircle } from 'react-icons/md';
 
-import { flex, fontCss, gnbHeight, palettes } from '~/styles/utils';
+import {
+  flex,
+  fontCss,
+  gnbHeight,
+  palettes,
+  fixBottomCenter,
+} from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface GnbProps {
@@ -65,16 +71,18 @@ const Gnb = (props: GnbProps) => {
   );
 };
 
-const selfCss = css({
-  width: '100%',
-  borderTopLeftRadius: 15,
-  borderTopRightRadius: 15,
-  overflow: 'hidden',
-  boxShadow: '0px -7px 18px rgba(0, 0, 0, 0.05)',
-  padding: '0 20px',
-  background: palettes.white,
-  color: palettes.black,
-});
+const selfCss = css(
+  {
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    overflow: 'hidden',
+    boxShadow: '0px -7px 18px rgba(0, 0, 0, 0.05)',
+    padding: '0 20px',
+    background: palettes.white,
+    color: palettes.black,
+  },
+  fixBottomCenter
+);
 
 const itemContainerCss = css(
   { width: '100%' },

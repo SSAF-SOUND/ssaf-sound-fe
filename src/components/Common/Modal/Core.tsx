@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 import { css } from '@emotion/react';
 import * as Dialog from '@radix-ui/react-dialog';
 
-import { colorMix, palettes } from '~/styles/utils';
+import { colorMix, palettes, zIndex } from '~/styles/utils';
 
 interface ModalCoreProps {
   /**
@@ -54,8 +54,9 @@ const ModalCore = (props: ModalCoreProps) => {
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
       {portal ? (
         <Dialog.Portal>
-          <Dialog.Overlay css={overlayCss.black} />
+          <Dialog.Overlay css={[overlayCss, overlayColorCss.black]} />
           <Dialog.Content
+            css={contentCss}
             onEscapeKeyDown={onEscapeKeyDown}
             onPointerDownOutside={onPointerDownOutside}
           >
@@ -64,8 +65,9 @@ const ModalCore = (props: ModalCoreProps) => {
         </Dialog.Portal>
       ) : (
         <>
-          <Dialog.Overlay css={overlayCss.black} />
+          <Dialog.Overlay css={[overlayCss, overlayColorCss.black]} />
           <Dialog.Content
+            css={contentCss}
             onEscapeKeyDown={onEscapeKeyDown}
             onPointerDownOutside={onPointerDownOutside}
           >
@@ -79,12 +81,19 @@ const ModalCore = (props: ModalCoreProps) => {
 
 export default ModalCore;
 
-const overlayBaseCss = css({ position: 'fixed', inset: 0 });
-const overlayCss = {
-  black: css([
-    overlayBaseCss,
-    { backgroundColor: colorMix('50%', palettes.black) },
-  ]),
+const overlayCss = css({
+  position: 'fixed',
+  inset: 0,
+  zIndex: zIndex.fixed.modalOverlay,
+});
+
+const overlayColorCss = {
+  black: css({ backgroundColor: colorMix('50%', palettes.black) }),
   // 추가할 오버레이 색상이 있다면, 여기에 추가하고 prop 으로 분기처리 하거나,
   // overlayStyle prop 만들어서 스타일 덮어쓸 생각입니다.
 };
+
+const contentCss = css({
+  position: 'relative',
+  zIndex: zIndex.fixed.modalContent,
+});

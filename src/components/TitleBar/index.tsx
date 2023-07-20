@@ -1,9 +1,9 @@
 import DefaultTitleBar from './DefaultTitleBar';
-import RecruitFormTitleBar from './RecruitFormTitleBar';
+import FormTitleBar from './FormTitleBar';
 
 const TitleBar = {
   Default: DefaultTitleBar,
-  RecruitForm: RecruitFormTitleBar,
+  Form: FormTitleBar,
 };
 
 export default TitleBar;

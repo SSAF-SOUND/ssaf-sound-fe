@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import LunchCard from './index';
 
 const meta: Meta<LunchCardProps> = {
-  title: 'LunchCard',
+  title: 'Lunch/LunchCard',
   component: LunchCard,
   tags: ['autodocs'],
 };

@@ -1,7 +1,7 @@
 export const queryKeys = {
-  todos: (id: string) => ['todos', { id }],
+  auth: () => ['auth'],
   user: {
-    myInfo: () => ['myInfo'],
+    myInfo: () => [...queryKeys.auth(), 'myInfo'],
   },
 };
 
