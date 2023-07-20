@@ -8,14 +8,17 @@ import { flex, fontCss, lineClamp, palettes } from '~/styles/utils';
 import RecruitBadge from './RecruitBadge';
 import RecruitCardSkills from '../Common/RecruitSkills';
 
-export interface RecruitCardProps extends RecruitSummary {
+export interface RecruitCardProps {
   category?: RecruitCategoryType;
+  recruitSummary: RecruitSummary;
 }
 
 const MAX_SKILL_SVG_NUM = 6;
 
 const SmallRecruitCard = (props: RecruitCardProps) => {
-  const { category = 'project', recruitEnd, title, skills } = props;
+  const { category = 'project', recruitSummary } = props;
+  const { recruitEnd, title, skills } = recruitSummary;
+
   return (
     <div css={selfCss}>
       <div css={flex('center', 'space-between', 'row')}>
