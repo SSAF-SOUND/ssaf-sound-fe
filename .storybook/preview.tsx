@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { Global, css } from '@emotion/react';
 import { initialize, mswLoader } from 'msw-storybook-addon';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import AppGlobalStyles from '../src/styles/GlobalStyles';
 import {
