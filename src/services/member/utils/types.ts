@@ -78,3 +78,8 @@ export type UserPortfolio =
       isPublic: true;
       portfolio: Portfolio;
     };
+
+export type MyPortfolio = {
+  isPublic: boolean;
+  portfolio: Portfolio;
+};

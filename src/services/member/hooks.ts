@@ -1,4 +1,4 @@
-import type { UserInfo } from '~/services/member/utils';
+import type { MyPortfolio, UserInfo } from '~/services/member/utils';
 
 import { useRouter } from 'next/router';
 
@@ -11,7 +11,8 @@ import { routes } from '~/utils/routes';
 import {
   certifyStudent,
   getMyInfo,
-  getPortfolio,
+  getMyPortfolio,
+  getUserPortfolio,
   updateIsMajor,
   updateMyInfo,
   updateNickname,
@@ -42,7 +43,7 @@ export const useSetMyInfo = () => {
   const queryClient = useQueryClient();
   const queryKey = queryKeys.user.myInfo();
   const setMyInfo = (
-    updater?: UserInfo | ((payload?: UserInfo) => UserInfo)
+    updater?: UserInfo | ((payload?: UserInfo) => UserInfo | undefined)
   ) => {
     queryClient.setQueryData<UserInfo>(queryKey, updater);
   };
@@ -135,16 +136,58 @@ export const useCertifyStudent = () => {
 };
 
 export const useUpdatePortfolioVisibility = () => {
+  const queryClient = useQueryClient();
+  const setMyPortfolio = useSetMyPortfolio();
+
   return useMutation({
     mutationFn: updatePortfolioVisibility,
+    onMutate: async ({ isPublic }) => {
+      const myPortfolioQueryKey = queryKeys.user.myPortfolio();
+      await queryClient.cancelQueries(myPortfolioQueryKey);
+      const prevMyPortfolio =
+        queryClient.getQueryData<MyPortfolio>(myPortfolioQueryKey);
+
+      if (prevMyPortfolio) {
+        setMyPortfolio({
+          ...prevMyPortfolio,
+          isPublic,
+        });
+      }
+
+      return { prevMyPortfolio };
+    },
+    onError: (err, _, context) => {
+      console.error(err);
+      setMyPortfolio(context?.prevMyPortfolio);
+    },
   });
 };
 
 // 포트폴리오
 
-export const usePortfolio = (id: number) => {
+export const useUserPortfolio = (id: number) => {
   return useQuery({
     queryKey: queryKeys.user.portfolio(id),
-    queryFn: () => getPortfolio(id),
+    queryFn: () => getUserPortfolio(id),
   });
+};
+
+export const useMyPortfolio = () => {
+  return useQuery({
+    queryKey: queryKeys.user.myPortfolio(),
+    queryFn: getMyPortfolio,
+  });
+};
+
+export const useSetMyPortfolio = () => {
+  const queryClient = useQueryClient();
+  const queryKey = queryKeys.user.myPortfolio();
+
+  const setMyPortfolio = (
+    updater?: MyPortfolio | ((payload?: MyPortfolio) => MyPortfolio | undefined)
+  ) => {
+    queryClient.setQueryData<MyPortfolio>(queryKey, updater);
+  };
+
+  return setMyPortfolio;
 };

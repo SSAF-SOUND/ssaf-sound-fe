@@ -1,6 +1,7 @@
 import type {
   CertifyStudentApiData,
   GetMyInfoApiData,
+  MyPortfolio,
   UpdateMyInfoParams,
   UserInfo,
   UserPortfolio,
@@ -189,6 +190,15 @@ export const getPortfolio = restSuccess<UserPortfolio>(
   }
 );
 
+export const getMyPortfolio = restSuccess<MyPortfolio>(
+  'get',
+  composeUrls(API_URL, endpoints.user.myPortfolio()),
+  {
+    // data: userPortfolio.myPublicPortfolio,
+    data: userPortfolio.myPrivatePortfolio,
+  }
+);
+
 export const memberHandlers = [
   getMyInfo,
   updateMyInfo,
@@ -200,4 +210,5 @@ export const memberHandlers = [
   updateTrack,
   updatePortfolioVisibility,
   getPortfolio,
+  getMyPortfolio,
 ];

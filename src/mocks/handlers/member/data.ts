@@ -64,4 +64,6 @@ const privatePortfolio: UserPortfolio = {
 export const userPortfolio = {
   publicPortfolio,
   privatePortfolio,
+  myPublicPortfolio: publicPortfolio,
+  myPrivatePortfolio: { ...publicPortfolio, isPublic: false },
 };

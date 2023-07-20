@@ -1,4 +1,9 @@
-import type { UserInfo, SsafyTrack, UserPortfolio } from './utils/types';
+import type {
+  UserInfo,
+  SsafyTrack,
+  UserPortfolio,
+  MyPortfolio,
+} from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
@@ -101,24 +106,32 @@ export const certifyStudent = (params: CertifyStudentParams) => {
 };
 
 interface UpdatePortfolioVisibilityParams {
-  public: boolean;
+  isPublic: boolean;
 }
 
 export const updatePortfolioVisibility = (
   params: UpdatePortfolioVisibilityParams
 ) => {
   const endpoint = endpoints.user.portfolioVisibility();
-  return privateAxios.post(endpoint, params).then((res) => res.data);
+  return privateAxios.patch(endpoint, params).then((res) => res.data);
 };
 
 // 포트폴리오
 
-type GetPortfolioApiData = ApiSuccessResponse<UserPortfolio>;
-
-export const getPortfolio = (id: number) => {
+type GetUserPortfolioApiData = ApiSuccessResponse<UserPortfolio>;
+export const getUserPortfolio = (id: number) => {
   const endpoint = endpoints.user.portfolio(id);
 
   return privateAxios
-    .get<GetPortfolioApiData>(endpoint)
+    .get<GetUserPortfolioApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
+type GetMyPortfolioApiData = ApiSuccessResponse<MyPortfolio>;
+export const getMyPortfolio = () => {
+  const endpoint = endpoints.user.myPortfolio();
+
+  return privateAxios
+    .get<GetMyPortfolioApiData>(endpoint)
     .then((res) => res.data.data);
 };

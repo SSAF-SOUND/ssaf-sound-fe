@@ -2,7 +2,8 @@ export const queryKeys = {
   auth: () => ['auth'],
   user: {
     myInfo: () => [...queryKeys.auth(), 'myInfo'],
-    portfolio: (id: number) => [...queryKeys.auth(), 'portfolio', id],
+    myPortfolio: () => [...queryKeys.auth(), 'portfolio'],
+    portfolio: (id: number) => ['portfolio', id],
   },
   meta: {
     self: () => ['meta'],
@@ -20,6 +21,8 @@ export const endpoints = {
   user: {
     myInfo: () => '/members' as const,
     studentCertification: () => '/members/ssafy-certification' as const,
+
+    myPortfolio: () => `/members/portfolio`,
     portfolio: (id: number) => `/members/${id}/portfolio` as const,
 
     ssafyBasicInfo: () => '/members/default-information' as const,
