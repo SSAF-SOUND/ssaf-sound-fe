@@ -20,6 +20,7 @@ export const endpoints = {
   recruit: {
     // todo 이름, 파라미터 수정
     data: () => '/recruits' as const,
-    detail: () => '/recruit/detail' as const,
+    members: (recruitId: string) => `/recruits/${recruitId}/members` as const,
+    detail: (recruitId: string) => `/recruits/${recruitId}/detail` as const,
   },
 };

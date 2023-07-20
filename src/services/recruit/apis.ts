@@ -4,6 +4,7 @@ import type {
   RecruitType,
   SkillsType,
 } from './utils';
+import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
@@ -27,7 +28,7 @@ export interface RecruitDetail {
 export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetail>;
 
 export const getRecruitDetail = () => {
-  const endpoint = endpoints.recruit.detail();
+  const endpoint = endpoints.recruit.detail('1');
   return privateAxios.get<GetRecruitDetailApiData>(endpoint).then((res) => res);
 };
 
@@ -51,6 +52,7 @@ export interface RecruitSummary {
   skills: SkillsType[];
   participants: RecruitParticipant[];
 }
+
 export interface RecruitParticipant {
   recruitType: RecruitType;
   limit: number;
@@ -60,7 +62,24 @@ export interface RecruitParticipant {
   }[];
 }
 
+export type RecruitMember = UserInfo & {
+  recruitType: RecruitType;
+};
+
+export interface RecruitMembers {
+  members: RecruitMember[];
+}
+
+export type GetRecruitMembersApiData = ApiSuccessResponse<RecruitMembers>;
+
 export const getRecruits = () => {
   const endpoint = endpoints.recruit.data();
   return privateAxios.get<GetRecruitsApiData>(endpoint).then((res) => res);
+};
+
+export const getRecruitMembers = (recruitId: string) => {
+  const endpoint = endpoints.recruit.members(recruitId);
+  return privateAxios
+    .get<GetRecruitMembersApiData>(endpoint)
+    .then((res) => res);
 };
