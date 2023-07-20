@@ -55,3 +55,26 @@ export type UserSsafyInfo =
     };
 
 export type UserInfo = UserBasicInfo & UserSsafyInfo;
+
+// 포트폴리오
+
+export interface PortfolioExternalLink {
+  linkName: string;
+  path: string;
+}
+
+export interface Portfolio {
+  selfIntroduction: string;
+  skills: string[];
+  memberLinks: PortfolioExternalLink[];
+}
+
+export type UserPortfolio =
+  | {
+      isPublic: false;
+      portfolio: null;
+    }
+  | {
+      isPublic: true;
+      portfolio: Portfolio;
+    };
