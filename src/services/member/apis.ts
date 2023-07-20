@@ -99,3 +99,14 @@ export const certifyStudent = (params: CertifyStudentParams) => {
     .post<CertifyStudentApiData>(endpoint, params)
     .then((res) => res.data.data);
 };
+
+interface UpdatePortfolioVisibilityParams {
+  public: boolean;
+}
+
+export const updatePortfolioVisibility = (
+  params: UpdatePortfolioVisibilityParams
+) => {
+  const endpoint = endpoints.user.portfolioVisibility();
+  return privateAxios.post(endpoint, params).then((res) => res.data);
+};

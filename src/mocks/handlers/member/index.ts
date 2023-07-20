@@ -161,6 +161,22 @@ export const certifyStudentAttemptsCountError = restError(
   }
 );
 
+export const updatePortfolioVisibility = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.portfolioVisibility()),
+  {
+    data: null,
+  }
+);
+
+export const updatePortfolioVisibilityError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.portfolioVisibility()),
+  {
+    message: '에러가 발생했습니다',
+  }
+);
+
 export const memberHandlers = [
   getMyInfo,
   updateMyInfo,
@@ -170,4 +186,5 @@ export const memberHandlers = [
   updateIsMajor,
   updateSsafyBasicInfo,
   updateTrack,
+  updatePortfolioVisibility,
 ];

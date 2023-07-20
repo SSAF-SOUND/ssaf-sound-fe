@@ -14,6 +14,7 @@ import {
   updateIsMajor,
   updateMyInfo,
   updateNickname,
+  updatePortfolioVisibility,
   updateSsafyBasicInfo,
   updateTrack,
   validateNickname,
@@ -129,5 +130,11 @@ export const useValidateNickname = () => {
 export const useCertifyStudent = () => {
   return useMutation({
     mutationFn: certifyStudent,
+  });
+};
+
+export const useUpdatePortfolioVisibility = () => {
+  return useMutation({
+    mutationFn: updatePortfolioVisibility,
   });
 };
