@@ -11,6 +11,7 @@ import { routes } from '~/utils/routes';
 import {
   certifyStudent,
   getMyInfo,
+  getPortfolio,
   updateIsMajor,
   updateMyInfo,
   updateNickname,
@@ -136,5 +137,14 @@ export const useCertifyStudent = () => {
 export const useUpdatePortfolioVisibility = () => {
   return useMutation({
     mutationFn: updatePortfolioVisibility,
+  });
+};
+
+// 포트폴리오
+
+export const usePortfolio = (id: number) => {
+  return useQuery({
+    queryKey: queryKeys.user.portfolio(id),
+    queryFn: () => getPortfolio(id),
   });
 };

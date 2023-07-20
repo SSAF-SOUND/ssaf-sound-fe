@@ -3,12 +3,13 @@ import type {
   GetMyInfoApiData,
   UpdateMyInfoParams,
   UserInfo,
+  UserPortfolio,
 } from '~/services/member';
 import type { ApiErrorResponse } from '~/types';
 
 import { rest } from 'msw';
 
-import { userInfo } from '~/mocks/handlers/member/data';
+import { userInfo, userPortfolio } from '~/mocks/handlers/member/data';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { CertificationState } from '~/services/member';
@@ -177,6 +178,17 @@ export const updatePortfolioVisibilityError = restError(
   }
 );
 
+export const getPortfolio = restSuccess<UserPortfolio>(
+  'get',
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.user.portfolio(':id')),
+  {
+    data: userPortfolio.publicPortfolio,
+    // data: userPortfolio.privatePortfolio,
+  }
+);
+
 export const memberHandlers = [
   getMyInfo,
   updateMyInfo,
@@ -187,4 +199,5 @@ export const memberHandlers = [
   updateSsafyBasicInfo,
   updateTrack,
   updatePortfolioVisibility,
+  getPortfolio,
 ];

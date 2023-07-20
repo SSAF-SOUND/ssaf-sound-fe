@@ -1,4 +1,4 @@
-import type { UserInfo, SsafyTrack } from './utils/types';
+import type { UserInfo, SsafyTrack, UserPortfolio } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
@@ -109,4 +109,16 @@ export const updatePortfolioVisibility = (
 ) => {
   const endpoint = endpoints.user.portfolioVisibility();
   return privateAxios.post(endpoint, params).then((res) => res.data);
+};
+
+// 포트폴리오
+
+type GetPortfolioApiData = ApiSuccessResponse<UserPortfolio>;
+
+export const getPortfolio = (id: number) => {
+  const endpoint = endpoints.user.portfolio(id);
+
+  return privateAxios
+    .get<GetPortfolioApiData>(endpoint)
+    .then((res) => res.data.data);
 };
