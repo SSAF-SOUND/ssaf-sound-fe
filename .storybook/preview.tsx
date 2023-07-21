@@ -3,7 +3,11 @@ import { Global, css } from '@emotion/react';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
 import AppGlobalStyles from '../src/styles/GlobalStyles';
-import { authHandlers, memberHandlers } from '../src/mocks/handlers';
+import {
+  authHandlers,
+  memberHandlers,
+  metaHandlers,
+} from '../src/mocks/handlers';
 import { palettes } from '../src/styles/utils';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { getQueryClient } from '../src/react-query/common';
@@ -41,6 +45,7 @@ const preview: Preview = {
       handlers: {
         auth: authHandlers,
         member: memberHandlers,
+        meta: metaHandlers,
       },
     },
   },
@@ -48,7 +53,7 @@ const preview: Preview = {
     (Story) => (
       <QueryClientProvider client={getQueryClient()}>
         <Toaster />
-        <ReactQueryDevtools initialIsOpen position={"bottom-left"} />
+        <ReactQueryDevtools initialIsOpen position={'bottom-left'} />
         <GlobalModal />
         <div>
           <StorybookGlobalStyles />

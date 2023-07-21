@@ -64,7 +64,6 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
           withoutClose
           withoutBackward={currentPhase === 0}
           onClickBackward={popPhase}
-          css={titleBarCss}
         />
         <ProgressBar
           min={0}
@@ -94,8 +93,3 @@ const formCss = css(
   },
   flex('', 'space-between', 'column')
 );
-
-const titleBarCss = css({
-  padding: 0,
-  margin: '0 -5px 12px',
-});

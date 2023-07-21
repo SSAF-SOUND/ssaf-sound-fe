@@ -1,67 +1,72 @@
 import { css } from '@emotion/react';
 import { useEffect, useId, useRef, useState } from 'react';
+import { useWatch } from 'react-hook-form';
 
-import {
-  Icon,
-  IconButton,
-  AlertText,
-  TextInput,
-  Button,
-  Modal,
-  VisuallyHidden,
-} from '~/components/Common';
+import { Button, VisuallyHidden } from '~/components/Common';
+import NicknameField from '~/components/Forms/Common/Nickname';
+import { useNicknameReconfirmModal } from '~/components/Forms/Common/Nickname/utils';
 import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
-import { Alert } from '~/components/ModalContent';
-import {
-  createRandomNickname,
-  nicknameValidator,
-  useValidateNickname,
-} from '~/services/member';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { useModal } from '~/components/GlobalModal';
+import { useValidateNickname } from '~/services/member';
+import { flex, fontCss } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
 const fieldName = 'nickname';
 
-const Nickname = () => {
-  const [submitModalOpen, setSubmitModalOpen] = useState(false);
+interface NicknameProps {
+  initialNickname?: string;
+  className?: string;
+  withLabelText?: boolean;
+  buttonText?: string;
+}
+
+const Nickname = (props: NicknameProps) => {
+  const {
+    initialNickname = '',
+    className,
+    withLabelText = true,
+    buttonText = '확인',
+  } = props;
   const [isValidNickname, setIsValidNickname] = useState(false);
   const { mutate: validateNickname, isLoading: isValidatingNickname } =
     useValidateNickname();
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   const {
-    register,
-    setValue,
     setFocus,
     resetField,
-    getValues,
     trigger,
     setError,
-    formState: { errors, dirtyFields, isSubmitting },
+    formState: { dirtyFields, isSubmitting },
   } = useUserRegisterFormContext();
+  const nickname = useWatch({ name: fieldName });
+  const { closeModal } = useModal();
   const nicknameFieldId = useId();
-  const errorMessage = errors.nickname?.message;
-  const submittable = isValidNickname && !dirtyFields.nickname;
-  const isButtonDisabled = !isValidNickname && !dirtyFields.nickname;
+  const { openNicknameReconfirmModal } = useNicknameReconfirmModal();
+  const submittable =
+    isValidNickname && !dirtyFields.nickname && nickname !== initialNickname;
+  const isButtonDisabled =
+    (!isValidNickname && !dirtyFields.nickname) || nickname === initialNickname;
   const isButtonLoading = isValidatingNickname || isSubmitting;
 
-  const closeSubmitModal = () => setSubmitModalOpen(false);
-  const openSubmitModal = () => setSubmitModalOpen(true);
+  const submitForm = () => {
+    submitButtonRef.current?.click();
+    closeModal();
+  };
 
-  const handleCreateRandomNickname = () => {
-    setValue(fieldName, createRandomNickname(), {
-      shouldDirty: true,
+  const handleOpenReconfirmModal = (nickname: string) => {
+    openNicknameReconfirmModal({
+      nickname,
+      onClickAction: submitForm,
     });
-    setFocus(fieldName);
   };
 
   const handleValidateNickname = async () => {
-    const nickname = getValues(fieldName);
-    const passClientValidate = await trigger(fieldName);
-    if (!passClientValidate) return;
+    const passClientValidation = await trigger(fieldName);
+    if (!passClientValidation) return;
 
     if (submittable) {
-      openSubmitModal();
+      handleOpenReconfirmModal(nickname);
       return;
     }
 
@@ -70,7 +75,7 @@ const Nickname = () => {
       {
         onSuccess: () => {
           setIsValidNickname(true);
-          openSubmitModal();
+          handleOpenReconfirmModal(nickname);
           resetField(fieldName, { defaultValue: nickname });
         },
         onError: (error) => {
@@ -88,50 +93,27 @@ const Nickname = () => {
     );
   };
 
-  const triggerSubmit = () => {
-    submitButtonRef.current?.click();
-    closeSubmitModal();
-  };
-
   useEffect(() => {
-    resetField(fieldName, { defaultValue: '' });
+    resetField(fieldName, { defaultValue: initialNickname });
     setFocus(fieldName);
-  }, [resetField, setFocus]);
+  }, [initialNickname, resetField, setFocus]);
 
   return (
-    <div css={selfCss}>
-      <label htmlFor={nicknameFieldId}>
-        <div css={fontCss.style.B28}>
-          <p>닉네임을</p>
-          <p>입력해주세요</p>
-        </div>
-      </label>
+    <div css={selfCss} className={className}>
+      {withLabelText && (
+        <label htmlFor={nicknameFieldId}>
+          <div css={fontCss.style.B28}>
+            <p>닉네임을</p>
+            <p>입력해주세요</p>
+          </div>
+        </label>
+      )}
 
-      <div css={inputContainerCss}>
-        <div css={refreshNicknameCss}>
-          <p>랜덤 닉네임 생성</p>
-          <IconButton size={32} onClick={handleCreateRandomNickname}>
-            <Icon name="refresh" size={28} />
-          </IconButton>
-        </div>
-        <TextInput
-          onKeyDown={(e) => {
-            // Enter Key를 통한 Submit 방지
-            if (e.key === 'Enter') {
-              e.preventDefault();
-            }
-          }}
-          placeholder="James"
-          size="lg"
-          type="text"
-          autoComplete="off"
-          id={nicknameFieldId}
-          {...register(fieldName, {
-            validate: nicknameValidator,
-          })}
-        />
-        {errorMessage && <AlertText>{errorMessage}</AlertText>}
-      </div>
+      <NicknameField
+        id={nicknameFieldId}
+        css={inputContainerCss}
+        fieldName={fieldName}
+      />
 
       <Button
         type="button"
@@ -141,39 +123,13 @@ const Nickname = () => {
         loading={isButtonLoading}
         disabled={isButtonDisabled}
       >
-        확인
+        {buttonText}
       </Button>
 
       {submittable && (
-        <>
-          <Modal
-            open={submitModalOpen}
-            onEscapeKeyDown={closeSubmitModal}
-            onPointerDownOutside={closeSubmitModal}
-            content={
-              <Alert
-                title="알림"
-                description={
-                  <p>
-                    닉네임을{' '}
-                    <strong style={{ color: palettes.primary.darken }}>
-                      {getValues(fieldName)}
-                    </strong>
-                    (으)로 설정하시겠습니까?
-                  </p>
-                }
-                actionText="확인"
-                cancelText="취소"
-                onClickAction={triggerSubmit}
-                onClickCancel={closeSubmitModal}
-              />
-            }
-          />
-
-          <VisuallyHidden>
-            <button type="submit" ref={submitButtonRef} aria-hidden />
-          </VisuallyHidden>
-        </>
+        <VisuallyHidden>
+          <button type="submit" ref={submitButtonRef} aria-hidden />
+        </VisuallyHidden>
       )}
     </div>
   );
@@ -192,5 +148,3 @@ const inputContainerCss = css(
   },
   flex('', '', 'column', 10)
 );
-
-const refreshNicknameCss = css(flex('center', 'flex-end', 'row', 8));

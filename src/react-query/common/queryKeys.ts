@@ -3,6 +3,10 @@ export const queryKeys = {
   user: {
     myInfo: () => [...queryKeys.auth(), 'myInfo'],
   },
+  meta: {
+    self: () => ['meta'],
+    campuses: () => [...queryKeys.meta.self(), 'campuses'],
+  },
 };
 
 export const endpoints = {
@@ -14,13 +18,21 @@ export const endpoints = {
   },
   user: {
     myInfo: () => '/members' as const,
-    nickname: () => '/members/nickname' as const,
     studentCertification: () => '/members/ssafy-certification' as const,
+
+    ssafyBasicInfo: () => '/members/default-information' as const,
+    nickname: () => '/members/nickname' as const,
+    isMajor: () => '/members/major' as const,
+    track: () => '/members/major-track' as const,
   },
   recruit: {
     // todo 이름, 파라미터 수정
     data: () => '/recruits' as const,
     members: (recruitId: string) => `/recruits/${recruitId}/members` as const,
     detail: (recruitId: string) => `/recruits/${recruitId}/detail` as const,
+  },
+  meta: {
+    campuses: () => '/meta/campuses' as const,
+    skills: () => '/meta/skills' as const,
   },
 };

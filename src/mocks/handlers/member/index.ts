@@ -19,8 +19,8 @@ const getMyInfo = rest.get<never, never, GetMyInfoApiData | ApiErrorResponse>(
   (req, res, ctx) => {
     return res(
       ctx.delay(500),
-      ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
-      // ...mockSuccess<UserInfo>(ctx, userInfo.certifiedSsafyUserInfo)
+      // ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
+      ...mockSuccess<UserInfo>(ctx, userInfo.certifiedSsafyUserInfo)
       // ...mockSuccess<UserInfo>(ctx, userInfo.uncertifiedSsafyUserInfo)
       // ...mockSuccess<UserInfo>(ctx, userInfo.nonSsafyUserInfo)
       // ...mockError(ctx, 'code', 'message', 404),
@@ -28,7 +28,7 @@ const getMyInfo = rest.get<never, never, GetMyInfoApiData | ApiErrorResponse>(
   }
 );
 
-const updateMyInfo = rest.patch<
+const updateMyInfo = rest.put<
   never,
   never,
   GetMyInfoApiData | ApiErrorResponse
@@ -93,16 +93,14 @@ export const certifyStudent = restSuccess<CertifyStudentApiData['data']>(
   }
 );
 
-export const certifyStudentIncorrectError = restSuccess<CertifyStudentApiData['data']>(
-  'post',
-  composeUrls(API_URL, endpoints.user.studentCertification()),
-  {
-    data: {
-      certificationInquiryCount: 2,
-      possible: false,
-    },
-  }
-);
+export const certifyStudentIncorrectError = restSuccess<
+  CertifyStudentApiData['data']
+>('post', composeUrls(API_URL, endpoints.user.studentCertification()), {
+  data: {
+    certificationInquiryCount: 2,
+    possible: false,
+  },
+});
 
 export const certifyStudentAttemptsCountError = restError(
   'post',

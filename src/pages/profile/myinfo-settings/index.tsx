@@ -1,5 +1,7 @@
 import type { CustomNextPage } from 'next/types';
 
+import { useRouter } from 'next/router';
+
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
@@ -10,6 +12,7 @@ import TitleBar from '~/components/TitleBar';
 import { useSignOut } from '~/services/auth';
 import { CertificationState, useMyInfo } from '~/services/member';
 import {
+  flex,
   fontCss,
   globalVars,
   pageMinHeight,
@@ -20,19 +23,20 @@ import { EditableMyInfoFields, handleAxiosError, routes } from '~/utils';
 
 const MyInfoSettingsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
+  const isSsafyMember = !!myInfo?.ssafyMember;
   const isCertified =
     myInfo?.ssafyInfo?.certificationState === CertificationState.CERTIFIED;
+  const router = useRouter();
   const { openModal, closeModal } = useModal();
   const { mutate: signOut, isLoading: isSigningOut } = useSignOut();
-  const handleSignOut = async () => {
+  const handleSignOut = () => {
     signOut(undefined, {
-      onError: (err) => {
-        handleAxiosError(err);
-      },
+      onSuccess: () => router.push(routes.main()),
+      onError: (err) => handleAxiosError(err),
     });
   };
 
-  const openSignOutAlertModal = () => {
+  const openSignOutReconfirmModal = () => {
     openModal('alert', {
       title: '알림',
       description: `${myInfo?.nickname}님 로그아웃 하시겠습니까?`,
@@ -45,58 +49,53 @@ const MyInfoSettingsPage: CustomNextPage = () => {
 
   return (
     <div css={selfCss}>
-      <TitleBar.Default title="프로필 설정" withoutClose />
+      <div>
+        <TitleBar.Default title="프로필 설정" withoutClose />
 
-      <nav css={[expandCss, { marginBottom: 40 }]}>
-        <MyInfoSettings.NavTitle css={navTitleCss}>
-          내 정보
-        </MyInfoSettings.NavTitle>
+        <nav css={[expandCss, { marginBottom: 40 }]}>
+          <MyInfoSettings.NavTitle css={navTitleCss}>
+            내 정보
+          </MyInfoSettings.NavTitle>
 
-        <MyInfoSettings.NavItem
-          href={routes.profile.edit.myInfo(EditableMyInfoFields.NICKNAME)}
-        >
-          닉네임 수정
-        </MyInfoSettings.NavItem>
-        {!isCertified && (
-          <MyInfoSettings.NavItem href={routes.certification.student()}>
-            학생 인증
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.NICKNAME)}
+          >
+            닉네임 수정
           </MyInfoSettings.NavItem>
-        )}
-        <MyInfoSettings.NavItem
-          withStateCss={false}
-          withIcon={false}
-          asLink={false}
-        >
-          <span>내 프로필 공개</span>
-          <ProfileVisibilityToggle />
-        </MyInfoSettings.NavItem>
-      </nav>
 
-      {myInfo?.ssafyMember && (
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.IS_MAJOR)}
+          >
+            전공자 여부
+          </MyInfoSettings.NavItem>
+
+          {isSsafyMember && !isCertified && (
+            <MyInfoSettings.NavItem href={routes.certification.student()}>
+              학생 인증
+            </MyInfoSettings.NavItem>
+          )}
+
+          <MyInfoSettings.NavItem
+            withStateCss={false}
+            withIcon={false}
+            asLink={false}
+          >
+            <span>내 프로필 공개</span>
+            <ProfileVisibilityToggle />
+          </MyInfoSettings.NavItem>
+        </nav>
+
         <nav css={[expandCss, { marginBottom: 40 }]}>
           <MyInfoSettings.NavTitle css={navTitleCss}>
             SSAFY 정보
           </MyInfoSettings.NavTitle>
 
           <MyInfoSettings.NavItem
-            href={routes.profile.edit.myInfo(EditableMyInfoFields.SSAFY_MEMBER)}
+            href={routes.profile.edit.myInfo(
+              EditableMyInfoFields.SSAFY_BASIC_INFO
+            )}
           >
-            SSAFY 멤버 여부
-          </MyInfoSettings.NavItem>
-          <MyInfoSettings.NavItem
-            href={routes.profile.edit.myInfo(EditableMyInfoFields.YEAR)}
-          >
-            SSAFY 기수
-          </MyInfoSettings.NavItem>
-          <MyInfoSettings.NavItem
-            href={routes.profile.edit.myInfo(EditableMyInfoFields.CAMPUS)}
-          >
-            SSAFY 캠퍼스
-          </MyInfoSettings.NavItem>
-          <MyInfoSettings.NavItem
-            href={routes.profile.edit.myInfo(EditableMyInfoFields.IS_MAJOR)}
-          >
-            SSAFY 전공자
+            SSAFY 기본 정보
           </MyInfoSettings.NavItem>
           {isCertified && (
             <MyInfoSettings.NavItem
@@ -106,15 +105,14 @@ const MyInfoSettingsPage: CustomNextPage = () => {
             </MyInfoSettings.NavItem>
           )}
         </nav>
-      )}
+      </div>
 
-      <div css={[expandCss, separatorCss, { marginBottom: 20 }]} />
-
-      <div css={expandCss}>
+      <div css={[expandCss, signOutLayerCss]}>
+        <div css={[separatorCss, { marginBottom: 20 }]} />
         <button
           type="button"
           css={signOutButtonCss}
-          onClick={openSignOutAlertModal}
+          onClick={openSignOutReconfirmModal}
           disabled={isSigningOut}
         >
           <MyInfoSettings.NavItem asLink={false}>
@@ -165,11 +163,14 @@ MyInfoSettingsPage.auth = {
 const selfPaddingX = '15px';
 const selfPaddingY = `${titleBarHeight + 30}px`;
 const totalPaddingX = `calc(${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var})`;
-const selfCss = css({
-  padding: `${selfPaddingY} ${selfPaddingX}`,
-  minHeight: pageMinHeight,
-  height: '100vh',
-});
+const selfCss = css(
+  {
+    padding: `${selfPaddingY} ${selfPaddingX}`,
+    minHeight: pageMinHeight,
+    height: '100vh',
+  },
+  flex('', '', 'column')
+);
 
 const expandCss = css({
   margin: `0 calc(-1 * ${totalPaddingX})`,
@@ -182,6 +183,13 @@ const separatorCss = css({
 });
 
 const navTitleCss = css({ padding: `0 ${totalPaddingX}` });
+
+const signOutLayerCss = css(
+  {
+    flexGrow: 1,
+  },
+  flex('', 'flex-end')
+);
 
 const signOutButtonCss = css({
   width: '100%',
