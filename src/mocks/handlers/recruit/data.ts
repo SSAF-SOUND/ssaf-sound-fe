@@ -50,10 +50,12 @@ const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
       {
         recruitType: '기획/디자인',
         limit: 2,
+        currentNumber: 1,
       },
       {
         recruitType: '프론트엔드',
         limit: 3,
+        currentNumber: 0,
       },
     ],
   },
