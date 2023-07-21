@@ -23,7 +23,7 @@ const Info = (props: InfoProps) => {
         <Icon name={icon} size={13} />
         <span css={textCss}>{title}</span>
       </span>
-      <span css={[textCss, id === 'stack' && highlightCss]}>{children}</span>
+      <span css={[textCss, flex('center', '', 'row')]}>{children}</span>
     </div>
   );
 };
@@ -33,9 +33,5 @@ const selfCss = css(flex('', '', 'row', 30));
 
 const textCss = css(fontCss.style.R14);
 const titleBoxCss = css(inlineFlex('center', 'center', 'row', 6));
-const highlightCss = css(
-  { color: palettes.secondary.default },
-  flex('', '', 'row', 2)
-);
 
 export default Info;
