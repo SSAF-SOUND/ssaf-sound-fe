@@ -1,13 +1,15 @@
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss, palettes, themeColorVars } from '~/styles/utils';
 
 const VacantSquareAvatar = memo(() => {
   return (
     <div css={selfCss}>
       <span css={titleCss}>vacant</span>
-      <span css={textCss}>리쿠르팅 모집중</span>
+      <span css={textCss} data-theme="recruit">
+        리쿠르팅 모집중
+      </span>
     </div>
   );
 });
@@ -26,7 +28,7 @@ const titleCss = css(fontCss.family.auto, fontCss.style.R18, {
 });
 
 const textCss = css(fontCss.family.auto, fontCss.style.R12, {
-  color: palettes.point.recruit,
+  color: themeColorVars.mainColor.var,
 });
 
 export default VacantSquareAvatar;
