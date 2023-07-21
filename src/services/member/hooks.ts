@@ -1,4 +1,4 @@
-import type { MyPortfolio, UserInfo } from '~/services/member/utils';
+import type { ProfileVisibility, UserInfo } from '~/services/member/utils';
 
 import { useRouter } from 'next/router';
 
@@ -12,11 +12,12 @@ import {
   certifyStudent,
   getMyInfo,
   getMyPortfolio,
+  getProfileVisibility,
   getUserPortfolio,
   updateIsMajor,
   updateMyInfo,
   updateNickname,
-  updatePortfolioVisibility,
+  updateProfileVisibility,
   updateSsafyBasicInfo,
   updateTrack,
   validateNickname,
@@ -135,35 +136,41 @@ export const useCertifyStudent = () => {
   });
 };
 
-export const useUpdatePortfolioVisibility = () => {
+// 프로필
+
+export const useProfileVisibility = () => {
+  return useQuery({
+    queryKey: queryKeys.user.profileVisibility(),
+    queryFn: getProfileVisibility,
+  });
+};
+
+export const useUpdateProfileVisibility = () => {
   const queryClient = useQueryClient();
-  const setMyPortfolio = useSetMyPortfolio();
+  const profileVisibilityQueryKey = queryKeys.user.profileVisibility();
+  const setProfileVisibility = (updater?: ProfileVisibility) =>
+    queryClient.setQueryData<ProfileVisibility>(
+      profileVisibilityQueryKey,
+      updater
+    );
 
   return useMutation({
-    mutationFn: updatePortfolioVisibility,
+    mutationFn: updateProfileVisibility,
     onMutate: async ({ isPublic }) => {
-      const myPortfolioQueryKey = queryKeys.user.myPortfolio();
-      await queryClient.cancelQueries(myPortfolioQueryKey);
-      const prevMyPortfolio =
-        queryClient.getQueryData<MyPortfolio>(myPortfolioQueryKey);
-
-      if (prevMyPortfolio) {
-        setMyPortfolio({
-          ...prevMyPortfolio,
-          isPublic,
-        });
-      }
-
-      return { prevMyPortfolio };
+      await queryClient.cancelQueries(profileVisibilityQueryKey);
+      const prevProfileVisibility = queryClient.getQueryData<ProfileVisibility>(
+        profileVisibilityQueryKey
+      );
+      setProfileVisibility({ isPublic });
+      return { prevProfileVisibility };
     },
-    onError: (err, _, context) => {
-      console.error(err);
-      setMyPortfolio(context?.prevMyPortfolio);
+    onError: (err, variables, context) => {
+      setProfileVisibility(context?.prevProfileVisibility);
     },
   });
 };
 
-// 포트폴리오
+// 프로필 - 포트폴리오
 
 export const useUserPortfolio = (id: number) => {
   return useQuery({
@@ -177,17 +184,4 @@ export const useMyPortfolio = () => {
     queryKey: queryKeys.user.myPortfolio(),
     queryFn: getMyPortfolio,
   });
-};
-
-export const useSetMyPortfolio = () => {
-  const queryClient = useQueryClient();
-  const queryKey = queryKeys.user.myPortfolio();
-
-  const setMyPortfolio = (
-    updater?: MyPortfolio | ((payload?: MyPortfolio) => MyPortfolio | undefined)
-  ) => {
-    queryClient.setQueryData<MyPortfolio>(queryKey, updater);
-  };
-
-  return setMyPortfolio;
 };

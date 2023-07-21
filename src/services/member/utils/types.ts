@@ -56,7 +56,13 @@ export type UserSsafyInfo =
 
 export type UserInfo = UserBasicInfo & UserSsafyInfo;
 
-// 포트폴리오
+// 프로필
+
+export interface ProfileVisibility {
+  isPublic: boolean;
+}
+
+// 프로필 - 포트폴리오
 
 export interface PortfolioExternalLink {
   linkName: string;

@@ -1,6 +1,7 @@
 import type {
   CertifyStudentApiData,
   GetMyInfoApiData,
+  GetProfileVisibilityApiData,
   MyPortfolio,
   UpdateMyInfoParams,
   UserInfo,
@@ -16,17 +17,14 @@ import { endpoints } from '~/react-query/common';
 import { CertificationState } from '~/services/member';
 import { API_URL, composeUrls, ResponseCode } from '~/utils';
 
-const getMyInfo = rest.get<never, never, GetMyInfoApiData | ApiErrorResponse>(
+export const getMyInfo = restSuccess<GetMyInfoApiData['data']>(
+  'get',
   composeUrls(API_URL, endpoints.user.myInfo()),
-  (req, res, ctx) => {
-    return res(
-      ctx.delay(500),
-      // ...mockSuccess<UserInfo>(ctx, userInfo.initialUserInfo)
-      ...mockSuccess<UserInfo>(ctx, userInfo.certifiedSsafyUserInfo)
-      // ...mockSuccess<UserInfo>(ctx, userInfo.uncertifiedSsafyUserInfo)
-      // ...mockSuccess<UserInfo>(ctx, userInfo.nonSsafyUserInfo)
-      // ...mockError(ctx, 'code', 'message', 404),
-    );
+  {
+    // data: userInfo.initialUserInfo,
+    data: userInfo.certifiedSsafyUserInfo,
+    // data: userInfo.uncertifiedSsafyUserInfo,
+    // data: userInfo.nonSsafyUserInfo,
   }
 );
 
@@ -64,16 +62,10 @@ const updateMyInfo = rest.put<
   );
 });
 
-const validateNickname = rest.post(
+const validateNickname = restSuccess(
+  'post',
   composeUrls(API_URL, endpoints.user.nickname()),
-  (req, res, ctx) => {
-    return res(
-      ctx.delay(500),
-      ...mockSuccess(ctx, {})
-      // ...mockError(ctx, '400', '닉네임이 중복됩니다.'),
-      // ...mockError(ctx, '400', '닉네임의 길이는 1 ~ 11 사이여야 합니다..')
-    );
-  }
+  { data: null }
 );
 
 export const validateNicknameError = restError(
@@ -163,20 +155,25 @@ export const certifyStudentAttemptsCountError = restError(
   }
 );
 
-export const updatePortfolioVisibility = restSuccess(
+export const getProfileVisibility = restSuccess<
+  GetProfileVisibilityApiData['data']
+>('get', composeUrls(API_URL, endpoints.user.profileVisibility()), {
+  data: {
+    isPublic: true,
+    // isPublic: false,
+  },
+});
+
+export const updateProfileVisibility = restSuccess(
   'patch',
-  composeUrls(API_URL, endpoints.user.portfolioVisibility()),
-  {
-    data: null,
-  }
+  composeUrls(API_URL, endpoints.user.profileVisibility()),
+  { data: null }
 );
 
-export const updatePortfolioVisibilityError = restError(
+export const updateProfileVisibilityError = restError(
   'patch',
-  composeUrls(API_URL, endpoints.user.portfolioVisibility()),
-  {
-    message: '에러가 발생했습니다',
-  }
+  composeUrls(API_URL, endpoints.user.profileVisibility()),
+  { message: '에러가 발생했습니다' }
 );
 
 export const getPortfolio = restSuccess<UserPortfolio>(
@@ -208,7 +205,8 @@ export const memberHandlers = [
   updateIsMajor,
   updateSsafyBasicInfo,
   updateTrack,
-  updatePortfolioVisibility,
+  getProfileVisibility,
+  updateProfileVisibility,
   getPortfolio,
   getMyPortfolio,
 ];

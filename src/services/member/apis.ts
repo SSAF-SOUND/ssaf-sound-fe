@@ -3,6 +3,7 @@ import type {
   SsafyTrack,
   UserPortfolio,
   MyPortfolio,
+  ProfileVisibility,
 } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
@@ -105,14 +106,24 @@ export const certifyStudent = (params: CertifyStudentParams) => {
     .then((res) => res.data.data);
 };
 
-interface UpdatePortfolioVisibilityParams {
+export type GetProfileVisibilityApiData = ApiSuccessResponse<ProfileVisibility>;
+
+export const getProfileVisibility = () => {
+  const endpoint = endpoints.user.profileVisibility();
+
+  return privateAxios
+    .get<GetProfileVisibilityApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
+interface UpdateProfileVisibilityParams {
   isPublic: boolean;
 }
 
-export const updatePortfolioVisibility = (
-  params: UpdatePortfolioVisibilityParams
+export const updateProfileVisibility = (
+  params: UpdateProfileVisibilityParams
 ) => {
-  const endpoint = endpoints.user.portfolioVisibility();
+  const endpoint = endpoints.user.profileVisibility();
   return privateAxios.patch(endpoint, params).then((res) => res.data);
 };
 

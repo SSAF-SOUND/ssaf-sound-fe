@@ -4,6 +4,7 @@ export const queryKeys = {
     myInfo: () => [...queryKeys.auth(), 'myInfo'],
     myPortfolio: () => [...queryKeys.auth(), 'portfolio'],
     portfolio: (id: number) => ['portfolio', id],
+    profileVisibility: () => ['profileVisibility'],
   },
   meta: {
     self: () => ['meta'],
@@ -29,7 +30,7 @@ export const endpoints = {
     nickname: () => '/members/nickname' as const,
     isMajor: () => '/members/major' as const,
     track: () => '/members/major-track' as const,
-    portfolioVisibility: () => '/members/portfolio-public' as const,
+    profileVisibility: () => '/members/profile-public' as const,
   },
   recruit: {
     // todo 이름, 파라미터 수정

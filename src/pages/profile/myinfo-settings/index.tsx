@@ -13,8 +13,8 @@ import { useSignOut } from '~/services/auth';
 import {
   CertificationState,
   useMyInfo,
-  useMyPortfolio,
-  useUpdatePortfolioVisibility,
+  useProfileVisibility,
+  useUpdateProfileVisibility,
 } from '~/services/member';
 import {
   flex,
@@ -135,11 +135,11 @@ const MyInfoSettingsPage: CustomNextPage = () => {
 
 const ProfileVisibilityToggleLayer = () => {
   const { openModal, closeModal } = useModal();
-  const { data: myPortfolio, isLoading } = useMyPortfolio();
+  const { data: profileVisibility } = useProfileVisibility();
   const {
     mutate: updatePortfolioVisibility,
     isLoading: isUpdatingPortfolioVisibility,
-  } = useUpdatePortfolioVisibility();
+  } = useUpdateProfileVisibility();
 
   const openPrivateProfileAlertModal = () => {
     openModal('alert', {
@@ -165,11 +165,11 @@ const ProfileVisibilityToggleLayer = () => {
     );
   };
 
-  return isLoading ? (
+  return !profileVisibility ? (
     <ProfileVisibilityToggle.Skeleton />
   ) : (
     <ProfileVisibilityToggle
-      isPublic={myPortfolio?.isPublic}
+      isPublic={profileVisibility.isPublic}
       disabled={isUpdatingPortfolioVisibility}
       onPressedChange={handleToggleProfileVisibility}
     />
