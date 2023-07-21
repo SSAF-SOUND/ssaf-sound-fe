@@ -2,7 +2,7 @@ import type { LimitType, SkillsType } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
-import { palettes } from '~/styles/utils';
+import { palettes, themeColorVars } from '~/styles/utils';
 
 import Info from './Info';
 import Personnel from './Personnel';
@@ -22,12 +22,9 @@ const ProjectInfo = (props: ProjectProps) => {
     recruitEnd = '2023-06-30',
     limits = [
       {
-        recruitType: '프론트엔드',
-        limit: 5,
-      },
-      {
-        recruitType: '백엔드',
-        limit: 4,
+        recruitType: '기획/디자인',
+        limit: 3,
+        currentNumber: 1,
       },
     ],
     skills = [
@@ -45,23 +42,25 @@ const ProjectInfo = (props: ProjectProps) => {
       },
     ],
   } = props;
-  // 임시
 
   return (
     <div css={selfCss}>
       <Info {...PROJECT_INFO.personnel}>
-        {/* 데이터 어떤식으로 넘어오는지 여쭈어보고 수ㅇㅖ정 */}
-        <Personnel type="기획/디자인" max={6} recruitedNumber={2} />
+        {limits.map((limit, index) => (
+          <>
+            <Personnel {...limit} key={limit.recruitType} />
+            {limits.length !== index + 1 && <span>,&nbsp;</span>}
+          </>
+        ))}
       </Info>
-      {/* content type을 배열로 한정짓고 싶어서 배열로 진행 */}
       <Info {...PROJECT_INFO.period}>
         <span>{recruitStart.replaceAll('-', '/')}</span>
         <span> ~ </span>
-        <span data-theme="highLight">{recruitEnd.replaceAll('-', '/')}</span>
+        <span data-theme="recruit">{recruitEnd.replaceAll('-', '/')}</span>
       </Info>
       <Info {...PROJECT_INFO.stack}>
         {skills.map((skill) => (
-          <SkillIcon name={skill.name} key={skill.skillId} />
+          <SkillIcon name={skill.name} key={skill.skillId} size={21} />
         ))}
       </Info>
     </div>
@@ -74,8 +73,13 @@ const selfCss = css({
   background: palettes.background.grey,
   color: palettes.white,
 
-  /** 추후에 수정할게요! */
-  '[data-theme="highLight"]': {
-    color: palettes.point.recruit,
+  width: '100vw',
+  marginLeft: '-30px',
+  // marginLeft 값은 페이지의 padding 값을 사용해야해요.
+  // 추후에 페이지관련 레이아웃이 마무리되게 되면 수정하겠습니다!
+
+  padding: '10px 30px',
+  '[data-theme="recruit"]': {
+    color: themeColorVars.mainColor.var,
   },
 });
