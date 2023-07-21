@@ -1,19 +1,26 @@
-import type { RecruitType } from '~/services/recruit';
+import type { LimitType } from '~/services/recruit';
 
-interface PersonnelProps {
-  type: RecruitType;
-  max: number;
-  recruitedNumber: number;
-}
+import { css } from '@emotion/react';
+
+import { themeColorVars } from '~/styles/utils';
+
+interface PersonnelProps extends LimitType {}
 
 const Personnel = (props: PersonnelProps) => {
-  const { max = 6, type = '프론트엔드', recruitedNumber = 2 } = props;
+  const { limit, recruitType, currentNumber } = props;
   return (
     <span>
-      {type} <span data-theme="highLight">{recruitedNumber}</span>/
-      <span>{max}명</span>
+      {recruitType}{' '}
+      <span data-theme="recruit" css={pointCss}>
+        {currentNumber}
+      </span>
+      /<span>{limit}명</span>
     </span>
   );
 };
+
+const pointCss = css({
+  color: themeColorVars.mainColor.var,
+});
 
 export default Personnel;
