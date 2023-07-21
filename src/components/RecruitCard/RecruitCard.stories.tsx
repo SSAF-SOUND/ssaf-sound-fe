@@ -6,7 +6,7 @@ import SmallRecruitCard from './Small';
 import RecruitCard from './Wide';
 
 const meta: Meta<typeof RecruitCard> = {
-  title: 'RecruitCard',
+  title: 'Recruit/RecruitCard',
   component: RecruitCard,
   argTypes: {},
 };
