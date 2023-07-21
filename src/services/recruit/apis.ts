@@ -66,9 +66,14 @@ export type RecruitMember = UserInfo & {
   recruitType: RecruitType;
 };
 
-export interface RecruitMembers {
-  members: RecruitMember[];
-}
+type RecruitMemberData = {
+  members: UserInfo[];
+  limit: number;
+};
+
+export type RecruitMembers = {
+  recruitTypes: Record<RecruitType, RecruitMemberData>;
+};
 
 export type GetRecruitMembersApiData = ApiSuccessResponse<RecruitMembers>;
 
