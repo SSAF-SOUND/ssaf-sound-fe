@@ -84,7 +84,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
 
           {isSsafyMember && !isCertified && (
             <MyInfoSettings.NavItem href={routes.certification.student()}>
-              학생 인증
+              SSAFY 인증
             </MyInfoSettings.NavItem>
           )}
 
