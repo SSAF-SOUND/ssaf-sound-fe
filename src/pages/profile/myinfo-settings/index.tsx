@@ -59,7 +59,11 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   return (
     <div css={selfCss}>
       <div>
-        <TitleBar.Default title="프로필 설정" withoutClose />
+        <TitleBar.Default
+          title="프로필 설정"
+          withoutClose
+          backwardAs={routes.profile.self()}
+        />
 
         <nav css={[expandCss, { marginBottom: 40 }]}>
           <MyInfoSettings.NavTitle css={navTitleCss}>
