@@ -1,5 +1,9 @@
 import type { MyInfoEditFormValues } from './utils';
-import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
+import type {
+  SubmitErrorHandler,
+  SubmitHandler,
+  UseFormReturn,
+} from 'react-hook-form';
 import type { PartialDeep } from 'type-fest';
 
 import { css } from '@emotion/react';
@@ -26,10 +30,20 @@ interface MyInfoEditFormPropsOptions {
   titleBarBackwardRoute: string;
 }
 
+type OriginalOnValidSubmit = SubmitHandler<MyInfoEditFormValues>;
+type OnValidSubmit = OriginalOnValidSubmit extends (
+  ...args: infer Args
+) => infer Return
+  ? (
+      reset: UseFormReturn<MyInfoEditFormValues>['reset'],
+      ...args: Args
+    ) => Return
+  : never;
+
 export interface MyInfoEditFormProps {
   field: MyInfoEditFormFields;
   defaultValues: PartialDeep<MyInfoEditFormValues>;
-  onValidSubmit: SubmitHandler<MyInfoEditFormValues>;
+  onValidSubmit: OnValidSubmit;
   onInvalidSubmit?: SubmitErrorHandler<MyInfoEditFormValues>;
   className?: string;
   options?: Partial<MyInfoEditFormPropsOptions>;
@@ -52,14 +66,19 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
   const {
     handleSubmit,
     formState: { isDirty, isSubmitting },
+    reset,
   } = methods;
+
+  const handleValidSubmit: OriginalOnValidSubmit = async (value, event) => {
+    await onValidSubmit(reset, value, event);
+  };
 
   return (
     <FormProvider {...methods}>
       <form
         css={selfCss}
         className={className}
-        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+        onSubmit={handleSubmit(handleValidSubmit, onInvalidSubmit)}
       >
         <TitleBar.Default
           title={titleMap[field]}

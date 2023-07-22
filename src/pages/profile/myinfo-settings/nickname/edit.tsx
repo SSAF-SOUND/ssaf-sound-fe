@@ -10,7 +10,7 @@ import { DefaultFullPageLoader } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateNickname } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
-import { handleAxiosError, routes } from '~/utils';
+import { customToast, handleAxiosError, routes } from '~/utils';
 
 const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -31,7 +31,10 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
     );
   };
 
-  const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (value) => {
+  const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (
+    reset,
+    value
+  ) => {
     const newNickname = value.nickname;
     try {
       await updateNickname({
@@ -39,7 +42,8 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
       });
 
       setNickname(newNickname);
-      await router.push(routes.profile.myInfoSettings());
+      reset({ nickname: newNickname });
+      customToast.success('닉네임이 변경되었습니다.');
     } catch (err) {
       handleAxiosError(err);
     }
