@@ -62,7 +62,7 @@ const updateMyInfo = rest.put<
   );
 });
 
-const validateNickname = restSuccess(
+export const validateNickname = restSuccess(
   'post',
   composeUrls(API_URL, endpoints.user.nickname()),
   { data: null }
