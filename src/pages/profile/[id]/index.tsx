@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { Button, Icon, SsafyIcon, Tabs, TrackSize } from '~/components/Common';
+import NavigationGroup from '~/components/NavigationGroup';
 import { Profile } from '~/components/Profile';
 import { useMyInfo } from '~/services/member';
 import {
@@ -31,6 +32,7 @@ const ProfilePage: CustomNextPage = () => {
 
   return (
     <div css={selfCss}>
+      <NavigationGroup />
       <div css={myInfoCss}>
         NameCard
         {/* <NameCard />  */}
@@ -123,7 +125,6 @@ const ProfilePage: CustomNextPage = () => {
 };
 
 export default ProfilePage;
-ProfilePage.navigation = true;
 
 const selfPaddingX = 15;
 

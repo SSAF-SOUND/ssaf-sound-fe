@@ -19,13 +19,10 @@ type NextPageConfig = {
      */
     unauthorized: ReactElement | string;
   };
-
-  navigation: boolean;
 };
 
 declare module 'next/types' {
   export type NextPageAuthConfig = NextPageConfig['auth'];
-  export type NextPageNavigationConfig = NextPageConfig['navigation'];
 
   // eslint-disable-next-line
   export type CustomNextPage<Props = {}, InitialProps = Props> = NextPage<

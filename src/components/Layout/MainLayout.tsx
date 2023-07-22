@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import NavigationGroup from '~/components/NavigationGroup';
 import { globalVars, pageMaxWidth, pageMinWidth } from '~/styles/utils';
 
 // 임시 레이아웃입니다.
@@ -11,14 +10,12 @@ import { globalVars, pageMaxWidth, pageMinWidth } from '~/styles/utils';
 interface MainLayoutProps {
   children: ReactNode;
   className?: string;
-  withNavigation?: boolean;
 }
 
 const MainLayout = (props: MainLayoutProps) => {
-  const { children, className, withNavigation = false } = props;
+  const { children, className } = props;
   return (
     <div css={selfCss} className={className}>
-      {withNavigation && <NavigationGroup />}
       <main>{children}</main>
     </div>
   );
