@@ -23,6 +23,7 @@ const titleMap: Record<MyInfoEditFormFields, string> = {
 
 interface MyInfoEditFormPropsOptions {
   forceSsafyMemberToTrue: boolean;
+  titleBarBackwardRoute: string;
 }
 
 export interface MyInfoEditFormProps {
@@ -41,7 +42,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
     onValidSubmit,
     onInvalidSubmit,
     className,
-    options: { forceSsafyMemberToTrue } = {},
+    options: { forceSsafyMemberToTrue, titleBarBackwardRoute } = {},
   } = props;
 
   const methods = useForm<MyInfoEditFormValues>({
@@ -60,7 +61,11 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
         className={className}
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
-        <TitleBar.Default title={titleMap[field]} withoutClose />
+        <TitleBar.Default
+          title={titleMap[field]}
+          backwardAs={titleBarBackwardRoute}
+          withoutClose
+        />
         {field === 'nickname' && (
           <Nickname
             buttonText="수정 완료"

@@ -54,6 +54,9 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
           nickname: myInfo.nickname,
         }}
         onValidSubmit={onValidSubmit}
+        options={{
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
+        }}
       />
     </div>
   );

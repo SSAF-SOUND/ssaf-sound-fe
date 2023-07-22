@@ -89,6 +89,7 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
         onInvalidSubmit={onInvalidSubmit}
         options={{
           forceSsafyMemberToTrue: isCertified,
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
         }}
       />
     </div>

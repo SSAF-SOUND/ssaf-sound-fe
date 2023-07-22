@@ -50,6 +50,9 @@ const MyInfoSettingsIsMajorEditPage = () => {
           isMajor: myInfo.isMajor,
         }}
         onValidSubmit={onValidSubmit}
+        options={{
+          titleBarBackwardRoute: routes.profile.myInfoSettings()
+        }}
       />
     </div>
   );

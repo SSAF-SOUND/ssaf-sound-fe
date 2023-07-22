@@ -59,6 +59,9 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
           track: myInfo.ssafyInfo.majorTrack,
         }}
         onValidSubmit={onValidSubmit}
+        options={{
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
+        }}
       />
     </div>
   );
