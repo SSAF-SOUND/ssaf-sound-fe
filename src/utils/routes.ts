@@ -1,6 +1,12 @@
 export const routes = {
   root: () => '/',
   main: () => '/main',
+  articles: {
+    self: () => '/articles',
+    category: (categoryId: number) => `${routes.articles.self()}/${categoryId}`,
+    detail: (categoryId: number, articleId: number) =>
+      `${routes.articles.category(categoryId)}/${articleId}`,
+  },
 
   //
   signIn: () => '/auth/sign-in',
