@@ -20,7 +20,7 @@ type MyInfoEditFormFields = keyof MyInfoEditFormValues;
 
 const titleMap: Record<MyInfoEditFormFields, string> = {
   nickname: '닉네임 수정',
-  isMajor: 'SSAFY 전공자',
+  isMajor: '전공자 여부',
   ssafyBasicInfo: 'SSAFY 기본정보',
   track: 'SSAFY 트랙',
 };
