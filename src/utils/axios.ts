@@ -1,10 +1,12 @@
 import type { InternalAxiosRequestConfig, AxiosError } from 'axios';
 import type { ApiErrorResponse } from '~/types';
 
+import * as Sentry from '@sentry/nextjs';
 import axios, { isAxiosError } from 'axios';
 
 import { reissueToken } from '~/services/auth';
-import { customToast } from '~/utils/index';
+import { createRequestInfiniteLoopDetector } from '~/utils/createRequestInfiniteLoopDetector';
+import customToast from '~/utils/customToast';
 import { webStorage } from '~/utils/webStorage';
 
 import { API_URL, isDevMode, ResponseCode } from './constants';
@@ -24,35 +26,16 @@ const devPlugin = (config: InternalAxiosRequestConfig) => {
     config.headers.Authorization = `Bearer ${webStorage.DEV__getAccessToken()}`;
 };
 
-const detectDeveloperMistakes = isDevMode
-  ? (() => {
-      const MAX_REISSUE_COUNT = 5;
-      let resetReissueCountTimer: NodeJS.Timeout;
-      let reissueCount = 0;
-      const increaseReissueCount = () => {
-        reissueCount += 1;
-      };
-      const debouncedResetReissueCount = (seconds: number) => {
-        if (resetReissueCountTimer) clearTimeout(resetReissueCountTimer);
-        resetReissueCountTimer = setTimeout(() => {
-          reissueCount = 0;
-        }, seconds * 1000);
-      };
-
-      return () => {
-        increaseReissueCount();
-        debouncedResetReissueCount(10);
-        if (reissueCount > MAX_REISSUE_COUNT) {
-          customToast.clientError(
-            '등록하지 않은 Mocking API가 있는지 확인해주세요! Method가 일치하지 않는 문제일 수도 있습니다.'
-          );
-          return true;
-        }
-
-        return false;
-      };
-    })()
-  : () => false;
+const detectRequestInfiniteLoop = createRequestInfiniteLoopDetector(5, {
+  timerSeconds: 10,
+  onDetect: () => {
+    const errorMessage = isDevMode
+      ? '등록하지 않은 Mocking API가 있는지 확인해주세요! HTTP Method가 일치하지 않는 문제일 수도 있습니다.'
+      : '오류가 발생했습니다.';
+    customToast.clientError(errorMessage);
+    Sentry.captureException(new Error('Error: Detect request infinite loop'));
+  },
+});
 
 const configurePrivateAxiosInterceptors = (
   reissueToken: () => Promise<unknown>,
@@ -104,7 +87,7 @@ const configurePrivateAxiosInterceptors = (
         return Promise.reject(error);
       }
 
-      if (detectDeveloperMistakes()) return;
+      if (detectRequestInfiniteLoop()) return;
 
       if (reissueTokenRequest === undefined) {
         reissueTokenRequest = reissueToken();
