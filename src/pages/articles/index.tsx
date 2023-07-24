@@ -52,6 +52,8 @@ const descriptionCss = css(
 
 const hotLinkCss = css({
   color: palettes.secondary.dark,
+  '&:hover, &:focus-visible': { color: palettes.secondary.default },
+  '&:active': { color: palettes.secondary.dark },
 });
 
 const categoriesCss = css(flex('', '', 'column', 12));
