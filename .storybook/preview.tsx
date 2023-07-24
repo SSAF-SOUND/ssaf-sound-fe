@@ -5,6 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import AppGlobalStyles from '../src/styles/GlobalStyles';
 import {
+  articleHandlers,
   authHandlers,
   memberHandlers,
   metaHandlers,
@@ -46,6 +47,7 @@ const preview: Preview = {
       handlers: {
         auth: authHandlers,
         member: memberHandlers,
+        article: articleHandlers,
         meta: metaHandlers,
       },
     },
