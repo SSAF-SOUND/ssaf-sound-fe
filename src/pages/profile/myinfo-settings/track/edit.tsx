@@ -24,11 +24,12 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
   const setMyInfo = useSetMyInfo();
   const { mutateAsync: updateTrack } = useUpdateTrack();
 
-  if (
+  const isUncertified =
     !myInfo ||
     !myInfo.ssafyInfo ||
-    myInfo.ssafyInfo.certificationState !== CertificationState.CERTIFIED
-  ) {
+    myInfo.ssafyInfo.certificationState !== CertificationState.CERTIFIED;
+
+  if (isUncertified) {
     router.replace(routes.unauthorized());
     return <DefaultFullPageLoader />;
   }
@@ -60,7 +61,7 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
         css={formCss}
         field="track"
         defaultValues={{
-          track: myInfo.ssafyInfo.majorTrack,
+          track: myInfo.ssafyInfo.majorTrack as string,
         }}
         onValidSubmit={onValidSubmit}
         options={{
