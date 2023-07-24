@@ -4,6 +4,7 @@ import { isAxiosError } from 'axios';
 import toast from 'react-hot-toast';
 
 import { Toast } from '~/components/Common';
+import { customToast } from '~/utils';
 
 interface HandleAxiosErrorOptions {
   /**
@@ -24,7 +25,7 @@ interface HandleAxiosErrorOptions {
   /**
    * - `statusCode`값이 `400 ~ 499` (=클라이언트 오류)일 때 수행할 함수입니다.
    */
-  onClientError: (response: ApiErrorResponse) => void;
+  onClientError: ((response: ApiErrorResponse) => void) | null;
   /**
    * - `statusCode`값이 `500 ~ 599` (=서버 오류)일 때 수행할 함수입니다.
    * - 주어지지 않으면 기본 핸들러 함수를 사용합니다.
@@ -44,7 +45,7 @@ export const handleAxiosError = (
     tag = '',
     clientMessageOnServerError = '서버에서 알 수 없는 오류가 발생하였습니다',
     showServerMessage = process.env.NODE_ENV === 'development',
-    onClientError,
+    onClientError = defaultOnClientError,
     onServerError,
     skipServerError = false,
   } = options;
@@ -79,4 +80,10 @@ export const handleAxiosError = (
   if (400 <= statusCode && statusCode < 500) {
     onClientError?.(error.response.data);
   }
+};
+
+const defaultOnClientError: HandleAxiosErrorOptions['onClientError'] = (
+  err
+) => {
+  customToast.clientError(err.message || '오류가 발생했습니다');
 };

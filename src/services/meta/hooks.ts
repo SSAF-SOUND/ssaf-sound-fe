@@ -13,7 +13,7 @@ export const initialCampuses = [
 ];
 
 export const useCampuses = () => {
-  const { data } = useQuery({
+  return useQuery({
     queryKey: queryKeys.meta.campuses(),
     queryFn: getCampuses,
     initialData: initialCampuses,
@@ -23,8 +23,6 @@ export const useCampuses = () => {
         .map(({ name }) => name);
     },
   });
-
-  return data;
 };
 
 export const useTracks = () => {

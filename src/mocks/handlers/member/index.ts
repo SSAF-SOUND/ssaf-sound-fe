@@ -82,6 +82,55 @@ export const validateNicknameError = restError(
   }
 );
 
+export const updateNickname = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.nickname())
+);
+
+export const updateNicknameError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.nickname()),
+  {
+    message: '유효하지 않은 닉네임입니다.',
+  }
+);
+
+export const updateIsMajor = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.isMajor())
+);
+
+export const updateIsMajorError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.isMajor()),
+  {
+    message: '오류가 발생했습니다.',
+  }
+);
+
+export const updateSsafyBasicInfo = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.ssafyBasicInfo())
+);
+
+export const updateSsafyBasicInfoError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.ssafyBasicInfo()),
+  {
+    message: '오류가 발생했습니다.',
+  }
+);
+
+export const updateTrack = restSuccess(
+  'patch',
+  composeUrls(API_URL, endpoints.user.track())
+);
+
+export const updateTrackError = restError(
+  'patch',
+  composeUrls(API_URL, endpoints.user.track())
+);
+
 export const certifyStudent = restSuccess<CertifyStudentApiData['data']>(
   'post',
   composeUrls(API_URL, endpoints.user.studentCertification()),
@@ -117,4 +166,8 @@ export const memberHandlers = [
   updateMyInfo,
   validateNickname,
   certifyStudent,
+  updateNickname,
+  updateIsMajor,
+  updateSsafyBasicInfo,
+  updateTrack,
 ];

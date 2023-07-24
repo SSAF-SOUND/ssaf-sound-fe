@@ -1,5 +1,6 @@
 import type { CustomNextPage } from 'next/types';
 import type { MyInfoEditFormProps } from '~/components/Forms/MyInfoEditForm';
+import type { SsafyTrack } from '~/services/member';
 
 import { useRouter } from 'next/router';
 
@@ -8,37 +9,41 @@ import { produce } from 'immer';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
-import { useMyInfo, useSetMyInfo, useUpdateNickname } from '~/services/member';
+import {
+  CertificationState,
+  useMyInfo,
+  useSetMyInfo,
+  useUpdateTrack,
+} from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
 import { handleAxiosError, routes } from '~/utils';
 
-const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
+const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
   const router = useRouter();
   const { data: myInfo } = useMyInfo();
-  const { mutateAsync: updateNickname } = useUpdateNickname();
   const setMyInfo = useSetMyInfo();
+  const { mutateAsync: updateTrack } = useUpdateTrack();
 
-  if (!myInfo || !myInfo.nickname) {
+  if (
+    !myInfo ||
+    !myInfo.ssafyInfo ||
+    myInfo.ssafyInfo.certificationState !== CertificationState.CERTIFIED
+  ) {
     router.replace(routes.unauthorized());
     return <DefaultFullPageLoader />;
   }
 
-  const setNickname = (newNickname: string) => {
-    setMyInfo(
-      produce(myInfo, (draft) => {
-        draft.nickname = newNickname;
-      })
-    );
-  };
-
   const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (value) => {
-    const newNickname = value.nickname;
+    const newTrack = value.track;
     try {
-      await updateNickname({
-        nickname: newNickname,
-      });
+      await updateTrack({ track: newTrack });
 
-      setNickname(newNickname);
+      setMyInfo(
+        produce(myInfo, (draft) => {
+          draft.ssafyInfo.majorTrack = newTrack as SsafyTrack;
+        })
+      );
+
       await router.push(routes.profile.myInfoSettings());
     } catch (err) {
       handleAxiosError(err);
@@ -49,9 +54,9 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
     <div css={selfCss}>
       <MyInfoEditForm
         css={formCss}
-        field="nickname"
+        field="track"
         defaultValues={{
-          nickname: myInfo.nickname,
+          track: myInfo.ssafyInfo.majorTrack,
         }}
         onValidSubmit={onValidSubmit}
       />
@@ -59,12 +64,12 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
   );
 };
 
-MyInfoSettingsNicknameEditPage.auth = {
+MyInfoSettingsTrackEditPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader />,
   unauthorized: routes.unauthorized(),
 };
-export default MyInfoSettingsNicknameEditPage;
+export default MyInfoSettingsTrackEditPage;
 
 const selfCss = css(
   { padding: `${titleBarHeight}px 15px`, height: '100vh' },

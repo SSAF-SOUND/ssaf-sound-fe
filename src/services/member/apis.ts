@@ -30,13 +30,13 @@ export const updateMyInfo = (params: UpdateMyInfoParams) => {
     .then((res) => res.data.data);
 };
 
-export interface UpdateSsafyInfoParams {
+export interface UpdateSsafyBasicInfoParams {
   ssafyMember: boolean;
   semester: null | number;
   campus: null | string;
 }
 
-export const updateSsafyInfo = (params: UpdateSsafyInfoParams) => {
+export const updateSsafyBasicInfo = (params: UpdateSsafyBasicInfoParams) => {
   const endpoint = endpoints.user.ssafyBasicInfo();
 
   return privateAxios.patch(endpoint, params).then((res) => res.data);

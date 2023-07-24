@@ -101,7 +101,7 @@ const Nickname = (props: NicknameProps) => {
   return (
     <div css={selfCss} className={className}>
       {withLabelText && (
-        <label htmlFor={nicknameFieldId}>
+        <label htmlFor={nicknameFieldId} css={[labelCss, { marginBottom: 40 }]}>
           <div css={fontCss.style.B28}>
             <p>닉네임을</p>
             <p>입력해주세요</p>
@@ -111,6 +111,7 @@ const Nickname = (props: NicknameProps) => {
 
       <NicknameField
         id={nicknameFieldId}
+        initialNickname={initialNickname}
         css={inputContainerCss}
         fieldName={fieldName}
       />
@@ -141,10 +142,5 @@ const buttonCss = css({ width: '100%' });
 
 const selfCss = css({ flexGrow: 1 }, flex());
 
-const inputContainerCss = css(
-  {
-    flexGrow: 1,
-    marginTop: 40,
-  },
-  flex('', '', 'column', 10)
-);
+const labelCss = css({ display: 'block' });
+const inputContainerCss = css({ flexGrow: 1 }, flex('', '', 'column', 10));

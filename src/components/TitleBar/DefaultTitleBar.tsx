@@ -5,14 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { Bar, Icon, IconButton } from '~/components/Common';
-import {
-  fixTopCenter,
-  fontCss,
-  pageMaxWidth,
-  pageMinWidth,
-  position,
-  zIndex,
-} from '~/styles/utils';
+import { fixTopCenter, fontCss, zIndex } from '~/styles/utils';
 
 interface DefaultTitleBarProps {
   title?: string;
@@ -22,6 +15,12 @@ interface DefaultTitleBarProps {
   withoutClose?: boolean;
   onClickBackward?: MouseEventHandler<HTMLButtonElement>;
   onClickClose?: MouseEventHandler<HTMLButtonElement>;
+
+  /**
+   * - onClickBackward를 명시하지 않고, 여기에 path 를 입력하면 뒤로가기 버튼 누를 시 해당 path로 이동합니다.
+   * - onClickBackward와 backwardAs를 모두 입력하지 않으면 기본값은 뒤로가기입니다.
+   */
+  backwardAs?: string;
 }
 
 const DefaultTitleBar = (props: DefaultTitleBarProps) => {
@@ -32,12 +31,14 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
     withoutClose = false,
     onClickBackward,
     onClickClose,
+    backwardAs,
     ...restProps
   } = props;
   const router = useRouter();
 
   const defaultHandleClickBackward = () => {
-    router.back();
+    if (backwardAs) return router.push(backwardAs);
+    return router.back();
   };
 
   return (

@@ -1,4 +1,3 @@
-import type { CustomNextPage } from 'next/types';
 import type { MyInfoEditFormProps } from '~/components/Forms/MyInfoEditForm';
 
 import { useRouter } from 'next/router';
@@ -8,37 +7,34 @@ import { produce } from 'immer';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
-import { useMyInfo, useSetMyInfo, useUpdateNickname } from '~/services/member';
+import { useMyInfo, useSetMyInfo, useUpdateIsMajor } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
 import { handleAxiosError, routes } from '~/utils';
 
-const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
+const MyInfoSettingsIsMajorEditPage = () => {
   const router = useRouter();
   const { data: myInfo } = useMyInfo();
-  const { mutateAsync: updateNickname } = useUpdateNickname();
+  const { mutateAsync: updateIsMajor } = useUpdateIsMajor();
   const setMyInfo = useSetMyInfo();
 
-  if (!myInfo || !myInfo.nickname) {
+  if (!myInfo) {
     router.replace(routes.unauthorized());
     return <DefaultFullPageLoader />;
   }
 
-  const setNickname = (newNickname: string) => {
+  const setIsMajor = (isMajor: boolean) => {
     setMyInfo(
       produce(myInfo, (draft) => {
-        draft.nickname = newNickname;
+        draft.isMajor = isMajor;
       })
     );
   };
 
   const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (value) => {
-    const newNickname = value.nickname;
+    const newIsMajor = value.isMajor;
     try {
-      await updateNickname({
-        nickname: newNickname,
-      });
-
-      setNickname(newNickname);
+      await updateIsMajor({ isMajor: newIsMajor });
+      setIsMajor(newIsMajor);
       await router.push(routes.profile.myInfoSettings());
     } catch (err) {
       handleAxiosError(err);
@@ -49,9 +45,9 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
     <div css={selfCss}>
       <MyInfoEditForm
         css={formCss}
-        field="nickname"
+        field="isMajor"
         defaultValues={{
-          nickname: myInfo.nickname,
+          isMajor: myInfo.isMajor,
         }}
         onValidSubmit={onValidSubmit}
       />
@@ -59,12 +55,12 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
   );
 };
 
-MyInfoSettingsNicknameEditPage.auth = {
+export default MyInfoSettingsIsMajorEditPage;
+MyInfoSettingsIsMajorEditPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader />,
   unauthorized: routes.unauthorized(),
 };
-export default MyInfoSettingsNicknameEditPage;
 
 const selfCss = css(
   { padding: `${titleBarHeight}px 15px`, height: '100vh' },
