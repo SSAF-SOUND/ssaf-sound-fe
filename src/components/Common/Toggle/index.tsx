@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import * as RadixToggle from '@radix-ui/react-toggle';
 
-import { colorMix, inlineFlex, palettes, themeColorVars } from '~/styles/utils';
+import { inlineFlex, palettes, themeColorVars } from '~/styles/utils';
 
 type ToggleTheme = 'primary' | 'secondary' | 'recruit';
 type ToggleOrder = 'thumb-first' | 'text-first';

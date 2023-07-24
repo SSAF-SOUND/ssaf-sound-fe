@@ -1,7 +1,4 @@
-import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
-
-import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 interface ButtonLoaderProps {
   color?: string;

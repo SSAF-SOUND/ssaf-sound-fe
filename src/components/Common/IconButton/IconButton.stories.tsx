@@ -58,6 +58,7 @@ export const Examples: IconButtonStory = {
         {backgroundColors.map((backgroundColor) => {
           return (
             <div
+              key={backgroundColor}
               css={{
                 height: 50,
                 display: 'flex',
@@ -68,7 +69,7 @@ export const Examples: IconButtonStory = {
               }}
             >
               {themes.map((theme) => (
-                <IconButton theme={theme} size={30}>
+                <IconButton key={theme} theme={theme} size={30}>
                   <Icon name="close" size={30} />
                 </IconButton>
               ))}

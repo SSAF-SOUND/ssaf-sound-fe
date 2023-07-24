@@ -21,7 +21,9 @@ import { routes } from '~/utils';
 
 const ProfilePage: CustomNextPage = () => {
   const router = useRouter();
+  // eslint-disable-next-line
   const { id } = router.query as { id?: string };
+  // eslint-disable-next-line
   const { data: myInfo } = useMyInfo();
   const hasPortfolio = true as boolean;
   const mine = true as boolean;

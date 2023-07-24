@@ -28,6 +28,7 @@ export interface EditorProps
 
 const Editor = (props: EditorProps) => {
   const { withCustomToolbar = true, ...restProps } = props;
+  // eslint-disable-next-line
   const [images, setImages] = useState<Blob[]>([]);
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const hasThumbnails = !!thumbnails.length;

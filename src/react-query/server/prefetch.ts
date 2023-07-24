@@ -1,6 +1,7 @@
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 type QueryKey = unknown[];
+// eslint-disable-next-line
 type QueryFn = (...args: any[]) => Promise<any>;
 type QueryOption = { queryKey: QueryKey; queryFn: QueryFn };
 

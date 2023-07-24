@@ -1,10 +1,9 @@
-interface MainPageProps {
-}
+import NavigationGroup from '~/components/NavigationGroup';
 
-const MainPage = (props: MainPageProps) => {
+const MainPage = () => {
   return (
     <div>
-      MainPage
+      <NavigationGroup />
     </div>
   );
 };
