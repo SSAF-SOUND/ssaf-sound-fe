@@ -1,4 +1,4 @@
-import type { ArticleCategory } from '~/services/articles';
+import type { ArticleCategory } from '~/services/article';
 
 import Link from 'next/link';
 

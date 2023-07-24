@@ -4,10 +4,10 @@ import { css } from '@emotion/react';
 
 import { ArticleCategoryCard } from '~/components/ArticleCategoryCard';
 import NavigationGroup from '~/components/NavigationGroup';
-import { useArticleCategories } from '~/services/articles';
+import { useArticleCategories } from '~/services/article';
 import { flex, fontCss, palettes, topBarHeight } from '~/styles/utils';
 
-const ArticlesPage = () => {
+const ArticleCategoriesPage = () => {
   const { data: articleCategories } = useArticleCategories();
 
   return (
@@ -41,7 +41,7 @@ const ArticlesPage = () => {
   );
 };
 
-export default ArticlesPage;
+export default ArticleCategoriesPage;
 
 const selfCss = css({ padding: `${topBarHeight + 40}px 15px` });
 

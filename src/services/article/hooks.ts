@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { getArticleCategories } from '~/services/articles/apis';
+import { getArticleCategories } from '~/services/article/apis';
 
 export const useArticleCategories = () => {
   return useQuery({
