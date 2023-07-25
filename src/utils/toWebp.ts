@@ -16,10 +16,7 @@ export interface ToWebpOptions {
   quality: number;
 }
 
-type ToWebp = (
-  file: File,
-  options?: Partial<ToWebpOptions>
-) => Promise<{ file: File; src: string }>;
+type ToWebp = (file: File, options?: Partial<ToWebpOptions>) => Promise<File>;
 
 /* https://github.com/juunini/webp-converter-browser/blob/main/src/index.ts */
 export const toWebp: ToWebp = (file, options = {}) =>
@@ -66,7 +63,7 @@ export const toWebp: ToWebp = (file, options = {}) =>
             type: 'image/webp',
           });
 
-          resolve({ file, src: URL.createObjectURL(file) });
+          resolve(file);
         },
         'image/webp',
         quality
