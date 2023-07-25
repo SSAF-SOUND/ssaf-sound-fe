@@ -3,15 +3,14 @@ import type { ReactQuillProps } from 'react-quill';
 import dynamic from 'next/dynamic';
 
 import { css } from '@emotion/react';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 
 import { Icon, IconButton } from '~/components/Common';
 import { classnames as cn } from '~/components/Editor/classnames';
 import ThumbnailBar from '~/components/Editor/ThumbnailBar';
+import { useImageUpload } from '~/services/s3/hooks';
 import { fontCss, palettes } from '~/styles/utils';
-
-import { imageHandler } from './imageHandler';
 
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false,
@@ -28,27 +27,11 @@ export interface EditorProps
 
 const Editor = (props: EditorProps) => {
   const { withCustomToolbar = true, ...restProps } = props;
+  const { images, handleImageUpload, isUploading } = useImageUpload();
+
   // eslint-disable-next-line
-  const [images, setImages] = useState<Blob[]>([]);
   const [thumbnails, setThumbnails] = useState<string[]>([]);
   const hasThumbnails = !!thumbnails.length;
-
-  const handleImageUpload = useCallback(() => {
-    imageHandler({
-      onUploadStart: () => {
-        /* loading true */
-      },
-      onUploadSettled: () => {
-        /* loading false */
-      },
-      onUploadError: (err) => console.log(err),
-      onUploadSuccess: ({ blob, src }) => {
-        // NOTE: s3에 즉시 업로드하는 방식이 될 듯
-        setImages((prevBlobs) => [...prevBlobs, blob]);
-        setThumbnails((prevThumbnails) => [...prevThumbnails, src]);
-      },
-    });
-  }, []);
 
   return (
     <div css={selfCss}>
