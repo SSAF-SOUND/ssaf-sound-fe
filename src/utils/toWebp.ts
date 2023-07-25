@@ -3,6 +3,14 @@ export const byteToMB = (byte: number) => {
   return (byte / MB).toFixed(2);
 };
 
+export const ALLOWED_IMAGE_TYPES = [
+  'image/webp',
+  'image/png',
+  'image/jpeg',
+  'image/jpg',
+  'image/gif',
+];
+
 export interface ToWebpOptions {
   maxWebpSize: number;
   quality: number;
