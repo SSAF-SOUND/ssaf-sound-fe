@@ -4,10 +4,9 @@ const LIMIT_FILE_SIZE = MB * 10; /* byte */
 const QUALITY = 0.5;
 
 export interface UploadImageToBrowserOptions {
-  onUploadStart: () => void;
-  onUploadSuccess: (imageValues: Awaited<ReturnType<typeof toWebp>>) => void;
-  onUploadError: (reason: string) => void;
-  onUploadSettled: () => void;
+  onLoadImage: (loaded: Awaited<ReturnType<typeof toWebp>>) => void;
+  onError: (reason: string) => void;
+  onSettled: () => void;
 }
 
 export type OpenImageUploader = (
@@ -29,26 +28,24 @@ type HandleUploadImageToBrowser = (
 const handleUploadToBrowser: HandleUploadImageToBrowser =
   (options = {}) =>
   async (e) => {
-    const { onUploadStart, onUploadSuccess, onUploadSettled, onUploadError } =
-      options;
+    const { onLoadImage, onSettled, onError } = options;
 
     const $target = e.target as HTMLInputElement;
     if (!$target.files) return;
-    onUploadStart?.();
 
     const file = $target.files[0];
 
     try {
-      const webp = await fileToWebp(file);
-      onUploadSuccess?.(webp);
+      const converted = await fileToWebp(file);
+      await onLoadImage?.(converted);
     } catch (err) {
       if (typeof err === 'string') {
-        onUploadError?.(err);
+        onError?.(err);
         return;
       }
       console.error('[In fileToWebp]: Unknown Error', err);
     } finally {
-      onUploadSettled?.();
+      onSettled?.();
     }
   };
 
