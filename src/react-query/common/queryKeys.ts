@@ -27,6 +27,9 @@ export const endpoints = {
     signOut: () => '/auth/logout' as const,
     refresh: () => '/auth/reissue' as const,
   },
+  s3: {
+    preSignedUrl: (count = 1) => `/store/image?count=${count}`,
+  },
   articles: {
     categories: () => '/boards',
   },
