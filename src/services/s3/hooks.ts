@@ -46,22 +46,31 @@ export const useImageUpload = () => {
   };
 
   const handleImageUpload = async () => {
+    if (isUploadingImageToS3) {
+      console.error('여러 이미지 업로드를 동시에 할 수 없습니다.');
+      return;
+    }
+
     openImageUploader({
       onLoadImage: async (file) => {
         const idx = images.length;
 
-        setImages((prevImages) => [
-          ...prevImages,
-          { thumbnailUrl: URL.createObjectURL(file) },
-        ]);
+        try {
+          setImages((prevImages) => [
+            ...prevImages,
+            { thumbnailUrl: URL.createObjectURL(file) },
+          ]);
 
-        const url = await uploadImage(file);
+          const url = await uploadImage(file);
 
-        setImages((prevImages) => {
-          return produce(prevImages, (draft) => {
-            draft[idx].url = url;
-          });
-        });
+          setImages((prevImages) =>
+            produce(prevImages, (draft) => {
+              draft[idx].url = url;
+            })
+          );
+        } catch (err) {
+          setImages((prevImages) => prevImages.filter((_, i) => i !== idx));
+        }
       },
       onError: (err) => {
         console.error('[In useImageUpload]:', err);
