@@ -2,7 +2,6 @@ import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils/typ
 
 import { useFormContext } from 'react-hook-form';
 
-
 export const useArticleFormContext = () => {
   return useFormContext<ArticleFormValues>();
 };
