@@ -27,35 +27,15 @@ export interface EditorProps
 
 const Editor = (props: EditorProps) => {
   const { withCustomToolbar = true, ...restProps } = props;
-  const { images, handleImageUpload, isUploading } = useImageUpload();
-
-  // eslint-disable-next-line
-  const [thumbnails, setThumbnails] = useState<string[]>([]);
-  const hasThumbnails = !!thumbnails.length;
+  const { images, handleOpenImageUploader, isUploading } = useImageUpload();
 
   return (
-    <div css={selfCss}>
-      <ReactQuill {...restProps} modules={modules} formats={formats} />
-
-      {hasThumbnails && (
-        <div css={thumbnailBarCss}>
-          <ThumbnailBar thumbnails={thumbnails} />
-        </div>
-      )}
-
-      {withCustomToolbar && (
-        <div css={bottomToolbarCss}>
-          <IconButton
-            type="button"
-            size={28}
-            theme="black"
-            onClick={handleImageUpload}
-          >
-            <Icon name="image" label="사진 첨부" size={18} />
-          </IconButton>
-        </div>
-      )}
-    </div>
+    <ReactQuill
+      css={selfCss}
+      {...restProps}
+      modules={modules}
+      formats={formats}
+    />
   );
 };
 
