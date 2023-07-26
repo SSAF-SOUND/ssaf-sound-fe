@@ -21,21 +21,11 @@ export interface EditorProps
   extends Pick<
     ReactQuillProps,
     'value' | 'onChange' | 'defaultValue' | 'placeholder'
-  > {
-  withCustomToolbar?: boolean;
-}
+  > {}
 
 const Editor = (props: EditorProps) => {
-  const { withCustomToolbar = true, ...restProps } = props;
-  const { images, handleOpenImageUploader, isUploading } = useImageUpload();
-
   return (
-    <ReactQuill
-      css={selfCss}
-      {...restProps}
-      modules={modules}
-      formats={formats}
-    />
+    <ReactQuill css={selfCss} {...props} modules={modules} formats={formats} />
   );
 };
 

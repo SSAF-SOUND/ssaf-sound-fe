@@ -62,7 +62,6 @@ export const SelfIntroduction = (props: SelfIntroductionProps) => {
       <p css={labelCss}>⓵ 500자 내외로 짧지만 강렬한 자기소개를 작성해보세요</p>
       <Editor
         defaultValue={defaultSelfIntroduction}
-        withCustomToolbar={false}
         onChange={handleInputChange}
       />
       {errorMessage && <AlertText>{errorMessage}</AlertText>}

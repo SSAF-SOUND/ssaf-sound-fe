@@ -25,11 +25,7 @@ const meta: Meta<typeof Editor> = {
 export default meta;
 
 type EditorStory = StoryObj<typeof Editor>;
-export const Default: EditorStory = {
-  args: {
-    withCustomToolbar: true,
-  },
-};
+export const Default: EditorStory = {};
 
 export const LengthTest = () => {
   const [textLength, setTextLength] = useState(0);

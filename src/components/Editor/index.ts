@@ -8,3 +8,4 @@ const Editor = Object.assign(EditorCore, {
 });
 
 export default Editor;
+export * from './Editor';
