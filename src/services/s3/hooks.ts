@@ -23,29 +23,57 @@ const useUploadImageToS3 = () => {
   });
 };
 
+export interface UseImageUploadOptions {
+  maxImageCount: number;
+}
+
 export interface ImageState {
   url?: string;
   thumbnailUrl: string;
 }
 
-export const useImageUpload = () => {
+export const useImageUpload = (
+  options: Partial<UseImageUploadOptions> = {}
+) => {
+  const { maxImageCount = 3 } = options;
   const [images, setImages] = useState<ImageState[]>([]);
   const { mutateAsync: createPreSignedUrl } = useCreatePreSignedUrl();
   const { mutateAsync: uploadImageToS3, isLoading: isUploadingImageToS3 } =
     useUploadImageToS3();
 
   const uploadImage = async (file: File) => {
-    const { preSignedUrl, imageDir } = await createPreSignedUrl();
+    const idx = images.length;
+    try {
+      setImages((prevImages) => [
+        ...prevImages,
+        { thumbnailUrl: URL.createObjectURL(file) },
+      ]);
 
-    await uploadImageToS3({
-      url: preSignedUrl,
-      file,
-    });
+      const { preSignedUrl, imageDir } = await createPreSignedUrl();
 
-    return preSignedUrl + imageDir;
+      await uploadImageToS3({
+        url: preSignedUrl,
+        file,
+      });
+
+      setImages((prevImages) =>
+        produce(prevImages, (draft) => {
+          draft[idx].url = preSignedUrl + imageDir;
+        })
+      );
+    } catch (err) {
+      setImages((prevImages) => prevImages.filter((_, i) => i !== idx));
+    }
   };
 
-  const handleImageUpload = async () => {
+  const handleOpenImageUploader = () => {
+    if (maxImageCount <= images.length) {
+      console.error(
+        `이미지는 최대 ${images.length}개 까지 업로드할 수 있습니다.`
+      );
+      return;
+    }
+
     if (isUploadingImageToS3) {
       console.error('여러 이미지 업로드를 동시에 할 수 없습니다.');
       return;
@@ -53,27 +81,10 @@ export const useImageUpload = () => {
 
     openImageUploader({
       onLoadImage: async (file) => {
-        const idx = images.length;
-
-        try {
-          setImages((prevImages) => [
-            ...prevImages,
-            { thumbnailUrl: URL.createObjectURL(file) },
-          ]);
-
-          const url = await uploadImage(file);
-
-          setImages((prevImages) =>
-            produce(prevImages, (draft) => {
-              draft[idx].url = url;
-            })
-          );
-        } catch (err) {
-          setImages((prevImages) => prevImages.filter((_, i) => i !== idx));
-        }
+        await uploadImage(file);
       },
       onError: (err) => {
-        console.error('[In useImageUpload]:', err);
+        console.error('[In openImageUploader]:', err);
       },
     });
   };
@@ -81,6 +92,6 @@ export const useImageUpload = () => {
   return {
     images,
     isUploading: isUploadingImageToS3,
-    handleImageUpload,
+    handleOpenImageUploader,
   };
 };
