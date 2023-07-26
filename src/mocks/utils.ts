@@ -67,23 +67,23 @@ export const restSuccess = <D extends DefaultBodyType>(
  * - 기본 `delay`는 500ms 입니다.
  */
 export const restError = <D extends DefaultBodyType>(
-  method: 'get' | 'post' | 'patch' | 'delete',
+  method: 'get' | 'post' | 'patch' | 'put' | 'delete',
   url: string,
   {
     delay = 500,
     message = '에러가 발생하였습니다.',
-    status = 400,
+    statusCode = 400,
     code = '400',
     data = {},
   }: {
     delay?: number;
     message?: string;
     code?: string;
-    status?: number;
+    statusCode?: number;
     data?: D;
   } = {}
 ) => {
-  const safeStatus = status >= 400 && status < 600 ? status : 400;
+  const safeStatus = statusCode >= 400 && statusCode < 600 ? statusCode : 400;
 
   return rest[method](url, (req, res, ctx) => {
     return res(
