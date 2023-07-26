@@ -9,15 +9,18 @@ const validateTitle = (value: string) => {
   return true;
 };
 
-const ArticleTitle = () => {
-  const { register } = useArticleFormContext();
+export const ArticleTitle = () => {
+  const {
+    register,
+    formState: { defaultValues: { title: defaultTitle } = {} },
+  } = useArticleFormContext();
+
   return (
     <Editor.TitleInput
+      defaultValue={defaultTitle}
       {...register(fieldName, {
         validate: validateTitle,
       })}
     />
   );
 };
-
-export default ArticleTitle;
