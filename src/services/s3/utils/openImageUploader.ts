@@ -36,20 +36,20 @@ const handleUploadToBrowser: HandleUploadImageToBrowser =
     const file = $target.files[0];
 
     try {
-      const converted = await fileToWebp(file);
-      await onLoadImage?.(converted);
+      const convertedFile = await convertToWebp(file);
+      await onLoadImage?.(convertedFile);
     } catch (err) {
       if (typeof err === 'string') {
         onError?.(err);
         return;
       }
-      console.error('[In fileToWebp]: Unknown Error', err);
+      console.error('[In convertToWebp]: Unknown Error', err);
     } finally {
       onSettled?.();
     }
   };
 
-export const fileToWebp = async (file: File) => {
+export const convertToWebp = async (file: File) => {
   const { type, size } = file;
 
   if (!ALLOWED_IMAGE_TYPES.includes(type))
