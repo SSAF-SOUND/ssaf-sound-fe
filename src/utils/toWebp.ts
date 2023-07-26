@@ -8,7 +8,6 @@ export const ALLOWED_IMAGE_TYPES = [
   'image/png',
   'image/jpeg',
   'image/jpg',
-  'image/gif',
 ];
 
 export interface ToWebpOptions {
@@ -55,7 +54,7 @@ export const toWebp: ToWebp = (file, options = {}) =>
           }
 
           const fileName = originalFileName.replace(
-            /(png|jpe?g|gif|webp)$/i,
+            /(png|jpe?g|webp)$/i,
             'webp'
           );
 
