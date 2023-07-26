@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { produce } from 'immer';
 import { useState } from 'react';
 
-import { customToast } from '~/utils';
+import { customToast, handleAxiosError } from '~/utils';
 
 import { createPreSignedUrl, uploadImageToS3 } from './apis';
 import { openImageUploader } from './utils';
@@ -74,6 +74,7 @@ export const useImageUpload = (
       );
     } catch (err) {
       setImages((prevImages) => prevImages.filter((_, i) => i !== idx));
+      throw err;
     }
   };
 
@@ -83,8 +84,11 @@ export const useImageUpload = (
         await uploadImage(file);
       },
       onError: (err) => {
-        console.error('[In openImageUploader]:', err);
-        customToast.clientError(err);
+        if (typeof err === 'string') {
+          customToast.clientError(err);
+        } else {
+          handleAxiosError(err);
+        }
       },
     });
   };

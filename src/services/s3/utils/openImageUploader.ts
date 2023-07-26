@@ -5,7 +5,7 @@ const QUALITY = 0.5;
 
 export interface UploadImageToBrowserOptions {
   onLoadImage: (loaded: Awaited<ReturnType<typeof toWebp>>) => void;
-  onError: (reason: string) => void;
+  onError: (reason: unknown) => void;
   onSettled: () => void;
 }
 
@@ -39,11 +39,7 @@ const handleUploadToBrowser: HandleUploadImageToBrowser =
       const convertedFile = await convertToWebp(file);
       await onLoadImage?.(convertedFile);
     } catch (err) {
-      if (typeof err === 'string') {
-        onError?.(err);
-        return;
-      }
-      console.error('[In convertToWebp]: Unknown Error', err);
+      onError?.(err);
     } finally {
       onSettled?.();
     }
