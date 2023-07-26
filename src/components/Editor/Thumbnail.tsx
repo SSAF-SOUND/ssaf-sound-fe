@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { css } from '@emotion/react';
 import { memo } from 'react';
+import { ClipLoader } from 'react-spinners';
 
 import { Icon } from '~/components/Common';
 import { colorMix, inlineFlex, palettes } from '~/styles/utils';
@@ -9,48 +10,68 @@ import { colorMix, inlineFlex, palettes } from '~/styles/utils';
 interface ThumbnailProps {
   src: string;
   alt: string;
+  loading?: boolean;
   size?: number;
   onClickThumbnail?: () => void;
   onClickRemove?: () => void;
+  disableRemove?: boolean;
 }
 
 const Thumbnail = (props: ThumbnailProps) => {
   const {
     src,
     alt,
+    loading = false,
     size = defaultSize,
     onClickThumbnail,
     onClickRemove,
+    disableRemove = false,
   } = props;
 
+  const showRemoveButton = !disableRemove && !loading;
+
   return (
-    <li css={selfCss}>
+    <li css={[selfCss, loading && darkerCss]}>
       <div
         css={imageContainerCss}
         style={{ width: size, height: size }}
         onClick={onClickThumbnail}
         data-thumbnail=""
       >
+        {loading && <ImageLoadIndicator />}
         <Image css={imageCss} src={src} alt={alt} width={size} height={size} />
       </div>
-      <button type="button" css={removeButtonCss} onClick={onClickRemove}>
-        <Icon name="close" size={12} label="썸네일 삭제" />
-      </button>
+      {showRemoveButton && (
+        <button type="button" css={removeButtonCss} onClick={onClickRemove}>
+          <Icon name="close" size={12} label="썸네일 삭제" />
+        </button>
+      )}
     </li>
+  );
+};
+
+const ImageLoadIndicator = () => {
+  return (
+    <div css={imageLoadIndicatorCss}>
+      <ClipLoader color={palettes.white} size={30} />
+    </div>
   );
 };
 
 export default memo(Thumbnail);
 
 const defaultSize = 70;
+
+const darkerCss = {
+  '& [data-thumbnail]::after': {
+    backgroundColor: colorMix('50%', palettes.black),
+  },
+};
+
 const selfCss = css(
   {
     position: 'relative',
-    ':hover': {
-      '& [data-thumbnail]::after': {
-        backgroundColor: colorMix('30%', palettes.black),
-      },
-    },
+    ':hover': darkerCss,
   },
   inlineFlex('center', 'center')
 );
@@ -94,3 +115,5 @@ const removeButtonCss = css(
   },
   inlineFlex('center', 'center')
 );
+
+const imageLoadIndicatorCss = css({ position: 'absolute', zIndex: 10 });
