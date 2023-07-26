@@ -27,6 +27,7 @@ const useUploadImageToS3 = () => {
 
 export interface UseImageUploadOptions {
   maxImageCount: number;
+  initialImages: ImageState[] | (() => ImageState[]);
 }
 
 export interface ImageState {
@@ -37,8 +38,8 @@ export interface ImageState {
 export const useImageUpload = (
   options: Partial<UseImageUploadOptions> = {}
 ) => {
-  const { maxImageCount = 3 } = options;
-  const [images, setImages] = useState<ImageState[]>([]);
+  const { maxImageCount = 3, initialImages = () => [] } = options;
+  const [images, setImages] = useState<ImageState[]>(initialImages);
   const { mutateAsync: createPreSignedUrl, isLoading: isCreatingPreSignedUrl } =
     useCreatePreSignedUrl();
   const { mutateAsync: uploadImageToS3, isLoading: isUploadingImageToS3 } =
