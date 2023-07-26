@@ -52,7 +52,7 @@ export const mockError = (
  * - 기본 `delay`는 500ms 입니다.
  */
 export const restSuccess = <D extends DefaultBodyType>(
-  method: 'get' | 'post' | 'patch' | 'delete',
+  method: 'get' | 'post' | 'patch' | 'put' | 'delete',
   url: string,
   { delay = 500, data }: { delay?: number; data?: D } = {}
 ) => {

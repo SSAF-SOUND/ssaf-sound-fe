@@ -22,7 +22,13 @@ interface UploadImageToS3Params {
 
 export const uploadImageToS3 = (params: UploadImageToS3Params) => {
   const { url, file } = params;
+
   return publicAxios
-    .put(url, file)
+    .put(url, file, {
+      headers: {
+        'Content-Type': 'image/webp',
+      },
+      baseURL: '',
+    })
     .then((res) => res.data) as Promise<PreSignedUrl>;
 };
