@@ -9,6 +9,8 @@ import TitleBar from '~/components/TitleBar';
 import { useImageUpload } from '~/services/s3/hooks';
 import { titleBarHeight } from '~/styles/utils';
 
+import ArticleTitle from './Fields/ArticleTitle';
+
 interface ArticleFormProps {
   defaultValues?: PartialDeep<ArticleFormValues>;
 }
@@ -25,7 +27,7 @@ const ArticleForm = (props: ArticleFormProps) => {
     <FormProvider {...methods}>
       <form css={selfCss}>
         <TitleBar.Form title="게시글 쓰기" submitButtonText="완료" />
-        <Editor.TitleInput />
+        <ArticleTitle />
         <Editor />
         <Editor.ThumbnailBar
           thumbnails={[
