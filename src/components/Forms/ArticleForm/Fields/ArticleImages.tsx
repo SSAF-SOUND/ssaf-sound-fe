@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import Editor from '~/components/Editor';
 import { useArticleFormContext } from '~/components/Forms/ArticleForm/utils';
+import { useModal } from '~/components/GlobalModal';
 import { useImageUpload } from '~/services/s3/hooks';
 
 const fieldName = 'images';
@@ -12,11 +13,26 @@ const validateImages = (value: string[]) => {
 };
 
 export const ArticleImages = () => {
-  const { register, setValue } = useArticleFormContext();
+  const {
+    register,
+    setValue,
+    formState: { defaultValues: { images: defaultImages = [] } = {} },
+  } = useArticleFormContext();
+
+  const createInitialImages = () =>
+    (defaultImages.filter(Boolean) as string[]).map((url) => ({
+      url,
+      thumbnailUrl: url,
+    }));
+
   const { images, setImages, handleOpenImageUploader, isUploading } =
     useImageUpload({
+      initialImages: createInitialImages,
       maxImageCount,
     });
+
+  const { openRemoveThumbnailReconfirmModal } =
+    useRemoveThumbnailReconfirmModal();
 
   const removeImageByIndex = (index: number) =>
     setImages((p) => p.filter((_, i) => i !== index));
@@ -46,7 +62,9 @@ export const ArticleImages = () => {
       {hasImages && (
         <Editor.ThumbnailBar
           thumbnails={thumbnails}
-          onClickRemoveThumbnail={removeImageByIndex}
+          onClickRemoveThumbnail={(index) =>
+            openRemoveThumbnailReconfirmModal(() => removeImageByIndex(index))
+          }
           disableRemove={isUploading}
         />
       )}
@@ -56,4 +74,25 @@ export const ArticleImages = () => {
       </Editor.ToolBar>
     </div>
   );
+};
+
+const useRemoveThumbnailReconfirmModal = () => {
+  const { openModal, closeModal } = useModal();
+
+  const openRemoveThumbnailReconfirmModal = (onClickAction: () => void) => {
+    const handleClickAction = () => {
+      onClickAction();
+      closeModal();
+    };
+    openModal('alert', {
+      title: '알림',
+      description: '이미지를 삭제합니다.',
+      actionText: '삭제',
+      cancelText: '취소',
+      onClickCancel: closeModal,
+      onClickAction: handleClickAction,
+    });
+  };
+
+  return { openRemoveThumbnailReconfirmModal };
 };
