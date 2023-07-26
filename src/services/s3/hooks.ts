@@ -2,6 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import { produce } from 'immer';
 import { useState } from 'react';
 
+import { customToast } from '~/utils';
+
 import { createPreSignedUrl, uploadImageToS3 } from './apis';
 import { openImageUploader } from './utils';
 
@@ -37,12 +39,20 @@ export const useImageUpload = (
 ) => {
   const { maxImageCount = 3 } = options;
   const [images, setImages] = useState<ImageState[]>([]);
-  const { mutateAsync: createPreSignedUrl } = useCreatePreSignedUrl();
+  const { mutateAsync: createPreSignedUrl, isLoading: isCreatingPreSignedUrl } =
+    useCreatePreSignedUrl();
   const { mutateAsync: uploadImageToS3, isLoading: isUploadingImageToS3 } =
     useUploadImageToS3();
 
+  const isUploading = isCreatingPreSignedUrl || isUploadingImageToS3;
+
   const uploadImage = async (file: File) => {
+    if (maxImageCount <= images.length) {
+      throw `이미지는 최대 ${images.length}개 까지 업로드할 수 있습니다.`;
+    }
+
     const idx = images.length;
+
     try {
       setImages((prevImages) => [
         ...prevImages,
@@ -58,7 +68,7 @@ export const useImageUpload = (
 
       setImages((prevImages) =>
         produce(prevImages, (draft) => {
-          draft[idx].url = preSignedUrl + imageDir;
+          draft[idx].url = imageDir;
         })
       );
     } catch (err) {
@@ -67,31 +77,21 @@ export const useImageUpload = (
   };
 
   const handleOpenImageUploader = () => {
-    if (maxImageCount <= images.length) {
-      console.error(
-        `이미지는 최대 ${images.length}개 까지 업로드할 수 있습니다.`
-      );
-      return;
-    }
-
-    if (isUploadingImageToS3) {
-      console.error('여러 이미지 업로드를 동시에 할 수 없습니다.');
-      return;
-    }
-
     openImageUploader({
       onLoadImage: async (file) => {
         await uploadImage(file);
       },
       onError: (err) => {
         console.error('[In openImageUploader]:', err);
+        customToast.clientError(err);
       },
     });
   };
 
   return {
     images,
-    isUploading: isUploadingImageToS3,
+    setImages,
+    isUploading,
     handleOpenImageUploader,
   };
 };
