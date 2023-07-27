@@ -31,7 +31,9 @@ export interface UseImageUploadOptions {
 }
 
 export interface ImageState {
+  /** 서버에 이미지 업로드가 완료되면 `url`이 할당된다. (`url`로 로딩 상태 판단 가능) */
   url?: string;
+  /** `thumbnailUrl`은 업로드한 이미지의 `objectUrl`이 생성되어 즉시 할당된다. */
   thumbnailUrl: string;
 }
 
