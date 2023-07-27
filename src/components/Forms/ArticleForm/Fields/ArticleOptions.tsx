@@ -91,12 +91,12 @@ export const ArticleOptions = () => {
       <Editor.ToolBar css={optionsBarCss}>
         <Editor.ToolBarItem name="image" onClick={handleOpenImageUploader} />
 
-        <label css={anonymousCss}>
+        <label css={anonymousLayerCss}>
           <Checkbox
             defaultChecked={defaultAnonymous}
             onCheckedChange={handleAnonymousChange}
           />
-          <span css={anonymousLabelCss}>익명</span>
+          <span>익명</span>
         </label>
       </Editor.ToolBar>
     </div>
@@ -128,7 +128,7 @@ const optionsBarCss = css({
   justifyContent: 'space-between',
 });
 
-const anonymousCss = css(flex('center', '', 'row', 4));
-const anonymousLabelCss = css({
-  cursor: 'pointer',
-});
+const anonymousLayerCss = css(
+  { cursor: 'pointer' },
+  flex('center', '', 'row', 4)
+);
