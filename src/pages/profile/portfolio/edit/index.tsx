@@ -38,7 +38,7 @@ const PortfolioEditPage: CustomNextPage = () => {
   return (
     <div css={selfCss}>
       <PortfolioForm
-        skillsContainerStyle={skillsContainerStyle}
+        options={{ skillsContainerStyle }}
         onInvalidSubmit={onInvalidSubmit}
         onValidSubmit={onValidSubmit}
       />

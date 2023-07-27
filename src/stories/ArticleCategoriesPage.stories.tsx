@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ArticleCategoriesPage from '~/pages/articles';
+import ArticleCategoriesPage from '~/pages/articles/categories';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof ArticleCategoriesPage> = {
