@@ -11,6 +11,7 @@ const fieldName = 'content';
 const minLength = 2;
 const maxLength = 4000;
 const lengthErrorMessage = `글 내용은 ${minLength}자 이상, ${maxLength}자 이하까지 가능합니다.`;
+const validateArticleContent = (error?: string) => () => !error || error;
 
 export const ArticleContent = () => {
   const {
@@ -40,7 +41,9 @@ export const ArticleContent = () => {
     if (errorMessage) clearErrors(fieldName);
   };
 
-  register(fieldName);
+  register(fieldName, {
+    validate: validateArticleContent(errorMessage),
+  });
 
   return (
     <div>
