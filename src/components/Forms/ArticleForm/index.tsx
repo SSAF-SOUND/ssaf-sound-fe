@@ -1,5 +1,4 @@
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
-import type { PartialDeep } from 'type-fest';
 import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils';
 
 import { css } from '@emotion/react';
@@ -10,10 +9,16 @@ import { titleBarHeight } from '~/styles/utils';
 
 import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
 
+type OriginalOnInvalidSubmit = SubmitErrorHandler<ArticleFormValues>;
+type OnInvalidSubmit = (
+  message?: string,
+  ...args: Parameters<OriginalOnInvalidSubmit>
+) => ReturnType<OriginalOnInvalidSubmit>;
+
 export interface ArticleFormProps {
-  defaultValues?: PartialDeep<ArticleFormValues>;
+  defaultValues?: ArticleFormValues;
   onValidSubmit: SubmitHandler<ArticleFormValues>;
-  onInvalidSubmit?: SubmitErrorHandler<ArticleFormValues>;
+  onInvalidSubmit?: OnInvalidSubmit;
 }
 
 const ArticleForm = (props: ArticleFormProps) => {
@@ -26,15 +31,32 @@ const ArticleForm = (props: ArticleFormProps) => {
   const methods = useForm<ArticleFormValues>({
     defaultValues,
   });
-  const { handleSubmit } = methods;
+
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const handleInvalidSubmit: OriginalOnInvalidSubmit = (errors, event) => {
+    const errorMessage =
+      errors.title?.message ||
+      errors.content?.message ||
+      errors.images?.message;
+
+    onInvalidSubmit?.(errorMessage, errors, event);
+  };
 
   return (
     <FormProvider {...methods}>
       <form
         css={selfCss}
-        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+        onSubmit={handleSubmit(onValidSubmit, handleInvalidSubmit)}
       >
-        <TitleBar.Form title="게시글 쓰기" submitButtonText="완료" />
+        <TitleBar.Form
+          title="게시글 쓰기"
+          submitButtonText="완료"
+          isSubmitting={isSubmitting}
+        />
         <ArticleTitle />
         <ArticleContent />
         <ArticleOptions />
