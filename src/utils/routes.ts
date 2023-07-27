@@ -3,9 +3,10 @@ export const routes = {
   main: () => '/main',
   articles: {
     self: () => '/articles',
-    category: (categoryId: number) => `${routes.articles.self()}/${categoryId}`,
-    detail: (categoryId: number, articleId: number) =>
-      `${routes.articles.category(categoryId)}/${articleId}`,
+    categories: () => '/articles/categories',
+    category: (categoryId: number) =>
+      `${routes.articles.categories()}/${categoryId}`,
+    detail: (articleId: number) => `${routes.articles.self()}/${articleId}`,
   },
 
   //

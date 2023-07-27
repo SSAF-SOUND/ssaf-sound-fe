@@ -30,7 +30,7 @@ const Gnb = (props: GnbProps) => {
       {
         text: '게시판',
         icon: <MdArticle />,
-        href: routes.articles.self(),
+        href: routes.articles.categories(),
       },
       {
         text: '리쿠르팅',
