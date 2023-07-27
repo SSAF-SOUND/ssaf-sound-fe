@@ -18,7 +18,7 @@ interface ThumbnailBarProps {
   className?: string;
   style?: CSSProperties;
   thumbnails: ThumbnailState[];
-  onClickRemoveThumbnail?: (idx: number) => void;
+  onClickRemoveThumbnail?: (index: number) => void;
   disableRemove?: boolean;
   thumbnailSize?: number;
 }
