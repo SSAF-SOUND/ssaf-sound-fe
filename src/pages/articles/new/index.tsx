@@ -22,8 +22,8 @@ const ArticleCreatePage: CustomNextPage = () => {
   useEffect(() => {
     if (!articleCategories) return;
 
-    const isValidCategoryId = articleCategories.every(
-      ({ boardId }) => boardId !== categoryId
+    const isValidCategoryId = articleCategories.some(
+      ({ boardId }) => boardId === categoryId
     );
 
     if (!isValidCategoryId) {
@@ -61,7 +61,12 @@ const ArticleCreatePage: CustomNextPage = () => {
 
   return (
     <div>
-      <ArticleForm onValidSubmit={onValidSubmit} />
+      <ArticleForm
+        onValidSubmit={onValidSubmit}
+        options={{
+          titleBarCloseRoute: routes.articles.category(categoryId),
+        }}
+      />
     </div>
   );
 };
