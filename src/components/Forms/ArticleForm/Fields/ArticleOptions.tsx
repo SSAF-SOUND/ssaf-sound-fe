@@ -70,8 +70,8 @@ export const ArticleOptions = () => {
   });
 
   useEffect(() => {
-    const fieldValues = images.map(({ url }) => url || '');
-    setValue(imageFieldName, fieldValues, {
+    const imageFieldValues = images.map(({ url }) => url || '');
+    setValue(imageFieldName, imageFieldValues, {
       shouldDirty: true,
     });
   }, [images, setValue]);
@@ -80,6 +80,7 @@ export const ArticleOptions = () => {
     <div>
       {hasImages && (
         <Editor.ThumbnailBar
+          css={thumbnailBarCss}
           thumbnails={thumbnails}
           onClickRemoveThumbnail={(index) =>
             openRemoveThumbnailReconfirmModal(() => removeImageByIndex(index))
@@ -132,3 +133,8 @@ const anonymousLayerCss = css(
   { cursor: 'pointer' },
   flex('center', '', 'row', 4)
 );
+
+const thumbnailBarCss = css({
+  borderTop: 0,
+  borderBottom: 0,
+});
