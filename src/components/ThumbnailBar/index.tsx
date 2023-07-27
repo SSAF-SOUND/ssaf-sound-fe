@@ -1,4 +1,4 @@
-import type { CSSProperties} from 'react';
+import type { CSSProperties } from 'react';
 
 import { css } from '@emotion/react';
 import { memo, useState } from 'react';
@@ -20,15 +20,16 @@ interface ThumbnailBarProps {
   thumbnails: ThumbnailState[];
   onClickRemoveThumbnail?: (idx: number) => void;
   disableRemove?: boolean;
+  thumbnailSize?: number;
 }
 
 const ThumbnailBar = (props: ThumbnailBarProps) => {
   const {
     thumbnails,
+    thumbnailSize = 100,
     onClickRemoveThumbnail,
-    className,
-    style,
     disableRemove,
+    ...restProps
   } = props;
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
@@ -40,14 +41,14 @@ const ThumbnailBar = (props: ThumbnailBarProps) => {
 
   return (
     <>
-      <ol css={selfCss} style={style} className={className}>
+      <ol css={selfCss} {...restProps}>
         {thumbnails.map(({ thumbnailUrl, loading }, index) => (
           <Thumbnail
             loading={loading}
             key={thumbnailUrl}
             src={thumbnailUrl}
             alt=""
-            size={70}
+            size={thumbnailSize}
             onClickThumbnail={() => {
               openModal();
               setSelectedIndex(index);
