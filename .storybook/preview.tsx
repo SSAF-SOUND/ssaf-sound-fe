@@ -9,6 +9,7 @@ import {
   authHandlers,
   memberHandlers,
   metaHandlers,
+  s3Handlers,
 } from '../src/mocks/handlers';
 import { palettes } from '../src/styles/utils';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -49,6 +50,7 @@ const preview: Preview = {
         member: memberHandlers,
         article: articleHandlers,
         meta: metaHandlers,
+        s3: s3Handlers,
       },
     },
   },
