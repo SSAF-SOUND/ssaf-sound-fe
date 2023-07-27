@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
@@ -7,6 +7,7 @@ import { flex, palettes } from '~/styles/utils';
 interface ToolbarProps {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 }
 
 const ToolBar = (props: ToolbarProps) => {
