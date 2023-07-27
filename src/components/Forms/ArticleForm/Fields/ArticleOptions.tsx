@@ -1,23 +1,38 @@
+import { css } from '@emotion/react';
+import { isBoolean } from 'is-what';
 import { useEffect } from 'react';
 
+import { Checkbox } from '~/components/Common';
 import Editor from '~/components/Editor';
 import { useArticleFormContext } from '~/components/Forms/ArticleForm/utils';
 import { useModal } from '~/components/GlobalModal';
 import { useImageUpload } from '~/services/s3/hooks';
+import { flex } from '~/styles/utils';
 
-const fieldName = 'images';
+const imageFieldName = 'images';
 const maxImageCount = 3;
 const validateImages = (value: string[]) => {
   if (value.length > maxImageCount)
     return `한 번에 업로드할 수 있는 최대 이미지의 개수는 ${maxImageCount}개 입니다.`;
 };
 
-export const ArticleImages = () => {
+const anonymousFieldName = 'anonymous';
+
+export const ArticleOptions = () => {
   const {
     register,
     setValue,
-    formState: { defaultValues: { images: defaultImages = [] } = {} },
+    formState: {
+      defaultValues: {
+        images: defaultImages = [],
+        anonymous: defaultAnonymous = false,
+      } = {},
+    },
   } = useArticleFormContext();
+
+  const handleAnonymousChange = (value: boolean) => {
+    setValue(anonymousFieldName, value, { shouldDirty: true });
+  };
 
   const createInitialImages = () =>
     (defaultImages.filter(Boolean) as string[]).map((url) => ({
@@ -46,13 +61,17 @@ export const ArticleImages = () => {
     };
   });
 
-  register(fieldName, {
+  register(imageFieldName, {
     validate: validateImages,
+  });
+
+  register(anonymousFieldName, {
+    validate: (value) => isBoolean(value),
   });
 
   useEffect(() => {
     const fieldValues = images.map(({ url }) => url || '');
-    setValue(fieldName, fieldValues, {
+    setValue(imageFieldName, fieldValues, {
       shouldDirty: true,
     });
   }, [images, setValue]);
@@ -69,8 +88,16 @@ export const ArticleImages = () => {
         />
       )}
 
-      <Editor.ToolBar>
+      <Editor.ToolBar css={optionsBarCss}>
         <Editor.ToolBarItem name="image" onClick={handleOpenImageUploader} />
+
+        <label css={anonymousCss}>
+          <Checkbox
+            defaultChecked={defaultAnonymous}
+            onCheckedChange={handleAnonymousChange}
+          />
+          <span css={anonymousLabelCss}>익명</span>
+        </label>
       </Editor.ToolBar>
     </div>
   );
@@ -96,3 +123,12 @@ const useRemoveThumbnailReconfirmModal = () => {
 
   return { openRemoveThumbnailReconfirmModal };
 };
+
+const optionsBarCss = css({
+  justifyContent: 'space-between',
+});
+
+const anonymousCss = css(flex('center', '', 'row', 4));
+const anonymousLabelCss = css({
+  cursor: 'pointer',
+});

@@ -1,21 +1,16 @@
-import type {
-  SubmitErrorHandler,
-  SubmitHandler} from 'react-hook-form';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { PartialDeep } from 'type-fest';
 import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils';
 
 import { css } from '@emotion/react';
-import {
-  FormProvider,
-  useForm,
-} from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import TitleBar from '~/components/TitleBar';
 import { titleBarHeight } from '~/styles/utils';
 
-import { ArticleTitle, ArticleContent, ArticleImages } from './Fields';
+import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
 
-interface ArticleFormProps {
+export interface ArticleFormProps {
   defaultValues?: PartialDeep<ArticleFormValues>;
   onValidSubmit: SubmitHandler<ArticleFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<ArticleFormValues>;
@@ -42,7 +37,7 @@ const ArticleForm = (props: ArticleFormProps) => {
         <TitleBar.Form title="게시글 쓰기" submitButtonText="완료" />
         <ArticleTitle />
         <ArticleContent />
-        <ArticleImages />
+        <ArticleOptions />
       </form>
     </FormProvider>
   );
