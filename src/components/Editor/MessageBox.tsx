@@ -14,4 +14,4 @@ const MessageBox = (props: MessageBoxProps) => {
 };
 
 export default MessageBox;
-const selfCss = css({ border: `1px solid ${palettes.grey3}` });
+const selfCss = css({ backgroundColor: palettes.white, border: `1px solid ${palettes.grey3}` });

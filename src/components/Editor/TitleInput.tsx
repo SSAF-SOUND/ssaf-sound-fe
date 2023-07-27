@@ -28,6 +28,7 @@ export default TitleInput;
 
 const selfCss = css(
   {
+    backgroundColor: palettes.white,
     width: '100%',
     borderRadius: 0,
     outline: 0,

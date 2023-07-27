@@ -49,5 +49,4 @@ const errorMessageContainerCss = css({
   borderTop: 0,
   borderBottom: 0,
   padding: '4px 16px',
-  backgroundColor: palettes.white,
 });
