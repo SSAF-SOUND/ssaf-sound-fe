@@ -3,18 +3,15 @@ import type { ReactQuillProps } from 'react-quill';
 import dynamic from 'next/dynamic';
 
 import { css } from '@emotion/react';
-import { useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 
-import { Icon, IconButton } from '~/components/Common';
 import { classnames as cn } from '~/components/Editor/classnames';
-import ThumbnailBar from '~/components/Editor/ThumbnailBar';
-import { useImageUpload } from '~/services/s3/hooks';
+import EditorSkeleton from '~/components/Editor/EditorSkeleton';
 import { fontCss, palettes } from '~/styles/utils';
 
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false,
-  loading: () => <p>로딩중</p>,
+  loading: () => <EditorSkeleton />,
 });
 
 export interface EditorProps
@@ -78,11 +75,4 @@ const selfCss = css({
   '& strong': {
     fontWeight: 700,
   },
-});
-
-const thumbnailBarCss = css({});
-
-const bottomToolbarCss = css({
-  padding: 8,
-  border: editorBorder,
 });
