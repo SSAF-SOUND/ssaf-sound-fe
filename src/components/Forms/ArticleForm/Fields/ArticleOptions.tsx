@@ -6,8 +6,9 @@ import { Checkbox } from '~/components/Common';
 import Editor from '~/components/Editor';
 import { useArticleFormContext } from '~/components/Forms/ArticleForm/utils';
 import { useModal } from '~/components/GlobalModal';
+import ThumbnailBar from '~/components/ThumbnailBar';
 import { useImageUpload } from '~/services/s3/hooks';
-import { flex } from '~/styles/utils';
+import { flex, palettes } from '~/styles/utils';
 
 const imageFieldName = 'images';
 const maxImageCount = 3;
@@ -79,7 +80,7 @@ export const ArticleOptions = () => {
   return (
     <div>
       {hasImages && (
-        <Editor.ThumbnailBar
+        <ThumbnailBar
           css={thumbnailBarCss}
           thumbnails={thumbnails}
           onClickRemoveThumbnail={(index) =>
@@ -135,6 +136,7 @@ const anonymousLayerCss = css(
 );
 
 const thumbnailBarCss = css({
+  border: `1px solid ${palettes.grey3}`,
   borderTop: 0,
   borderBottom: 0,
 });
