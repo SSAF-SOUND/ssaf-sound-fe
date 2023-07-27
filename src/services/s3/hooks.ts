@@ -37,6 +37,9 @@ export interface ImageState {
   thumbnailUrl: string;
 }
 
+const exceedMaxCountErrorMessage = (maxCount: number) =>
+  `이미지는 최대 ${maxCount}개 까지 업로드할 수 있습니다.`;
+
 export const useImageUpload = (
   options: Partial<UseImageUploadOptions> = {}
 ) => {
@@ -51,16 +54,17 @@ export const useImageUpload = (
 
   const uploadImage = async (file: File) => {
     if (maxImageCount <= images.length) {
-      throw `이미지는 최대 ${images.length}개 까지 업로드할 수 있습니다.`;
+      throw exceedMaxCountErrorMessage(maxImageCount);
     }
 
-    const idx = images.length;
+    const index = images.length;
 
     try {
-      setImages((prevImages) => [
-        ...prevImages,
-        { thumbnailUrl: URL.createObjectURL(file) },
-      ]);
+      setImages((prevImages) =>
+        produce(prevImages, (draft) => {
+          draft[index] = { thumbnailUrl: URL.createObjectURL(file) };
+        })
+      );
 
       const { preSignedUrl, imageDir } = await createPreSignedUrl();
 
@@ -71,16 +75,21 @@ export const useImageUpload = (
 
       setImages((prevImages) =>
         produce(prevImages, (draft) => {
-          draft[idx].url = imageDir;
+          draft[index].url = imageDir;
         })
       );
     } catch (err) {
-      setImages((prevImages) => prevImages.filter((_, i) => i !== idx));
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
       throw err;
     }
   };
 
   const handleOpenImageUploader = () => {
+    if (maxImageCount <= images.length) {
+      customToast.clientError(exceedMaxCountErrorMessage(maxImageCount));
+      return;
+    }
+
     openImageUploader({
       onLoadImage: async (file) => {
         await uploadImage(file);
