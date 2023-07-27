@@ -1,7 +1,9 @@
-import type { ArticleCategory } from '~/services/article';
+import type { ArticleCategory, CreateArticleApiData } from '~/services/article';
 
-import { articleCategories } from '~/mocks/handlers/article/data';
-import { restSuccess } from '~/mocks/utils';
+import { rest } from 'msw';
+
+import { articleCategories, articles } from '~/mocks/handlers/article/data';
+import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
@@ -11,4 +13,32 @@ export const getArticleCategories = restSuccess<ArticleCategory[]>(
   { data: articleCategories }
 );
 
-export const articleHandlers = [getArticleCategories];
+export const createArticle = rest.post(
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.create(':categoryId')),
+  (req, res, ctx) => {
+    const postId = articles.length + 1;
+
+    // TODO: update mock articles
+    // articles[postId] = { };
+
+    return res(
+      ...mockSuccess<CreateArticleApiData['data']>(ctx, {
+        postId,
+      })
+    );
+  }
+);
+
+export const createArticleError = restError(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.create(':categoryId')),
+  {
+    data: null,
+  }
+);
+
+export const articleHandlers = [getArticleCategories, createArticle];

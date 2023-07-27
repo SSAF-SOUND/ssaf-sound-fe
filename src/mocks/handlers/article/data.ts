@@ -11,3 +11,5 @@ export const articleCategories: ArticleCategory[] = [
   boardId: idx + 1,
   title: `${category} 게시판`,
 }));
+
+export const articles = [];

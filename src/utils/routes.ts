@@ -7,6 +7,9 @@ export const routes = {
     category: (categoryId: number) =>
       `${routes.articles.categories()}/${categoryId}`,
     detail: (articleId: number) => `${routes.articles.self()}/${articleId}`,
+
+    create: (categoryId: number) =>
+      `${routes.articles.self()}/new?categoryId=${categoryId}`,
   },
 
   //
