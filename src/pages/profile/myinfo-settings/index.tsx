@@ -62,7 +62,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
         <TitleBar.Default
           title="프로필 설정"
           withoutClose
-          backwardAs={routes.profile.self()}
+          onClickBackward={routes.profile.self()}
         />
 
         <nav css={[expandCss, { marginBottom: 40 }]}>
