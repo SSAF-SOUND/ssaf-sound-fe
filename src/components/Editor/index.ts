@@ -1,5 +1,6 @@
 import EditorCore from './Editor';
 import Skeleton from './EditorSkeleton';
+import MessageBox from './MessageBox';
 import ThumbnailBar from './ThumbnailBar';
 import TitleInput from './TitleInput';
 import ToolBar from './ToolBar';
@@ -11,6 +12,7 @@ const Editor = Object.assign(EditorCore, {
   ToolBar,
   ToolBarItem,
   Skeleton,
+  MessageBox,
 });
 
 export default Editor;
