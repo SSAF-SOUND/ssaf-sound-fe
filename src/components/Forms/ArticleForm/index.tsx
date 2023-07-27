@@ -21,6 +21,7 @@ type OnInvalidSubmit = (
 ) => ReturnType<OriginalOnInvalidSubmit>;
 
 export interface ArticleFormProps {
+  className?: string;
   defaultValues?: ArticleFormValues;
   onValidSubmit: SubmitHandler<ArticleFormValues>;
   onInvalidSubmit?: OnInvalidSubmit;
