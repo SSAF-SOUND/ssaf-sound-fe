@@ -7,12 +7,13 @@ import { useEffect } from 'react';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
-import { useArticleCategories } from '~/services/article';
-import { routes } from '~/utils';
+import { useArticleCategories, useCreateArticle } from '~/services/article';
+import { handleAxiosError, routes } from '~/utils';
 
 /* /articles/new?categoryId=${categoryId} */
 const ArticleCreatePage: CustomNextPage = () => {
   const router = useRouter();
+  const { mutateAsync: createArticle } = useCreateArticle();
 
   const query = router.query as { categoryId: string };
   const { data: articleCategories } = useArticleCategories();
@@ -34,17 +35,33 @@ const ArticleCreatePage: CustomNextPage = () => {
     return <DefaultFullPageLoader />;
   }
 
-  const onValidSubmit: ArticleFormProps['onValidSubmit'] = (value) => {
-    
+  const onValidSubmit: ArticleFormProps['onValidSubmit'] = async (
+    formValues
+  ) => {
+    const { images: fieldImages, ...restFormValues } = formValues;
+
+    // TODO: imagePath 업데이트 (이미지를 삭제할 수 있는 S3 URL)
+    const images = fieldImages.map((url) => ({
+      imagePath: url,
+      imageUrl: url,
+    }));
+
+    try {
+      const articleId = await createArticle({
+        categoryId,
+        images,
+        ...restFormValues,
+      });
+
+      await router.replace(routes.articles.detail(articleId));
+    } catch (err) {
+      handleAxiosError(err);
+    }
   };
 
   return (
     <div>
-      <ArticleForm
-        onValidSubmit={(v) => {
-          console.log(v);
-        }}
-      />
+      <ArticleForm onValidSubmit={onValidSubmit} />
     </div>
   );
 };
