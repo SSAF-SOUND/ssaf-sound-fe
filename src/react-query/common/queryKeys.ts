@@ -2,6 +2,9 @@ export const queryKeys = {
   auth: () => ['auth'],
   user: {
     myInfo: () => [...queryKeys.auth(), 'myInfo'],
+    myPortfolio: () => [...queryKeys.auth(), 'portfolio'],
+    portfolio: (id: number) => ['portfolio', id],
+    profileVisibility: () => ['profileVisibility'],
   },
   meta: {
     self: () => ['meta'],
@@ -20,10 +23,14 @@ export const endpoints = {
     myInfo: () => '/members' as const,
     studentCertification: () => '/members/ssafy-certification' as const,
 
+    myPortfolio: () => `/members/portfolio`,
+    portfolio: (id: number) => `/members/${id}/portfolio` as const,
+
     ssafyBasicInfo: () => '/members/default-information' as const,
     nickname: () => '/members/nickname' as const,
     isMajor: () => '/members/major' as const,
     track: () => '/members/major-track' as const,
+    profileVisibility: () => '/members/profile-public' as const,
   },
   recruit: {
     // todo 이름, 파라미터 수정

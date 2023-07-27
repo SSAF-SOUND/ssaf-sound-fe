@@ -31,15 +31,18 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
     return <DefaultFullPageLoader />;
   }
 
-  const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (value) => {
-    const { year: semester, ...restSsafyBasicInfo } = value.ssafyBasicInfo;
-    const newSsafyBasicInfo = {
-      semester,
-      ...restSsafyBasicInfo,
-    };
+  const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (
+    reset,
+    value
+  ) => {
+    const newSsafyBasicInfo = value.ssafyBasicInfo;
+    const { year: _, ...restNewSsafyBasicInfo } = value.ssafyBasicInfo;
 
     try {
-      await updateSsafyBasicInfo(newSsafyBasicInfo);
+      await updateSsafyBasicInfo({
+        ...restNewSsafyBasicInfo,
+        semester: newSsafyBasicInfo.year,
+      });
 
       setMyInfo(
         produce(myInfo, (draft) => {
@@ -53,14 +56,18 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
               majorTrack: null,
               ...draft.ssafyInfo,
               campus: newSsafyBasicInfo.campus,
-              semester: newSsafyBasicInfo.semester,
+              semester: newSsafyBasicInfo.year,
             };
           } else {
             delete draft.ssafyInfo;
           }
         })
       );
-      await router.push(routes.profile.myInfoSettings());
+
+      reset({
+        ssafyBasicInfo: newSsafyBasicInfo,
+      });
+      customToast.success('SSAFY 기본정보가 변경되었습니다.');
     } catch (err) {
       handleAxiosError(err);
     }
@@ -89,6 +96,7 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
         onInvalidSubmit={onInvalidSubmit}
         options={{
           forceSsafyMemberToTrue: isCertified,
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
         }}
       />
     </div>

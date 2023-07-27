@@ -2,6 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { useEffect } from 'react';
 
+import {
+  getProfileVisibility,
+  updateProfileVisibility,
+} from '~/mocks/handlers/member';
 import { userInfo } from '~/mocks/handlers/member/data';
 import MyInfoSettingsPage from '~/pages/profile/myinfo-settings';
 import { useSetMyInfo } from '~/services/member';
@@ -22,7 +26,7 @@ const meta: Meta<typeof MyInfoSettingsPage> = {
 
     msw: {
       handlers: {
-        member: [],
+        member: [getProfileVisibility, updateProfileVisibility],
       },
     },
   },

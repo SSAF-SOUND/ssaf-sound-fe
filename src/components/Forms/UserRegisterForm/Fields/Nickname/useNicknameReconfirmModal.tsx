@@ -1,10 +1,12 @@
 import { useModal } from '~/components/GlobalModal';
 import { palettes } from '~/styles/utils';
 
-interface DescriptionProps {
+interface NicknameReconfirmDescriptionProps {
   nickname: string;
 }
-const Description = (props: DescriptionProps) => {
+const NicknameReconfirmDescription = (
+  props: NicknameReconfirmDescriptionProps
+) => {
   const { nickname } = props;
   return (
     <p>
@@ -29,7 +31,7 @@ export const useNicknameReconfirmModal = () => {
 
     openModal('alert', {
       title: '알림',
-      description: <Description nickname={nickname} />,
+      description: <NicknameReconfirmDescription nickname={nickname} />,
       actionText: '확인',
       cancelText: '취소',
       onClickAction: onClickAction,

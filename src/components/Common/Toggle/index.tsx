@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import * as RadixToggle from '@radix-ui/react-toggle';
 
-import { inlineFlex, palettes, themeColorVars } from '~/styles/utils';
+import { colorMix, inlineFlex, palettes, themeColorVars } from '~/styles/utils';
 
 type ToggleTheme = 'primary' | 'secondary' | 'recruit';
 type ToggleOrder = 'thumb-first' | 'text-first';
@@ -67,9 +67,13 @@ const selfSizeCss = (
   padding: number | string
 ) =>
   css({
+    cursor: 'pointer',
     width: thumbSize + textWidth,
     height: thumbSize,
     padding,
+    '&:disabled': {
+      opacity: 0.5,
+    },
   });
 
 const thumbSizeCss = (

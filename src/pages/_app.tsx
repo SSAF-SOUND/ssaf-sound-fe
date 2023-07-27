@@ -4,6 +4,7 @@ import { QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import AuthChecker from '~/components/AuthChecker';
 import Background from '~/components/Background';
@@ -31,7 +32,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
         <GlobalStyles />
         <Background />
         <Toaster />
-        <MainLayout withNavigation={Component.navigation}>
+        <MainLayout>
           {Component.auth ? (
             <AuthChecker auth={Component.auth}>
               <Component {...pageProps} />

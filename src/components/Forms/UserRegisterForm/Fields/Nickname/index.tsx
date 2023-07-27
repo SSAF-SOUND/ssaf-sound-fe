@@ -3,13 +3,14 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { Button, VisuallyHidden } from '~/components/Common';
-import NicknameField from '~/components/Forms/Common/Nickname';
-import { useNicknameReconfirmModal } from '~/components/Forms/Common/Nickname/utils';
 import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { useModal } from '~/components/GlobalModal';
 import { useValidateNickname } from '~/services/member';
 import { flex, fontCss } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
+
+import NicknameInput from './NicknameInput';
+import { useNicknameReconfirmModal } from './useNicknameReconfirmModal';
 
 const fieldName = 'nickname';
 
@@ -109,7 +110,7 @@ const Nickname = (props: NicknameProps) => {
         </label>
       )}
 
-      <NicknameField
+      <NicknameInput
         id={nicknameFieldId}
         initialNickname={initialNickname}
         css={inputContainerCss}

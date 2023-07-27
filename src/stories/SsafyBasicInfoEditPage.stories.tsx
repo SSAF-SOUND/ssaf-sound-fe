@@ -4,6 +4,7 @@ import { expect } from '@storybook/jest';
 import { userEvent, within } from '@storybook/testing-library';
 import { useEffect } from 'react';
 
+import { updateSsafyBasicInfo } from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
 import MyInfoSettingsSsafyBasicInfoEditPage from '~/pages/profile/myinfo-settings/ssafy-basic-info/edit';
 import { useSetMyInfo } from '~/services/member';
@@ -25,7 +26,7 @@ const meta: Meta<typeof MyInfoSettingsSsafyBasicInfoEditPage> = {
 
     msw: {
       handlers: {
-        member: [],
+        member: [updateSsafyBasicInfo],
       },
     },
   },

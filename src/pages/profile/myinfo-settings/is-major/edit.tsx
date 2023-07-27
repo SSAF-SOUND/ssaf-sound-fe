@@ -9,7 +9,7 @@ import { DefaultFullPageLoader } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateIsMajor } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
-import { handleAxiosError, routes } from '~/utils';
+import { customToast, handleAxiosError, routes } from '~/utils';
 
 const MyInfoSettingsIsMajorEditPage = () => {
   const router = useRouter();
@@ -30,12 +30,16 @@ const MyInfoSettingsIsMajorEditPage = () => {
     );
   };
 
-  const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (value) => {
+  const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (
+    reset,
+    value
+  ) => {
     const newIsMajor = value.isMajor;
     try {
       await updateIsMajor({ isMajor: newIsMajor });
       setIsMajor(newIsMajor);
-      await router.push(routes.profile.myInfoSettings());
+      reset({ isMajor: newIsMajor });
+      customToast.success('전공자 여부가 변경되었습니다.');
     } catch (err) {
       handleAxiosError(err);
     }
@@ -50,6 +54,9 @@ const MyInfoSettingsIsMajorEditPage = () => {
           isMajor: myInfo.isMajor,
         }}
         onValidSubmit={onValidSubmit}
+        options={{
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
+        }}
       />
     </div>
   );

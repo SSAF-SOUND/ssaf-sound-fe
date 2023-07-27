@@ -3,17 +3,21 @@ import type { CustomNextPage } from 'next/types';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
-import { useState } from 'react';
 
-import { DefaultFullPageLoader, Toggle } from '~/components/Common';
+import { DefaultFullPageLoader } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
 import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';
+import { ProfileVisibilityToggle } from '~/components/Toggles';
 import { useSignOut } from '~/services/auth';
-import { CertificationState, useMyInfo } from '~/services/member';
+import {
+  CertificationState,
+  useMyInfo,
+  useProfileVisibility,
+  useUpdateProfileVisibility,
+} from '~/services/member';
 import {
   flex,
-  fontCss,
   globalVars,
   pageMinHeight,
   palettes,
@@ -23,12 +27,14 @@ import { EditableMyInfoFields, handleAxiosError, routes } from '~/utils';
 
 const MyInfoSettingsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
+
   const isSsafyMember = !!myInfo?.ssafyMember;
   const isCertified =
     myInfo?.ssafyInfo?.certificationState === CertificationState.CERTIFIED;
   const router = useRouter();
   const { openModal, closeModal } = useModal();
   const { mutate: signOut, isLoading: isSigningOut } = useSignOut();
+
   const handleSignOut = () => {
     signOut(undefined, {
       onSuccess: () => {
@@ -53,7 +59,11 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   return (
     <div css={selfCss}>
       <div>
-        <TitleBar.Default title="프로필 설정" withoutClose />
+        <TitleBar.Default
+          title="프로필 설정"
+          withoutClose
+          backwardAs={routes.profile.self()}
+        />
 
         <nav css={[expandCss, { marginBottom: 40 }]}>
           <MyInfoSettings.NavTitle css={navTitleCss}>
@@ -74,7 +84,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
 
           {isSsafyMember && !isCertified && (
             <MyInfoSettings.NavItem href={routes.certification.student()}>
-              학생 인증
+              SSAFY 인증
             </MyInfoSettings.NavItem>
           )}
 
@@ -84,7 +94,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
             asLink={false}
           >
             <span>내 프로필 공개</span>
-            <ProfileVisibilityToggle />
+            <ProfileVisibilityToggleLayer />
           </MyInfoSettings.NavItem>
         </nav>
 
@@ -127,31 +137,45 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   );
 };
 
-const ProfileVisibilityToggle = () => {
+const ProfileVisibilityToggleLayer = () => {
   const { openModal, closeModal } = useModal();
-  const [isPublic, setIsPublic] = useState(false);
-  const toggleText = isPublic ? '공개' : '비공개';
-  const handlePressedChange = () => {
-    if (isPublic) {
-      openModal('alert', {
-        title: '알림',
-        description: '포트폴리오 및 프로젝트, 스터디 정보가 비공개됩니다.',
-        actionText: '확인',
-        onClickAction: closeModal,
-      });
-    }
-    setIsPublic((p) => !p);
+  const { data: profileVisibility } = useProfileVisibility();
+  const {
+    mutate: updatePortfolioVisibility,
+    isLoading: isUpdatingPortfolioVisibility,
+  } = useUpdateProfileVisibility();
+
+  const openPrivateProfileAlertModal = () => {
+    openModal('alert', {
+      title: '알림',
+      description: '포트폴리오 및 프로젝트, 스터디 정보가 비공개됩니다.',
+      actionText: '확인',
+      onClickAction: closeModal,
+    });
   };
 
-  return (
-    <Toggle
-      pressed={isPublic}
-      onPressedChange={handlePressedChange}
-      padding="3px 5px"
-      thumbSize={20}
-      textWidth={40}
-      text={toggleText}
-      css={fontCss.style.B12}
+  const handleToggleProfileVisibility = (isPublic: boolean) => {
+    if (!isPublic) {
+      openPrivateProfileAlertModal();
+    }
+
+    updatePortfolioVisibility(
+      { isPublic },
+      {
+        onError: (err) => {
+          handleAxiosError(err);
+        },
+      }
+    );
+  };
+
+  return !profileVisibility ? (
+    <ProfileVisibilityToggle.Skeleton />
+  ) : (
+    <ProfileVisibilityToggle
+      isPublic={profileVisibility.isPublic}
+      disabled={isUpdatingPortfolioVisibility}
+      onPressedChange={handleToggleProfileVisibility}
     />
   );
 };

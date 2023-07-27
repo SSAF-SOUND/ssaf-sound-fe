@@ -16,7 +16,7 @@ import {
   useUpdateTrack,
 } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
-import { handleAxiosError, routes } from '~/utils';
+import { customToast, handleAxiosError, routes } from '~/utils';
 
 const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -24,16 +24,20 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
   const setMyInfo = useSetMyInfo();
   const { mutateAsync: updateTrack } = useUpdateTrack();
 
-  if (
+  const isUncertified =
     !myInfo ||
     !myInfo.ssafyInfo ||
-    myInfo.ssafyInfo.certificationState !== CertificationState.CERTIFIED
-  ) {
+    myInfo.ssafyInfo.certificationState !== CertificationState.CERTIFIED;
+
+  if (isUncertified) {
     router.replace(routes.unauthorized());
     return <DefaultFullPageLoader />;
   }
 
-  const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (value) => {
+  const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (
+    reset,
+    value
+  ) => {
     const newTrack = value.track;
     try {
       await updateTrack({ track: newTrack });
@@ -44,7 +48,8 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
         })
       );
 
-      await router.push(routes.profile.myInfoSettings());
+      reset({ track: newTrack });
+      customToast.success('트랙이 변경되었습니다.');
     } catch (err) {
       handleAxiosError(err);
     }
@@ -56,9 +61,12 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
         css={formCss}
         field="track"
         defaultValues={{
-          track: myInfo.ssafyInfo.majorTrack,
+          track: myInfo.ssafyInfo.majorTrack as string,
         }}
         onValidSubmit={onValidSubmit}
+        options={{
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
+        }}
       />
     </div>
   );

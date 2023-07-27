@@ -1,4 +1,4 @@
-import type { UserInfo } from '~/services/member/utils';
+import type { ProfileVisibility, UserInfo } from '~/services/member/utils';
 
 import { useRouter } from 'next/router';
 
@@ -11,9 +11,13 @@ import { routes } from '~/utils/routes';
 import {
   certifyStudent,
   getMyInfo,
+  getMyPortfolio,
+  getProfileVisibility,
+  getUserPortfolio,
   updateIsMajor,
   updateMyInfo,
   updateNickname,
+  updateProfileVisibility,
   updateSsafyBasicInfo,
   updateTrack,
   validateNickname,
@@ -40,7 +44,7 @@ export const useSetMyInfo = () => {
   const queryClient = useQueryClient();
   const queryKey = queryKeys.user.myInfo();
   const setMyInfo = (
-    updater?: UserInfo | ((payload?: UserInfo) => UserInfo)
+    updater?: UserInfo | ((payload?: UserInfo) => UserInfo | undefined)
   ) => {
     queryClient.setQueryData<UserInfo>(queryKey, updater);
   };
@@ -129,5 +133,55 @@ export const useValidateNickname = () => {
 export const useCertifyStudent = () => {
   return useMutation({
     mutationFn: certifyStudent,
+  });
+};
+
+// 프로필
+
+export const useProfileVisibility = () => {
+  return useQuery({
+    queryKey: queryKeys.user.profileVisibility(),
+    queryFn: getProfileVisibility,
+  });
+};
+
+export const useUpdateProfileVisibility = () => {
+  const queryClient = useQueryClient();
+  const profileVisibilityQueryKey = queryKeys.user.profileVisibility();
+  const setProfileVisibility = (updater?: ProfileVisibility) =>
+    queryClient.setQueryData<ProfileVisibility>(
+      profileVisibilityQueryKey,
+      updater
+    );
+
+  return useMutation({
+    mutationFn: updateProfileVisibility,
+    onMutate: async ({ isPublic }) => {
+      await queryClient.cancelQueries(profileVisibilityQueryKey);
+      const prevProfileVisibility = queryClient.getQueryData<ProfileVisibility>(
+        profileVisibilityQueryKey
+      );
+      setProfileVisibility({ isPublic });
+      return { prevProfileVisibility };
+    },
+    onError: (err, variables, context) => {
+      setProfileVisibility(context?.prevProfileVisibility);
+    },
+  });
+};
+
+// 프로필 - 포트폴리오
+
+export const useUserPortfolio = (id: number) => {
+  return useQuery({
+    queryKey: queryKeys.user.portfolio(id),
+    queryFn: () => getUserPortfolio(id),
+  });
+};
+
+export const useMyPortfolio = () => {
+  return useQuery({
+    queryKey: queryKeys.user.myPortfolio(),
+    queryFn: getMyPortfolio,
   });
 };

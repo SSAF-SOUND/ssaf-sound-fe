@@ -1,6 +1,7 @@
-import type { UserInfo } from '~/services/member';
+import type { UserInfo, UserPortfolio } from '~/services/member';
 
 import { CertificationState, SsafyTrack } from '~/services/member';
+import { SkillName } from '~/services/recruit';
 
 const initialUserInfo: UserInfo = {
   memberId: 434,
@@ -44,4 +45,25 @@ export const userInfo = {
   certifiedSsafyUserInfo,
   uncertifiedSsafyUserInfo,
   nonSsafyUserInfo,
+};
+
+const publicPortfolio: UserPortfolio = {
+  isPublic: true,
+  portfolio: {
+    selfIntroduction: 'grammar',
+    skills: Object.values(SkillName).slice(0, 10),
+    memberLinks: [],
+  },
+};
+
+const privatePortfolio: UserPortfolio = {
+  isPublic: false,
+  portfolio: null,
+};
+
+export const userPortfolio = {
+  publicPortfolio,
+  privatePortfolio,
+  myPublicPortfolio: publicPortfolio,
+  myPrivatePortfolio: { ...publicPortfolio, isPublic: false },
 };

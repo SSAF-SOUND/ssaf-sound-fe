@@ -54,7 +54,7 @@ export const mockError = (
 export const restSuccess = <D extends DefaultBodyType>(
   method: 'get' | 'post' | 'patch' | 'delete',
   url: string,
-  { delay = 500, data = {} }: { delay?: number; data?: D } = {}
+  { delay = 500, data }: { delay?: number; data?: D } = {}
 ) => {
   return rest[method](url, (req, res, ctx) => {
     return res(ctx.delay(delay), ctx.json({ data }));

@@ -8,14 +8,14 @@ import { AlertText, Icon, IconButton, TextInput } from '~/components/Common';
 import { createRandomNickname, nicknameValidator } from '~/services/member';
 import { flex } from '~/styles/utils';
 
-interface NicknameProps {
+interface NicknameInputProps {
   fieldName: string;
   initialNickname: string;
   className?: string;
   id?: string;
 }
 
-const Nickname = (props: NicknameProps) => {
+const NicknameInput = (props: NicknameInputProps) => {
   const { fieldName, className, id, initialNickname } = props;
   const { register, setFocus, setValue } = useFormContext();
 
@@ -59,7 +59,7 @@ const Nickname = (props: NicknameProps) => {
   );
 };
 
-Nickname.displayName = 'Nickname';
-export default Nickname;
+NicknameInput.displayName = 'Nickname';
+export default NicknameInput;
 
 const refreshNicknameCss = css(flex('center', 'flex-end', 'row', 8));
