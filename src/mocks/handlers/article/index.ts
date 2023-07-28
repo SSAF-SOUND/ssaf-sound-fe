@@ -1,8 +1,16 @@
-import type { ArticleCategory, CreateArticleApiData } from '~/services/article';
+import type {
+  ArticleCategory,
+  CreateArticleApiData,
+  GetArticleDetailApiData,
+} from '~/services/article';
 
 import { rest } from 'msw';
 
-import { articleCategories, articles } from '~/mocks/handlers/article/data';
+import {
+  articleCategories,
+  articleFallback,
+  articles,
+} from '~/mocks/handlers/article/data';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
@@ -46,4 +54,31 @@ export const createArticleError = restError(
   }
 );
 
-export const articleHandlers = [getArticleCategories, createArticle];
+export const getArticleDetail = rest.get(
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.detail(':articleId')),
+  (req, res, ctx) => {
+    const params = req.params as { articleId: string };
+    const articleId = Number(params.articleId);
+    const article = articles[Number(articleId)] || articleFallback;
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<GetArticleDetailApiData['data']>(ctx, { post: article })
+    );
+  }
+);
+
+export const getArticleDetailError = restError(
+  'get',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.detail(':articleId'))
+);
+
+export const articleHandlers = [
+  getArticleCategories,
+  createArticle,
+  getArticleDetail,
+];
