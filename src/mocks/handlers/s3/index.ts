@@ -2,27 +2,31 @@ import type { CreatePreSignedUrlApiData } from '~/services/s3';
 
 import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { API_URL, composeUrls } from '~/utils';
+import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import { imageDir, preSignedUrl } from './data';
 
 export const createPreSignedUrl = restSuccess<
   CreatePreSignedUrlApiData['data']
->('post', composeUrls(API_URL, endpoints.s3.preSignedUrl()), {
-  data: {
-    imagePathDtos: [
-      {
-        preSignedUrl,
-        imageDir,
-      },
-    ],
-  },
-  delay: 1000,
-});
+>(
+  'post',
+  composeUrls(API_URL, removeQueryParams(endpoints.s3.preSignedUrl())),
+  {
+    data: {
+      imagePathDtos: [
+        {
+          preSignedUrl,
+          imageDir,
+        },
+      ],
+    },
+    delay: 1000,
+  }
+);
 
 export const createPreSignedUrlError = restError(
   'post',
-  composeUrls(API_URL, endpoints.s3.preSignedUrl()),
+  composeUrls(API_URL, removeQueryParams(endpoints.s3.preSignedUrl())),
   {
     data: null,
   }
