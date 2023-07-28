@@ -18,12 +18,17 @@ export const createArticle = rest.post(
   // @ts-ignore
   composeUrls(API_URL, removeQueryParams(endpoints.articles.create(1))),
   (req, res, ctx) => {
-    const postId = articles.length + 1;
-
     // TODO: update mock articles
-    // articles[postId] = { };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    articles.push({});
+
+    const postId = articles.length;
+
+    console.log('[현재 mock articles 목록]: ', articles);
 
     return res(
+      ctx.delay(500),
       ...mockSuccess<CreateArticleApiData['data']>(ctx, {
         postId,
       })
