@@ -48,6 +48,7 @@ export const ArticleContent = () => {
 
   register(fieldName, {
     validate: validateArticleContent(errorMessage),
+    required: lengthErrorMessage,
   });
 
   return (
