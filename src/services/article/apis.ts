@@ -1,8 +1,11 @@
-import type { ArticleCategory } from './utils';
+import type { ArticleCategory, ArticleDetail , ArticleDetailError } from './utils';
 import type { ApiSuccessResponse } from '~/types';
 
+import { isAxiosError } from 'axios';
+
 import { endpoints } from '~/react-query/common';
-import { privateAxios, publicAxios } from '~/utils';
+import { getErrorResponse, privateAxios, publicAxios } from '~/utils';
+
 
 type GetArticleCategoriesApiData = ApiSuccessResponse<ArticleCategory[]>;
 
@@ -34,4 +37,41 @@ export const createArticle = (params: CreateArticleParams) => {
   return privateAxios
     .post<CreateArticleApiData>(endpoint, body)
     .then((res) => res.data.data.postId);
+};
+
+export type GetArticleDetailApiData = ApiSuccessResponse<{
+  post: ArticleDetail;
+}>;
+
+const createArticleDetailErrorData = (
+  message: string,
+  isUnknownError = false
+): ArticleDetailError => {
+  return {
+    error: {
+      isUnknownError,
+      message,
+    },
+  };
+};
+
+export const getArticleDetail = (articleId: number) => {
+  const endpoint = endpoints.articles.detail(articleId);
+  return publicAxios
+    .get<GetArticleDetailApiData>(endpoint)
+    .then((res) => res.data.data)
+    .catch((err) => {
+      if (isAxiosError(err)) {
+        const response = getErrorResponse(err);
+
+        if (response) {
+          return createArticleDetailErrorData(response.message);
+        }
+      }
+
+      return createArticleDetailErrorData(
+        '알 수 없는 에러가 발생했습니다.',
+        true
+      );
+    });
 };
