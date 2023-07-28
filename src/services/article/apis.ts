@@ -1,11 +1,14 @@
-import type { ArticleCategory, ArticleDetail , ArticleDetailError } from './utils';
+import type {
+  ArticleCategory,
+  ArticleDetail,
+  ArticleDetailError,
+} from './utils';
 import type { ApiSuccessResponse } from '~/types';
 
 import { isAxiosError } from 'axios';
 
 import { endpoints } from '~/react-query/common';
 import { getErrorResponse, privateAxios, publicAxios } from '~/utils';
-
 
 type GetArticleCategoriesApiData = ApiSuccessResponse<ArticleCategory[]>;
 
@@ -59,7 +62,7 @@ export const getArticleDetail = (articleId: number) => {
   const endpoint = endpoints.articles.detail(articleId);
   return publicAxios
     .get<GetArticleDetailApiData>(endpoint)
-    .then((res) => res.data.data)
+    .then((res) => res.data.data.post)
     .catch((err) => {
       if (isAxiosError(err)) {
         const response = getErrorResponse(err);
