@@ -1,7 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { createArticle, getArticleCategories } from '~/services/article/apis';
+import {
+  createArticle,
+  getArticleCategories,
+  getArticleDetail,
+} from '~/services/article/apis';
 
 export const useArticleCategories = () => {
   return useQuery({
@@ -14,5 +18,12 @@ export const useArticleCategories = () => {
 export const useCreateArticle = () => {
   return useMutation({
     mutationFn: createArticle,
+  });
+};
+
+export const useArticleDetail = (articleId: number) => {
+  return useQuery({
+    queryKey: queryKeys.article.detail(articleId),
+    queryFn: () => getArticleDetail(articleId),
   });
 };

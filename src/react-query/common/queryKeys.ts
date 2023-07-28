@@ -33,6 +33,7 @@ export const endpoints = {
   articles: {
     categories: () => '/boards',
     create: (categoryId: number) => `/posts?boardId=${categoryId}`,
+    detail: (articleId: number) => `/posts/${articleId}`,
   },
   user: {
     myInfo: () => '/members' as const,
