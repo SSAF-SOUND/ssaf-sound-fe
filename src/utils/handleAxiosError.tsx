@@ -1,4 +1,4 @@
-import type { AxiosError} from 'axios';
+import type { AxiosError } from 'axios';
 import type { ApiErrorResponse } from '~/types';
 
 import { isAxiosError } from 'axios';
@@ -95,4 +95,8 @@ export const isServerError = (error: AxiosError) => {
 export const isClientError = (error: AxiosError) => {
   const statusCode = error.response?.status;
   return statusCode && 400 <= statusCode && statusCode < 500;
+};
+
+export const getErrorResponse = (error: AxiosError) => {
+  return error.response?.data as ApiErrorResponse | undefined;
 };
