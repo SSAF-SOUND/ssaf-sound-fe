@@ -1,3 +1,4 @@
+import type { AxiosError} from 'axios';
 import type { ApiErrorResponse } from '~/types';
 
 import { isAxiosError } from 'axios';
@@ -58,10 +59,8 @@ export const handleAxiosError = (
     return;
   }
 
-  const statusCode = error.response.status;
-
   /* Server Error */
-  if (!skipServerError && statusCode && statusCode >= 500) {
+  if (!skipServerError && isServerError(error)) {
     if (onServerError) {
       onServerError(error.response.data);
     } else {
@@ -77,7 +76,7 @@ export const handleAxiosError = (
   }
 
   /* Client Error */
-  if (400 <= statusCode && statusCode < 500) {
+  if (isClientError(error)) {
     onClientError?.(error.response.data);
   }
 };
@@ -86,4 +85,14 @@ const defaultOnClientError: HandleAxiosErrorOptions['onClientError'] = (
   err
 ) => {
   customToast.clientError(err.message || '오류가 발생했습니다');
+};
+
+export const isServerError = (error: AxiosError) => {
+  const statusCode = error.response?.status;
+  return statusCode && 500 <= statusCode && statusCode < 600;
+};
+
+export const isClientError = (error: AxiosError) => {
+  const statusCode = error.response?.status;
+  return statusCode && 400 <= statusCode && statusCode < 500;
 };
