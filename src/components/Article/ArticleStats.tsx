@@ -76,4 +76,7 @@ const interestStatCss = css(
 
 const iconContainerCss = css(inlineFlex('center', '', 'row', 2));
 
-const commentStatCss = css({ color: palettes.secondary.default });
+const commentStatCss = css(
+  { color: palettes.secondary.default },
+  flex('center')
+);
