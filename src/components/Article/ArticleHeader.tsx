@@ -19,16 +19,17 @@ const formatCreatedAt = (dateString: string) => {
 };
 
 interface ArticleHeaderProps {
+  className?: string;
   articleDetail: ArticleDetail;
 }
 
 const ArticleHeader = (props: ArticleHeaderProps) => {
-  const { articleDetail } = props;
+  const { articleDetail, className } = props;
   const { author, createdAt } = articleDetail;
   const { date, time } = formatCreatedAt(createdAt);
 
   return (
-    <header css={selfCss}>
+    <header css={selfCss} className={className}>
       <div css={metaCss}>
         {/* FIXME: userInfo type */}
         {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
