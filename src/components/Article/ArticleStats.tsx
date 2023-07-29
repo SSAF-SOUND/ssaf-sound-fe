@@ -10,10 +10,11 @@ const iconButtonSize = 24;
 
 interface ArticleStatsProps {
   articleDetail: ArticleDetail;
+  className?: string;
 }
 
 const ArticleStats = (props: ArticleStatsProps) => {
-  const { articleDetail } = props;
+  const { articleDetail, className } = props;
   const { liked, likeCount, scraped, scrapCount, commentCount } = articleDetail;
 
   // TODO
@@ -21,7 +22,7 @@ const ArticleStats = (props: ArticleStatsProps) => {
   const handleClickScrap = () => {};
 
   return (
-    <div css={selfCss}>
+    <div css={selfCss} className={className}>
       <div css={interestStatCss}>
         <div css={iconContainerCss}>
           <IconButton

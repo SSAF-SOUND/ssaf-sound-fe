@@ -2,7 +2,6 @@ import type { ArticleDetail } from '~/services/article';
 
 import { css } from '@emotion/react';
 
-import ArticleStats from '~/components/Article/ArticleStats';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 import ArticleContent from './ArticleContent';
@@ -18,12 +17,11 @@ const ArticleMain = (props: ArticleMainProps) => {
 
   return (
     <div className={className}>
-      <h2 css={titleCss}>
+      <h2 css={[titleCss, { marginBottom: 10 }]}>
         <span>{title}</span>
         {modified && <strong css={modifyIndicator}>(수정됨)</strong>}
       </h2>
       <ArticleContent html={content} />
-      <ArticleStats articleDetail={articleDetail} />
     </div>
   );
 };
