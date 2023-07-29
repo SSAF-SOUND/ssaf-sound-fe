@@ -4,7 +4,6 @@ import type {
 } from 'next/types';
 import type { ArticleDetail, ArticleDetailError } from '~/services/article';
 
-
 import { css } from '@emotion/react';
 
 import { Article } from '~/components/Article';
@@ -12,19 +11,18 @@ import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
-import { getArticleDetail } from '~/services/article';
-import {
-  globalVars,
-  palettes,
-  titleBarHeight,
-} from '~/styles/utils';
+import { getArticleDetail, useArticleDetail } from '~/services/article';
+import { globalVars, palettes, titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface ArticleDetailPageProps
   extends InferGetServerSidePropsType<typeof getServerSideProps> {}
 
 const ArticleDetailPage = (props: ArticleDetailPageProps) => {
-  const { articleDetail, articleId } = props;
+  const { initialArticleDetail, articleId } = props;
+  const { data: articleDetail } = useArticleDetail(articleId, {
+    initialData: initialArticleDetail ?? undefined,
+  });
 
   if (!articleDetail) {
     return (
@@ -81,7 +79,7 @@ const articleCss = css({
 /* ssr */
 
 interface Props {
-  articleDetail: null | ArticleDetail | ArticleDetailError;
+  initialArticleDetail: null | ArticleDetail | ArticleDetailError;
   articleId: number;
 }
 
@@ -111,7 +109,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   const dehydratedState = await dehydrate();
 
-  const articleDetail =
+  const initialArticleDetail =
     (dehydratedState.queries[0]?.state?.data as
       | ArticleDetail
       | ArticleDetailError
@@ -120,7 +118,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   return {
     props: {
       articleId,
-      articleDetail,
+      initialArticleDetail,
       dehydratedState,
     },
   };

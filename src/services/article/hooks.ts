@@ -1,3 +1,8 @@
+import type {
+  ArticleDetail,
+  ArticleDetailError,
+} from '~/services/article/utils';
+
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
@@ -21,9 +26,18 @@ export const useCreateArticle = () => {
   });
 };
 
-export const useArticleDetail = (articleId: number) => {
+interface UseArticleDetailOptions {
+  initialData: ArticleDetail | ArticleDetailError;
+}
+
+export const useArticleDetail = (
+  articleId: number,
+  options: Partial<UseArticleDetailOptions> = {}
+) => {
+  const { initialData } = options;
   return useQuery({
     queryKey: queryKeys.article.detail(articleId),
     queryFn: () => getArticleDetail(articleId),
+    initialData,
   });
 };
