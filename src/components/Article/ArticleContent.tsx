@@ -11,7 +11,7 @@ const ArticleContent = (props: ArticleContentProps) => {
   const sanitized = sanitizeHtml(html);
 
   return (
-    <article css={selfCss} dangerouslySetInnerHTML={{ __html: sanitized }} />
+    <div css={selfCss} dangerouslySetInnerHTML={{ __html: sanitized }} />
   );
 };
 

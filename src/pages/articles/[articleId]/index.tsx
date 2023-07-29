@@ -4,14 +4,20 @@ import type {
 } from 'next/types';
 import type { ArticleDetail, ArticleDetailError } from '~/services/article';
 
-import Link from 'next/link';
 
-import { Button } from '~/components/Common';
+import { css } from '@emotion/react';
+
+import { Article } from '~/components/Article';
 import RedirectionGuide from '~/components/RedirectionGuide';
+import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail } from '~/services/article';
-import { fontCss } from '~/styles/utils';
+import {
+  globalVars,
+  palettes,
+  titleBarHeight,
+} from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface ArticleDetailPageProps
@@ -31,17 +37,48 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
     );
   }
 
+  if ('error' in articleDetail) {
+    return <>에러 페이지</>;
+  }
+
+  const { title: categoryTitle, boardId: articleCategoryId } =
+    articleDetail.category;
+
   return (
-    <div>
-      <h2 css={fontCss.style.B28}>ArticleDetail</h2>
-      <Button asChild css={{ width: 100 }}>
-        <Link href={routes.articles.create(1)}>글 작성</Link>
-      </Button>
+    <div css={selfCss}>
+      <TitleBar.Default
+        title={categoryTitle}
+        withoutClose
+        onClickBackward={routes.articles.category(articleCategoryId)}
+      />
+
+      <Article css={[articleCss, expandCss]} articleDetail={articleDetail} />
     </div>
   );
 };
 
 export default ArticleDetailPage;
+
+/* css */
+
+const selfPaddingX = 0;
+const negativeMarginForExpand = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
+
+const selfCss = css({
+  padding: `${titleBarHeight + 10}px ${selfPaddingX}px`,
+});
+
+const expandCss = css({
+  width: 'auto',
+  margin: `0 ${negativeMarginForExpand}`,
+});
+
+const articleCss = css({
+  padding: '20px 24px',
+  backgroundColor: palettes.background.grey,
+});
+
+/* ssr */
 
 interface Props {
   articleDetail: null | ArticleDetail | ArticleDetailError;
