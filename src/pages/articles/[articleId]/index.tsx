@@ -100,7 +100,7 @@ const selfPaddingX = 0;
 const negativeMarginForExpand = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
 
 const selfCss = css({
-  padding: `${titleBarHeight + 10}px ${selfPaddingX}px`,
+  padding: `${titleBarHeight}px ${selfPaddingX}px`,
 });
 
 const expandCss = css({
