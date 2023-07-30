@@ -4,15 +4,19 @@ import type {
 } from 'next/types';
 import type { ArticleDetail, ArticleDetailError } from '~/services/article';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
 import { css } from '@emotion/react';
 
 import { Article } from '~/components/Article';
+import { Button } from '~/components/Common';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail, useArticleDetail } from '~/services/article';
-import { globalVars, palettes, titleBarHeight } from '~/styles/utils';
+import { flex, globalVars, palettes, titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface ArticleDetailPageProps
@@ -36,7 +40,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
   }
 
   if ('error' in articleDetail) {
-    return <>에러 페이지</>;
+    return <NotExistsArticle articleError={articleDetail} />;
   }
 
   const { title: categoryTitle, boardId: articleCategoryId } =
@@ -56,6 +60,39 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 };
 
 export default ArticleDetailPage;
+
+interface NotExistsArticleProps {
+  articleError: ArticleDetailError;
+}
+
+const NotExistsArticle = (props: NotExistsArticleProps) => {
+  const { articleError } = props;
+  const router = useRouter();
+
+  return (
+    <RedirectionGuide
+      title="게시글을 불러오는데 실패했습니다."
+      description={articleError.error.message}
+      customLinkElements={
+        <div css={flex('', '', 'column', 10)}>
+          <Button size="lg" asChild>
+            <Link href={routes.articles.categories()}>
+              게시판 모아보기 페이지로
+            </Link>
+          </Button>
+          <Button
+            variant="literal"
+            size="lg"
+            onClick={() => router.back()}
+            style={{ textDecoration: 'underline', alignSelf: 'center' }}
+          >
+            뒤로 가기
+          </Button>
+        </div>
+      }
+    />
+  );
+};
 
 /* css */
 
