@@ -112,13 +112,21 @@ interface ArticleReportButtonProps {
 
 const ArticleReportButton = (props: ArticleReportButtonProps) => {
   const { articleDetail, onReportSuccess } = props;
+  const { postId: articleId } = articleDetail;
+  const { mutateAsync: reportArticle, isLoading: isReportingArticle } =
+    useReportArticle();
 
-  const handleReportArticle = () => {};
+  const handleReportArticle = async () => {
+    try {
+      // TODO: 신고 사유를 SelectBox에서 선택할 수 있음
+      await reportArticle({ articleId, content: '' });
+      onReportSuccess();
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
 
-  /**
-   * TODO
-   *   신고 Modal Content 만들기
-   */
+  // TODO: 신고 Modal Content 만들기
 
   return (
     <Modal
@@ -131,7 +139,11 @@ const ArticleReportButton = (props: ArticleReportButtonProps) => {
           onClickAction={handleReportArticle}
         />
       }
-      trigger={<BottomMenu.Button>신고하기</BottomMenu.Button>}
+      trigger={
+        <BottomMenu.Button loading={isReportingArticle}>
+          신고하기
+        </BottomMenu.Button>
+      }
     />
   );
 };
