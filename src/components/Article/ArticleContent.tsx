@@ -4,14 +4,19 @@ import { sanitizeHtml } from '~/utils';
 
 interface ArticleContentProps {
   html: string;
+  className?: string;
 }
 
 const ArticleContent = (props: ArticleContentProps) => {
-  const { html } = props;
+  const { html, className } = props;
   const sanitized = sanitizeHtml(html);
 
   return (
-    <div css={selfCss} dangerouslySetInnerHTML={{ __html: sanitized }} />
+    <div
+      css={selfCss}
+      className={className}
+      dangerouslySetInnerHTML={{ __html: sanitized }}
+    />
   );
 };
 
