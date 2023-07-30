@@ -1,29 +1,46 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
+import { ClipLoader } from 'react-spinners';
 
 import { Modal } from '~/components/Common';
 import { fontCss, palettes } from '~/styles/utils';
 
+const ButtonLoader = () => {
+  return <ClipLoader color={palettes.primary.darken} size={24} />;
+};
+
 interface BottomMenuButtonProps extends ComponentPropsWithoutRef<'button'> {
   children: ReactNode;
   bold?: boolean;
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 export const BottomMenuCloseButton = (props: BottomMenuButtonProps) => {
-  const { children, bold = false, ...restProps } = props;
+  const { children, bold = false, loading, disabled, ...restProps } = props;
+  const buttonDisabled = loading || disabled;
   return (
-    <Modal.Close css={[buttonCss, bold && boldCss]} {...restProps}>
-      {children}
+    <Modal.Close
+      css={[buttonCss, bold && boldCss]}
+      disabled={buttonDisabled}
+      {...restProps}
+    >
+      {loading ? <ButtonLoader /> : children}
     </Modal.Close>
   );
 };
 
 export const BottomMenuButton = (props: BottomMenuButtonProps) => {
-  const { children, bold = false, ...restProps } = props;
+  const { children, bold = false, loading, disabled, ...restProps } = props;
+  const buttonDisabled = loading || disabled;
   return (
-    <button css={[buttonCss, bold && boldCss]} {...restProps}>
-      {children}
+    <button
+      css={[buttonCss, bold && boldCss]}
+      disabled={buttonDisabled}
+      {...restProps}
+    >
+      {loading ? <ButtonLoader /> : children}
     </button>
   );
 };
@@ -45,6 +62,10 @@ const buttonCss = css(
     },
     ':focus-visible': {
       backgroundColor: palettes.grey4,
+    },
+    ':disabled': {
+      cursor: 'not-allowed',
+      backgroundColor: palettes.white,
     },
   },
   fontCss.style.R18
