@@ -1,2 +1,3 @@
 export const preSignedUrl = 'preSignedUrl';
-export const imageDir = 'imageDir';
+export const imageUrl = 'imageUrl';
+export const imagePath = 'imagePath';

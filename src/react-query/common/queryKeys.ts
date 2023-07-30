@@ -28,7 +28,7 @@ export const endpoints = {
     refresh: () => '/auth/reissue' as const,
   },
   s3: {
-    preSignedUrl: (count = 1) => `/store/image?count=${count}`,
+    preSignedUrl: () => `/store/image`,
   },
   articles: {
     categories: () => '/boards',

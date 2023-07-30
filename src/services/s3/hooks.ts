@@ -31,9 +31,11 @@ export interface UseImageUploadOptions {
 }
 
 export interface ImageState {
-  /** 서버에 이미지 업로드가 완료되면 `url`이 할당된다. (`url`로 로딩 상태 판단 가능) */
-  url?: string;
-  /** `thumbnailUrl`은 업로드한 이미지의 `objectUrl`이 생성되어 즉시 할당된다. */
+  /** 서버에 이미지 업로드가 완료되면 `imageUrl`이 할당됩니다. (`imageUrl`로 로딩 상태 판단 가능) */
+  imageUrl?: string;
+  /** `imageUrl`에서 이미지가 저장된 `Path`부분으로, 삭제할 때 필요하기 때문에 게시글 작성 시 서버에 전달해야 합니다. */
+  imagePath?: string;
+  /** `thumbnailUrl`은 업로드한 이미지의 `objectUrl`이 생성되어 즉시 할당됩니다. */
   thumbnailUrl: string;
 }
 
@@ -66,7 +68,7 @@ export const useImageUpload = (
         })
       );
 
-      const { preSignedUrl, imageDir } = await createPreSignedUrl();
+      const { preSignedUrl, imageUrl, imagePath } = await createPreSignedUrl();
 
       await uploadImageToS3({
         url: preSignedUrl,
@@ -75,7 +77,8 @@ export const useImageUpload = (
 
       setImages((prevImages) =>
         produce(prevImages, (draft) => {
-          draft[index].url = imageDir;
+          draft[index].imageUrl = imageUrl;
+          draft[index].imagePath = imagePath;
         })
       );
     } catch (err) {

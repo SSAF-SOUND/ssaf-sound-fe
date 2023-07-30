@@ -1,18 +1,16 @@
-import type { PreSignedUrl } from '~/services/s3/utils';
+import type { PreparedUrls } from '~/services/s3/utils';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
 import { privateAxios, publicAxios } from '~/utils';
 
-export type CreatePreSignedUrlApiData = ApiSuccessResponse<{
-  imagePathDtos: PreSignedUrl[];
-}>;
+export type CreatePreSignedUrlApiData = ApiSuccessResponse<PreparedUrls>;
 
 export const createPreSignedUrl = () => {
   const endpoint = endpoints.s3.preSignedUrl();
   return privateAxios
     .post<CreatePreSignedUrlApiData>(endpoint)
-    .then((res) => res.data.data.imagePathDtos[0]);
+    .then((res) => res.data.data);
 };
 
 interface UploadImageToS3Params {
@@ -30,5 +28,5 @@ export const uploadImageToS3 = (params: UploadImageToS3Params) => {
       },
       baseURL: '',
     })
-    .then((res) => res.data) as Promise<PreSignedUrl>;
+    .then((res) => res.data) as Promise<PreparedUrls>;
 };
