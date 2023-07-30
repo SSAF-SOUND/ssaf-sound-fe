@@ -1,9 +1,11 @@
 import type {
+  UpdateArticleParams} from '~/services/article/apis';
+import type {
   ArticleDetail,
   ArticleDetailError,
 } from '~/services/article/utils';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import {
@@ -12,6 +14,7 @@ import {
   getArticleDetail,
   removeArticle,
   reportArticle,
+  updateArticle
 } from '~/services/article/apis';
 
 export const useArticleCategories = () => {
@@ -37,6 +40,18 @@ export const useRemoveArticle = () => {
 export const useReportArticle = () => {
   return useMutation({
     mutationFn: reportArticle,
+  });
+};
+
+export const useUpdateArticle = (articleId: number) => {
+  const queryClient = useQueryClient();
+  const queryKey = queryKeys.article.detail(articleId);
+  const onSuccess = () => queryClient.invalidateQueries(queryKey);
+
+  return useMutation({
+    mutationFn: (payload: Omit<UpdateArticleParams, 'articleId'>) =>
+      updateArticle({ articleId, ...payload }),
+    onSuccess,
   });
 };
 

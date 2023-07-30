@@ -2,6 +2,7 @@ import type {
   ArticleCategory,
   CreateArticleApiData,
   GetArticleDetailApiData,
+  UpdateArticleParams,
 } from '~/services/article';
 
 import { rest } from 'msw';
@@ -94,6 +95,38 @@ export const reportArticleError = restError(
   }
 );
 
+export const updateArticle = rest.put(
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.detail(':articleId')),
+  async (req, res, ctx) => {
+    const payload = (await req.json()) as Omit<
+      UpdateArticleParams,
+      'articleId'
+    >;
+    const params = req.params as { articleId: string };
+    const articleId = Number(params.articleId);
+
+    // author - anonymous 타입 관계 때문에 타입 에러 발생 (실제로는 문제 없으므로 무시)
+    // eslint-disable-next-line
+    // @ts-ignore
+    articles[articleId] = { ...articles[articleId], ...payload };
+    console.log('[현재 mock articles 목록]: ', articles);
+
+    return res(ctx.delay(500), ...mockSuccess(ctx, {}));
+  }
+);
+
+export const updateArticleError = restError(
+  'put',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.detail(':articleId')),
+  {
+    message: '게시글 수정에 실패했습니다.',
+  }
+);
+
 export const getArticleDetail = rest.get(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -123,4 +156,5 @@ export const articleHandlers = [
   getArticleDetail,
   removeArticle,
   reportArticle,
+  updateArticle,
 ];

@@ -68,6 +68,18 @@ export const reportArticle = (params: ReportArticleParams) => {
   return privateAxios.post(endpoint, { content }).then((res) => res.data);
 };
 
+export interface UpdateArticleParams
+  extends Omit<CreateArticleParams, 'categoryId'> {
+  articleId: number;
+}
+
+export const updateArticle = (params: UpdateArticleParams) => {
+  const { articleId, ...body } = params;
+
+  const endpoint = endpoints.articles.detail(articleId);
+  return privateAxios.put(endpoint, body).then((res) => res.data);
+};
+
 const createArticleDetailErrorData = (
   message: string,
   isUnknownError = false

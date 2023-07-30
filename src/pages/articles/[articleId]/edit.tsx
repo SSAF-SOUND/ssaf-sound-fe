@@ -1,18 +1,20 @@
 import type { CustomNextPage } from 'next/types';
+import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 
 import { useRouter } from 'next/router';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
-import { useArticleDetail } from '~/services/article';
-import { routes } from '~/utils';
+import { useArticleDetail, useUpdateArticle } from '~/services/article';
+import { handleAxiosError, routes } from '~/utils';
 
 const ArticleEditPage: CustomNextPage = () => {
   const router = useRouter();
   const query = router.query as { articleId: string };
   const articleId = Number(query.articleId);
   const { data: articleDetail } = useArticleDetail(articleId);
+  const { mutateAsync: updateArticle } = useUpdateArticle(articleId);
 
   if (!articleDetail) {
     return <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />;
@@ -29,20 +31,37 @@ const ArticleEditPage: CustomNextPage = () => {
     );
   }
 
-  const { mine } = articleDetail;
+  const { mine, title, content, images, anonymous } = articleDetail;
 
   if (!mine) {
     router.replace(routes.unauthorized());
     return <DefaultFullPageLoader />;
   }
 
+  const onValidSubmit: ArticleFormProps['onValidSubmit'] = async (
+    formValues
+  ) => {
+    try {
+      await updateArticle(formValues);
+      await router.push(routes.articles.detail(articleId));
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
   return (
     <div>
       <ArticleForm
-        onValidSubmit={() => {}}
+        onValidSubmit={onValidSubmit}
         options={{
           titleBarText: '게시글 수정',
           titleBarCloseRoute: routes.articles.detail(articleId),
+        }}
+        defaultValues={{
+          title,
+          content,
+          images,
+          anonymous,
         }}
       />
     </div>
