@@ -34,8 +34,7 @@ export const createMockArticle = (id: number): ArticleDetail => {
   const booleanValue = Boolean(id % 2);
   return {
     title: `${id}번째 게시글`,
-    content: `<h2>affsda</h2><p><strong>asfdasf<u>adfaf</u></strong></p><pre class="ql-syntax" spellcheck="false">asdfasf
-</pre><p><br></p><ul><li>ㅁㄴㅇㄹㅁㄴㄹㅇ</li></ul><p><br></p><p>ㅁㄴㅇㄹㄴㅁㄹ</p><p><br></p><ol><li>ㅁㄴㅇㄹ<a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">ㄴㅁㄹㅇㄴㅁㄹㄴㅁ</a></li><li><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">ㅁㄴㄹㅇㄴㅁ</a></li><li><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">ㅁㄴㅇㄹㅁㄴ</a></li></ol><ul><li><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">ㄹㄴㅁㄹ</a></li></ul>`,
+    content: `<p><strong>BOLD</strong></p><p><u>UNDERLINE</u></p><p><code>inline-code</code></p><pre class="ql-syntax" spellcheck="false">code-block</pre><p><br></p><ol><li>ordered</li><li>ordered</li><li>ordered</li></ol><p><br></p><ul><li>unordered</li><li>unordered</li><li>unordered</li></ul><p><br></p><p><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">Link</a></p><p><br></p><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><p>Normal</p>`,
     commentCount: faker.number.int(100),
     likeCount: faker.number.int(100),
     scrapCount: faker.number.int(100),

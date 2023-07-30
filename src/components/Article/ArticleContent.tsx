@@ -1,5 +1,4 @@
-import { css } from '@emotion/react';
-
+import { articleCss } from '~/services/article';
 import { sanitizeHtml } from '~/utils';
 
 interface ArticleContentProps {
@@ -13,7 +12,7 @@ const ArticleContent = (props: ArticleContentProps) => {
 
   return (
     <div
-      css={selfCss}
+      css={articleCss}
       className={className}
       dangerouslySetInnerHTML={{ __html: sanitized }}
     />
@@ -21,6 +20,3 @@ const ArticleContent = (props: ArticleContentProps) => {
 };
 
 export default ArticleContent;
-
-// TODO: Content Style
-const selfCss = css({});

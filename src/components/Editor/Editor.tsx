@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 
 import { classnames as cn } from '~/components/Editor/classnames';
 import EditorSkeleton from '~/components/Editor/EditorSkeleton';
+import { articleCss } from "~/services/article";
 import { fontCss, palettes } from '~/styles/utils';
 
 const ReactQuill = dynamic(import('react-quill'), {
@@ -22,7 +23,7 @@ export interface EditorProps
 
 const Editor = (props: EditorProps) => {
   return (
-    <ReactQuill css={selfCss} {...props} modules={modules} formats={formats} />
+    <ReactQuill css={[selfCss,articleCss]} {...props} modules={modules} formats={formats} />
   );
 };
 
