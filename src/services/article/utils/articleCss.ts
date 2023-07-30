@@ -3,9 +3,9 @@ import { css } from '@emotion/react';
 import { fontCss, palettes } from '~/styles/utils';
 
 const headingCss = css({
-  '& h1': fontCss.style.B24,
-  '& h2': fontCss.style.B20,
-  '& h3': fontCss.style.B18,
+  '& h1': [{ margin: '10px 0 15px' }, fontCss.style.B24],
+  '& h2': [{ margin: '5px 0 10px' }, fontCss.style.B20],
+  '& h3': [{ margin: '0 0 5px' }, fontCss.style.B18],
 });
 
 const paragraphCss = css({
