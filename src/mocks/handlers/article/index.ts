@@ -64,13 +64,33 @@ export const removeArticle = restSuccess(
   }
 );
 
-export const removeArticleError = restSuccess(
+export const removeArticleError = restError(
   'delete',
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.detail(':articleId')),
   {
+    message: '게시글 삭제에 실패했습니다.',
+  }
+);
+
+export const reportArticle = restSuccess(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.report(':articleId')),
+  {
     data: null,
+  }
+);
+
+export const reportArticleError = restError(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.report(':articleId')),
+  {
+    message: '게시글 신고에 실패했습니다.',
   }
 );
 
@@ -102,4 +122,5 @@ export const articleHandlers = [
   createArticle,
   getArticleDetail,
   removeArticle,
+  reportArticle,
 ];

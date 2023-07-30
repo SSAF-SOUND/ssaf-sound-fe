@@ -11,6 +11,7 @@ import {
   getArticleCategories,
   getArticleDetail,
   removeArticle,
+  reportArticle,
 } from '~/services/article/apis';
 
 export const useArticleCategories = () => {
@@ -30,6 +31,12 @@ export const useCreateArticle = () => {
 export const useRemoveArticle = () => {
   return useMutation({
     mutationFn: removeArticle,
+  });
+};
+
+export const useReportArticle = () => {
+  return useMutation({
+    mutationFn: reportArticle,
   });
 };
 

@@ -10,7 +10,7 @@ import { isAxiosError } from 'axios';
 import { endpoints } from '~/react-query/common';
 import { getErrorResponse, privateAxios, publicAxios } from '~/utils';
 
-type GetArticleCategoriesApiData = ApiSuccessResponse<ArticleCategory[]>;
+export type GetArticleCategoriesApiData = ApiSuccessResponse<ArticleCategory[]>;
 
 export const getArticleCategories = () => {
   const endpoint = endpoints.articles.categories();
@@ -42,7 +42,7 @@ export const createArticle = (params: CreateArticleParams) => {
     .then((res) => res.data.data.postId);
 };
 
-interface RemoveArticleParams {
+export interface RemoveArticleParams {
   articleId: number;
 }
 
@@ -55,6 +55,18 @@ export const removeArticle = (params: RemoveArticleParams) => {
 export type GetArticleDetailApiData = ApiSuccessResponse<{
   post: ArticleDetail;
 }>;
+
+export interface ReportArticleParams {
+  articleId: number;
+  content: string;
+}
+
+export const reportArticle = (params: ReportArticleParams) => {
+  const { articleId, content } = params;
+
+  const endpoint = endpoints.articles.report(articleId);
+  return privateAxios.post(endpoint, { content }).then((res) => res.data);
+};
 
 const createArticleDetailErrorData = (
   message: string,
