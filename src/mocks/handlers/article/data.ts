@@ -16,6 +16,9 @@ export const articleCategories: ArticleCategory[] = [
   title: `${category} 게시판`,
 }));
 
+const imageUrl = process.env.NEXT_PUBLIC_MOCK_IMAGE as string;
+const imagePath = process.env.NEXT_PUBLIC_MOCK_IMAGE as string;
+
 export const createMockArticle = (id: number): ArticleDetail => {
   const booleanValue = Boolean(id % 2);
   return {
@@ -31,9 +34,9 @@ export const createMockArticle = (id: number): ArticleDetail => {
     modified: booleanValue,
     scraped: booleanValue,
     images: [
-      { imageUrl: process.env.NEXT_PUBLIC_MOCK_IMAGE as string },
-      { imageUrl: process.env.NEXT_PUBLIC_MOCK_IMAGE as string },
-      { imageUrl: process.env.NEXT_PUBLIC_MOCK_IMAGE as string },
+      { imageUrl, imagePath },
+      { imageUrl, imagePath },
+      { imageUrl, imagePath },
     ],
     postId: id,
     anonymous: booleanValue,

@@ -1,3 +1,4 @@
+import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils';
 import type { ArticleImage } from '~/services/article';
 
 import { css } from '@emotion/react';
@@ -38,10 +39,13 @@ export const ArticleOptions = () => {
   };
 
   const createInitialImages = () =>
-    (defaultImages.filter(Boolean) as string[]).map((url) => ({
-      url,
-      thumbnailUrl: url,
-    }));
+    (defaultImages.filter(Boolean) as ArticleFormValues['images']).map(
+      ({ imageUrl, imagePath }) => ({
+        imageUrl,
+        imagePath,
+        thumbnailUrl: imageUrl,
+      })
+    );
 
   const { images, setImages, handleOpenImageUploader, isUploading } =
     useImageUpload({
@@ -73,6 +77,7 @@ export const ArticleOptions = () => {
   });
 
   useEffect(() => {
+    // sync image load and form image values
     const imageFieldValues = images.map(({ imageUrl, imagePath }) => ({
       imageUrl: imageUrl || '',
       imagePath: imagePath || '',
