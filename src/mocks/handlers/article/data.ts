@@ -1,4 +1,8 @@
-import type { ArticleCategory, ArticleDetail } from '~/services/article';
+import type {
+  ArticleCategory,
+  ArticleDetail,
+  ArticleDetailError,
+} from '~/services/article';
 
 import { faker } from '@faker-js/faker';
 
@@ -16,8 +20,15 @@ export const articleCategories: ArticleCategory[] = [
   title: `${category} 게시판`,
 }));
 
-const imageUrl = process.env.NEXT_PUBLIC_MOCK_IMAGE as string;
-const imagePath = process.env.NEXT_PUBLIC_MOCK_IMAGE as string;
+const imageUrls = [
+  'https://images.unsplash.com/flagged/1/apple-gear-looking-pretty.jpg?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
+  'https://images.unsplash.com/photo-1679648370654-2e5e1b4ebe2f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80',
+  'https://images.unsplash.com/photo-1603959823148-f60a3f4d4b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80',
+];
+
+const createMockImages = (urls: string[]) => {
+  return urls.map((url) => ({ imageUrl: url, imagePath: url }));
+};
 
 export const createMockArticle = (id: number): ArticleDetail => {
   const booleanValue = Boolean(id % 2);
@@ -33,11 +44,7 @@ export const createMockArticle = (id: number): ArticleDetail => {
     liked: booleanValue,
     modified: booleanValue,
     scraped: booleanValue,
-    images: [
-      { imageUrl, imagePath },
-      { imageUrl, imagePath },
-      { imageUrl, imagePath },
-    ],
+    images: createMockImages(imageUrls),
     postId: id,
     anonymous: booleanValue,
     author: userInfo.certifiedSsafyUserInfo,
@@ -54,3 +61,10 @@ export const articles: ArticleDetail[] = Array(5)
 
 // TODO: 없는 article 요청시 응답할 데이터로 바꾸기
 export const articleFallback = createMockArticle(100);
+
+export const articleError: ArticleDetailError = {
+  error: {
+    isUnknownError: false,
+    message: '삭제된 게시글입니다.',
+  },
+};
