@@ -5,8 +5,8 @@ import { useRouter } from 'next/router';
 import { Modal } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
 import { Alert, BottomMenu } from '~/components/ModalContent';
-import { useRemoveArticle } from '~/services/article';
-import { handleAxiosError, routes } from '~/utils';
+import { useRemoveArticle, useReportArticle } from '~/services/article';
+import { customToast, handleAxiosError, routes } from '~/utils';
 
 interface UseArticleMenuModalParams {
   articleDetail: ArticleDetail;
@@ -15,25 +15,45 @@ interface UseArticleMenuModalParams {
 export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
   const { openModal, closeModal } = useModal();
   const { articleDetail } = params;
-  const { mine } = articleDetail;
+  const {
+    mine,
+    category: { boardId: categoryId },
+  } = articleDetail;
+  const router = useRouter();
 
-  const handleClickModifyButton = () => {};
+  const onRemoveSuccess = () => {
+    closeModal();
+    router.push(routes.articles.category(categoryId));
+    customToast.success('게시글을 삭제했습니다.');
+  };
+
+  const onReportSuccess = () => {
+    closeModal();
+    customToast.success('게시글을 신고했습니다.');
+  };
+
+  const handleClickModifyButton = () => {
+    closeModal();
+    // router.push(routes.articles.edit(articleId));
+  };
 
   const openArticleMenuModal = () => {
     openModal('bottomMenu', {
       title: '게시글 메뉴',
       buttonElements: mine ? (
         <>
-          <BottomMenu.Button>수정하기</BottomMenu.Button>
+          <BottomMenu.Button onClick={handleClickModifyButton}>
+            수정하기
+          </BottomMenu.Button>
           <ArticleRemoveButton
             articleDetail={articleDetail}
-            onRemoveSuccess={closeModal}
+            onRemoveSuccess={onRemoveSuccess}
           />
         </>
       ) : (
         <ArticleReportButton
           articleDetail={articleDetail}
-          onReportSuccess={closeModal}
+          onReportSuccess={onReportSuccess}
         />
       ),
 
@@ -50,12 +70,8 @@ interface ArticleRemoveButtonProps {
 }
 
 const ArticleRemoveButton = (props: ArticleRemoveButtonProps) => {
-  const router = useRouter();
   const { articleDetail, onRemoveSuccess } = props;
-  const {
-    postId: articleId,
-    category: { boardId: categoryId },
-  } = articleDetail;
+  const { postId: articleId } = articleDetail;
 
   const { mutateAsync: removeArticle, isLoading: isRemovingArticle } =
     useRemoveArticle();
@@ -64,7 +80,6 @@ const ArticleRemoveButton = (props: ArticleRemoveButtonProps) => {
     try {
       await removeArticle({ articleId });
       onRemoveSuccess();
-      router.push(routes.articles.category(categoryId));
     } catch (err) {
       handleAxiosError(err);
     }
