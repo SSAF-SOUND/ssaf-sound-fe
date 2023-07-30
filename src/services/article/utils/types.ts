@@ -9,11 +9,17 @@ export interface ArticleImage {
   imageUrl: string;
 }
 
-/* NOTE 
-    - author 는 아직 반영 확정 X
-    - category 데이터도 필요 (TitleBar)
-*/
-export interface ArticleDetail {
+export type ArticleAuthor =
+  | {
+      anonymous: false;
+      author: Omit<UserInfo, 'memberId'>;
+    }
+  | {
+      anonymous: true;
+      author: Pick<UserInfo, 'nickname'>;
+    };
+
+export interface ArticleDetailWithoutAuthor {
   title: string;
   content: string;
 
@@ -25,15 +31,16 @@ export interface ArticleDetail {
   scraped: boolean;
 
   createdAt: string;
-  anonymous: boolean;
   modified: boolean;
   mine: boolean;
   images: ArticleImage[];
 
-  // NOTE: 아직 반영이 안 된 타입
-  author: Omit<UserInfo, 'memberId'>;
+  // NOTE: 아직 반영이 안 된 타입들
+  postId: number;
   category: ArticleCategory;
 }
+
+export type ArticleDetail = ArticleDetailWithoutAuthor & ArticleAuthor;
 
 export interface ArticleDetailError {
   error: {

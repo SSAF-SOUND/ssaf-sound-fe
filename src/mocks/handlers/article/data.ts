@@ -22,7 +22,6 @@ export const createMockArticle = (id: number): ArticleDetail => {
     title: `${id}번째 게시글`,
     content: `<h2>affsda</h2><p><strong>asfdasf<u>adfaf</u></strong></p><pre class="ql-syntax" spellcheck="false">asdfasf
 </pre><p><br></p><ul><li>ㅁㄴㅇㄹㅁㄴㄹㅇ</li></ul><p><br></p><p>ㅁㄴㅇㄹㄴㅁㄹ</p><p><br></p><ol><li>ㅁㄴㅇㄹ<a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">ㄴㅁㄹㅇㄴㅁㄹㄴㅁ</a></li><li><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">ㅁㄴㄹㅇㄴㅁ</a></li><li><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">ㅁㄴㅇㄹㅁㄴ</a></li></ol><ul><li><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">ㄹㄴㅁㄹ</a></li></ul>`,
-    anonymous: booleanValue,
     commentCount: faker.number.int(100),
     likeCount: faker.number.int(100),
     scrapCount: faker.number.int(100),
@@ -36,6 +35,8 @@ export const createMockArticle = (id: number): ArticleDetail => {
       { imageUrl: process.env.NEXT_PUBLIC_MOCK_IMAGE as string },
       { imageUrl: process.env.NEXT_PUBLIC_MOCK_IMAGE as string },
     ],
+    postId: id,
+    anonymous: booleanValue,
     author: userInfo.certifiedSsafyUserInfo,
     category: {
       boardId: 1,
