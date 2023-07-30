@@ -42,6 +42,16 @@ export const createArticle = (params: CreateArticleParams) => {
     .then((res) => res.data.data.postId);
 };
 
+interface RemoveArticleParams {
+  articleId: number;
+}
+
+export const removeArticle = (params: RemoveArticleParams) => {
+  const { articleId } = params;
+  const endpoint = endpoints.articles.detail(articleId);
+  return privateAxios.delete(endpoint).then((res) => res.data);
+};
+
 export type GetArticleDetailApiData = ApiSuccessResponse<{
   post: ArticleDetail;
 }>;

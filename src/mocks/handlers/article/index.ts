@@ -54,6 +54,26 @@ export const createArticleError = restError(
   }
 );
 
+export const removeArticle = restSuccess(
+  'delete',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.detail(':articleId')),
+  {
+    data: null,
+  }
+);
+
+export const removeArticleError = restSuccess(
+  'delete',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.detail(':articleId')),
+  {
+    data: null,
+  }
+);
+
 export const getArticleDetail = rest.get(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -81,4 +101,5 @@ export const articleHandlers = [
   getArticleCategories,
   createArticle,
   getArticleDetail,
+  removeArticle,
 ];
