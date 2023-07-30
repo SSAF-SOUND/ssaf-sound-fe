@@ -3,11 +3,11 @@ export const routes = {
   main: () => '/main',
   articles: {
     self: () => '/articles',
-    categories: () => '/articles/categories',
+    categories: () => `${routes.articles.self()}/categories`,
     category: (categoryId: number) =>
       `${routes.articles.categories()}/${categoryId}`,
     detail: (articleId: number) => `${routes.articles.self()}/${articleId}`,
-
+    edit: (articleId: number) => `${routes.articles.detail(articleId)}/edit`,
     create: (categoryId: number) =>
       `${routes.articles.self()}/new?categoryId=${categoryId}`,
   },

@@ -12,6 +12,7 @@ import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
 
 interface ArticleFormOptions {
   titleBarCloseRoute: Route;
+  titleBarText: string;
 }
 
 type OriginalOnInvalidSubmit = SubmitErrorHandler<ArticleFormValues>;
@@ -33,7 +34,7 @@ const ArticleForm = (props: ArticleFormProps) => {
     defaultValues = defaultArticleFormValues,
     onValidSubmit,
     onInvalidSubmit,
-    options: { titleBarCloseRoute } = {},
+    options: { titleBarCloseRoute, titleBarText = '게시글 쓰기' } = {},
   } = props;
 
   const methods = useForm<ArticleFormValues>({
@@ -61,7 +62,7 @@ const ArticleForm = (props: ArticleFormProps) => {
         onSubmit={handleSubmit(onValidSubmit, handleInvalidSubmit)}
       >
         <TitleBar.Form
-          title="게시글 쓰기"
+          title={titleBarText}
           submitButtonText="완료"
           isSubmitting={isSubmitting}
           onClickClose={titleBarCloseRoute}
