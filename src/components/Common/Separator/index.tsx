@@ -17,7 +17,7 @@ interface SeparatorProps {
 
 export const Separator = (props: SeparatorProps) => {
   const { decorative = true, height, width, style, ...restProps } = props;
-  const styleWithHeight = { ...style, height, width };
+  const styleWithHeight = { height, width, ...style };
 
   return (
     <RadixSeparator.Root
