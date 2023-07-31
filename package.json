@@ -46,6 +46,7 @@
     "react-quill": "^2.0.0",
     "react-spinners": "^0.13.8",
     "react-zoom-pan-pinch": "^3.1.0",
+    "string-strip-html": "^13.4.2",
     "unique-names-generator": "^4.7.1"
   },
   "packageManager": "yarn@3.5.1",
