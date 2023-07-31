@@ -24,7 +24,7 @@ export default meta;
 
 type ArticleDetailPageStory = StoryObj<typeof ArticleDetailPage>;
 
-export const Exists: ArticleDetailPageStory = {
+export const Normal: ArticleDetailPageStory = {
   render: () => {
     return (
       <ArticleDetailPage articleId={1} initialArticleDetail={articles[1]} />
@@ -32,7 +32,7 @@ export const Exists: ArticleDetailPageStory = {
   },
 };
 
-export const NotExists: ArticleDetailPageStory = {
+export const NotExistsArticle: ArticleDetailPageStory = {
   render: () => {
     return (
       <ArticleDetailPage articleId={100} initialArticleDetail={articleError} />
@@ -41,7 +41,7 @@ export const NotExists: ArticleDetailPageStory = {
 };
 
 export const LikeAndScrapError = {
-  ...Exists,
+  ...Normal,
   parameters: {
     msw: {
       handlers: {
