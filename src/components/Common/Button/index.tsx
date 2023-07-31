@@ -63,9 +63,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const styleWithCustomColor = customColor
     ? {
         ...style,
-        [themeColorVars.mainColor.var]: customColor.mainColor,
-        [themeColorVars.mainLightColor.var]: customColor.mainLightColor,
-        [themeColorVars.mainDarkColor.var]: customColor.mainDarkColor,
+        [themeColorVars.mainColor.varName]: customColor.mainColor,
+        [themeColorVars.mainLightColor.varName]: customColor.mainLightColor,
+        [themeColorVars.mainDarkColor.varName]: customColor.mainDarkColor,
       }
     : style;
 

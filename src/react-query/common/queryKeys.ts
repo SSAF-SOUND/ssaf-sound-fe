@@ -10,6 +10,14 @@ export const queryKeys = {
     self: () => ['meta'],
     campuses: () => [...queryKeys.meta.self(), 'campuses'],
   },
+  article: {
+    categories: () => ['article', 'categories'],
+    category: (categoryId: number) => ['article', 'category', categoryId], // article list
+    detail: (articleId: number) => ['article', articleId],
+    search: () => [],
+    hot: () => [],
+    mine: () => [],
+  },
 };
 
 export const endpoints = {
@@ -18,6 +26,9 @@ export const endpoints = {
     signIn: () => '/auth/callback' as const,
     signOut: () => '/auth/logout' as const,
     refresh: () => '/auth/reissue' as const,
+  },
+  articles: {
+    categories: () => '/boards',
   },
   user: {
     myInfo: () => '/members' as const,
