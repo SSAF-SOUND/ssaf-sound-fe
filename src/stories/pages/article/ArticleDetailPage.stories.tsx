@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { likeArticleError, scrapArticleError } from '~/mocks/handlers';
 import { articleError, articles } from '~/mocks/handlers/article/data';
 import ArticleDetailPage from '~/pages/articles/[articleId]';
 import { PageLayout } from '~/stories/Layout';
@@ -36,5 +37,16 @@ export const NotExists: ArticleDetailPageStory = {
     return (
       <ArticleDetailPage articleId={100} initialArticleDetail={articleError} />
     );
+  },
+};
+
+export const LikeAndScrapError = {
+  ...Exists,
+  parameters: {
+    msw: {
+      handlers: {
+        article: [likeArticleError, scrapArticleError],
+      },
+    },
   },
 };
