@@ -112,3 +112,27 @@ export const getArticleDetail = (articleId: number) => {
       );
     });
 };
+
+export type LikeArticleApiData = ApiSuccessResponse<
+  Pick<ArticleDetail, 'liked'>
+>;
+
+export const likeArticle = (articleId: number) => {
+  const endpoint = endpoints.articles.like(articleId);
+
+  return privateAxios
+    .post<LikeArticleApiData>(endpoint, null)
+    .then((res) => res.data.data.liked);
+};
+
+export type ScrapArticleApiData = ApiSuccessResponse<
+  Pick<ArticleDetail, 'scraped'>
+>;
+
+export const scrapArticle = (articleId: number) => {
+  const endpoint = endpoints.articles.scrap(articleId);
+
+  return privateAxios
+    .post<ScrapArticleApiData>(endpoint, null)
+    .then((res) => res.data.data.scraped);
+};

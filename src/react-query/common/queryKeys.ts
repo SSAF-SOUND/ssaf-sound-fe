@@ -36,6 +36,9 @@ export const endpoints = {
     detail: (articleId: number) => `/posts/${articleId}`,
     report: (articleId: number) =>
       `${endpoints.articles.detail(articleId)}/report`,
+    like: (articleId: number) => `${endpoints.articles.detail(articleId)}/like`,
+    scrap: (articleId: number) =>
+      `${endpoints.articles.detail(articleId)}/scrap`,
   },
   user: {
     myInfo: () => '/members' as const,

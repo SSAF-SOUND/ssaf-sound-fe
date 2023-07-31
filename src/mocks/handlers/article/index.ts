@@ -2,6 +2,8 @@ import type {
   ArticleCategory,
   CreateArticleApiData,
   GetArticleDetailApiData,
+  LikeArticleApiData,
+  ScrapArticleApiData,
   UpdateArticleParams,
 } from '~/services/article';
 
@@ -150,6 +152,68 @@ export const getArticleDetailError = restError(
   composeUrls(API_URL, endpoints.articles.detail(':articleId'))
 );
 
+export const likeArticle = rest.post(
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.like(':articleId')),
+  (req, res, ctx) => {
+    const params = req.params as { articleId: string };
+
+    const articleId = Number(params.articleId);
+    const article = articles[articleId];
+    article.liked = !article.liked;
+    const latestLiked = article.liked;
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<LikeArticleApiData['data']>(ctx, { liked: latestLiked })
+    );
+  }
+);
+
+export const likeArticleError = restError(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.like(':articleId')),
+  {
+    message: '좋아요에 실패했습니다.',
+  }
+);
+
+export const scrapArticle = rest.post(
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.scrap(':articleId')),
+  (req, res, ctx) => {
+    const params = req.params as { articleId: string };
+
+    const articleId = Number(params.articleId);
+    const article = articles[articleId];
+    article.scraped = !article.scraped;
+    const latestScraped = article.scraped;
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<ScrapArticleApiData['data']>(ctx, {
+        scraped: latestScraped,
+      })
+    );
+  }
+);
+
+export const scrapArticleError = restError(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articles.scrap(':articleId')),
+  {
+    message: '스크랩에 실패했습니다.',
+
+  }
+);
+
+
 export const articleHandlers = [
   getArticleCategories,
   createArticle,
@@ -157,4 +221,6 @@ export const articleHandlers = [
   removeArticle,
   reportArticle,
   updateArticle,
+  likeArticle,
+  scrapArticle,
 ];
