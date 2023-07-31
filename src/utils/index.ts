@@ -12,5 +12,6 @@ export * from './regex';
 export * from './routes';
 export * from './sanitizeHtml';
 export * from './string';
+export * from './timeAgo';
 export * from './toWebp';
 export * from './webStorage';
