@@ -2,6 +2,7 @@ import type {
   ArticleCategory,
   ArticleDetail,
   ArticleDetailError,
+  ArticleSummary,
 } from '~/services/article';
 
 import { faker } from '@faker-js/faker';
@@ -93,4 +94,37 @@ export const articleError: ArticleDetailError = {
     isUnknownError: false,
     message: '삭제된 게시글입니다.',
   },
+};
+
+export const createMockArticleSummary = (id: number): ArticleSummary => {
+  const anonymous = Boolean(id % 2);
+  const numberRange = { min: 1000, max: 100000 };
+  return {
+    title: faker.lorem.sentence(4),
+    content: ` 
+      <p>
+        <strong>BOLD</strong>
+      </p>
+      <p>
+        <u>UNDERLINE</u>
+      </p>
+      <p>
+        <code>inline-code</code>
+      </p>
+      <pre class="ql-syntax" spellcheck="false">code-block</pre>
+      <p><br></p>
+      <ol>
+        <li>ordered</li>
+        <li>ordered</li>
+        <li>ordered</li>
+      </ol>`,
+    anonymous: anonymous,
+    boardTitle: '자유 게시판',
+    commentCount: faker.number.int(numberRange),
+    createdAt: faker.date.past().toISOString(),
+    likeCount: faker.number.int(numberRange),
+    nickname: anonymous ? '익명' : faker.animal.dog(),
+    postId: id,
+    thumbnail: '',
+  };
 };
