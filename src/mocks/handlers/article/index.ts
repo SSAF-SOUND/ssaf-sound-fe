@@ -177,7 +177,7 @@ export const likeArticleError = restError(
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.like(':articleId')),
   {
-    message: '좋아요에 실패했습니다.',
+    message: '좋아요 업데이트에 실패했습니다.',
   }
 );
 
@@ -208,11 +208,9 @@ export const scrapArticleError = restError(
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.scrap(':articleId')),
   {
-    message: '스크랩에 실패했습니다.',
-
+    message: '스크랩 업데이트에 실패했습니다.',
   }
 );
-
 
 export const articleHandlers = [
   getArticleCategories,
@@ -222,5 +220,7 @@ export const articleHandlers = [
   reportArticle,
   updateArticle,
   likeArticle,
+  // likeArticleError,
   scrapArticle,
+  // scrapArticleError,
 ];
