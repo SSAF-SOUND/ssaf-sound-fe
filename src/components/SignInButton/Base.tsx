@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
+import { Button } from '~/components/Common';
 import { endpoints } from '~/react-query/common';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 import { API_URL, composeUrls } from '~/utils';
@@ -9,24 +10,24 @@ import { API_URL, composeUrls } from '~/utils';
 type Provider = 'google' | 'github' | 'kakao' | 'apple';
 
 interface BaseProps {
-  icon: ReactNode;
+  icon?: ReactNode;
   provider: Provider;
-  text: string;
+  text?: string;
+  className?: string;
 }
 
 const Base = (props: BaseProps) => {
-  const { icon, text, provider } = props;
+  const { icon, text, provider, className } = props;
 
   return (
-    <a
-      href={composeUrls(API_URL, endpoints.auth.provider(provider))}
-      css={selfCss}
-    >
-      <div css={contentCss}>
-        <div css={iconCss}>{icon}</div>
-        <div css={textCss}>{text}</div>
-      </div>
-    </a>
+    <Button asChild variant="outlined" css={selfCss} className={className}>
+      <a href={composeUrls(API_URL, endpoints.auth.provider(provider))}>
+        <div css={contentCss}>
+          {icon && <div css={iconCss}>{icon}</div>}
+          {text && <div css={textCss}>{text}</div>}
+        </div>
+      </a>
+    </Button>
   );
 };
 

@@ -3,7 +3,9 @@ import type { ArticleDetail } from '~/services/article';
 import { css } from '@emotion/react';
 
 import { Icon, IconButton } from '~/components/Common';
+import { useModal } from '~/components/GlobalModal';
 import { useLikeArticle, useScrapArticle } from '~/services/article';
+import { useMyInfo } from '~/services/member';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
@@ -17,6 +19,10 @@ interface ArticleStatsProps {
 
 const ArticleStats = (props: ArticleStatsProps) => {
   const { articleDetail, className } = props;
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
+  const { openModal, closeModal } = useModal();
+
   const { liked, likeCount, scraped, scrapCount, commentCount } = articleDetail;
   const { postId: articleId } = articleDetail;
   const { mutateAsync: likeArticle, isLoading: isTogglingLike } =
@@ -24,7 +30,21 @@ const ArticleStats = (props: ArticleStatsProps) => {
   const { mutateAsync: scrapArticle, isLoading: isTogglingScrap } =
     useScrapArticle(articleId);
 
+  const handleNotSignedInUser = () => {
+    openModal('alert', {
+      title: '알림',
+      description: '로그인이 필요한 기능입니다.',
+      actionText: '확인',
+      onClickAction: closeModal,
+    });
+  };
+
   const handleClickLike = async () => {
+    if (!isSignedIn) {
+      handleNotSignedInUser();
+      return;
+    }
+
     try {
       await likeArticle();
     } catch (err) {
@@ -33,6 +53,11 @@ const ArticleStats = (props: ArticleStatsProps) => {
   };
 
   const handleClickScrap = async () => {
+    if (!isSignedIn) {
+      handleNotSignedInUser();
+      return;
+    }
+
     try {
       await scrapArticle();
     } catch (err) {
