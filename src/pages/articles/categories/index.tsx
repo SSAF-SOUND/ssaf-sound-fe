@@ -12,28 +12,26 @@ const ArticleCategoriesPage = () => {
 
   return (
     <div css={selfCss}>
-      <div css={[descriptionCss, { marginBottom: 24 }]}>
-        <span>모아보기</span>
-        <Link href="/" css={hotLinkCss}>
-          Hot
-        </Link>
-      </div>
+      <Link href="/" css={[hotLinkCss, { marginBottom: 24 }]}>
+        Hot 게시글
+      </Link>
+
       <div css={categoriesCss}>
-        {!articleCategories ? (
-          <>
-            {Array(6)
-              .fill(undefined)
-              .map((_, i) => (
-                <ArticleCategoryCard.Skeleton key={i} />
-              ))}
-          </>
-        ) : (
+        {articleCategories ? (
           articleCategories.map((articleCategory) => (
             <ArticleCategoryCard
               key={articleCategory.boardId}
               articleCategory={articleCategory}
             />
           ))
+        ) : (
+          <>
+            {Array(5)
+              .fill(undefined)
+              .map((_, i) => (
+                <ArticleCategoryCard.Skeleton key={i} />
+              ))}
+          </>
         )}
       </div>
       <NavigationGroup />
@@ -45,15 +43,14 @@ export default ArticleCategoriesPage;
 
 const selfCss = css({ padding: `${topBarHeight + 40}px 15px` });
 
-const descriptionCss = css(
-  flex('center', 'space-between', 'row'),
-  fontCss.style.B16
+const hotLinkCss = css(
+  {
+    color: palettes.secondary.dark,
+    '&:hover, &:focus-visible': { color: palettes.secondary.default },
+    '&:active': { color: palettes.secondary.dark },
+  },
+  fontCss.style.B16,
+  flex('center', 'space-between', 'row')
 );
-
-const hotLinkCss = css({
-  color: palettes.secondary.dark,
-  '&:hover, &:focus-visible': { color: palettes.secondary.default },
-  '&:active': { color: palettes.secondary.dark },
-});
 
 const categoriesCss = css(flex('', '', 'column', 12));
