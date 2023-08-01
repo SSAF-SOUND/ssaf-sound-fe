@@ -12,7 +12,7 @@ const ArticleCategoriesPage = () => {
 
   return (
     <div css={selfCss}>
-      <Link href="/" css={[hotLinkCss, { marginBottom: 24 }]}>
+      <Link href="/" css={[hotLinkCss, { marginBottom: 56 }]}>
         Hot 게시글
       </Link>
 
@@ -50,7 +50,7 @@ const hotLinkCss = css(
     '&:active': { color: palettes.secondary.dark },
   },
   fontCss.style.B16,
-  flex('center', 'space-between', 'row')
+  flex('center', 'flex-end', 'row')
 );
 
 const categoriesCss = css(flex('', '', 'column', 12));
