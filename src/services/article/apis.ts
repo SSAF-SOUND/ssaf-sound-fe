@@ -2,6 +2,7 @@ import type {
   ArticleCategory,
   ArticleDetail,
   ArticleDetailError,
+  ArticleSummary,
 } from './utils';
 import type { ApiSuccessResponse } from '~/types';
 
@@ -135,4 +136,24 @@ export const scrapArticle = (articleId: number) => {
   return privateAxios
     .post<ScrapArticleApiData>(endpoint, null)
     .then((res) => res.data.data.scraped);
+};
+
+export interface GetArticlesParams {
+  categoryId: number;
+  cursor?: number;
+  size?: number;
+}
+
+export type GetArticlesApiData = ApiSuccessResponse<{
+  posts: ArticleSummary[];
+  cursor: number | null;
+}>;
+
+export const getArticles = (params: GetArticlesParams) => {
+  const { categoryId, cursor = -1, size = 10 } = params;
+  const endpoint = endpoints.articles.list({ categoryId, cursor, size });
+
+  return publicAxios
+    .get<GetArticlesApiData>(endpoint)
+    .then((res) => res.data.data);
 };

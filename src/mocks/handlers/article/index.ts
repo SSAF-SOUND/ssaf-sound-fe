@@ -1,11 +1,12 @@
 import type {
   ArticleCategory,
+  ArticleSummary,
   CreateArticleApiData,
   GetArticleDetailApiData,
   LikeArticleApiData,
   ScrapArticleApiData,
   UpdateArticleParams,
-} from '~/services/article';
+ GetArticlesApiData } from '~/services/article';
 
 import { rest } from 'msw';
 
@@ -13,6 +14,7 @@ import {
   articleCategories,
   articleFallback,
   articles,
+  articleSummaries,
 } from '~/mocks/handlers/article/data';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
@@ -212,6 +214,48 @@ export const scrapArticleError = restError(
   }
 );
 
+export const getArticles = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.list({
+        categoryId: 0,
+        cursor: 0,
+        size: 0,
+      })
+    )
+  ),
+  (req, res, ctx) => {
+    const searchParams = req.url.searchParams;
+    const categoryId = Number(searchParams.get('boardId'));
+    const size = Number(searchParams.get('size'));
+    const cursor = Number(searchParams.get('cursor'));
+
+    // 데이터는 `size`개 만큼 보내야 하는데
+    // 이후 데이터가 더 있는지 확인하기 위해 `size + 1`개를 가져옵니다.
+    // 데이터가 더 있다면, `size + 1`개가 가져와지고
+    // 데이터가 더 없다면, `size + 1`개보다 적은 개수만 가져와집니다.
+    const startIndex = cursor < 0 || Number.isNaN(cursor) ? 0 : cursor;
+    const endIndex = startIndex + size;
+
+    const data = articleSummaries.slice(startIndex, endIndex + 1);
+    const isReachingEnd = data.length < size + 1;
+
+    if (!isReachingEnd) data.pop();
+
+    const lastArticleSummaries = data.at(-1) as ArticleSummary;
+    const nextCursor = isReachingEnd ? null : lastArticleSummaries.postId;
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<GetArticlesApiData['data']>(ctx, {
+        posts: data,
+        cursor: nextCursor,
+      })
+    );
+  }
+);
+
 export const articleHandlers = [
   getArticleCategories,
   createArticle,
@@ -223,4 +267,5 @@ export const articleHandlers = [
   // likeArticleError,
   scrapArticle,
   // scrapArticleError,
+  getArticles,
 ];

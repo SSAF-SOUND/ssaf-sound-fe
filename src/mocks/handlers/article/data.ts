@@ -127,3 +127,9 @@ export const createMockArticleSummary = (id: number): ArticleSummary => {
     thumbnail: '',
   };
 };
+
+export const articleSummaries = Array(35)
+  .fill(undefined)
+  .map((_, index) => {
+    return createMockArticleSummary(index);
+  });
