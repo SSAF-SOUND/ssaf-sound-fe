@@ -1,6 +1,7 @@
 import type { ArticleSummary } from '~/services/article';
 
 import { css } from '@emotion/react';
+import { memo } from 'react';
 
 import ArticleCardLink from '~/components/ArticleCard/ArticleCardLink';
 import CommentStat from '~/components/ArticleCard/CommentStat';
@@ -14,7 +15,7 @@ interface ArticleCardProps {
   article: ArticleSummary;
 }
 
-export const ArticleCard = (props: ArticleCardProps) => {
+export const ArticleCard = memo((props: ArticleCardProps) => {
   const { article } = props;
   const {
     title,
@@ -51,7 +52,8 @@ export const ArticleCard = (props: ArticleCardProps) => {
       </div>
     </ArticleCardLink>
   );
-};
+});
+ArticleCard.displayName = 'ArticleCard';
 
 const clampCss = css(
   {
