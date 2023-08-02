@@ -11,6 +11,7 @@ export * from './object';
 export * from './regex';
 export * from './routes';
 export * from './sanitizeHtml';
+export * from './scroll';
 export * from './string';
 export * from './timeAgo';
 export * from './toWebp';
