@@ -10,7 +10,7 @@ export const routes = {
     },
     hot: (searchKeyword?: string) => {
       const queryString = searchKeyword ? `?keyword=${searchKeyword}` : '';
-      return `${routes.articles.categories()}/hot${queryString}`;
+      return `/hot-articles${queryString}`;
     },
     detail: (articleId: number) => `${routes.articles.self()}/${articleId}`,
     edit: (articleId: number) => `${routes.articles.detail(articleId)}/edit`,
