@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { ArticleCard } from '~/components/ArticleCard';
 import ArticleCardList from '~/components/ArticleCardList';
 import { Icon, IconButton, TextInput } from '~/components/Common';
+import ErrorCard from '~/components/ErrorCard';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
@@ -131,7 +132,12 @@ const ArticleLayer = (props: ArticleLayerProps) => {
           />
 
           {hasNextArticles && <ArticleCardSkeletons />}
-          {hasError && <div onClick={() => setHasError(false)}>다시시도</div>}
+          {hasError && (
+            <ErrorCard
+              css={{ marginTop: 16 }}
+              onClickRetry={() => setHasError(false)}
+            />
+          )}
         </>
       )}
     </>
