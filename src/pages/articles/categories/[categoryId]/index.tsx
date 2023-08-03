@@ -181,12 +181,14 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   }
 
   const { dehydratedState } = dehydrate(queryClient);
-  // https://github.com/TanStack/query/issues/1458#issuecomment-1022396964
-  // eslint-disable-next-line
-  // @ts-ignore
-  if ('pageParams' in dehydratedState.queries[0]?.state.data) {
-    dehydratedState.queries[0].state.data.pageParams = [null];
-  }
+  dehydratedState.queries.forEach((query) => {
+    // https://github.com/TanStack/query/issues/1458#issuecomment-1022396964
+    // eslint-disable-next-line
+    // @ts-ignore
+    if ('pageParams' in query.state.data) {
+      query.state.data.pageParams = [null];
+    }
+  });
 
   /* prefetch end */
 
