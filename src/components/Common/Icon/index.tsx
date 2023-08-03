@@ -42,7 +42,7 @@ import {
   MdSearch,
 } from 'react-icons/md';
 import { RiKakaoTalkFill } from 'react-icons/ri';
-import { TbSquareRoundedCheckFilled } from 'react-icons/tb';
+import { TbPencilPlus, TbSquareRoundedCheckFilled } from 'react-icons/tb';
 
 import { inlineFlex } from '~/styles/utils';
 
@@ -66,6 +66,7 @@ export const icons = {
 
   triangle: <IoTriangle />,
   pencil: <MdCreate />,
+  [`pencil.plus`]: <TbPencilPlus />,
 
   [`circle.plus`]: <MdControlPoint />,
   [`circle.minus`]: <MdRemoveCircleOutline />,
