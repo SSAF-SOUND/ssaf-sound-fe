@@ -93,7 +93,7 @@ const ArticleCategoryPage = (
 
       <div css={articleContainerCss}>
         {isLoading ? (
-          <Skeletons />
+          <ArticleCardSkeletons />
         ) : (
           articles && (
             <>
@@ -103,7 +103,7 @@ const ArticleCategoryPage = (
                 hasNextPage={hasNextArticles}
               />
 
-              {hasNextArticles && <Skeletons />}
+              {hasNextArticles && <ArticleCardSkeletons />}
               {hasError && (
                 <div onClick={() => setHasError(false)}>다시시도</div>
               )}
@@ -115,7 +115,7 @@ const ArticleCategoryPage = (
   );
 };
 
-const Skeletons = memo(() => {
+const ArticleCardSkeletons = memo(() => {
   const skeletonCount = 6;
   return (
     <div css={[skeletonsCss, { marginTop: 16 }]}>
@@ -127,7 +127,7 @@ const Skeletons = memo(() => {
     </div>
   );
 });
-Skeletons.displayName = 'ArticleCardSkeleton';
+ArticleCardSkeletons.displayName = 'ArticleCardSkeletons';
 
 interface SearchBarFieldValues {
   keyword: string;
