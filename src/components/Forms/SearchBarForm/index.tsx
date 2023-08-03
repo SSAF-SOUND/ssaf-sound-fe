@@ -12,12 +12,12 @@ import { Icon, IconButton, TextInput } from '~/components/Common';
 import { position } from '~/styles/utils';
 
 const fieldName = 'keyword';
-const minLength = 3;
-const defaultValidateKeyword = (value: string) => {
-  const formatted = value.trim();
-  if (formatted.length < minLength) {
-    return `검색어는 최소 ${minLength}자 이상이어야 합니다.`;
-  }
+const defaultMinKeywordLength = 3;
+const validateKeyword = (minKeywordLength: number) => (value: string) => {
+  return (
+    value.trim().length >= minKeywordLength ||
+    `검색어는 최소 ${minKeywordLength}자 이상이어야 합니다.`
+  );
 };
 
 const defaultSearchBarFormValues = {
@@ -28,13 +28,17 @@ interface SearchBarFormValues {
   keyword: string;
 }
 
+interface SearchBarFormOptions {
+  minKeywordLength: number;
+}
+
 export interface SearchBarFormProps {
   className?: string;
   style?: CSSProperties;
-  validate?: (value: string) => boolean | string;
   onValidSubmit: SubmitHandlerWithReset<SearchBarFormValues>;
   onInvalidSubmit?: SubmitErrorHandlerWithErrorMessage<SearchBarFormValues>;
   defaultValues?: Partial<SearchBarFormValues>;
+  options?: Partial<SearchBarFormOptions>;
 }
 
 const SearchBarForm = (props: SearchBarFormProps) => {
@@ -42,9 +46,11 @@ const SearchBarForm = (props: SearchBarFormProps) => {
     defaultValues = defaultSearchBarFormValues,
     onValidSubmit,
     onInvalidSubmit,
-    validate = defaultValidateKeyword,
+    options = {},
     ...restProps
   } = props;
+
+  const { minKeywordLength = defaultMinKeywordLength } = options;
 
   const { register, handleSubmit, reset } = useForm<SearchBarFormValues>({
     defaultValues,
@@ -76,7 +82,7 @@ const SearchBarForm = (props: SearchBarFormProps) => {
           size="md"
           css={searchBarInputCss}
           {...register(fieldName, {
-            validate,
+            validate: validateKeyword(minKeywordLength),
           })}
         />
         <IconButton type="submit" css={searchButtonCss} theme="black" size={34}>

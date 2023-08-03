@@ -195,6 +195,7 @@ const SearchBar = (props: SearchBarProps) => {
       defaultValues={{
         keyword: defaultKeyword,
       }}
+      options={{ minKeywordLength }}
     />
   );
 };
