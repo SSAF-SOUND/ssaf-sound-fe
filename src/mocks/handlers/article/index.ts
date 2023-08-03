@@ -14,7 +14,10 @@ import {
   articleFallback,
   articles,
 } from '~/mocks/handlers/article/data';
-import { restInfiniteArticlesSuccess } from '~/mocks/handlers/article/utils';
+import {
+  restInfiniteArticlesError,
+  restInfiniteArticlesSuccess,
+} from '~/mocks/handlers/article/utils';
 import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
@@ -227,8 +230,7 @@ export const getArticles = rest.get(
   restInfiniteArticlesSuccess
 );
 
-export const getArticlesError = restError(
-  'get',
+export const getArticlesError = rest.get(
   removeQueryParams(
     composeUrls(
       API_URL,
@@ -239,40 +241,7 @@ export const getArticlesError = restError(
       })
     )
   ),
-  {
-    message: '에러가 발생했습니다',
-  }
-);
-
-export const getHotArticles = rest.get(
-  removeQueryParams(
-    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
-  ),
-  restInfiniteArticlesSuccess
-);
-
-export const getHotArticlesError = restError(
-  'get',
-  removeQueryParams(
-    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
-  ),
-  {
-    message: '에러가 발생했습니다.',
-  }
-);
-
-export const getHotArticlesByKeyword = rest.get(
-  removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.hot({
-        cursor: 0,
-        size: 0,
-        keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
-      })
-    )
-  ),
-  restInfiniteArticlesSuccess
+  restInfiniteArticlesError
 );
 
 export const getArticlesByKeyword = rest.get(
@@ -290,8 +259,7 @@ export const getArticlesByKeyword = rest.get(
   restInfiniteArticlesSuccess
 );
 
-export const getArticlesByKeywordError = restError(
-  'get',
+export const getArticlesByKeywordError = rest.get(
   removeQueryParams(
     composeUrls(
       API_URL,
@@ -303,9 +271,49 @@ export const getArticlesByKeywordError = restError(
       })
     )
   ),
-  {
-    message: '에러가 발생했습니다',
-  }
+  restInfiniteArticlesError
+);
+
+export const getHotArticles = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getHotArticlesError = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesError
+);
+
+export const getHotArticlesByKeyword = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.hot({
+        cursor: 0,
+        size: 0,
+        keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
+      })
+    )
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getHotArticlesByKeywordError = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.hot({
+        cursor: 0,
+        size: 0,
+        keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
+      })
+    )
+  ),
+  restInfiniteArticlesError
 );
 
 export const articleHandlers = [
