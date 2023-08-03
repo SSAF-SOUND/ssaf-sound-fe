@@ -46,13 +46,37 @@ const ArticleCategoryPage = (
   const { categoryId } = props;
   const router = useRouter();
   const { keyword } = router.query as QueryString;
-  const queryKeyword = validateKeyword(keyword) ? keyword : undefined;
 
   const { data: articleCategories } = useArticleCategories();
   const categoryName = articleCategories?.find(
     (category) => category.boardId === categoryId
   )?.title;
 
+  return (
+    <div css={selfCss}>
+      <TitleBar.Default
+        title={categoryName}
+        onClickBackward={routes.articles.categories()}
+        withoutClose
+      />
+
+      <SearchBar categoryId={categoryId} />
+
+      <div css={articleContainerCss}>
+        <ArticleLayer categoryId={categoryId} keyword={keyword} />
+      </div>
+    </div>
+  );
+};
+
+interface ArticleLayerProps {
+  categoryId: number;
+  keyword?: string;
+}
+
+const ArticleLayer = (props: ArticleLayerProps) => {
+  const { categoryId, keyword } = props;
+  const isValidKeyword = validateKeyword(keyword);
   const {
     data: articles,
     hasNextPage,
@@ -60,7 +84,7 @@ const ArticleCategoryPage = (
     isFetchingNextPage,
     error,
     isLoading,
-  } = useArticles(categoryId, { keyword: queryKeyword });
+  } = useArticles(categoryId, { keyword });
 
   const [hasError, setHasError] = useState(false);
 
@@ -78,40 +102,33 @@ const ArticleCategoryPage = (
     setHasError(!!error);
   }, [error, keyword]);
 
-  const hasNoResult =
+  const isArticleEmpty =
     articles?.pages.map((page) => page.posts.length).reduce(add) === 0;
 
+  const notExistSearchResults = isValidKeyword && isArticleEmpty;
+  const notExistArticles = !isValidKeyword && isArticleEmpty;
+
+  if (isLoading) return <ArticleCardSkeletons />;
+
+  if (notExistSearchResults) return <>검색 결과가 없습니다.</>;
+
+  if (notExistArticles) return <>아직 게시글이 없습니다.</>;
+
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        title={categoryName}
-        onClickBackward={routes.articles.categories()}
-        withoutClose
-      />
+    <>
+      {articles && (
+        <>
+          <ArticleCardList
+            articlesPages={articles.pages}
+            fetchNextPage={fetchNextArticles}
+            hasNextPage={hasNextArticles}
+          />
 
-      <SearchBar categoryId={categoryId} />
-
-      <div css={articleContainerCss}>
-        {isLoading ? (
-          <ArticleCardSkeletons />
-        ) : (
-          articles && (
-            <>
-              <ArticleCardList
-                articlesPages={articles.pages}
-                fetchNextPage={fetchNextArticles}
-                hasNextPage={hasNextArticles}
-              />
-
-              {hasNextArticles && <ArticleCardSkeletons />}
-              {hasError && (
-                <div onClick={() => setHasError(false)}>다시시도</div>
-              )}
-            </>
-          )
-        )}
-      </div>
-    </div>
+          {hasNextArticles && <ArticleCardSkeletons />}
+          {hasError && <div onClick={() => setHasError(false)}>다시시도</div>}
+        </>
+      )}
+    </>
   );
 };
 
