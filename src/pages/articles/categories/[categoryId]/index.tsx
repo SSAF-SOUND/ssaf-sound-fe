@@ -10,11 +10,18 @@ import { QueryClient } from '@tanstack/react-query';
 import { Fragment } from 'react';
 
 import { ArticleCard } from '~/components/ArticleCard';
-import { IntersectionArea, TextInput } from '~/components/Common';
+import ArticleCardList from '~/components/ArticleCardList';
+import { Icon, IconButton, TextInput } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
-import { getArticles, useArticles } from '~/services/article';
+import {
+  getArticleCategories,
+  getArticles,
+  getArticlesByKeyword,
+  useArticleCategories,
+  useArticles,
+} from '~/services/article';
 import {
   flex,
   globalVars,
@@ -25,14 +32,25 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { routes, scrollUpBy } from '~/utils';
+import { add, customToast, routes, scrollUpBy } from '~/utils';
+
+const minKeywordLength = 3;
+const validateKeyword = (keyword?: string) =>
+  keyword && keyword.trim().length >= minKeywordLength;
 
 const ArticleCategoryPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const { categoryId } = props;
   const router = useRouter();
-  const skeletonCount = 6;
+  const { keyword } = router.query as Partial<Params>;
+  const queryKeyword = validateKeyword(keyword) ? keyword : undefined;
+
+  const { data: articleCategories } = useArticleCategories();
+  const categoryName = articleCategories?.find(
+    (category) => category.boardId === categoryId
+  )?.title;
+
   const {
     data: articles,
     hasNextPage,
@@ -152,12 +170,15 @@ interface Props {
 
 type Params = {
   categoryId: string;
+  keyword: string;
 };
 
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   context
 ) => {
   const categoryId = Number(context.params?.categoryId);
+  const keyword = context.params?.keyword;
+  const isValidKeyword = validateKeyword(keyword);
 
   if (Number.isNaN(categoryId)) {
     return {
@@ -167,15 +188,23 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   /* prefetch start */
   const queryClient = new QueryClient();
-  const queryKey = queryKeys.article.list(categoryId);
+  const articleListQueryKey = queryKeys.article.list(categoryId, keyword);
+  const categoriesQueryKey = queryKeys.article.categories();
+  const fetchArticles = isValidKeyword ? getArticlesByKeyword : getArticles;
 
   try {
     // https://github.com/TanStack/query/discussions/3306
-    await queryClient.fetchInfiniteQuery({
-      queryKey,
-      queryFn: ({ pageParam }) =>
-        getArticles({ categoryId, cursor: pageParam }),
-    });
+    await Promise.all([
+      queryClient.fetchInfiniteQuery({
+        queryKey: articleListQueryKey,
+        queryFn: ({ pageParam }) =>
+          fetchArticles({ categoryId, cursor: pageParam, keyword }),
+      }),
+      queryClient.fetchQuery({
+        queryKey: categoriesQueryKey,
+        queryFn: getArticleCategories,
+      }),
+    ]);
   } catch (err) {
     // err handling
   }
