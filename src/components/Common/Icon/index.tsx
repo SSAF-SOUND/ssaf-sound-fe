@@ -39,6 +39,7 @@ import {
   MdRemoveCircleOutline,
   MdSettings,
   MdThumbUp,
+  MdSearch,
 } from 'react-icons/md';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { TbSquareRoundedCheckFilled } from 'react-icons/tb';
@@ -51,6 +52,7 @@ export const icons = {
   backward: <HiOutlineArrowLeft />,
   home: <MdHome />,
   profile: <MdAccountCircle />,
+  search: <MdSearch />,
 
   group: <MdGroup />,
   calendar: <MdCalendarToday />,
