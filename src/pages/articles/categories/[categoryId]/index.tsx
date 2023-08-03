@@ -12,6 +12,7 @@ import { memo, useEffect, useState } from 'react';
 
 import { ArticleCard } from '~/components/ArticleCard';
 import ArticleCardList from '~/components/ArticleCardList';
+import { CircleButton } from '~/components/Common';
 import ErrorCard from '~/components/ErrorCard';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
@@ -53,6 +54,10 @@ const ArticleCategoryPage = (
     (category) => category.boardId === categoryId
   )?.title;
 
+  const navigateToCreateArticlePage = () => {
+    router.push(routes.articles.create(categoryId));
+  };
+
   return (
     <div css={selfCss}>
       <TitleBar.Default
@@ -66,6 +71,15 @@ const ArticleCategoryPage = (
 
       <div css={articleContainerCss}>
         <ArticleLayer categoryId={categoryId} keyword={keyword} />
+      </div>
+
+      <div css={fabContainerCss}>
+        <CircleButton
+          css={fabCss}
+          name="pencil.plus"
+          label="게시글 작성 버튼"
+          onClick={navigateToCreateArticlePage}
+        />
       </div>
     </div>
   );
@@ -211,8 +225,11 @@ const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
 const searchBarTop = titleBarHeight;
 const searchBarContainerPaddingX = `calc(${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var})`;
 const searchBarContainerHeight = 72;
-const searchBarZIndex = 10;
 const selfPaddingTop = searchBarTop + searchBarContainerHeight;
+
+// `Skeleton`의 `zIndex`는 1
+const searchBarZIndex = 10;
+const fabZIndex = 30;
 
 const selfCss = css(
   {
@@ -245,6 +262,10 @@ const articleContainerCss = css({
 });
 
 const skeletonsCss = css(flex('', '', 'column', 16));
+
+const fabContainerCss = css(flex('center', 'flex-end', 'row'));
+
+const fabCss = css({ position: 'fixed', bottom: 40, zIndex: fabZIndex });
 
 /* ssr */
 
