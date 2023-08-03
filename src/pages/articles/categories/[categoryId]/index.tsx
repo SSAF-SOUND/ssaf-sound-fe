@@ -2,19 +2,18 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next/types';
-import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
+import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 import { memo, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 import { ArticleCard } from '~/components/ArticleCard';
 import ArticleCardList from '~/components/ArticleCardList';
-import { Icon, IconButton, TextInput } from '~/components/Common';
 import ErrorCard from '~/components/ErrorCard';
+import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
@@ -158,72 +157,46 @@ const ArticleCardSkeletons = memo(() => {
 });
 ArticleCardSkeletons.displayName = 'ArticleCardSkeletons';
 
-interface SearchBarFieldValues {
-  keyword: string;
-}
 interface SearchBarProps {
   categoryId: number;
 }
 
 const SearchBar = (props: SearchBarProps) => {
-  const fieldName = 'keyword';
   const { categoryId } = props;
   const router = useRouter();
   const { keyword: queryKeyword } = router.query as QueryString;
   const isValidKeyword = validateKeyword(queryKeyword);
   const defaultKeyword = isValidKeyword ? queryKeyword : '';
 
-  const { register, handleSubmit, resetField } = useForm<SearchBarFieldValues>({
-    defaultValues: {
-      keyword: defaultKeyword,
-    },
-  });
-
-  const onValidSubmit: SubmitHandler<SearchBarFieldValues> = async (
+  const onValidSubmit: SearchBarFormProps['onValidSubmit'] = async (
+    reset,
     formValues
   ) => {
     const { keyword } = formValues;
     if (keyword === queryKeyword) {
       return;
     }
-    resetField(fieldName, { defaultValue: keyword });
+    reset({ keyword });
     router.push(routes.articles.category(categoryId, keyword));
   };
 
-  const onInvalidSubmit: SubmitErrorHandler<SearchBarFieldValues> = (
-    errors
+  const onInvalidSubmit: SearchBarFormProps['onInvalidSubmit'] = (
+    errorMessage: string
   ) => {
-    const errorMessage = errors.keyword?.message;
     if (errorMessage) {
       customToast.clientError(errorMessage);
     }
   };
 
   return (
-    <form
+    <SearchBarForm
       css={searchBarContainerCss}
-      onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
-    >
-      <div css={inputContainerCss}>
-        <TextInput
-          autoComplete="off"
-          rounded
-          size="md"
-          css={searchBarInputCss}
-          {...register(fieldName, {
-            validate: (value) => {
-              return (
-                validateKeyword(value) ||
-                `검색어는 최소 ${minKeywordLength}자 이상이어야 합니다.`
-              );
-            },
-          })}
-        />
-        <IconButton type="submit" css={searchButtonCss} theme="black" size={34}>
-          <Icon name="search" size={28} />
-        </IconButton>
-      </div>
-    </form>
+      onValidSubmit={onValidSubmit}
+      onInvalidSubmit={onInvalidSubmit}
+      defaultValues={{
+        keyword: defaultKeyword,
+      }}
+    />
   );
 };
 
@@ -261,11 +234,6 @@ const searchBarContainerCss = css(
   position.x('center', 'fixed')
 );
 
-const searchBarInputCss = css({
-  width: '100%',
-  padding: '0 44px 0 20px',
-});
-
 const articleContainerCss = css({
   position: 'relative',
   width: '100%',
@@ -275,17 +243,6 @@ const articleContainerCss = css({
 });
 
 const skeletonsCss = css(flex('', '', 'column', 16));
-
-const inputContainerCss = css({
-  position: 'relative',
-});
-
-const searchButtonCss = css(
-  {
-    right: 12,
-  },
-  position.y('center', 'absolute')
-);
 
 /* ssr */
 
