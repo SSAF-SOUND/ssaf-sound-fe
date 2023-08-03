@@ -26,6 +26,7 @@ import {
 } from '~/services/article';
 import {
   flex,
+  fontCss,
   globalVars,
   pageMaxWidth,
   pageMinHeight,
@@ -55,6 +56,7 @@ const ArticleCategoryPage = (
   return (
     <div css={selfCss}>
       <TitleBar.Default
+        css={fontCss.style.B16}
         title={categoryName}
         onClickBackward={routes.articles.categories()}
         withoutClose
