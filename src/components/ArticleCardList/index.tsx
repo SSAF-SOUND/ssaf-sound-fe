@@ -11,27 +11,28 @@ import { flex } from '~/styles/utils';
 import { concat } from '~/utils';
 
 interface ArticleCardListProps {
-  articlesPages?: InfiniteData<GetArticlesApiData['data']>['pages'];
-  getNextPage: () => void;
+  articlesPages: InfiniteData<GetArticlesApiData['data']>['pages'];
+  fetchNextPage?: () => void;
   hasNextPage?: boolean;
   className?: string;
 }
 
 const ArticleCardList = (props: ArticleCardListProps) => {
-  const { articlesPages, className, getNextPage, hasNextPage } = props;
+  const { articlesPages, className, fetchNextPage, hasNextPage } = props;
   const articles = articlesPages?.map((pages) => pages.posts).reduce(concat);
+  const loadMore = hasNextPage ? fetchNextPage : undefined;
 
   return (
     <Virtuoso
       className={className}
       useWindowScroll
       data={articles}
+      endReached={loadMore}
+      overscan={200}
+      components={{ List }}
       itemContent={(index, article) => (
         <ArticleCard key={article.postId} article={article} />
       )}
-      endReached={hasNextPage ? getNextPage : undefined}
-      overscan={200}
-      components={{ List, Footer: hasNextPage ? Footer : undefined }}
     />
   );
 };
@@ -40,19 +41,6 @@ const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
   return <div css={listCss} {...props} ref={ref} />;
 });
 List.displayName = 'ArticleCardList';
-
-const Footer = () => {
-  const skeletonCount = 6;
-  return (
-    <div css={[listCss, { marginTop: itemGap }]}>
-      {Array(skeletonCount)
-        .fill(undefined)
-        .map((_, index) => {
-          return <ArticleCard.Skeleton key={index} />;
-        })}
-    </div>
-  );
-};
 
 export default ArticleCardList;
 
