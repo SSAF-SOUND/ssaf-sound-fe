@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { ArticleCard } from '~/components/ArticleCard';
 import ArticleCardList from '~/components/ArticleCardList';
 import { Icon, IconButton, TextInput } from '~/components/Common';
+import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
@@ -110,7 +111,7 @@ const ArticleLayer = (props: ArticleLayerProps) => {
 
   if (isLoading) return <ArticleCardSkeletons />;
 
-  if (notExistSearchResults) return <>검색 결과가 없습니다.</>;
+  if (notExistSearchResults) return <NoSearchResults keyword={keyword} />;
 
   if (notExistArticles) return <>아직 게시글이 없습니다.</>;
 
@@ -220,6 +221,7 @@ export default ArticleCategoryPage;
 /* css */
 
 const selfPaddingX = 10;
+const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
 const searchBarTop = titleBarHeight;
 const searchBarContainerPaddingX = `calc(${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var})`;
 const searchBarContainerHeight = 72;
@@ -229,7 +231,7 @@ const selfPaddingTop = searchBarTop + searchBarContainerHeight;
 const selfCss = css(
   {
     padding: `${selfPaddingTop}px ${selfPaddingX}px 15px`,
-    minHeight: pageMinHeight,
+    minHeight: selfMinHeight,
   },
   flex('', '', 'column')
 );
@@ -256,7 +258,7 @@ const searchBarInputCss = css({
 const articleContainerCss = css({
   width: '100%',
   height: '100%',
-  flexGrow: 0,
+  flexGrow: 1,
   marginTop: 4,
 });
 
