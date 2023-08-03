@@ -12,7 +12,7 @@ const meta: Meta<typeof ArticleCard> = {
   component: ArticleCard,
   decorators: [
     (Story) => (
-      <PageLayout>
+      <PageLayout css={{ paddingTop: 20 }}>
         <Story />
       </PageLayout>
     ),
