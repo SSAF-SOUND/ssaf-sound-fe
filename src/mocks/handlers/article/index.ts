@@ -246,10 +246,7 @@ export const getArticlesError = restError(
 
 export const getHotArticles = rest.get(
   removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.list({ categoryId: 'hot', cursor: 0, size: 0 })
-    )
+    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
   ),
   restInfiniteArticlesSuccess
 );
@@ -257,10 +254,7 @@ export const getHotArticles = rest.get(
 export const getHotArticlesError = restError(
   'get',
   removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.list({ categoryId: 'hot', cursor: 0, size: 0 })
-    )
+    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
   ),
   {
     message: '에러가 발생했습니다.',
@@ -271,11 +265,10 @@ export const getHotArticlesByKeyword = rest.get(
   removeQueryParams(
     composeUrls(
       API_URL,
-      endpoints.articles.search({
-        categoryId: 'hot',
+      endpoints.articles.hot({
         cursor: 0,
         size: 0,
-        keyword: '',
+        keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
       })
     )
   ),
@@ -286,11 +279,11 @@ export const getArticlesByKeyword = rest.get(
   removeQueryParams(
     composeUrls(
       API_URL,
-      endpoints.articles.search({
+      endpoints.articles.list({
         categoryId: 0,
         cursor: 0,
         size: 0,
-        keyword: '',
+        keyword: 'keyword',
       })
     )
   ),
@@ -302,11 +295,11 @@ export const getArticlesByKeywordError = restError(
   removeQueryParams(
     composeUrls(
       API_URL,
-      endpoints.articles.search({
+      endpoints.articles.list({
         categoryId: 0,
         cursor: 0,
         size: 0,
-        keyword: '',
+        keyword: 'keyword',
       })
     )
   ),
