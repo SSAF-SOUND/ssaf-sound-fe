@@ -10,17 +10,16 @@ export const queryKeys = {
     self: () => ['meta'],
     campuses: () => [...queryKeys.meta.self(), 'campuses'],
   },
-  article: {
-    categories: () => ['article', 'categories'],
-    list: (categoryId: number | 'hot', searchKeyword?: string) => [
-      'article',
+  articles: {
+    categories: () => ['articles', 'categories'],
+    list: (categoryId: number, searchKeyword?: string) => [
+      'articles',
       'category',
       categoryId,
       searchKeyword ?? null,
     ],
-    detail: (articleId: number) => ['article', articleId],
-    search: () => [],
-    hot: () => [],
+    hot: (searchKeyword?: string) => ['articles', 'hot', searchKeyword ?? null],
+    detail: (articleId: number) => ['articles', articleId],
     mine: () => [],
   },
 };
@@ -38,19 +37,22 @@ export const endpoints = {
   articles: {
     categories: () => '/boards',
     list: (params: {
-      categoryId: number | 'hot';
+      categoryId: number;
       cursor: number;
       size: number;
+      keyword?: string;
     }) => {
-      const { categoryId: boardId, size, cursor } = params;
+      const { categoryId: boardId, size, cursor, keyword = '' } = params;
 
-      if (params.categoryId === 'hot') {
+      if (keyword) {
         // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1568
         const queryString = new URLSearchParams({
+          boardId,
           size,
           cursor,
+          keyword,
         } as never).toString();
-        return `/posts/hot?${queryString}`;
+        return `/posts/search?${queryString}`;
       }
 
       const queryString = new URLSearchParams({
@@ -61,15 +63,10 @@ export const endpoints = {
 
       return `/posts?${queryString}`;
     },
-    search: (params: {
-      categoryId: number | 'hot';
-      cursor: number;
-      size: number;
-      keyword: string;
-    }) => {
-      const { categoryId: boardId, size, cursor, keyword } = params;
+    hot: (params: { cursor: number; size: number; keyword?: string }) => {
+      const { size, cursor, keyword = '' } = params;
 
-      if (params.categoryId === 'hot') {
+      if (keyword) {
         const queryString = new URLSearchParams({
           size,
           cursor,
@@ -79,13 +76,11 @@ export const endpoints = {
       }
 
       const queryString = new URLSearchParams({
-        boardId,
         size,
         cursor,
-        keyword,
       } as never).toString();
 
-      return `/posts/search?${queryString}`;
+      return `/posts/hot?${queryString}`;
     },
     create: (categoryId: number) => `/posts?boardId=${categoryId}`,
     detail: (articleId: number) => `/posts/${articleId}`,

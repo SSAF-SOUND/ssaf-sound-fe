@@ -23,12 +23,12 @@ import {
   likeArticle,
   scrapArticle,
   getArticles,
-  getArticlesByKeyword,
+  getHotArticles,
 } from '~/services/article/apis';
 
 export const useArticleCategories = () => {
   return useQuery({
-    queryKey: queryKeys.article.categories(),
+    queryKey: queryKeys.articles.categories(),
     queryFn: getArticleCategories,
     select: (categories) => categories.sort((a, b) => a.boardId - b.boardId),
   });
@@ -54,7 +54,7 @@ export const useReportArticle = () => {
 
 export const useUpdateArticle = (articleId: number) => {
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.article.detail(articleId);
+  const queryKey = queryKeys.articles.detail(articleId);
   const onSuccess = () => queryClient.invalidateQueries(queryKey);
 
   return useMutation({
@@ -74,7 +74,7 @@ export const useArticleDetail = (
 ) => {
   const { initialData } = options;
   return useQuery({
-    queryKey: queryKeys.article.detail(articleId),
+    queryKey: queryKeys.articles.detail(articleId),
     queryFn: () => getArticleDetail(articleId),
     initialData,
   });
@@ -83,7 +83,7 @@ export const useArticleDetail = (
 export const useLikeArticle = (articleId: number) => {
   const setArticleDetail = useSetArticleDetail(articleId);
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.article.detail(articleId);
+  const queryKey = queryKeys.articles.detail(articleId);
 
   return useMutation({
     mutationFn: () => likeArticle(articleId),
@@ -125,7 +125,7 @@ export const useLikeArticle = (articleId: number) => {
 export const useScrapArticle = (articleId: number) => {
   const setArticleDetail = useSetArticleDetail(articleId);
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.article.detail(articleId);
+  const queryKey = queryKeys.articles.detail(articleId);
 
   return useMutation({
     mutationFn: () => scrapArticle(articleId),
@@ -168,7 +168,7 @@ export const useScrapArticle = (articleId: number) => {
 
 export const useSetArticleDetail = (articleId: number) => {
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.article.detail(articleId);
+  const queryKey = queryKeys.articles.detail(articleId);
   const setArticleDetail = (
     updater: SetStateAction<ArticleDetail | undefined>
   ) => {
@@ -183,20 +183,42 @@ interface UseArticlesOptions {
 }
 
 export const useArticles = (
-  categoryId: number | 'hot',
+  categoryId: number,
   options: Partial<UseArticlesOptions> = {}
 ) => {
   const { keyword } = options;
-  const queryKey = queryKeys.article.list(categoryId, keyword);
-  const queryFn = keyword ? getArticlesByKeyword : getArticles;
+  const queryKey = queryKeys.articles.list(categoryId, keyword);
 
   return useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam }) =>
-      queryFn({
+      getArticles({
         cursor: pageParam,
         categoryId,
-        keyword: keyword || '',
+        keyword,
+      }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.cursor ?? undefined;
+    },
+  });
+};
+
+interface UseHotArticlesOptions {
+  keyword: string;
+}
+
+export const useHotArticles = (
+  options: Partial<UseHotArticlesOptions> = {}
+) => {
+  const { keyword } = options;
+  const queryKey = queryKeys.articles.hot(keyword);
+
+  return useInfiniteQuery({
+    queryKey,
+    queryFn: ({ pageParam }) =>
+      getHotArticles({
+        cursor: pageParam,
+        keyword,
       }),
     getNextPageParam: (lastPage) => {
       return lastPage.cursor ?? undefined;
