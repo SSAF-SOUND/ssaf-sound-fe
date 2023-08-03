@@ -6,7 +6,7 @@ import { css } from '@emotion/react';
 import { forwardRef } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
-import { ArticleCard } from '~/components/ArticleCard';
+import { ArticleCard, HotArticleCard } from '~/components/ArticleCard';
 import { flex } from '~/styles/utils';
 import { concat } from '~/utils';
 
@@ -15,12 +15,20 @@ interface ArticleCardListProps {
   fetchNextPage?: () => void;
   hasNextPage?: boolean;
   className?: string;
+  hot?: boolean;
 }
 
 const ArticleCardList = (props: ArticleCardListProps) => {
-  const { articlesPages, className, fetchNextPage, hasNextPage } = props;
+  const {
+    articlesPages,
+    className,
+    fetchNextPage,
+    hasNextPage,
+    hot = false,
+  } = props;
   const articles = articlesPages?.map((pages) => pages.posts).reduce(concat);
   const loadMore = hasNextPage ? fetchNextPage : undefined;
+  const Card = hot ? HotArticleCard : ArticleCard;
 
   return (
     <Virtuoso
@@ -31,7 +39,7 @@ const ArticleCardList = (props: ArticleCardListProps) => {
       overscan={200}
       components={{ List }}
       itemContent={(index, article) => (
-        <ArticleCard key={article.postId} article={article} />
+        <Card key={article.postId} article={article} />
       )}
     />
   );
