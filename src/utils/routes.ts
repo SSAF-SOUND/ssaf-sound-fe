@@ -4,7 +4,7 @@ export const routes = {
   articles: {
     self: () => '/articles',
     categories: () => `${routes.articles.self()}/categories`,
-    category: (categoryId: number, searchKeyword?: string) => {
+    category: (categoryId: number | 'hot', searchKeyword?: string) => {
       const queryString = searchKeyword ? `?keyword=${searchKeyword}` : '';
       return `${routes.articles.categories()}/${categoryId}${queryString}`;
     },

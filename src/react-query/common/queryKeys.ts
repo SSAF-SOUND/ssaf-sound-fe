@@ -12,7 +12,7 @@ export const queryKeys = {
   },
   article: {
     categories: () => ['article', 'categories'],
-    list: (categoryId: number, searchKeyword?: string) => [
+    list: (categoryId: number | 'hot', searchKeyword?: string) => [
       'article',
       'category',
       categoryId,
@@ -37,10 +37,22 @@ export const endpoints = {
   },
   articles: {
     categories: () => '/boards',
-    list: (params: { categoryId: number; cursor: number; size: number }) => {
+    list: (params: {
+      categoryId: number | 'hot';
+      cursor: number;
+      size: number;
+    }) => {
       const { categoryId: boardId, size, cursor } = params;
 
-      // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1568
+      if (params.categoryId === 'hot') {
+        // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1568
+        const queryString = new URLSearchParams({
+          size,
+          cursor,
+        } as never).toString();
+        return `/posts/hot?${queryString}`;
+      }
+
       const queryString = new URLSearchParams({
         boardId,
         size,
@@ -50,14 +62,22 @@ export const endpoints = {
       return `/posts?${queryString}`;
     },
     search: (params: {
-      categoryId: number;
+      categoryId: number | 'hot';
       cursor: number;
       size: number;
       keyword: string;
     }) => {
       const { categoryId: boardId, size, cursor, keyword } = params;
 
-      // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1568
+      if (params.categoryId === 'hot') {
+        const queryString = new URLSearchParams({
+          size,
+          cursor,
+          keyword,
+        } as never).toString();
+        return `/posts/hot/search?${queryString}`;
+      }
+
       const queryString = new URLSearchParams({
         boardId,
         size,

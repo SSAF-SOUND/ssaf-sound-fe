@@ -139,7 +139,7 @@ export const scrapArticle = (articleId: number) => {
 };
 
 export interface GetArticlesParams {
-  categoryId: number;
+  categoryId: number | 'hot';
   cursor?: number;
   size?: number;
 }

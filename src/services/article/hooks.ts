@@ -183,7 +183,7 @@ interface UseArticlesOptions {
 }
 
 export const useArticles = (
-  categoryId: number,
+  categoryId: number | 'hot',
   options: Partial<UseArticlesOptions> = {}
 ) => {
   const { keyword } = options;
