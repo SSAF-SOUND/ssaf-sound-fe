@@ -113,7 +113,12 @@ const ArticleLayer = (props: ArticleLayerProps) => {
 
   if (notExistSearchResults) return <NoSearchResults keyword={keyword} />;
 
-  if (notExistArticles) return <>아직 게시글이 없습니다.</>;
+  if (notExistArticles)
+    return (
+      <div css={position.xy('center', 'center', 'absolute')}>
+        아직 게시글이 없습니다.
+      </div>
+    );
 
   return (
     <>
@@ -256,6 +261,7 @@ const searchBarInputCss = css({
 });
 
 const articleContainerCss = css({
+  position: 'relative',
   width: '100%',
   height: '100%',
   flexGrow: 1,
