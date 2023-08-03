@@ -149,9 +149,35 @@ export type GetArticlesApiData = ApiSuccessResponse<{
   cursor: number | null;
 }>;
 
+const defaultCursor = -1;
+const defaultSize = 20;
+
 export const getArticles = (params: GetArticlesParams) => {
-  const { categoryId, cursor = -1, size = 10 } = params;
+  const { categoryId, cursor = defaultCursor, size = defaultSize } = params;
   const endpoint = endpoints.articles.list({ categoryId, cursor, size });
+
+  return publicAxios
+    .get<GetArticlesApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
+export interface GetArticlesByKeywordParams extends GetArticlesParams {
+  keyword?: string;
+}
+
+export const getArticlesByKeyword = (params: GetArticlesByKeywordParams) => {
+  const {
+    categoryId,
+    cursor = defaultCursor,
+    size = defaultSize,
+    keyword = '',
+  } = params;
+  const endpoint = endpoints.articles.search({
+    categoryId,
+    cursor,
+    size,
+    keyword,
+  });
 
   return publicAxios
     .get<GetArticlesApiData>(endpoint)

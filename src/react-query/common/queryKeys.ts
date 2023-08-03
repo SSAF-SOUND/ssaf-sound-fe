@@ -12,7 +12,12 @@ export const queryKeys = {
   },
   article: {
     categories: () => ['article', 'categories'],
-    list: (categoryId: number) => ['article', 'category', categoryId],
+    list: (categoryId: number, searchKeyword?: string) => [
+      'article',
+      'category',
+      categoryId,
+      searchKeyword ?? null,
+    ],
     detail: (articleId: number) => ['article', articleId],
     search: () => [],
     hot: () => [],
@@ -43,6 +48,24 @@ export const endpoints = {
       } as never).toString();
 
       return `/posts?${queryString}`;
+    },
+    search: (params: {
+      categoryId: number;
+      cursor: number;
+      size: number;
+      keyword: string;
+    }) => {
+      const { categoryId: boardId, size, cursor, keyword } = params;
+
+      // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1568
+      const queryString = new URLSearchParams({
+        boardId,
+        size,
+        cursor,
+        keyword,
+      } as never).toString();
+
+      return `/posts/search?${queryString}`;
     },
     create: (categoryId: number) => `/posts?boardId=${categoryId}`,
     detail: (articleId: number) => `/posts/${articleId}`,

@@ -5,7 +5,12 @@ import type {
   ArticleDetailError,
 } from '~/services/article/utils';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import {
@@ -17,6 +22,8 @@ import {
   updateArticle,
   likeArticle,
   scrapArticle,
+  getArticles,
+  getArticlesByKeyword,
 } from '~/services/article/apis';
 
 export const useArticleCategories = () => {
@@ -169,4 +176,30 @@ export const useSetArticleDetail = (articleId: number) => {
   };
 
   return setArticleDetail;
+};
+
+interface UseArticlesOptions {
+  keyword: string;
+}
+
+export const useArticles = (
+  categoryId: number,
+  options: Partial<UseArticlesOptions> = {}
+) => {
+  const { keyword } = options;
+  const queryKey = queryKeys.article.list(categoryId, keyword);
+  const queryFn = keyword ? getArticlesByKeyword : getArticles;
+
+  return useInfiniteQuery({
+    queryKey,
+    queryFn: ({ pageParam }) =>
+      queryFn({
+        cursor: pageParam,
+        categoryId,
+        keyword: keyword || '',
+      }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.cursor ?? undefined;
+    },
+  });
 };
