@@ -2,12 +2,14 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next/types';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
-import { Fragment } from 'react';
+import { memo, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { ArticleCard } from '~/components/ArticleCard';
 import ArticleCardList from '~/components/ArticleCardList';
@@ -43,7 +45,7 @@ const ArticleCategoryPage = (
 ) => {
   const { categoryId } = props;
   const router = useRouter();
-  const { keyword } = router.query as Partial<Params>;
+  const { keyword } = router.query as QueryString;
   const queryKeyword = validateKeyword(keyword) ? keyword : undefined;
 
   const { data: articleCategories } = useArticleCategories();
@@ -56,11 +58,13 @@ const ArticleCategoryPage = (
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useArticles(categoryId);
+    error,
+    isLoading,
+  } = useArticles(categoryId, { keyword: queryKeyword });
 
-  const categoryName = articles?.pages[0].posts[0].boardTitle;
+  const [hasError, setHasError] = useState(false);
 
-  const getNextArticles = async () => {
+  const fetchNextArticles = async () => {
     if (!hasNextPage || isFetchingNextPage) return;
     await fetchNextPage();
 
@@ -68,9 +72,14 @@ const ArticleCategoryPage = (
     scrollUpBy(1);
   };
 
-  if (!articles) {
-    return <div>No articles</div>;
-  }
+  const hasNextArticles = hasError ? false : hasNextPage;
+
+  useEffect(() => {
+    setHasError(!!error);
+  }, [error, keyword]);
+
+  const hasNoResult =
+    articles?.pages.map((page) => page.posts.length).reduce(add) === 0;
 
   return (
     <div css={selfCss}>
@@ -80,37 +89,112 @@ const ArticleCategoryPage = (
         withoutClose
       />
 
-      <div css={searchBarContainerCss}>
-        <TextInput rounded size="md" css={searchBarCss} />
-      </div>
+      <SearchBar categoryId={categoryId} />
 
-      <div>
-        <div css={articleContainerCss}>
-          {articles.pages.map((page, index) => {
-            return (
-              <Fragment key={index}>
-                {page.posts.map((article) => (
-                  <ArticleCard key={article.postId} article={article} />
-                ))}
-              </Fragment>
-            );
-          })}
-        </div>
+      <div css={articleContainerCss}>
+        {isLoading ? (
+          <Skeletons />
+        ) : (
+          articles && (
+            <>
+              <ArticleCardList
+                articlesPages={articles.pages}
+                fetchNextPage={fetchNextArticles}
+                hasNextPage={hasNextArticles}
+              />
 
-        {hasNextPage && (
-          <IntersectionArea
-            css={skeletonContainerCss}
-            onIntersection={getNextArticles}
-          >
-            {Array(skeletonCount)
-              .fill(undefined)
-              .map((_, index) => (
-                <ArticleCard.Skeleton key={index} />
-              ))}
-          </IntersectionArea>
+              {hasNextArticles && <Skeletons />}
+              {hasError && (
+                <div onClick={() => setHasError(false)}>다시시도</div>
+              )}
+            </>
+          )
         )}
       </div>
     </div>
+  );
+};
+
+const Skeletons = memo(() => {
+  const skeletonCount = 6;
+  return (
+    <div css={[skeletonsCss, { marginTop: 16 }]}>
+      {Array(skeletonCount)
+        .fill(undefined)
+        .map((_, index) => {
+          return <ArticleCard.Skeleton key={index} />;
+        })}
+    </div>
+  );
+});
+Skeletons.displayName = 'ArticleCardSkeleton';
+
+interface SearchBarFieldValues {
+  keyword: string;
+}
+interface SearchBarProps {
+  categoryId: number;
+}
+
+const SearchBar = (props: SearchBarProps) => {
+  const fieldName = 'keyword';
+  const { categoryId } = props;
+  const router = useRouter();
+  const { keyword: queryKeyword } = router.query as QueryString;
+  const isValidKeyword = validateKeyword(queryKeyword);
+  const defaultKeyword = isValidKeyword ? queryKeyword : '';
+
+  const { register, handleSubmit, resetField } = useForm<SearchBarFieldValues>({
+    defaultValues: {
+      keyword: defaultKeyword,
+    },
+  });
+
+  const onValidSubmit: SubmitHandler<SearchBarFieldValues> = async (
+    formValues
+  ) => {
+    const { keyword } = formValues;
+    if (keyword === queryKeyword) {
+      return;
+    }
+    resetField(fieldName, { defaultValue: keyword });
+    router.push(routes.articles.category(categoryId, keyword));
+  };
+
+  const onInvalidSubmit: SubmitErrorHandler<SearchBarFieldValues> = (
+    errors
+  ) => {
+    const errorMessage = errors.keyword?.message;
+    if (errorMessage) {
+      customToast.clientError(errorMessage);
+    }
+  };
+
+  return (
+    <form
+      css={searchBarContainerCss}
+      onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+    >
+      <div css={inputContainerCss}>
+        <TextInput
+          autoComplete="off"
+          rounded
+          size="md"
+          css={searchBarInputCss}
+          {...register(fieldName, {
+            validate: (value) => {
+              return (
+                validateKeyword(value) ||
+                `검색어는 최소 ${minKeywordLength}자 이상이어야 합니다.`
+              );
+            },
+          })}
+        />
+        <IconButton type="submit" css={searchButtonCss} theme="black" size={34}>
+          <Icon name="search" size={28} />
+        </IconButton>
+      </div>
+    </form>
   );
 };
 
@@ -147,19 +231,29 @@ const searchBarContainerCss = css(
   position.x('center', 'fixed')
 );
 
-const searchBarCss = css({
+const searchBarInputCss = css({
   width: '100%',
+  padding: '0 44px 0 20px',
 });
 
-const listCss = css(flex('', '', 'column', 16));
+const articleContainerCss = css({
+  width: '100%',
+  height: '100%',
+  flexGrow: 0,
+  marginTop: 4,
+});
 
-const articleContainerCss = css(
-  { width: '100%', height: '100%', flexGrow: 0 },
-  listCss
-);
-const skeletonContainerCss = css(
-  { width: '100%', height: '100%', marginTop: 16 },
-  listCss
+const skeletonsCss = css(flex('', '', 'column', 16));
+
+const inputContainerCss = css({
+  position: 'relative',
+});
+
+const searchButtonCss = css(
+  {
+    right: 12,
+  },
+  position.y('center', 'absolute')
 );
 
 /* ssr */
@@ -168,17 +262,22 @@ interface Props {
   categoryId: number;
 }
 
+// `interface`로 작성하면, `GetServerSideProps`의 Generic에 할당이 안되어서, type으로 작성
 type Params = {
   categoryId: string;
-  keyword: string;
 };
+
+type QueryString = Partial<{
+  keyword: string;
+}>;
 
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   context
 ) => {
   const categoryId = Number(context.params?.categoryId);
-  const keyword = context.params?.keyword;
+  const { keyword } = context.query as QueryString;
   const isValidKeyword = validateKeyword(keyword);
+  const safeKeyword = isValidKeyword ? keyword?.trim() : undefined;
 
   if (Number.isNaN(categoryId)) {
     return {
@@ -188,7 +287,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   /* prefetch start */
   const queryClient = new QueryClient();
-  const articleListQueryKey = queryKeys.article.list(categoryId, keyword);
+  const articleListQueryKey = queryKeys.article.list(categoryId, safeKeyword);
   const categoriesQueryKey = queryKeys.article.categories();
   const fetchArticles = isValidKeyword ? getArticlesByKeyword : getArticles;
 
@@ -198,7 +297,11 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
       queryClient.fetchInfiniteQuery({
         queryKey: articleListQueryKey,
         queryFn: ({ pageParam }) =>
-          fetchArticles({ categoryId, cursor: pageParam, keyword }),
+          fetchArticles({
+            categoryId,
+            cursor: pageParam,
+            keyword: safeKeyword,
+          }),
       }),
       queryClient.fetchQuery({
         queryKey: categoriesQueryKey,
