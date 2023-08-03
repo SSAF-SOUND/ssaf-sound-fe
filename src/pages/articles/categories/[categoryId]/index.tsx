@@ -71,12 +71,11 @@ const ArticleCategoryPage = (
 
 interface ArticleLayerProps {
   categoryId: number;
-  hot?: boolean;
   keyword?: string;
 }
 
 const ArticleLayer = (props: ArticleLayerProps) => {
-  const { categoryId, keyword, hot = false } = props;
+  const { categoryId, keyword } = props;
   const isValidKeyword = validateKeyword(keyword);
   const {
     data: articles,
@@ -125,7 +124,6 @@ const ArticleLayer = (props: ArticleLayerProps) => {
       {articles && (
         <>
           <ArticleCardList
-            hot={hot}
             articlesPages={articles.pages}
             fetchNextPage={fetchNextArticles}
             hasNextPage={hasNextArticles}
