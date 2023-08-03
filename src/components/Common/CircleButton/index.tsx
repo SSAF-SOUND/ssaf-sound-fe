@@ -23,13 +23,13 @@ export const CircleButton = (props: CircleButtonProps) => {
   const { label, name, ...restProps } = props;
   return (
     <Button css={selfCss} {...restProps}>
-      <Icon name={name} label={label} />
+      <Icon name={name} label={label} size={28} />
     </Button>
   );
 };
 
 const selfCss = css({
-  width: 44,
-  height: 44,
+  width: 52,
+  height: 52,
   borderRadius: '50%',
 });
