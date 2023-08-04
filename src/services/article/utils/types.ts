@@ -23,6 +23,9 @@ export type ArticleAuthor =
     };
 
 export interface ArticleDetailWithoutAuthor {
+  postId: number;
+  category: ArticleCategory;
+
   title: string;
   content: string;
 
@@ -37,10 +40,6 @@ export interface ArticleDetailWithoutAuthor {
   modified: boolean;
   mine: boolean;
   images: ArticleImage[];
-
-  // NOTE: 아직 반영이 안 된 타입들
-  postId: number;
-  category: ArticleCategory;
 }
 
 export type ArticleDetail = ArticleDetailWithoutAuthor & ArticleAuthor;
@@ -53,6 +52,7 @@ export interface ArticleDetailError {
 }
 
 export interface ArticleSummary {
+  postId: number;
   boardTitle: string;
   title: string;
   content: string;
@@ -62,9 +62,6 @@ export interface ArticleSummary {
   nickname: string;
   anonymous: boolean;
   thumbnail: string; // 안 쓰임
-
-  // NOTE: 아직 반영 안됨
-  postId: number;
 }
 
 export interface HotArticleSummary extends ArticleSummary {}

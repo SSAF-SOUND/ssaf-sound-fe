@@ -1,6 +1,7 @@
 import type {
   ArticleCategory,
   CreateArticleApiData,
+  CreateArticleParams,
   GetArticleDetailApiData,
   LikeArticleApiData,
   ScrapArticleApiData,
@@ -13,6 +14,7 @@ import {
   articleCategories,
   articleFallback,
   articles,
+  createMockArticle,
 } from '~/mocks/handlers/article/data';
 import {
   restInfiniteArticlesError,
@@ -32,20 +34,30 @@ export const createArticle = rest.post(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, removeQueryParams(endpoints.articles.create(1))),
-  (req, res, ctx) => {
-    // TODO: update mock articles
+  async (req, res, ctx) => {
+    const { title, content, images, anonymous } = (await req.json()) as Omit<
+      CreateArticleParams,
+      'categoryId'
+    >;
+
+    const articleId = articles.length;
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    articles.push({});
-
-    const postId = articles.length;
+    articles.push({
+      ...createMockArticle(articleId),
+      title,
+      content,
+      images,
+      anonymous,
+    });
 
     console.log('[현재 mock articles 목록]: ', articles);
 
     return res(
       ctx.delay(500),
       ...mockSuccess<CreateArticleApiData['data']>(ctx, {
-        postId,
+        postId: articleId,
       })
     );
   }
