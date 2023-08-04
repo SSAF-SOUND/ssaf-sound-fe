@@ -22,6 +22,9 @@ export const queryKeys = {
     detail: (articleId: number) => ['articles', articleId],
     mine: () => [],
   },
+  comments: {
+    list: (articleId: number) => ['comments', articleId],
+  },
 };
 
 export const endpoints = {
@@ -89,6 +92,9 @@ export const endpoints = {
     like: (articleId: number) => `${endpoints.articles.detail(articleId)}/like`,
     scrap: (articleId: number) =>
       `${endpoints.articles.detail(articleId)}/scrap`,
+  },
+  comments: {
+    list: (articleId: number) => `/comments?postId=${articleId}`,
   },
   user: {
     myInfo: () => '/members' as const,

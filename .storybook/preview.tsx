@@ -7,6 +7,7 @@ import AppGlobalStyles from '../src/styles/GlobalStyles';
 import {
   articleHandlers,
   authHandlers,
+  commentHandlers,
   memberHandlers,
   metaHandlers,
   s3Handlers,
@@ -49,6 +50,7 @@ const preview: Preview = {
         auth: authHandlers,
         member: memberHandlers,
         article: articleHandlers,
+        comment: commentHandlers,
         meta: metaHandlers,
         s3: s3Handlers,
       },
