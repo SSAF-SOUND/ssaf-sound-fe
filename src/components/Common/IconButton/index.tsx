@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
 
-import { colorMix, inlineFlex, palettes } from '~/styles/utils';
+import { colorMix, inlineFlex } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 type IconTheme = 'primary' | 'secondary' | 'white' | 'black';

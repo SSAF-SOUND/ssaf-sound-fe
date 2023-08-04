@@ -50,7 +50,10 @@ const RecruitForm = (props: RecruitFormProps) => {
   } = options;
 
   const methods = useForm<RecruitFormValues>({
-    defaultValues: useMemo(() => populateDefaultValues(defaultValues), []),
+    defaultValues: useMemo(
+      () => populateDefaultValues(defaultValues),
+      [defaultValues]
+    ),
   });
 
   const { handleSubmit } = methods;

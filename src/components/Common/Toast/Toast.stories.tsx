@@ -30,10 +30,8 @@ export const ServerError: ServerErrorToastStory = {
     showServerMessage: true,
   },
   render: (args) => {
-    const { t: _, ...rest } = args;
-
     const onClick = () => {
-      toast((t) => <ServerErrorToast t={t} {...rest} />);
+      toast((t) => <ServerErrorToast {...args} t={t} />);
     };
 
     return (
@@ -51,10 +49,8 @@ export const Success: SuccessToastStory = {
     message: 'Success',
   },
   render: (args) => {
-    const { t: _, ...rest } = args;
-
     const onClick = () => {
-      toast((t) => <SuccessToast t={t} {...rest} />);
+      toast((t) => <SuccessToast {...args} t={t} />);
     };
 
     return (

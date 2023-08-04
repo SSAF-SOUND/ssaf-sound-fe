@@ -36,6 +36,7 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
     value
   ) => {
     const newSsafyBasicInfo = value.ssafyBasicInfo;
+    // eslint-disable-next-line
     const { year: _, ...restNewSsafyBasicInfo } = value.ssafyBasicInfo;
 
     try {

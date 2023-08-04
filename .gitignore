@@ -50,3 +50,6 @@ next-env.d.ts
 
 # storybook
 build-storybook.log*
+
+# Sentry Auth Token
+.sentryclirc

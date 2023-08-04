@@ -17,7 +17,7 @@ const meta: Meta<typeof UserRegisterPage> = {
 
       useEffect(() => {
         setMyInfo(userInfo.initialUserInfo);
-      }, []);
+      }, [setMyInfo]);
 
       return (
         <PageLayout>
