@@ -12,6 +12,7 @@ import { rest } from 'msw';
 
 import {
   articleCategories,
+  articleError,
   articleFallback,
   articles,
   createMockArticle,
@@ -152,7 +153,7 @@ export const getArticleDetail = rest.get(
   (req, res, ctx) => {
     const params = req.params as { articleId: string };
     const articleId = Number(params.articleId);
-    const article = articles[Number(articleId)] || articleFallback;
+    const article = articles[Number(articleId)] || articleError;
 
     return res(
       ctx.delay(500),
