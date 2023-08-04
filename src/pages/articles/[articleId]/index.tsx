@@ -69,7 +69,7 @@ const NotExistsArticle = (props: NotExistsArticleProps) => {
 
   return (
     <RedirectionGuide
-      title="게시글을 불러오는데 실패했습니다."
+      title="Error"
       description={articleError.error.message}
       customLinkElements={
         <div css={flex('', '', 'column', 10)}>
