@@ -124,7 +124,7 @@ const ArticleLayer = (props: ArticleLayerProps) => {
   const notExistSearchResults = isValidKeyword && isArticleEmpty;
   const notExistArticles = !isValidKeyword && isArticleEmpty;
 
-  if (isLoading) return <ArticleCardSkeletons />;
+  if (isLoading) return <ArticleCardSkeletons count={6} />;
 
   if (notExistSearchResults) return <NoSearchResults keyword={keyword} />;
 
@@ -158,11 +158,14 @@ const ArticleLayer = (props: ArticleLayerProps) => {
   );
 };
 
-const ArticleCardSkeletons = memo(() => {
-  const skeletonCount = 6;
+interface ArticleCardSkeletonsProps {
+  count?: number;
+}
+const ArticleCardSkeletons = memo((props: ArticleCardSkeletonsProps) => {
+  const { count = 5 } = props;
   return (
     <div css={[skeletonsCss, { marginTop: 16 }]}>
-      {Array(skeletonCount)
+      {Array(count)
         .fill(undefined)
         .map((_, index) => {
           return <ArticleCard.Skeleton key={index} />;

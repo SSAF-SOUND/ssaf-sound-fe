@@ -130,11 +130,14 @@ const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
   );
 };
 
-const HotArticleCardSkeletons = memo(() => {
-  const skeletonCount = 6;
+interface HotArticleCardSkeletonsProps {
+  count?: number;
+}
+const HotArticleCardSkeletons = memo((props: HotArticleCardSkeletonsProps) => {
+  const { count = 4 } = props;
   return (
     <div css={[skeletonsCss, { marginTop: 16 }]}>
-      {Array(skeletonCount)
+      {Array(count)
         .fill(undefined)
         .map((_, index) => {
           return <HotArticleCard.Skeleton key={index} />;
