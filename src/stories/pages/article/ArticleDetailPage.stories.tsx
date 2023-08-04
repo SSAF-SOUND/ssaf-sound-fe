@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 
 import { likeArticleError, scrapArticleError } from '~/mocks/handlers';
 import { articleError, articles } from '~/mocks/handlers/article/data';
+import { userInfo } from '~/mocks/handlers/member/data';
 import ArticleDetailPage from '~/pages/articles/[articleId]';
 import { queryKeys } from '~/react-query/common';
 import { useSetMyInfo } from '~/services/member';
@@ -37,27 +38,39 @@ export default meta;
 type ArticleDetailPageStory = StoryObj<typeof ArticleDetailPage>;
 
 export const MyArticle: ArticleDetailPageStory = {
-  render: () => {
-    const articleId = 1;
-    return (
-      <ArticleDetailPage
-        articleId={articleId}
-        initialArticleDetail={articles[articleId]}
-      />
-    );
+  render: function Render() {
+    const articleId = 1; // 홀수 id는 `mine`값이 `true`
+    const queryClient = useQueryClient();
+    const queryKey = queryKeys.articles.detail(articleId);
+    queryClient.setQueryData(queryKey, articles[articleId]);
+
+    return <ArticleDetailPage articleId={articleId} />;
   },
+  decorators: [
+    (Story) => {
+      const setMyInfo = useSetMyInfo();
+      setMyInfo(userInfo.certifiedSsafyUserInfo);
+      return <Story />;
+    },
+  ],
 };
 
 export const NotMine: ArticleDetailPageStory = {
-  render: () => {
-    const articleId = 2;
-    return (
-      <ArticleDetailPage
-        articleId={articleId}
-        initialArticleDetail={articles[articleId]}
-      />
-    );
+  render: function Render() {
+    const articleId = 2; // 짝수 id는 `mine`값이 `false`
+    const queryClient = useQueryClient();
+    const queryKey = queryKeys.articles.detail(articleId);
+    queryClient.setQueryData(queryKey, articles[articleId]);
+
+    return <ArticleDetailPage articleId={articleId} />;
   },
+  decorators: [
+    (Story) => {
+      const setMyInfo = useSetMyInfo();
+      setMyInfo(userInfo.certifiedSsafyUserInfo);
+      return <Story />;
+    },
+  ],
 };
 
 export const NotSignedIn: ArticleDetailPageStory = {
@@ -65,6 +78,7 @@ export const NotSignedIn: ArticleDetailPageStory = {
   decorators: [
     (Story) => {
       const setMyInfo = useSetMyInfo();
+
       useEffect(() => {
         // eslint-disable-next-line
         // @ts-ignore
@@ -84,9 +98,7 @@ export const NotSignedIn: ArticleDetailPageStory = {
 
 export const NotExistsArticle: ArticleDetailPageStory = {
   render: () => {
-    return (
-      <ArticleDetailPage articleId={100} initialArticleDetail={articleError} />
-    );
+    return <ArticleDetailPage articleId={100} />;
   },
 };
 
