@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { InfiniteData } from '@tanstack/query-core';
+import type { GetArticlesApiData } from '~/services/article';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
@@ -48,7 +50,7 @@ export const Success: ArticleCategoryPageStory = {
 };
 
 const errorCaseCategoryId = 2;
-export const InfiniteScrollError: ArticleCategoryPageStory = {
+export const FetchError: ArticleCategoryPageStory = {
   args: {
     categoryId: errorCaseCategoryId,
   },
@@ -60,3 +62,34 @@ export const InfiniteScrollError: ArticleCategoryPageStory = {
     },
   },
 };
+
+const notExistCaseCategoryId = 3;
+const notExistData: InfiniteData<GetArticlesApiData['data']> = {
+  pages: [
+    {
+      posts: [],
+      cursor: null,
+    },
+  ],
+  pageParams: [null],
+};
+
+export const NotExist: ArticleCategoryPageStory = {
+  args: {
+    categoryId: notExistCaseCategoryId,
+  },
+  decorators: [
+    (Story) => {
+      const queryClient = useQueryClient();
+      const queryKey = queryKeys.articles.list(notExistCaseCategoryId);
+      queryClient.setQueryData(queryKey, notExistData);
+
+      return <Story />;
+    },
+  ],
+};
+
+/**
+ * 검색 결과가 없는 스토리(NoSearchResultsStory)는 작성하지 않음
+ * 검색어는 `query parameters`기반으로 동작하는데, 관련 애드온인 `@storybook/addon-queryparams`가 최신 스토리북 버전과 호환되지 않음
+ */
