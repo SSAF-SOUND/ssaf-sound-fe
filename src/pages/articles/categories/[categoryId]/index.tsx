@@ -114,6 +114,11 @@ const ArticleLayer = (props: ArticleLayerProps) => {
 
   const hasNextArticles = hasError ? false : hasNextPage;
 
+  const retryFetchNextArticles = () => {
+    setHasError(false);
+    fetchNextArticles();
+  };
+
   useEffect(() => {
     setHasError(!!error);
   }, [error, keyword]);
@@ -149,7 +154,7 @@ const ArticleLayer = (props: ArticleLayerProps) => {
           {hasError && (
             <ErrorCard
               css={{ marginTop: 16 }}
-              onClickRetry={() => setHasError(false)}
+              onClickRetry={retryFetchNextArticles}
             />
           )}
         </>
