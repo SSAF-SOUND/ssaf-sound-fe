@@ -26,11 +26,7 @@ export const Content = () => {
 
   return (
     <div>
-      <Editor
-        defaultValue={defaultContent}
-        withCustomToolbar={false}
-        onChange={handleChangeValue}
-      />
+      <Editor defaultValue={defaultContent} onChange={handleChangeValue} />
     </div>
   );
 };

@@ -4,14 +4,23 @@ import { memo, useState } from 'react';
 import { Icon, IconButton, Modal } from '~/components/Common';
 import Thumbnail from '~/components/Editor/Thumbnail';
 import { ImageViewer } from '~/components/ModalContent';
-import { flex } from '~/styles/utils';
+import { flex, palettes } from '~/styles/utils';
+
+interface ThumbnailUrl {
+  thumbnailUrl: string;
+  loading: boolean;
+}
 
 interface ThumbnailBarProps {
-  thumbnails: string[];
+  className?: string;
+  thumbnails: ThumbnailUrl[];
+  onClickRemoveThumbnail?: (idx: number) => void;
+  disableRemove?: boolean;
 }
 
 const ThumbnailBar = (props: ThumbnailBarProps) => {
-  const { thumbnails } = props;
+  const { thumbnails, onClickRemoveThumbnail, className, disableRemove } =
+    props;
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
   const openModal = () => setOpen(true);
@@ -22,18 +31,20 @@ const ThumbnailBar = (props: ThumbnailBarProps) => {
 
   return (
     <>
-      <ol css={selfCss}>
-        {thumbnails.map((thumbnail, index) => (
+      <ol css={selfCss} className={className}>
+        {thumbnails.map(({ thumbnailUrl, loading }, index) => (
           <Thumbnail
-            key={thumbnail}
-            src={thumbnail}
+            loading={loading}
+            key={thumbnailUrl}
+            src={thumbnailUrl}
             alt=""
             size={70}
             onClickThumbnail={() => {
               openModal();
               setSelectedIndex(index);
             }}
-            onClickRemove={() => console.log('remove clicked')}
+            onClickRemove={() => onClickRemoveThumbnail?.(index)}
+            disableRemove={disableRemove}
           />
         ))}
       </ol>
@@ -44,7 +55,7 @@ const ThumbnailBar = (props: ThumbnailBarProps) => {
           onEscapeKeyDown={closeModal}
           content={
             <ImageViewer
-              src={thumbnails[selectedIndex]}
+              src={thumbnails[selectedIndex].thumbnailUrl}
               onClickClose={closeModal}
               controlButtons={
                 <div css={controlButtonsCss}>
@@ -53,24 +64,14 @@ const ThumbnailBar = (props: ThumbnailBarProps) => {
                     onClick={() => setSelectedIndex((p) => p - 1)}
                     disabled={selectedIndex === 0}
                   >
-                    <Icon
-                      size={34}
-                      name="chevron.down"
-                      label="이전 썸네일"
-                      style={{ transform: 'rotate(90deg)' }}
-                    />
+                    <Icon size={34} name="chevron.left" label="이전 썸네일" />
                   </IconButton>
                   <IconButton
                     size={34}
                     onClick={() => setSelectedIndex((p) => p + 1)}
                     disabled={selectedIndex === lastIndex}
                   >
-                    <Icon
-                      size={34}
-                      name="chevron.down"
-                      label="다음 썸네일"
-                      style={{ transform: 'rotate(-90deg)' }}
-                    />
+                    <Icon size={34} name="chevron.right" label="다음 썸네일" />
                   </IconButton>
                 </div>
               }
@@ -86,6 +87,8 @@ export default memo(ThumbnailBar);
 
 const selfCss = css(
   {
+    backgroundColor: palettes.white,
+    border: `1px solid ${palettes.grey3}`,
     width: '100%',
     padding: 10,
   },
