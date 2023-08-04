@@ -3,6 +3,10 @@ import type {
   InferGetServerSidePropsType,
 } from 'next/types';
 import type { ArticleDetailError } from '~/services/article';
+import type {
+  CommentDetail,
+  CommentDetailWithoutReplies,
+} from '~/services/comment';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,6 +20,7 @@ import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail, useArticleDetail } from '~/services/article';
+import { useComments } from '~/services/comment';
 import {
   flex,
   fontCss,
@@ -25,12 +30,58 @@ import {
 } from '~/styles/utils';
 import { routes } from '~/utils';
 
+/* temp */
+const CommentsLayer = (props: { articleId: number }) => {
+  const { articleId } = props;
+  const { data: comments } = useComments(articleId);
+
+  return (
+    <ul css={{ [`& > li + li`]: { marginTop: 20 } }}>
+      {comments?.map((comment) => {
+        return <Comment key={comment.commentId} comment={comment} />;
+      })}
+    </ul>
+  );
+};
+
+const Comment = (props: {
+  comment: CommentDetail | CommentDetailWithoutReplies;
+}) => {
+  const { comment } = props;
+  const hasReplies = comment.replies && comment.replies.length > 0;
+
+  return (
+    <li
+      css={{
+        border: `1px solid white`,
+        backgroundColor: hasReplies
+          ? palettes.majorDark
+          : palettes.nonMajorDark,
+      }}
+    >
+      <div>
+        <p>{comment.createdAt}</p>
+        <p>{comment.content}</p>
+      </div>
+      {hasReplies && (
+        <ul css={{ paddingLeft: 40 }}>
+          {comment.replies.map((reply) => {
+            return <Comment key={reply.commentId} comment={reply} />;
+          })}
+        </ul>
+      )}
+    </li>
+  );
+};
+/* temp-end */
+
 interface ArticleDetailPageProps
   extends InferGetServerSidePropsType<typeof getServerSideProps> {}
 
 const ArticleDetailPage = (props: ArticleDetailPageProps) => {
   const { articleId } = props;
   const { data: articleDetail } = useArticleDetail(articleId);
+  const { data: comments } = useComments(articleId);
 
   if (!articleDetail) {
     return (
@@ -59,7 +110,12 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
         onClickBackward={routes.articles.category(articleCategoryId)}
       />
 
-      <Article css={[articleCss, expandCss]} articleDetail={articleDetail} />
+      <Article
+        css={[articleCss, expandCss, { marginBottom: 40 }]}
+        articleDetail={articleDetail}
+      />
+
+      <CommentsLayer articleId={articleId} />
     </div>
   );
 };
