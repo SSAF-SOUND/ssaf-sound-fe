@@ -1,6 +1,7 @@
 import type {
   ArticleCategory,
   CreateArticleApiData,
+  CreateArticleBody,
   CreateArticleParams,
   GetArticleDetailApiData,
   LikeArticleApiData,
@@ -36,10 +37,8 @@ export const createArticle = rest.post(
   // @ts-ignore
   composeUrls(API_URL, removeQueryParams(endpoints.articles.create(1))),
   async (req, res, ctx) => {
-    const { title, content, images, anonymous } = (await req.json()) as Omit<
-      CreateArticleParams,
-      'categoryId'
-    >;
+    const { title, content, images, anonymity } =
+      (await req.json()) as CreateArticleBody;
 
     const articleId = articles.length;
 
@@ -50,7 +49,7 @@ export const createArticle = rest.post(
       title,
       content,
       images,
-      anonymous,
+      anonymity,
     });
 
     console.log('[현재 mock articles 목록]: ', articles);

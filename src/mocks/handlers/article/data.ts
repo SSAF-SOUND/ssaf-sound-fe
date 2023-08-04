@@ -75,7 +75,7 @@ export const createMockArticle = (id: number): ArticleDetail => {
     scraped: booleanValue,
     images: createMockImages(imageUrls),
     postId: id,
-    anonymous: booleanValue,
+    anonymity: booleanValue,
     author: userInfo.certifiedSsafyUserInfo,
     category: articleCategories[id % 5],
   };
@@ -96,7 +96,7 @@ export const articleError: ArticleDetailError = {
 };
 
 export const createMockArticleSummary = (id: number): ArticleSummary => {
-  const anonymous = Boolean(id % 2);
+  const anonymity = Boolean(id % 2);
   const numberRange = { min: 1000, max: 100000 };
   return {
     title: faker.lorem.sentence(4),
@@ -117,12 +117,12 @@ export const createMockArticleSummary = (id: number): ArticleSummary => {
         <li>ordered</li>
         <li>ordered</li>
       </ol>`,
-    anonymous: anonymous,
+    anonymity,
     boardTitle: '자유 게시판',
     commentCount: faker.number.int(numberRange),
     createdAt: faker.date.past().toISOString(),
     likeCount: faker.number.int(numberRange),
-    nickname: anonymous ? '익명' : faker.animal.dog(),
+    nickname: anonymity ? '익명' : faker.animal.dog(),
     postId: id,
     thumbnail: '',
   };

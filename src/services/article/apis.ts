@@ -33,11 +33,24 @@ export interface CreateArticleParams {
   images: CreateArticleImagePayload[];
 }
 
+export interface CreateArticleBody {
+  title: string;
+  content: string;
+  anonymity: boolean;
+  images: CreateArticleImagePayload[];
+}
+
 export type CreateArticleApiData = ApiSuccessResponse<{ postId: number }>;
 
 export const createArticle = (params: CreateArticleParams) => {
-  const { categoryId, ...body } = params;
+  const { categoryId, anonymous, ...restParams } = params;
   const endpoint = endpoints.articles.create(categoryId);
+
+  const body: CreateArticleBody = {
+    ...restParams,
+    anonymity: anonymous,
+  };
+
   return privateAxios
     .post<CreateArticleApiData>(endpoint, body)
     .then((res) => res.data.data.postId);

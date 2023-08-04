@@ -14,11 +14,11 @@ export interface ArticleImage {
 
 export type ArticleAuthor =
   | {
-      anonymous: false;
+      anonymity: false;
       author: Omit<UserInfo, 'memberId'>;
     }
   | {
-      anonymous: true;
+      anonymity: true;
       author: Pick<UserInfo, 'nickname'>;
     };
 
@@ -60,7 +60,7 @@ export interface ArticleSummary {
   commentCount: number;
   createdAt: string;
   nickname: string;
-  anonymous: boolean;
+  anonymity: boolean;
   thumbnail: string; // 안 쓰임
 }
 
