@@ -16,7 +16,13 @@ import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail, useArticleDetail } from '~/services/article';
-import { flex, globalVars, palettes, titleBarHeight } from '~/styles/utils';
+import {
+  flex,
+  fontCss,
+  globalVars,
+  palettes,
+  titleBarHeight,
+} from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface ArticleDetailPageProps
@@ -47,6 +53,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
   return (
     <div css={selfCss}>
       <TitleBar.Default
+        css={titleBarCss}
         title={categoryTitle}
         withoutClose
         onClickBackward={routes.articles.category(articleCategoryId)}
@@ -110,6 +117,8 @@ const articleCss = css({
   padding: '20px 24px',
   backgroundColor: palettes.background.grey,
 });
+
+const titleBarCss = css(fontCss.style.B16);
 
 /* ssr */
 
