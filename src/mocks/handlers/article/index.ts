@@ -178,11 +178,17 @@ export const likeArticle = rest.post(
     const articleId = Number(params.articleId);
     const article = articles[articleId];
     article.liked = !article.liked;
+    const delta = article.liked ? 1 : -1;
+    article.likeCount += delta;
     const latestLiked = article.liked;
+    const latestLikeCount = article.likeCount;
 
     return res(
       ctx.delay(500),
-      ...mockSuccess<LikeArticleApiData['data']>(ctx, { liked: latestLiked })
+      ...mockSuccess<LikeArticleApiData['data']>(ctx, {
+        liked: latestLiked,
+        likeCount: latestLikeCount,
+      })
     );
   }
 );
@@ -207,12 +213,16 @@ export const scrapArticle = rest.post(
     const articleId = Number(params.articleId);
     const article = articles[articleId];
     article.scraped = !article.scraped;
+    const delta = article.scraped ? 1 : -1;
+    article.scrapCount += delta;
     const latestScraped = article.scraped;
+    const latestScrapCount = article.scrapCount;
 
     return res(
       ctx.delay(500),
       ...mockSuccess<ScrapArticleApiData['data']>(ctx, {
         scraped: latestScraped,
+        scrapCount: latestScrapCount,
       })
     );
   }

@@ -115,7 +115,7 @@ export const getArticleDetail = (articleId: number) => {
 };
 
 export type LikeArticleApiData = ApiSuccessResponse<
-  Pick<ArticleDetail, 'liked'>
+  Pick<ArticleDetail, 'liked' | 'likeCount'>
 >;
 
 export const likeArticle = (articleId: number) => {
@@ -123,11 +123,11 @@ export const likeArticle = (articleId: number) => {
 
   return privateAxios
     .post<LikeArticleApiData>(endpoint, null)
-    .then((res) => res.data.data.liked);
+    .then((res) => res.data.data);
 };
 
 export type ScrapArticleApiData = ApiSuccessResponse<
-  Pick<ArticleDetail, 'scraped'>
+  Pick<ArticleDetail, 'scraped' | 'scrapCount'>
 >;
 
 export const scrapArticle = (articleId: number) => {
@@ -135,7 +135,7 @@ export const scrapArticle = (articleId: number) => {
 
   return privateAxios
     .post<ScrapArticleApiData>(endpoint, null)
-    .then((res) => res.data.data.scraped);
+    .then((res) => res.data.data);
 };
 
 export interface GetArticlesParams {

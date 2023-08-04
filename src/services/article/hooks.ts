@@ -106,12 +106,13 @@ export const useLikeArticle = (articleId: number) => {
       });
       return { prevArticle: article };
     },
-    onSuccess: (liked) => {
+    onSuccess: ({ liked, likeCount }) => {
       setArticleDetail((prevArticle) => {
         if (!prevArticle) return;
         return {
           ...prevArticle,
           liked,
+          likeCount,
         };
       });
     },
@@ -150,12 +151,13 @@ export const useScrapArticle = (articleId: number) => {
       });
       return { prevArticle: article };
     },
-    onSuccess: (scraped) => {
+    onSuccess: ({ scraped, scrapCount }) => {
       setArticleDetail((prevArticle) => {
         if (!prevArticle) return;
         return {
           ...prevArticle,
           scraped,
+          scrapCount,
         };
       });
     },
