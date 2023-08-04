@@ -100,7 +100,7 @@ const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
   const notExistSearchResults = isValidKeyword && isHotArticleEmpty;
   const notExistHotArticles = !isValidKeyword && isHotArticleEmpty;
 
-  if (isLoading) return <HotArticleCardSkeletons />;
+  if (isLoading) return <HotArticleCardSkeletons count={6} />;
 
   if (notExistSearchResults) return <NoSearchResults keyword={keyword} />;
 
