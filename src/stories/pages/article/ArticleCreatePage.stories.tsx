@@ -5,7 +5,7 @@ import ArticleCreatePage from '~/pages/articles/new';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof ArticleCreatePage> = {
-  title: 'Page/ArticleCreate',
+  title: 'Page/Article/Create',
   component: ArticleCreatePage,
   decorators: [
     (Story) => (

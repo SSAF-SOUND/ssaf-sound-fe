@@ -4,7 +4,7 @@ import ArticleCategoriesPage from '~/pages/articles/categories';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof ArticleCategoriesPage> = {
-  title: 'Page/ArticleCategories',
+  title: 'Page/Article/Categories',
   component: ArticleCategoriesPage,
   decorators: [
     (Story) => (

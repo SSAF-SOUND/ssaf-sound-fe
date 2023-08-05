@@ -7,6 +7,7 @@ export interface ArticleCategory {
 
 export interface ArticleImage {
   imageUrl: string;
+  imagePath: string;
 }
 
 export type ArticleAuthor =

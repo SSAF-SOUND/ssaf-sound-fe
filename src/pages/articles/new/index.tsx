@@ -38,19 +38,10 @@ const ArticleCreatePage: CustomNextPage = () => {
   const onValidSubmit: ArticleFormProps['onValidSubmit'] = async (
     formValues
   ) => {
-    const { images: fieldImages, ...restFormValues } = formValues;
-
-    // TODO: imagePath 업데이트 (이미지를 삭제할 수 있는 S3 URL)
-    const images = fieldImages.map((url) => ({
-      imagePath: url,
-      imageUrl: url,
-    }));
-
     try {
       const articleId = await createArticle({
         categoryId,
-        images,
-        ...restFormValues,
+        ...formValues,
       });
 
       await router.replace(routes.articles.detail(articleId));

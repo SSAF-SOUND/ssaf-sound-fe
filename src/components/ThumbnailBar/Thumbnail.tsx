@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
 import { css } from '@emotion/react';
-import { memo } from 'react';
 import { ClipLoader } from 'react-spinners';
 
 import { Icon } from '~/components/Common';
+import { useIsImageLoading } from '~/hooks/useIsImageLoading';
 import { colorMix, inlineFlex, palettes } from '~/styles/utils';
 
 interface ThumbnailProps {
@@ -17,6 +17,10 @@ interface ThumbnailProps {
   disableRemove?: boolean;
 }
 
+/**
+ * - `loading`은 외부에서 강제로 설정할 수 있는 로딩상태 값입니다.
+ * - `isImageLoading`은 실제 이미지의 로딩상태입니다.
+ */
 const Thumbnail = (props: ThumbnailProps) => {
   const {
     src,
@@ -27,18 +31,20 @@ const Thumbnail = (props: ThumbnailProps) => {
     onClickRemove,
     disableRemove = false,
   } = props;
-
-  const showRemoveButton = !disableRemove && !loading;
+  const isImageLoading = useIsImageLoading(src);
+  const showSpinner = loading || isImageLoading;
+  const showRemoveButton = !disableRemove && !showSpinner;
+  const handleClickThumbnail = showSpinner ? undefined : onClickThumbnail;
 
   return (
-    <li css={[selfCss, loading && darkerCss]}>
+    <li css={[selfCss, showSpinner && darkerCss]}>
       <div
         css={imageContainerCss}
         style={{ width: size, height: size }}
-        onClick={onClickThumbnail}
+        onClick={handleClickThumbnail}
         data-thumbnail=""
       >
-        {loading && <ImageLoadIndicator />}
+        {showSpinner && <ImageLoadIndicator />}
         <Image css={imageCss} src={src} alt={alt} width={size} height={size} />
       </div>
       {showRemoveButton && (
@@ -58,7 +64,7 @@ const ImageLoadIndicator = () => {
   );
 };
 
-export default memo(Thumbnail);
+export default Thumbnail;
 
 const defaultSize = 70;
 

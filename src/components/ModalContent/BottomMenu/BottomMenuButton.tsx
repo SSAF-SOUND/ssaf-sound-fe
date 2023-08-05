@@ -60,7 +60,7 @@ const buttonCss = css(
     ':active': {
       backgroundColor: palettes.grey5,
     },
-    ':focus-visible': {
+    ':focus': {
       backgroundColor: palettes.grey4,
     },
     ':disabled': {

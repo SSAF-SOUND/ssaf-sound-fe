@@ -17,6 +17,7 @@ export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
   const { articleDetail } = params;
   const {
     mine,
+    postId: articleId,
     category: { boardId: categoryId },
   } = articleDetail;
   const router = useRouter();
@@ -34,7 +35,7 @@ export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
 
   const handleClickModifyButton = () => {
     closeModal();
-    // router.push(routes.articles.edit(articleId));
+    router.push(routes.articles.edit(articleId));
   };
 
   const openArticleMenuModal = () => {

@@ -94,9 +94,9 @@ export const OtherOptions = () => {
       {hasImages && (
         <ThumbnailBar
           css={thumbnailBarCss}
-          thumbnails={images.map(({ url, thumbnailUrl }) => ({
+          thumbnails={images.map(({ imageUrl, thumbnailUrl }) => ({
             thumbnailUrl,
-            loading: !url,
+            loading: !imageUrl,
           }))}
           onClickRemoveThumbnail={(index) =>
             setImages((prev) => prev.filter((_, i) => i !== index))

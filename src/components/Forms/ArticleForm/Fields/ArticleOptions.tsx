@@ -1,3 +1,6 @@
+import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils';
+import type { ArticleImage } from '~/services/article';
+
 import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 import { useEffect } from 'react';
@@ -12,7 +15,7 @@ import { flex, palettes } from '~/styles/utils';
 
 const imageFieldName = 'images';
 const maxImageCount = 3;
-const validateImages = (value: string[]) => {
+const validateImages = (value: ArticleImage[]) => {
   if (value.length > maxImageCount)
     return `한 번에 업로드할 수 있는 최대 이미지의 개수는 ${maxImageCount}개 입니다.`;
 };
@@ -36,10 +39,13 @@ export const ArticleOptions = () => {
   };
 
   const createInitialImages = () =>
-    (defaultImages.filter(Boolean) as string[]).map((url) => ({
-      url,
-      thumbnailUrl: url,
-    }));
+    (defaultImages.filter(Boolean) as ArticleFormValues['images']).map(
+      ({ imageUrl, imagePath }) => ({
+        imageUrl,
+        imagePath,
+        thumbnailUrl: imageUrl,
+      })
+    );
 
   const { images, setImages, handleOpenImageUploader, isUploading } =
     useImageUpload({
@@ -55,9 +61,9 @@ export const ArticleOptions = () => {
 
   const hasImages = images.length > 0;
 
-  const thumbnails = images.map(({ thumbnailUrl, url }) => {
+  const thumbnails = images.map(({ thumbnailUrl, imageUrl }) => {
     return {
-      loading: !url,
+      loading: !imageUrl,
       thumbnailUrl,
     };
   });
@@ -71,7 +77,11 @@ export const ArticleOptions = () => {
   });
 
   useEffect(() => {
-    const imageFieldValues = images.map(({ url }) => url || '');
+    // sync image load and form image values
+    const imageFieldValues = images.map(({ imageUrl, imagePath }) => ({
+      imageUrl: imageUrl || '',
+      imagePath: imagePath || '',
+    }));
     setValue(imageFieldName, imageFieldValues, {
       shouldDirty: true,
     });

@@ -4,7 +4,7 @@ import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-import { imageDir, preSignedUrl } from './data';
+import { imageUrl, preSignedUrl, imagePath } from './data';
 
 export const createPreSignedUrl = restSuccess<
   CreatePreSignedUrlApiData['data']
@@ -13,12 +13,9 @@ export const createPreSignedUrl = restSuccess<
   composeUrls(API_URL, removeQueryParams(endpoints.s3.preSignedUrl())),
   {
     data: {
-      imagePathDtos: [
-        {
-          preSignedUrl,
-          imageDir,
-        },
-      ],
+      preSignedUrl,
+      imageUrl,
+      imagePath,
     },
     delay: 1000,
   }
