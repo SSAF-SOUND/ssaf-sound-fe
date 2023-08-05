@@ -41,7 +41,7 @@ import {
   MdThumbUp,
   MdSearch,
 } from 'react-icons/md';
-import { RiKakaoTalkFill } from 'react-icons/ri';
+import { RiKakaoTalkFill, RiSendPlane2Line } from 'react-icons/ri';
 import { TbPencilPlus, TbSquareRoundedCheckFilled } from 'react-icons/tb';
 
 import { inlineFlex } from '~/styles/utils';
@@ -95,6 +95,7 @@ export const icons = {
   link: <MdLink />,
   setting: <MdSettings />,
   document: <MdDescription />,
+  send: <RiSendPlane2Line />,
 
   google: <AiOutlineGoogle />,
   github: <AiFillGithub />,
