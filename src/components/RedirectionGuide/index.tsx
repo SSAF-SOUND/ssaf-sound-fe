@@ -18,8 +18,11 @@ interface RedirectionGuideProps {
   description: ReactNode;
   /** 기본값은 `<SsafyIcon.Track name="fallback" size={TrackSize.LG2} />`의 */
   indicator?: ReactNode;
-  redirectionTo: LinkProps['href'];
-  redirectionText: string;
+  redirectionTo?: LinkProps['href'];
+  redirectionText?: string;
+
+  /** 이 prop을 명시하면 redirectionTo, redirectionText는 사용되지 않습니다. */
+  customLinkElements?: ReactNode;
 }
 
 const RedirectionGuide = (props: RedirectionGuideProps) => {
@@ -28,7 +31,8 @@ const RedirectionGuide = (props: RedirectionGuideProps) => {
     title,
     description,
     redirectionTo,
-    redirectionText,
+    redirectionText = '',
+    customLinkElements,
     indicator = <SsafyIcon.Track size={TrackSize.LG2} theme={theme} />,
   } = props;
 
@@ -42,9 +46,12 @@ const RedirectionGuide = (props: RedirectionGuideProps) => {
         <div css={descriptionCss}>{description}</div>
       </div>
       <div css={bottomContainerCss}>
-        <Button asChild size="lg" theme={theme}>
-          <Link href={redirectionTo}>{redirectionText}</Link>
-        </Button>
+        {!customLinkElements && redirectionTo && (
+          <Button asChild size="lg" theme={theme}>
+            <Link href={redirectionTo}>{redirectionText}</Link>
+          </Button>
+        )}
+        {customLinkElements}
       </div>
     </div>
   );

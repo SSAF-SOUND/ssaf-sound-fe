@@ -1,10 +1,16 @@
-import type { ArticleCategory } from './utils';
+import type {
+  ArticleCategory,
+  ArticleDetail,
+  ArticleDetailError,
+} from './utils';
 import type { ApiSuccessResponse } from '~/types';
 
-import { endpoints } from '~/react-query/common';
-import { privateAxios, publicAxios } from '~/utils';
+import { isAxiosError } from 'axios';
 
-type GetArticleCategoriesApiData = ApiSuccessResponse<ArticleCategory[]>;
+import { endpoints } from '~/react-query/common';
+import { getErrorResponse, privateAxios, publicAxios } from '~/utils';
+
+export type GetArticleCategoriesApiData = ApiSuccessResponse<ArticleCategory[]>;
 
 export const getArticleCategories = () => {
   const endpoint = endpoints.articles.categories();
@@ -34,4 +40,63 @@ export const createArticle = (params: CreateArticleParams) => {
   return privateAxios
     .post<CreateArticleApiData>(endpoint, body)
     .then((res) => res.data.data.postId);
+};
+
+export interface RemoveArticleParams {
+  articleId: number;
+}
+
+export const removeArticle = (params: RemoveArticleParams) => {
+  const { articleId } = params;
+  const endpoint = endpoints.articles.detail(articleId);
+  return privateAxios.delete(endpoint).then((res) => res.data);
+};
+
+export type GetArticleDetailApiData = ApiSuccessResponse<{
+  post: ArticleDetail;
+}>;
+
+export interface ReportArticleParams {
+  articleId: number;
+  content: string;
+}
+
+export const reportArticle = (params: ReportArticleParams) => {
+  const { articleId, content } = params;
+
+  const endpoint = endpoints.articles.report(articleId);
+  return privateAxios.post(endpoint, { content }).then((res) => res.data);
+};
+
+const createArticleDetailErrorData = (
+  message: string,
+  isUnknownError = false
+): ArticleDetailError => {
+  return {
+    error: {
+      isUnknownError,
+      message,
+    },
+  };
+};
+
+export const getArticleDetail = (articleId: number) => {
+  const endpoint = endpoints.articles.detail(articleId);
+  return publicAxios
+    .get<GetArticleDetailApiData>(endpoint)
+    .then((res) => res.data.data.post)
+    .catch((err) => {
+      if (isAxiosError(err)) {
+        const response = getErrorResponse(err);
+
+        if (response) {
+          return createArticleDetailErrorData(response.message);
+        }
+      }
+
+      return createArticleDetailErrorData(
+        '알 수 없는 에러가 발생했습니다.',
+        true
+      );
+    });
 };

@@ -3,7 +3,13 @@ import type { MouseEventHandler, ReactElement } from 'react';
 import { css } from '@emotion/react';
 
 import { Modal, VisuallyHidden } from '~/components/Common';
-import { flex, fontCss, palettes, position } from '~/styles/utils';
+import {
+  flex,
+  fontCss,
+  pageMinWidth,
+  palettes,
+  position,
+} from '~/styles/utils';
 
 import { BottomMenuCloseButton } from './BottomMenuButton';
 
@@ -39,6 +45,7 @@ export default BottomMenuBase;
 const selfCss = css(
   {
     width: '100vw',
+    minWidth: pageMinWidth - 20,
     maxWidth: 576,
     borderRadius: 16,
     padding: 12,

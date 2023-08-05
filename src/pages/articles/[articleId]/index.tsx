@@ -1,22 +1,162 @@
-import Link from 'next/link';
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+} from 'next/types';
+import type { ArticleDetail, ArticleDetailError } from '~/services/article';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { css } from '@emotion/react';
+
+import { Article } from '~/components/Article';
 import { Button } from '~/components/Common';
-import { fontCss } from '~/styles/utils';
+import RedirectionGuide from '~/components/RedirectionGuide';
+import TitleBar from '~/components/TitleBar';
+import { queryKeys } from '~/react-query/common';
+import { prefetch } from '~/react-query/server';
+import { getArticleDetail, useArticleDetail } from '~/services/article';
+import { flex, globalVars, palettes, titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 
-interface ArticleDetailPageProps {}
+interface ArticleDetailPageProps
+  extends InferGetServerSidePropsType<typeof getServerSideProps> {}
 
 const ArticleDetailPage = (props: ArticleDetailPageProps) => {
+  const { initialArticleDetail, articleId } = props;
+  const { data: articleDetail } = useArticleDetail(articleId, {
+    initialData: initialArticleDetail ?? undefined,
+  });
+
+  if (!articleDetail) {
+    return (
+      <RedirectionGuide
+        title="Error"
+        description="게시글을 불러오는데 실패했습니다."
+        redirectionText="게시글 모아보기 페이지로"
+        redirectionTo={routes.articles.categories()}
+      />
+    );
+  }
+
+  if ('error' in articleDetail) {
+    return <NotExistsArticle articleError={articleDetail} />;
+  }
+
+  const { title: categoryTitle, boardId: articleCategoryId } =
+    articleDetail.category;
+
   return (
-    <div>
-      <h2 css={fontCss.style.B28}>ArticleDetail</h2>
-      <Button asChild css={{ width: 100 }}>
-        <Link href={routes.articles.create(1)}>글 작성</Link>
-      </Button>
+    <div css={selfCss}>
+      <TitleBar.Default
+        title={categoryTitle}
+        withoutClose
+        onClickBackward={routes.articles.category(articleCategoryId)}
+      />
+
+      <Article css={[articleCss, expandCss]} articleDetail={articleDetail} />
     </div>
   );
 };
 
 export default ArticleDetailPage;
 
-// SSR
+interface NotExistsArticleProps {
+  articleError: ArticleDetailError;
+}
+
+const NotExistsArticle = (props: NotExistsArticleProps) => {
+  const { articleError } = props;
+  const router = useRouter();
+
+  return (
+    <RedirectionGuide
+      title="게시글을 불러오는데 실패했습니다."
+      description={articleError.error.message}
+      customLinkElements={
+        <div css={flex('', '', 'column', 10)}>
+          <Button size="lg" asChild>
+            <Link href={routes.articles.categories()}>
+              게시판 모아보기 페이지로
+            </Link>
+          </Button>
+          <Button
+            variant="literal"
+            size="lg"
+            onClick={() => router.back()}
+            style={{ textDecoration: 'underline', alignSelf: 'center' }}
+          >
+            뒤로 가기
+          </Button>
+        </div>
+      }
+    />
+  );
+};
+
+/* css */
+
+const selfPaddingX = 0;
+const negativeMarginForExpand = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
+
+const selfCss = css({
+  padding: `${titleBarHeight + 10}px ${selfPaddingX}px`,
+});
+
+const expandCss = css({
+  width: 'auto',
+  margin: `0 ${negativeMarginForExpand}`,
+});
+
+const articleCss = css({
+  padding: '20px 24px',
+  backgroundColor: palettes.background.grey,
+});
+
+/* ssr */
+
+interface Props {
+  initialArticleDetail: null | ArticleDetail | ArticleDetailError;
+  articleId: number;
+}
+
+type Params = {
+  articleId: string;
+};
+
+export const getServerSideProps: GetServerSideProps<Props, Params> = async (
+  context
+) => {
+  const articleId = Number(context.params?.articleId);
+
+  // 0. articleId가 유효하지 않음 (숫자가 아님) -> notFound
+  // 1. 클라이언트 오류 (없는 게시글, 삭제된 게시글을 조회할 때)
+  // 2. 서버 오류
+
+  if (Number.isNaN(articleId)) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const dehydrate = prefetch({
+    queryKey: queryKeys.article.detail(articleId),
+    queryFn: () => getArticleDetail(articleId),
+  });
+
+  const dehydratedState = await dehydrate();
+
+  const initialArticleDetail =
+    (dehydratedState.queries[0]?.state?.data as
+      | ArticleDetail
+      | ArticleDetailError
+      | undefined) ?? null;
+
+  return {
+    props: {
+      articleId,
+      initialArticleDetail,
+      dehydratedState,
+    },
+  };
+};
