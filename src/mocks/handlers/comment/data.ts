@@ -30,6 +30,7 @@ export const createMockCommentDetailWithoutReplies = (
     mine,
     anonymity,
     author: userInfo.certifiedSsafyUserInfo,
+    replies: undefined,
   };
 };
 
