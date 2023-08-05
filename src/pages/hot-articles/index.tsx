@@ -171,7 +171,7 @@ const SearchBar = () => {
   };
 
   const onInvalidSubmit: SearchBarFormProps['onInvalidSubmit'] = (
-    errorMessage: string
+    errorMessage
   ) => {
     if (errorMessage) {
       customToast.clientError(errorMessage);
