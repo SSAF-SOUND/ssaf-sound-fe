@@ -18,7 +18,7 @@ interface CommentFormOptions {
   showAnonymous: boolean;
 }
 
-interface CommentFormProps {
+export interface CommentFormProps {
   defaultValues?: CommentFormValues;
   onValidSubmit: SubmitHandlerWithReset<CommentFormValues>;
   onInvalidSubmit?: SubmitErrorHandlerWithErrorMessage<CommentFormValues>;

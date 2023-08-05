@@ -34,9 +34,10 @@ export const createMockCommentDetailWithoutReplies = (
   };
 };
 
-export const createMockCommentDetail = (id: number): CommentDetail => {
-  const replyCount = faker.number.int({ min: 1, max: 5 });
-
+export const createMockCommentDetail = (
+  id: number,
+  replyCount = faker.number.int({ min: 1, max: 5 })
+): CommentDetail => {
   const replies = Array(replyCount)
     .fill(undefined)
     .map(() => createMockCommentDetailWithoutReplies(replyId++));

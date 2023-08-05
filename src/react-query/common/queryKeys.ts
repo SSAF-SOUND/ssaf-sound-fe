@@ -95,6 +95,7 @@ export const endpoints = {
   },
   comments: {
     list: (articleId: number) => `/comments?postId=${articleId}`,
+    create: (articleId: number) => `/comments?postId=${articleId}`,
   },
   user: {
     myInfo: () => '/members' as const,
