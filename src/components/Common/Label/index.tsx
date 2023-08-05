@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 interface LabelProps extends ComponentPropsWithoutRef<'label'> {
-  name: string;
+  name?: string;
   customNameElement?: ReactElement;
   children: ReactElement;
 }

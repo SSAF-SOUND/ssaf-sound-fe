@@ -1,4 +1,5 @@
 import type { MouseEventHandler } from 'react';
+import type { Route } from '~/types';
 
 import { useRouter } from 'next/router';
 
@@ -14,7 +15,7 @@ interface FormTitleBarProps {
   submitButtonText: string;
   isSubmitting?: boolean;
   isSubmitDisabled?: boolean;
-  onClickClose?: MouseEventHandler<HTMLButtonElement>;
+  onClickClose?: Route | MouseEventHandler<HTMLButtonElement>;
   className?: string;
 }
 
@@ -36,15 +37,26 @@ const FormTitleBar = (props: FormTitleBarProps) => {
     router.back();
   };
 
+  const handleClickClose: MouseEventHandler<HTMLButtonElement> = (e) => {
+    if (!onClickClose) {
+      defaultHandleClickClose();
+      return;
+    }
+
+    if (typeof onClickClose === 'function') {
+      onClickClose(e);
+      return;
+    }
+
+    router.push(onClickClose);
+  };
+
   return (
     <Bar
       css={selfCss}
       {...restProps}
       left={
-        <IconButton
-          size={iconButtonSize}
-          onClick={onClickClose || defaultHandleClickClose}
-        >
+        <IconButton size={iconButtonSize} onClick={handleClickClose}>
           <Icon name="close" size={iconSize} />
         </IconButton>
       }

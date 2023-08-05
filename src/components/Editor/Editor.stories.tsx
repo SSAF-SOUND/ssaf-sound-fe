@@ -3,6 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
+import { AlertText } from '~/components/Common';
+import ThumbnailBar from '~/components/ThumbnailBar';
+import { useImageUpload } from '~/services/s3/hooks';
 import { PageLayout } from '~/stories/Layout';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
@@ -70,3 +73,50 @@ const lengthCss = css(
   flex('center', '', 'column', 10),
   fontCss.style.B16
 );
+
+export const OtherOptions = () => {
+  const { images, handleOpenImageUploader, setImages } = useImageUpload({
+    initialImages: [],
+    maxImageCount: 5,
+  });
+
+  const hasImages = Boolean(images.length);
+
+  return (
+    <div>
+      <Editor.TitleInput placeholder="Title" />
+      <Editor placeholder="Content" />
+
+      <Editor.MessageBox css={messageBoxCss}>
+        <AlertText>경고 메세지</AlertText>
+      </Editor.MessageBox>
+
+      {hasImages && (
+        <ThumbnailBar
+          css={thumbnailBarCss}
+          thumbnails={images.map(({ url, thumbnailUrl }) => ({
+            thumbnailUrl,
+            loading: !url,
+          }))}
+          onClickRemoveThumbnail={(index) =>
+            setImages((prev) => prev.filter((_, i) => i !== index))
+          }
+        />
+      )}
+      <Editor.ToolBar css={{ borderTop: 0 }}>
+        <Editor.ToolBarItem name="image" onClick={handleOpenImageUploader} />
+      </Editor.ToolBar>
+    </div>
+  );
+};
+
+const thumbnailBarCss = css({
+  border: `1px solid ${palettes.grey3}`,
+  borderTop: 0,
+  borderBottom: 0,
+});
+
+const messageBoxCss = css({
+  padding: '0 15px',
+  borderTop: 0,
+});

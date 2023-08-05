@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import * as RadixCheckbox from '@radix-ui/react-checkbox';
 
 import { Icon } from '~/components/Common';
-import { inlineFlex, palettes, themeColorVars } from '~/styles/utils';
+import { colorMix, inlineFlex, palettes, themeColorVars } from '~/styles/utils';
 
 interface CheckboxProps extends Omit<RadixCheckboxProps, 'asChild'> {
   theme?: 'primary' | 'secondary';
@@ -42,7 +42,7 @@ const selfCss = css(
 
 const checkIconCss = css({
   '[data-state="unchecked"] &': {
-    color: palettes.font.blueGrey,
+    color: colorMix('50%', palettes.font.blueGrey),
   },
   '[data-state="checked"] &': {
     color: themeColorVars.mainDarkColor.var,

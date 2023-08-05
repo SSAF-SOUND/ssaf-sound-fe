@@ -19,6 +19,10 @@ export const composeUrls = (...urls: string[]) => {
   return '/' + composed;
 };
 
+export const removeQueryParams = (url: string) => {
+  return url.replace(/\?.*$/, '');
+};
+
 export const sleep = (ms: number) => {
   return new Promise((resolve) => {
     setTimeout(() => resolve(0), ms);

@@ -8,9 +8,9 @@ import { useArticleFormContext } from '~/components/Forms/ArticleForm/utils';
 import { palettes } from '~/styles/utils';
 
 const fieldName = 'content';
-const minLength = 2;
-const maxLength = 4000;
-const lengthErrorMessage = `글 내용은 ${minLength}자 이상, ${maxLength}자 이하까지 가능합니다.`;
+const minContentLength = 2;
+const maxContentLength = 4000;
+const lengthErrorMessage = `내용은 ${minContentLength}~${maxContentLength}자 사이여야 합니다.`;
 const validateArticleContent = (error?: string) => () => !error || error;
 
 export const ArticleContent = () => {
@@ -19,10 +19,15 @@ export const ArticleContent = () => {
     setValue,
     setError,
     clearErrors,
-    formState: { defaultValues: { content: defaultContent } = {}, errors },
+    formState: {
+      isSubmitted,
+      defaultValues: { content: defaultContent } = {},
+      errors,
+    },
   } = useArticleFormContext();
 
   const errorMessage = errors?.content?.message;
+  const showErrorMessage = isSubmitted && errorMessage;
 
   const onChange: EditorProps['onChange'] = (value, d, s, editor) => {
     setValue(fieldName, value, {
@@ -31,7 +36,7 @@ export const ArticleContent = () => {
 
     const textLength = editor.getText().length - 1;
 
-    if (textLength < minLength || textLength > maxLength) {
+    if (textLength < minContentLength || textLength > maxContentLength) {
       setError(fieldName, {
         message: lengthErrorMessage,
       });
@@ -43,19 +48,28 @@ export const ArticleContent = () => {
 
   register(fieldName, {
     validate: validateArticleContent(errorMessage),
+    required: lengthErrorMessage,
   });
 
   return (
     <div>
-      <Editor defaultValue={defaultContent} onChange={onChange} />
-      {errorMessage && (
-        <AlertText css={alertMessageCss}>{errorMessage}</AlertText>
+      <Editor
+        placeholder="내용"
+        defaultValue={defaultContent}
+        onChange={onChange}
+      />
+      {showErrorMessage && (
+        <Editor.MessageBox css={errorMessageContainerCss}>
+          <AlertText>{errorMessage}</AlertText>
+        </Editor.MessageBox>
       )}
     </div>
   );
 };
 
-const alertMessageCss = css({
-  padding: '0 10px',
+const errorMessageContainerCss = css({
+  borderBottom: 0,
+  borderTop: 0,
+  padding: '0 15px',
   backgroundColor: palettes.white,
 });

@@ -1,26 +1,36 @@
+import type { CSSProperties } from 'react';
+
 import { css } from '@emotion/react';
 import { memo, useState } from 'react';
 
 import { Icon, IconButton, Modal } from '~/components/Common';
-import Thumbnail from '~/components/Editor/Thumbnail';
 import { ImageViewer } from '~/components/ModalContent';
 import { flex, palettes } from '~/styles/utils';
 
-interface ThumbnailUrl {
+import Thumbnail from './Thumbnail';
+
+interface ThumbnailState {
   thumbnailUrl: string;
   loading: boolean;
 }
 
 interface ThumbnailBarProps {
   className?: string;
-  thumbnails: ThumbnailUrl[];
-  onClickRemoveThumbnail?: (idx: number) => void;
+  style?: CSSProperties;
+  thumbnails: ThumbnailState[];
+  onClickRemoveThumbnail?: (index: number) => void;
   disableRemove?: boolean;
+  thumbnailSize?: number;
 }
 
 const ThumbnailBar = (props: ThumbnailBarProps) => {
-  const { thumbnails, onClickRemoveThumbnail, className, disableRemove } =
-    props;
+  const {
+    thumbnails,
+    thumbnailSize = 100,
+    onClickRemoveThumbnail,
+    disableRemove,
+    ...restProps
+  } = props;
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
   const openModal = () => setOpen(true);
@@ -31,14 +41,14 @@ const ThumbnailBar = (props: ThumbnailBarProps) => {
 
   return (
     <>
-      <ol css={selfCss} className={className}>
+      <ol css={selfCss} {...restProps}>
         {thumbnails.map(({ thumbnailUrl, loading }, index) => (
           <Thumbnail
             loading={loading}
             key={thumbnailUrl}
             src={thumbnailUrl}
             alt=""
-            size={70}
+            size={thumbnailSize}
             onClickThumbnail={() => {
               openModal();
               setSelectedIndex(index);
@@ -88,7 +98,6 @@ export default memo(ThumbnailBar);
 const selfCss = css(
   {
     backgroundColor: palettes.white,
-    border: `1px solid ${palettes.grey3}`,
     width: '100%',
     padding: 10,
   },

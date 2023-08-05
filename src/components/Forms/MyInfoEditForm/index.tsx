@@ -31,14 +31,10 @@ interface MyInfoEditFormPropsOptions {
 }
 
 type OriginalOnValidSubmit = SubmitHandler<MyInfoEditFormValues>;
-type OnValidSubmit = OriginalOnValidSubmit extends (
-  ...args: infer Args
-) => infer Return
-  ? (
-      reset: UseFormReturn<MyInfoEditFormValues>['reset'],
-      ...args: Args
-    ) => Return
-  : never;
+type OnValidSubmit = (
+  reset: UseFormReturn<MyInfoEditFormValues>['reset'],
+  ...args: Parameters<OriginalOnValidSubmit>
+) => ReturnType<OriginalOnValidSubmit>;
 
 export interface MyInfoEditFormProps {
   field: MyInfoEditFormFields;
@@ -82,7 +78,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
       >
         <TitleBar.Default
           title={titleMap[field]}
-          backwardAs={titleBarBackwardRoute}
+          onClickBackward={titleBarBackwardRoute}
           withoutClose
         />
         {field === 'nickname' && (

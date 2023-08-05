@@ -78,6 +78,7 @@ const selfCss = css(
 
 const imageContainerCss = css(
   {
+    border: `1px solid black`,
     width: defaultSize,
     height: defaultSize,
     position: 'relative',

@@ -1,24 +1,31 @@
-import type {
-  SubmitErrorHandler,
-  SubmitHandler} from 'react-hook-form';
-import type { PartialDeep } from 'type-fest';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils';
+import type { Route } from '~/types';
 
 import { css } from '@emotion/react';
-import {
-  FormProvider,
-  useForm,
-} from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import TitleBar from '~/components/TitleBar';
 import { titleBarHeight } from '~/styles/utils';
 
-import { ArticleTitle, ArticleContent, ArticleImages } from './Fields';
+import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
 
-interface ArticleFormProps {
-  defaultValues?: PartialDeep<ArticleFormValues>;
+interface ArticleFormOptions {
+  titleBarCloseRoute: Route;
+}
+
+type OriginalOnInvalidSubmit = SubmitErrorHandler<ArticleFormValues>;
+type OnInvalidSubmit = (
+  message?: string,
+  ...args: Parameters<OriginalOnInvalidSubmit>
+) => ReturnType<OriginalOnInvalidSubmit>;
+
+export interface ArticleFormProps {
+  className?: string;
+  defaultValues?: ArticleFormValues;
   onValidSubmit: SubmitHandler<ArticleFormValues>;
-  onInvalidSubmit?: SubmitErrorHandler<ArticleFormValues>;
+  onInvalidSubmit?: OnInvalidSubmit;
+  options?: Partial<ArticleFormOptions>;
 }
 
 const ArticleForm = (props: ArticleFormProps) => {
@@ -26,23 +33,42 @@ const ArticleForm = (props: ArticleFormProps) => {
     defaultValues = defaultArticleFormValues,
     onValidSubmit,
     onInvalidSubmit,
+    options: { titleBarCloseRoute } = {},
   } = props;
 
   const methods = useForm<ArticleFormValues>({
     defaultValues,
   });
-  const { handleSubmit } = methods;
+
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const handleInvalidSubmit: OriginalOnInvalidSubmit = (errors, event) => {
+    const errorMessage =
+      errors.title?.message ||
+      errors.content?.message ||
+      errors.images?.message;
+
+    onInvalidSubmit?.(errorMessage, errors, event);
+  };
 
   return (
     <FormProvider {...methods}>
       <form
         css={selfCss}
-        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+        onSubmit={handleSubmit(onValidSubmit, handleInvalidSubmit)}
       >
-        <TitleBar.Form title="게시글 쓰기" submitButtonText="완료" />
+        <TitleBar.Form
+          title="게시글 쓰기"
+          submitButtonText="완료"
+          isSubmitting={isSubmitting}
+          onClickClose={titleBarCloseRoute}
+        />
         <ArticleTitle />
         <ArticleContent />
-        <ArticleImages />
+        <ArticleOptions />
       </form>
     </FormProvider>
   );

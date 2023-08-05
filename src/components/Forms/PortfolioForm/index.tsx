@@ -11,11 +11,12 @@ import { noop } from '~/utils';
 
 import { Links, SelfIntroduction, Skills } from './Fields';
 
-interface PortfolioFormOptions {}
+interface PortfolioFormOptions {
+  skillsContainerStyle: CSSProperties;
+}
 
 export interface PortfolioFormProps {
   className?: string;
-  skillsContainerStyle?: CSSProperties;
   onValidSubmit?: SubmitHandler<PortfolioFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<PortfolioFormValues>;
   defaultValues?: Partial<PortfolioFormValues>;
@@ -25,14 +26,11 @@ export interface PortfolioFormProps {
 const PortfolioForm = (props: PortfolioFormProps) => {
   const {
     className,
-    skillsContainerStyle,
-    options = {},
     onValidSubmit = noop,
     onInvalidSubmit = noop,
     defaultValues,
+    options: { skillsContainerStyle } = {},
   } = props;
-
-  const {} = options;
 
   const methods = useForm({
     defaultValues,

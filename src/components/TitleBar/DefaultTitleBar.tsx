@@ -1,4 +1,5 @@
 import type { MouseEventHandler } from 'react';
+import type { Route } from '~/types';
 
 import { useRouter } from 'next/router';
 
@@ -13,14 +14,8 @@ interface DefaultTitleBarProps {
   withoutBackward?: boolean;
   withoutTitle?: boolean;
   withoutClose?: boolean;
-  onClickBackward?: MouseEventHandler<HTMLButtonElement>;
-  onClickClose?: MouseEventHandler<HTMLButtonElement>;
-
-  /**
-   * - onClickBackward를 명시하지 않고, 여기에 path 를 입력하면 뒤로가기 버튼 누를 시 해당 path로 이동합니다.
-   * - onClickBackward와 backwardAs를 모두 입력하지 않으면 기본값은 뒤로가기입니다.
-   */
-  backwardAs?: string;
+  onClickBackward?: Route | MouseEventHandler<HTMLButtonElement>;
+  onClickClose?: Route | MouseEventHandler<HTMLButtonElement>;
 }
 
 const DefaultTitleBar = (props: DefaultTitleBarProps) => {
@@ -31,14 +26,41 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
     withoutClose = false,
     onClickBackward,
     onClickClose,
-    backwardAs,
     ...restProps
   } = props;
+
   const router = useRouter();
 
-  const defaultHandleClickBackward = () => {
-    if (backwardAs) return router.push(backwardAs);
-    return router.back();
+  const defaultHandleClickClose = () => {
+    router.back();
+  };
+
+  const handleClickClose: MouseEventHandler<HTMLButtonElement> = (e) => {
+    if (!onClickClose) {
+      defaultHandleClickClose();
+      return;
+    }
+
+    if (typeof onClickClose === 'function') {
+      onClickClose(e);
+      return;
+    }
+
+    router.push(onClickClose);
+  };
+
+  const handleClickBackward: MouseEventHandler<HTMLButtonElement> = (e) => {
+    if (!onClickBackward) {
+      defaultHandleClickClose();
+      return;
+    }
+
+    if (typeof onClickBackward === 'function') {
+      onClickBackward(e);
+      return;
+    }
+
+    router.push(onClickBackward);
   };
 
   return (
@@ -49,7 +71,7 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
         <IconButton
           size={iconButtonSize}
           css={withoutBackward && visuallyHiddenCss}
-          onClick={onClickBackward || defaultHandleClickBackward}
+          onClick={handleClickBackward}
           aria-hidden={withoutBackward && 'true'}
           disabled={withoutBackward}
         >
@@ -68,7 +90,7 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
         <IconButton
           size={iconButtonSize}
           css={withoutClose && visuallyHiddenCss}
-          onClick={onClickClose}
+          onClick={handleClickClose}
           aria-hidden={withoutClose && 'true'}
           disabled={withoutClose}
         >
