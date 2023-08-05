@@ -2,6 +2,7 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next/types';
+import type { CommentFormProps } from '~/components/Forms/CommentForm';
 import type { ArticleDetailError } from '~/services/article';
 import type {
   CommentDetail,
@@ -15,12 +16,17 @@ import { css } from '@emotion/react';
 
 import { Article } from '~/components/Article';
 import { Button } from '~/components/Common';
+import CommentForm from '~/components/Forms/CommentForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail, useArticleDetail } from '~/services/article';
-import { useComments } from '~/services/comment';
+import {
+  useComments,
+  useCreateComment,
+  useInvalidateComments,
+} from '~/services/comment';
 import {
   flex,
   fontCss,
@@ -81,7 +87,6 @@ interface ArticleDetailPageProps
 const ArticleDetailPage = (props: ArticleDetailPageProps) => {
   const { articleId } = props;
   const { data: articleDetail } = useArticleDetail(articleId);
-  const { data: comments } = useComments(articleId);
 
   if (!articleDetail) {
     return (
@@ -116,6 +121,8 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
       />
 
       <CommentsLayer articleId={articleId} />
+
+      <CommentFormLayer articleId={articleId} />
     </div>
   );
 };
@@ -125,6 +132,30 @@ export default ArticleDetailPage;
 interface NotExistsArticleProps {
   articleError: ArticleDetailError;
 }
+
+interface CommentFormLayerProps {
+  articleId: number;
+}
+
+const CommentFormLayer = (props: CommentFormLayerProps) => {
+  const { articleId } = props;
+  const { mutateAsync: createComment } = useCreateComment();
+  const invalidateComments = useInvalidateComments(articleId);
+
+  const onValidSubmit: CommentFormProps['onValidSubmit'] = async (
+    reset,
+    formValues
+  ) => {
+    try {
+      await createComment({ articleId, ...formValues });
+      await invalidateComments();
+      reset({ content: '' });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  return <CommentForm onValidSubmit={onValidSubmit} />;
+};
 
 const NotExistsArticle = (props: NotExistsArticleProps) => {
   const { articleError } = props;
