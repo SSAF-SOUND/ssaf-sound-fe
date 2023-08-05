@@ -1,5 +1,5 @@
-import ShortCut from './ShortCut';
+import NavItem from './ProfileNavItem';
 
 export const Profile = {
-  ShortCut,
+  NavItem,
 };

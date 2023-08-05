@@ -45,15 +45,15 @@ const ProfilePage: CustomNextPage = () => {
 
       {mine && (
         <div css={shortcutCss}>
-          <Profile.ShortCut
-            css={expandWidthCss}
+          <Profile.NavItem
+            css={expandCss}
             iconName="bookmark.outline"
             href="#"
             text="나의 스크랩"
           />
 
-          <Profile.ShortCut
-            css={expandWidthCss}
+          <Profile.NavItem
+            css={expandCss}
             iconName="document"
             href="#"
             text="내가 작성한 게시글"
@@ -62,7 +62,7 @@ const ProfilePage: CustomNextPage = () => {
       )}
 
       <Tabs.Root defaultValue="1">
-        <Tabs.List css={expandWidthCss}>
+        <Tabs.List css={expandCss}>
           <Tabs.Border />
           <Tabs.Trigger theme="white" value="1">
             포트폴리오
@@ -78,7 +78,7 @@ const ProfilePage: CustomNextPage = () => {
         <Tabs.Content value="1" css={tabContentCss}>
           {mine && (
             <Button
-              size="sm"
+              size="md"
               theme="grey"
               variant="filled"
               css={{ color: palettes.white, width: '100%', marginBottom: 60 }}
@@ -141,7 +141,7 @@ const myInfoCss = css(
 
 const shortcutCss = css({ marginBottom: 50 }, flex('', 'center', 'column', 8));
 
-const expandWidthCss = css({
+const expandCss = css({
   width: 'auto',
   margin: `0 calc(-1 * (${globalVars.mainLayoutPaddingX.var} + ${selfPaddingX}px));`,
 });
