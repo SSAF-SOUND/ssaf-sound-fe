@@ -3,7 +3,7 @@ import type {
   GetRecruitMembersApiData,
   GetRecruitsApiData,
   RecruitDetail,
-  RecruitMembers,
+  recruitMembersType,
   Recruits,
 } from '~/services/recruit';
 
@@ -40,7 +40,7 @@ const getRecruitMembers = rest.get<never, never, GetRecruitMembersApiData>(
   (req, res, ctx) => {
     return res(
       ctx.delay(500),
-      ...mockSuccess<RecruitMembers>(ctx, RecruitData.recruitMembers)
+      ...mockSuccess<recruitMembersType>(ctx, RecruitData.recruitMembers)
     );
   }
 );

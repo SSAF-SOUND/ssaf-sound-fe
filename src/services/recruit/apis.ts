@@ -11,6 +11,7 @@ import { endpoints } from '~/react-query/common';
 import { privateAxios } from '~/utils';
 
 export interface RecruitDetail {
+  userInfo: UserInfo;
   category: RecruitCategoryType;
   title: string;
   recruitStart: string;
@@ -62,15 +63,19 @@ export interface RecruitParticipant {
   }[];
 }
 
-export type RecruitMember = UserInfo & {
-  recruitType: RecruitType;
+export type RecruitMember = UserInfo;
+
+type RecruitMembers = {
+  members: RecruitMember[];
+  limit: number;
 };
 
-export interface RecruitMembers {
-  members: RecruitMember[];
-}
+type PartialRecruitType = Partial<RecruitType>;
+export type recruitMembersType = {
+  recruitTypes: Partial<Record<PartialRecruitType, RecruitMembers>>;
+};
 
-export type GetRecruitMembersApiData = ApiSuccessResponse<RecruitMembers>;
+export type GetRecruitMembersApiData = ApiSuccessResponse<recruitMembersType>;
 
 export const getRecruits = () => {
   const endpoint = endpoints.recruit.data();
