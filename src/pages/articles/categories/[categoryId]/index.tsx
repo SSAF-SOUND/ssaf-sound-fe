@@ -8,12 +8,9 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
-import { memo, useEffect, useState } from 'react';
 
-import { ArticleCard } from '~/components/ArticleCard';
 import ArticleCardList from '~/components/ArticleCardList';
 import { CircleButton } from '~/components/Common';
-import ErrorCard from '~/components/ErrorCard';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
@@ -36,7 +33,7 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { add, customToast, routes, scrollUpBy } from '~/utils';
+import { customToast, routes } from '~/utils';
 
 const minKeywordLength = 3;
 const validateKeyword = (keyword?: string) =>
@@ -93,92 +90,16 @@ interface ArticleLayerProps {
 const ArticleLayer = (props: ArticleLayerProps) => {
   const { categoryId, keyword } = props;
   const isValidKeyword = validateKeyword(keyword);
-  const {
-    data: articles,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-    error,
-    isLoading,
-  } = useArticles(categoryId, { keyword });
-
-  const [hasError, setHasError] = useState(false);
-
-  const fetchNextArticles = async () => {
-    if (!hasNextPage || isFetchingNextPage) return;
-    await fetchNextPage();
-
-    /* 스크롤이 바닥에 닿아있으면, 자동 스크롤 조절이 되지 않기 때문에 `fetch`되자마자 스크롤을 1 올려줍니다. */
-    scrollUpBy(1);
-  };
-
-  const hasNextArticles = hasError ? false : hasNextPage;
-
-  const retryFetchNextArticles = () => {
-    setHasError(false);
-    fetchNextArticles();
-  };
-
-  useEffect(() => {
-    setHasError(!!error);
-  }, [error, keyword]);
-
-  const isArticleEmpty =
-    articles?.pages.map((page) => page.posts.length).reduce(add) === 0;
-
-  const notExistSearchResults = isValidKeyword && isArticleEmpty;
-  const notExistArticles = !isValidKeyword && isArticleEmpty;
-
-  if (isLoading) return <ArticleCardSkeletons count={6} />;
-
-  if (notExistSearchResults) return <NoSearchResults keyword={keyword} />;
-
-  if (notExistArticles)
-    return (
-      <div css={position.xy('center', 'center', 'absolute')}>
-        아직 게시글이 없습니다.
-      </div>
-    );
+  const articlesInfiniteQuery = useArticles(categoryId, { keyword });
 
   return (
-    <>
-      {articles && (
-        <>
-          <ArticleCardList
-            articlesPages={articles.pages}
-            fetchNextPage={fetchNextArticles}
-            hasNextPage={hasNextArticles}
-          />
-
-          {hasNextArticles && <ArticleCardSkeletons />}
-          {hasError && (
-            <ErrorCard
-              css={{ marginTop: 16 }}
-              onClickRetry={retryFetchNextArticles}
-            />
-          )}
-        </>
-      )}
-    </>
+    <ArticleCardList
+      infiniteQuery={articlesInfiniteQuery}
+      emptyElement={isValidKeyword && <NoSearchResults keyword={keyword} />}
+      skeletonCount={5}
+    />
   );
 };
-
-interface ArticleCardSkeletonsProps {
-  count?: number;
-}
-const ArticleCardSkeletons = memo((props: ArticleCardSkeletonsProps) => {
-  const { count = 5 } = props;
-  return (
-    <div css={[skeletonsCss, { marginTop: 16 }]}>
-      {Array(count)
-        .fill(undefined)
-        .map((_, index) => {
-          return <ArticleCard.Skeleton key={index} />;
-        })}
-    </div>
-  );
-});
-ArticleCardSkeletons.displayName = 'ArticleCardSkeletons';
 
 interface SearchBarProps {
   categoryId: number;
@@ -268,8 +189,6 @@ const articleContainerCss = css({
   flexGrow: 1,
   marginTop: 4,
 });
-
-const skeletonsCss = css(flex('', '', 'column', 16));
 
 const fabContainerCss = css(flex('center', 'flex-end', 'row'));
 
