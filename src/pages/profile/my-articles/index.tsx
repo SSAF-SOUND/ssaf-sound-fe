@@ -35,6 +35,7 @@ const ArticleLayer = () => {
 
   return (
     <ArticleCardList
+      hot
       infiniteQuery={myArticlesInfiniteQuery}
       skeletonCount={5}
     />
@@ -48,6 +49,7 @@ MyArticlesPage.auth = {
   unauthorized: routes.unauthorized(),
 };
 
+const selfPaddingTop = titleBarHeight + 24;
 const selfCss = css({
-  paddingTop: titleBarHeight + 24,
+  padding: `${selfPaddingTop}px 15px 0`,
 });
