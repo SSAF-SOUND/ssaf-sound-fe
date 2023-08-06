@@ -37,6 +37,8 @@ export const routes = {
     detail: (id: number) => `${routes.profile.self()}/${id}`,
 
     myInfoSettings: () => `${routes.profile.self()}/myinfo-settings`,
+    myArticles: () => `${routes.profile.self()}/my-articles`,
+
     edit: {
       myInfo: (field: EditableMyInfoFields) =>
         `${routes.profile.myInfoSettings()}/${field}/edit`,
