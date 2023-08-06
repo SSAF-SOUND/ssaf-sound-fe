@@ -48,7 +48,8 @@ const ArticleCardList = (props: ArticleCardListProps) => {
   }, [error]);
 
   if (isLoading) {
-    return <Skeletons count={skeletonCount} />;
+    const loadingSkeletonCount = 6;
+    return <Skeletons count={loadingSkeletonCount} />;
   }
 
   if (isError && !data) {
