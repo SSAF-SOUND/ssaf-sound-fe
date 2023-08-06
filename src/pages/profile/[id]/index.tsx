@@ -55,7 +55,7 @@ const ProfilePage: CustomNextPage = () => {
           <Profile.NavItem
             css={expandCss}
             iconName="document"
-            href="#"
+            href={routes.profile.myArticles()}
             text="내가 작성한 게시글"
           />
         </div>
