@@ -7,7 +7,7 @@ interface DefaultFullPageLoaderProps {
   text?: string;
 }
 
-const DefaultFullPageLoader = (props: DefaultFullPageLoaderProps) => {
+export const DefaultFullPageLoader = (props: DefaultFullPageLoaderProps) => {
   const { text = '' } = props;
   return (
     <div css={selfCss}>
@@ -27,4 +27,6 @@ const selfCss = css(
 
 const textCss = css(fontCss.family.auto);
 
-export default DefaultFullPageLoader;
+export const loaderText = {
+  checkUser: '유저 정보를 확인중입니다.',
+} as const;
