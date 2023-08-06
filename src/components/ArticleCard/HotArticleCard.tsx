@@ -69,7 +69,7 @@ const categoryCss = css({ color: palettes.point.purple }, fontCss.style.B18);
 
 const contentCss = css(fontCss.style.R14, clampCss);
 
-const headerCss = css(flex('center', 'space-between', 'row'));
+const headerCss = css(flex('center', 'space-between', 'row', 16));
 
 const statsCss = css(flex('center', '', 'row', 8));
 
