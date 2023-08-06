@@ -5,7 +5,14 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Button, Icon, SsafyIcon, Tabs, TrackSize } from '~/components/Common';
+import {
+  Button,
+  Icon,
+  IconButton,
+  SsafyIcon,
+  Tabs,
+  TrackSize,
+} from '~/components/Common';
 import NavigationGroup from '~/components/NavigationGroup';
 import { Profile } from '~/components/Profile';
 import { useMyInfo } from '~/services/member';
@@ -38,9 +45,11 @@ const ProfilePage: CustomNextPage = () => {
       <div css={myInfoCss}>
         NameCard
         {/* <NameCard />  */}
-        <Link href={routes.profile.myInfoSettings()}>
-          <Icon name="setting" size={28} />
-        </Link>
+        <IconButton asChild size={34}>
+          <Link href={routes.profile.myInfoSettings()}>
+            <Icon name="setting" size={28} />
+          </Link>
+        </IconButton>
       </div>
 
       {mine && (
@@ -48,7 +57,7 @@ const ProfilePage: CustomNextPage = () => {
           <Profile.NavItem
             css={expandCss}
             iconName="bookmark.outline"
-            href="#"
+            href={routes.profile.myScraps()}
             text="나의 스크랩"
           />
 
