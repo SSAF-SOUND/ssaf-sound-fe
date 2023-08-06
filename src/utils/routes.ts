@@ -38,6 +38,9 @@ export const routes = {
 
     myInfoSettings: () => `${routes.profile.self()}/myinfo-settings`,
     myArticles: () => `${routes.profile.self()}/my-articles`,
+    myScraps: (
+      category: PossibleMyScrapsCategories = PossibleMyScrapsCategories.ARTICLES
+    ) => `${routes.profile.self()}/my-scraps?category=${category}`,
 
     edit: {
       myInfo: (field: EditableMyInfoFields) =>
@@ -56,4 +59,9 @@ export enum EditableMyInfoFields {
   NICKNAME = 'nickname',
   IS_MAJOR = 'is-major',
   TRACK = 'track', // 인증된 상태에서만 바꿀 수 있음
+}
+
+export enum PossibleMyScrapsCategories {
+  ARTICLES = 'articles',
+  RECRUITS = 'recruits',
 }
