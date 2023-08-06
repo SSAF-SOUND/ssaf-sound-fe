@@ -2,15 +2,15 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { useEffect } from 'react';
 
-import { updateTrack } from '~/mocks/handlers/member';
+import { updateIsMajor } from '~/mocks/handlers/member';
 import { userInfo } from '~/mocks/handlers/member/data';
-import MyInfoSettingsTrackEditPage from '~/pages/profile/myinfo-settings/track/edit';
+import MyInfoSettingsIsMajorEditPage from '~/pages/profile/myinfo-settings/is-major/edit';
 import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
-const meta: Meta<typeof MyInfoSettingsTrackEditPage> = {
-  title: 'Page/MyInfoSettings/TrackEdit',
-  component: MyInfoSettingsTrackEditPage,
+const meta: Meta<typeof MyInfoSettingsIsMajorEditPage> = {
+  title: 'Page/Profile/MyInfoSettings/IsMajorEdit',
+  component: MyInfoSettingsIsMajorEditPage,
   decorators: [
     (Story) => (
       <PageLayout>
@@ -23,7 +23,7 @@ const meta: Meta<typeof MyInfoSettingsTrackEditPage> = {
 
     msw: {
       handlers: {
-        member: [updateTrack],
+        member: [updateIsMajor],
       },
     },
   },
@@ -31,9 +31,9 @@ const meta: Meta<typeof MyInfoSettingsTrackEditPage> = {
 
 export default meta;
 
-type TrackEditPageStory = StoryObj<typeof MyInfoSettingsTrackEditPage>;
+type IsMajorEditPageStory = StoryObj<typeof MyInfoSettingsIsMajorEditPage>;
 
-export const Default: TrackEditPageStory = {
+export const Default: IsMajorEditPageStory = {
   decorators: [
     (Story) => {
       const setMyInfo = useSetMyInfo();
