@@ -15,7 +15,7 @@ interface SkillSelectButtonProps {
   selectedOrderRef: MutableRefObject<number>;
 }
 
-const SkillSelectButton = (props: SkillSelectButtonProps) => {
+const SkillOption = (props: SkillSelectButtonProps) => {
   const { skillName, selectedOrderRef } = props;
   const { setCenter } = useTransformContext();
   const { setValue } = usePortfolioFormContext();
@@ -39,4 +39,4 @@ const SkillSelectButton = (props: SkillSelectButtonProps) => {
   );
 };
 
-export default SkillSelectButton;
+export default SkillOption;
