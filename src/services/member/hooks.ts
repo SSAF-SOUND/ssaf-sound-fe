@@ -158,7 +158,6 @@ export const useUserProfileVisibility = (id: number) => {
   return useQuery({
     queryKey: queryKeys.user.userProfileVisibility(id),
     queryFn: () => getUserProfileVisibility(id),
-    enabled: Number.isNaN(id),
   });
 };
 
