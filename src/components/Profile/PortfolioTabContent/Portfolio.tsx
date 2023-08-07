@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
-import type { PortfolioExternalLink } from '~/services/member';
+import type { PortfolioExternalLink ,
+  UserPortfolio} from '~/services/member';
 
 import { css } from '@emotion/react';
 import { useLayoutEffect } from 'react';
@@ -15,14 +16,13 @@ import PortfolioLink from '~/components/PortfolioLink';
 import { articleCss } from '~/services/article';
 import {
   getPortfolioLinkColor,
-  isEmptyPortfolio,
-  Portfolio,
+  isEmptyPortfolio
 } from '~/services/member';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 import { sanitizeHtml } from '~/utils';
 
 interface PortfolioProps {
-  portfolio: Portfolio;
+  portfolio: UserPortfolio;
   className?: string;
   skillsContainerStyle?: CSSProperties;
 }

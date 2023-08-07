@@ -2,7 +2,7 @@ import type {
   UserInfo,
   SsafyTrack,
   ProfileVisibility,
-  Portfolio,
+  UserPortfolio,
 } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
@@ -154,7 +154,7 @@ export const updateProfileVisibility = (
 // 포트폴리오
 
 export type GetUserPortfolioApiData = ApiSuccessResponse<{
-  portfolio: Portfolio;
+  portfolio: UserPortfolio;
 }>;
 export const getUserPortfolio = (id: number) => {
   const endpoint = endpoints.user.portfolio(id);
@@ -165,7 +165,7 @@ export const getUserPortfolio = (id: number) => {
 };
 
 export type GetMyPortfolioApiData = ApiSuccessResponse<{
-  portfolio: Portfolio;
+  portfolio: UserPortfolio;
 }>;
 export const getMyPortfolio = () => {
   const endpoint = endpoints.user.myPortfolio();

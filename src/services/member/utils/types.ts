@@ -69,7 +69,7 @@ export interface PortfolioExternalLink {
   path: string;
 }
 
-export interface Portfolio {
+export interface UserPortfolio {
   selfIntroduction: string;
   skills: string[];
   memberLinks: PortfolioExternalLink[];

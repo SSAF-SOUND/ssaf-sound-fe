@@ -1,4 +1,4 @@
-import type { Portfolio, UserInfo } from '~/services/member';
+import type { UserPortfolio, UserInfo } from '~/services/member';
 
 import { faker } from '@faker-js/faker';
 
@@ -53,7 +53,7 @@ export const userInfo = {
   nonSsafyUserInfo,
 };
 
-export const portfolio: Portfolio = {
+export const portfolio: UserPortfolio = {
   selfIntroduction: mockHtmlString,
   skills: Object.values(SkillName).slice(0, 10),
   memberLinks: Array(10)

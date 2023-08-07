@@ -1,6 +1,6 @@
-import type { Portfolio } from '~/services/member';
+import type { UserPortfolio } from '~/services/member';
 
-export const isEmptyPortfolio = (portfolio: Portfolio) => {
+export const isEmptyPortfolio = (portfolio: UserPortfolio) => {
   const { selfIntroduction, memberLinks, skills } = portfolio;
   return !selfIntroduction && !memberLinks.length && !skills.length;
 };
