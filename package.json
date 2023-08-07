@@ -51,7 +51,6 @@
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
-    "@chakra-ui/react": "^2.8.0",
     "@emotion/babel-preset-css-prop": "^11.11.0",
     "@faker-js/faker": "^8.0.2",
     "@storybook/addon-a11y": "^7.0.27",
