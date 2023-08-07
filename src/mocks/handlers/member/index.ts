@@ -2,6 +2,7 @@ import type {
   CertifyStudentApiData,
   GetMyInfoApiData,
   GetProfileVisibilityApiData,
+  GetUserInfoApiData,
   MyPortfolio,
   UpdateMyInfoParams,
   UserInfo,
@@ -28,7 +29,30 @@ export const getMyInfo = restSuccess<GetMyInfoApiData['data']>(
   }
 );
 
-const updateMyInfo = rest.put<
+export const getUserInfo = restSuccess<GetUserInfoApiData['data']>(
+  'get',
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.user.userInfo(':id')),
+  {
+    // data: userInfo.initialUserInfo,
+    data: userInfo.certifiedSsafyUserInfo,
+    // data: userInfo.uncertifiedSsafyUserInfo,
+    // data: userInfo.nonSsafyUserInfo,
+  }
+);
+
+export const getUserInfoError = restError(
+  'get',
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.user.userInfo(':id')),
+  {
+    data: null,
+  }
+);
+
+export const updateMyInfo = rest.put<
   never,
   never,
   GetMyInfoApiData | ApiErrorResponse
@@ -209,4 +233,5 @@ export const memberHandlers = [
   updateProfileVisibility,
   getPortfolio,
   getMyPortfolio,
+  getUserInfo,
 ];

@@ -13,6 +13,7 @@ import {
   getMyInfo,
   getMyPortfolio,
   getProfileVisibility,
+  getUserInfo,
   getUserPortfolio,
   updateIsMajor,
   updateMyInfo,
@@ -37,6 +38,13 @@ export const useMyInfo = (options: UseMyInfoOptions = {}) => {
     staleTime: Infinity,
     enabled,
     retry,
+  });
+};
+
+export const useUserInfo = (id: number) => {
+  return useQuery({
+    queryKey: queryKeys.user.userInfo(id),
+    queryFn: () => getUserInfo(id),
   });
 };
 

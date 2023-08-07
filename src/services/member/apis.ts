@@ -8,7 +8,7 @@ import type {
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
-import { privateAxios } from '~/utils';
+import { privateAxios, publicAxios } from '~/utils';
 
 export type GetMyInfoApiData = ApiSuccessResponse<UserInfo>;
 
@@ -17,6 +17,21 @@ export const getMyInfo = () => {
   return privateAxios
     .get<GetMyInfoApiData>(endpoint)
     .then((res) => res.data.data);
+};
+
+export type GetUserInfoApiData = ApiSuccessResponse<
+  Omit<UserInfo, 'memberRole' | 'memberId'>
+>;
+
+export const getUserInfo = (id: number) => {
+  const endpoint = endpoints.user.userInfo(id);
+
+  return publicAxios.get<GetUserInfoApiData>(endpoint).then((res) => {
+    return {
+      ...res.data.data,
+      memberId: id,
+    };
+  });
 };
 
 export type UpdateMyInfoApiData = ApiSuccessResponse<UserInfo>;
