@@ -15,6 +15,7 @@ import {
   getProfileVisibility,
   getUserInfo,
   getUserPortfolio,
+  getUserProfileVisibility,
   updateIsMajor,
   updateMyInfo,
   updateNickname,
@@ -153,6 +154,14 @@ export const useProfileVisibility = () => {
   });
 };
 
+export const useUserProfileVisibility = (id: number) => {
+  return useQuery({
+    queryKey: queryKeys.user.userProfileVisibility(id),
+    queryFn: () => getUserProfileVisibility(id),
+    enabled: Number.isNaN(id),
+  });
+};
+
 export const useUpdateProfileVisibility = () => {
   const queryClient = useQueryClient();
   const profileVisibilityQueryKey = queryKeys.user.profileVisibility();
@@ -180,16 +189,27 @@ export const useUpdateProfileVisibility = () => {
 
 // 프로필 - 포트폴리오
 
-export const useUserPortfolio = (id: number) => {
+interface UsePortfolioOptions {
+  enabled: boolean;
+}
+
+export const useUserPortfolio = (
+  id: number,
+  options: Partial<UsePortfolioOptions> = {}
+) => {
+  const { enabled } = options;
   return useQuery({
     queryKey: queryKeys.user.portfolio(id),
     queryFn: () => getUserPortfolio(id),
+    enabled,
   });
 };
 
-export const useMyPortfolio = () => {
+export const useMyPortfolio = (options: Partial<UsePortfolioOptions> = {}) => {
+  const { enabled } = options;
   return useQuery({
     queryKey: queryKeys.user.myPortfolio(),
     queryFn: getMyPortfolio,
+    enabled,
   });
 };

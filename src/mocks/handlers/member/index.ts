@@ -188,6 +188,19 @@ export const getProfileVisibility = restSuccess<
   },
 });
 
+export const getUserProfileVisibility = restSuccess(
+  'get',
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.user.userProfileVisibility(':id')),
+  {
+    data: {
+      isPublic: true,
+      // isPublic: false,
+    },
+  }
+);
+
 export const updateProfileVisibility = restSuccess(
   'patch',
   composeUrls(API_URL, endpoints.user.profileVisibility()),
@@ -230,6 +243,7 @@ export const memberHandlers = [
   updateSsafyBasicInfo,
   updateTrack,
   getProfileVisibility,
+  getUserProfileVisibility,
   updateProfileVisibility,
   getPortfolio,
   getMyPortfolio,

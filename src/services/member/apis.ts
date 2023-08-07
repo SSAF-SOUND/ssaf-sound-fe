@@ -131,6 +131,16 @@ export const getProfileVisibility = () => {
     .then((res) => res.data.data);
 };
 
+export type GetUserProfileVisibilityApiData =
+  ApiSuccessResponse<ProfileVisibility>;
+
+export const getUserProfileVisibility = (id: number) => {
+  const endpoint = endpoints.user.userProfileVisibility(id);
+  return publicAxios
+    .get<GetUserProfileVisibilityApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
 interface UpdateProfileVisibilityParams {
   isPublic: boolean;
 }
