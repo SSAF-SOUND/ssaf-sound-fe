@@ -37,7 +37,10 @@ const PortfolioForm = (props: PortfolioFormProps) => {
     defaultValues,
   });
 
-  const { handleSubmit } = methods;
+  const {
+    handleSubmit,
+    formState: { isSubmitting, isDirty },
+  } = methods;
   const handleOnInvalidSubmit: SubmitErrorHandler<PortfolioFormValues> = async (
     errors
   ) => {
@@ -61,6 +64,8 @@ const PortfolioForm = (props: PortfolioFormProps) => {
           title="포트폴리오 입력"
           submitButtonText="완료"
           onClickClose={titleBarCloseRoute}
+          isSubmitting={isSubmitting}
+          isSubmitDisabled={!isDirty}
         />
 
         <section css={{ marginBottom: 40 }}>

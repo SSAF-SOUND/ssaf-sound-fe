@@ -9,9 +9,18 @@ import { css } from '@emotion/react';
 import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import { DefaultFullPageLoader, loaderText } from '~/components/Common';
 import RedirectionGuide from '~/components/RedirectionGuide';
-import { useMyInfo, useMyPortfolio } from '~/services/member';
+import {
+  useMyInfo,
+  useMyPortfolio,
+  useUpdateMyPortfolio,
+} from '~/services/member';
 import { globalVars } from '~/styles/utils';
-import { customToast, getErrorResponse, routes } from '~/utils';
+import {
+  customToast,
+  getErrorResponse,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const PortfolioEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -22,6 +31,7 @@ const PortfolioEditPage: CustomNextPage = () => {
     isError: isErrorMyPortfolio,
     error: myPortfolioError,
   } = useMyPortfolio();
+  const { mutateAsync: updateMyPortfolio } = useUpdateMyPortfolio();
 
   if (!myInfo) {
     router.replace(routes.unauthorized());
@@ -55,8 +65,35 @@ const PortfolioEditPage: CustomNextPage = () => {
     if (errorMessage) customToast.clientError(errorMessage);
   };
 
-  const onValidSubmit: PortfolioFormProps['onValidSubmit'] = (value) => {
-    console.log(value);
+  const onValidSubmit: PortfolioFormProps['onValidSubmit'] = async (
+    fieldValues
+  ) => {
+    const {
+      selfIntroduction,
+      links: fieldLinks,
+      skills: fieldSkills,
+    } = fieldValues;
+
+    const memberLinks = fieldLinks.map(({ link, linkText }) => ({
+      linkName: linkText,
+      path: link,
+    }));
+
+    const skills = Object.entries(fieldSkills)
+      .filter(([, order]) => !!order)
+      .map(([skillName]) => skillName);
+
+    try {
+      await updateMyPortfolio({
+        selfIntroduction,
+        memberLinks,
+        skills,
+      });
+
+      await router.push(routes.profile.detail(myInfo.memberId));
+    } catch (err) {
+      handleAxiosError(err);
+    }
   };
 
   const skillsContainerStyle = {
@@ -108,7 +145,7 @@ const portfolioSkillsToFormSkillsField = (
 export default PortfolioEditPage;
 PortfolioEditPage.auth = {
   role: 'user',
-  loading: <DefaultFullPageLoader />,
+  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
 };
 
