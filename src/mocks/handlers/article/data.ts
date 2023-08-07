@@ -2,6 +2,7 @@ import type {
   ArticleCategory,
   ArticleDetail,
   ArticleDetailError,
+  ArticleSummary,
 } from '~/services/article';
 
 import { faker } from '@faker-js/faker';
@@ -35,7 +36,33 @@ export const createMockArticle = (id: number): ArticleDetail => {
   const numberRange = { min: 1000, max: 100000 };
   return {
     title: `${id}번째 게시글`,
-    content: `<p><strong>BOLD</strong></p><p><u>UNDERLINE</u></p><p><code>inline-code</code></p><pre class="ql-syntax" spellcheck="false">code-block</pre><p><br></p><ol><li>ordered</li><li>ordered</li><li>ordered</li></ol><p><br></p><ul><li>unordered</li><li>unordered</li><li>unordered</li></ul><p><br></p><p><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">Link</a></p><p><br></p><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><p>Normal</p>`,
+    content: `
+        <p>
+          <strong>BOLD</strong>
+        </p>
+        <p>
+          <u>UNDERLINE</u>
+        </p>
+        <p>
+          <code>inline-code</code>
+        </p>
+        <pre class="ql-syntax" spellcheck="false">code-block</pre>
+        <p><br></p>
+        <ol>
+          <li>ordered</li>
+          <li>ordered</li>
+          <li>ordered</li>
+        </ol>
+        <p><br></p>
+        <ul>
+          <li>unordered</li>
+          <li>unordered</li>
+          <li>unordered</li>
+        </ul>
+        <p>
+          <br>
+        </p>
+        <p><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">Link</a></p><p><br></p><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><p>Normal</p>`,
     commentCount: faker.number.int(numberRange),
     likeCount: faker.number.int(numberRange),
     scrapCount: faker.number.int(numberRange),
@@ -67,4 +94,37 @@ export const articleError: ArticleDetailError = {
     isUnknownError: false,
     message: '삭제된 게시글입니다.',
   },
+};
+
+export const createMockArticleSummary = (id: number): ArticleSummary => {
+  const anonymous = Boolean(id % 2);
+  const numberRange = { min: 1000, max: 100000 };
+  return {
+    title: faker.lorem.sentence(4),
+    content: ` 
+      <p>
+        <strong>BOLD</strong>
+      </p>
+      <p>
+        <u>UNDERLINE</u>
+      </p>
+      <p>
+        <code>inline-code</code>
+      </p>
+      <pre class="ql-syntax" spellcheck="false">code-block</pre>
+      <p><br></p>
+      <ol>
+        <li>ordered</li>
+        <li>ordered</li>
+        <li>ordered</li>
+      </ol>`,
+    anonymous: anonymous,
+    boardTitle: '자유 게시판',
+    commentCount: faker.number.int(numberRange),
+    createdAt: faker.date.past().toISOString(),
+    likeCount: faker.number.int(numberRange),
+    nickname: anonymous ? '익명' : faker.animal.dog(),
+    postId: id,
+    thumbnail: '',
+  };
 };

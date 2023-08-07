@@ -49,3 +49,20 @@ export interface ArticleDetailError {
     message: string;
   };
 }
+
+export interface ArticleSummary {
+  boardTitle: string;
+  title: string;
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+  nickname: string;
+  anonymous: boolean;
+  thumbnail: string; // 안 쓰임
+
+  // NOTE: 아직 반영 안됨
+  postId: number;
+}
+
+export interface HotArticleSummary extends ArticleSummary {}
