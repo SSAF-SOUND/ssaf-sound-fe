@@ -15,5 +15,7 @@ export enum ResponseCode {
   EXPIRED_TOKEN = '706',
   EXCEEDED_ATTEMPTS_OF_STUDENT_CERTIFICATION = '712',
 
+  NO_PERMISSIONS = '12313312',
+
   //
 }
