@@ -46,25 +46,29 @@ const NormalPortfolio = (props: PortfolioProps) => {
   const { portfolio, skillsContainerStyle } = props;
   const { selfIntroduction, memberLinks, skills } = portfolio;
   const sanitized = sanitizeHtml(selfIntroduction);
+  const hasSkills = skills.length > 0;
+  const hasLinks = memberLinks.length > 0;
 
   return (
     <div css={normalPortfolioSelfCss}>
       <div css={articleCss} dangerouslySetInnerHTML={{ __html: sanitized }} />
 
-      <TransformWrapper
-        minScale={1}
-        maxScale={1}
-        panning={{ lockAxisY: true }}
-        limitToBounds={true}
-        disablePadding={true}
-      >
-        <PortfolioSkills
-          skills={skills}
-          skillsContainerStyle={skillsContainerStyle}
-        />
-      </TransformWrapper>
+      {hasSkills && (
+        <TransformWrapper
+          minScale={1}
+          maxScale={1}
+          panning={{ lockAxisY: true }}
+          limitToBounds={true}
+          disablePadding={true}
+        >
+          <PortfolioSkills
+            skills={skills}
+            skillsContainerStyle={skillsContainerStyle}
+          />
+        </TransformWrapper>
+      )}
 
-      <PortfolioLinks links={memberLinks} />
+      {hasLinks && <PortfolioLinks links={memberLinks} />}
     </div>
   );
 };
