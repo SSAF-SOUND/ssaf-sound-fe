@@ -6,7 +6,7 @@ import Name from '~/components/Name';
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 export interface NameCardProps {
-  userInfo: UserInfo;
+  userInfo: Omit<UserInfo, 'memberRole'>;
   withBackground?: boolean;
 }
 
@@ -17,6 +17,9 @@ const NameCard = (props: NameCardProps) => {
 
   return (
     <div css={[selfCss, withBackground && backgroundCss]}>
+      {/* FIXME: Name Interface */}
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* @ts-ignore */}
       <Name userInfo={userInfo} size="lg" />
       {hasSsafyInfo && (
         <div css={ssafyInfoCss}>{formatSsafyInfo(semester, campus)}</div>
