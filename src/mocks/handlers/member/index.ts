@@ -1,18 +1,19 @@
 import type {
   CertifyStudentApiData,
   GetMyInfoApiData,
+  GetMyPortfolioApiData,
   GetProfileVisibilityApiData,
   GetUserInfoApiData,
-  MyPortfolio,
+  GetUserPortfolioApiData,
+  Portfolio,
   UpdateMyInfoParams,
   UserInfo,
-  UserPortfolio,
 } from '~/services/member';
 import type { ApiErrorResponse } from '~/types';
 
 import { rest } from 'msw';
 
-import { userInfo, userPortfolio } from '~/mocks/handlers/member/data';
+import { userInfo, portfolio } from '~/mocks/handlers/member/data';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { CertificationState } from '~/services/member';
@@ -213,23 +214,25 @@ export const updateProfileVisibilityError = restError(
   { message: '에러가 발생했습니다' }
 );
 
-export const getPortfolio = restSuccess<UserPortfolio>(
+export const getUserPortfolio = restSuccess<GetUserPortfolioApiData['data']>(
   'get',
   // eslint-disable-next-line
   // @ts-ignore
   composeUrls(API_URL, endpoints.user.portfolio(':id')),
   {
-    data: userPortfolio.publicPortfolio,
-    // data: userPortfolio.privatePortfolio,
+    data: {
+      portfolio,
+    },
   }
 );
 
-export const getMyPortfolio = restSuccess<MyPortfolio>(
+export const getMyPortfolio = restSuccess<GetMyPortfolioApiData['data']>(
   'get',
   composeUrls(API_URL, endpoints.user.myPortfolio()),
   {
-    // data: userPortfolio.myPublicPortfolio,
-    data: userPortfolio.myPrivatePortfolio,
+    data: {
+      portfolio,
+    },
   }
 );
 
@@ -245,7 +248,7 @@ export const memberHandlers = [
   getProfileVisibility,
   getUserProfileVisibility,
   updateProfileVisibility,
-  getPortfolio,
+  getUserPortfolio,
   getMyPortfolio,
   getUserInfo,
 ];

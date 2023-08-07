@@ -1,9 +1,8 @@
 import type {
   UserInfo,
   SsafyTrack,
-  UserPortfolio,
-  MyPortfolio,
   ProfileVisibility,
+  Portfolio,
 } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
@@ -154,20 +153,24 @@ export const updateProfileVisibility = (
 
 // 포트폴리오
 
-type GetUserPortfolioApiData = ApiSuccessResponse<UserPortfolio>;
+export type GetUserPortfolioApiData = ApiSuccessResponse<{
+  portfolio: Portfolio;
+}>;
 export const getUserPortfolio = (id: number) => {
   const endpoint = endpoints.user.portfolio(id);
 
   return privateAxios
     .get<GetUserPortfolioApiData>(endpoint)
-    .then((res) => res.data.data);
+    .then((res) => res.data.data.portfolio);
 };
 
-type GetMyPortfolioApiData = ApiSuccessResponse<MyPortfolio>;
+export type GetMyPortfolioApiData = ApiSuccessResponse<{
+  portfolio: Portfolio;
+}>;
 export const getMyPortfolio = () => {
   const endpoint = endpoints.user.myPortfolio();
 
   return privateAxios
     .get<GetMyPortfolioApiData>(endpoint)
-    .then((res) => res.data.data);
+    .then((res) => res.data.data.portfolio);
 };

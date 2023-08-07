@@ -74,18 +74,3 @@ export interface Portfolio {
   skills: string[];
   memberLinks: PortfolioExternalLink[];
 }
-
-export type UserPortfolio =
-  | {
-      isPublic: false;
-      portfolio: null;
-    }
-  | {
-      isPublic: true;
-      portfolio: Portfolio;
-    };
-
-export type MyPortfolio = {
-  isPublic: boolean;
-  portfolio: Portfolio;
-};
