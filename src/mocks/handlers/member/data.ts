@@ -1,5 +1,8 @@
 import type { Portfolio, UserInfo } from '~/services/member';
 
+import { faker } from '@faker-js/faker';
+
+import { mockHtmlString } from '~/mocks/handlers/common';
 import { CertificationState, SsafyTrack } from '~/services/member';
 import { SkillName } from '~/services/recruit';
 
@@ -48,13 +51,12 @@ export const userInfo = {
 };
 
 export const portfolio: Portfolio = {
-  selfIntroduction:
-    '<ul><li>안녕하세요</li><li>안녕하세요</li><li>안녕하세요</li><li>안녕하세요</li></ul>',
+  selfIntroduction: mockHtmlString,
   skills: Object.values(SkillName).slice(0, 10),
   memberLinks: Array(10)
     .fill(undefined)
-    .map((_, index) => ({
-      linkName: `링크${index}`,
+    .map(() => ({
+      linkName: faker.lorem.words(2),
       path: `https://www.naver.com`,
     })),
 };
