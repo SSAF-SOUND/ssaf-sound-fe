@@ -3,6 +3,7 @@ import PortfolioTabContent from './PortfolioTabContent';
 import NavItem from './ProfileNavItem';
 import PrivateIndicator from './ProfilePrivateIndicator';
 import TabsTriggers from './ProfileTabsTriggers';
+import UserError from './UserError';
 
 export const Profile = {
   NavItem,
@@ -10,6 +11,7 @@ export const Profile = {
   PrivateIndicator,
   TabsTriggers,
   PortfolioTabContent,
+  UserError,
 };
 
 export * from './utils';
