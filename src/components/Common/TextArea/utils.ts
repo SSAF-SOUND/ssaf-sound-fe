@@ -1,12 +1,12 @@
 import type { TextAreaProps } from './UnStyled';
 
-type CommentTextAreaSafeGuardsFn = ({
+type TextAreaSafeGuardsFn = ({
   value,
   defaultValue,
   valueOnChange,
 }: Pick<TextAreaProps, 'value' | 'defaultValue' | 'valueOnChange'>) => void;
 
-export const CommentTextAreaSafeGuards: CommentTextAreaSafeGuardsFn = ({
+export const TextAreaSafeGuards: TextAreaSafeGuardsFn = ({
   value,
   defaultValue,
   valueOnChange,

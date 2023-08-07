@@ -6,7 +6,7 @@ import { forwardRef, useRef } from 'react';
 import { useAutofocus } from '~/hooks';
 import { useComposedRefs } from '~/hooks/useComposedRefs';
 
-import { CommentTextAreaSafeGuards } from './utils';
+import { TextAreaSafeGuards } from './utils';
 
 export interface TextAreaProps extends ComponentPropsWithoutRef<'textarea'> {
   autoFocus?: boolean;
@@ -25,7 +25,8 @@ export const TextArea = forwardRef(
       disabled,
       ...restProps
     } = props;
-    CommentTextAreaSafeGuards({ value, defaultValue, valueOnChange });
+
+    TextAreaSafeGuards({ value, defaultValue, valueOnChange });
     const isControlled = !!value && !!valueOnChange;
 
     const [internalValue, setInternalValue] = useControllableState({
