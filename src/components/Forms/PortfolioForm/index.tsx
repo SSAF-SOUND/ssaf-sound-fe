@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils';
+import type { SubmitErrorHandlerWithErrorMessage } from '~/components/Forms/utils';
 
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -17,17 +18,17 @@ interface PortfolioFormOptions {
 
 export interface PortfolioFormProps {
   className?: string;
-  onValidSubmit?: SubmitHandler<PortfolioFormValues>;
-  onInvalidSubmit?: SubmitErrorHandler<PortfolioFormValues>;
-  defaultValues?: Partial<PortfolioFormValues>;
+  onValidSubmit: SubmitHandler<PortfolioFormValues>;
+  onInvalidSubmit?: SubmitErrorHandlerWithErrorMessage<PortfolioFormValues>;
+  defaultValues?: PortfolioFormValues;
   options?: Partial<PortfolioFormOptions>;
 }
 
 const PortfolioForm = (props: PortfolioFormProps) => {
   const {
     className,
-    onValidSubmit = noop,
-    onInvalidSubmit = noop,
+    onValidSubmit,
+    onInvalidSubmit,
     defaultValues,
     options: { skillsContainerStyle } = {},
   } = props;
@@ -37,13 +38,24 @@ const PortfolioForm = (props: PortfolioFormProps) => {
   });
 
   const { handleSubmit } = methods;
+  const handleOnInvalidSubmit: SubmitErrorHandler<PortfolioFormValues> = async (
+    errors
+  ) => {
+    const linkError = errors.links?.find?.(Boolean);
+    const errorMessage =
+      linkError?.link?.message ||
+      linkError?.linkText?.message ||
+      errors?.selfIntroduction?.message;
+
+    onInvalidSubmit?.(errorMessage, errors);
+  };
 
   return (
     <FormProvider {...methods}>
       <form
         css={selfCss}
         className={className}
-        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+        onSubmit={handleSubmit(onValidSubmit, handleOnInvalidSubmit)}
       >
         <TitleBar.Form title="포트폴리오 입력" submitButtonText="완료" />
 
