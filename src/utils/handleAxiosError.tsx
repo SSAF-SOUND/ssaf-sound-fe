@@ -97,6 +97,8 @@ export const isClientError = (error: AxiosError) => {
   return statusCode && 400 <= statusCode && statusCode < 500;
 };
 
-export const getErrorResponse = (error: AxiosError) => {
-  return error.response?.data as ApiErrorResponse | undefined;
+export const getErrorResponse = (error: unknown) => {
+  if (isAxiosError(error)) {
+    return error.response?.data as ApiErrorResponse | undefined;
+  }
 };
