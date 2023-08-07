@@ -3,11 +3,11 @@ import { css } from '@emotion/react';
 import { SsafyIcon, TrackSize } from '~/components/Common';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
-interface PrivateProfileIndicatorProps {
+interface ProfilePrivateIndicatorProps {
   className?: string;
 }
 
-const PrivateProfileIndicator = (props: PrivateProfileIndicatorProps) => {
+const ProfilePrivateIndicator = (props: ProfilePrivateIndicatorProps) => {
   return (
     <div css={selfCss} {...props}>
       <p css={textCss}>프로필 비공개</p>
@@ -16,6 +16,6 @@ const PrivateProfileIndicator = (props: PrivateProfileIndicatorProps) => {
   );
 };
 
-export default PrivateProfileIndicator;
+export default ProfilePrivateIndicator;
 const selfCss = css(flex('center', 'center', 'column', 30));
 const textCss = css({ color: palettes.primary.default }, fontCss.style.B18);

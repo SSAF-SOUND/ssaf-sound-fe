@@ -1,12 +1,12 @@
 import MyInfoSettingsLink from './MyInfoSettingsLink';
-import PrivateProfileIndicator from './PrivateProfileIndicator';
 import NavItem from './ProfileNavItem';
+import PrivateIndicator from './ProfilePrivateIndicator';
 import TabsTriggers from './ProfileTabsTriggers';
 
 export const Profile = {
   NavItem,
   MyInfoSettingsLink,
-  PrivateProfileIndicator,
+  PrivateIndicator,
   TabsTriggers,
 };
 
