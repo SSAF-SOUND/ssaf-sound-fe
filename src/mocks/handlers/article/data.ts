@@ -32,15 +32,16 @@ const createMockImages = (urls: string[]) => {
 
 export const createMockArticle = (id: number): ArticleDetail => {
   const booleanValue = Boolean(id % 2);
+  const numberRange = { min: 1000, max: 100000 };
   return {
     title: `${id}번째 게시글`,
     content: `<p><strong>BOLD</strong></p><p><u>UNDERLINE</u></p><p><code>inline-code</code></p><pre class="ql-syntax" spellcheck="false">code-block</pre><p><br></p><ol><li>ordered</li><li>ordered</li><li>ordered</li></ol><p><br></p><ul><li>unordered</li><li>unordered</li><li>unordered</li></ul><p><br></p><p><a href="https://www.naver.com" rel="noopener noreferrer" target="_blank">Link</a></p><p><br></p><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><p>Normal</p>`,
-    commentCount: faker.number.int(100),
-    likeCount: faker.number.int(100),
-    scrapCount: faker.number.int(100),
+    commentCount: faker.number.int(numberRange),
+    likeCount: faker.number.int(numberRange),
+    scrapCount: faker.number.int(numberRange),
     createdAt: faker.date.past().toISOString(),
     mine: booleanValue,
-    liked: booleanValue,
+    liked: !booleanValue,
     modified: booleanValue,
     scraped: booleanValue,
     images: createMockImages(imageUrls),
