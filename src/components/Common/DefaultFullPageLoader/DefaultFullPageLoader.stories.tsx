@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import DefaultFullPageLoader from './index';
+import { DefaultFullPageLoader } from './index';
 
 const meta: Meta<typeof DefaultFullPageLoader> = {
   title: 'Indicator/DefaultFullPageLoader',
