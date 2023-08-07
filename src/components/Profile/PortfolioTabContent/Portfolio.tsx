@@ -1,9 +1,8 @@
 import type { CSSProperties } from 'react';
-import type { PortfolioExternalLink ,
-  UserPortfolio} from '~/services/member';
+import type { PortfolioExternalLink, UserPortfolio } from '~/services/member';
 
 import { css } from '@emotion/react';
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import {
   TransformComponent,
   TransformWrapper,
@@ -14,10 +13,7 @@ import { SsafyIcon, TrackSize } from '~/components/Common';
 import SkillsSorter from '~/components/Forms/PortfolioForm/Fields/Skills/SkillsSorter';
 import PortfolioLink from '~/components/PortfolioLink';
 import { articleCss } from '~/services/article';
-import {
-  getPortfolioLinkColor,
-  isEmptyPortfolio
-} from '~/services/member';
+import { getPortfolioLinkColor, isEmptyPortfolio } from '~/services/member';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 import { sanitizeHtml } from '~/utils';
 
@@ -103,7 +99,7 @@ const PortfolioSkills = (props: PortfolioSkillsProps) => {
   const { skills, skillsContainerStyle } = props;
   const { setCenter } = useTransformContext();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setCenter();
   }, [setCenter]);
 
