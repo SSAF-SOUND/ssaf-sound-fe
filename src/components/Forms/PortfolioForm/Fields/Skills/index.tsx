@@ -7,6 +7,7 @@ import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import { SkillName } from '~/services/recruit';
 import { flex, fontCss, palettes, position } from '~/styles/utils';
+import { clamp } from '~/utils';
 
 import SelectedSkills from './SelectedSkills';
 import SkillOption from './SkillOption';
@@ -21,18 +22,21 @@ interface SkillsProps {
 
 export const Skills = (props: SkillsProps) => {
   const { className, skillsContainerStyle } = props;
-  const selectedOrderRef = useRef<number>(1);
-  const { register } = usePortfolioFormContext();
+  const {
+    register,
+    formState: { defaultValues: { skills: defaultSkills = {} } = {} },
+  } = usePortfolioFormContext();
+  const selectedOrderRef = useRef<number>(getStartOrder(defaultSkills));
 
-  const [showSkillSelectButtons, setShowSkillSelectButtons] = useState(false);
-  const showSkillSelectButtonsTriggerId = useId();
-  const handleCheckedChange = () => setShowSkillSelectButtons((p) => !p);
+  const [showSkillOptions, setShowSkillOptions] = useState(false);
+  const showSkillOptionsTriggerId = useId();
+  const handleCheckedChange = () => setShowSkillOptions((p) => !p);
 
   register(fieldName);
 
   return (
     <div css={selfCss} className={className}>
-      <label htmlFor={showSkillSelectButtonsTriggerId} css={labelCss}>
+      <label htmlFor={showSkillOptionsTriggerId} css={labelCss}>
         ② 사용하시는 기술스택을 자유롭게 골라주세요
       </label>
 
@@ -49,14 +53,14 @@ export const Skills = (props: SkillsProps) => {
           </TransformComponent>
           <SkillOptionsVisibilityToggle
             css={position.x('center', 'absolute')}
-            checked={showSkillSelectButtons}
-            id={showSkillSelectButtonsTriggerId}
+            checked={showSkillOptions}
+            id={showSkillOptionsTriggerId}
             onCheckedChange={handleCheckedChange}
           />
         </div>
 
-        {showSkillSelectButtons && (
-          <div css={skillSelectButtonsCss}>
+        {showSkillOptions && (
+          <div css={skillOptionCss}>
             {Object.values(SkillName).map((skillName) => (
               <SkillOption
                 key={skillName}
@@ -71,6 +75,12 @@ export const Skills = (props: SkillsProps) => {
   );
 };
 
+const getStartOrder = (skills: Record<string, number | undefined>) => {
+  const orders = Object.values(skills).filter(Boolean) as number[];
+  const maxOrder = clamp(Math.max(...orders), [0, 10000]);
+  return maxOrder + 1;
+};
+
 const selfCss = css({ position: 'relative' });
 
 const labelCss = css(
@@ -83,10 +93,9 @@ const labelCss = css(
   fontCss.style.R14
 );
 
-// 페이지 padding 값에 따라 negative margin 조절
 const selectedSkillsCss = css(
   { marginBottom: 20 },
   flex('center', 'center', 'row')
 );
 
-const skillSelectButtonsCss = css(flex('center', 'center', 'row', 8, 'wrap'));
+const skillOptionCss = css(flex('center', 'center', 'row', 8, 'wrap'));

@@ -1,5 +1,6 @@
 import type { CustomNextPage } from 'next/types';
 import type { PortfolioFormProps } from 'src/components/Forms/PortfolioForm';
+import type { UserPortfolio } from '~/services/member';
 
 import { useRouter } from 'next/router';
 
@@ -58,21 +59,49 @@ const PortfolioEditPage: CustomNextPage = () => {
     console.log(value);
   };
 
-  const skillsContainerStyle = useMemo(() => {
-    return {
-      width: 'auto',
-      margin: `0 calc(-1 * (${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var}))`,
-    };
-  }, []);
+  const skillsContainerStyle = {
+    width: 'auto',
+    margin: `0 calc(-1 * (${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var}))`,
+  };
 
   return (
     <div css={selfCss}>
       <PortfolioForm
-        options={{ skillsContainerStyle }}
+        defaultValues={{
+          selfIntroduction: myPortfolio.selfIntroduction,
+          links: portfolioLinksToFormLinksField(myPortfolio.memberLinks),
+          skills: portfolioSkillsToFormSkillsField(myPortfolio.skills),
+        }}
+        options={{
+          skillsContainerStyle,
+          titleBarCloseRoute: routes.profile.detail(myInfo.memberId),
+        }}
         onInvalidSubmit={onInvalidSubmit}
         onValidSubmit={onValidSubmit}
       />
     </div>
+  );
+};
+
+const portfolioLinksToFormLinksField = (
+  portfolioLinks: UserPortfolio['memberLinks']
+) => {
+  return portfolioLinks.map(({ linkName, path }) => {
+    return {
+      link: path,
+      linkText: linkName,
+    };
+  });
+};
+
+const portfolioSkillsToFormSkillsField = (
+  portfolioSkills: UserPortfolio['skills']
+) => {
+  return Object.fromEntries(
+    portfolioSkills.map((skillName, index) => {
+      const selectedOrder = index + 1;
+      return [skillName, selectedOrder];
+    })
   );
 };
 

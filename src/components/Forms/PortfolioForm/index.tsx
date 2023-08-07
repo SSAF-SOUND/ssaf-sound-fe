@@ -7,13 +7,13 @@ import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import TitleBar from '~/components/TitleBar';
-import { fontCss, palettes } from '~/styles/utils';
-import { noop } from '~/utils';
+import { fontCss, palettes, titleBarHeight } from '~/styles/utils';
 
 import { Links, SelfIntroduction, Skills } from './Fields';
 
 interface PortfolioFormOptions {
   skillsContainerStyle: CSSProperties;
+  titleBarCloseRoute: string;
 }
 
 export interface PortfolioFormProps {
@@ -30,7 +30,7 @@ const PortfolioForm = (props: PortfolioFormProps) => {
     onValidSubmit,
     onInvalidSubmit,
     defaultValues,
-    options: { skillsContainerStyle } = {},
+    options: { skillsContainerStyle, titleBarCloseRoute } = {},
   } = props;
 
   const methods = useForm({
@@ -57,9 +57,13 @@ const PortfolioForm = (props: PortfolioFormProps) => {
         className={className}
         onSubmit={handleSubmit(onValidSubmit, handleOnInvalidSubmit)}
       >
-        <TitleBar.Form title="포트폴리오 입력" submitButtonText="완료" />
+        <TitleBar.Form
+          title="포트폴리오 입력"
+          submitButtonText="완료"
+          onClickClose={titleBarCloseRoute}
+        />
 
-        <section css={{ marginTop: 74, marginBottom: 40 }}>
+        <section css={{ marginBottom: 40 }}>
           <h2 css={headingCss}>My Portfolio</h2>
           <p>나만의 포트폴리오를 꾸며보세요!</p>
         </section>
@@ -77,6 +81,12 @@ const PortfolioForm = (props: PortfolioFormProps) => {
 
 export default PortfolioForm;
 
-const selfCss = css({ position: 'relative' }, fontCss.family.auto);
+const selfCss = css(
+  {
+    position: 'relative',
+    paddingTop: titleBarHeight + 24,
+  },
+  fontCss.family.auto
+);
 
 const headingCss = css({ color: palettes.primary.default }, fontCss.style.B32);
