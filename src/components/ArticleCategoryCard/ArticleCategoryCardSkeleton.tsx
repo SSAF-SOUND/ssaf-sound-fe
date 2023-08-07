@@ -6,7 +6,7 @@ const ArticleCategoryCardSkeleton = () => {
   return (
     <Skeleton
       borderRadius={20}
-      height={116}
+      height={108}
       baseColor={palettes.grey3}
       highlightColor={palettes.grey5}
     />

@@ -12,13 +12,15 @@ import { userInfo } from '~/mocks/handlers/member/data';
 export const articleCategories: ArticleCategory[] = [
   '자유',
   '취업',
-  '테크',
-  '맛집',
   '질문',
+  '맛집',
   '싸피 예비생',
 ].map((category, idx) => ({
   boardId: idx + 1,
   title: `${category} 게시판`,
+  description: '취업에 대한 이야기를 공유해봐요!',
+  imageUrl:
+    'https://images.unsplash.com/flagged/1/apple-gear-looking-pretty.jpg?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
 }));
 
 const imageUrls = [
@@ -75,10 +77,7 @@ export const createMockArticle = (id: number): ArticleDetail => {
     postId: id,
     anonymous: booleanValue,
     author: userInfo.certifiedSsafyUserInfo,
-    category: {
-      boardId: 1,
-      title: '자유 게시판',
-    },
+    category: articleCategories[id % 5],
   };
 };
 

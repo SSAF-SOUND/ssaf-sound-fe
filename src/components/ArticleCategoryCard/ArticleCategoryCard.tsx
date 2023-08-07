@@ -1,5 +1,6 @@
 import type { ArticleCategory } from '~/services/article';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
@@ -7,22 +8,29 @@ import { css } from '@emotion/react';
 import { flex, fontCss, palettes } from '~/styles/utils';
 import { routes } from '~/utils';
 
+const imageSize = 100;
+
 interface ArticleCategoryCardProps {
   articleCategory: ArticleCategory;
 }
 
-const suffix = '게시판';
-
 const ArticleCategoryCard = (props: ArticleCategoryCardProps) => {
   const { articleCategory } = props;
-  const { boardId, title } = articleCategory;
-  const titleWithoutSuffix = title.replace(suffix, '').trim();
+  const { boardId, title, description, imageUrl } = articleCategory;
 
   return (
     <Link css={selfCss} href={routes.articles.category(boardId)}>
-      {titleWithoutSuffix}
-      <br />
-      {suffix}
+      <div>
+        <h2 css={titleCss}>{title}</h2>
+        <p css={descriptionCss}>{description}</p>
+      </div>
+      <Image
+        css={imageCss}
+        src={imageUrl}
+        alt="게시판 이미지"
+        width={imageSize}
+        height={imageSize}
+      />
     </Link>
   );
 };
@@ -31,10 +39,13 @@ export default ArticleCategoryCard;
 
 const selfCss = css(
   {
+    overflow: 'hidden',
+    position: 'relative',
+    minWidth: 330,
     width: '100%',
     backgroundColor: palettes.white,
     color: palettes.black,
-    padding: 28,
+    padding: 24,
     borderRadius: 20,
     transition: 'transform 200ms',
     '&:hover, &:focus-visible': {
@@ -44,7 +55,19 @@ const selfCss = css(
       transform: 'scale(0.99)',
     },
   },
-  flex('center', 'flex-start', 'row'),
+  flex('center', 'space-between', 'row'),
   fontCss.style.B20,
   fontCss.family.auto
 );
+
+const titleCss = css(fontCss.style.B24);
+const descriptionCss = css(
+  { color: palettes.font.blueGrey, backgroundColor: palettes.white },
+  fontCss.style.B14
+);
+const imageCss = css({
+  position: 'absolute',
+  borderRadius: 8,
+  bottom: -8,
+  right: 12,
+});

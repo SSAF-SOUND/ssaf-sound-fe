@@ -3,6 +3,8 @@ import type { UserInfo } from '~/services/member';
 export interface ArticleCategory {
   boardId: number;
   title: string;
+  description: string;
+  imageUrl: string;
 }
 
 export interface ArticleImage {
