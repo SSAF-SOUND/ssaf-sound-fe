@@ -13,13 +13,13 @@ import { ProfileTabs } from '../utils';
 
 interface ProfilePortfolioTabContentProps {
   className?: string;
-  mine: boolean;
+  mine?: boolean;
   userId: number;
   skillsContainerStyle?: CSSProperties;
 }
 
 const ProfilePortfolioTabContent = (props: ProfilePortfolioTabContentProps) => {
-  const { mine, userId, className, skillsContainerStyle } = props;
+  const { mine = false, userId, className, skillsContainerStyle } = props;
   const myPortfolioQuery = useMyPortfolio({
     enabled: mine,
   });
@@ -42,10 +42,9 @@ const ProfilePortfolioTabContent = (props: ProfilePortfolioTabContentProps) => {
         <PortfolioError error={error} />
       ) : (
         <>
-          {!mine && <PortfolioEditLink />}
+          {mine && <PortfolioEditLink css={{ marginBottom: 52 }} />}
 
           <Portfolio
-            css={portfolioLayerCss}
             portfolio={portfolio}
             skillsContainerStyle={skillsContainerStyle}
           />
@@ -61,4 +60,3 @@ const selfCss = css({
   paddingTop: 20,
   paddingBottom: 20,
 });
-const portfolioLayerCss = css({ marginTop: 52 });
