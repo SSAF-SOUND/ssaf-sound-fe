@@ -27,7 +27,9 @@ const SkillOption = (props: SkillSelectButtonProps) => {
     return selectedOrderRef.current++;
   };
   const handlePressedChange = (pressed: boolean) => {
-    setValue(optionFieldName, pressed ? getNextOrder() : undefined);
+    setValue(optionFieldName, pressed ? getNextOrder() : undefined, {
+      shouldDirty: true,
+    });
     setTimeout(() => setCenter());
   };
 
