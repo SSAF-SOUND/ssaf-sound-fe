@@ -7,7 +7,7 @@ import { CertificationState, SsafyTrack } from '~/services/member';
 import { SkillName } from '~/services/recruit';
 
 const initialUserInfo: UserInfo = {
-  memberId: 434,
+  memberId: 144,
   memberRole: 'user',
   nickname: 'mechanic',
   ssafyMember: null,
@@ -15,6 +15,7 @@ const initialUserInfo: UserInfo = {
 };
 const certifiedSsafyUserInfo: UserInfo = {
   ...initialUserInfo,
+  memberId: 586,
   ssafyMember: true,
   isMajor: false,
   ssafyInfo: {
@@ -27,6 +28,7 @@ const certifiedSsafyUserInfo: UserInfo = {
 
 const uncertifiedSsafyUserInfo: UserInfo = {
   ...initialUserInfo,
+  memberId: 248,
   ssafyMember: true,
   isMajor: false,
   ssafyInfo: {
@@ -39,6 +41,7 @@ const uncertifiedSsafyUserInfo: UserInfo = {
 
 const nonSsafyUserInfo: UserInfo = {
   ...initialUserInfo,
+  memberId: 738,
   ssafyMember: false,
   ssafyInfo: undefined,
 };

@@ -5,7 +5,6 @@ import type {
   GetProfileVisibilityApiData,
   GetUserInfoApiData,
   GetUserPortfolioApiData,
-  Portfolio,
   UpdateMyInfoParams,
   UserInfo,
 } from '~/services/member';
