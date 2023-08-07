@@ -41,15 +41,19 @@ const ProfilePage: CustomNextPage = () => {
 
   return (
     <div css={selfCss}>
-      <NavigationGroup />
-      <div css={myInfoCss}>
-        NameCard
-        {/* <NameCard />  */}
-        <IconButton asChild size={34}>
-          <Link href={routes.profile.myInfoSettings()}>
-            <Icon name="setting" size={28} />
-          </Link>
-        </IconButton>
+      {mine ? (
+        <NavigationGroup />
+      ) : (
+        <TitleBar.Default
+          title="프로필"
+          withoutClose
+          // TODO: Return Page
+          onClickBackward={routes.main()}
+        />
+      )}
+      <div css={userInfoLayerCss}>
+        <NameCard userInfo={userInfo} />
+        {mine && <MyInfoSettingsLink />}
       </div>
 
       {mine && (
