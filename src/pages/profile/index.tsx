@@ -1,7 +1,5 @@
 import { useRouter } from 'next/router';
 
-import { useEffect } from 'react';
-
 import { DefaultFullPageLoader, loaderText } from '~/components/Common';
 import { useMyInfo } from '~/services/member';
 import { customToast, routes } from '~/utils';

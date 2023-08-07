@@ -1,43 +1,68 @@
 import type { CustomNextPage } from 'next/types';
 
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  Button,
-  Icon,
-  IconButton,
-  SsafyIcon,
-  Tabs,
-  TrackSize,
-} from '~/components/Common';
+import { DefaultFullPageLoader, loaderText, Tabs } from '~/components/Common';
+import NameCard from '~/components/NameCard';
 import NavigationGroup from '~/components/NavigationGroup';
-import { Profile } from '~/components/Profile';
-import { useMyInfo } from '~/services/member';
+import { Profile, ProfileTabs } from '~/components/Profile';
+import TitleBar from '~/components/TitleBar';
+import NotFoundPage from '~/pages/404';
+import {
+  useMyInfo,
+  useUserInfo,
+  useUserProfileVisibility,
+} from '~/services/member';
 import {
   flex,
-  fontCss,
   globalVars,
   gnbHeight,
-  palettes,
+  pageMinHeight,
   topBarHeight,
 } from '~/styles/utils';
 import { routes } from '~/utils';
 
+type QueryString = {
+  id: string;
+};
+
 const ProfilePage: CustomNextPage = () => {
   const router = useRouter();
-  // eslint-disable-next-line
-  const { id } = router.query as { id?: string };
-  // eslint-disable-next-line
-  const { data: myInfo } = useMyInfo();
-  const hasPortfolio = true as boolean;
-  const mine = true as boolean;
+  const query = router.query as QueryString;
+  const id = Number(query.id);
 
-  // id로 프로필 조회
-  // const { data: userInfo } = useUserInfo(id);
-  // const mine = userInfo && myInfo && (userInfo.memberId === myInfo.memberId)
+  const { data: myInfo, isLoading: isMyInfoLoading } = useMyInfo();
+  const {
+    data: userInfo,
+    error: userInfoError,
+    isLoading: isUserInfoLoading,
+    isError: isUserInfoError,
+  } = useUserInfo(id);
+  const {
+    data: userProfileVisibility,
+    isLoading: isUserProfileVisibilityLoading,
+    isError: isUserProfileVisibilityError,
+    error: userProfileVisibilityError,
+  } = useUserProfileVisibility(id);
+
+  const mine = userInfo && myInfo && userInfo.memberId === myInfo.memberId;
+
+  if (Number.isNaN(id)) {
+    return <NotFoundPage />;
+  }
+
+  if (isUserInfoError || isUserProfileVisibilityError) {
+    const error = userInfoError || userProfileVisibilityError;
+    return <Profile.UserError error={error} />;
+  }
+
+  if (isUserInfoLoading || isUserProfileVisibilityLoading || isMyInfoLoading) {
+    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+  }
+
+  const isProfilePublic = userProfileVisibility.isPublic;
 
   return (
     <div css={selfCss}>
@@ -51,13 +76,14 @@ const ProfilePage: CustomNextPage = () => {
           onClickBackward={routes.main()}
         />
       )}
+
       <div css={userInfoLayerCss}>
-        <NameCard userInfo={userInfo} />
-        {mine && <MyInfoSettingsLink />}
+        <NameCard userInfo={userInfo} css={nameCardCss} />
+        {mine && <Profile.MyInfoSettingsLink />}
       </div>
 
       {mine && (
-        <div css={shortcutCss}>
+        <div css={navLayerCss}>
           <Profile.NavItem
             css={expandCss}
             iconName="bookmark.outline"
@@ -74,91 +100,56 @@ const ProfilePage: CustomNextPage = () => {
         </div>
       )}
 
-      <Tabs.Root defaultValue="1">
-        <Tabs.List css={expandCss}>
-          <Tabs.Border />
-          <Tabs.Trigger theme="white" value="1">
-            포트폴리오
-          </Tabs.Trigger>
-          <Tabs.Trigger theme="white" value="2">
-            프로젝트
-          </Tabs.Trigger>
-          <Tabs.Trigger theme="white" value="3">
-            스터디
-          </Tabs.Trigger>
-        </Tabs.List>
+      {isProfilePublic ? (
+        <Tabs.Root defaultValue={ProfileTabs.PORTFOLIO}>
+          <Profile.TabsTriggers css={expandCss} />
 
-        <Tabs.Content value="1" css={tabContentCss}>
-          {mine && (
-            <Button
-              size="md"
-              theme="grey"
-              variant="filled"
-              css={{ color: palettes.white, width: '100%', marginBottom: 60 }}
-            >
-              입력하기
-            </Button>
-          )}
+          <Profile.PortfolioTabContent
+            mine={mine}
+            userId={id}
+            skillsContainerStyle={{ margin: `0 ${expandNegativeMarginX}` }}
+          />
 
-          {!hasPortfolio ? (
-            <div>
-              <div>Content</div>
-              {/* <Spacing /> */}
+          <Tabs.Content value="2">
+            <div>2</div>
+          </Tabs.Content>
 
-              <div>Skills</div>
-              {/* <Spacing /> */}
-
-              <div>Links</div>
-              {/* <Spacing /> */}
-            </div>
-          ) : (
-            <div css={flex('center', '', 'column')}>
-              <p
-                css={[
-                  {
-                    marginBottom: 28,
-                    color: palettes.primary.default,
-                  },
-                  fontCss.style.R16,
-                ]}
-              >
-                아직 입력된 포트폴리오 내용이 없습니다.
-              </p>
-              <SsafyIcon.Track size={TrackSize.LG2} />
-            </div>
-          )}
-        </Tabs.Content>
-        <Tabs.Content value="2" css={tabContentCss}>
-          <div>2</div>
-        </Tabs.Content>
-        <Tabs.Content value="3" css={tabContentCss}>
-          <div>3</div>
-        </Tabs.Content>
-      </Tabs.Root>
+          <Tabs.Content value="3">
+            <div>3</div>
+          </Tabs.Content>
+        </Tabs.Root>
+      ) : (
+        <Profile.PrivateIndicator css={privateProfileCss} />
+      )}
     </div>
   );
 };
 
 export default ProfilePage;
 
+const privateProfileCss = css({ flexGrow: 1 });
+
 const selfPaddingX = 15;
+const expandNegativeMarginX = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
 
-const selfCss = css({
-  padding: `${topBarHeight + 30}px ${selfPaddingX}px ${gnbHeight}px`,
-});
-
-const myInfoCss = css(
-  { marginBottom: 44 },
-  flex('center', 'space-between', 'row')
+const selfCss = css(
+  {
+    padding: `${topBarHeight + 30}px ${selfPaddingX}px ${gnbHeight + 30}px`,
+    minHeight: `max(${pageMinHeight}, 100vh)`,
+  },
+  flex('', '', 'column')
 );
 
-const shortcutCss = css({ marginBottom: 50 }, flex('', 'center', 'column', 8));
+const userInfoLayerCss = css(
+  { marginBottom: 44 },
+  flex('center', 'space-between', 'row', 10)
+);
+
+const nameCardCss = css({ padding: 0 });
+
+const navLayerCss = css({ marginBottom: 50 }, flex('', 'center', 'column', 8));
 
 const expandCss = css({
   width: 'auto',
-  margin: `0 calc(-1 * (${globalVars.mainLayoutPaddingX.var} + ${selfPaddingX}px));`,
-});
-
-const tabContentCss = css({
-  padding: '20px 0',
+  margin: `0 ${expandNegativeMarginX}`,
 });
