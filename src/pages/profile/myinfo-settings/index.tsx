@@ -120,18 +120,20 @@ const MyInfoSettingsPage: CustomNextPage = () => {
         </nav>
       </div>
 
-      <div css={[expandCss, signOutLayerCss]}>
+      <div css={[expandCss, bottomNavLayerCss]}>
         <div css={[separatorCss, { marginBottom: 20 }]} />
-        <button
-          type="button"
-          css={signOutButtonCss}
+
+        <MyInfoSettings.NavButton
           onClick={openSignOutReconfirmModal}
           disabled={isSigningOut}
+          css={cursorCss}
         >
-          <MyInfoSettings.NavItem asLink={false}>
-            로그아웃
-          </MyInfoSettings.NavItem>
-        </button>
+          로그아웃
+        </MyInfoSettings.NavButton>
+
+        <MyInfoSettings.NavButton css={cursorCss}>
+          회원 탈퇴
+        </MyInfoSettings.NavButton>
       </div>
     </div>
   );
@@ -211,21 +213,6 @@ const separatorCss = css({
 
 const navTitleCss = css({ padding: `0 ${totalPaddingX}` });
 
-const signOutLayerCss = css(
-  {
-    flexGrow: 1,
-  },
-  flex('', 'flex-end')
-);
+const bottomNavLayerCss = css({ flexGrow: 1 }, flex('', 'flex-end'));
 
-const signOutButtonCss = css({
-  width: '100%',
-  color: palettes.white,
-  padding: 0,
-  cursor: 'pointer',
-  backgroundColor: palettes.background.default,
-  transition: 'background-color 200ms',
-  ':focus-visible': {
-    backgroundColor: palettes.background.grey,
-  },
-});
+const cursorCss = css({ cursor: 'pointer' });
