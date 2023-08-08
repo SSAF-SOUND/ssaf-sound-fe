@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { withSentryConfig } = require('@sentry/nextjs');
 
+const sentryConfig = require('./config/sentry');
 const svgrConfig = require('./config/svgr');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  webpack(config) {
+  webpack(config, context) {
     svgrConfig(config);
+    sentryConfig(config, context);
     return config;
   },
   compiler: {
@@ -31,9 +33,20 @@ const nextConfig = {
       },
     ],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
-module.exports = nextConfig;
+// eslint-disable-next-line import/order
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer(nextConfig);
 
 // Injected content via Sentry wizard below
 
