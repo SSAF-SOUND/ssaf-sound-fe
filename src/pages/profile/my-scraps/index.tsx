@@ -22,13 +22,13 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { isDevMode, PossibleMyScrapsCategories, routes } from '~/utils';
+import { isStorybookMode, PossibleMyScrapsCategories, routes } from '~/utils';
 
 const possibleCategories = Object.values(PossibleMyScrapsCategories);
 const defaultCategory = PossibleMyScrapsCategories.ARTICLES;
 
 const validateCategory = (category?: string) => {
-  if (isDevMode) return true;
+  if (isStorybookMode()) return true;
 
   return (
     category &&

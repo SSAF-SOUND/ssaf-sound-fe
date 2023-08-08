@@ -7,6 +7,7 @@ export { default as customToast } from './customToast';
 export * from './date';
 export * from './defaultify';
 export * from './handleAxiosError';
+export * from './isStorybookMode';
 export * from './misc';
 export * from './number';
 export * from './object';

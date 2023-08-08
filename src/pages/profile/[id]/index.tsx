@@ -22,10 +22,12 @@ import {
   pageMinHeight,
   topBarHeight,
 } from '~/styles/utils';
-import { isDevMode, routes } from '~/utils';
+import { isStorybookMode, routes } from '~/utils';
 
-const isValidId = (id: number) => {
-  return !isDevMode && Number.isNaN(id);
+const isIdNaN = (id: number) => {
+  if (isStorybookMode()) return false;
+
+  return Number.isNaN(id);
 };
 
 type QueryString = {
@@ -53,7 +55,7 @@ const ProfilePage: CustomNextPage = () => {
 
   const mine = userInfo && myInfo && userInfo.memberId === myInfo.memberId;
 
-  if (isValidId(id)) {
+  if (isIdNaN(id)) {
     return <NotFoundPage />;
   }
 
