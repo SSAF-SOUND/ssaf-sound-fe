@@ -48,6 +48,10 @@ export const routes = {
 
       portfolio: () => `${routes.profile.self()}/portfolio/edit`,
     },
+
+    delete: {
+      account: () => `${routes.profile.myInfoSettings()}/account/delete`,
+    },
   },
 
   //

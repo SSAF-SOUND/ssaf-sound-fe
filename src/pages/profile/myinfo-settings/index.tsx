@@ -131,9 +131,9 @@ const MyInfoSettingsPage: CustomNextPage = () => {
           로그아웃
         </MyInfoSettings.NavButton>
 
-        <MyInfoSettings.NavButton css={cursorCss}>
+        <MyInfoSettings.NavItem href={routes.profile.delete.account()}>
           회원 탈퇴
-        </MyInfoSettings.NavButton>
+        </MyInfoSettings.NavItem>
       </div>
     </div>
   );
