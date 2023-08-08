@@ -54,7 +54,7 @@ const reissueToken = rest.post(
   }
 );
 
-const deleteAccount = restSuccess(
+export const deleteAccount = restSuccess(
   'delete',
   composeUrls(API_URL, endpoints.user.myInfo()),
   {
@@ -62,7 +62,7 @@ const deleteAccount = restSuccess(
   }
 );
 
-const deleteAccountError = restError(
+export const deleteAccountError = restError(
   'delete',
   composeUrls(API_URL, endpoints.user.myInfo()),
   {
