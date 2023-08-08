@@ -7,7 +7,7 @@ import {
   removeTokens,
   checkRefreshTokenError,
 } from '~/mocks/handlers/auth/data';
-import { mockError, mockSuccess } from '~/mocks/utils';
+import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
@@ -54,4 +54,20 @@ const reissueToken = rest.post(
   }
 );
 
-export const authHandlers = [signIn, signOut, reissueToken];
+const deleteAccount = restSuccess(
+  'delete',
+  composeUrls(API_URL, endpoints.user.myInfo()),
+  {
+    data: null,
+  }
+);
+
+const deleteAccountError = restError(
+  'delete',
+  composeUrls(API_URL, endpoints.user.myInfo()),
+  {
+    message: '에러가 발생했습니다.',
+  }
+);
+
+export const authHandlers = [signIn, signOut, reissueToken, deleteAccount];
