@@ -45,6 +45,7 @@
     "react-loading-skeleton": "^3.3.1",
     "react-quill": "^2.0.0",
     "react-spinners": "^0.13.8",
+    "react-virtuoso": "^4.4.2",
     "react-zoom-pan-pinch": "^3.1.0",
     "string-strip-html": "^13.4.2",
     "unique-names-generator": "^4.7.1"

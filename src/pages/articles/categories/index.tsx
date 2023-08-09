@@ -6,13 +6,17 @@ import { ArticleCategoryCard } from '~/components/ArticleCategoryCard';
 import NavigationGroup from '~/components/NavigationGroup';
 import { useArticleCategories } from '~/services/article';
 import { flex, fontCss, palettes, topBarHeight } from '~/styles/utils';
+import { routes } from '~/utils';
 
 const ArticleCategoriesPage = () => {
   const { data: articleCategories } = useArticleCategories();
 
   return (
     <div css={selfCss}>
-      <Link href="/" css={[hotLinkCss, { marginBottom: 24 }]}>
+      <Link
+        href={routes.articles.hot()}
+        css={[hotLinkCss, { marginBottom: 56 }]}
+      >
         Hot 게시글
       </Link>
 
@@ -50,7 +54,7 @@ const hotLinkCss = css(
     '&:active': { color: palettes.secondary.dark },
   },
   fontCss.style.B16,
-  flex('center', 'space-between', 'row')
+  flex('center', 'flex-end', 'row')
 );
 
 const categoriesCss = css(flex('', '', 'column', 12));

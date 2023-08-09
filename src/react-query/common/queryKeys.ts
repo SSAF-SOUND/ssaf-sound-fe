@@ -10,12 +10,16 @@ export const queryKeys = {
     self: () => ['meta'],
     campuses: () => [...queryKeys.meta.self(), 'campuses'],
   },
-  article: {
-    categories: () => ['article', 'categories'],
-    category: (categoryId: number) => ['article', 'category', categoryId], // article list
-    detail: (articleId: number) => ['article', articleId],
-    search: () => [],
-    hot: () => [],
+  articles: {
+    categories: () => ['articles', 'categories'],
+    list: (categoryId: number, searchKeyword?: string) => [
+      'articles',
+      'category',
+      categoryId,
+      searchKeyword ?? null,
+    ],
+    hot: (searchKeyword?: string) => ['articles', 'hot', searchKeyword ?? null],
+    detail: (articleId: number) => ['articles', articleId],
     mine: () => [],
   },
 };
@@ -32,6 +36,52 @@ export const endpoints = {
   },
   articles: {
     categories: () => '/boards',
+    list: (params: {
+      categoryId: number;
+      cursor: number;
+      size: number;
+      keyword?: string;
+    }) => {
+      const { categoryId: boardId, size, cursor, keyword = '' } = params;
+
+      if (keyword) {
+        // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1568
+        const queryString = new URLSearchParams({
+          boardId,
+          size,
+          cursor,
+          keyword,
+        } as never).toString();
+        return `/posts/search?${queryString}`;
+      }
+
+      const queryString = new URLSearchParams({
+        boardId,
+        size,
+        cursor,
+      } as never).toString();
+
+      return `/posts?${queryString}`;
+    },
+    hot: (params: { cursor: number; size: number; keyword?: string }) => {
+      const { size, cursor, keyword = '' } = params;
+
+      if (keyword) {
+        const queryString = new URLSearchParams({
+          size,
+          cursor,
+          keyword,
+        } as never).toString();
+        return `/posts/hot/search?${queryString}`;
+      }
+
+      const queryString = new URLSearchParams({
+        size,
+        cursor,
+      } as never).toString();
+
+      return `/posts/hot?${queryString}`;
+    },
     create: (categoryId: number) => `/posts?boardId=${categoryId}`,
     detail: (articleId: number) => `/posts/${articleId}`,
     report: (articleId: number) =>

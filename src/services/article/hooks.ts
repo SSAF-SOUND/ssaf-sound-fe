@@ -5,7 +5,12 @@ import type {
   ArticleDetailError,
 } from '~/services/article/utils';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import {
@@ -17,11 +22,13 @@ import {
   updateArticle,
   likeArticle,
   scrapArticle,
+  getArticles,
+  getHotArticles,
 } from '~/services/article/apis';
 
 export const useArticleCategories = () => {
   return useQuery({
-    queryKey: queryKeys.article.categories(),
+    queryKey: queryKeys.articles.categories(),
     queryFn: getArticleCategories,
     select: (categories) => categories.sort((a, b) => a.boardId - b.boardId),
   });
@@ -47,7 +54,7 @@ export const useReportArticle = () => {
 
 export const useUpdateArticle = (articleId: number) => {
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.article.detail(articleId);
+  const queryKey = queryKeys.articles.detail(articleId);
   const onSuccess = () => queryClient.invalidateQueries(queryKey);
 
   return useMutation({
@@ -67,7 +74,7 @@ export const useArticleDetail = (
 ) => {
   const { initialData } = options;
   return useQuery({
-    queryKey: queryKeys.article.detail(articleId),
+    queryKey: queryKeys.articles.detail(articleId),
     queryFn: () => getArticleDetail(articleId),
     initialData,
   });
@@ -76,7 +83,7 @@ export const useArticleDetail = (
 export const useLikeArticle = (articleId: number) => {
   const setArticleDetail = useSetArticleDetail(articleId);
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.article.detail(articleId);
+  const queryKey = queryKeys.articles.detail(articleId);
 
   return useMutation({
     mutationFn: () => likeArticle(articleId),
@@ -118,7 +125,7 @@ export const useLikeArticle = (articleId: number) => {
 export const useScrapArticle = (articleId: number) => {
   const setArticleDetail = useSetArticleDetail(articleId);
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.article.detail(articleId);
+  const queryKey = queryKeys.articles.detail(articleId);
 
   return useMutation({
     mutationFn: () => scrapArticle(articleId),
@@ -161,7 +168,7 @@ export const useScrapArticle = (articleId: number) => {
 
 export const useSetArticleDetail = (articleId: number) => {
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.article.detail(articleId);
+  const queryKey = queryKeys.articles.detail(articleId);
   const setArticleDetail = (
     updater: SetStateAction<ArticleDetail | undefined>
   ) => {
@@ -169,4 +176,52 @@ export const useSetArticleDetail = (articleId: number) => {
   };
 
   return setArticleDetail;
+};
+
+interface UseArticlesOptions {
+  keyword: string;
+}
+
+export const useArticles = (
+  categoryId: number,
+  options: Partial<UseArticlesOptions> = {}
+) => {
+  const { keyword } = options;
+  const queryKey = queryKeys.articles.list(categoryId, keyword);
+
+  return useInfiniteQuery({
+    queryKey,
+    queryFn: ({ pageParam }) =>
+      getArticles({
+        cursor: pageParam,
+        categoryId,
+        keyword,
+      }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.cursor ?? undefined;
+    },
+  });
+};
+
+interface UseHotArticlesOptions {
+  keyword: string;
+}
+
+export const useHotArticles = (
+  options: Partial<UseHotArticlesOptions> = {}
+) => {
+  const { keyword } = options;
+  const queryKey = queryKeys.articles.hot(keyword);
+
+  return useInfiniteQuery({
+    queryKey,
+    queryFn: ({ pageParam }) =>
+      getHotArticles({
+        cursor: pageParam,
+        keyword,
+      }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.cursor ?? undefined;
+    },
+  });
 };

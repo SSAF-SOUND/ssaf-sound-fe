@@ -14,7 +14,11 @@ import {
   articleFallback,
   articles,
 } from '~/mocks/handlers/article/data';
-import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
+import {
+  restInfiniteArticlesError,
+  restInfiniteArticlesSuccess,
+} from '~/mocks/handlers/article/utils';
+import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
@@ -212,10 +216,115 @@ export const scrapArticleError = restError(
   }
 );
 
+export const getArticles = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.list({
+        categoryId: 0,
+        cursor: 0,
+        size: 0,
+      })
+    )
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getArticlesError = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.list({
+        categoryId: 0,
+        cursor: 0,
+        size: 0,
+      })
+    )
+  ),
+  restInfiniteArticlesError
+);
+
+export const getArticlesByKeyword = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.list({
+        categoryId: 0,
+        cursor: 0,
+        size: 0,
+        keyword: 'keyword',
+      })
+    )
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getArticlesByKeywordError = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.list({
+        categoryId: 0,
+        cursor: 0,
+        size: 0,
+        keyword: 'keyword',
+      })
+    )
+  ),
+  restInfiniteArticlesError
+);
+
+export const getHotArticles = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getHotArticlesError = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesError
+);
+
+export const getHotArticlesByKeyword = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.hot({
+        cursor: 0,
+        size: 0,
+        keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
+      })
+    )
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getHotArticlesByKeywordError = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articles.hot({
+        cursor: 0,
+        size: 0,
+        keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
+      })
+    )
+  ),
+  restInfiniteArticlesError
+);
+
 export const articleHandlers = [
+  getHotArticles, // /posts/hot?
+  getHotArticlesByKeyword, // /posts/hot/search?
+  getArticlesByKeyword, // /posts/search?
+  getArticles, // /posts?
+  // getArticlesError,
   getArticleCategories,
+  getArticleDetail, // /posts/:id
   createArticle,
-  getArticleDetail,
   removeArticle,
   reportArticle,
   updateArticle,

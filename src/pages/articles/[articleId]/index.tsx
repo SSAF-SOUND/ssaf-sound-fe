@@ -140,7 +140,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   }
 
   const dehydrate = prefetch({
-    queryKey: queryKeys.article.detail(articleId),
+    queryKey: queryKeys.articles.detail(articleId),
     queryFn: () => getArticleDetail(articleId),
   });
 

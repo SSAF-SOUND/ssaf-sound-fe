@@ -1,3 +1,4 @@
+export * from './useIntersectionObserver';
 export * from './useIsClient';
 export * from './useIsImageLoading';
 export * from './useStack';

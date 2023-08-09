@@ -2,6 +2,7 @@ import type {
   ArticleCategory,
   ArticleDetail,
   ArticleDetailError,
+  ArticleSummary,
 } from './utils';
 import type { ApiSuccessResponse } from '~/types';
 
@@ -135,4 +136,50 @@ export const scrapArticle = (articleId: number) => {
   return privateAxios
     .post<ScrapArticleApiData>(endpoint, null)
     .then((res) => res.data.data.scraped);
+};
+
+export interface GetArticlesParams {
+  categoryId: number;
+  cursor?: number;
+  size?: number;
+  keyword?: string;
+}
+
+export type GetArticlesApiData = ApiSuccessResponse<{
+  posts: ArticleSummary[];
+  cursor: number | null;
+}>;
+
+const defaultCursor = -1;
+const defaultSize = 20;
+
+export const getArticles = (params: GetArticlesParams) => {
+  const {
+    categoryId,
+    cursor = defaultCursor,
+    size = defaultSize,
+    keyword,
+  } = params;
+  const endpoint = endpoints.articles.list({
+    categoryId,
+    cursor,
+    size,
+    keyword,
+  });
+
+  return publicAxios
+    .get<GetArticlesApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
+export type GetHotArticlesParams = Omit<GetArticlesParams, 'categoryId'>;
+export type GetHotArticlesApiData = GetArticlesApiData;
+
+export const getHotArticles = (params: GetHotArticlesParams) => {
+  const { cursor = defaultCursor, size = defaultSize, keyword } = params;
+  const endpoint = endpoints.articles.hot({ cursor, size, keyword });
+
+  return publicAxios
+    .get<GetHotArticlesApiData>(endpoint)
+    .then((res) => res.data.data);
 };

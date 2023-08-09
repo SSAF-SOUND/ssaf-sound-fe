@@ -16918,6 +16918,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-virtuoso@npm:^4.4.2":
+  version: 4.4.2
+  resolution: "react-virtuoso@npm:4.4.2"
+  peerDependencies:
+    react: ">=16 || >=17 || >= 18"
+    react-dom: ">=16 || >=17 || >= 18"
+  checksum: 4f7727622ffc775ec0beb16b30ac313a883196339bf98c919e45f3943aba9da9192167336d72e037dda503db38c91db6fc28b0778ac550d25e060e352339fb24
+  languageName: node
+  linkType: hard
+
 "react-zoom-pan-pinch@npm:^3.1.0":
   version: 3.1.0
   resolution: "react-zoom-pan-pinch@npm:3.1.0"
@@ -18125,6 +18135,7 @@ __metadata:
     react-loading-skeleton: ^3.3.1
     react-quill: ^2.0.0
     react-spinners: ^0.13.8
+    react-virtuoso: ^4.4.2
     react-zoom-pan-pinch: ^3.1.0
     storybook: ^7.0.27
     string-strip-html: ^13.4.2
