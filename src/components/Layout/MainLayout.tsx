@@ -15,12 +15,14 @@ const MainLayout = (props: MainLayoutProps) => {
   const { children, className, headingText } = props;
   return (
     <div css={selfCss} className={className}>
-      {headingText && (
-        <VisuallyHidden asChild>
-          <h1>{headingText}</h1>
-        </VisuallyHidden>
-      )}
-      <main>{children}</main>
+      <main>
+        {headingText && (
+          <VisuallyHidden asChild>
+            <h1>{headingText}</h1>
+          </VisuallyHidden>
+        )}
+        {children}
+      </main>
     </div>
   );
 };
