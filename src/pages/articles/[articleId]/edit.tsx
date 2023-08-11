@@ -3,7 +3,7 @@ import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 
 import { useRouter } from 'next/router';
 
-import { DefaultFullPageLoader } from '~/components/Common';
+import { DefaultFullPageLoader, PageHead } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import { useArticleDetail, useUpdateArticle } from '~/services/article';
@@ -17,7 +17,18 @@ const ArticleEditPage: CustomNextPage = () => {
   const { mutateAsync: updateArticle } = useUpdateArticle(articleId);
 
   if (!articleDetail) {
-    return <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />;
+    return (
+      <>
+        <PageHead
+          title="게시글 수정"
+          robots={{
+            follow: false,
+            index: false,
+          }}
+        />
+        <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />
+      </>
+    );
   }
 
   if ('error' in articleDetail) {
@@ -50,21 +61,31 @@ const ArticleEditPage: CustomNextPage = () => {
   };
 
   return (
-    <div>
-      <ArticleForm
-        onValidSubmit={onValidSubmit}
-        options={{
-          titleBarText: '게시글 수정',
-          titleBarCloseRoute: routes.articles.detail(articleId),
-        }}
-        defaultValues={{
-          title,
-          content,
-          images,
-          anonymous: anonymity,
+    <>
+      <PageHead
+        title="게시글 수정"
+        robots={{
+          follow: false,
+          index: false,
         }}
       />
-    </div>
+
+      <div>
+        <ArticleForm
+          onValidSubmit={onValidSubmit}
+          options={{
+            titleBarText: '게시글 수정',
+            titleBarCloseRoute: routes.articles.detail(articleId),
+          }}
+          defaultValues={{
+            title,
+            content,
+            images,
+            anonymous: anonymity,
+          }}
+        />
+      </div>
+    </>
   );
 };
 
