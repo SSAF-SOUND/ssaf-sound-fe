@@ -10,7 +10,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import ArticleCardList from '~/components/ArticleCardList';
-import { CircleButton } from '~/components/Common';
+import { CircleButton, PageHead } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
@@ -56,29 +56,38 @@ const ArticleCategoryPage = (
   };
 
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        css={fontCss.style.B16}
+    <>
+      <PageHead
         title={categoryName}
-        onClickBackward={routes.articles.categories()}
-        withoutClose
+        openGraph={{
+          title: categoryName,
+        }}
+        url={routes.articles.category(categoryId)}
       />
-
-      <SearchBar categoryId={categoryId} />
-
-      <div css={articleContainerCss}>
-        <ArticleLayer categoryId={categoryId} keyword={keyword} />
-      </div>
-
-      <div css={fabContainerCss}>
-        <CircleButton
-          css={fabCss}
-          name="pencil.plus"
-          label="게시글 작성 버튼"
-          onClick={navigateToCreateArticlePage}
+      <div css={selfCss}>
+        <TitleBar.Default
+          css={fontCss.style.B16}
+          title={categoryName}
+          onClickBackward={routes.articles.categories()}
+          withoutClose
         />
+
+        <SearchBar categoryId={categoryId} />
+
+        <div css={articleContainerCss}>
+          <ArticleLayer categoryId={categoryId} keyword={keyword} />
+        </div>
+
+        <div css={fabContainerCss}>
+          <CircleButton
+            css={fabCss}
+            name="pencil.plus"
+            label="게시글 작성 버튼"
+            onClick={navigateToCreateArticlePage}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
