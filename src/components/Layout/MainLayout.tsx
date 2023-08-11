@@ -2,27 +2,18 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import { VisuallyHidden } from '~/components/Common';
 import { globalVars, pageMaxWidth, pageMinWidth } from '~/styles/utils';
 
 interface MainLayoutProps {
   children: ReactNode;
   className?: string;
-  headingText?: string;
 }
 
 const MainLayout = (props: MainLayoutProps) => {
-  const { children, className, headingText } = props;
+  const { children, className } = props;
   return (
     <div css={selfCss} className={className}>
-      <main>
-        {headingText && (
-          <VisuallyHidden asChild>
-            <h1>{headingText}</h1>
-          </VisuallyHidden>
-        )}
-        {children}
-      </main>
+      <main>{children}</main>
     </div>
   );
 };
