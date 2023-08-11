@@ -2,20 +2,24 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
+import { VisuallyHidden } from '~/components/Common';
 import { globalVars, pageMaxWidth, pageMinWidth } from '~/styles/utils';
-
-// 임시 레이아웃입니다.
-// 개발 단계에서, 보기 편하게 하기 위해서 넣어놨어요!
 
 interface MainLayoutProps {
   children: ReactNode;
   className?: string;
+  headingText?: string;
 }
 
 const MainLayout = (props: MainLayoutProps) => {
-  const { children, className } = props;
+  const { children, className, headingText } = props;
   return (
     <div css={selfCss} className={className}>
+      {headingText && (
+        <VisuallyHidden asChild>
+          <h1>{headingText}</h1>
+        </VisuallyHidden>
+      )}
       <main>{children}</main>
     </div>
   );

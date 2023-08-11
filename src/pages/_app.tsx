@@ -32,7 +32,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
         <GlobalStyles />
         <Background />
         <Toaster />
-        <MainLayout>
+        <MainLayout headingText={Component.headingText}>
           {Component.auth ? (
             <AuthChecker auth={Component.auth}>
               <Component {...pageProps} />

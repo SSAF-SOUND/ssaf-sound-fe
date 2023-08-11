@@ -19,6 +19,7 @@ type NextPageConfig = {
      */
     unauthorized: ReactElement | string;
   };
+  headingText: string;
 };
 
 declare module 'next/types' {
