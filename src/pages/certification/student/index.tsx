@@ -8,7 +8,12 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import StudentCertificationForm from 'src/components/Forms/StudentCertificationForm';
-import { DefaultFullPageLoader } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  loaderText,
+  PageHead,
+  PageHeadingText,
+} from '~/components/Common';
 import DelayedRedirection from '~/components/DelayedRedirection';
 import { useModal } from '~/components/GlobalModal';
 import PreviewCertifiedMyInfo from '~/components/PreviewCertifiedMyInfo';
@@ -27,7 +32,8 @@ import {
   routes,
 } from '~/utils';
 
-const loaderText = '유저 정보를 확인하는 중입니다.';
+const metaTitle = 'SSAFY 학생 인증';
+
 const maxAttempts = 3;
 
 const StudentCertificationPage: CustomNextPage = () => {
@@ -51,7 +57,7 @@ const StudentCertificationPage: CustomNextPage = () => {
     myInfo.ssafyInfo.certificationState === CertificationState.CERTIFIED
   ) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader text={loaderText} />;
+    return <DefaultFullPageLoader text={loaderText.checkUser} />;
   }
 
   const handleIncorrectAnswer = (remainChances: number) => {
@@ -143,22 +149,34 @@ const StudentCertificationPage: CustomNextPage = () => {
   };
 
   return (
-    <div css={selfCss}>
-      <StudentCertificationForm
-        css={formCss}
-        onSubmit={onSubmit}
-        defaultValues={{
-          year: myInfo.ssafyInfo.semester,
+    <>
+      <PageHead
+        title={metaTitle}
+        robots={{
+          follow: false,
+          index: false,
         }}
       />
-    </div>
+
+      <PageHeadingText text={metaTitle} />
+
+      <div css={selfCss}>
+        <StudentCertificationForm
+          css={formCss}
+          onSubmit={onSubmit}
+          defaultValues={{
+            year: myInfo.ssafyInfo.semester,
+          }}
+        />
+      </div>
+    </>
   );
 };
 export default StudentCertificationPage;
 
 StudentCertificationPage.auth = {
   role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText} />,
+  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
 };
 
