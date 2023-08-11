@@ -5,10 +5,16 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { DefaultFullPageLoader } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  PageHead,
+  PageHeadingText,
+} from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import { useArticleCategories, useCreateArticle } from '~/services/article';
 import { handleAxiosError, routes } from '~/utils';
+
+const metaTitle = '게시글 작성';
 
 /* /articles/new?categoryId=${categoryId} */
 const ArticleCreatePage: CustomNextPage = () => {
@@ -51,14 +57,29 @@ const ArticleCreatePage: CustomNextPage = () => {
   };
 
   return (
-    <div>
-      <ArticleForm
-        onValidSubmit={onValidSubmit}
-        options={{
-          titleBarCloseRoute: routes.articles.category(categoryId),
+    <>
+      <PageHead
+        title={metaTitle}
+        openGraph={{
+          title: metaTitle,
+        }}
+        robots={{
+          index: false,
+          follow: false,
         }}
       />
-    </div>
+
+      <PageHeadingText text={metaTitle} />
+
+      <div>
+        <ArticleForm
+          onValidSubmit={onValidSubmit}
+          options={{
+            titleBarCloseRoute: routes.articles.category(categoryId),
+          }}
+        />
+      </div>
+    </>
   );
 };
 
