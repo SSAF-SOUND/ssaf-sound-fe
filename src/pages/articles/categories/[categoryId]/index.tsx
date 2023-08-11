@@ -10,7 +10,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import ArticleCardList from '~/components/ArticleCardList';
-import { CircleButton, PageHead } from '~/components/Common';
+import { CircleButton, PageHead, PageHeadingText } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
@@ -64,6 +64,9 @@ const ArticleCategoryPage = (
         }}
         url={routes.articles.category(categoryId)}
       />
+
+      <PageHeadingText text={categoryName ?? '게시판'} />
+
       <div css={selfCss}>
         <TitleBar.Default
           css={fontCss.style.B16}

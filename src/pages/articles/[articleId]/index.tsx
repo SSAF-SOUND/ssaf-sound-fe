@@ -16,7 +16,7 @@ import { css } from '@emotion/react';
 import { stripHtml } from 'string-strip-html';
 
 import { Article } from '~/components/Article';
-import { Button, PageHead, VisuallyHidden } from '~/components/Common';
+import { Button, PageHead, PageHeadingText } from '~/components/Common';
 import CommentForm from '~/components/Forms/CommentForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
@@ -126,9 +126,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
         url={pageUrl}
       />
 
-      <VisuallyHidden asChild>
-        <h1>{metaTitle}</h1>
-      </VisuallyHidden>
+      <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
         <TitleBar.Default

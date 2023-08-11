@@ -3,11 +3,28 @@ import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 
 import { useRouter } from 'next/router';
 
-import { DefaultFullPageLoader, PageHead } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  PageHead,
+  PageHeadingText,
+} from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import { useArticleDetail, useUpdateArticle } from '~/services/article';
 import { handleAxiosError, routes } from '~/utils';
+
+const metaTitle = '게시글 수정';
+const ArticleEditPageHead = () => {
+  return (
+    <PageHead
+      title={metaTitle}
+      robots={{
+        follow: false,
+        index: false,
+      }}
+    />
+  );
+};
 
 const ArticleEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -19,13 +36,7 @@ const ArticleEditPage: CustomNextPage = () => {
   if (!articleDetail) {
     return (
       <>
-        <PageHead
-          title="게시글 수정"
-          robots={{
-            follow: false,
-            index: false,
-          }}
-        />
+        <ArticleEditPageHead />
         <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />
       </>
     );
@@ -62,13 +73,9 @@ const ArticleEditPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead
-        title="게시글 수정"
-        robots={{
-          follow: false,
-          index: false,
-        }}
-      />
+      <ArticleEditPageHead />
+
+      <PageHeadingText text={metaTitle} />
 
       <div>
         <ArticleForm

@@ -6,7 +6,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { ArticleCategoryCard } from '~/components/ArticleCategoryCard';
-import { PageHead } from '~/components/Common';
+import { PageHead, PageHeadingText } from '~/components/Common';
 import NavigationGroup from '~/components/NavigationGroup';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
@@ -18,7 +18,7 @@ const metaTitle = '게시글 카테고리 모음';
 const metaDescription =
   'SSAF SOUND의 모든 게시글 카테고리를 모아볼 수 있는 페이지입니다.';
 
-const ArticleCategoriesPage: CustomNextPage = () => {
+const ArticleCategoriesPage = () => {
   const { data: articleCategories } = useArticleCategories();
 
   return (
@@ -31,6 +31,8 @@ const ArticleCategoriesPage: CustomNextPage = () => {
           description: metaDescription,
         }}
       />
+
+      <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
         <Link
@@ -65,7 +67,6 @@ const ArticleCategoriesPage: CustomNextPage = () => {
 };
 
 export default ArticleCategoriesPage;
-ArticleCategoriesPage.headingText = metaTitle;
 
 const selfCss = css({ padding: `${topBarHeight + 40}px 15px` });
 
