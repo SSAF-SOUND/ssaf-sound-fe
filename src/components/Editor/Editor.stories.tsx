@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { AlertText } from '~/components/Common';
+import { useModal } from '~/components/GlobalModal';
 import ThumbnailBar from '~/components/ThumbnailBar';
 import { useImageUpload } from '~/services/s3/hooks';
 import { PageLayout } from '~/stories/Layout';
@@ -81,6 +82,20 @@ export const OtherOptions = () => {
   });
 
   const hasImages = Boolean(images.length);
+  const { openModal, closeModal } = useModal();
+  const openRemoveThumbnailReconfirmModal = (index: number) => {
+    openModal('alert', {
+      title: '알림',
+      actionText: '삭제',
+      description: '썸네일을 삭제합니다.',
+      cancelText: '취소',
+      onClickAction: () => {
+        setImages((p) => p.filter((_, i) => i !== index));
+        closeModal();
+      },
+      onClickCancel: closeModal,
+    });
+  };
 
   return (
     <div>
@@ -98,9 +113,7 @@ export const OtherOptions = () => {
             thumbnailUrl,
             loading: !imageUrl,
           }))}
-          onClickRemoveThumbnail={(index) =>
-            setImages((prev) => prev.filter((_, i) => i !== index))
-          }
+          onClickRemoveThumbnail={openRemoveThumbnailReconfirmModal}
         />
       )}
       <Editor.ToolBar css={{ borderTop: 0 }}>
