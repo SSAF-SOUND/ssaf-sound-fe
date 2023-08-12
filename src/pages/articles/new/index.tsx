@@ -16,21 +16,6 @@ import { handleAxiosError, routes } from '~/utils';
 
 const metaTitle = '게시글 작성';
 
-const ArticleCreatePageHead = () => {
-  return (
-    <PageHead
-      title={metaTitle}
-      openGraph={{
-        title: metaTitle,
-      }}
-      robots={{
-        index: false,
-        follow: false,
-      }}
-    />
-  );
-};
-
 /* /articles/new?categoryId=${categoryId} */
 const ArticleCreatePage: CustomNextPage = () => {
   const router = useRouter();
@@ -53,12 +38,7 @@ const ArticleCreatePage: CustomNextPage = () => {
   }, [articleCategories, router, categoryId]);
 
   if (!articleCategories) {
-    return (
-      <>
-        <ArticleCreatePageHead />
-        <DefaultFullPageLoader />
-      </>
-    );
+    return <DefaultFullPageLoader />;
   }
 
   const onValidSubmit: ArticleFormProps['onValidSubmit'] = async (
@@ -78,7 +58,16 @@ const ArticleCreatePage: CustomNextPage = () => {
 
   return (
     <>
-      <ArticleCreatePageHead />
+      <PageHead
+        title={metaTitle}
+        openGraph={{
+          title: metaTitle,
+        }}
+        robots={{
+          index: false,
+          follow: false,
+        }}
+      />
 
       <PageHeadingText text={metaTitle} />
 

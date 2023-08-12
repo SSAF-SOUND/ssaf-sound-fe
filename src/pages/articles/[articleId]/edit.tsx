@@ -14,17 +14,6 @@ import { useArticleDetail, useUpdateArticle } from '~/services/article';
 import { handleAxiosError, routes } from '~/utils';
 
 const metaTitle = '게시글 수정';
-const ArticleEditPageHead = () => {
-  return (
-    <PageHead
-      title={metaTitle}
-      robots={{
-        follow: false,
-        index: false,
-      }}
-    />
-  );
-};
 
 const ArticleEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -34,12 +23,7 @@ const ArticleEditPage: CustomNextPage = () => {
   const { mutateAsync: updateArticle } = useUpdateArticle(articleId);
 
   if (!articleDetail) {
-    return (
-      <>
-        <ArticleEditPageHead />
-        <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />
-      </>
-    );
+    return <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />;
   }
 
   if ('error' in articleDetail) {
@@ -73,7 +57,13 @@ const ArticleEditPage: CustomNextPage = () => {
 
   return (
     <>
-      <ArticleEditPageHead />
+      <PageHead
+        title={metaTitle}
+        robots={{
+          follow: false,
+          index: false,
+        }}
+      />
 
       <PageHeadingText text={metaTitle} />
 
