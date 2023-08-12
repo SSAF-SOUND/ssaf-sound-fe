@@ -24,7 +24,6 @@ export interface PageHeadProps {
   title?: string;
   description?: string;
   robots?: Partial<MetaRobots>;
-  url?: string;
   openGraph?: Partial<MetaOpenGraph>;
   options?: Partial<PageHeadOptions>;
 }
