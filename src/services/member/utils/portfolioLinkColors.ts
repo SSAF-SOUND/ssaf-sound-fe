@@ -1,6 +1,6 @@
 import { palettes } from '~/styles/utils';
 
-export const linkColors = [
+export const portfolioLinkColors = [
   palettes.point.orange,
   palettes.point.green,
   palettes.point.purple,
@@ -12,3 +12,7 @@ export const linkColors = [
   palettes.recruit.default,
   '#EEFF89',
 ];
+
+export const getPortfolioLinkColor = (index: number) => {
+  return portfolioLinkColors[index % portfolioLinkColors.length];
+};

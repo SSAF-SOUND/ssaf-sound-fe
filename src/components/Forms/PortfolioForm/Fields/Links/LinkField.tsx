@@ -8,11 +8,9 @@ import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
 
 import { Icon, IconButton } from '~/components/Common';
-import {
-  linkColors,
-  usePortfolioFormContext,
-} from '~/components/Forms/PortfolioForm/utils';
+import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import PortfolioLinkInputGroup from '~/components/PortfolioLinkInputGroup';
+import { getPortfolioLinkColor } from '~/services/member';
 import { inlineFlex } from '~/styles/utils';
 import { regex } from '~/utils';
 
@@ -49,14 +47,13 @@ const LinkField = (props: LinkFieldProps) => {
   }) as Link;
 
   const removeField = () => remove(index);
-  const color = linkColors[index % linkColors.length];
 
   return (
     <div css={selfCss}>
       <PortfolioLinkInputGroup.Root
         viewText={linkText}
         viewHref={link}
-        color={color}
+        color={getPortfolioLinkColor(index)}
       >
         <PortfolioLinkInputGroup.Input
           inputType={'href'}

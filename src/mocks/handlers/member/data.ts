@@ -1,10 +1,13 @@
-import type { UserInfo, UserPortfolio } from '~/services/member';
+import type { UserPortfolio, UserInfo } from '~/services/member';
 
+import { faker } from '@faker-js/faker';
+
+import { mockHtmlString } from '~/mocks/handlers/common';
 import { CertificationState, SsafyTrack } from '~/services/member';
 import { SkillName } from '~/services/recruit';
 
 const initialUserInfo: UserInfo = {
-  memberId: 434,
+  memberId: 144,
   memberRole: 'user',
   nickname: 'mechanic',
   ssafyMember: null,
@@ -12,6 +15,7 @@ const initialUserInfo: UserInfo = {
 };
 const certifiedSsafyUserInfo: UserInfo = {
   ...initialUserInfo,
+  memberId: 586,
   ssafyMember: true,
   isMajor: false,
   ssafyInfo: {
@@ -24,6 +28,7 @@ const certifiedSsafyUserInfo: UserInfo = {
 
 const uncertifiedSsafyUserInfo: UserInfo = {
   ...initialUserInfo,
+  memberId: 248,
   ssafyMember: true,
   isMajor: false,
   ssafyInfo: {
@@ -36,6 +41,7 @@ const uncertifiedSsafyUserInfo: UserInfo = {
 
 const nonSsafyUserInfo: UserInfo = {
   ...initialUserInfo,
+  memberId: 738,
   ssafyMember: false,
   ssafyInfo: undefined,
 };
@@ -47,23 +53,13 @@ export const userInfo = {
   nonSsafyUserInfo,
 };
 
-const publicPortfolio: UserPortfolio = {
-  isPublic: true,
-  portfolio: {
-    selfIntroduction: 'grammar',
-    skills: Object.values(SkillName).slice(0, 10),
-    memberLinks: [],
-  },
-};
-
-const privatePortfolio: UserPortfolio = {
-  isPublic: false,
-  portfolio: null,
-};
-
-export const userPortfolio = {
-  publicPortfolio,
-  privatePortfolio,
-  myPublicPortfolio: publicPortfolio,
-  myPrivatePortfolio: { ...publicPortfolio, isPublic: false },
+export const portfolio: UserPortfolio = {
+  selfIntroduction: mockHtmlString,
+  skills: Object.values(SkillName).slice(0, 10),
+  memberLinks: Array(10)
+    .fill(undefined)
+    .map(() => ({
+      linkName: faker.lorem.words(2),
+      path: `https://www.naver.com`,
+    })),
 };

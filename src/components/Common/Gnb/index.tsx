@@ -11,6 +11,7 @@ import {
   gnbHeight,
   palettes,
   fixBottomCenter,
+  zIndex,
 } from '~/styles/utils';
 import { routes } from '~/utils';
 
@@ -71,18 +72,16 @@ const Gnb = (props: GnbProps) => {
   );
 };
 
-const selfCss = css(
-  {
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    overflow: 'hidden',
-    boxShadow: '0px -7px 18px rgba(0, 0, 0, 0.05)',
-    padding: '0 20px',
-    background: palettes.white,
-    color: palettes.black,
-  },
-  fixBottomCenter
-);
+const selfCss = css(fixBottomCenter, {
+  borderTopLeftRadius: 15,
+  borderTopRightRadius: 15,
+  overflow: 'hidden',
+  boxShadow: '0px -7px 18px rgba(0, 0, 0, 0.05)',
+  padding: '0 20px',
+  background: palettes.white,
+  color: palettes.black,
+  zIndex: zIndex.fixed.normal,
+});
 
 const itemContainerCss = css(
   { width: '100%' },

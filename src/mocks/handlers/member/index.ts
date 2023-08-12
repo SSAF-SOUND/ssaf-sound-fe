@@ -1,17 +1,18 @@
 import type {
   CertifyStudentApiData,
   GetMyInfoApiData,
+  GetMyPortfolioApiData,
   GetProfileVisibilityApiData,
-  MyPortfolio,
+  GetUserInfoApiData,
+  GetUserPortfolioApiData,
   UpdateMyInfoParams,
   UserInfo,
-  UserPortfolio,
 } from '~/services/member';
 import type { ApiErrorResponse } from '~/types';
 
 import { rest } from 'msw';
 
-import { userInfo, userPortfolio } from '~/mocks/handlers/member/data';
+import { userInfo, portfolio } from '~/mocks/handlers/member/data';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { CertificationState } from '~/services/member';
@@ -28,7 +29,30 @@ export const getMyInfo = restSuccess<GetMyInfoApiData['data']>(
   }
 );
 
-const updateMyInfo = rest.put<
+export const getUserInfo = restSuccess<GetUserInfoApiData['data']>(
+  'get',
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.user.userInfo(':id')),
+  {
+    // data: userInfo.initialUserInfo,
+    data: userInfo.certifiedSsafyUserInfo,
+    // data: userInfo.uncertifiedSsafyUserInfo,
+    // data: userInfo.nonSsafyUserInfo,
+  }
+);
+
+export const getUserInfoError = restError(
+  'get',
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.user.userInfo(':id')),
+  {
+    data: null,
+  }
+);
+
+export const updateMyInfo = rest.put<
   never,
   never,
   GetMyInfoApiData | ApiErrorResponse
@@ -164,6 +188,19 @@ export const getProfileVisibility = restSuccess<
   },
 });
 
+export const getUserProfileVisibility = restSuccess(
+  'get',
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.user.userProfileVisibility(':id')),
+  {
+    data: {
+      isPublic: true,
+      // isPublic: false,
+    },
+  }
+);
+
 export const updateProfileVisibility = restSuccess(
   'patch',
   composeUrls(API_URL, endpoints.user.profileVisibility()),
@@ -176,23 +213,25 @@ export const updateProfileVisibilityError = restError(
   { message: '에러가 발생했습니다' }
 );
 
-export const getPortfolio = restSuccess<UserPortfolio>(
+export const getUserPortfolio = restSuccess<GetUserPortfolioApiData['data']>(
   'get',
   // eslint-disable-next-line
   // @ts-ignore
   composeUrls(API_URL, endpoints.user.portfolio(':id')),
   {
-    data: userPortfolio.publicPortfolio,
-    // data: userPortfolio.privatePortfolio,
+    data: {
+      portfolio,
+    },
   }
 );
 
-export const getMyPortfolio = restSuccess<MyPortfolio>(
+export const getMyPortfolio = restSuccess<GetMyPortfolioApiData['data']>(
   'get',
   composeUrls(API_URL, endpoints.user.myPortfolio()),
   {
-    // data: userPortfolio.myPublicPortfolio,
-    data: userPortfolio.myPrivatePortfolio,
+    data: {
+      portfolio,
+    },
   }
 );
 
@@ -206,7 +245,9 @@ export const memberHandlers = [
   updateSsafyBasicInfo,
   updateTrack,
   getProfileVisibility,
+  getUserProfileVisibility,
   updateProfileVisibility,
-  getPortfolio,
+  getUserPortfolio,
   getMyPortfolio,
+  getUserInfo,
 ];

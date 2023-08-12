@@ -1,14 +1,13 @@
 import type {
   UserInfo,
   SsafyTrack,
-  UserPortfolio,
-  MyPortfolio,
   ProfileVisibility,
+  UserPortfolio,
 } from './utils/types';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
-import { privateAxios } from '~/utils';
+import { privateAxios, publicAxios } from '~/utils';
 
 export type GetMyInfoApiData = ApiSuccessResponse<UserInfo>;
 
@@ -17,6 +16,21 @@ export const getMyInfo = () => {
   return privateAxios
     .get<GetMyInfoApiData>(endpoint)
     .then((res) => res.data.data);
+};
+
+export type GetUserInfoApiData = ApiSuccessResponse<
+  Omit<UserInfo, 'memberRole' | 'memberId'>
+>;
+
+export const getUserInfo = (id: number) => {
+  const endpoint = endpoints.user.userInfo(id);
+
+  return publicAxios.get<GetUserInfoApiData>(endpoint).then((res) => {
+    return {
+      ...res.data.data,
+      memberId: id,
+    };
+  });
 };
 
 export type UpdateMyInfoApiData = ApiSuccessResponse<UserInfo>;
@@ -116,6 +130,16 @@ export const getProfileVisibility = () => {
     .then((res) => res.data.data);
 };
 
+export type GetUserProfileVisibilityApiData =
+  ApiSuccessResponse<ProfileVisibility>;
+
+export const getUserProfileVisibility = (id: number) => {
+  const endpoint = endpoints.user.userProfileVisibility(id);
+  return publicAxios
+    .get<GetUserProfileVisibilityApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
 interface UpdateProfileVisibilityParams {
   isPublic: boolean;
 }
@@ -129,20 +153,24 @@ export const updateProfileVisibility = (
 
 // 포트폴리오
 
-type GetUserPortfolioApiData = ApiSuccessResponse<UserPortfolio>;
+export type GetUserPortfolioApiData = ApiSuccessResponse<{
+  portfolio: UserPortfolio;
+}>;
 export const getUserPortfolio = (id: number) => {
   const endpoint = endpoints.user.portfolio(id);
 
   return privateAxios
     .get<GetUserPortfolioApiData>(endpoint)
-    .then((res) => res.data.data);
+    .then((res) => res.data.data.portfolio);
 };
 
-type GetMyPortfolioApiData = ApiSuccessResponse<MyPortfolio>;
+export type GetMyPortfolioApiData = ApiSuccessResponse<{
+  portfolio: UserPortfolio;
+}>;
 export const getMyPortfolio = () => {
   const endpoint = endpoints.user.myPortfolio();
 
   return privateAxios
     .get<GetMyPortfolioApiData>(endpoint)
-    .then((res) => res.data.data);
+    .then((res) => res.data.data.portfolio);
 };
