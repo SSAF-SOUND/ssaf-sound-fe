@@ -4,7 +4,13 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { DefaultFullPageLoader, loaderText, Tabs } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  loaderText,
+  PageHead,
+  PageHeadingText,
+  Tabs,
+} from '~/components/Common';
 import NameCard from '~/components/NameCard';
 import NavigationGroup from '~/components/NavigationGroup';
 import { Profile, ProfileTabs } from '~/components/Profile';
@@ -23,6 +29,28 @@ import {
   topBarHeight,
 } from '~/styles/utils';
 import { isStorybookMode, routes } from '~/utils';
+
+const metaTitle = '프로필';
+
+interface ProfilePageHeadProps {
+  userId: number;
+}
+
+const ProfilePageHead = (props: ProfilePageHeadProps) => {
+  const { userId } = props;
+  return (
+    <PageHead
+      title={metaTitle}
+      robots={{
+        follow: false,
+        index: false,
+      }}
+      openGraph={{
+        url: routes.profile.detail(userId),
+      }}
+    />
+  );
+};
 
 const isIdNaN = (id: number) => {
   if (isStorybookMode()) return false;
@@ -65,69 +93,80 @@ const ProfilePage: CustomNextPage = () => {
   }
 
   if (isUserInfoLoading || isUserProfileVisibilityLoading || isMyInfoLoading) {
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return (
+      <>
+        <ProfilePageHead userId={id} />
+        <DefaultFullPageLoader text={loaderText.checkUser} />
+      </>
+    );
   }
 
   const isProfilePublic = userProfileVisibility.isPublic;
 
   return (
-    <div css={selfCss}>
-      {mine ? (
-        <NavigationGroup />
-      ) : (
-        <TitleBar.Default
-          title="프로필"
-          withoutClose
-          // TODO: Return Page
-          onClickBackward={routes.main()}
-        />
-      )}
+    <>
+      <ProfilePageHead userId={id} />
 
-      <div css={userInfoLayerCss}>
-        <NameCard userInfo={userInfo} css={nameCardCss} />
-        {mine && <Profile.MyInfoSettingsLink />}
-      </div>
+      <PageHeadingText text={metaTitle} />
 
-      {mine && (
-        <div css={navLayerCss}>
-          <Profile.NavItem
-            css={expandCss}
-            iconName="bookmark.outline"
-            href={routes.profile.myScraps()}
-            text="나의 스크랩"
+      <div css={selfCss}>
+        {mine ? (
+          <NavigationGroup />
+        ) : (
+          <TitleBar.Default
+            title="프로필"
+            withoutClose
+            // TODO: Return Page
+            onClickBackward={routes.main()}
           />
+        )}
 
-          <Profile.NavItem
-            css={expandCss}
-            iconName="document"
-            href={routes.profile.myArticles()}
-            text="내가 작성한 게시글"
-          />
+        <div css={userInfoLayerCss}>
+          <NameCard userInfo={userInfo} css={nameCardCss} />
+          {mine && <Profile.MyInfoSettingsLink />}
         </div>
-      )}
 
-      {isProfilePublic ? (
-        <Tabs.Root defaultValue={ProfileTabs.PORTFOLIO}>
-          <Profile.TabsTriggers css={expandCss} />
+        {mine && (
+          <div css={navLayerCss}>
+            <Profile.NavItem
+              css={expandCss}
+              iconName="bookmark.outline"
+              href={routes.profile.myScraps()}
+              text="나의 스크랩"
+            />
 
-          <Profile.PortfolioTabContent
-            mine={mine}
-            userId={id}
-            skillsContainerStyle={{ margin: `0 ${expandNegativeMarginX}` }}
-          />
+            <Profile.NavItem
+              css={expandCss}
+              iconName="document"
+              href={routes.profile.myArticles()}
+              text="내가 작성한 게시글"
+            />
+          </div>
+        )}
 
-          <Tabs.Content value="2">
-            <div>2</div>
-          </Tabs.Content>
+        {isProfilePublic ? (
+          <Tabs.Root defaultValue={ProfileTabs.PORTFOLIO}>
+            <Profile.TabsTriggers css={expandCss} />
 
-          <Tabs.Content value="3">
-            <div>3</div>
-          </Tabs.Content>
-        </Tabs.Root>
-      ) : (
-        <Profile.PrivateIndicator css={privateProfileCss} />
-      )}
-    </div>
+            <Profile.PortfolioTabContent
+              mine={mine}
+              userId={id}
+              skillsContainerStyle={{ margin: `0 ${expandNegativeMarginX}` }}
+            />
+
+            <Tabs.Content value="2">
+              <div>2</div>
+            </Tabs.Content>
+
+            <Tabs.Content value="3">
+              <div>3</div>
+            </Tabs.Content>
+          </Tabs.Root>
+        ) : (
+          <Profile.PrivateIndicator css={privateProfileCss} />
+        )}
+      </div>
+    </>
   );
 };
 

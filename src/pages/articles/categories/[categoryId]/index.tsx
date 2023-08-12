@@ -61,8 +61,8 @@ const ArticleCategoryPage = (
         title={categoryName}
         openGraph={{
           title: categoryName,
+          url: routes.articles.category(categoryId),
         }}
-        url={routes.articles.category(categoryId)}
       />
 
       <PageHeadingText text={categoryName ?? '게시판'} />

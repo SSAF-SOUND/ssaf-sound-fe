@@ -42,7 +42,13 @@ const HotArticlesPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} description={metaDescription} />
+      <PageHead
+        title={metaTitle}
+        description={metaDescription}
+        openGraph={{
+          url: routes.articles.hot(),
+        }}
+      />
 
       <PageHeadingText text={metaTitle} />
 
