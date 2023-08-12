@@ -1,5 +1,6 @@
 import Head from 'next/head';
 
+import { composeUrls } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
 interface MetaRobots {
@@ -53,6 +54,8 @@ export const PageHead = (props: PageHeadProps) => {
   } = props;
 
   const renderMetaRobots = !follow || !index;
+  const openGraphUrl =
+    url === globalMetaData.url ? url : composeUrls(globalMetaData.url, url);
 
   return (
     <Head>
@@ -67,7 +70,7 @@ export const PageHead = (props: PageHeadProps) => {
       <meta property="og:title" content={openGraphTitle} />
       <meta property="og:description" content={openGraphDescription} />
       <meta property="og:type" content={openGraphType} />
-      <meta property="og:url" content={url} />
+      <meta property="og:url" content={openGraphUrl} />
       <meta property="og:image" content={image} />
       <meta property="og:site_name" content={globalMetaData.title} />
       <meta property="og:locale" content={globalMetaData.locale} />
