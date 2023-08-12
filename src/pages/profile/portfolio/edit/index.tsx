@@ -7,7 +7,12 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import PortfolioForm from 'src/components/Forms/PortfolioForm';
-import { DefaultFullPageLoader, loaderText } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  loaderText,
+  PageHead,
+  PageHeadingText,
+} from '~/components/Common';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import {
   useMyInfo,
@@ -21,6 +26,8 @@ import {
   handleAxiosError,
   routes,
 } from '~/utils';
+
+const metaTitle = '포트폴리오 작성';
 
 const PortfolioEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -102,21 +109,27 @@ const PortfolioEditPage: CustomNextPage = () => {
   };
 
   return (
-    <div css={selfCss}>
-      <PortfolioForm
-        defaultValues={{
-          selfIntroduction: myPortfolio.selfIntroduction,
-          links: portfolioLinksToFormLinksField(myPortfolio.memberLinks),
-          skills: portfolioSkillsToFormSkillsField(myPortfolio.skills),
-        }}
-        options={{
-          skillsContainerStyle,
-          titleBarCloseRoute: routes.profile.detail(myInfo.memberId),
-        }}
-        onInvalidSubmit={onInvalidSubmit}
-        onValidSubmit={onValidSubmit}
-      />
-    </div>
+    <>
+      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
+
+      <PageHeadingText text={metaTitle} />
+
+      <div css={selfCss}>
+        <PortfolioForm
+          defaultValues={{
+            selfIntroduction: myPortfolio.selfIntroduction,
+            links: portfolioLinksToFormLinksField(myPortfolio.memberLinks),
+            skills: portfolioSkillsToFormSkillsField(myPortfolio.skills),
+          }}
+          options={{
+            skillsContainerStyle,
+            titleBarCloseRoute: routes.profile.detail(myInfo.memberId),
+          }}
+          onInvalidSubmit={onInvalidSubmit}
+          onValidSubmit={onValidSubmit}
+        />
+      </div>
+    </>
   );
 };
 

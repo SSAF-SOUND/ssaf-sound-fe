@@ -7,7 +7,11 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { produce } from 'immer';
 
-import { DefaultFullPageLoader } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  PageHead,
+  PageHeadingText,
+} from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import {
   CertificationState,
@@ -17,6 +21,8 @@ import {
 } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
 import { customToast, handleAxiosError, routes } from '~/utils';
+
+const metaTitle = '트랙 수정';
 
 const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -56,19 +62,31 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
   };
 
   return (
-    <div css={selfCss}>
-      <MyInfoEditForm
-        css={formCss}
-        field="track"
-        defaultValues={{
-          track: myInfo.ssafyInfo.majorTrack as string,
-        }}
-        onValidSubmit={onValidSubmit}
-        options={{
-          titleBarBackwardRoute: routes.profile.myInfoSettings(),
+    <>
+      <PageHead
+        title={metaTitle}
+        robots={{
+          index: false,
+          follow: false,
         }}
       />
-    </div>
+
+      <PageHeadingText text={metaTitle} />
+
+      <div css={selfCss}>
+        <MyInfoEditForm
+          css={formCss}
+          field="track"
+          defaultValues={{
+            track: myInfo.ssafyInfo.majorTrack as string,
+          }}
+          onValidSubmit={onValidSubmit}
+          options={{
+            titleBarBackwardRoute: routes.profile.myInfoSettings(),
+          }}
+        />
+      </div>
+    </>
   );
 };
 
