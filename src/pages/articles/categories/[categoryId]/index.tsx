@@ -35,7 +35,7 @@ import {
 } from '~/styles/utils';
 import { customToast, routes } from '~/utils';
 
-const createMetaDescription = (categoryName = "게시판") =>
+const createMetaDescription = (categoryName = '게시판') =>
   `SSAF SOUND의 ${categoryName}에 속하는 게시글들을 모아볼 수 있는 페이지입니다.`;
 
 const minKeywordLength = 3;
@@ -58,13 +58,16 @@ const ArticleCategoryPage = (
     router.push(routes.articles.create(categoryId));
   };
 
+  const metaDescription = createMetaDescription(categoryName);
+
   return (
     <>
       <PageHead
         title={categoryName}
+        description={metaDescription}
         openGraph={{
           title: categoryName,
-          description: createMetaDescription(categoryName),
+          description: metaDescription,
           url: routes.articles.category(categoryId),
         }}
       />
