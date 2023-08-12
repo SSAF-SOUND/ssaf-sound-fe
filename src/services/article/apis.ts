@@ -196,3 +196,18 @@ export const getHotArticles = (params: GetHotArticlesParams) => {
     .get<GetHotArticlesApiData>(endpoint)
     .then((res) => res.data.data);
 };
+
+export interface GetMyArticlesParams {
+  cursor?: number;
+  size?: number;
+}
+
+export type GetMyArticlesApiData = GetArticlesApiData;
+
+export const getMyArticles = (params: GetMyArticlesParams) => {
+  const { cursor = defaultCursor, size = defaultSize } = params;
+  const endpoint = endpoints.articles.mine({ cursor, size });
+  return privateAxios
+    .get<GetMyArticlesApiData>(endpoint)
+    .then((res) => res.data.data);
+};

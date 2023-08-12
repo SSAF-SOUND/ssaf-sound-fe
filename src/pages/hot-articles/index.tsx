@@ -5,11 +5,8 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
-import { memo, useEffect, useState } from 'react';
 
-import { HotArticleCard } from '~/components/ArticleCard';
 import ArticleCardList from '~/components/ArticleCardList';
-import ErrorCard from '~/components/ErrorCard';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
@@ -27,7 +24,7 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { add, customToast, routes, scrollUpBy } from '~/utils';
+import { customToast, routes } from '~/utils';
 
 const titleBarTitle = 'HOT 게시판';
 
@@ -51,106 +48,30 @@ const HotArticlesPage = () => {
       <SearchBar />
 
       <div css={articleContainerCss}>
-        <HotArticleCardListLayer keyword={keyword} />
+        <HotArticleLayer keyword={keyword} />
       </div>
     </div>
   );
 };
 
-interface HotArticleCardListLayerProps {
+interface HotArticleLayerProps {
   keyword?: string;
 }
 
-const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
+const HotArticleLayer = (props: HotArticleLayerProps) => {
   const { keyword } = props;
   const isValidKeyword = validateKeyword(keyword);
-  const {
-    data: articles,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-    error,
-    isLoading,
-  } = useHotArticles({ keyword });
-
-  const [hasError, setHasError] = useState(false);
-
-  const fetchNextHotArticles = async () => {
-    if (!hasNextPage || isFetchingNextPage) return;
-    await fetchNextPage();
-
-    /* 스크롤이 바닥에 닿아있으면, 자동 스크롤 조절이 되지 않기 때문에 `fetch`되자마자 스크롤을 1 올려줍니다. */
-    scrollUpBy(1);
-  };
-
-  const hasNextHotArticles = hasError ? false : hasNextPage;
-
-  const retryFetchNextHotArticles = () => {
-    setHasError(false);
-    fetchNextHotArticles();
-  };
-
-  useEffect(() => {
-    setHasError(!!error);
-  }, [error, keyword]);
-
-  const isHotArticleEmpty =
-    articles?.pages.map((page) => page.posts.length).reduce(add) === 0;
-
-  const notExistSearchResults = isValidKeyword && isHotArticleEmpty;
-  const notExistHotArticles = !isValidKeyword && isHotArticleEmpty;
-
-  if (isLoading) return <HotArticleCardSkeletons count={6} />;
-
-  if (notExistSearchResults) return <NoSearchResults keyword={keyword} />;
-
-  if (notExistHotArticles)
-    return (
-      <div css={position.xy('center', 'center', 'absolute')}>
-        아직 게시글이 없습니다.
-      </div>
-    );
+  const infiniteQuery = useHotArticles({ keyword });
 
   return (
-    <>
-      {articles && (
-        <>
-          <ArticleCardList
-            hot
-            articlesPages={articles.pages}
-            fetchNextPage={fetchNextHotArticles}
-            hasNextPage={hasNextHotArticles}
-          />
-
-          {hasNextHotArticles && <HotArticleCardSkeletons />}
-          {hasError && (
-            <ErrorCard
-              css={{ marginTop: 16 }}
-              onClickRetry={retryFetchNextHotArticles}
-            />
-          )}
-        </>
-      )}
-    </>
+    <ArticleCardList
+      hot
+      infiniteQuery={infiniteQuery}
+      emptyElement={isValidKeyword && <NoSearchResults keyword={keyword} />}
+      skeletonCount={4}
+    />
   );
 };
-
-interface HotArticleCardSkeletonsProps {
-  count?: number;
-}
-const HotArticleCardSkeletons = memo((props: HotArticleCardSkeletonsProps) => {
-  const { count = 4 } = props;
-  return (
-    <div css={[skeletonsCss, { marginTop: 16 }]}>
-      {Array(count)
-        .fill(undefined)
-        .map((_, index) => {
-          return <HotArticleCard.Skeleton key={index} />;
-        })}
-    </div>
-  );
-});
-HotArticleCardSkeletons.displayName = 'HotArticleCardSkeletons';
 
 const SearchBar = () => {
   const router = useRouter();
@@ -230,8 +151,6 @@ const articleContainerCss = css({
   flexGrow: 1,
   marginTop: 4,
 });
-
-const skeletonsCss = css(flex('', '', 'column', 16));
 
 /* ssr */
 

@@ -13,17 +13,25 @@ interface SeparatorProps {
   orientation?: RadixSeparatorProps['orientation'];
   height?: number | string;
   width?: number | string;
+  backgroundColor?: string;
 }
 
 export const Separator = (props: SeparatorProps) => {
-  const { decorative = true, height, width, style, ...restProps } = props;
-  const styleWithHeight = { height, width, ...style };
+  const {
+    decorative = true,
+    height,
+    width,
+    style,
+    backgroundColor,
+    ...restProps
+  } = props;
+  const separatorStyle = { width, height, backgroundColor, ...style };
 
   return (
     <RadixSeparator.Root
       decorative={decorative}
       css={selfCss}
-      style={styleWithHeight}
+      style={separatorStyle}
       {...restProps}
     />
   );

@@ -20,7 +20,7 @@ export const queryKeys = {
     ],
     hot: (searchKeyword?: string) => ['articles', 'hot', searchKeyword ?? null],
     detail: (articleId: number) => ['articles', articleId],
-    mine: () => [],
+    mine: () => [...queryKeys.auth(), 'articles'],
   },
   comments: {
     list: (articleId: number) => ['comments', articleId],
@@ -84,6 +84,10 @@ export const endpoints = {
       } as never).toString();
 
       return `/posts/hot?${queryString}`;
+    },
+    mine: (params: { cursor: number; size: number }) => {
+      const queryString = new URLSearchParams(params as never).toString();
+      return `/posts/my?${queryString}`;
     },
     create: (categoryId: number) => `/posts?boardId=${categoryId}`,
     detail: (articleId: number) => `/posts/${articleId}`,

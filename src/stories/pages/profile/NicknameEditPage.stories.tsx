@@ -9,7 +9,7 @@ import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof MyInfoSettingsNicknameEditPage> = {
-  title: 'Page/MyInfoSettings/NicknameEdit',
+  title: 'Page/Profile/MyInfoSettings/NicknameEdit',
   component: MyInfoSettingsNicknameEditPage,
   decorators: [
     (Story) => (

@@ -5,7 +5,14 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Button, Icon, SsafyIcon, Tabs, TrackSize } from '~/components/Common';
+import {
+  Button,
+  Icon,
+  IconButton,
+  SsafyIcon,
+  Tabs,
+  TrackSize,
+} from '~/components/Common';
 import NavigationGroup from '~/components/NavigationGroup';
 import { Profile } from '~/components/Profile';
 import { useMyInfo } from '~/services/member';
@@ -38,31 +45,33 @@ const ProfilePage: CustomNextPage = () => {
       <div css={myInfoCss}>
         NameCard
         {/* <NameCard />  */}
-        <Link href={routes.profile.myInfoSettings()}>
-          <Icon name="setting" size={28} />
-        </Link>
+        <IconButton asChild size={34}>
+          <Link href={routes.profile.myInfoSettings()}>
+            <Icon name="setting" size={28} />
+          </Link>
+        </IconButton>
       </div>
 
       {mine && (
         <div css={shortcutCss}>
-          <Profile.ShortCut
-            css={expandWidthCss}
+          <Profile.NavItem
+            css={expandCss}
             iconName="bookmark.outline"
-            href="#"
+            href={routes.profile.myScraps()}
             text="나의 스크랩"
           />
 
-          <Profile.ShortCut
-            css={expandWidthCss}
+          <Profile.NavItem
+            css={expandCss}
             iconName="document"
-            href="#"
+            href={routes.profile.myArticles()}
             text="내가 작성한 게시글"
           />
         </div>
       )}
 
       <Tabs.Root defaultValue="1">
-        <Tabs.List css={expandWidthCss}>
+        <Tabs.List css={expandCss}>
           <Tabs.Border />
           <Tabs.Trigger theme="white" value="1">
             포트폴리오
@@ -78,7 +87,7 @@ const ProfilePage: CustomNextPage = () => {
         <Tabs.Content value="1" css={tabContentCss}>
           {mine && (
             <Button
-              size="sm"
+              size="md"
               theme="grey"
               variant="filled"
               css={{ color: palettes.white, width: '100%', marginBottom: 60 }}
@@ -141,7 +150,7 @@ const myInfoCss = css(
 
 const shortcutCss = css({ marginBottom: 50 }, flex('', 'center', 'column', 8));
 
-const expandWidthCss = css({
+const expandCss = css({
   width: 'auto',
   margin: `0 calc(-1 * (${globalVars.mainLayoutPaddingX.var} + ${selfPaddingX}px));`,
 });

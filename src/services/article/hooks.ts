@@ -24,6 +24,7 @@ import {
   scrapArticle,
   getArticles,
   getHotArticles,
+  getMyArticles,
 } from '~/services/article/apis';
 
 export const useArticleCategories = () => {
@@ -222,6 +223,16 @@ export const useHotArticles = (
         cursor: pageParam,
         keyword,
       }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.cursor ?? undefined;
+    },
+  });
+};
+
+export const useMyArticles = () => {
+  return useInfiniteQuery({
+    queryKey: queryKeys.articles.mine(),
+    queryFn: ({ pageParam }) => getMyArticles({ cursor: pageParam }),
     getNextPageParam: (lastPage) => {
       return lastPage.cursor ?? undefined;
     },

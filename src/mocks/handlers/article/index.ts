@@ -2,7 +2,6 @@ import type {
   ArticleCategory,
   CreateArticleApiData,
   CreateArticleBody,
-  CreateArticleParams,
   GetArticleDetailApiData,
   LikeArticleApiData,
   ScrapArticleApiData,
@@ -14,7 +13,6 @@ import { rest } from 'msw';
 import {
   articleCategories,
   articleError,
-  articleFallback,
   articles,
   createMockArticle,
 } from '~/mocks/handlers/article/data';
@@ -338,7 +336,22 @@ export const getHotArticlesByKeywordError = rest.get(
   restInfiniteArticlesError
 );
 
+export const getMyArticles = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.mine({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getMyArticlesError = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.mine({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesError
+);
+
 export const articleHandlers = [
+  getMyArticles, // /posts/my
   getHotArticles, // /posts/hot?
   getHotArticlesByKeyword, // /posts/hot/search?
   getArticlesByKeyword, // /posts/search?

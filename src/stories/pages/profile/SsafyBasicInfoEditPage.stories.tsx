@@ -12,7 +12,7 @@ import { PageLayout } from '~/stories/Layout';
 import { sleep } from '~/utils';
 
 const meta: Meta<typeof MyInfoSettingsSsafyBasicInfoEditPage> = {
-  title: 'Page/MyInfoSettings/SsafyBasicInfoEdit',
+  title: 'Page/Profile/MyInfoSettings/SsafyBasicInfoEdit',
   component: MyInfoSettingsSsafyBasicInfoEditPage,
   decorators: [
     (Story) => (

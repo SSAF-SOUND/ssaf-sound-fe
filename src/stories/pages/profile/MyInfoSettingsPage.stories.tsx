@@ -12,7 +12,7 @@ import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof MyInfoSettingsPage> = {
-  title: 'Page/MyInfoSettings/Root',
+  title: 'Page/Profile/MyInfoSettings/Root',
   component: MyInfoSettingsPage,
   decorators: [
     (Story) => (
