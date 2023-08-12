@@ -1,0 +1,20 @@
+# API Routes
+User-Agent: *
+Disallow: /api/
+
+# 작성, 수정 페이지
+User-Agent: *
+Disallow: /*/new
+Disallow: /*/edit
+
+# Auth
+User-Agent: *
+Disallow: /auth/callback
+Disallow: /auth/register
+Allow: /auth/sign-in
+
+# User Private
+User-Agent: *
+Disallow: /certification
+Disallow: /intro/student-certification
+Disallow: /profile
