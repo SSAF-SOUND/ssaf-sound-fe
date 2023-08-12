@@ -1,6 +1,8 @@
 import type {
   ArticleCategory,
   CreateArticleApiData,
+  CreateArticleBody,
+  CreateArticleParams,
   GetArticleDetailApiData,
   LikeArticleApiData,
   ScrapArticleApiData,
@@ -11,8 +13,10 @@ import { rest } from 'msw';
 
 import {
   articleCategories,
+  articleError,
   articleFallback,
   articles,
+  createMockArticle,
 } from '~/mocks/handlers/article/data';
 import {
   restInfiniteArticlesError,
@@ -32,20 +36,28 @@ export const createArticle = rest.post(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, removeQueryParams(endpoints.articles.create(1))),
-  (req, res, ctx) => {
-    // TODO: update mock articles
+  async (req, res, ctx) => {
+    const { title, content, images, anonymity } =
+      (await req.json()) as CreateArticleBody;
+
+    const articleId = articles.length;
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    articles.push({});
-
-    const postId = articles.length;
+    articles.push({
+      ...createMockArticle(articleId),
+      title,
+      content,
+      images,
+      anonymity,
+    });
 
     console.log('[현재 mock articles 목록]: ', articles);
 
     return res(
       ctx.delay(500),
       ...mockSuccess<CreateArticleApiData['data']>(ctx, {
-        postId,
+        postId: articleId,
       })
     );
   }
@@ -140,7 +152,7 @@ export const getArticleDetail = rest.get(
   (req, res, ctx) => {
     const params = req.params as { articleId: string };
     const articleId = Number(params.articleId);
-    const article = articles[Number(articleId)] || articleFallback;
+    const article = articles[Number(articleId)] || articleError;
 
     return res(
       ctx.delay(500),
@@ -166,11 +178,17 @@ export const likeArticle = rest.post(
     const articleId = Number(params.articleId);
     const article = articles[articleId];
     article.liked = !article.liked;
+    const delta = article.liked ? 1 : -1;
+    article.likeCount += delta;
     const latestLiked = article.liked;
+    const latestLikeCount = article.likeCount;
 
     return res(
       ctx.delay(500),
-      ...mockSuccess<LikeArticleApiData['data']>(ctx, { liked: latestLiked })
+      ...mockSuccess<LikeArticleApiData['data']>(ctx, {
+        liked: latestLiked,
+        likeCount: latestLikeCount,
+      })
     );
   }
 );
@@ -195,12 +213,16 @@ export const scrapArticle = rest.post(
     const articleId = Number(params.articleId);
     const article = articles[articleId];
     article.scraped = !article.scraped;
+    const delta = article.scraped ? 1 : -1;
+    article.scrapCount += delta;
     const latestScraped = article.scraped;
+    const latestScrapCount = article.scrapCount;
 
     return res(
       ctx.delay(500),
       ...mockSuccess<ScrapArticleApiData['data']>(ctx, {
         scraped: latestScraped,
+        scrapCount: latestScrapCount,
       })
     );
   }

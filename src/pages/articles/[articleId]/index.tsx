@@ -2,7 +2,7 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next/types';
-import type { ArticleDetail, ArticleDetailError } from '~/services/article';
+import type { ArticleDetailError } from '~/services/article';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,17 +16,21 @@ import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail, useArticleDetail } from '~/services/article';
-import { flex, globalVars, palettes, titleBarHeight } from '~/styles/utils';
+import {
+  flex,
+  fontCss,
+  globalVars,
+  palettes,
+  titleBarHeight,
+} from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface ArticleDetailPageProps
   extends InferGetServerSidePropsType<typeof getServerSideProps> {}
 
 const ArticleDetailPage = (props: ArticleDetailPageProps) => {
-  const { initialArticleDetail, articleId } = props;
-  const { data: articleDetail } = useArticleDetail(articleId, {
-    initialData: initialArticleDetail ?? undefined,
-  });
+  const { articleId } = props;
+  const { data: articleDetail } = useArticleDetail(articleId);
 
   if (!articleDetail) {
     return (
@@ -49,6 +53,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
   return (
     <div css={selfCss}>
       <TitleBar.Default
+        css={titleBarCss}
         title={categoryTitle}
         withoutClose
         onClickBackward={routes.articles.category(articleCategoryId)}
@@ -71,7 +76,7 @@ const NotExistsArticle = (props: NotExistsArticleProps) => {
 
   return (
     <RedirectionGuide
-      title="게시글을 불러오는데 실패했습니다."
+      title="Error"
       description={articleError.error.message}
       customLinkElements={
         <div css={flex('', '', 'column', 10)}>
@@ -113,10 +118,11 @@ const articleCss = css({
   backgroundColor: palettes.background.grey,
 });
 
+const titleBarCss = css(fontCss.style.B16);
+
 /* ssr */
 
 interface Props {
-  initialArticleDetail: null | ArticleDetail | ArticleDetailError;
   articleId: number;
 }
 
@@ -146,16 +152,9 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   const dehydratedState = await dehydrate();
 
-  const initialArticleDetail =
-    (dehydratedState.queries[0]?.state?.data as
-      | ArticleDetail
-      | ArticleDetailError
-      | undefined) ?? null;
-
   return {
     props: {
       articleId,
-      initialArticleDetail,
       dehydratedState,
     },
   };

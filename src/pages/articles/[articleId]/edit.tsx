@@ -31,7 +31,7 @@ const ArticleEditPage: CustomNextPage = () => {
     );
   }
 
-  const { mine, title, content, images, anonymous } = articleDetail;
+  const { mine, title, content, images, anonymity } = articleDetail;
 
   if (!mine) {
     router.replace(routes.unauthorized());
@@ -61,7 +61,7 @@ const ArticleEditPage: CustomNextPage = () => {
           title,
           content,
           images,
-          anonymous,
+          anonymous: anonymity,
         }}
       />
     </div>

@@ -36,7 +36,7 @@ const ArticleCardList = (props: ArticleCardListProps) => {
       useWindowScroll
       data={articles}
       endReached={loadMore}
-      overscan={200}
+      // overscan={200} --> https://github.com/petyosi/react-virtuoso/issues/946
       components={{ List }}
       itemContent={(index, article) => (
         <Card key={article.postId} article={article} />

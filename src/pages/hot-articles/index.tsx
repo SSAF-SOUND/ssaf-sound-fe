@@ -75,7 +75,7 @@ const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
 
   const [hasError, setHasError] = useState(false);
 
-  const fetchNextArticles = async () => {
+  const fetchNextHotArticles = async () => {
     if (!hasNextPage || isFetchingNextPage) return;
     await fetchNextPage();
 
@@ -83,7 +83,12 @@ const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
     scrollUpBy(1);
   };
 
-  const hasNextArticles = hasError ? false : hasNextPage;
+  const hasNextHotArticles = hasError ? false : hasNextPage;
+
+  const retryFetchNextHotArticles = () => {
+    setHasError(false);
+    fetchNextHotArticles();
+  };
 
   useEffect(() => {
     setHasError(!!error);
@@ -95,7 +100,7 @@ const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
   const notExistSearchResults = isValidKeyword && isHotArticleEmpty;
   const notExistHotArticles = !isValidKeyword && isHotArticleEmpty;
 
-  if (isLoading) return <HotArticleCardSkeletons />;
+  if (isLoading) return <HotArticleCardSkeletons count={6} />;
 
   if (notExistSearchResults) return <NoSearchResults keyword={keyword} />;
 
@@ -113,15 +118,15 @@ const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
           <ArticleCardList
             hot
             articlesPages={articles.pages}
-            fetchNextPage={fetchNextArticles}
-            hasNextPage={hasNextArticles}
+            fetchNextPage={fetchNextHotArticles}
+            hasNextPage={hasNextHotArticles}
           />
 
-          {hasNextArticles && <HotArticleCardSkeletons />}
+          {hasNextHotArticles && <HotArticleCardSkeletons />}
           {hasError && (
             <ErrorCard
               css={{ marginTop: 16 }}
-              onClickRetry={() => setHasError(false)}
+              onClickRetry={retryFetchNextHotArticles}
             />
           )}
         </>
@@ -130,11 +135,14 @@ const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
   );
 };
 
-const HotArticleCardSkeletons = memo(() => {
-  const skeletonCount = 6;
+interface HotArticleCardSkeletonsProps {
+  count?: number;
+}
+const HotArticleCardSkeletons = memo((props: HotArticleCardSkeletonsProps) => {
+  const { count = 4 } = props;
   return (
     <div css={[skeletonsCss, { marginTop: 16 }]}>
-      {Array(skeletonCount)
+      {Array(count)
         .fill(undefined)
         .map((_, index) => {
           return <HotArticleCard.Skeleton key={index} />;
