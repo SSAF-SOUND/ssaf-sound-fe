@@ -57,13 +57,7 @@ const ArticleEditPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead
-        title={metaTitle}
-        robots={{
-          follow: false,
-          index: false,
-        }}
-      />
+      <PageHead title={metaTitle} robots={{ follow: false, index: false }} />
 
       <PageHeadingText text={metaTitle} />
 

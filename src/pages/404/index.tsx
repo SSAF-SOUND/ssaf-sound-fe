@@ -2,11 +2,13 @@ import { PageHead, PageHeadingText } from '~/components/Common';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import { routes } from '~/utils';
 
+const metaTitle = '페이지를 찾지 못했습니다';
+
 const NotFoundPage = () => (
   <>
-    <PageHead />
+    <PageHead title={metaTitle} />
 
-    <PageHeadingText text="페이지를 찾지 못했습니다." />
+    <PageHeadingText text={metaTitle} />
 
     <RedirectionGuide
       theme="primary"

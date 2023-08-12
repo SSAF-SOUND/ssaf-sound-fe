@@ -63,13 +63,7 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead
-        title={metaTitle}
-        robots={{
-          index: false,
-          follow: false,
-        }}
-      />
+      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
 
       <PageHeadingText text={metaTitle} />
 

@@ -46,6 +46,8 @@ const HotArticlesPage = () => {
         title={metaTitle}
         description={metaDescription}
         openGraph={{
+          title: metaTitle,
+          description: metaDescription,
           url: routes.articles.hot(),
         }}
       />

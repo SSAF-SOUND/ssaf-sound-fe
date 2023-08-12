@@ -122,8 +122,8 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
+          url: pageUrl,
         }}
-        url={pageUrl}
       />
 
       <PageHeadingText text={metaTitle} />

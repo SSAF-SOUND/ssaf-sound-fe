@@ -32,26 +32,6 @@ import { isStorybookMode, routes } from '~/utils';
 
 const metaTitle = '프로필';
 
-interface ProfilePageHeadProps {
-  userId: number;
-}
-
-const ProfilePageHead = (props: ProfilePageHeadProps) => {
-  const { userId } = props;
-  return (
-    <PageHead
-      title={metaTitle}
-      robots={{
-        follow: false,
-        index: false,
-      }}
-      openGraph={{
-        url: routes.profile.detail(userId),
-      }}
-    />
-  );
-};
-
 const isIdNaN = (id: number) => {
   if (isStorybookMode()) return false;
 
@@ -74,6 +54,7 @@ const ProfilePage: CustomNextPage = () => {
     isLoading: isUserInfoLoading,
     isError: isUserInfoError,
   } = useUserInfo(id);
+
   const {
     data: userProfileVisibility,
     isLoading: isUserProfileVisibilityLoading,
@@ -93,19 +74,14 @@ const ProfilePage: CustomNextPage = () => {
   }
 
   if (isUserInfoLoading || isUserProfileVisibilityLoading || isMyInfoLoading) {
-    return (
-      <>
-        <ProfilePageHead userId={id} />
-        <DefaultFullPageLoader text={loaderText.checkUser} />
-      </>
-    );
+    return <DefaultFullPageLoader text={loaderText.checkUser} />;
   }
 
   const isProfilePublic = userProfileVisibility.isPublic;
 
   return (
     <>
-      <ProfilePageHead userId={id} />
+      <PageHead title={metaTitle} robots={{ follow: false, index: false }} />
 
       <PageHeadingText text={metaTitle} />
 

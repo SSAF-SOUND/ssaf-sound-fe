@@ -60,13 +60,8 @@ const ArticleCreatePage: CustomNextPage = () => {
     <>
       <PageHead
         title={metaTitle}
-        openGraph={{
-          title: metaTitle,
-        }}
-        robots={{
-          index: false,
-          follow: false,
-        }}
+        openGraph={{ title: metaTitle }}
+        robots={{ index: false, follow: false }}
       />
 
       <PageHeadingText text={metaTitle} />
