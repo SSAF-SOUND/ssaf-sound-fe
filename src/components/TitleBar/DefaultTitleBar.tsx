@@ -80,7 +80,7 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
       }
       center={
         <h2
-          css={[fontCss.style.R16, withoutTitle && visuallyHiddenCss]}
+          css={withoutTitle && visuallyHiddenCss}
           aria-hidden={withoutTitle && 'true'}
         >
           {title}

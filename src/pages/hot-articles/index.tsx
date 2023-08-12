@@ -1,7 +1,4 @@
-import type {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-} from 'next/types';
+import type { GetServerSideProps } from 'next/types';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
 
 import { useRouter } from 'next/router';
@@ -10,7 +7,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 import { memo, useEffect, useState } from 'react';
 
-import { ArticleCard } from '~/components/ArticleCard';
+import { HotArticleCard } from '~/components/ArticleCard';
 import ArticleCardList from '~/components/ArticleCardList';
 import ErrorCard from '~/components/ErrorCard';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
@@ -18,12 +15,7 @@ import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
-import {
-  getArticleCategories,
-  getArticles,
-  useArticleCategories,
-  useArticles,
-} from '~/services/article';
+import { getHotArticles, useHotArticles } from '~/services/article';
 import {
   flex,
   fontCss,
@@ -37,47 +29,40 @@ import {
 } from '~/styles/utils';
 import { add, customToast, routes, scrollUpBy } from '~/utils';
 
+const titleBarTitle = 'HOT 게시판';
+
 const minKeywordLength = 3;
 const validateKeyword = (keyword?: string) =>
   keyword && keyword.trim().length >= minKeywordLength;
 
-const ArticleCategoryPage = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) => {
-  const { categoryId } = props;
+const HotArticlesPage = () => {
   const router = useRouter();
   const { keyword } = router.query as QueryString;
-
-  const { data: articleCategories } = useArticleCategories();
-  const categoryName = articleCategories?.find(
-    (category) => category.boardId === categoryId
-  )?.title;
 
   return (
     <div css={selfCss}>
       <TitleBar.Default
         css={fontCss.style.B16}
-        title={categoryName}
+        title={titleBarTitle}
         onClickBackward={routes.articles.categories()}
         withoutClose
       />
 
-      <SearchBar categoryId={categoryId} />
+      <SearchBar />
 
       <div css={articleContainerCss}>
-        <ArticleLayer categoryId={categoryId} keyword={keyword} />
+        <HotArticleCardListLayer keyword={keyword} />
       </div>
     </div>
   );
 };
 
-interface ArticleLayerProps {
-  categoryId: number;
+interface HotArticleCardListLayerProps {
   keyword?: string;
 }
 
-const ArticleLayer = (props: ArticleLayerProps) => {
-  const { categoryId, keyword } = props;
+const HotArticleCardListLayer = (props: HotArticleCardListLayerProps) => {
+  const { keyword } = props;
   const isValidKeyword = validateKeyword(keyword);
   const {
     data: articles,
@@ -86,7 +71,7 @@ const ArticleLayer = (props: ArticleLayerProps) => {
     isFetchingNextPage,
     error,
     isLoading,
-  } = useArticles(categoryId, { keyword });
+  } = useHotArticles({ keyword });
 
   const [hasError, setHasError] = useState(false);
 
@@ -104,17 +89,17 @@ const ArticleLayer = (props: ArticleLayerProps) => {
     setHasError(!!error);
   }, [error, keyword]);
 
-  const isArticleEmpty =
+  const isHotArticleEmpty =
     articles?.pages.map((page) => page.posts.length).reduce(add) === 0;
 
-  const notExistSearchResults = isValidKeyword && isArticleEmpty;
-  const notExistArticles = !isValidKeyword && isArticleEmpty;
+  const notExistSearchResults = isValidKeyword && isHotArticleEmpty;
+  const notExistHotArticles = !isValidKeyword && isHotArticleEmpty;
 
-  if (isLoading) return <ArticleCardSkeletons />;
+  if (isLoading) return <HotArticleCardSkeletons />;
 
   if (notExistSearchResults) return <NoSearchResults keyword={keyword} />;
 
-  if (notExistArticles)
+  if (notExistHotArticles)
     return (
       <div css={position.xy('center', 'center', 'absolute')}>
         아직 게시글이 없습니다.
@@ -126,12 +111,13 @@ const ArticleLayer = (props: ArticleLayerProps) => {
       {articles && (
         <>
           <ArticleCardList
+            hot
             articlesPages={articles.pages}
             fetchNextPage={fetchNextArticles}
             hasNextPage={hasNextArticles}
           />
 
-          {hasNextArticles && <ArticleCardSkeletons />}
+          {hasNextArticles && <HotArticleCardSkeletons />}
           {hasError && (
             <ErrorCard
               css={{ marginTop: 16 }}
@@ -144,26 +130,21 @@ const ArticleLayer = (props: ArticleLayerProps) => {
   );
 };
 
-const ArticleCardSkeletons = memo(() => {
+const HotArticleCardSkeletons = memo(() => {
   const skeletonCount = 6;
   return (
     <div css={[skeletonsCss, { marginTop: 16 }]}>
       {Array(skeletonCount)
         .fill(undefined)
         .map((_, index) => {
-          return <ArticleCard.Skeleton key={index} />;
+          return <HotArticleCard.Skeleton key={index} />;
         })}
     </div>
   );
 });
-ArticleCardSkeletons.displayName = 'ArticleCardSkeletons';
+HotArticleCardSkeletons.displayName = 'HotArticleCardSkeletons';
 
-interface SearchBarProps {
-  categoryId: number;
-}
-
-const SearchBar = (props: SearchBarProps) => {
-  const { categoryId } = props;
+const SearchBar = () => {
   const router = useRouter();
   const { keyword: queryKeyword } = router.query as QueryString;
   const isValidKeyword = validateKeyword(queryKeyword);
@@ -178,7 +159,7 @@ const SearchBar = (props: SearchBarProps) => {
       return;
     }
     reset({ keyword });
-    router.push(routes.articles.category(categoryId, keyword));
+    router.push(routes.articles.hot(keyword));
   };
 
   const onInvalidSubmit: SearchBarFormProps['onInvalidSubmit'] = (
@@ -194,15 +175,13 @@ const SearchBar = (props: SearchBarProps) => {
       css={searchBarContainerCss}
       onValidSubmit={onValidSubmit}
       onInvalidSubmit={onInvalidSubmit}
-      defaultValues={{
-        keyword: defaultKeyword,
-      }}
+      defaultValues={{ keyword: defaultKeyword }}
       options={{ minKeywordLength }}
     />
   );
 };
 
-export default ArticleCategoryPage;
+export default HotArticlesPage;
 
 /* css */
 
@@ -248,57 +227,29 @@ const skeletonsCss = css(flex('', '', 'column', 16));
 
 /* ssr */
 
-interface Props {
-  categoryId: number;
-}
-
-// `interface`로 작성하면, `GetServerSideProps`의 Generic에 할당이 안되어서, type으로 작성
-type Params = {
-  categoryId: string;
-};
-
 type QueryString = Partial<{
   keyword: string;
 }>;
 
-export const getServerSideProps: GetServerSideProps<Props, Params> = async (
-  context
-) => {
-  const categoryId = Number(context.params?.categoryId);
-  const isValidCategoryId = !Number.isNaN(categoryId);
-
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { keyword: queryKeyword } = context.query as QueryString;
   const isValidKeyword = validateKeyword(queryKeyword);
   const keyword = isValidKeyword ? queryKeyword?.trim() : undefined;
 
-  if (!isValidCategoryId) {
-    return {
-      notFound: true,
-    };
-  }
-
   /* prefetch start */
   const queryClient = new QueryClient();
-  const articleListQueryKey = queryKeys.articles.list(categoryId, keyword);
-  const articleCategoriesQueryKey = queryKeys.articles.categories();
+  const hotArticleListQueryKey = queryKeys.articles.hot(keyword);
 
   try {
     // https://github.com/TanStack/query/discussions/3306
-    await Promise.all([
-      queryClient.fetchInfiniteQuery({
-        queryKey: articleListQueryKey,
-        queryFn: ({ pageParam }) =>
-          getArticles({
-            categoryId,
-            cursor: pageParam,
-            keyword: keyword,
-          }),
-      }),
-      queryClient.fetchQuery({
-        queryKey: articleCategoriesQueryKey,
-        queryFn: getArticleCategories,
-      }),
-    ]);
+    await queryClient.fetchInfiniteQuery({
+      queryKey: hotArticleListQueryKey,
+      queryFn: ({ pageParam }) =>
+        getHotArticles({
+          cursor: pageParam,
+          keyword: keyword,
+        }),
+    });
   } catch (err) {
     // err handling
   }
@@ -318,7 +269,6 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   return {
     props: {
       dehydratedState,
-      categoryId,
     },
   };
 };
