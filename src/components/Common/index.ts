@@ -3,6 +3,7 @@ export { default as Avatar } from './Avatar';
 export { default as Bar } from './Bar';
 export { default as Button } from './Button';
 export { default as Checkbox } from './Checkbox';
+export * from './CircleButton';
 export { default as DatePicker } from './DatePicker';
 export { default as DefaultFullPageLoader } from './DefaultFullPageLoader';
 export { default as Dot } from './Dot';
