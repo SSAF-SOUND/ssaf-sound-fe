@@ -16,6 +16,6 @@ export type SubmitErrorHandlerWithReset<T extends FieldValues> = (
 ) => ReturnType<SubmitErrorHandler<T>>;
 
 export type SubmitErrorHandlerWithErrorMessage<T extends FieldValues> = (
-  errorMessage: string,
+  errorMessage?: string,
   ...args: Parameters<SubmitErrorHandler<T>>
 ) => ReturnType<SubmitErrorHandler<T>>;

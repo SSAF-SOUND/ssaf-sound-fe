@@ -1,5 +1,6 @@
 export * from './examples';
 export * from './auth';
+export * from './comment';
 export * from './member';
 export * from './meta';
 export * from './recruit';
