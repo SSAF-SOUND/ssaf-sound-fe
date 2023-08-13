@@ -4,6 +4,7 @@ import type {
 } from '~/services/comment';
 
 import { css } from '@emotion/react';
+import { memo } from 'react';
 
 import CommentContent from '~/components/ArticleComment/CommentContent';
 import LikeLayer from '~/components/ArticleComment/LikeLayer';
@@ -17,15 +18,18 @@ import { flex, fontCss, palettes } from '~/styles/utils';
 import { formatDateTime } from '~/utils';
 
 interface ArticleCommentProps {
+  articleId: number;
   comment: CommentDetail | CommentDetailWithoutReplies;
   leaf?: boolean;
 }
 
-const ArticleComment = (props: ArticleCommentProps) => {
-  const { comment, leaf = false } = props;
+const ArticleComment = memo((props: ArticleCommentProps) => {
+  const { articleId, comment, leaf = false } = props;
   const { data: myInfo } = useMyInfo();
+
   const {
     author,
+    commentId,
     anonymity,
     mine,
     liked,
@@ -59,7 +63,9 @@ const ArticleComment = (props: ArticleCommentProps) => {
             <LikeLayer
               liked={liked}
               likeCount={likeCount}
-              onClickLikeButton={() => {}}
+              articleId={articleId}
+              commentId={commentId}
+              isSignedIn={isSignedIn}
             />
             {isSignedIn && <MoreButton />}
           </div>
@@ -87,14 +93,16 @@ const ArticleComment = (props: ArticleCommentProps) => {
           {replies.map((reply) => (
             <div key={reply.commentId} css={replyCss}>
               <Icon name="reply" size={24} />
-              <ArticleComment leaf comment={reply} />
+              <ArticleComment articleId={articleId} leaf comment={reply} />
             </div>
           ))}
         </div>
       )}
     </div>
   );
-};
+});
+
+ArticleComment.displayName = 'ArticleComment';
 
 export default ArticleComment;
 
