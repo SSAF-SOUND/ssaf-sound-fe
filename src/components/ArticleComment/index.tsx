@@ -4,7 +4,6 @@ import type {
 } from '~/services/comment';
 
 import { css } from '@emotion/react';
-import { Fragment } from 'react';
 
 import CommentContent from '~/components/ArticleComment/CommentContent';
 import LikeLayer from '~/components/ArticleComment/LikeLayer';
@@ -48,37 +47,39 @@ const ArticleComment = (props: ArticleCommentProps) => {
   const showReplyButton = isSignedIn && !leaf;
 
   return (
-    <div css={[selfCss, leaf && leafCss]}>
-      <header css={headerCss}>
-        {/* eslint-disable-next-line */}
-        {/* @ts-ignore */}
-        <Name userInfo={userInfo} size="sm" />
+    <div css={selfCss}>
+      <div css={[commentLayerCss, leaf && leafCss]}>
+        <header css={headerCss}>
+          {/* eslint-disable-next-line */}
+          {/* @ts-ignore */}
+          <Name userInfo={userInfo} size="sm" />
 
-        <div css={buttonLayerCss}>
-          {showReplyButton && <ReplyButton />}
-          <LikeLayer
-            liked={liked}
-            likeCount={likeCount}
-            onClickLikeButton={() => {}}
-          />
-          {isSignedIn && <MoreButton />}
+          <div css={buttonLayerCss}>
+            {showReplyButton && <ReplyButton />}
+            <LikeLayer
+              liked={liked}
+              likeCount={likeCount}
+              onClickLikeButton={() => {}}
+            />
+            {isSignedIn && <MoreButton />}
+          </div>
+        </header>
+
+        <div css={{ marginBottom: 4 }}>
+          <CommentContent content={content} />
+          {modified && <span css={modifiedCss}>(수정됨)</span>}
         </div>
-      </header>
 
-      <div css={{ marginBottom: 4 }}>
-        <CommentContent content={content} />
-        {modified && <span css={modifiedCss}>(수정됨)</span>}
-      </div>
-
-      <div css={dateTimeCss}>
-        <span>{date}</span>
-        <Separator
-          orientation="vertical"
-          backgroundColor={palettes.font.blueGrey}
-          css={{ margin: '0 8px' }}
-          height={12}
-        />
-        <span>{time}</span>
+        <div css={dateTimeCss}>
+          <span>{date}</span>
+          <Separator
+            orientation="vertical"
+            backgroundColor={palettes.font.blueGrey}
+            css={{ margin: '0 8px' }}
+            height={12}
+          />
+          <span>{time}</span>
+        </div>
       </div>
 
       {hasReplies && (
@@ -97,11 +98,13 @@ const ArticleComment = (props: ArticleCommentProps) => {
 
 export default ArticleComment;
 
-const selfPaddingX = 20;
+const selfCss = css({ width: '100%' });
 
-const selfCss = css({
+const commentLayerPaddingX = 20;
+
+const commentLayerCss = css({
   width: '100%',
-  padding: `6px ${selfPaddingX}px`,
+  padding: `6px ${commentLayerPaddingX}px`,
   borderRadius: 12,
 });
 
@@ -124,7 +127,7 @@ const replyLayerCss = css({ marginTop: 6 }, flex('', '', 'column', 6));
 const replyCss = css(
   {
     width: '100%',
-    paddingLeft: selfPaddingX,
+    paddingLeft: commentLayerPaddingX,
   },
   flex('flex-start', '', 'row', 6)
 );
