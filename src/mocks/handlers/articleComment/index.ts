@@ -51,8 +51,7 @@ export const likeArticleComment = rest.post(
 
     const commentId = Number(params.commentId);
     const target = findArticleCommentById(commentDetails, commentId);
-    console.log(target);
-    console.log(commentDetails);
+
     if (!target) return res(...mockError(ctx, '400', '존재하지 않는 댓글'));
 
     target.liked = !target.liked;

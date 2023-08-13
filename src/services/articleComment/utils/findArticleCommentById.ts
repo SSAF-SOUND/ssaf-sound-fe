@@ -18,7 +18,8 @@ export const findArticleCommentById: FindArticleCommentById = (
     }
 
     if (comment.replies) {
-      return findArticleCommentById(comment.replies, commentId);
+      const result = findArticleCommentById(comment.replies, commentId);
+      if (result) return result;
     }
   }
 
