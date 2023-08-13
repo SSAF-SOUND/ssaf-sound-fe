@@ -4,12 +4,13 @@ import type {
 } from '~/services/comment';
 
 import { css } from '@emotion/react';
+import { Fragment } from 'react';
 
 import CommentContent from '~/components/ArticleComment/CommentContent';
 import LikeLayer from '~/components/ArticleComment/LikeLayer';
 import MoreButton from '~/components/ArticleComment/MoreButton';
 import ReplyButton from '~/components/ArticleComment/ReplyButton';
-import { Separator } from '~/components/Common';
+import { Icon, Separator } from '~/components/Common';
 import Name from '~/components/Name';
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';
@@ -18,13 +19,22 @@ import { formatDateTime } from '~/utils';
 
 interface ArticleCommentProps {
   comment: CommentDetail | CommentDetailWithoutReplies;
+  leaf?: boolean;
 }
 
 const ArticleComment = (props: ArticleCommentProps) => {
-  const { comment } = props;
+  const { comment, leaf = false } = props;
   const { data: myInfo } = useMyInfo();
-  const { author, anonymity, mine, liked, likeCount, content, createdAt } =
-    comment;
+  const {
+    author,
+    anonymity,
+    mine,
+    liked,
+    likeCount,
+    content,
+    createdAt,
+    replies,
+  } = comment;
 
   const isSignedIn = !!myInfo;
 
@@ -32,15 +42,19 @@ const ArticleComment = (props: ArticleCommentProps) => {
 
   const { date, time } = formatDateTime(createdAt);
 
+  const hasReplies = replies && replies.length > 0;
+
+  const showReplyButton = isSignedIn && !leaf;
+
   return (
-    <div css={selfCss}>
+    <div css={[selfCss, leaf && leafCss]}>
       <header css={headerCss}>
         {/* eslint-disable-next-line */}
         {/* @ts-ignore */}
         <Name userInfo={userInfo} size="sm" />
 
         <div css={buttonLayerCss}>
-          {isSignedIn && <ReplyButton />}
+          {showReplyButton && <ReplyButton />}
           <LikeLayer
             liked={liked}
             likeCount={likeCount}
@@ -62,15 +76,33 @@ const ArticleComment = (props: ArticleCommentProps) => {
         />
         <span>{time}</span>
       </div>
+
+      {hasReplies && (
+        <div css={replyLayerCss}>
+          {replies.map((reply) => (
+            <div key={reply.commentId} css={replyCss}>
+              <Icon name="reply" size={24} />
+              <ArticleComment leaf comment={reply} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
 export default ArticleComment;
 
+const selfPaddingX = 20;
+
 const selfCss = css({
-  padding: '6px 20px',
+  width: '100%',
+  padding: `6px ${selfPaddingX}px`,
   borderRadius: 12,
+});
+
+const leafCss = css({
+  backgroundColor: palettes.background.grey,
 });
 
 const headerCss = css(flex('center', 'space-between', 'row', 20));
@@ -81,4 +113,14 @@ const dateTimeCss = css(
   { color: palettes.font.blueGrey },
   fontCss.style.R12,
   flex('center', '', 'row')
+);
+
+const replyLayerCss = css({ marginTop: 6 }, flex('', '', 'column', 6));
+
+const replyCss = css(
+  {
+    width: '100%',
+    paddingLeft: selfPaddingX,
+  },
+  flex('flex-start', '', 'row', 6)
 );
