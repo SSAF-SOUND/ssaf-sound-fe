@@ -22,6 +22,7 @@ export const useArticleCommentModalForm = () => {
     openModal('articleCommentForm', params, {
       onPointerDownOutside: reconfirmModalClose,
       onEscapeKeyDown: reconfirmModalClose,
+      overlayTheme: 'lightBlack',
     });
   };
 
