@@ -2,20 +2,21 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next/types';
-import type { CommentFormProps } from '~/components/Forms/CommentForm';
+import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 import type { ArticleDetailError } from '~/services/article';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { stripHtml } from 'string-strip-html';
 
 import { Article } from '~/components/Article';
 import ArticleComment from '~/components/ArticleComment';
 import { Button, PageHead, PageHeadingText } from '~/components/Common';
-import CommentForm from '~/components/Forms/CommentForm';
+import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { commentDetails } from '~/mocks/handlers/comment/data';
@@ -34,7 +35,7 @@ import {
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
-import { routes } from '~/utils';
+import { handleAxiosError, routes } from '~/utils';
 import { replaceMultipleSpacesWithSingle } from '~/utils/replaceMultipleSpacesWithSingle';
 
 interface ArticleDetailPageProps
@@ -95,15 +96,37 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
           articleDetail={articleDetail}
         />
 
-        <CommentsLayer articleId={articleId} />
+        <ArticleCommentsLayer
+          articleId={articleId}
+          css={{ marginBottom: 40 }}
+        />
 
-        {/*<CommentFormLayer articleId={articleId} />*/}
+        <ArticleCommentFormLayer articleId={articleId} />
       </div>
     </>
   );
 };
 
 export default ArticleDetailPage;
+
+const selfPaddingX = 10;
+const negativeMarginForExpand = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
+
+const selfCss = css({
+  padding: `${titleBarHeight}px ${selfPaddingX}px 240px`,
+});
+
+const expandCss = css({
+  width: 'auto',
+  margin: `0 ${negativeMarginForExpand}`,
+});
+
+const articleCss = css({
+  padding: '20px 24px',
+  backgroundColor: palettes.background.grey,
+});
+
+const titleBarCss = css(fontCss.style.B16);
 
 interface NotExistsArticleProps {
   articleError: ArticleDetailError;
@@ -138,13 +161,16 @@ const NotExistsArticle = (props: NotExistsArticleProps) => {
   );
 };
 
-const CommentsLayer = (props: { articleId: number }) => {
-  const { articleId } = props;
+const ArticleCommentsLayer = (props: {
+  articleId: number;
+  className?: string;
+}) => {
+  const { articleId, className } = props;
   const skeletonCount = 8;
   const { data: comments, isLoading } = useComments(articleId);
 
   return (
-    <div css={flex('', '', 'column', 20)}>
+    <div css={commentsLayerSelfCss} className={className}>
       {isLoading && (
         <Skeleton
           count={skeletonCount}
@@ -168,50 +194,30 @@ const CommentsLayer = (props: { articleId: number }) => {
   );
 };
 
-interface CommentFormLayerProps {
-  articleId: number;
-}
+const commentsLayerSelfCss = css(flex('', '', 'column', 20));
 
-const CommentFormLayer = (props: CommentFormLayerProps) => {
+const ArticleCommentFormLayer = (props: { articleId: number }) => {
   const { articleId } = props;
   const { mutateAsync: createComment } = useCreateComment();
+  const [formKey, setFormKey] = useState(1);
+
   const invalidateComments = useInvalidateComments(articleId);
 
-  const onValidSubmit: CommentFormProps['onValidSubmit'] = async (
+  const onValidSubmit: ArticleCommentFormProps['onValidSubmit'] = async (
     reset,
     formValues
   ) => {
     try {
       await createComment({ articleId, ...formValues });
       await invalidateComments();
-      reset({ content: '' });
+      setFormKey((p) => p + 1);
     } catch (err) {
-      console.error(err);
+      handleAxiosError(err);
     }
   };
-  return <CommentForm onValidSubmit={onValidSubmit} />;
+
+  return <ArticleCommentForm onValidSubmit={onValidSubmit} key={formKey} />;
 };
-
-/* css */
-
-const selfPaddingX = 0;
-const negativeMarginForExpand = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
-
-const selfCss = css({
-  padding: `${titleBarHeight}px ${selfPaddingX}px`,
-});
-
-const expandCss = css({
-  width: 'auto',
-  margin: `0 ${negativeMarginForExpand}`,
-});
-
-const articleCss = css({
-  padding: '20px 24px',
-  backgroundColor: palettes.background.grey,
-});
-
-const titleBarCss = css(fontCss.style.B16);
 
 /* ssr */
 
