@@ -38,3 +38,15 @@ export const createComment = (params: CreateCommentParams) => {
 
   return privateAxios.post(endpoint, body).then((res) => res.data);
 };
+
+export type LikeCommentApiData = ApiSuccessResponse<
+  Pick<CommentDetail, 'liked' | 'likeCount'>
+>;
+
+export const likeComment = (commentId: number) => {
+  const endpoint = endpoints.comments.like(commentId);
+
+  return privateAxios
+    .post<LikeCommentApiData>(endpoint, null)
+    .then((res) => res.data.data);
+};
