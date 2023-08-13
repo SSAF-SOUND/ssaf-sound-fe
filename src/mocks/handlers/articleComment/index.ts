@@ -95,13 +95,9 @@ export const replyArticleComment = rest.post(
     )
   ),
   async (req, res, ctx) => {
-    const query = req.url.search as Partial<{
-      articleId: string;
-      commentId: string;
-    }>;
-
-    const articleId = Number(query.articleId);
-    const commentId = Number(query.commentId);
+    const searchParams = req.url.searchParams;
+    const articleId = Number(searchParams.get('articleId'));
+    const commentId = Number(searchParams.get('commentId'));
 
     if (Number.isNaN(articleId) || Number.isNaN(commentId)) {
       return res(...mockError(ctx, '400', 'articleId, commentId 오류'));
