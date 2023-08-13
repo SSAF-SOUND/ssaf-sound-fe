@@ -49,7 +49,7 @@ const CommentStoryComponent = (props: {
   // @ts-ignore
   setMyInfo(myInfo);
 
-  return <ArticleComment comment={comment} />;
+  return <ArticleComment articleId={1} comment={comment} />;
 };
 
 export const NotMine = () => {
@@ -73,7 +73,13 @@ export const MultipleComments = () => {
   return (
     <div css={flex('', '', 'column', 12)}>
       {commentDetails.map((comment) => {
-        return <ArticleComment comment={comment} key={comment.commentId} />;
+        return (
+          <ArticleComment
+            articleId={1}
+            comment={comment}
+            key={comment.commentId}
+          />
+        );
       })}
     </div>
   );
