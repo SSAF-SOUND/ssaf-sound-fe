@@ -7,6 +7,7 @@ import type {
 
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AlertText, Checkbox, Icon, IconButton } from '~/components/Common';
@@ -93,7 +94,10 @@ const ArticleCommentForm = (props: ArticleCommentFormProps) => {
 
         {showAnonymous && (
           <label css={checkboxLabelCss}>
-            <Checkbox onCheckedChange={onAnonymousChange} />
+            <Checkbox
+              onCheckedChange={onAnonymousChange}
+              defaultChecked={defaultValues.anonymous}
+            />
             <span>익명</span>
           </label>
         )}
