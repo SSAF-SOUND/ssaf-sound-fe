@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import type { ReactElement } from 'react';
 
 import { css } from '@emotion/react';
@@ -5,7 +6,9 @@ import * as Dialog from '@radix-ui/react-dialog';
 
 import { colorMix, palettes, zIndex } from '~/styles/utils';
 
-interface ModalCoreProps {
+export type OverlayTheme = 'black' | 'lightBlack';
+
+export interface ModalCoreProps {
   /**
    * - 모달이 열렸을 때 보여줄 콘텐츠
    * - `~/components/ModalContent`에 작성된 컴포넌트만 할당합니다.
@@ -37,6 +40,8 @@ interface ModalCoreProps {
    * - `uncontrolled`에서는 `e.preventDefault()`를 사용하여 `ESC`키를 누를시 모달 닫힘을 막을 수 있습니다.
    */
   onEscapeKeyDown?: (e: KeyboardEvent) => void;
+
+  overlayTheme?: OverlayTheme;
 }
 
 const ModalCore = (props: ModalCoreProps) => {
@@ -47,14 +52,17 @@ const ModalCore = (props: ModalCoreProps) => {
     portal = true,
     onPointerDownOutside,
     onEscapeKeyDown,
+    overlayTheme = 'black',
   } = props;
+
+  const overlayThemeCss = overlayColorCss[overlayTheme];
 
   return (
     <Dialog.Root open={open}>
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
       {portal ? (
         <Dialog.Portal>
-          <Dialog.Overlay css={[overlayCss, overlayColorCss.black]} />
+          <Dialog.Overlay css={[overlayCss, overlayThemeCss]} />
           <Dialog.Content
             css={contentCss}
             onEscapeKeyDown={onEscapeKeyDown}
@@ -65,7 +73,7 @@ const ModalCore = (props: ModalCoreProps) => {
         </Dialog.Portal>
       ) : (
         <>
-          <Dialog.Overlay css={[overlayCss, overlayColorCss.black]} />
+          <Dialog.Overlay css={[overlayCss, overlayThemeCss]} />
           <Dialog.Content
             css={contentCss}
             onEscapeKeyDown={onEscapeKeyDown}
@@ -87,10 +95,9 @@ const overlayCss = css({
   zIndex: zIndex.fixed.modal,
 });
 
-const overlayColorCss = {
+const overlayColorCss: Record<OverlayTheme, SerializedStyles> = {
   black: css({ backgroundColor: colorMix('50%', palettes.black) }),
-  // 추가할 오버레이 색상이 있다면, 여기에 추가하고 prop 으로 분기처리 하거나,
-  // overlayStyle prop 만들어서 스타일 덮어쓸 생각입니다.
+  lightBlack: css({ backgroundColor: colorMix('25%', palettes.black) }),
 };
 
 const contentCss = css({

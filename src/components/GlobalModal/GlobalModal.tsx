@@ -12,6 +12,7 @@ export const GlobalModal = () => {
   const onPointerDownOutside = useAtomValue(modalAtoms.onPointerDownOutside);
   const onEscapeKeyDown = useAtomValue(modalAtoms.onEscapeKeyDown);
   const closeModal = useSetAtom(modalAtoms.closeModal);
+  const modalOverlayTheme = useAtomValue(modalAtoms.modalOverlayTheme);
 
   if (!modalId) return <></>;
 
@@ -25,6 +26,7 @@ export const GlobalModal = () => {
       content={<ModalContent {...modalProps} />}
       onPointerDownOutside={onPointerDownOutside || closeModal}
       onEscapeKeyDown={onEscapeKeyDown || closeModal}
+      overlayTheme={modalOverlayTheme}
     />
   );
 };
