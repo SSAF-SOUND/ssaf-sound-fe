@@ -1,5 +1,7 @@
-import type { ReplyArticleCommentParams ,
-  UpdateArticleCommentParams} from '~/services/articleComment/apis';
+import type {
+  ReplyArticleCommentParams,
+  UpdateArticleCommentParams,
+} from '~/services/articleComment/apis';
 import type {
   CommentDetail,
   CommentDetailWithoutReplies,
@@ -9,7 +11,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
 
 import { queryKeys } from '~/react-query/common';
-import { updateArticle } from '~/services/article';
 import {
   createArticleComment,
   getArticleComments,
@@ -17,7 +18,6 @@ import {
   removeArticleComment,
   replyArticleComment,
   updateArticleComment,
-  UpdateArticleCommentBody
 } from '~/services/articleComment/apis';
 import { findArticleCommentById } from '~/services/articleComment/utils';
 
