@@ -98,13 +98,13 @@ const ArticleComment = (props: ArticleCommentProps) => {
 
 export default ArticleComment;
 
-const selfCss = css({ width: '100%' });
+const commentLayerPaddingX = 10;
 
-const commentLayerPaddingX = 20;
+const selfCss = css({ width: '100%' });
 
 const commentLayerCss = css({
   width: '100%',
-  padding: `6px ${commentLayerPaddingX}px`,
+  padding: `8px ${commentLayerPaddingX}px`,
   borderRadius: 12,
 });
 
@@ -132,9 +132,4 @@ const replyCss = css(
   flex('flex-start', '', 'row', 6)
 );
 
-const modifiedCss = css(
-  {
-    color: palettes.primary.default,
-  },
-  fontCss.style.R14
-);
+const modifiedCss = css({ color: palettes.primary.default }, fontCss.style.R14);
