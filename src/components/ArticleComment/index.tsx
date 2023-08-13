@@ -9,10 +9,11 @@ import { css } from '@emotion/react';
 import { memo } from 'react';
 
 import CommentContent from '~/components/ArticleComment/CommentContent';
+import CommentDateTime from '~/components/ArticleComment/CommentDateTime';
 import LikeLayer from '~/components/ArticleComment/LikeLayer';
 import MoreButton from '~/components/ArticleComment/MoreButton';
 import ReplyButton from '~/components/ArticleComment/ReplyButton';
-import { Icon, Separator } from '~/components/Common';
+import { Icon } from '~/components/Common';
 import Name from '~/components/Name';
 import {
   useInvalidateArticleComments,
@@ -23,7 +24,7 @@ import {
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';
 import { flex, fontCss, palettes } from '~/styles/utils';
-import { formatDateTime, handleAxiosError } from '~/utils';
+import { handleAxiosError } from '~/utils';
 
 import { useArticleCommentMenu, useArticleCommentModalForm } from './utils';
 
@@ -79,7 +80,6 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
     isUpdatingArticleComment || isRemovingArticleComment;
   const isSignedIn = !!myInfo;
   const userInfo = populateDefaultUserInfo(author);
-  const { date, time } = formatDateTime(createdAt);
   const hasReplies = replies && replies.length > 0;
   const showReplyButton = isSignedIn && !leaf;
 
@@ -176,21 +176,13 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
               </div>
             </header>
 
-            <div css={{ marginBottom: 4 }}>
-              <CommentContent content={content} />
-              {modified && <span css={modifiedCss}>(수정됨)</span>}
-            </div>
+            <CommentContent
+              content={content}
+              modified={modified}
+              css={{ marginBottom: 4 }}
+            />
 
-            <div css={dateTimeCss}>
-              <span>{date}</span>
-              <Separator
-                orientation="vertical"
-                backgroundColor={palettes.font.blueGrey}
-                css={{ margin: '0 8px' }}
-                height={12}
-              />
-              <span>{time}</span>
-            </div>
+            <CommentDateTime createdAt={createdAt} />
           </>
         )}
       </div>
@@ -231,12 +223,6 @@ const headerCss = css(flex('center', 'space-between', 'row', 20));
 
 const buttonLayerCss = css(flex('center', '', 'row', 4));
 
-const dateTimeCss = css(
-  { color: palettes.font.blueGrey },
-  fontCss.style.R12,
-  flex('center', '', 'row')
-);
-
 const replyLayerCss = css({ marginTop: 6 }, flex('', '', 'column', 6));
 
 const replyCss = css(
@@ -246,8 +232,6 @@ const replyCss = css(
   },
   flex('flex-start', '', 'row', 6)
 );
-
-const modifiedCss = css({ color: palettes.primary.default }, fontCss.style.R14);
 
 const selfHighLightCss = css({
   background: 'red',
