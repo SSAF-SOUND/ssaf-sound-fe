@@ -59,7 +59,7 @@ const ArticleCommentForm = (props: ArticleCommentFormProps) => {
   });
 
   const onAnonymousChange = (value: boolean) =>
-    setValue(anonymousFieldName, value);
+    setValue(anonymousFieldName, value, { shouldDirty: true });
 
   const handleValidSubmit: SubmitHandler<ArticleCommentFormValues> = async (
     ...args
@@ -73,6 +73,8 @@ const ArticleCommentForm = (props: ArticleCommentFormProps) => {
     const errorMessage = errors.content?.message || errors.anonymous?.message;
     await onInvalidSubmit?.(errorMessage, errors, event);
   };
+
+  register(anonymousFieldName);
 
   return (
     <form
@@ -91,10 +93,7 @@ const ArticleCommentForm = (props: ArticleCommentFormProps) => {
 
         {showAnonymous && (
           <label css={checkboxLabelCss}>
-            <Checkbox
-              {...register(anonymousFieldName)}
-              onCheckedChange={onAnonymousChange}
-            />
+            <Checkbox onCheckedChange={onAnonymousChange} />
             <span>익명</span>
           </label>
         )}
