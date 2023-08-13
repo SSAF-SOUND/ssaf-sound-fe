@@ -1,4 +1,4 @@
-const url = process.env.NEXT_PUBLIC_APP_URL as string;
+const url = (process.env.NEXT_PUBLIC_APP_URL as string) || '';
 
 export const globalMetaData = {
   title: 'SSAF SOUND',
