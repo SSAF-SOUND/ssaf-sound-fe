@@ -19,7 +19,6 @@ import { Button, PageHead, PageHeadingText } from '~/components/Common';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
-import { commentDetails } from '~/mocks/handlers/comment/data';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail, useArticleDetail } from '~/services/article';
@@ -186,7 +185,8 @@ const ArticleCommentsLayer = (props: {
           return (
             <ArticleComment
               key={comment.commentId}
-              comment={commentDetails[1]}
+              comment={comment}
+              articleId={articleId}
             />
           );
         })}
