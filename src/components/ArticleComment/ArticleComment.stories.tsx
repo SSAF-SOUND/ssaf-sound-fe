@@ -2,7 +2,7 @@ import type { Meta } from '@storybook/react';
 
 import { useEffect } from 'react';
 
-import { commentDetails } from '~/mocks/handlers/comment/data';
+import { commentDetails } from '~/mocks/handlers/articleComment/data';
 import { userInfo } from '~/mocks/handlers/member/data';
 import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';

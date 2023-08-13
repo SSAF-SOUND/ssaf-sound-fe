@@ -1,59 +1,62 @@
 import type {
   CommentDetail,
   CommentDetailWithoutReplies,
-} from '~/services/comment/utils';
+} from '~/services/articleComment/utils';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
 
 import { queryKeys } from '~/react-query/common';
 import {
-  createComment,
-  getComments,
-  likeComment,
-} from '~/services/comment/apis';
-import { findCommentById } from '~/services/comment/utils';
+  createArticleComment,
+  getArticleComments,
+  likeArticleComment,
+} from '~/services/articleComment/apis';
+import { findArticleCommentById } from '~/services/articleComment/utils';
 
-export const useComments = (articleId: number) => {
+export const useArticleComments = (articleId: number) => {
   return useQuery({
-    queryKey: queryKeys.comments.list(articleId),
-    queryFn: () => getComments(articleId),
+    queryKey: queryKeys.articleComments.list(articleId),
+    queryFn: () => getArticleComments(articleId),
   });
 };
 
-export const useInvalidateComments = (articleId: number) => {
+export const useInvalidateArticleComments = (articleId: number) => {
   const queryClient = useQueryClient();
   const invalidate = () =>
-    queryClient.invalidateQueries(queryKeys.comments.list(articleId));
+    queryClient.invalidateQueries(queryKeys.articleComments.list(articleId));
 
   return invalidate;
 };
 
-export const useCreateComment = () => {
+export const useCreateArticleComment = () => {
   return useMutation({
-    mutationFn: createComment,
+    mutationFn: createArticleComment,
   });
 };
 
-interface UseLikeParams {
+interface UseLikeArticleCommentParams {
   commentId: number;
   articleId: number;
 }
 
-export const useLikeComment = (params: UseLikeParams) => {
+export const useLikeArticleComment = (params: UseLikeArticleCommentParams) => {
   const { articleId, commentId } = params;
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.comments.list(articleId);
-  const setCommentWithImmer = useSetCommentWithImmer({ articleId, commentId });
+  const queryKey = queryKeys.articleComments.list(articleId);
+  const setArticleCommentWithImmer = useSetArticleCommentWithImmer({
+    articleId,
+    commentId,
+  });
 
   return useMutation({
-    mutationFn: () => likeComment(commentId),
+    mutationFn: () => likeArticleComment(commentId),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey });
       const comments = queryClient.getQueryData<CommentDetail[]>(queryKey);
       if (!comments) return;
 
-      setCommentWithImmer((target) => {
+      setArticleCommentWithImmer((target) => {
         if (!target) return;
 
         const { liked, likeCount } = target;
@@ -71,7 +74,7 @@ export const useLikeComment = (params: UseLikeParams) => {
       queryClient.setQueryData<CommentDetail[]>(queryKey, prevComments);
     },
     onSuccess: ({ likeCount, liked }) => {
-      setCommentWithImmer((comment) => {
+      setArticleCommentWithImmer((comment) => {
         if (!comment) return;
 
         comment.liked = liked;
@@ -81,27 +84,27 @@ export const useLikeComment = (params: UseLikeParams) => {
   });
 };
 
-interface SetCommentsParams {
+interface SetArticleCommentParams {
   articleId: number;
   commentId: number;
 }
 
-const useSetCommentWithImmer = (params: SetCommentsParams) => {
+const useSetArticleCommentWithImmer = (params: SetArticleCommentParams) => {
   const { commentId, articleId } = params;
   const queryClient = useQueryClient();
 
-  const setCommentWithImmer = (
+  const setArticleCommentWithImmer = (
     recipe: (comment?: CommentDetail | CommentDetailWithoutReplies) => void
   ) => {
-    const commentsQueryKey = queryKeys.comments.list(articleId);
+    const commentsQueryKey = queryKeys.articleComments.list(articleId);
 
-    queryClient.setQueryData<ReturnType<typeof useComments>['data']>(
+    queryClient.setQueryData<ReturnType<typeof useArticleComments>['data']>(
       commentsQueryKey,
       (prevComments) => {
         if (!prevComments) return;
 
         const nextComments = produce(prevComments, (draft) => {
-          const result = findCommentById(draft, commentId);
+          const result = findArticleCommentById(draft, commentId);
 
           recipe(result);
         });
@@ -111,5 +114,5 @@ const useSetCommentWithImmer = (params: SetCommentsParams) => {
     );
   };
 
-  return setCommentWithImmer;
+  return setArticleCommentWithImmer;
 };

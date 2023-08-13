@@ -1,11 +1,9 @@
-import type { IconButtonProps } from '~/components/Common';
-
 import { css } from '@emotion/react';
 
 import { commentIconSize } from '~/components/ArticleComment/utils';
 import { Icon, IconButton } from '~/components/Common';
 import { useSignInGuideModal } from '~/hooks';
-import { useLikeComment } from '~/services/comment';
+import { useLikeArticleComment } from '~/services/articleComment';
 import { flex, fontCss } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
@@ -21,17 +19,17 @@ const LikeLayer = (props: LikeButtonProps) => {
   const { liked, likeCount, articleId, commentId, isSignedIn } = props;
   const { openSignInGuideModal } = useSignInGuideModal();
   const iconName = liked ? 'like' : 'like.outline';
-  const { mutateAsync: likeComment, isLoading: isLikingComment } =
-    useLikeComment({ commentId, articleId });
+  const { mutateAsync: likeArticleComment, isLoading: isLikingArticleComment } =
+    useLikeArticleComment({ commentId, articleId });
 
-  const handleLikeComment = async () => {
+  const handleLikeArticleComment = async () => {
     if (!isSignedIn) {
       openSignInGuideModal();
       return;
     }
 
     try {
-      await likeComment();
+      await likeArticleComment();
     } catch (err) {
       handleAxiosError(err);
     }
@@ -41,8 +39,8 @@ const LikeLayer = (props: LikeButtonProps) => {
     <div css={selfCss}>
       <IconButton
         size={commentIconSize.iconButton}
-        onClick={handleLikeComment}
-        disabled={isLikingComment}
+        onClick={handleLikeArticleComment}
+        disabled={isLikingArticleComment}
       >
         <Icon name={iconName} size={commentIconSize.icon} />
       </IconButton>

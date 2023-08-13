@@ -23,10 +23,10 @@ import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail, useArticleDetail } from '~/services/article';
 import {
-  useComments,
-  useCreateComment,
-  useInvalidateComments,
-} from '~/services/comment';
+  useArticleComments,
+  useCreateArticleComment,
+  useInvalidateArticleComments,
+} from '~/services/articleComment';
 import {
   flex,
   fontCss,
@@ -166,7 +166,7 @@ const ArticleCommentsLayer = (props: {
 }) => {
   const { articleId, className } = props;
   const skeletonCount = 8;
-  const { data: comments, isLoading } = useComments(articleId);
+  const { data: comments, isLoading } = useArticleComments(articleId);
 
   return (
     <div css={commentsLayerSelfCss} className={className}>
@@ -198,17 +198,17 @@ const commentsLayerSelfCss = css(flex('', '', 'column', 20));
 
 const ArticleCommentFormLayer = (props: { articleId: number }) => {
   const { articleId } = props;
-  const { mutateAsync: createComment } = useCreateComment();
+  const { mutateAsync: createArticleComment } = useCreateArticleComment();
   const [formKey, setFormKey] = useState(1);
 
-  const invalidateComments = useInvalidateComments(articleId);
+  const invalidateComments = useInvalidateArticleComments(articleId);
 
   const onValidSubmit: ArticleCommentFormProps['onValidSubmit'] = async (
     reset,
     formValues
   ) => {
     try {
-      await createComment({ articleId, ...formValues });
+      await createArticleComment({ articleId, ...formValues });
       await invalidateComments();
       setFormKey((p) => p + 1);
     } catch (err) {

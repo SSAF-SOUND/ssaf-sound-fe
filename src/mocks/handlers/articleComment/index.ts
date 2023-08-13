@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment*/
 import type {
-  CreateCommentBody,
-  GetCommentsApiData,
-  LikeCommentApiData,
-} from '~/services/comment';
+  CreateArticleCommentBody,
+  GetArticleCommentsApiData,
+  LikeArticleCommentApiData,
+} from '~/services/articleComment';
 
 import { rest } from 'msw';
 
-import {
-  commentDetails,
-  createMockCommentDetail,
-} from '~/mocks/handlers/comment/data';
 import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { findCommentById } from '~/services/comment';
+import { findArticleCommentById } from '~/services/articleComment';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-export const getComments = restSuccess<GetCommentsApiData['data']>(
+import { commentDetails, createMockCommentDetail } from './data';
+
+export const getArticleComments = restSuccess<
+  GetArticleCommentsApiData['data']
+>(
   'get',
-  removeQueryParams(composeUrls(API_URL, endpoints.comments.list(1))),
+  removeQueryParams(composeUrls(API_URL, endpoints.articleComments.list(1))),
   {
     data: {
       comments: commentDetails,
@@ -26,10 +26,11 @@ export const getComments = restSuccess<GetCommentsApiData['data']>(
   }
 );
 
-export const creatComment = rest.post(
-  removeQueryParams(composeUrls(API_URL, endpoints.comments.create(1))),
+export const createArticleComment = rest.post(
+  removeQueryParams(composeUrls(API_URL, endpoints.articleComments.create(1))),
   async (req, res, ctx) => {
-    const { anonymity, content } = (await req.json()) as CreateCommentBody;
+    const { anonymity, content } =
+      (await req.json()) as CreateArticleCommentBody;
     const lastComment = commentDetails.at(-1);
     const newCommentId = (lastComment?.commentId ?? 1) + 1;
     const newComment = createMockCommentDetail(newCommentId, 0);
@@ -42,14 +43,14 @@ export const creatComment = rest.post(
   }
 );
 
-export const likeComment = rest.post(
+export const likeArticleComment = rest.post(
   // @ts-ignore
-  composeUrls(API_URL, endpoints.comments.like(':commentId')),
+  composeUrls(API_URL, endpoints.articleComments.like(':commentId')),
   (req, res, ctx) => {
     const params = req.params as { commentId: string };
 
     const commentId = Number(params.commentId);
-    const target = findCommentById(commentDetails, commentId);
+    const target = findArticleCommentById(commentDetails, commentId);
     console.log(target);
     console.log(commentDetails);
     if (!target) return res(...mockError(ctx, '400', '존재하지 않는 댓글'));
@@ -62,7 +63,7 @@ export const likeComment = rest.post(
 
     return res(
       ctx.delay(500),
-      ...mockSuccess<LikeCommentApiData['data']>(ctx, {
+      ...mockSuccess<LikeArticleCommentApiData['data']>(ctx, {
         liked: latestLiked,
         likeCount: latestLikeCount,
       })
@@ -70,13 +71,17 @@ export const likeComment = rest.post(
   }
 );
 
-export const likeCommentError = restError(
+export const likeArticleCommentError = restError(
   'post',
   // @ts-ignore
-  composeUrls(API_URL, endpoints.comments.like(':commentId')),
+  composeUrls(API_URL, endpoints.articleComments.like(':commentId')),
   {
     message: '댓글 좋아요 실패',
   }
 );
 
-export const commentHandlers = [getComments, creatComment, likeComment];
+export const articleCommentHandlers = [
+  getArticleComments,
+  createArticleComment,
+  likeArticleComment,
+];
