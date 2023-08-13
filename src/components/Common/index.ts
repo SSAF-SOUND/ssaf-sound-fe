@@ -9,7 +9,7 @@ export * from './DefaultFullPageLoader';
 export { default as Dot } from './Dot';
 export { default as Gnb } from './Gnb';
 export * from './Icon';
-export { default as IconButton } from './IconButton';
+export * from './IconButton';
 export * from './IntersectionArea';
 export { default as Label } from './Label';
 export { default as Logo } from './Logo';
