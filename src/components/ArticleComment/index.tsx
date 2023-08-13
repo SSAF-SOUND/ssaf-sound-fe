@@ -23,7 +23,7 @@ import {
 } from '~/services/articleComment';
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
 import { useArticleCommentMenu, useArticleCommentModalForm } from './utils';
@@ -234,7 +234,7 @@ const replyCss = css(
 );
 
 const selfHighLightCss = css({
-  background: 'red',
+  background: colorMix('30%', palettes.primary.default),
 });
 
 const deletedCommentCss = css(fontCss.style.R14);
