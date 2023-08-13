@@ -34,6 +34,7 @@ const ArticleComment = (props: ArticleCommentProps) => {
     content,
     createdAt,
     replies,
+    modified,
   } = comment;
 
   const isSignedIn = !!myInfo;
@@ -64,7 +65,10 @@ const ArticleComment = (props: ArticleCommentProps) => {
         </div>
       </header>
 
-      <CommentContent css={{ marginBottom: 4 }} content={content} />
+      <div css={{ marginBottom: 4 }}>
+        <CommentContent content={content} />
+        {modified && <span css={modifiedCss}>(수정됨)</span>}
+      </div>
 
       <div css={dateTimeCss}>
         <span>{date}</span>
@@ -123,4 +127,11 @@ const replyCss = css(
     paddingLeft: selfPaddingX,
   },
   flex('flex-start', '', 'row', 6)
+);
+
+const modifiedCss = css(
+  {
+    color: palettes.primary.default,
+  },
+  fontCss.style.R14
 );
