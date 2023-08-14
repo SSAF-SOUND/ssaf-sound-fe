@@ -4,10 +4,16 @@ import { fontCss, palettes } from '~/styles/utils';
 
 interface ViewNumberProps {
   view: number;
+  className?: string;
 }
 
 export const ViewNumber = (props: ViewNumberProps) => {
-  return <span css={selfCss}>조회수 {props.view}</span>;
+  const { view, ...restProps } = props;
+  return (
+    <span css={selfCss} {...restProps}>
+      조회수 {view}
+    </span>
+  );
 };
 
 const selfCss = css(fontCss.family.auto, fontCss.style.R12, {
