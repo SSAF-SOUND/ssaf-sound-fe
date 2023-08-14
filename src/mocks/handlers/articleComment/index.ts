@@ -123,6 +123,17 @@ export const replyArticleComment = rest.post(
   }
 );
 
+export const replyArticleCommentError = restError(
+  'post',
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articleComments.reply({ articleId: 1, commentId: 1 })
+    )
+  ),
+  { message: '대댓글 작성 실패' }
+);
+
 export const updateArticleComment = rest.put(
   // @ts-ignore
   composeUrls(API_URL, endpoints.articleComments.detail(':commentId')),

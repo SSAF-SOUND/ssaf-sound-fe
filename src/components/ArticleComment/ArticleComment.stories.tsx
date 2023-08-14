@@ -2,6 +2,7 @@ import type { Meta } from '@storybook/react';
 
 import { useEffect } from 'react';
 
+import { articleCommentHandlers, getArticleComments } from '~/mocks/handlers';
 import { commentDetails } from '~/mocks/handlers/articleComment/data';
 import { userInfo } from '~/mocks/handlers/member/data';
 import { useSetMyInfo } from '~/services/member';
@@ -28,6 +29,7 @@ const meta: Meta<typeof ArticleComment> = {
     msw: {
       handlers: {
         member: [],
+        articleComment: [],
       },
     },
   },
@@ -49,7 +51,7 @@ const CommentStoryComponent = (props: {
   // @ts-ignore
   setMyInfo(myInfo);
 
-  return <ArticleComment articleId={1} comment={comment} />;
+  return <ArticleComment articleId={NaN} comment={comment} />;
 };
 
 export const NotMine = () => {
