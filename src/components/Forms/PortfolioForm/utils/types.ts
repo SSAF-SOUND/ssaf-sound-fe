@@ -1,10 +1,10 @@
 export interface PortfolioFormValues {
   selfIntroduction: string;
   skills: Record<string, number | undefined>;
-  links: Link[];
+  links: PortfolioFormLink[];
 }
 
-export interface Link {
+export interface PortfolioFormLink {
   linkText: string;
   link: string;
 }

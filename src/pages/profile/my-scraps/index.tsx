@@ -22,10 +22,19 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { PossibleMyScrapsCategories, routes } from '~/utils';
+import { isDevMode, PossibleMyScrapsCategories, routes } from '~/utils';
 
 const possibleCategories = Object.values(PossibleMyScrapsCategories);
 const defaultCategory = PossibleMyScrapsCategories.ARTICLES;
+
+const validateCategory = (category?: string) => {
+  if (isDevMode) return true;
+
+  return (
+    category &&
+    possibleCategories.includes(category as PossibleMyScrapsCategories)
+  );
+};
 
 type QueryString = {
   category: string;
@@ -35,9 +44,7 @@ const MyScrapsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
   const router = useRouter();
   const { category } = router.query as Partial<QueryString>;
-  const isValidCategory =
-    category &&
-    possibleCategories.includes(category as PossibleMyScrapsCategories);
+  const isValidCategory = validateCategory(category);
 
   if (!isValidCategory) {
     router.replace(routes.profile.myScraps(defaultCategory));
@@ -48,6 +55,8 @@ const MyScrapsPage: CustomNextPage = () => {
     return <DefaultFullPageLoader text={loaderText.checkUser} />;
   }
 
+  const defaultTabValue = category || defaultCategory;
+
   return (
     <div css={selfCss}>
       <TitleBar.Default
@@ -55,7 +64,7 @@ const MyScrapsPage: CustomNextPage = () => {
         title="나의 스크랩"
         onClickBackward={routes.profile.detail(myInfo.memberId)}
       />
-      <Tabs.Root defaultValue={category} value={category}>
+      <Tabs.Root defaultValue={defaultTabValue} value={category}>
         <TabList />
         <Tabs.Content value={PossibleMyScrapsCategories.ARTICLES}>
           <ArticleLayer />
