@@ -14,7 +14,6 @@ import {
   PageHead,
   PageHeadingText,
 } from '~/components/Common';
-import DelayedRedirection from '~/components/DelayedRedirection';
 import { useModal } from '~/components/GlobalModal';
 import PreviewCertifiedMyInfo from '~/components/PreviewCertifiedMyInfo';
 import {
@@ -46,9 +45,7 @@ const StudentCertificationPage: CustomNextPage = () => {
 
   if (certificationSuccess) {
     return (
-      <DelayedRedirection to={routes.main()} seconds={3}>
-        <PreviewCertifiedMyInfo userInfo={myInfo as NonNullable<UserInfo>} />
-      </DelayedRedirection>
+      <PreviewCertifiedMyInfo userInfo={myInfo as NonNullable<UserInfo>} />
     );
   }
 
