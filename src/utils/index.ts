@@ -1,11 +1,13 @@
 export * from './array';
 export * from './axios';
+export * from './clearPrivateData';
 export * from './constants';
 export * from './createRequestInfiniteLoopDetector';
 export { default as customToast } from './customToast';
 export * from './date';
 export * from './defaultify';
 export * from './handleAxiosError';
+export * from './isStorybookMode';
 export * from './misc';
 export * from './number';
 export * from './object';
