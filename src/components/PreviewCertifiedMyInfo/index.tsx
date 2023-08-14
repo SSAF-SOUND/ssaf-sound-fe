@@ -1,10 +1,13 @@
 import type { UserInfo } from '~/services/member';
 
+import Link from 'next/link';
+
 import { css } from '@emotion/react';
 
-import { SsafyIcon, TrackSize } from '~/components/Common';
+import { Button, SsafyIcon, TrackSize } from '~/components/Common';
 import NameCard from '~/components/NameCard';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss, pageMinHeight, palettes } from '~/styles/utils';
+import { routes } from '~/utils';
 
 interface PreviewCertifiedMyInfoProps {
   userInfo: UserInfo;
@@ -35,6 +38,10 @@ const PreviewCertifiedMyInfo = (props: PreviewCertifiedMyInfoProps) => {
 
         <NameCard userInfo={userInfo} withBackground />
       </div>
+
+      <Button css={{ width: '100%' }} size="lg" asChild>
+        <Link href={routes.main()}>확인</Link>
+      </Button>
     </div>
   );
 };
@@ -42,8 +49,11 @@ const PreviewCertifiedMyInfo = (props: PreviewCertifiedMyInfoProps) => {
 export default PreviewCertifiedMyInfo;
 
 const selfCss = css(
-  { minHeight: '100vh', padding: '40px 0' },
-  flex('center', 'center', 'column', 120)
+  {
+    minHeight: `max(${pageMinHeight}px, 100vh)`,
+    padding: '40px 15px',
+  },
+  flex('center', 'center', 'column', 100)
 );
 
 const topLayerCss = css({ textAlign: 'center' }, fontCss.style.B28);
