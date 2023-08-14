@@ -24,6 +24,7 @@ export default meta;
 
 interface AccordionStoryProps {
   accordionType: 'single' | 'multiple';
+  collapsible: true;
 }
 
 type AccordionStory = StoryObj<AccordionStoryProps>;
@@ -37,13 +38,14 @@ export const Example1: AccordionStory = {
   },
   args: {
     accordionType: 'single',
+    collapsible: true,
   },
   render: (args) => (
     <div>
       <Accordion.Root
         type={args.accordionType}
         css={{ width: 'auto', margin: '0 -10px' }}
-        collapsible
+        collapsible={args.collapsible}
       >
         <Accordion.Item value="1" css={[accordionThemeCss, accordionItemCss]}>
           <Accordion.Trigger css={accordionTriggerCss}>
