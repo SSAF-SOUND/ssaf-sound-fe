@@ -21,15 +21,16 @@ export interface RecruitMetaProps {
   title?: string;
   recruitMeta: RecruitMeta;
   expanded?: boolean;
+  className?: string;
 }
 
 const RecruitMeta = (props: RecruitMetaProps) => {
-  const { expanded = true, userInfo, title, recruitMeta } = props;
+  const { expanded = true, userInfo, title, recruitMeta, className } = props;
 
   if (expanded && userInfo && title)
     // 이 부분 로직은 추후 수정할게요!
     return (
-      <div css={selfCss}>
+      <div css={selfCss} className={className}>
         <RecruitMetaTitle title={title} css={titleCss} />
         <Name userInfo={userInfo} size="md" />
         <RecruitTable {...recruitMeta} />
