@@ -30,7 +30,7 @@ export const Title = (props: TitleProps) => {
       <TextInput
         size="md"
         css={inputCss}
-        placeholder="리크루팅 제목"
+        placeholder="리쿠르팅 제목"
         defaultValue={defaultTitle}
         {...register(fieldName, {
           validate: validateTitle,

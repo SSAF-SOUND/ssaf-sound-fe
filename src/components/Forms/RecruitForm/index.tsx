@@ -1,23 +1,22 @@
 import type { RecruitFormValues } from './utils';
 import type { SubmitHandler } from 'react-hook-form';
+import type { SubmitErrorHandlerWithErrorMessage } from '~/components/Forms/utils';
 
-import { useMemo } from 'react';
+import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
+import { titleBarHeight } from '~/styles/utils';
 import { noop } from '~/utils';
 
 import {
   Category,
-  Participants,
-  EndDate,
   Title,
   Content,
-  Skills,
   QuestionToApplicants,
   Contact,
 } from './Fields';
 import SubmitBar from './SubmitBar';
-import { populateDefaultValues } from './utils';
 
 interface RecruitFormOptions {
   // SubmitBar
@@ -30,15 +29,17 @@ interface RecruitFormOptions {
 }
 
 interface RecruitFormProps {
-  onSubmit?: SubmitHandler<RecruitFormValues>;
-  defaultValues?: Partial<RecruitFormValues>;
+  onValidSubmit: SubmitHandler<RecruitFormValues>;
+  onInvalidSubmit?: SubmitErrorHandlerWithErrorMessage<RecruitFormValues>;
+  defaultValues?: RecruitFormValues;
   options?: Partial<RecruitFormOptions>;
 }
 
 const RecruitForm = (props: RecruitFormProps) => {
   const {
     options = {},
-    onSubmit = noop,
+    onValidSubmit,
+    onInvalidSubmit = noop,
     defaultValues = defaultRecruitFormValues,
   } = props;
 
@@ -50,28 +51,28 @@ const RecruitForm = (props: RecruitFormProps) => {
   } = options;
 
   const methods = useForm<RecruitFormValues>({
-    defaultValues: useMemo(
-      () => populateDefaultValues(defaultValues),
-      [defaultValues]
-    ),
+    defaultValues,
   });
 
   const { handleSubmit } = methods;
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onValidSubmit)} css={selfCss}>
         <SubmitBar title={barTitle} submitButtonText={submitButtonText} />
+
         <Category
           isProjectDisabled={isProjectDisabled}
           isStudyDisabled={isStudyDisabled}
+          css={{ marginBottom: 32 }}
         />
-        <Participants />
-        <EndDate />
-        <Skills />
+
+        <RecruitBasicInfo css={{ marginBottom: 24 }} />
+
         <Title />
-        <Content />
-        <QuestionToApplicants />
+        <Content css={{ marginBottom: 74 }} />
+
+        <QuestionToApplicants css={{ marginBottom: 48 }} />
         <Contact />
       </form>
     </FormProvider>
@@ -79,10 +80,20 @@ const RecruitForm = (props: RecruitFormProps) => {
 };
 
 const defaultRecruitFormValues: RecruitFormValues = {
-  category: '',
+  category: '프로젝트',
   participants: {
-    project: [],
-    study: [],
+    project: [
+      {
+        part: '',
+        count: 1,
+      },
+    ],
+    study: [
+      {
+        part: '스터디',
+        count: 1,
+      },
+    ],
   },
   endDate: '',
   skills: {},
@@ -93,3 +104,5 @@ const defaultRecruitFormValues: RecruitFormValues = {
 };
 
 export default RecruitForm;
+
+const selfCss = css({ paddingTop: titleBarHeight + 30, paddingBottom: 360 });

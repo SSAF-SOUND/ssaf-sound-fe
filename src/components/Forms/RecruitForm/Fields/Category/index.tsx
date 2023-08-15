@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 
+import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import {
   colorMix,
   flex,
@@ -10,7 +11,6 @@ import {
 } from '~/styles/utils';
 
 import { useRecruitFormContext } from '../../utils';
-
 
 export interface CategoryProps {
   className?: string;
@@ -36,6 +36,7 @@ export const Category = (props: CategoryProps) => {
 
   return (
     <div className={className}>
+      <FieldOverview>리쿠르팅 유형</FieldOverview>
       <RadioGroup.Root
         defaultValue={defaultCategory}
         css={radioGroupCss}

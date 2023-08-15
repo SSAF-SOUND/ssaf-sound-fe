@@ -7,6 +7,7 @@ import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
 
 import { NumberInput } from '~/components/Common';
+import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { createBoundClamp } from '~/utils';
 
@@ -40,6 +41,8 @@ const StudyParticipants = (props: StudyParticipantsProps) => {
 
   return (
     <div className={className}>
+      <FieldOverview>모집 인원</FieldOverview>
+
       <NumberInput
         css={numberInputCss}
         min={minCount}

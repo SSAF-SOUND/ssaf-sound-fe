@@ -31,7 +31,7 @@ export const EndDate = (props: EndDateProps) => {
   const {
     register,
     setValue,
-    formState: { defaultValues: { endDate } = {} },
+    formState: { defaultValues: { endDate: defaultEndDate } = {} },
   } = useRecruitFormContext();
   const category = useWatch<RecruitFormValues>({
     name: 'category',
@@ -39,7 +39,6 @@ export const EndDate = (props: EndDateProps) => {
 
   const datePickerTheme = category === '프로젝트' ? 'primary' : 'secondary';
   const tomorrow = dayjs().add(1, 'day').toDate();
-  const defaultDateValue = endDate || dayjs(tomorrow).format('YYYY-MM-DD');
 
   const handleChangeDate = (value: unknown) => {
     if (value instanceof Date) {
@@ -51,7 +50,9 @@ export const EndDate = (props: EndDateProps) => {
   };
 
   useEffect(() => {
-    setValue(fieldName, defaultDateValue);
+    if (defaultEndDate) {
+      setValue(fieldName, defaultEndDate);
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -62,7 +63,7 @@ export const EndDate = (props: EndDateProps) => {
   return (
     <div className={className} css={selfCss}>
       <DatePicker
-        defaultValue={defaultDateValue}
+        defaultValue={defaultEndDate}
         minDetail="month"
         minDate={tomorrow}
         theme={datePickerTheme}

@@ -8,23 +8,33 @@ import { memo } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { Icon, IconButton, NumberInput, SelectBox } from '~/components/Common';
-import { parts, useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
+import {
+  RecruitParts,
+  useRecruitFormContext,
+} from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
 import { createBoundClamp } from '~/utils';
 
 const fieldArrayName = 'participants.project';
 
-const maxZIndex = 100;
+const possibleParts = Object.values(RecruitParts).filter(
+  (part) => part !== RecruitParts.STUDY
+);
+const maxZIndex = possibleParts.length;
 const maxCount = 20;
 const minCount = 1;
 const clamp = createBoundClamp([minCount, maxCount]);
 
 const validateParticipantsCount = (value: number) => {
-  if (value > 20 || value < 1)
-    return '모집 인원은 파트당 1명 ~ 20명 사이만 가능합니다.';
+  if (value > maxCount || value < minCount)
+    return `모집 인원은 파트당 ${minCount}명 ~ ${maxCount}명 사이만 가능합니다.`;
+  return true;
 };
+
 const validateParticipantsPart = (value: string) => {
-  return parts.includes(value) || '모집 파트를 선택해주세요.';
+  return (
+    possibleParts.includes(value as RecruitParts) || '모집 파트를 선택해주세요.'
+  );
 };
 
 interface FieldRowProps {
@@ -63,7 +73,7 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
       <SelectBox
         triggerTextAlign="center"
         css={fieldCss}
-        items={parts}
+        items={possibleParts}
         size="md"
         value={part}
         onValueChange={handleChangePart}

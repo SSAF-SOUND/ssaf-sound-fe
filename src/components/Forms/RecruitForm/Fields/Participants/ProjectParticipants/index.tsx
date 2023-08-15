@@ -1,39 +1,59 @@
-import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
+import type {
+  Participants,
+  RecruitFormValues,
+} from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Button, Icon } from '~/components/Common';
-import { parts } from '~/components/Forms/RecruitForm/utils';
+import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
+import { RecruitParts } from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
 
 import ProjectParticipantsFieldRow from './ProjectParticipantsFieldRow';
 
 const fieldArrayName = 'participants.project';
+const initialParticipantsFieldValue = {
+  part: '',
+  count: 1,
+};
+const projectParticipantsMaxLength = Object.values(RecruitParts).filter(
+  (part) => part !== RecruitParts.STUDY
+).length;
+const projectParticipantsMinLength = 1;
+const validateProjectParticipants = (value: Participants[]) => {
+  const parts = value.map(({ part }) => part);
+
+  if (new Set([...parts]).size !== parts.length) {
+    return '모집 파트는 중복이 불가능합니다.';
+  }
+
+  return true;
+};
 
 const ProjectParticipants = () => {
   const { fields, append, remove } = useFieldArray<RecruitFormValues>({
     name: fieldArrayName,
     rules: {
-      minLength: 1,
-      maxLength: parts.length,
+      minLength: projectParticipantsMinLength,
+      maxLength: projectParticipantsMaxLength,
+      validate: validateProjectParticipants,
     },
   });
 
-  const canAddField = fields.length < parts.length;
-  const canRemoveField = fields.length > 1;
+  const canAddField = fields.length < projectParticipantsMaxLength;
+  const canRemoveField = fields.length > projectParticipantsMinLength;
 
   const handleAddField = () => {
     if (!canAddField) return;
 
-    append({
-      part: '',
-      count: 1,
-    });
+    append(initialParticipantsFieldValue);
   };
 
   return (
     <div>
+      <FieldOverview>모집파트 별 인원</FieldOverview>
       <div css={fieldContainerCss}>
         {fields.map((field, index) => (
           <ProjectParticipantsFieldRow
@@ -60,13 +80,11 @@ const ProjectParticipants = () => {
 export default ProjectParticipants;
 
 const addFieldButtonCss = css({
-  width: '100%',
+  width: 'calc(100% - 26px)',
   height: 34,
 });
 
 const fieldContainerCss = css(
-  {
-    position: 'relative',
-  },
+  { position: 'relative', marginBottom: 12, zIndex: 1 },
   flex('', '', 'column', 10)
 );

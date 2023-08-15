@@ -10,7 +10,11 @@ const validateContent = (value: string) => {
   }
 };
 
-export const Content = () => {
+interface ContentProps {
+  className?: string;
+}
+
+export const Content = (props: ContentProps) => {
   const {
     register,
     setValue,
@@ -25,8 +29,12 @@ export const Content = () => {
   });
 
   return (
-    <div>
-      <Editor defaultValue={defaultContent} onChange={handleChangeValue} />
+    <div {...props}>
+      <Editor
+        defaultValue={defaultContent}
+        onChange={handleChangeValue}
+        placeholder="내용을 입력해주세요"
+      />
     </div>
   );
 };
