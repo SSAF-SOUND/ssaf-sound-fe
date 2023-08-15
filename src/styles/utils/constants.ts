@@ -13,7 +13,6 @@ export const zIndex = {
   // fixed 요소 간 zIndex 순서
   fixed: {
     normal: 10,
-    modalOverlay: 50,
-    modalContent: 100,
+    modal: 50,
   },
 };

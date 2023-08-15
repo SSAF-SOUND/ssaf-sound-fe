@@ -84,7 +84,7 @@ export default ModalCore;
 const overlayCss = css({
   position: 'fixed',
   inset: 0,
-  zIndex: zIndex.fixed.modalOverlay,
+  zIndex: zIndex.fixed.modal,
 });
 
 const overlayColorCss = {
@@ -95,5 +95,5 @@ const overlayColorCss = {
 
 const contentCss = css({
   position: 'relative',
-  zIndex: zIndex.fixed.modalContent,
+  zIndex: zIndex.fixed.modal,
 });
