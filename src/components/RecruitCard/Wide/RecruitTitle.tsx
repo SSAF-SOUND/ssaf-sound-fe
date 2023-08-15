@@ -13,11 +13,11 @@ const selfCss = css([
   fontCss.family.auto,
   fontCss.style.B20,
   {
-    width: '100%',
+    width: '70%',
     lineHeight: '22px',
     wordBreak: 'break-all',
   },
-  lineClamp(2),
+  lineClamp(1),
 ]);
 
 export default RecruitTitle;
