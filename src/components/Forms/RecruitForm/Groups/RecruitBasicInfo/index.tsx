@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { IconNames } from '~/components/Common';
 import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 
@@ -7,6 +7,7 @@ import { useWatch } from 'react-hook-form';
 
 import { Accordion, Icon } from '~/components/Common';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
+import SelectedSkills from '~/components/Forms/RecruitForm/Common/SelectedSkills';
 import {
   EndDate,
   Participants,
@@ -89,7 +90,19 @@ const EndDateLayer = () => {
 const SkillsLayer = () => {
   return (
     <AccordionItem value="기술 스택">
-      <AccordionTrigger titleIconName="board">기술 스택</AccordionTrigger>
+      <AccordionTrigger
+        titleIconName="board"
+        summary={
+          <SelectedSkills
+            css={{ marginTop: 6 }}
+            withLabel={false}
+            mountOnlySelectedSkillExists={true}
+          />
+        }
+        summaryContainerStyle={{ margin: 0 }}
+      >
+        기술 스택
+      </AccordionTrigger>
       <AccordionContent>
         <Skills />
       </AccordionContent>
@@ -133,10 +146,12 @@ interface AccordionTriggerProps {
   children: ReactNode;
   titleIconName: IconNames;
   summary?: ReactNode;
+  summaryContainerStyle?: CSSProperties;
 }
 
 const AccordionTrigger = (props: AccordionTriggerProps) => {
-  const { children, titleIconName, summary } = props;
+  const { children, titleIconName, summary, summaryContainerStyle } = props;
+
   return (
     <Accordion.Trigger css={[accordionTriggerSelfCss, accordionThemeCss]}>
       <div css={accordionTriggerRowCss}>
@@ -147,7 +162,12 @@ const AccordionTrigger = (props: AccordionTriggerProps) => {
         <Icon name="chevron.down" size={24} />
       </div>
       {summary && (
-        <div css={[accordionTriggerRowCss, summaryCss]}>{summary}</div>
+        <div
+          css={[accordionTriggerRowCss, summaryCss]}
+          style={summaryContainerStyle}
+        >
+          {summary}
+        </div>
       )}
     </Accordion.Trigger>
   );
