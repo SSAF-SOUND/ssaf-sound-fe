@@ -5,6 +5,8 @@ import { useEffect, useRef } from 'react';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
+const triggerClassName = 'select-box-trigger';
+
 type TextAlign = 'center' | 'left';
 type SelectBoxSize = 'sm' | 'md' | 'lg';
 type SelectBoxVariant = 'normal' | 'outlined';
@@ -100,7 +102,7 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
           textAlignCss[triggerTextAlign],
           sizeCss[size],
         ]}
-        className={className}
+        className={[triggerClassName, className].join(' ')}
         data-theme={theme}
         style={{ paddingLeft: triggerPaddingX, paddingRight: triggerPaddingX }}
       >
@@ -190,10 +192,10 @@ const baseTriggerIconCss = css({
   userSelect: 'none',
   color: themeColorVars.mainDarkColor.var,
   transition: 'transform 200ms',
-  '[data-state="open"] &': {
+  [`.${triggerClassName}[data-state="open"] &`]: {
     transform: 'rotate(180deg)',
   },
-  '[data-disabled] &': {
+  [`.${triggerClassName}[data-disabled] &`]: {
     color: colorMix('50%', themeColorVars.mainDarkColor.var),
   },
 });
