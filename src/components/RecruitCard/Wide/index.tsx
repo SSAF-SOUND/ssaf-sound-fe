@@ -37,18 +37,16 @@ const RecruitCard = (props: RecruitCardProps) => {
 const RecruitCardImpl = (props: RecruitCardProps) => {
   const {
     recruitSummary,
-    withBadge = true,
+    withBadge = false,
     withMessage,
     category = 'project',
   } = props;
 
   const { recruitId, title, recruitEnd, skills, participants } = recruitSummary;
 
-  const categoryIsProject = category === 'project';
-
   return (
     <Link css={withMessage || selfCss} href={`/recruit/${recruitId}`}>
-      <div css={flex('', '', 'column', 5)}>
+      <div css={flex('', '', 'column', 8)}>
         <div css={flex('', 'space-between', 'row')}>
           {withBadge ? (
             <WithMyBadge>
@@ -57,25 +55,29 @@ const RecruitCardImpl = (props: RecruitCardProps) => {
           ) : (
             <RecruitTitle title={title} />
           )}
-          <Dday recruitEnd={recruitEnd} category={category} />
+
+          <Dday recruitEnd={recruitEnd} category={category} css={DdayCss} />
         </div>
         <RecruitCardSkills skills={skills} />
       </div>
-      <RecruitParticipants
-        participants={participants}
-        withLabel={categoryIsProject}
-      />
+      <RecruitParticipants participants={participants} />
     </Link>
   );
 };
 
 const selfCss = css(flex('', 'space-between', 'column'), {
   background: palettes.white,
-  width: 340,
+  width: '100%',
+  minWidth: 340,
+  maxWidth: 400,
   minHeight: 150,
-  borderRadius: 16,
+  borderRadius: 30,
   color: palettes.black,
   padding: '15px 20px',
+});
+
+const DdayCss = css({
+  lineHeight: '20px',
 });
 
 export default RecruitCard;
