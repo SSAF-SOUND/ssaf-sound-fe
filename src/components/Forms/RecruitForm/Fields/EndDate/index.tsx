@@ -2,7 +2,7 @@ import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
-import { useWatch } from 'react-hook-form';
+import { useFormState, useWatch } from 'react-hook-form';
 
 import { DatePicker } from '~/components/Common';
 import {
@@ -43,13 +43,21 @@ export const EndDate = (props: EndDateProps) => {
       name: fieldName,
     }) as RecruitFormValues['endDate']) || defaultEndDate;
 
+  const {
+    errors: { endDate: endDateErrors },
+  } = useFormState({ name: fieldName });
+
   const datePickerTheme =
     category === RecruitCategoryName.PROJECT ? 'primary' : 'secondary';
   const tomorrow = dayjs().add(1, 'day').toDate();
 
   const handleChangeDate = (value: unknown) => {
     if (value instanceof Date) {
-      setValue(fieldName, dayjs(value).format('YYYY-MM-DD'));
+      setValue(fieldName, dayjs(value).format('YYYY-MM-DD'), {
+        shouldDirty: true,
+        shouldValidate: !!endDateErrors,
+      });
+
       return;
     }
 
