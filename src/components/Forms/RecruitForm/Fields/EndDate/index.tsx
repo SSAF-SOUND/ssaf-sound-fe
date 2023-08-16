@@ -2,11 +2,13 @@ import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { DatePicker } from '~/components/Common';
-import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
+import {
+  RecruitCategoryName,
+  useRecruitFormContext,
+} from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
 
 const fieldName = 'endDate';
@@ -36,8 +38,13 @@ export const EndDate = (props: EndDateProps) => {
   const category = useWatch<RecruitFormValues>({
     name: 'category',
   });
+  const endDate =
+    (useWatch<RecruitFormValues>({
+      name: fieldName,
+    }) as RecruitFormValues['endDate']) || defaultEndDate;
 
-  const datePickerTheme = category === '프로젝트' ? 'primary' : 'secondary';
+  const datePickerTheme =
+    category === RecruitCategoryName.PROJECT ? 'primary' : 'secondary';
   const tomorrow = dayjs().add(1, 'day').toDate();
 
   const handleChangeDate = (value: unknown) => {
@@ -49,13 +56,6 @@ export const EndDate = (props: EndDateProps) => {
     console.error(`[In DatePicker] 알 수 없는 값 ${value}이 입력되었습니다.`);
   };
 
-  useEffect(() => {
-    if (defaultEndDate) {
-      setValue(fieldName, defaultEndDate);
-    }
-    // eslint-disable-next-line
-  }, []);
-
   register(fieldName, {
     validate: validateEndDate,
   });
@@ -63,7 +63,7 @@ export const EndDate = (props: EndDateProps) => {
   return (
     <div className={className} css={selfCss}>
       <DatePicker
-        defaultValue={defaultEndDate}
+        value={endDate}
         minDetail="month"
         minDate={tomorrow}
         theme={datePickerTheme}
