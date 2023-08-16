@@ -1,7 +1,10 @@
 import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 
+import { css } from '@emotion/react';
+import { ErrorMessage } from '@hookform/error-message';
 import { useWatch } from 'react-hook-form';
 
+import { AlertText } from '~/components/Common';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import { RecruitFormAccordion } from '~/components/Forms/RecruitForm/Common/RecruitFormAccordion';
 import SelectedSkills from '~/components/Forms/RecruitForm/Common/SelectedSkills';
@@ -35,10 +38,9 @@ export const RecruitBasicInfo = (props: RecruitBasicInfoProps) => {
 const participantsFieldName = 'participants';
 const categoryFieldName = 'category';
 const ParticipantsLayer = () => {
-  const { project, study } =
-    (useWatch<RecruitFormValues>({
-      name: participantsFieldName,
-    }) as RecruitFormValues['participants']) || {};
+  const { project, study } = useWatch<RecruitFormValues>({
+    name: participantsFieldName,
+  }) as RecruitFormValues['participants'];
 
   const category = useWatch<RecruitFormValues>({
     name: categoryFieldName,
@@ -57,6 +59,9 @@ const ParticipantsLayer = () => {
       <RecruitFormAccordion.Trigger titleIconName="group" summary={summary}>
         모집 인원
       </RecruitFormAccordion.Trigger>
+
+      <ParticipantsErrorLayer selectedCategory={category} />
+
       <RecruitFormAccordion.Content initiallyForceMountThenUnmountImmediately>
         <Participants />
       </RecruitFormAccordion.Content>
@@ -64,6 +69,28 @@ const ParticipantsLayer = () => {
   );
 };
 
+interface ParticipantsErrorLayerProps {
+  selectedCategory: string;
+}
+
+const ParticipantsErrorLayer = (props: ParticipantsErrorLayerProps) => {
+  const { selectedCategory } = props;
+  const categoryFieldName =
+    selectedCategory === RecruitCategoryName.PROJECT ? 'project' : 'study';
+
+  const errorFieldName = `participants.${categoryFieldName}.root`;
+
+  return (
+    <ErrorMessage
+      name={errorFieldName}
+      render={({ message }) => (
+        <AlertText css={errorLayerSelfCss}>{message}</AlertText>
+      )}
+    />
+  );
+};
+
+// EndDate
 const endDateFieldName = 'endDate';
 
 const EndDateLayer = () => {
@@ -76,6 +103,7 @@ const EndDateLayer = () => {
       <RecruitFormAccordion.Trigger titleIconName="calendar" summary={endDate}>
         모집 마감일 선택
       </RecruitFormAccordion.Trigger>
+      <EndDateErrorLayer />
       <RecruitFormAccordion.Content initiallyForceMountThenUnmountImmediately>
         <EndDate />
       </RecruitFormAccordion.Content>
@@ -83,6 +111,20 @@ const EndDateLayer = () => {
   );
 };
 
+const EndDateErrorLayer = () => {
+  const errorFieldName = `endDate`;
+
+  return (
+    <ErrorMessage
+      name={errorFieldName}
+      render={({ message }) => (
+        <AlertText css={errorLayerSelfCss}>{message}</AlertText>
+      )}
+    />
+  );
+};
+
+// Skills
 const SkillsLayer = () => {
   return (
     <RecruitFormAccordion.Item value="기술 스택">
@@ -105,3 +147,7 @@ const SkillsLayer = () => {
     </RecruitFormAccordion.Item>
   );
 };
+
+const errorLayerSelfCss = css({
+  padding: '0 25px 6px',
+});
