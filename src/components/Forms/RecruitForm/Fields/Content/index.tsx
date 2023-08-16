@@ -1,14 +1,16 @@
+import type { ReactQuillProps } from 'react-quill';
+
+import { ErrorMessage } from '@hookform/error-message';
+
+import { AlertText } from '~/components/Common';
 import Editor from '~/components/Editor';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 
 const fieldName = 'content';
-const maxLength = 3000;
-
-const validateContent = (value: string) => {
-  if (value.length > maxLength) {
-    return `본문의 내용은 ${maxLength}자를 넘을 수 없습니다.`;
-  }
-};
+const minContentLength = 2;
+const maxContentLength = 3000;
+const lengthErrorMessage = `본문의 내용은 ${minContentLength}자 이상 ${maxContentLength}자 이하여야 합니다.`;
+const validateContent = (error?: string) => () => !error || error;
 
 interface ContentProps {
   className?: string;
@@ -18,14 +20,39 @@ export const Content = (props: ContentProps) => {
   const {
     register,
     setValue,
-    formState: { defaultValues: { content: defaultContent } = {} },
+    setError,
+    clearErrors,
+    formState: {
+      defaultValues: { content: defaultContent } = {},
+      errors,
+      isSubmitted,
+    },
   } = useRecruitFormContext();
-  const handleChangeValue = (value: string) => {
-    setValue(fieldName, value);
+  const errorMessage = errors.content?.message;
+  const showErrorMessage = isSubmitted && errorMessage;
+
+  const handleChangeValue: ReactQuillProps['onChange'] = (
+    value: string,
+    d,
+    s,
+    editor
+  ) => {
+    setValue(fieldName, value, {
+      shouldDirty: true,
+    });
+
+    const textLength = editor.getText().length - 1;
+
+    if (textLength < minContentLength || textLength > maxContentLength) {
+      if (!errorMessage) setError(fieldName, { message: lengthErrorMessage });
+      return;
+    }
+
+    if (errorMessage) clearErrors(fieldName);
   };
 
   register(fieldName, {
-    validate: validateContent,
+    validate: validateContent(errorMessage),
   });
 
   return (
@@ -35,6 +62,13 @@ export const Content = (props: ContentProps) => {
         onChange={handleChangeValue}
         placeholder="내용을 입력해주세요"
       />
+
+      {showErrorMessage && (
+        <ErrorMessage
+          name={fieldName}
+          render={({ message }) => <AlertText>{message}</AlertText>}
+        />
+      )}
     </div>
   );
 };
