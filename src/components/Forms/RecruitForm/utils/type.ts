@@ -1,8 +1,8 @@
 export interface RecruitFormValues {
   category: string;
   participants: {
-    study: Participants[];
-    project: Participants[];
+    study: RecruitParticipants[];
+    project: RecruitParticipants[];
   };
   endDate: string;
   title: string;
@@ -12,7 +12,7 @@ export interface RecruitFormValues {
   contact: string;
 }
 
-export type Participants = {
+export type RecruitParticipants = {
   /** 스터디 | 프론트엔드 | 백엔드 | 앱 | 기획/디자인 */
   part: string;
   /** 1 ~ 20 */

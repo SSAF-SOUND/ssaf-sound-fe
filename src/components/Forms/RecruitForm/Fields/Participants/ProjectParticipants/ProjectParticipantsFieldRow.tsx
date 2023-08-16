@@ -1,5 +1,5 @@
 import type {
-  Participants,
+  RecruitParticipants,
   RecruitFormValues,
 } from '~/components/Forms/RecruitForm/utils';
 
@@ -48,7 +48,7 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
   const { register, setValue } = useRecruitFormContext();
   const participants = useWatch<RecruitFormValues>({
     name: `${fieldArrayName}.${index}`,
-  }) as Participants;
+  }) as RecruitParticipants;
   const { part, count } = participants;
   const partFieldName = `${fieldArrayName}.${index}.part` as const;
   const countFieldName = `${fieldArrayName}.${index}.count` as const;

@@ -1,5 +1,5 @@
 import type {
-  Participants,
+  RecruitParticipants,
   RecruitFormValues,
 } from '~/components/Forms/RecruitForm/utils';
 
@@ -22,7 +22,7 @@ const projectParticipantsMaxLength = Object.values(RecruitParts).filter(
   (part) => part !== RecruitParts.STUDY
 ).length;
 const projectParticipantsMinLength = 1;
-const validateProjectParticipants = (value: Participants[]) => {
+const validateProjectParticipants = (value: RecruitParticipants[]) => {
   const parts = value.map(({ part }) => part);
 
   if (new Set([...parts]).size !== parts.length) {

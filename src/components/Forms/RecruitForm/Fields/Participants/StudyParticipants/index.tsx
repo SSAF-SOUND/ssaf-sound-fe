@@ -1,5 +1,5 @@
 import type {
-  Participants,
+  RecruitParticipants,
   RecruitFormValues,
 } from '~/components/Forms/RecruitForm/utils';
 
@@ -30,7 +30,7 @@ const StudyParticipants = (props: StudyParticipantsProps) => {
   const { register, setValue } = useRecruitFormContext();
   const participants = useWatch<RecruitFormValues>({
     name: `${fieldArrayName}.0`,
-  }) as Participants;
+  }) as RecruitParticipants;
   const { count } = participants;
 
   const countFieldName = `${fieldArrayName}.0.count` as const;
