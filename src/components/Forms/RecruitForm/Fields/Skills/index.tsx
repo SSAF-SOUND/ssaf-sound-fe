@@ -36,21 +36,30 @@ const skillBadgeContainerCss = css(
 interface SkillProps {
   name: SkillName;
 }
+
 const Skill = (props: SkillProps) => {
   const { name } = props;
-  const { setValue } = useRecruitFormContext();
+  const { setValue, getValues } = useRecruitFormContext();
   const pressed = useWatch<RecruitFormValues>({
     name: `${fieldName}.${name}`,
   }) as boolean;
+
+  const onPressedChange = (pressed: boolean) => {
+    const prevValue = getValues(fieldName);
+    delete prevValue[name];
+    const nextValue = { ...prevValue, [name]: pressed };
+
+    setValue(fieldName, nextValue, {
+      shouldDirty: true,
+    });
+  };
 
   return (
     <SkillBadge
       key={name}
       name={name}
       pressed={pressed}
-      onPressedChange={(pressed) => {
-        setValue(`${fieldName}.${name}`, pressed);
-      }}
+      onPressedChange={onPressedChange}
     />
   );
 };

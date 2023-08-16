@@ -132,7 +132,7 @@ const SkillsLayer = () => {
         titleIconName="board"
         summary={
           <SelectedSkills
-            css={{ marginTop: 6 }}
+            css={{ marginTop: 6, paddingBottom: 2 }}
             withLabel={false}
             mountOnlySelectedSkillExists={true}
           />
