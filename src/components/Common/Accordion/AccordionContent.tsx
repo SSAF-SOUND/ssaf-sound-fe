@@ -4,6 +4,8 @@ import { css, keyframes } from '@emotion/react';
 import * as RadixAccordion from '@radix-ui/react-accordion';
 import { forwardRef } from 'react';
 
+import { accordionTimingFunction } from '~/components/Common/Accordion/utils';
+
 interface AccordionContentProps extends RadixAccordionContentProps {}
 
 const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
@@ -37,10 +39,10 @@ const slideUpAnim = keyframes`
 `;
 
 const slideDownAnimCss = css({
-  animation: `${slideDownAnim} 300ms cubic-bezier(0.87, 0, 0.13, 1)`,
+  animation: `${slideDownAnim} 300ms ${accordionTimingFunction}`,
 });
 const slideUpAnimCss = css({
-  animation: `${slideUpAnim} 300ms cubic-bezier(0.87, 0, 0.13, 1)`,
+  animation: `${slideUpAnim} 300ms ${accordionTimingFunction}`,
 });
 
 const selfCss = css({
