@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
+import { ErrorMessage } from '@hookform/error-message';
 
-import { TextInput } from '~/components/Common';
+import { AlertText, TextInput } from '~/components/Common';
 import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { palettes } from '~/styles/utils';
@@ -40,6 +41,10 @@ export const Contact = (props: ContactProps) => {
         {...register(fieldName, {
           validate: validateContact,
         })}
+      />
+      <ErrorMessage
+        name={fieldName}
+        render={({ message }) => <AlertText>{message}</AlertText>}
       />
     </div>
   );
