@@ -57,7 +57,7 @@ const ParticipantsLayer = () => {
       <RecruitFormAccordion.Trigger titleIconName="group" summary={summary}>
         모집 인원
       </RecruitFormAccordion.Trigger>
-      <RecruitFormAccordion.Content>
+      <RecruitFormAccordion.Content initiallyForceMountThenUnmountImmediately>
         <Participants />
       </RecruitFormAccordion.Content>
     </RecruitFormAccordion.Item>
@@ -76,7 +76,7 @@ const EndDateLayer = () => {
       <RecruitFormAccordion.Trigger titleIconName="calendar" summary={endDate}>
         모집 마감일 선택
       </RecruitFormAccordion.Trigger>
-      <RecruitFormAccordion.Content>
+      <RecruitFormAccordion.Content initiallyForceMountThenUnmountImmediately>
         <EndDate />
       </RecruitFormAccordion.Content>
     </RecruitFormAccordion.Item>

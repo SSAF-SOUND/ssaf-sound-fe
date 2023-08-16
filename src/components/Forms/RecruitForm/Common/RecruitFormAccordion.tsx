@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { IconNames } from '~/components/Common';
 
 import { css } from '@emotion/react';
+import { useEffect, useState } from 'react';
 
 import { Accordion, Icon } from '~/components/Common';
 import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
@@ -103,11 +104,21 @@ const summaryCss = css(
 
 interface AccordionContentProps {
   children: ReactNode;
+  initiallyForceMountThenUnmountImmediately?: boolean;
 }
 const AccordionContent = (props: AccordionContentProps) => {
-  const { children } = props;
+  const { children, initiallyForceMountThenUnmountImmediately = false } = props;
+
+  const [forceMount, setForceMount] = useState(
+    initiallyForceMountThenUnmountImmediately
+  );
+
+  useEffect(() => {
+    setForceMount(false);
+  }, []);
+
   return (
-    <Accordion.Content>
+    <Accordion.Content forceMount={forceMount ? true : undefined}>
       <div css={accordionContentCss}>{children}</div>
     </Accordion.Content>
   );
