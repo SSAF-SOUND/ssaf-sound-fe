@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import { Accordion, Icon } from '~/components/Common';
+import { accordionTimingFunction } from '~/components/Common/Accordion/utils';
 import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
@@ -37,19 +38,13 @@ const AccordionItem = (props: AccordionItemProps) => {
   const { value, children } = props;
   return (
     <Accordion.Item
-      css={[accordionItemSelfCss, accordionThemeCss, recruitFormExpandCss]}
+      css={[accordionThemeCss, recruitFormExpandCss]}
       value={value}
     >
       {children}
     </Accordion.Item>
   );
 };
-
-const accordionItemSelfCss = css({
-  '&:focus-within': {
-    outline: `2px solid ${palettes.primary.default}`,
-  },
-});
 
 interface AccordionTriggerProps {
   children: ReactNode;
@@ -68,7 +63,7 @@ const AccordionTrigger = (props: AccordionTriggerProps) => {
           <Icon name={titleIconName} size={24} color={palettes.white} />
           <div>{children}</div>
         </div>
-        <Icon name="chevron.down" size={24} />
+        <Icon className={arrowIconClassname} name="chevron.down" size={24} />
       </div>
       {summary && (
         <div
@@ -82,12 +77,24 @@ const AccordionTrigger = (props: AccordionTriggerProps) => {
   );
 };
 
+const arrowIconClassname = 'recruit-form-accordion-arrow-icon';
+
 const accordionTriggerSelfCss = css(
   { width: '100%', padding: '6px 25px' },
   fontCss.style.R16
 );
 
-const accordionTriggerRowCss = css(flex('center', 'space-between', 'row', 20));
+const accordionTriggerRowCss = css(
+  {
+    [`& > .${arrowIconClassname}`]: {
+      transition: `transform 300ms ${accordionTimingFunction}`,
+    },
+    [`[data-state="open"] > & > .${arrowIconClassname}`]: {
+      transform: `rotate(0.5turn)`,
+    },
+  },
+  flex('center', 'space-between', 'row', 20)
+);
 
 const accordionTriggerTitleLayerCss = css(
   flex('center', 'flex-start', 'row', 8)

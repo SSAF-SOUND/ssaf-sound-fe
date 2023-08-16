@@ -16,6 +16,7 @@ import {
   Contact,
 } from './Fields';
 import SubmitBar from './SubmitBar';
+import { RecruitCategoryName } from './utils';
 
 interface RecruitFormOptions {
   // SubmitBar
@@ -95,7 +96,7 @@ const RecruitForm = (props: RecruitFormProps) => {
 };
 
 const defaultRecruitFormValues: RecruitFormValues = {
-  category: '프로젝트',
+  category: RecruitCategoryName.PROJECT,
   participants: {
     project: [
       {
