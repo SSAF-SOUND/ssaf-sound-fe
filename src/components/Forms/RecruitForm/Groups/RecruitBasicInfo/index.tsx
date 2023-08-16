@@ -7,6 +7,7 @@ import { useWatch } from 'react-hook-form';
 
 import { Accordion, Icon } from '~/components/Common';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
+import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import SelectedSkills from '~/components/Forms/RecruitForm/Common/SelectedSkills';
 import {
   EndDate,
@@ -128,7 +129,7 @@ const AccordionItem = (props: AccordionItemProps) => {
   const { value, children } = props;
   return (
     <Accordion.Item
-      css={[accordionItemSelfCss, accordionThemeCss]}
+      css={[accordionItemSelfCss, accordionThemeCss, recruitFormExpandCss]}
       value={value}
     >
       {children}

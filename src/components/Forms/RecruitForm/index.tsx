@@ -5,6 +5,7 @@ import type { SubmitErrorHandlerWithErrorMessage } from '~/components/Forms/util
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
 import { titleBarHeight } from '~/styles/utils';
 import { noop } from '~/utils';
@@ -26,6 +27,9 @@ interface RecruitFormOptions {
   // Category
   isProjectDisabled: boolean;
   isStudyDisabled: boolean;
+
+  /** Negative margin 적용을 위한 `px`값 */
+  marginForExpand: string;
 }
 
 interface RecruitFormProps {
@@ -48,7 +52,9 @@ const RecruitForm = (props: RecruitFormProps) => {
     submitButtonText = '',
     isProjectDisabled,
     isStudyDisabled,
+    marginForExpand = 0,
   } = options;
+  console.log(marginForExpand);
 
   const methods = useForm<RecruitFormValues>({
     defaultValues,
@@ -56,9 +62,11 @@ const RecruitForm = (props: RecruitFormProps) => {
 
   const { handleSubmit } = methods;
 
+  const style = { [recruitFormMarginForExpandCssVar.varName]: marginForExpand };
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onValidSubmit)} css={selfCss}>
+      <form onSubmit={handleSubmit(onValidSubmit)} css={selfCss} style={style}>
         <SubmitBar title={barTitle} submitButtonText={submitButtonText} />
 
         <Category

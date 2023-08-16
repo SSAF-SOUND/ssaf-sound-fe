@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
 import { TextInput } from '~/components/Common';
+import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { fontCss, palettes } from '~/styles/utils';
 
@@ -61,7 +62,7 @@ export const QuestionToApplicants = (props: QuestionToApplicantsProps) => {
   );
 };
 
-const titleCss = css({
+const titleCss = css(recruitFormExpandCss, {
   padding: '12px 25px',
   backgroundColor: palettes.background.grey,
   marginBottom: 10,
