@@ -12,3 +12,7 @@ export enum RecruitCategoryName {
   PROJECT = '프로젝트',
   STUDY = '스터디',
 }
+
+export const maxParticipantsCount = 20;
+
+export const minParticipantsCount = 1;
