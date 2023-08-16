@@ -1,6 +1,5 @@
 import type { RecruitFormValues } from './utils';
-import type { SubmitHandler } from 'react-hook-form';
-import type { SubmitErrorHandlerWithErrorMessage } from '~/components/Forms/utils';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -8,7 +7,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
 import { titleBarHeight } from '~/styles/utils';
-import { noop } from '~/utils';
 
 import {
   Category,
@@ -35,7 +33,7 @@ interface RecruitFormOptions {
 
 interface RecruitFormProps {
   onValidSubmit: SubmitHandler<RecruitFormValues>;
-  onInvalidSubmit?: SubmitErrorHandlerWithErrorMessage<RecruitFormValues>;
+  onInvalidSubmit?: SubmitErrorHandler<RecruitFormValues>;
   defaultValues?: RecruitFormValues;
   options?: Partial<RecruitFormOptions>;
 }
@@ -44,7 +42,7 @@ const RecruitForm = (props: RecruitFormProps) => {
   const {
     options = {},
     onValidSubmit,
-    onInvalidSubmit = noop,
+    onInvalidSubmit,
     defaultValues = defaultRecruitFormValues,
   } = props;
 
@@ -56,7 +54,6 @@ const RecruitForm = (props: RecruitFormProps) => {
     marginForExpand = 0,
     submitBarCloseRoute,
   } = options;
-  console.log(marginForExpand);
 
   const methods = useForm<RecruitFormValues>({
     defaultValues,
@@ -68,7 +65,11 @@ const RecruitForm = (props: RecruitFormProps) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onValidSubmit)} css={selfCss} style={style}>
+      <form
+        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+        css={selfCss}
+        style={style}
+      >
         <SubmitBar
           title={barTitle}
           submitButtonText={submitButtonText}
