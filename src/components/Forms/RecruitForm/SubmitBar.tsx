@@ -1,3 +1,5 @@
+import type { LinkProps } from 'next/link';
+
 import { memo } from 'react';
 
 import TitleBar from '~/components/TitleBar';
@@ -5,7 +7,7 @@ import TitleBar from '~/components/TitleBar';
 interface SubmitBarProps {
   title: string;
   submitButtonText: string;
-  onClickClose?: () => void;
+  onClickClose?: LinkProps['href'];
 }
 
 const SubmitBar = (props: SubmitBarProps) => {

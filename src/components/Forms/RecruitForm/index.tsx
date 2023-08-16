@@ -23,6 +23,7 @@ interface RecruitFormOptions {
   // SubmitBar
   barTitle: string;
   submitButtonText: string;
+  submitBarCloseRoute: string;
 
   // Category
   isProjectDisabled: boolean;
@@ -53,6 +54,7 @@ const RecruitForm = (props: RecruitFormProps) => {
     isProjectDisabled,
     isStudyDisabled,
     marginForExpand = 0,
+    submitBarCloseRoute,
   } = options;
   console.log(marginForExpand);
 
@@ -67,7 +69,11 @@ const RecruitForm = (props: RecruitFormProps) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onValidSubmit)} css={selfCss} style={style}>
-        <SubmitBar title={barTitle} submitButtonText={submitButtonText} />
+        <SubmitBar
+          title={barTitle}
+          submitButtonText={submitButtonText}
+          onClickClose={submitBarCloseRoute}
+        />
 
         <Category
           isProjectDisabled={isProjectDisabled}
