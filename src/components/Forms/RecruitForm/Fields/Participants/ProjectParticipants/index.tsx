@@ -8,7 +8,12 @@ import { useFieldArray } from 'react-hook-form';
 
 import { Button, Icon } from '~/components/Common';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
-import { RecruitParts } from '~/components/Forms/RecruitForm/utils';
+import {
+  maxParticipantsCount,
+  minParticipantsCount,
+  RecruitCategoryName,
+  RecruitParts,
+} from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
 
 import ProjectParticipantsFieldRow from './ProjectParticipantsFieldRow';
@@ -22,12 +27,36 @@ const projectParticipantsMaxLength = Object.values(RecruitParts).filter(
   (part) => part !== RecruitParts.STUDY
 ).length;
 const projectParticipantsMinLength = 1;
-const validateProjectParticipants = (value: RecruitParticipants[]) => {
+
+const possibleParts = Object.values(RecruitParts).filter(
+  (part) => part !== RecruitParts.STUDY
+);
+
+const validateProjectParticipants = (
+  value: RecruitParticipants[],
+  formValues: RecruitFormValues
+) => {
+  // 카테고리가 선택되어 있는 경우, 프로젝트 필드들은 유효성 검사에 무조건 통과
+  if (formValues.category !== RecruitCategoryName.PROJECT) {
+    return true;
+  }
+
+  if (value.some((v) => !possibleParts.includes(v.part as RecruitParts)))
+    return '모집 파트를 선택해주세요.';
+
   const parts = value.map(({ part }) => part);
 
   if (new Set([...parts]).size !== parts.length) {
     return '모집 파트는 중복이 불가능합니다.';
   }
+
+  if (
+    value.some(
+      ({ count }) =>
+        count < minParticipantsCount || count > maxParticipantsCount
+    )
+  )
+    return `모집 인원은 파트당 ${minParticipantsCount}명 ~ ${maxParticipantsCount}명 사이만 가능합니다.`;
 
   return true;
 };

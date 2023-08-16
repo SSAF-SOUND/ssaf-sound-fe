@@ -9,6 +9,8 @@ import { useWatch } from 'react-hook-form';
 
 import { Icon, IconButton, NumberInput, SelectBox } from '~/components/Common';
 import {
+  maxParticipantsCount,
+  minParticipantsCount,
   RecruitParts,
   useRecruitFormContext,
 } from '~/components/Forms/RecruitForm/utils';
@@ -21,21 +23,7 @@ const possibleParts = Object.values(RecruitParts).filter(
   (part) => part !== RecruitParts.STUDY
 );
 const maxZIndex = possibleParts.length;
-const maxCount = 20;
-const minCount = 1;
-const clamp = createBoundClamp([minCount, maxCount]);
-
-const validateParticipantsCount = (value: number) => {
-  if (value > maxCount || value < minCount)
-    return `모집 인원은 파트당 ${minCount}명 ~ ${maxCount}명 사이만 가능합니다.`;
-  return true;
-};
-
-const validateParticipantsPart = (value: string) => {
-  return (
-    possibleParts.includes(value as RecruitParts) || '모집 파트를 선택해주세요.'
-  );
-};
+const clamp = createBoundClamp([minParticipantsCount, maxParticipantsCount]);
 
 interface FieldRowProps {
   index: number;
@@ -45,13 +33,16 @@ interface FieldRowProps {
 
 const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
   const { index, canRemoveField, remove } = props;
-  const { register, setValue } = useRecruitFormContext();
+  const participantsFieldName = `${fieldArrayName}.${index}` as const;
+  const partFieldName = `${participantsFieldName}.part` as const;
+  const countFieldName = `${participantsFieldName}.count` as const;
+
+  const { register, setValue, trigger } = useRecruitFormContext();
   const participants = useWatch<RecruitFormValues>({
-    name: `${fieldArrayName}.${index}`,
+    name: participantsFieldName,
   }) as RecruitParticipants;
   const { part, count } = participants;
-  const partFieldName = `${fieldArrayName}.${index}.part` as const;
-  const countFieldName = `${fieldArrayName}.${index}.count` as const;
+
   const style = { zIndex: maxZIndex - index };
 
   const handleRemoveField = () => {
@@ -60,12 +51,21 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
   };
 
   const handleChangeCount = (amount: number) => () => {
-    setValue(countFieldName, clamp(count + amount));
+    setValue(countFieldName, clamp(count + amount), {
+      shouldDirty: true,
+    });
   };
-  const handleChangePart = (value: string) => setValue(partFieldName, value);
+  const handleChangePart = (value: string) => {
+    setValue(partFieldName, value, {
+      shouldDirty: true,
+    });
+    trigger(fieldArrayName);
+  };
+
+  register(participantsFieldName);
 
   register(partFieldName, {
-    validate: validateParticipantsPart,
+    shouldUnregister: true,
   });
 
   return (
@@ -81,12 +81,11 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
       />
       <NumberInput
         css={fieldCss}
-        min={minCount}
-        max={maxCount}
+        min={minParticipantsCount}
+        max={maxParticipantsCount}
         onClickMinus={handleChangeCount(-1)}
         onClickPlus={handleChangeCount(1)}
         {...register(countFieldName, {
-          validate: validateParticipantsCount,
           valueAsNumber: true,
         })}
       />
