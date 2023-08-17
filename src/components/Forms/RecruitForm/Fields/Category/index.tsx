@@ -32,7 +32,8 @@ export const Category = (props: CategoryProps) => {
     formState: { defaultValues: { category: defaultCategory } = {} },
   } = useRecruitFormContext();
 
-  const onValueChange = (value: string) => setValue(fieldName, value);
+  const onValueChange = (value: string) =>
+    setValue(fieldName, value, { shouldDirty: true });
 
   return (
     <div className={className}>

@@ -4,6 +4,7 @@ export interface RecruitFormValues {
     study: RecruitParticipants[];
     project: RecruitParticipants[];
   };
+  myPart: string;
   endDate: string;
   title: string;
   content: string;

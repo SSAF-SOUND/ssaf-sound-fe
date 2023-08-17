@@ -73,20 +73,32 @@ interface ParticipantsErrorLayerProps {
   selectedCategory: string;
 }
 
+const myPartFieldName = 'myPart';
+
 const ParticipantsErrorLayer = (props: ParticipantsErrorLayerProps) => {
   const { selectedCategory } = props;
-  const categoryFieldName =
-    selectedCategory === RecruitCategoryName.PROJECT ? 'project' : 'study';
-
-  const errorFieldName = `participants.${categoryFieldName}.root`;
+  const isProjectCategorySelected =
+    selectedCategory === RecruitCategoryName.PROJECT;
+  const categoryFieldName = isProjectCategorySelected ? 'project' : 'study';
+  const categoryErrorFieldName = `participants.${categoryFieldName}.root`;
 
   return (
-    <ErrorMessage
-      name={errorFieldName}
-      render={({ message }) => (
-        <AlertText css={errorLayerSelfCss}>{message}</AlertText>
+    <>
+      <ErrorMessage
+        name={categoryErrorFieldName}
+        render={({ message }) => (
+          <AlertText css={errorLayerSelfCss}>{message}</AlertText>
+        )}
+      />
+      {isProjectCategorySelected && (
+        <ErrorMessage
+          name={myPartFieldName}
+          render={({ message }) => (
+            <AlertText css={errorLayerSelfCss}>{message}</AlertText>
+          )}
+        />
       )}
-    />
+    </>
   );
 };
 

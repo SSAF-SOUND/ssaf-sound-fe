@@ -13,6 +13,10 @@ export enum RecruitCategoryName {
   STUDY = '스터디',
 }
 
+export const possibleProjectParts = Object.values(RecruitParts).filter(
+  (part) => part !== RecruitParts.STUDY
+);
+
 export const maxParticipantsCount = 20;
 
 export const minParticipantsCount = 1;

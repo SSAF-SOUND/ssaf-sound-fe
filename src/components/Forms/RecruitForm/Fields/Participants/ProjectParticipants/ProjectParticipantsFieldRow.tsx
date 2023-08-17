@@ -11,7 +11,7 @@ import { Icon, IconButton, NumberInput, SelectBox } from '~/components/Common';
 import {
   maxParticipantsCount,
   minParticipantsCount,
-  RecruitParts,
+  possibleProjectParts,
   useRecruitFormContext,
 } from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
@@ -19,10 +19,7 @@ import { createBoundClamp } from '~/utils';
 
 const fieldArrayName = 'participants.project';
 
-const possibleParts = Object.values(RecruitParts).filter(
-  (part) => part !== RecruitParts.STUDY
-);
-const maxZIndex = possibleParts.length;
+const maxZIndex = possibleProjectParts.length;
 const clamp = createBoundClamp([minParticipantsCount, maxParticipantsCount]);
 
 interface FieldRowProps {
@@ -73,7 +70,7 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
       <SelectBox
         triggerTextAlign="center"
         css={fieldCss}
-        items={possibleParts}
+        items={possibleProjectParts}
         size="md"
         value={part}
         onValueChange={handleChangePart}

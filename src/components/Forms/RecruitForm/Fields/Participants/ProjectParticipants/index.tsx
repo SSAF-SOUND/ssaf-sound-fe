@@ -6,13 +6,15 @@ import type {
 import { css } from '@emotion/react';
 import { useFieldArray } from 'react-hook-form';
 
-import { Button, Icon } from '~/components/Common';
+import { Button, Icon, SelectBox } from '~/components/Common';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import {
   maxParticipantsCount,
   minParticipantsCount,
+  possibleProjectParts,
   RecruitCategoryName,
   RecruitParts,
+  useRecruitFormContext,
 } from '~/components/Forms/RecruitForm/utils';
 import { flex } from '~/styles/utils';
 
@@ -82,26 +84,33 @@ const ProjectParticipants = () => {
 
   return (
     <div>
-      <FieldOverview>모집파트 별 인원</FieldOverview>
-      <div css={fieldContainerCss}>
-        {fields.map((field, index) => (
-          <ProjectParticipantsFieldRow
-            key={field.id}
-            index={index}
-            canRemoveField={canRemoveField}
-            remove={remove}
-          />
-        ))}
+      <div css={{ marginBottom: 24 }}>
+        <FieldOverview>모집파트 별 인원</FieldOverview>
+        <div css={fieldContainerCss}>
+          {fields.map((field, index) => (
+            <ProjectParticipantsFieldRow
+              key={field.id}
+              index={index}
+              canRemoveField={canRemoveField}
+              remove={remove}
+            />
+          ))}
+        </div>
+        <Button
+          css={addFieldButtonCss}
+          variant="outlined"
+          theme="primary"
+          onClick={handleAddField}
+          disabled={!canAddField}
+        >
+          <Icon name="circle.plus" label="필드 추가" size={14} />
+        </Button>
       </div>
-      <Button
-        css={addFieldButtonCss}
-        variant="outlined"
-        theme="primary"
-        onClick={handleAddField}
-        disabled={!canAddField}
-      >
-        <Icon name="circle.plus" label="필드 추가" size={14} />
-      </Button>
+
+      <div>
+        <FieldOverview>본인 파트</FieldOverview>
+        <MyPart />
+      </div>
     </div>
   );
 };
@@ -117,3 +126,23 @@ const fieldContainerCss = css(
   { position: 'relative', marginBottom: 12, zIndex: 1 },
   flex('', '', 'column', 10)
 );
+
+const myPartFieldName = 'myPart';
+const validateMyPart = (value: string, formValues: RecruitFormValues) => {
+  if (formValues.category !== RecruitCategoryName.PROJECT) return true;
+
+  return (
+    possibleProjectParts.includes(value as RecruitParts) ||
+    '본인의 파트를 선택해주세요'
+  );
+};
+
+const MyPart = () => {
+  const { register } = useRecruitFormContext();
+
+  register(myPartFieldName, {
+    validate: validateMyPart,
+  });
+
+  return <SelectBox items={possibleProjectParts} size="md" />;
+};

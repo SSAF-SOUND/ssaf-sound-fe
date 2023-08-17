@@ -111,6 +111,7 @@ const defaultRecruitFormValues: RecruitFormValues = {
       },
     ],
   },
+  myPart: '',
   endDate: '',
   skills: {},
   title: '',
