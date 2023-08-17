@@ -7,7 +7,7 @@ import TitleBar from '~/components/TitleBar';
 interface SubmitBarProps {
   title: string;
   submitButtonText: string;
-  onClickClose?: LinkProps['href'];
+  onClickClose?: () => void;
 }
 
 const SubmitBar = (props: SubmitBarProps) => {
