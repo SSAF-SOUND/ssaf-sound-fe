@@ -1,9 +1,7 @@
 import type { CalendarProps } from 'react-calendar';
 
-import dynamic from 'next/dynamic';
-
 import { css } from '@emotion/react';
-import Skeleton from 'react-loading-skeleton';
+import { Calendar } from 'react-calendar';
 
 import { Icon, IconButton } from '~/components/Common';
 import {
@@ -16,21 +14,6 @@ import {
 } from '~/styles/utils';
 
 import cn from './classnames';
-
-const Calendar = dynamic(
-  () => import('react-calendar').then((mod) => mod.Calendar),
-  {
-    loading: () => (
-      <Skeleton
-        width={348}
-        height={342}
-        baseColor={palettes.white}
-        borderRadius={12}
-      />
-    ),
-    ssr: false,
-  }
-);
 
 type CustomCalendarProps = Pick<
   CalendarProps,

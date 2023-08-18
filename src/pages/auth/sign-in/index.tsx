@@ -2,64 +2,40 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  Logo,
-  SsafyIcon,
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-  loaderText,
-} from '~/components/Common';
+import { Logo, SsafyIcon, DefaultFullPageLoader } from '~/components/Common';
 import SignInButton from '~/components/SignInButton';
 import { useMyAccountStatus } from '~/services/member';
 import { flex, pageMinHeight } from '~/styles/utils';
 import { routes } from '~/utils/routes';
 
-const metaTitle = '로그인';
-const metaDescription =
-  'SSAF SOUND 로그인 페이지입니다. 소셜 계정으로 로그인이 가능합니다.';
-
 const SignInPage = () => {
   const { isAuthenticated, isChecking } = useMyAccountStatus();
   const router = useRouter();
+  const loaderText = '유저 정보를 확인중입니다.';
 
   if (isAuthenticated) {
     router.replace(routes.main());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <DefaultFullPageLoader text={loaderText} />;
   }
 
   if (isChecking) {
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <DefaultFullPageLoader text={loaderText} />;
   }
 
   return (
-    <>
-      <PageHead
-        title={metaTitle}
-        description={metaDescription}
-        openGraph={{
-          title: metaTitle,
-          description: metaDescription,
-          url: routes.signIn(),
-        }}
-      />
-
-      <PageHeadingText text={metaTitle} />
-
-      <div css={selfCss}>
-        <div css={logoContainerCss}>
-          <SsafyIcon.LogoCharacter />
-          <Logo size="lg" />
-        </div>
-
-        <div css={buttonGroupCss}>
-          <SignInButton.Google />
-          <SignInButton.GitHub />
-          <SignInButton.Kakao />
-          <SignInButton.Apple />
-        </div>
+    <section css={selfCss}>
+      <div css={logoContainerCss}>
+        <SsafyIcon.LogoCharacter />
+        <Logo size="lg" />
       </div>
-    </>
+
+      <div css={buttonGroupCss}>
+        <SignInButton.Google />
+        <SignInButton.GitHub />
+        <SignInButton.Kakao />
+        <SignInButton.Apple />
+      </div>
+    </section>
   );
 };
 

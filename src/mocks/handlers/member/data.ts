@@ -59,7 +59,7 @@ export const portfolio: UserPortfolio = {
   memberLinks: Array(10)
     .fill(undefined)
     .map(() => ({
-      linkName: faker.lorem.words(1),
+      linkName: faker.lorem.words(2),
       path: `https://www.naver.com`,
     })),
 };

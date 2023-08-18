@@ -7,12 +7,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import UserRegisterForm from 'src/components/Forms/UserRegisterForm';
-import {
-  DefaultFullPageLoader,
-  loaderText,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader } from '~/components/Common';
 import {
   useMyAccountStatus,
   useSetMyInfo,
@@ -22,7 +17,7 @@ import { flex } from '~/styles/utils';
 import { customToast, handleAxiosError } from '~/utils';
 import { routes } from '~/utils/routes';
 
-const metaTitle = '회원 가입';
+const loaderText = '유저 정보를 확인하는 중입니다.';
 
 const RegisterPage: CustomNextPage = () => {
   const router = useRouter();
@@ -33,7 +28,7 @@ const RegisterPage: CustomNextPage = () => {
 
   if (shouldCheckUserInfo && !isRegisterRequired) {
     router.replace(routes.main());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <DefaultFullPageLoader text={loaderText} />;
   }
 
   const onSubmit = async (value: UserRegisterFormValues) => {
@@ -57,21 +52,15 @@ const RegisterPage: CustomNextPage = () => {
   };
 
   return (
-    <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
-      <PageHeadingText text={metaTitle} />
-
-      <div css={selfCss}>
-        <UserRegisterForm onSubmit={onSubmit} css={formCss} />
-      </div>
-    </>
+    <div css={selfCss}>
+      <UserRegisterForm onSubmit={onSubmit} css={formCss} />
+    </div>
   );
 };
 
 RegisterPage.auth = {
   role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
+  loading: <DefaultFullPageLoader text={loaderText} />,
   unauthorized: routes.main(),
 };
 

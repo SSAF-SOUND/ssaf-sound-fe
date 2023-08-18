@@ -20,13 +20,11 @@ Sentry.init({
   replaysSessionSampleRate: 0.1,
 
   // You can remove this option if you're not planning to use the Sentry Session Replay feature:
-
-  // First Load JS -40KB (Replay 제거)
   integrations: [
-    // new Sentry.Replay({
-    //   // Additional Replay configuration goes in here, for example:
-    //   maskAllText: true,
-    //   blockAllMedia: true,
-    // }),
+    new Sentry.Replay({
+      // Additional Replay configuration goes in here, for example:
+      maskAllText: true,
+      blockAllMedia: true,
+    }),
   ],
 });

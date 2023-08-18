@@ -1,8 +1,4 @@
-import type {
-  ProfileVisibility,
-  UserInfo,
-  UserPortfolio,
-} from '~/services/member/utils';
+import type { ProfileVisibility, UserInfo } from '~/services/member/utils';
 
 import { useRouter } from 'next/router';
 
@@ -22,7 +18,6 @@ import {
   getUserProfileVisibility,
   updateIsMajor,
   updateMyInfo,
-  updateMyPortfolio,
   updateNickname,
   updateProfileVisibility,
   updateSsafyBasicInfo,
@@ -215,18 +210,5 @@ export const useMyPortfolio = (options: Partial<UsePortfolioOptions> = {}) => {
     queryKey: queryKeys.user.myPortfolio(),
     queryFn: getMyPortfolio,
     enabled,
-  });
-};
-
-export const useUpdateMyPortfolio = () => {
-  const queryClient = useQueryClient();
-  const setMyPortfolio = (data: UserPortfolio) =>
-    queryClient.setQueryData<UserPortfolio>(queryKeys.user.myPortfolio(), data);
-
-  return useMutation({
-    mutationFn: updateMyPortfolio,
-    onSuccess: (_, variables) => {
-      setMyPortfolio(variables);
-    },
   });
 };

@@ -33,7 +33,6 @@ const createWebStorage = () => {
         sessionStorage.getItem(AUTH_RETURN_PAGE_KEY) ?? DEFAULT_RETURN_PAGE
       );
     },
-    clearPrivateData: () => {},
     DEV__setTokens: (tokens: Tokens) => {
       localStorage.setItem(DEV__ACCESS_TOKEN_KEY, tokens.accessToken);
       localStorage.setItem(DEV__REFRESH_TOKEN_KEY, tokens.refreshToken);

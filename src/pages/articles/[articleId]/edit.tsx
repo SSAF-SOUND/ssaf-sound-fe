@@ -3,17 +3,11 @@ import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 
 import { useRouter } from 'next/router';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import { useArticleDetail, useUpdateArticle } from '~/services/article';
 import { handleAxiosError, routes } from '~/utils';
-
-const metaTitle = '게시글 수정';
 
 const ArticleEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -56,27 +50,21 @@ const ArticleEditPage: CustomNextPage = () => {
   };
 
   return (
-    <>
-      <PageHead title={metaTitle} robots={{ follow: false, index: false }} />
-
-      <PageHeadingText text={metaTitle} />
-
-      <div>
-        <ArticleForm
-          onValidSubmit={onValidSubmit}
-          options={{
-            titleBarText: '게시글 수정',
-            titleBarCloseRoute: routes.articles.detail(articleId),
-          }}
-          defaultValues={{
-            title,
-            content,
-            images,
-            anonymous: anonymity,
-          }}
-        />
-      </div>
-    </>
+    <div>
+      <ArticleForm
+        onValidSubmit={onValidSubmit}
+        options={{
+          titleBarText: '게시글 수정',
+          titleBarCloseRoute: routes.articles.detail(articleId),
+        }}
+        defaultValues={{
+          title,
+          content,
+          images,
+          anonymous: anonymity,
+        }}
+      />
+    </div>
   );
 };
 

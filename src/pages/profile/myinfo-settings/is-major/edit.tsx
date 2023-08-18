@@ -5,17 +5,11 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { produce } from 'immer';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateIsMajor } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
 import { customToast, handleAxiosError, routes } from '~/utils';
-
-const metaTitle = '전공자 여부 수정';
 
 const MyInfoSettingsIsMajorEditPage = () => {
   const router = useRouter();
@@ -52,25 +46,19 @@ const MyInfoSettingsIsMajorEditPage = () => {
   };
 
   return (
-    <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
-      <PageHeadingText text={metaTitle} />
-
-      <div css={selfCss}>
-        <MyInfoEditForm
-          css={formCss}
-          field="isMajor"
-          defaultValues={{
-            isMajor: myInfo.isMajor,
-          }}
-          onValidSubmit={onValidSubmit}
-          options={{
-            titleBarBackwardRoute: routes.profile.myInfoSettings(),
-          }}
-        />
-      </div>
-    </>
+    <div css={selfCss}>
+      <MyInfoEditForm
+        css={formCss}
+        field="isMajor"
+        defaultValues={{
+          isMajor: myInfo.isMajor,
+        }}
+        onValidSubmit={onValidSubmit}
+        options={{
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
+        }}
+      />
+    </div>
   );
 };
 

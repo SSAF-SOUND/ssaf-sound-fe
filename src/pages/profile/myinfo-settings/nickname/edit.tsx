@@ -6,17 +6,11 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { produce } from 'immer';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateNickname } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
 import { customToast, handleAxiosError, routes } from '~/utils';
-
-const metaTitle = '닉네임 수정';
 
 const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -56,25 +50,19 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
   };
 
   return (
-    <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
-      <PageHeadingText text={metaTitle} />
-
-      <div css={selfCss}>
-        <MyInfoEditForm
-          css={formCss}
-          field="nickname"
-          defaultValues={{
-            nickname: myInfo.nickname,
-          }}
-          onValidSubmit={onValidSubmit}
-          options={{
-            titleBarBackwardRoute: routes.profile.myInfoSettings(),
-          }}
-        />
-      </div>
-    </>
+    <div css={selfCss}>
+      <MyInfoEditForm
+        css={formCss}
+        field="nickname"
+        defaultValues={{
+          nickname: myInfo.nickname,
+        }}
+        onValidSubmit={onValidSubmit}
+        options={{
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
+        }}
+      />
+    </div>
   );
 };
 

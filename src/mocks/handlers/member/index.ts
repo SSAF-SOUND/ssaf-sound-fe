@@ -235,22 +235,6 @@ export const getMyPortfolio = restSuccess<GetMyPortfolioApiData['data']>(
   }
 );
 
-export const updateMyPortfolio = restSuccess(
-  'put',
-  composeUrls(API_URL, endpoints.user.myPortfolio()),
-  {
-    data: null,
-  }
-);
-
-export const updateMyPortfolioError = restError(
-  'put',
-  composeUrls(API_URL, endpoints.user.myPortfolio()),
-  {
-    message: '오류가 발생했습니다.',
-  }
-);
-
 export const memberHandlers = [
   getMyInfo,
   updateMyInfo,
@@ -266,6 +250,4 @@ export const memberHandlers = [
   getUserPortfolio,
   getMyPortfolio,
   getUserInfo,
-  updateMyPortfolio,
-  // updateMyPortfolioError,
 ];

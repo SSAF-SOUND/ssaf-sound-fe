@@ -2,14 +2,8 @@ import type { ApiSuccessResponse } from '~/types';
 
 import { isAxiosError } from 'axios';
 
-import { endpoints } from '~/react-query/common';
-import {
-  clearPrivateData,
-  isDevMode,
-  privateAxios,
-  publicAxios,
-  webStorage,
-} from '~/utils';
+import { endpoints, getQueryClient, queryKeys } from '~/react-query/common';
+import { isDevMode, publicAxios, webStorage } from '~/utils';
 
 export interface Tokens {
   accessToken: string;
@@ -38,9 +32,16 @@ export const signIn = (params: SignInParams) => {
 export const signOut = () => {
   const endpoint = endpoints.auth.signOut();
 
-  return publicAxios.post(endpoint, null).then(() => {
+  return publicAxios.post(endpoint, null).then(async () => {
     if (isDevMode) {
       webStorage.DEV__removeTokens();
+    }
+
+    const queryClient = getQueryClient();
+
+    if (queryClient) {
+      await queryClient.removeQueries(queryKeys.auth());
+      // NOTE: WebStorage 에 저장한 유저 정보도 모두 삭제해야합니다.
     }
   });
 };
@@ -72,15 +73,8 @@ export const reissueToken = () => {
         console.error(`${tag}: Client Error`);
 
         await signOut();
-        clearPrivateData();
         return Promise.reject(error);
       }
     }
   });
-};
-
-export const deleteAccount = () => {
-  const endpoint = endpoints.user.myInfo();
-
-  return privateAxios.delete(endpoint).then((res) => res.data);
 };

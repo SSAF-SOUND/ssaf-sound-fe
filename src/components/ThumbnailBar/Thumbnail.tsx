@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
 
@@ -36,16 +38,15 @@ const Thumbnail = (props: ThumbnailProps) => {
 
   return (
     <li css={[selfCss, showSpinner && darkerCss]}>
-      <button
+      <div
         css={imageContainerCss}
         style={{ width: size, height: size }}
         onClick={handleClickThumbnail}
         data-thumbnail=""
       >
         {showSpinner && <ImageLoadIndicator />}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img css={imageCss} src={src} alt={alt} width={size} height={size} />
-      </button>
+        <Image css={imageCss} src={src} alt={alt} width={size} height={size} />
+      </div>
       {showRemoveButton && (
         <button type="button" css={removeButtonCss} onClick={onClickRemove}>
           <Icon name="close" size={12} label="썸네일 삭제" />
@@ -83,8 +84,7 @@ const selfCss = css(
 
 const imageContainerCss = css(
   {
-    border: `1px solid ${palettes.black}`,
-    padding: 0,
+    border: `1px solid black`,
     width: defaultSize,
     height: defaultSize,
     position: 'relative',
@@ -98,9 +98,6 @@ const imageContainerCss = css(
       height: '100%',
       content: '""',
       display: 'block',
-    },
-    ':focus-visible': {
-      outline: `2px solid ${palettes.primary.default}`,
     },
   },
   inlineFlex('center', 'center')

@@ -7,11 +7,7 @@ import { css } from '@emotion/react';
 import { produce } from 'immer';
 import { isBoolean } from 'is-what';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import {
   CertificationState,
@@ -21,8 +17,6 @@ import {
 } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
 import { customToast, handleAxiosError, routes } from '~/utils';
-
-const metaTitle = 'SSAFY 기본 정보 수정';
 
 const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
   const router = useRouter();
@@ -88,31 +82,25 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
   };
 
   return (
-    <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
-      <PageHeadingText text={metaTitle} />
-
-      <div css={selfCss}>
-        <MyInfoEditForm
-          css={formCss}
-          field="ssafyBasicInfo"
-          defaultValues={{
-            ssafyBasicInfo: {
-              campus: myInfo.ssafyInfo?.campus,
-              year: myInfo.ssafyInfo?.semester,
-              ssafyMember: myInfo.ssafyMember,
-            },
-          }}
-          onValidSubmit={onValidSubmit}
-          onInvalidSubmit={onInvalidSubmit}
-          options={{
-            forceSsafyMemberToTrue: isCertified,
-            titleBarBackwardRoute: routes.profile.myInfoSettings(),
-          }}
-        />
-      </div>
-    </>
+    <div css={selfCss}>
+      <MyInfoEditForm
+        css={formCss}
+        field="ssafyBasicInfo"
+        defaultValues={{
+          ssafyBasicInfo: {
+            campus: myInfo.ssafyInfo?.campus,
+            year: myInfo.ssafyInfo?.semester,
+            ssafyMember: myInfo.ssafyMember,
+          },
+        }}
+        onValidSubmit={onValidSubmit}
+        onInvalidSubmit={onInvalidSubmit}
+        options={{
+          forceSsafyMemberToTrue: isCertified,
+          titleBarBackwardRoute: routes.profile.myInfoSettings(),
+        }}
+      />
+    </div>
   );
 };
 

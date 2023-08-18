@@ -1,10 +1,9 @@
-import { NavItem, NavButton } from './NavItem';
+import NavItem from './NavItem';
 import NavTitle from './NavTitle';
 
 const MyInfoSettings = {
   NavTitle,
   NavItem,
-  NavButton,
 };
 
 export default MyInfoSettings;

@@ -4,11 +4,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
 import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';
@@ -28,8 +24,6 @@ import {
   titleBarHeight,
 } from '~/styles/utils';
 import { EditableMyInfoFields, handleAxiosError, routes } from '~/utils';
-
-const metaTitle = '프로필 설정';
 
 const MyInfoSettingsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
@@ -63,91 +57,83 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   };
 
   return (
-    <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
+    <div css={selfCss}>
+      <div>
+        <TitleBar.Default
+          title="프로필 설정"
+          withoutClose
+          onClickBackward={routes.profile.self()}
+        />
 
-      <PageHeadingText text={metaTitle} />
+        <nav css={[expandCss, { marginBottom: 40 }]}>
+          <MyInfoSettings.NavTitle css={navTitleCss}>
+            내 정보
+          </MyInfoSettings.NavTitle>
 
-      <div css={selfCss}>
-        <div>
-          <TitleBar.Default
-            title="프로필 설정"
-            withoutClose
-            onClickBackward={routes.profile.self()}
-          />
-
-          <nav css={[expandCss, { marginBottom: 40 }]}>
-            <MyInfoSettings.NavTitle css={navTitleCss}>
-              내 정보
-            </MyInfoSettings.NavTitle>
-
-            <MyInfoSettings.NavItem
-              href={routes.profile.edit.myInfo(EditableMyInfoFields.NICKNAME)}
-            >
-              닉네임 수정
-            </MyInfoSettings.NavItem>
-
-            <MyInfoSettings.NavItem
-              href={routes.profile.edit.myInfo(EditableMyInfoFields.IS_MAJOR)}
-            >
-              전공자 여부
-            </MyInfoSettings.NavItem>
-
-            {isSsafyMember && !isCertified && (
-              <MyInfoSettings.NavItem href={routes.certification.student()}>
-                SSAFY 인증
-              </MyInfoSettings.NavItem>
-            )}
-
-            <MyInfoSettings.NavItem
-              withStateCss={false}
-              withIcon={false}
-              asLink={false}
-            >
-              <span>내 프로필 공개</span>
-              <ProfileVisibilityToggleLayer />
-            </MyInfoSettings.NavItem>
-          </nav>
-
-          <nav css={[expandCss, { marginBottom: 40 }]}>
-            <MyInfoSettings.NavTitle css={navTitleCss}>
-              SSAFY 정보
-            </MyInfoSettings.NavTitle>
-
-            <MyInfoSettings.NavItem
-              href={routes.profile.edit.myInfo(
-                EditableMyInfoFields.SSAFY_BASIC_INFO
-              )}
-            >
-              SSAFY 기본 정보
-            </MyInfoSettings.NavItem>
-            {isCertified && (
-              <MyInfoSettings.NavItem
-                href={routes.profile.edit.myInfo(EditableMyInfoFields.TRACK)}
-              >
-                SSAFY 트랙
-              </MyInfoSettings.NavItem>
-            )}
-          </nav>
-        </div>
-
-        <div css={[expandCss, bottomNavLayerCss]}>
-          <div css={[separatorCss, { marginBottom: 20 }]} />
-
-          <MyInfoSettings.NavButton
-            onClick={openSignOutReconfirmModal}
-            disabled={isSigningOut}
-            css={cursorCss}
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.NICKNAME)}
           >
-            로그아웃
-          </MyInfoSettings.NavButton>
-
-          <MyInfoSettings.NavItem href={routes.profile.delete.account()}>
-            회원 탈퇴
+            닉네임 수정
           </MyInfoSettings.NavItem>
-        </div>
+
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(EditableMyInfoFields.IS_MAJOR)}
+          >
+            전공자 여부
+          </MyInfoSettings.NavItem>
+
+          {isSsafyMember && !isCertified && (
+            <MyInfoSettings.NavItem href={routes.certification.student()}>
+              SSAFY 인증
+            </MyInfoSettings.NavItem>
+          )}
+
+          <MyInfoSettings.NavItem
+            withStateCss={false}
+            withIcon={false}
+            asLink={false}
+          >
+            <span>내 프로필 공개</span>
+            <ProfileVisibilityToggleLayer />
+          </MyInfoSettings.NavItem>
+        </nav>
+
+        <nav css={[expandCss, { marginBottom: 40 }]}>
+          <MyInfoSettings.NavTitle css={navTitleCss}>
+            SSAFY 정보
+          </MyInfoSettings.NavTitle>
+
+          <MyInfoSettings.NavItem
+            href={routes.profile.edit.myInfo(
+              EditableMyInfoFields.SSAFY_BASIC_INFO
+            )}
+          >
+            SSAFY 기본 정보
+          </MyInfoSettings.NavItem>
+          {isCertified && (
+            <MyInfoSettings.NavItem
+              href={routes.profile.edit.myInfo(EditableMyInfoFields.TRACK)}
+            >
+              SSAFY 트랙
+            </MyInfoSettings.NavItem>
+          )}
+        </nav>
       </div>
-    </>
+
+      <div css={[expandCss, signOutLayerCss]}>
+        <div css={[separatorCss, { marginBottom: 20 }]} />
+        <button
+          type="button"
+          css={signOutButtonCss}
+          onClick={openSignOutReconfirmModal}
+          disabled={isSigningOut}
+        >
+          <MyInfoSettings.NavItem asLink={false}>
+            로그아웃
+          </MyInfoSettings.NavItem>
+        </button>
+      </div>
+    </div>
   );
 };
 
@@ -225,6 +211,21 @@ const separatorCss = css({
 
 const navTitleCss = css({ padding: `0 ${totalPaddingX}` });
 
-const bottomNavLayerCss = css({ flexGrow: 1 }, flex('', 'flex-end'));
+const signOutLayerCss = css(
+  {
+    flexGrow: 1,
+  },
+  flex('', 'flex-end')
+);
 
-const cursorCss = css({ cursor: 'pointer' });
+const signOutButtonCss = css({
+  width: '100%',
+  color: palettes.white,
+  padding: 0,
+  cursor: 'pointer',
+  backgroundColor: palettes.background.default,
+  transition: 'background-color 200ms',
+  ':focus-visible': {
+    backgroundColor: palettes.background.grey,
+  },
+});

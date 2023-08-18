@@ -1,8 +1,4 @@
-import type {
-  ComponentPropsWithoutRef,
-  PropsWithChildren,
-  ReactNode,
-} from 'react';
+import type { ReactNode } from 'react';
 
 import Link from 'next/link';
 
@@ -19,7 +15,7 @@ interface NavItemProps {
   href?: string;
 }
 
-export const NavItem = (props: NavItemProps) => {
+const NavItem = (props: NavItemProps) => {
   const {
     children,
     href = '',
@@ -38,39 +34,24 @@ export const NavItem = (props: NavItemProps) => {
   );
 };
 
-interface NavButtonProps extends ComponentPropsWithoutRef<'button'> {
-  children: ReactNode;
-}
-
-export const NavButton = (props: NavButtonProps) => {
-  return <button css={[itemCss, itemStateCss]} type="button" {...props} />;
-};
+export default NavItem;
 
 const itemCss = css(
-  {
-    height: 46,
-    padding: '0 25px',
-    outline: 0,
-    color: palettes.white,
-  },
+  { height: 46, padding: '0 25px', outline: 0 },
   flex('center', 'space-between', 'row'),
   fontCss.style.B18
 );
 
 const itemStateCss = css({
-  backgroundColor: palettes.background.default,
   transition: 'background-color 200ms',
-  ':hover': {
+  ':hover, :focus-visible': {
     backgroundColor: palettes.background.grey,
   },
   ':active': {
-    backgroundColor: palettes.grey.dark,
+    backgroundColor: palettes.majorDark,
   },
   ':disabled': {
     pointerEvents: 'none',
     color: colorMix('50%', palettes.white),
-  },
-  ':focus-visible': {
-    backgroundColor: palettes.background.grey,
   },
 });

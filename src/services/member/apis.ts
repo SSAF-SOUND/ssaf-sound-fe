@@ -174,16 +174,3 @@ export const getMyPortfolio = () => {
     .get<GetMyPortfolioApiData>(endpoint)
     .then((res) => res.data.data.portfolio);
 };
-
-export interface UpdateMyPortfolioParams extends UserPortfolio {}
-
-export type UpdateMyPortfolioBody = UpdateMyPortfolioParams;
-
-export const updateMyPortfolio = (params: UpdateMyPortfolioParams) => {
-  const endpoint = endpoints.user.myPortfolio();
-  const body: UpdateMyPortfolioBody = {
-    ...params,
-  };
-
-  return privateAxios.put(endpoint, body).then((res) => res.data);
-};

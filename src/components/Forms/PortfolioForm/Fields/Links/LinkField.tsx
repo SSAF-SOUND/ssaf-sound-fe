@@ -1,6 +1,6 @@
 import type { UseFieldArrayRemove } from 'react-hook-form';
 import type {
-  PortfolioFormLink,
+  Link,
   PortfolioFormValues,
 } from '~/components/Forms/PortfolioForm/utils';
 
@@ -43,7 +43,8 @@ const LinkField = (props: LinkFieldProps) => {
 
   const { link, linkText } = useWatch<PortfolioFormValues>({
     name: fieldName,
-  }) as PortfolioFormLink;
+    defaultValue: { link: '', linkText: '' },
+  }) as Link;
 
   const removeField = () => remove(index);
 

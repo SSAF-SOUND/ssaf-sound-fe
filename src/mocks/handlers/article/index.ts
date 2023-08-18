@@ -30,12 +30,6 @@ export const getArticleCategories = restSuccess<ArticleCategory[]>(
   { data: articleCategories }
 );
 
-export const getArticleCategoriesError = restError(
-  'get',
-  composeUrls(API_URL, endpoints.articles.categories()),
-  { message: '에러가 발생했습니다.' }
-);
-
 export const createArticle = rest.post(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

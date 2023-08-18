@@ -1,23 +1,13 @@
 import type { CSSProperties } from 'react';
 
-import dynamic from 'next/dynamic';
-
 import { css } from '@emotion/react';
 import { memo, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
 
 import { Icon, IconButton, Modal } from '~/components/Common';
+import { ImageViewer } from '~/components/ModalContent';
 import { flex, palettes } from '~/styles/utils';
 
 import Thumbnail from './Thumbnail';
-
-const ImageViewer = dynamic(
-  () => import('~/components/ModalContent').then((mod) => mod.ImageViewer),
-  {
-    loading: () => <Skeleton />,
-    ssr: false,
-  }
-);
 
 interface ThumbnailState {
   thumbnailUrl: string;
