@@ -35,4 +35,5 @@ export { default as VisuallyHidden } from './VisuallyHidden';
 
 export * from './Table';
 export * from './TextArea';
+export * from './ImageWithFallback';
 export * from './Badge';
