@@ -6,7 +6,7 @@ import * as RadixCheckbox from '@radix-ui/react-checkbox';
 import { Icon } from '~/components/Common';
 import { colorMix, inlineFlex, palettes, themeColorVars } from '~/styles/utils';
 
-interface CheckboxProps extends Omit<RadixCheckboxProps, 'asChild'> {
+export interface CheckboxProps extends Omit<RadixCheckboxProps, 'asChild'> {
   theme?: 'primary' | 'secondary';
   size?: number;
 }
