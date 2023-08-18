@@ -27,6 +27,9 @@ export const queryKeys = {
   articleComments: {
     list: (articleId: number) => ['comments', articleId],
   },
+  recruitComments: {
+    list: (recruitId: number) => ['recruit-comments', recruitId],
+  },
 };
 
 export const endpoints = {
@@ -103,7 +106,8 @@ export const endpoints = {
     detail: (commentId: number) => `/comments/${commentId}`,
     list: (articleId: number) => `/comments?postId=${articleId}`,
     create: (articleId: number) => `/comments?postId=${articleId}`,
-    like: (commentId: number) => `${endpoints.articleComments.detail(commentId)}/like`,
+    like: (commentId: number) =>
+      `${endpoints.articleComments.detail(commentId)}/like`,
     report: (commentId: number) =>
       `${endpoints.articleComments.detail(commentId)}/report`,
     reply: (params: { articleId: number; commentId: number }) => {
@@ -136,6 +140,24 @@ export const endpoints = {
     data: () => '/recruits' as const,
     members: (recruitId: string) => `/recruits/${recruitId}/members` as const,
     detail: (recruitId: string) => `/recruits/${recruitId}/detail` as const,
+  },
+  recruitComments: {
+    list: (recruitId: number) => `/recruits/${recruitId}/comments`,
+    create: (recruitId: number) => `/recruits/${recruitId}/comments`,
+    detail: (recruitCommentId: number) =>
+      `/recruit-comments/${recruitCommentId}`, // 삭제, 수정
+    like: (recruitCommentId: number) =>
+      `${endpoints.recruitComments.detail(recruitCommentId)}/like`,
+    report: (recruitCommentId: number) =>
+      `${endpoints.recruitComments.detail(recruitCommentId)}/report`,
+    reply: (params: { recruitId: number; recruitCommentId: number }) => {
+      const { recruitId, recruitCommentId } = params;
+      const queryString = new URLSearchParams({
+        recruitId,
+        recruitCommentId,
+      } as never).toString();
+      return `/recruit-comments/reply?${queryString}`;
+    },
   },
   meta: {
     campuses: () => '/meta/campuses' as const,
