@@ -4,6 +4,7 @@ import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { Button } from '~/components/Common';
 import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
 import { titleBarHeight } from '~/styles/utils';
@@ -24,9 +25,8 @@ interface RecruitFormOptions {
   submitButtonText: string;
   onClickTitleBarClose: () => void;
 
-  // Category
-  isProjectDisabled: boolean;
-  isStudyDisabled: boolean;
+  // editMode
+  editMode?: boolean;
 
   /** Negative margin 적용을 위한 `px`값 */
   marginForExpand: string;
@@ -50,8 +50,7 @@ const RecruitForm = (props: RecruitFormProps) => {
   const {
     barTitle = '',
     submitButtonText = '',
-    isProjectDisabled,
-    isStudyDisabled,
+    editMode = false,
     marginForExpand = 0,
     onClickTitleBarClose,
   } = options;
@@ -77,19 +76,21 @@ const RecruitForm = (props: RecruitFormProps) => {
           onClickClose={onClickTitleBarClose}
         />
 
-        <Category
-          isProjectDisabled={isProjectDisabled}
-          isStudyDisabled={isStudyDisabled}
-          css={{ marginBottom: 32 }}
-        />
+        <Category editMode={editMode} css={{ marginBottom: 32 }} />
 
         <RecruitBasicInfo css={{ marginBottom: 24 }} />
 
         <Title />
         <Content css={{ marginBottom: 74 }} />
 
-        <QuestionToApplicants css={{ marginBottom: 48 }} />
+        <QuestionToApplicants css={{ marginBottom: 48 }} editMode={editMode} />
         <Contact />
+
+        {editMode && (
+          <Button size="lg" css={completeButtonCss}>
+            리쿠르팅 모집완료
+          </Button>
+        )}
       </form>
     </FormProvider>
   );
@@ -123,3 +124,8 @@ const defaultRecruitFormValues: RecruitFormValues = {
 export default RecruitForm;
 
 const selfCss = css({ paddingTop: titleBarHeight + 30, paddingBottom: 360 });
+
+const completeButtonCss = css({
+  width: '100%',
+  marginTop: 64,
+});

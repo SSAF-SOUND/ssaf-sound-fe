@@ -16,13 +16,12 @@ const validateQuestionToApplicants = (value: string) => {
 };
 
 interface QuestionToApplicantsProps {
-  disabled?: boolean;
-  readonly?: boolean;
+  editMode?: boolean;
   className?: string;
 }
 
 export const QuestionToApplicants = (props: QuestionToApplicantsProps) => {
-  const { disabled, readonly, className } = props;
+  const { editMode, className } = props;
   const {
     register,
     formState: {
@@ -37,27 +36,34 @@ export const QuestionToApplicants = (props: QuestionToApplicantsProps) => {
         <span>신청자에게 꼭 물어보고 싶은 질문을 적어주세요 (선택)</span>
       </div>
 
-      <p css={descriptionCss}>
-        {`질문을 작성하여 리쿠르팅 참여자에게 답변을 받을 수 있습니다. (글자 수 ${maxLength}자 내)`}
-      </p>
-      {readonly ? (
-        <TextInput
-          css={inputCss}
-          size="md"
-          value={defaultQuestionToApplicants}
-          disabled={disabled}
-        />
+      {editMode ? (
+        <>
+          <AlertText css={{ marginBottom: 12 }}>
+            등록자 질문은 변경이 불가능합니다. 추가적인 질문 사항은 Contact
+            Link를 이용해주세요!
+          </AlertText>
+          <TextInput
+            css={inputCss}
+            size="md"
+            value={'asfddasfasddsa'}
+            disabled
+          />
+        </>
       ) : (
-        <TextInput
-          defaultValue={defaultQuestionToApplicants}
-          css={inputCss}
-          size="md"
-          placeholder="질문을 작성해주세요"
-          {...register(fieldName, {
-            validate: validateQuestionToApplicants,
-          })}
-          disabled={disabled}
-        />
+        <>
+          <p css={descriptionCss}>
+            {`질문을 작성하여 리쿠르팅 참여자에게 답변을 받을 수 있습니다. (글자 수 ${maxLength}자 내)`}
+          </p>
+          <TextInput
+            defaultValue={defaultQuestionToApplicants}
+            css={inputCss}
+            size="md"
+            placeholder="질문을 작성해주세요"
+            {...register(fieldName, {
+              validate: validateQuestionToApplicants,
+            })}
+          />
+        </>
       )}
 
       <ErrorMessage

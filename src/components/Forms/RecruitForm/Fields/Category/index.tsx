@@ -14,18 +14,13 @@ import { useRecruitFormContext } from '../../utils';
 
 export interface CategoryProps {
   className?: string;
-  isProjectDisabled?: boolean;
-  isStudyDisabled?: boolean;
+  editMode?: boolean;
 }
 
 const fieldName = 'category';
 
 export const Category = (props: CategoryProps) => {
-  const {
-    className,
-    isProjectDisabled = false,
-    isStudyDisabled = false,
-  } = props;
+  const { className, editMode = false } = props;
 
   const {
     setValue,
@@ -42,12 +37,12 @@ export const Category = (props: CategoryProps) => {
         defaultValue={defaultCategory}
         css={radioGroupCss}
         onValueChange={onValueChange}
+        disabled={editMode}
       >
         <RadioGroup.Item
           value="프로젝트"
           css={radioItemCss}
           data-theme="primary"
-          disabled={isProjectDisabled}
         >
           <RadioGroup.Indicator forceMount>프로젝트</RadioGroup.Indicator>
         </RadioGroup.Item>
@@ -55,7 +50,6 @@ export const Category = (props: CategoryProps) => {
           value="스터디"
           css={radioItemCss}
           data-theme="secondary"
-          disabled={isStudyDisabled}
         >
           <RadioGroup.Indicator forceMount>스터디</RadioGroup.Indicator>
         </RadioGroup.Item>
@@ -71,6 +65,7 @@ const radioGroupCss = css(
     borderRadius: 8,
     overflow: 'hidden',
     padding: 2,
+    '&:disabled': {},
   },
   flex('center', '', 'row'),
   fontCss.family.auto
@@ -78,6 +73,7 @@ const radioGroupCss = css(
 
 const radioItemCss = css(
   {
+    position: 'relative',
     cursor: 'pointer',
     padding: 0,
     height: 28,
@@ -88,9 +84,8 @@ const radioItemCss = css(
       backgroundColor: colorMix('70%', palettes.grey3),
     },
     '&:disabled': {
-      color: colorMix('70%', palettes.font.blueGrey),
-      backgroundColor: 'transparent',
-      cursor: 'not-allowed',
+      pointerEvents: 'none',
+      backgroundColor: colorMix('30%', palettes.black),
     },
     '&[data-state="checked"]': {
       backgroundColor: themeColorVars.mainColor.var,
