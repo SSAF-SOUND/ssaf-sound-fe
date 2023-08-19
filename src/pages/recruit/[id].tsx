@@ -1,9 +1,10 @@
-import type { GetServerSideProps } from 'next/types';
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+} from 'next/types';
 import type { RecruitDetail, recruitMembersType } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
-
-import { QueryClient } from '@tanstack/react-query';
 
 import Dday from '~/components/Dday';
 import { RecruitLayout } from '~/components/Layout';
@@ -15,7 +16,12 @@ import { RecruitMetaTitle } from '~/components/RecruitMeta/RecruitMetaTitle';
 import SquareAvatar from '~/components/SquareAvatar';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
-import { recruitAPI } from '~/services/recruit';
+import { prefetch } from '~/react-query/server';
+import {
+  recruitAPI,
+  useRecruitDetail,
+  useRecruitMembers,
+} from '~/services/recruit';
 import { flex, fontCss } from '~/styles/utils';
 import { paramsToNumber, routes } from '~/utils';
 
@@ -23,8 +29,11 @@ interface RecruitDetailPageProps {
   data: RecruitDetail;
   membersData: recruitMembersType;
 }
-const RecruitDetailPage = (props: RecruitDetailPageProps) => {
-  const { data, membersData } = props;
+const RecruitDetailPage = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
+  const { data: recruitDetailData } = useRecruitDetail(props.recruitId);
+  const { data: recruitMembersData } = useRecruitMembers(props.recruitId);
   const {
     category,
     title,
@@ -41,9 +50,11 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
     modifiedAt,
     deletedRecruit,
     finishedRecruit,
-  } = data;
+  } = recruitDetailData;
 
-  const ParsedMembersData = Object.values(membersData)
+  const ParsedMembersData = Object.values(
+    recruitMembersData as recruitMembersType
+  )
     .map((v) => Object.values(v))
     .flat();
 
@@ -128,40 +139,39 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
 
 export default RecruitDetailPage;
 
-export const getServerSideProps: GetServerSideProps<
-  RecruitDetailPageProps
-> = async ({ params }) => {
-  const queryClient = new QueryClient();
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  // const queryClient = new QueryClient();
+  console.log(params?.id);
+  const id = paramsToNumber(params!.id);
+  // const recruitDetailQueryKeys = queryKeys.recruit.detail(Id);
 
-  const Id = paramsToNumber(params?.id);
-  const recruitDetailQueryKeys = queryKeys.recruit.detail(Id);
+  // const data = await queryClient.fetchQuery({
+  //   queryKey: recruitDetailQueryKeys,
+  //   queryFn: () => recruitAPI.getRecruitDetail(Id),
+  // });
 
-  try {
-    const data = await queryClient.fetchQuery({
-      queryKey: recruitDetailQueryKeys,
-      queryFn: () => recruitAPI.getRecruitDetail(Id),
-    });
+  // const membersData = await queryClient.fetchQuery({
+  //   queryKey: queryKeys.recruit.members(Id),
+  //   queryFn: () => recruitAPI.getRecruitMembers(Id),
+  // });
 
-    const membersData = await queryClient.fetchQuery({
-      queryKey: queryKeys.recruit.members(Id),
-      queryFn: () => recruitAPI.getRecruitMembers(Id),
-    });
+  const dehydrate = prefetch([
+    {
+      queryKey: queryKeys.recruit.detail(id),
+      queryFn: () => recruitAPI.getRecruitDetail(id),
+    },
+    {
+      queryKey: queryKeys.recruit.members(id),
+      queryFn: () => recruitAPI.getRecruitMembers(id),
+    },
+  ]);
 
-    return {
-      props: {
-        data,
-        membersData,
-      },
-    };
-  } catch (err) {
-    console.error(err);
-    // 추후 수정 예정!
-    // 서버에러코드 500만 다룹니다!
-    return {
-      redirect: {
-        destination: '/500',
-        permanent: false,
-      },
-    };
-  }
+  const dehydratedState = await dehydrate();
+
+  return {
+    props: {
+      recruitId: id,
+      dehydratedState,
+    },
+  };
 };
