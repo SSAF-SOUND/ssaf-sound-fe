@@ -66,10 +66,21 @@ export const postRecruitScrap = rest.post(
   }
 );
 
+export const postRecruitApply = restSuccess(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.apply(':recruitId')),
+  {
+    data: null,
+  }
+);
+
 export const recruitHandlers = [
   getRecruitDetail,
   getRecruits,
   getRecruitMembers,
   getRecruitScrap,
   postRecruitScrap,
+  postRecruitApply,
 ];
