@@ -14,5 +14,6 @@ export const zIndex = {
   fixed: {
     normal: 10,
     modal: 50,
+    max: 9999,
   },
 };
