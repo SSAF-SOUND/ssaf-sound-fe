@@ -8,9 +8,28 @@ import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
-import { privateAxios } from '~/utils';
+import { privateAxios, publicAxios } from '~/utils';
+
+export type GetRecruitsApiData = ApiSuccessResponse<Recruits>;
+
+export interface Recruits {
+  recruits: RecruitSummary[];
+  currentPage: number;
+  totalPages: number;
+  lastPage: boolean;
+}
+
+export const getRecruits = () => {
+  const endpoint = endpoints.recruit.list();
+  return publicAxios.get<GetRecruitsApiData>(endpoint).then((res) => res);
+};
+
+// ------------------------------------------
+
+export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetail>;
 
 export interface RecruitDetail {
+  userInfo: UserInfo;
   category: RecruitCategoryType;
   title: string;
   recruitStart: string;
@@ -23,26 +42,17 @@ export interface RecruitDetail {
   view: number;
   skills: SkillsType[];
   limits: LimitType[];
+  scrapCount: number;
 }
 
-export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetail>;
-
-export const getRecruitDetail = () => {
-  const endpoint = endpoints.recruit.detail('1');
-  return privateAxios.get<GetRecruitDetailApiData>(endpoint).then((res) => res);
+export const getRecruitDetail = (recruitId: number) => {
+  const endpoint = endpoints.recruit.detail(recruitId);
+  return privateAxios
+    .get<GetRecruitDetailApiData>(endpoint)
+    .then((res) => res.data.data);
 };
 
-// 추후 보완할 예정입니다!
-// Recruits 전체를 불러오는 부분입니다
-
-export type GetRecruitsApiData = ApiSuccessResponse<Recruits>;
-
-export interface Recruits {
-  recruits: RecruitSummary[];
-  currentPage: number;
-  totalPages: number;
-  lastPage: boolean;
-}
+// ------------------------------------------
 
 export interface RecruitSummary {
   recruitId: number;
@@ -62,24 +72,68 @@ export interface RecruitParticipant {
   }[];
 }
 
-export type RecruitMember = UserInfo & {
-  recruitType: RecruitType;
-};
+export type RecruitMember = UserInfo;
 
-export interface RecruitMembers {
+export type RecruitMembers = {
   members: RecruitMember[];
-}
-
-export type GetRecruitMembersApiData = ApiSuccessResponse<RecruitMembers>;
-
-export const getRecruits = () => {
-  const endpoint = endpoints.recruit.data();
-  return privateAxios.get<GetRecruitsApiData>(endpoint).then((res) => res);
+  limit: number;
 };
 
-export const getRecruitMembers = (recruitId: string) => {
+// ------------------------------------------
+// 수정 예정
+
+export type PartialRecruitType = Partial<RecruitType>;
+export type recruitMembersType = {
+  recruitTypes: Partial<Record<PartialRecruitType, RecruitMembers>>;
+};
+
+export type GetRecruitMembersApiData = ApiSuccessResponse<recruitMembersType>;
+
+export const getRecruitMembers = (recruitId: number) => {
   const endpoint = endpoints.recruit.members(recruitId);
   return privateAxios
     .get<GetRecruitMembersApiData>(endpoint)
-    .then((res) => res);
+    .then((res) => res.data.data);
+};
+
+// -----------------------------------------
+
+export interface RecruitComment {
+  recruitCommentId: number;
+  content: string;
+  commentGroup: number;
+  children: [
+    {
+      recruitCommentId: number;
+      content: string;
+      commentGroup: number;
+      children: [];
+      deletedComment: boolean;
+      memberId: number;
+      nickname: 'khs';
+      ssafyMember: true;
+      isMajor: true;
+      majorTrack: '자바백엔드';
+    }
+  ];
+  deletedComment: false;
+  memberId: 1;
+  nickname: 'khs';
+  ssafyMember: true;
+  isMajor: true;
+  majorTrack: '자바백엔드';
+}
+
+// --------------------------------------
+
+export interface RecruitScrap {
+  scrapCount: number;
+}
+
+export type RecruitScrapApiData = ApiSuccessResponse<RecruitScrap>;
+
+export const recruitAPI = {
+  getRecruits,
+  getRecruitDetail,
+  getRecruitMembers,
 };

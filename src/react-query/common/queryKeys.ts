@@ -30,7 +30,22 @@ export const queryKeys = {
   recruitComments: {
     list: (recruitId: number) => ['recruit-comments', recruitId],
   },
+  recruit: {
+    list: () => ['recruits'],
+    detail: (recruitId: number) => ['recruits', recruitId],
+    members: (recruitId: number) => ['recruits', 'members', recruitId],
+    scrap: (recruitId: number) => ['recruits', 'scrap', recruitId],
+  },
+  lunch: {
+    menus: ({ campus, date }: any) => ['lunch', 'menus', campus, date],
+    detail: (lunchId: number) => ['lunch', lunchId],
+  },
 };
+// menus: ({ campus, date }: any) =>
+// `/lunch?campus=${campus}&date=${date}` as const,
+// detail: (lunchId: number) => `/lunch/${lunchId}` as const,
+// vote: (lunchId: number) => `/lunch/poll/${lunchId}` as const,
+// revertVote: (lunchId: number) => `/lunch/poll/revert/${lunchId}` as const,
 
 export const endpoints = {
   auth: {
@@ -137,9 +152,10 @@ export const endpoints = {
   },
   recruit: {
     // todo 이름, 파라미터 수정
-    data: () => '/recruits' as const,
-    members: (recruitId: string) => `/recruits/${recruitId}/members` as const,
-    detail: (recruitId: string) => `/recruits/${recruitId}/detail` as const,
+    list: () => '/recruits' as const,
+    members: (recruitId: number) => `/recruits/${recruitId}/members` as const,
+    detail: (recruitId: number) => `/recruits/${recruitId}/detail` as const,
+    scrap: (recruitId: number) => `/recruits/${recruitId}/scrap` as const,
   },
   recruitComments: {
     list: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
@@ -161,5 +177,15 @@ export const endpoints = {
   meta: {
     campuses: () => '/meta/campuses' as const,
     skills: () => '/meta/skills' as const,
+  },
+  lunch: {
+    menus: ({ campus, date }: any) => {
+      const queryString = new URLSearchParams({ campus, date }).toString();
+      return `/lunch?${queryString}`;
+    },
+    detail: (lunchId: number) => `/lunch/${lunchId}` as const,
+    vote: (lunchId: number) => `/lunch/poll/${lunchId}` as const,
+    revertVote: (lunchId: number) => `/lunch/poll/revert/${lunchId}` as const,
+    error: () => `/lunch/error` as const,
   },
 };

@@ -43,6 +43,7 @@ export type RecruitType = '프론트엔드' | '백엔드' | '기획/디자인';
 export interface LimitType {
   recruitType: RecruitType;
   limit: number;
+  currentNumber?: number;
 }
 
 export interface SkillsType {

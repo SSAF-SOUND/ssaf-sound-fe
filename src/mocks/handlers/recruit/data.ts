@@ -5,13 +5,14 @@ import type {
   SkillsType,
   RecruitParticipant,
   RecruitSummary,
-  RecruitMembers,
+  recruitMembersType,
 } from '~/services/recruit';
 
 import { userInfo } from '../member/data';
 
 const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
   study: {
+    userInfo: { ...userInfo.certifiedSsafyUserInfo },
     category: 'study',
     title: 'string',
     recruitStart: '2023-06-01',
@@ -24,8 +25,10 @@ const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
     view: 100,
     skills: [],
     limits: [],
+    scrapCount: 2,
   },
   project: {
+    userInfo: { ...userInfo.certifiedSsafyUserInfo },
     category: 'project',
     title: 'prject test',
     recruitStart: '2023-06-12',
@@ -50,12 +53,15 @@ const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
       {
         recruitType: '기획/디자인',
         limit: 2,
+        currentNumber: 1,
       },
       {
         recruitType: '프론트엔드',
         limit: 3,
+        currentNumber: 0,
       },
     ],
+    scrapCount: 100,
   },
 };
 
@@ -99,25 +105,33 @@ const recruits: Recruits = {
   lastPage: true,
 };
 
-const recruitMembers: RecruitMembers = {
-  members: [
-    {
-      recruitType: '기획/디자인',
-      ...userInfo.certifiedSsafyUserInfo,
+const recruitMembers: recruitMembersType = {
+  recruitTypes: {
+    '기획/디자인': {
+      limit: 3,
+      members: [
+        { ...userInfo.certifiedSsafyUserInfo },
+        { ...userInfo.nonSsafyUserInfo },
+      ],
     },
-    {
-      recruitType: '프론트엔드',
-      ...userInfo.uncertifiedSsafyUserInfo,
+    백엔드: {
+      limit: 3,
+      members: [
+        { ...userInfo.certifiedSsafyUserInfo },
+        { ...userInfo.nonSsafyUserInfo },
+      ],
     },
-    {
-      recruitType: '백엔드',
-      ...userInfo.nonSsafyUserInfo,
-    },
-  ],
+  },
 };
+
+const RecruitScrap = {
+  scrapCount: 87,
+};
+
 export const RecruitData = {
   recruitDetail,
   recruits,
   recruitSummary,
   recruitMembers,
+  RecruitScrap,
 };

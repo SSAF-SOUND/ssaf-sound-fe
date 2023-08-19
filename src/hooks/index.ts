@@ -8,3 +8,5 @@ export * from './useStripHtml';
 
 /* re-export로 사용하니까 오류 발생합니다. */
 // export * from './useComposedRefs';
+
+export * from './useAutoFocus';

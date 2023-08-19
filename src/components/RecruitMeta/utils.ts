@@ -1,14 +1,7 @@
 import type { IconNames } from '../Common/Icon';
-import type {
-  LimitType,
-  SkillsType,
-  RecruitType,
-  SkillType,
-} from '~/services/recruit';
 
 export type InfoType = '모집 인원' | '모집 기간' | '기술 스택';
 // 위의 type들 나중에 types로 이전할 예정
-type PeriodType = string[];
 
 interface InfoConstantsTypes {
   icon: IconNames;

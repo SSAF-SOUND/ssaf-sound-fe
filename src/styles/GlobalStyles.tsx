@@ -166,12 +166,6 @@ const customBaseCss = css`
 `;
 
 const themeColorVarCss = css({
-  '[data-recruitTheme="project"]': {
-    color: palettes.primary.default,
-  },
-  '[data-recruitTheme="study"]': {
-    color: palettes.secondary.default,
-  },
   '[data-theme="primary"]': createThemePalettes(
     palettes.primary.default,
     palettes.primary.light,
