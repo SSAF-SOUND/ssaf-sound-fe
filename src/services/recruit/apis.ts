@@ -132,8 +132,40 @@ export interface RecruitScrap {
 
 export type RecruitScrapApiData = ApiSuccessResponse<RecruitScrap>;
 
+// ---------------------------------------
+
+export interface RecruitApplyParams {
+  recruitType: RecruitType;
+  contents: Array<string>;
+}
+
+export type RecruitApplyParamsApiData = ApiSuccessResponse<RecruitApplyParams>;
+
+export const postRecruitApply = ({
+  recruitId,
+  body,
+}: {
+  recruitId: number;
+  body: RecruitApplyParams;
+}) => {
+  const endpoint = endpoints.recruit.apply(recruitId);
+  return privateAxios
+    .post<GetRecruitMembersApiData>(endpoint, body)
+    .then((res) => res.data);
+};
+
+// ---------------------------------------
+
+// export const reportArticle = (params: ReportArticleParams) => {
+//   const { articleId, content } = params;
+
+//   const endpoint = endpoints.articles.report(articleId);
+//   return privateAxios.post(endpoint, { content }).then((res) => res.data);
+// };
+
 export const recruitAPI = {
   getRecruits,
   getRecruitDetail,
   getRecruitMembers,
+  postRecruitApply,
 };
