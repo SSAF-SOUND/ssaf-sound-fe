@@ -40,6 +40,7 @@ import {
   MdSettings,
   MdThumbUp,
   MdSearch,
+  MdOutlineSubdirectoryArrowRight,
 } from 'react-icons/md';
 import { RiKakaoTalkFill, RiSendPlane2Line } from 'react-icons/ri';
 import { TbPencilPlus, TbSquareRoundedCheckFilled } from 'react-icons/tb';
@@ -101,6 +102,8 @@ export const icons = {
   github: <AiFillGithub />,
   kakao: <RiKakaoTalkFill />,
   apple: <AiFillApple />,
+
+  reply: <MdOutlineSubdirectoryArrowRight />,
 } as const;
 
 export type IconNames = keyof typeof icons;

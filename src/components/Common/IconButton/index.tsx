@@ -8,13 +8,13 @@ import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 type IconTheme = 'primary' | 'secondary' | 'white' | 'black';
 
-interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
+export interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
   theme?: IconTheme;
   size?: number;
   asChild?: boolean;
 }
 
-const IconButton = (props: IconButtonProps) => {
+export const IconButton = (props: IconButtonProps) => {
   const {
     theme = 'white',
     size = 'auto',

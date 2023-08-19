@@ -4,22 +4,21 @@ import type {
 } from 'next/types';
 import type { CommentFormProps } from '~/components/Forms/CommentForm';
 import type { ArticleDetailError } from '~/services/article';
-import type {
-  CommentDetail,
-  CommentDetailWithoutReplies,
-} from '~/services/comment';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import Skeleton from 'react-loading-skeleton';
 import { stripHtml } from 'string-strip-html';
 
 import { Article } from '~/components/Article';
+import ArticleComment from '~/components/ArticleComment';
 import { Button, PageHead, PageHeadingText } from '~/components/Common';
 import CommentForm from '~/components/Forms/CommentForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
+import { commentDetails } from '~/mocks/handlers/comment/data';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleDetail, useArticleDetail } from '~/services/article';
@@ -37,51 +36,6 @@ import {
 } from '~/styles/utils';
 import { routes } from '~/utils';
 import { replaceMultipleSpacesWithSingle } from '~/utils/replaceMultipleSpacesWithSingle';
-
-/* temp */
-const CommentsLayer = (props: { articleId: number }) => {
-  const { articleId } = props;
-  const { data: comments } = useComments(articleId);
-
-  return (
-    <ul css={{ [`& > li + li`]: { marginTop: 20 } }}>
-      {comments?.map((comment) => {
-        return <Comment key={comment.commentId} comment={comment} />;
-      })}
-    </ul>
-  );
-};
-
-const Comment = (props: {
-  comment: CommentDetail | CommentDetailWithoutReplies;
-}) => {
-  const { comment } = props;
-  const hasReplies = comment.replies && comment.replies.length > 0;
-
-  return (
-    <li
-      css={{
-        border: `1px solid white`,
-        backgroundColor: hasReplies
-          ? palettes.majorDark
-          : palettes.nonMajorDark,
-      }}
-    >
-      <div>
-        <p>{comment.createdAt}</p>
-        <p>{comment.content}</p>
-      </div>
-      {hasReplies && (
-        <ul css={{ paddingLeft: 40 }}>
-          {comment.replies.map((reply) => {
-            return <Comment key={reply.commentId} comment={reply} />;
-          })}
-        </ul>
-      )}
-    </li>
-  );
-};
-/* temp-end */
 
 interface ArticleDetailPageProps
   extends InferGetServerSidePropsType<typeof getServerSideProps> {}
@@ -143,7 +97,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
         <CommentsLayer articleId={articleId} />
 
-        <CommentFormLayer articleId={articleId} />
+        {/*<CommentFormLayer articleId={articleId} />*/}
       </div>
     </>
   );
@@ -154,30 +108,6 @@ export default ArticleDetailPage;
 interface NotExistsArticleProps {
   articleError: ArticleDetailError;
 }
-
-interface CommentFormLayerProps {
-  articleId: number;
-}
-
-const CommentFormLayer = (props: CommentFormLayerProps) => {
-  const { articleId } = props;
-  const { mutateAsync: createComment } = useCreateComment();
-  const invalidateComments = useInvalidateComments(articleId);
-
-  const onValidSubmit: CommentFormProps['onValidSubmit'] = async (
-    reset,
-    formValues
-  ) => {
-    try {
-      await createComment({ articleId, ...formValues });
-      await invalidateComments();
-      reset({ content: '' });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  return <CommentForm onValidSubmit={onValidSubmit} />;
-};
 
 const NotExistsArticle = (props: NotExistsArticleProps) => {
   const { articleError } = props;
@@ -206,6 +136,60 @@ const NotExistsArticle = (props: NotExistsArticleProps) => {
       }
     />
   );
+};
+
+const CommentsLayer = (props: { articleId: number }) => {
+  const { articleId } = props;
+  const skeletonCount = 8;
+  const { data: comments, isLoading } = useComments(articleId);
+
+  return (
+    <div css={flex('', '', 'column', 20)}>
+      {isLoading && (
+        <Skeleton
+          count={skeletonCount}
+          height={120}
+          style={{ marginBottom: 20 }}
+          baseColor={palettes.background.grey}
+          enableAnimation={false}
+        />
+      )}
+
+      {comments &&
+        comments.map((comment) => {
+          return (
+            <ArticleComment
+              key={comment.commentId}
+              comment={commentDetails[1]}
+            />
+          );
+        })}
+    </div>
+  );
+};
+
+interface CommentFormLayerProps {
+  articleId: number;
+}
+
+const CommentFormLayer = (props: CommentFormLayerProps) => {
+  const { articleId } = props;
+  const { mutateAsync: createComment } = useCreateComment();
+  const invalidateComments = useInvalidateComments(articleId);
+
+  const onValidSubmit: CommentFormProps['onValidSubmit'] = async (
+    reset,
+    formValues
+  ) => {
+    try {
+      await createComment({ articleId, ...formValues });
+      await invalidateComments();
+      reset({ content: '' });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  return <CommentForm onValidSubmit={onValidSubmit} />;
 };
 
 /* css */

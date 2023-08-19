@@ -7,3 +7,14 @@ export function getDateDiff(end: Date) {
 
   return diff;
 }
+
+export const formatDateTime = (dateString: string) => {
+  const dayjsInstance = dayjs(dateString);
+  const formattedDate = dayjsInstance.format('MM-DD');
+  const formattedTime = dayjsInstance.format('hh:mm');
+
+  return {
+    date: formattedDate,
+    time: formattedTime,
+  };
+};

@@ -1,24 +1,13 @@
 import type { ArticleDetail } from '~/services/article';
 
 import { css } from '@emotion/react';
-import dayjs from 'dayjs';
 
 import { useArticleMenuModal } from '~/components/Article/utils';
 import { Icon, IconButton, Separator } from '~/components/Common';
 import Name from '~/components/Name';
 import { useMyInfo } from '~/services/member';
 import { flex, fontCss } from '~/styles/utils';
-
-const formatCreatedAt = (dateString: string) => {
-  const dayjsInstance = dayjs(dateString);
-  const formattedDate = dayjsInstance.format('MM-DD');
-  const formattedTime = dayjsInstance.format('hh:mm');
-
-  return {
-    date: formattedDate,
-    time: formattedTime,
-  };
-};
+import {formatDateTime} from "~/utils";
 
 interface ArticleHeaderProps {
   className?: string;
@@ -34,7 +23,7 @@ const ArticleHeader = (props: ArticleHeaderProps) => {
 
   const isSignedIn = !!myInfo;
   const { author, createdAt } = articleDetail;
-  const { date, time } = formatCreatedAt(createdAt);
+  const { date, time } = formatDateTime(createdAt);
 
   return (
     <header css={selfCss} className={className}>

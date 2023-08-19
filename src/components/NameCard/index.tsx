@@ -6,7 +6,7 @@ import Name from '~/components/Name';
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 export interface NameCardProps {
-  userInfo: Omit<UserInfo, 'memberRole'>;
+  userInfo: Omit<UserInfo, 'memberRole' | 'memberId'>;
   withBackground?: boolean;
   className?: string;
 }
