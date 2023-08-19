@@ -7,6 +7,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import ArticleCardList from '~/components/ArticleCardList';
+import { PageHead, PageHeadingText } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
@@ -27,6 +28,9 @@ import {
 import { customToast, routes } from '~/utils';
 
 const titleBarTitle = 'HOT 게시판';
+const metaTitle = titleBarTitle;
+const metaDescription =
+  'SSAF SOUND에서 인기있는 게시글들을 모아볼 수 있는 페이지입니다.';
 
 const minKeywordLength = 3;
 const validateKeyword = (keyword?: string) =>
@@ -37,20 +41,34 @@ const HotArticlesPage = () => {
   const { keyword } = router.query as QueryString;
 
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        css={fontCss.style.B16}
-        title={titleBarTitle}
-        onClickBackward={routes.articles.categories()}
-        withoutClose
+    <>
+      <PageHead
+        title={metaTitle}
+        description={metaDescription}
+        openGraph={{
+          title: metaTitle,
+          description: metaDescription,
+          url: routes.articles.hot(),
+        }}
       />
 
-      <SearchBar />
+      <PageHeadingText text={metaTitle} />
 
-      <div css={articleContainerCss}>
-        <HotArticleLayer keyword={keyword} />
+      <div css={selfCss}>
+        <TitleBar.Default
+          css={fontCss.style.B16}
+          title={titleBarTitle}
+          onClickBackward={routes.articles.categories()}
+          withoutClose
+        />
+
+        <SearchBar />
+
+        <div css={articleContainerCss}>
+          <HotArticleLayer keyword={keyword} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -9,6 +9,8 @@ import ArticleCardList from '~/components/ArticleCardList';
 import {
   DefaultFullPageLoader,
   loaderText,
+  PageHead,
+  PageHeadingText,
   Separator,
   Tabs,
 } from '~/components/Common';
@@ -22,10 +24,22 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { PossibleMyScrapsCategories, routes } from '~/utils';
+import { isStorybookMode, PossibleMyScrapsCategories, routes } from '~/utils';
 
 const possibleCategories = Object.values(PossibleMyScrapsCategories);
 const defaultCategory = PossibleMyScrapsCategories.ARTICLES;
+
+const titleBarTitle = '나의 스크랩';
+const metaTitle = titleBarTitle;
+
+const validateCategory = (category?: string) => {
+  if (isStorybookMode()) return true;
+
+  return (
+    category &&
+    possibleCategories.includes(category as PossibleMyScrapsCategories)
+  );
+};
 
 type QueryString = {
   category: string;
@@ -35,9 +49,7 @@ const MyScrapsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
   const router = useRouter();
   const { category } = router.query as Partial<QueryString>;
-  const isValidCategory =
-    category &&
-    possibleCategories.includes(category as PossibleMyScrapsCategories);
+  const isValidCategory = validateCategory(category);
 
   if (!isValidCategory) {
     router.replace(routes.profile.myScraps(defaultCategory));
@@ -48,23 +60,31 @@ const MyScrapsPage: CustomNextPage = () => {
     return <DefaultFullPageLoader text={loaderText.checkUser} />;
   }
 
+  const defaultTabValue = category || defaultCategory;
+
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        withoutClose
-        title="나의 스크랩"
-        onClickBackward={routes.profile.detail(myInfo.memberId)}
-      />
-      <Tabs.Root defaultValue={category} value={category}>
-        <TabList />
-        <Tabs.Content value={PossibleMyScrapsCategories.ARTICLES}>
-          <ArticleLayer />
-        </Tabs.Content>
-        <Tabs.Content value={PossibleMyScrapsCategories.RECRUITS}>
-          Recruits
-        </Tabs.Content>
-      </Tabs.Root>
-    </div>
+    <>
+      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
+
+      <PageHeadingText text={titleBarTitle} />
+
+      <div css={selfCss}>
+        <TitleBar.Default
+          withoutClose
+          title={titleBarTitle}
+          onClickBackward={routes.profile.detail(myInfo.memberId)}
+        />
+        <Tabs.Root defaultValue={defaultTabValue} value={category}>
+          <TabList />
+          <Tabs.Content value={PossibleMyScrapsCategories.ARTICLES}>
+            <ArticleLayer />
+          </Tabs.Content>
+          <Tabs.Content value={PossibleMyScrapsCategories.RECRUITS}>
+            Recruits
+          </Tabs.Content>
+        </Tabs.Root>
+      </div>
+    </>
   );
 };
 

@@ -4,9 +4,6 @@ import { css } from '@emotion/react';
 
 import { globalVars, pageMaxWidth, pageMinWidth } from '~/styles/utils';
 
-// 임시 레이아웃입니다.
-// 개발 단계에서, 보기 편하게 하기 위해서 넣어놨어요!
-
 interface MainLayoutProps {
   children: ReactNode;
   className?: string;

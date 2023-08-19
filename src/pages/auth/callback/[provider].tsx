@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { DefaultFullPageLoader } from '~/components/Common';
+import { DefaultFullPageLoader, PageHead } from '~/components/Common';
 import { useSignIn } from '~/services/auth';
 import { customToast, handleAxiosError } from '~/utils';
 import { routes } from '~/utils/routes';
@@ -51,7 +51,17 @@ const CallbackPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
     );
   }, [code, provider, router, signIn]);
 
-  return <DefaultFullPageLoader text="로그인 중입니다." />;
+  return (
+    <>
+      <PageHead
+        robots={{
+          index: false,
+          follow: false,
+        }}
+      />
+      <DefaultFullPageLoader text="로그인 중입니다." />
+    </>
+  );
 };
 
 export default CallbackPage;

@@ -3,12 +3,20 @@ import type { CustomNextPage } from 'next/types';
 import { css } from '@emotion/react';
 
 import ArticleCardList from '~/components/ArticleCardList';
-import { DefaultFullPageLoader, loaderText } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  loaderText,
+  PageHead,
+  PageHeadingText,
+} from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
 import { useMyArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import { titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
+
+const titleBarTitle = '내가 작성한 게시글';
+const metaTitle = titleBarTitle;
 
 const MyArticlesPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
@@ -18,15 +26,21 @@ const MyArticlesPage: CustomNextPage = () => {
   }
 
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        withoutClose
-        title="내가 작성한 게시글"
-        onClickBackward={routes.profile.detail(myInfo.memberId)}
-      />
+    <>
+      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
 
-      <ArticleLayer />
-    </div>
+      <PageHeadingText text={titleBarTitle} />
+
+      <div css={selfCss}>
+        <TitleBar.Default
+          withoutClose
+          title={titleBarTitle}
+          onClickBackward={routes.profile.detail(myInfo.memberId)}
+        />
+
+        <ArticleLayer />
+      </div>
+    </>
   );
 };
 
