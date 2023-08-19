@@ -3,6 +3,8 @@ import type {
   CreateArticleCommentBody,
   GetArticleCommentsApiData,
   LikeArticleCommentApiData,
+  ReplyArticleCommentBody,
+  UpdateArticleCommentBody,
 } from '~/services/articleComment';
 
 import { rest } from 'msw';
@@ -12,7 +14,13 @@ import { endpoints } from '~/react-query/common';
 import { findArticleCommentById } from '~/services/articleComment';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-import { commentDetails, createMockCommentDetail } from './data';
+import {
+  commentDetails,
+  createMockCommentDetail,
+  createMockCommentDetailWithoutReplies,
+  incrementReplyId,
+  replyId,
+} from './data';
 
 export const getArticleComments = restSuccess<
   GetArticleCommentsApiData['data']
@@ -79,8 +87,115 @@ export const likeArticleCommentError = restError(
   }
 );
 
+export const replyArticleComment = rest.post(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articleComments.reply({ articleId: 1, commentId: 1 })
+    )
+  ),
+  async (req, res, ctx) => {
+    const searchParams = req.url.searchParams;
+    const articleId = Number(searchParams.get('articleId'));
+    const commentId = Number(searchParams.get('commentId'));
+
+    if (Number.isNaN(articleId) || Number.isNaN(commentId)) {
+      return res(...mockError(ctx, '400', 'articleId, commentId 오류'));
+    }
+
+    const { anonymity, content } =
+      (await req.json()) as ReplyArticleCommentBody;
+
+    const parentComment = findArticleCommentById(commentDetails, commentId);
+
+    if (!parentComment) {
+      return res(...mockError(ctx, '400', 'parentComment가 없습니다.'));
+    }
+
+    const childComment = createMockCommentDetailWithoutReplies(replyId);
+    childComment.content = content;
+    childComment.anonymity = anonymity;
+
+    parentComment.replies?.push(childComment);
+    incrementReplyId();
+
+    return res(ctx.delay(500), ...mockSuccess(ctx, {}));
+  }
+);
+
+export const replyArticleCommentError = restError(
+  'post',
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.articleComments.reply({ articleId: 1, commentId: 1 })
+    )
+  ),
+  { message: '대댓글 작성 실패' }
+);
+
+export const updateArticleComment = rest.put(
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articleComments.detail(':commentId')),
+  async (req, res, ctx) => {
+    const { anonymity, content } =
+      (await req.json()) as UpdateArticleCommentBody;
+    const query = req.params as { commentId: string };
+    const commentId = Number(query.commentId);
+
+    const result = findArticleCommentById(commentDetails, commentId);
+    if (!result) {
+      return res(...mockError(ctx, '400', '존재하지 않는 댓글'));
+    }
+
+    result.content = content;
+    result.anonymity = anonymity;
+
+    return res(ctx.delay(500), ...mockSuccess(ctx, {}));
+  }
+);
+
+export const updateArticleCommentError = restError(
+  'put',
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articleComments.detail(':commentId')),
+  {
+    message: '댓글 업데이트 실패',
+  }
+);
+
+export const removeArticleComment = rest.delete(
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articleComments.detail(':commentId')),
+  (req, res, ctx) => {
+    const query = req.params as { commentId: string };
+    const commentId = Number(query.commentId);
+
+    const result = findArticleCommentById(commentDetails, commentId);
+    if (!result) {
+      return res(...mockError(ctx, '400', '존재하지 않는 댓글'));
+    }
+
+    result.deletedComment = true;
+
+    return res(ctx.delay(500), ...mockSuccess(ctx, {}));
+  }
+);
+
+export const removeArticleCommentError = restError(
+  'delete',
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.articleComments.detail(':commentId')),
+  {
+    message: '댓글 삭제 실패',
+  }
+);
+
 export const articleCommentHandlers = [
   getArticleComments,
   createArticleComment,
   likeArticleComment,
+  replyArticleComment,
+  updateArticleComment,
+  removeArticleComment,
 ];

@@ -3,8 +3,15 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-import { likeArticleError, scrapArticleError } from '~/mocks/handlers';
-import { articleError, articles } from '~/mocks/handlers/article/data';
+import {
+  likeArticleCommentError,
+  likeArticleError,
+  removeArticleCommentError,
+  replyArticleCommentError,
+  scrapArticleError,
+  updateArticleCommentError,
+} from '~/mocks/handlers';
+import { articles } from '~/mocks/handlers/article/data';
 import { userInfo } from '~/mocks/handlers/member/data';
 import ArticleDetailPage from '~/pages/articles/[articleId]';
 import { queryKeys } from '~/react-query/common';
@@ -102,12 +109,28 @@ export const NotExistsArticle: ArticleDetailPageStory = {
   },
 };
 
-export const LikeAndScrapError = {
+export const ArticleLikeAndScrapError = {
   ...MyArticle,
   parameters: {
     msw: {
       handlers: {
         article: [likeArticleError, scrapArticleError],
+      },
+    },
+  },
+};
+
+export const CommentInteractionError = {
+  ...MyArticle,
+  parameters: {
+    msw: {
+      handlers: {
+        articleComment: [
+          likeArticleCommentError,
+          replyArticleCommentError,
+          updateArticleCommentError,
+          removeArticleCommentError,
+        ],
       },
     },
   },

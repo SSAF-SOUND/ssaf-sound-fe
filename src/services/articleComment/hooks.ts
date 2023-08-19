@@ -1,4 +1,8 @@
 import type {
+  ReplyArticleCommentParams,
+  UpdateArticleCommentParams,
+} from '~/services/articleComment/apis';
+import type {
   CommentDetail,
   CommentDetailWithoutReplies,
 } from '~/services/articleComment/utils';
@@ -11,6 +15,9 @@ import {
   createArticleComment,
   getArticleComments,
   likeArticleComment,
+  removeArticleComment,
+  replyArticleComment,
+  updateArticleComment,
 } from '~/services/articleComment/apis';
 import { findArticleCommentById } from '~/services/articleComment/utils';
 
@@ -115,4 +122,42 @@ const useSetArticleCommentWithImmer = (params: SetArticleCommentParams) => {
   };
 
   return setArticleCommentWithImmer;
+};
+
+interface UseReplyArticleCommentParams {
+  commentId: number;
+  articleId: number;
+}
+
+type UseReplyArticleCommentMutationBody = Omit<
+  ReplyArticleCommentParams,
+  keyof UseReplyArticleCommentParams
+>;
+
+export const useReplyArticleComment = (
+  params: UseReplyArticleCommentParams
+) => {
+  const { articleId, commentId } = params;
+  return useMutation({
+    mutationFn: (body: UseReplyArticleCommentMutationBody) =>
+      replyArticleComment({ articleId, commentId, ...body }),
+  });
+};
+
+type UseUpdateArticleCommentMutationBody = Omit<
+  UpdateArticleCommentParams,
+  'commentId'
+>;
+
+export const useUpdateArticleComment = (commentId: number) => {
+  return useMutation({
+    mutationFn: (body: UseUpdateArticleCommentMutationBody) =>
+      updateArticleComment({ commentId, ...body }),
+  });
+};
+
+export const useRemoveArticleComment = (commentId: number) => {
+  return useMutation({
+    mutationFn: () => removeArticleComment(commentId),
+  });
 };

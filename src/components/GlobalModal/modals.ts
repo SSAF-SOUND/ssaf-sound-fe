@@ -14,7 +14,18 @@ const BottomMenu = dynamic(
   }
 );
 
+const ArticleCommentModalForm = dynamic(
+  () =>
+    import('~/components/ModalContent').then(
+      (mod) => mod.ArticleCommentModalForm
+    ),
+  {
+    ssr: false,
+  }
+);
+
 export const modals = {
   alert: Alert,
   bottomMenu: BottomMenu,
+  articleCommentForm: ArticleCommentModalForm,
 } as const;

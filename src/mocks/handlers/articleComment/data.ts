@@ -7,7 +7,8 @@ import { faker } from '@faker-js/faker';
 
 import { userInfo } from '~/mocks/handlers/member/data';
 
-let replyId = 1000000;
+export let replyId = 1000000;
+export const incrementReplyId = () => (replyId += 1);
 
 export const createMockCommentDetailWithoutReplies = (
   id: number
