@@ -3,11 +3,11 @@ import type { LimitType, SkillsType } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
-import { palettes } from '~/styles/utils';
+import { fontCss, palettes } from '~/styles/utils';
 
+import { RecruitMetaTitle } from './RecruitMetaTitle';
 import RecruitTable from './RecruitTable';
 import Name from '../Name';
-import RecruitTitle from '../RecruitCard/Wide/RecruitTitle';
 
 export interface RecruitMeta {
   recruitStart: string;
@@ -21,16 +21,17 @@ export interface RecruitMetaProps {
   title?: string;
   recruitMeta: RecruitMeta;
   expanded?: boolean;
+  className?: string;
 }
 
 const RecruitMeta = (props: RecruitMetaProps) => {
-  const { expanded = true, userInfo, title, recruitMeta } = props;
+  const { expanded = true, userInfo, title, recruitMeta, className } = props;
 
   if (expanded && userInfo && title)
     // 이 부분 로직은 추후 수정할게요!
     return (
-      <div css={selfCss}>
-        <RecruitTitle title={title} />
+      <div css={selfCss} className={className}>
+        <RecruitMetaTitle title={title} css={titleCss} />
         <Name userInfo={userInfo} size="md" />
         <RecruitTable {...recruitMeta} />
       </div>
@@ -53,3 +54,5 @@ const selfCss = css({
   padding: '0 30px',
   paddingTop: '10px',
 });
+
+const titleCss = css(fontCss.family.auto, fontCss.style.R20);

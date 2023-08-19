@@ -73,6 +73,6 @@ const selfCss = css({
   },
 });
 
-const tbodyCss = css(flex('', '', 'column'), {
+const tbodyCss = css(flex('', '', 'column', 8), {
   padding: '10px 30px',
 });
