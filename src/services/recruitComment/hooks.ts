@@ -3,6 +3,7 @@ import type {
   CommentDetailWithoutReplies,
 } from '~/services/articleComment/utils';
 import type {
+  CreateRecruitCommentParams,
   ReplyRecruitCommentParams,
   UpdateRecruitCommentParams,
 } from '~/services/recruitComment/apis';
@@ -36,9 +37,19 @@ export const useInvalidateRecruitComments = (recruitId: number) => {
   return invalidate;
 };
 
-export const useCreateRecruitComment = () => {
+interface UseCreateRecruitCommentParams {
+  recruitId: number;
+}
+
+type UseCreateArticleCommentMutationBody = Omit<
+  CreateRecruitCommentParams,
+  keyof UseCreateRecruitCommentParams
+>;
+
+export const useCreateRecruitComment = (recruitId: number) => {
   return useMutation({
-    mutationFn: createRecruitComment,
+    mutationFn: (body: UseCreateArticleCommentMutationBody) =>
+      createRecruitComment({ recruitId, ...body }),
   });
 };
 
