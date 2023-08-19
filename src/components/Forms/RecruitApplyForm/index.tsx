@@ -8,16 +8,18 @@ import { useRouter } from 'next/router';
 
 import { useForm } from 'react-hook-form';
 
-import { Button, SelectBox } from '~/components/Common';
+import { Button } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
 import { useRecruitTypes } from '~/services/meta';
 import { getRecruitThemeByCategory, useApplyRecruit } from '~/services/recruit';
 import { flex } from '~/styles/utils';
 import { handleAxiosError, routes } from '~/utils';
 
-import { ApplyQuestion } from './ApplyQuestion';
-import { ApplyTextArea } from './ApplyTextArea';
-import { ProfileVisibilityCheckbox } from './ProfileVisibilityCheckbox';
+import {
+  ApplyTextArea,
+  ProfileVisibilityCheckbox,
+  ApplySelectBox,
+} from './Fields';
 
 interface DefaultValues {
   customQuestionAnswer: string;
@@ -28,16 +30,11 @@ interface DefaultValues {
 interface RecruitApplyFormProps {
   recruitId: number;
   defaultValues?: DefaultValues;
-  customQuestion?: string;
   category?: RecruitCategory;
 }
 
 export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
-  const {
-    recruitId = 1,
-    category = 'study',
-    customQuestion = 'custom Question',
-  } = props;
+  const { recruitId = 1, category = 'study' } = props;
 
   const {
     defaultValues = {
@@ -107,41 +104,33 @@ export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
       css={flex('', '', 'column', 20)}
     >
       {isCategoryProject && (
-        <label css={flex('', '', 'column', 6)}>
-          <ApplyQuestion
-            order={startOrder + 1}
-            question="지원파트를 선택해주세요."
-          />
-          <SelectBox
-            items={RecruitMetaData.filter((data: string) => data !== '스터디')}
-            defaultValue={defaultValues.recruitType}
-            onValueChange={(value) =>
-              setValue('recruitType', value as RecruitType)
-            }
-            size="md"
-          />
-        </label>
+        <ApplySelectBox
+          items={RecruitMetaData.filter((data: string) => data !== '스터디')}
+          defaultValue={defaultValues.recruitType}
+          onValueChange={(value) =>
+            setValue('recruitType', value as RecruitType)
+          }
+          order={startOrder + 1}
+        />
       )}
 
       <ProfileVisibilityCheckbox
         defaultChecked={defaultValues.profileVisibility}
-        onCheckedChange={(value) =>
-          setValue('profileVisibility', value as boolean)
+        onCheckedChange={(value: boolean) =>
+          setValue('profileVisibility', value)
         }
         category={category}
         disabled={isLoading}
         order={startOrder + 2}
       />
 
-      <label css={flex('', '', 'column', 6)}>
-        <ApplyQuestion order={startOrder + 3} question={customQuestion} />
-        <ApplyTextArea
-          {...register('customQuestionAnswer', {
-            setValueAs: (value) => value.trim(),
-          })}
-          disabled={isLoading}
-        />
-      </label>
+      <ApplyTextArea
+        {...register('customQuestionAnswer', {
+          setValueAs: (value) => value.trim(),
+          validate: validator.customQuestionAnswer,
+        })}
+        order={startOrder + 3}
+      />
 
       <Button
         type="submit"
@@ -152,4 +141,20 @@ export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
       </Button>
     </form>
   );
+};
+
+const minCustomQuestionAnswerLength = 1;
+const maxCustomQuestionAnswerLength = 500;
+
+const validator = {
+  customQuestionAnswer: (value: string) => {
+    const { length } = value;
+    if (
+      length < minCustomQuestionAnswerLength ||
+      length > maxCustomQuestionAnswerLength
+    )
+      return `답변은 ${minCustomQuestionAnswerLength}이상 ${maxCustomQuestionAnswerLength}이하여야 합니다.`;
+
+    return true;
+  },
 };
