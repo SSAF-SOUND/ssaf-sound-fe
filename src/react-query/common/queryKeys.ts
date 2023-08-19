@@ -142,21 +142,20 @@ export const endpoints = {
     detail: (recruitId: string) => `/recruits/${recruitId}/detail` as const,
   },
   recruitComments: {
-    list: (recruitId: number) => `/recruits/${recruitId}/comments`,
-    create: (recruitId: number) => `/recruits/${recruitId}/comments`,
-    detail: (recruitCommentId: number) =>
-      `/recruit-comments/${recruitCommentId}`, // 삭제, 수정
-    like: (recruitCommentId: number) =>
-      `${endpoints.recruitComments.detail(recruitCommentId)}/like`,
-    report: (recruitCommentId: number) =>
-      `${endpoints.recruitComments.detail(recruitCommentId)}/report`,
-    reply: (params: { recruitId: number; recruitCommentId: number }) => {
-      const { recruitId, recruitCommentId } = params;
+    list: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
+    create: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
+    detail: (commentId: number) => `/recruit-comments/${commentId}` as const, // 삭제, 수정
+    like: (commentId: number) =>
+      `${endpoints.recruitComments.detail(commentId)}/like` as const,
+    report: (commentId: number) =>
+      `${endpoints.recruitComments.detail(commentId)}/report` as const,
+    reply: (params: { recruitId: number; commentId: number }) => {
+      const { recruitId, commentId } = params;
       const queryString = new URLSearchParams({
         recruitId,
-        recruitCommentId,
+        commentId,
       } as never).toString();
-      return `/recruit-comments/reply?${queryString}`;
+      return `/recruit-comments/reply?${queryString}` as const;
     },
   },
   meta: {

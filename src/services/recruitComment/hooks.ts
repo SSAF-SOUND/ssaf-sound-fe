@@ -43,21 +43,21 @@ export const useCreateRecruitComment = () => {
 };
 
 interface UseLikeRecruitCommentParams {
-  recruitCommentId: number;
+  commentId: number;
   recruitId: number;
 }
 
 export const useLikeRecruitComment = (params: UseLikeRecruitCommentParams) => {
-  const { recruitId, recruitCommentId } = params;
+  const { recruitId, commentId } = params;
   const queryClient = useQueryClient();
   const queryKey = queryKeys.recruitComments.list(recruitId);
   const setRecruitCommentWithImmer = useSetRecruitCommentWithImmer({
     recruitId,
-    recruitCommentId,
+    commentId,
   });
 
   return useMutation({
-    mutationFn: () => likeRecruitComment(recruitCommentId),
+    mutationFn: () => likeRecruitComment(commentId),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey });
       const comments = queryClient.getQueryData<CommentDetail[]>(queryKey);
@@ -93,11 +93,11 @@ export const useLikeRecruitComment = (params: UseLikeRecruitCommentParams) => {
 
 interface SetRecruitCommentParams {
   recruitId: number;
-  recruitCommentId: number;
+  commentId: number;
 }
 
 const useSetRecruitCommentWithImmer = (params: SetRecruitCommentParams) => {
-  const { recruitCommentId, recruitId } = params;
+  const { commentId, recruitId } = params;
   const queryClient = useQueryClient();
 
   const setRecruitCommentWithImmer = (
@@ -111,7 +111,7 @@ const useSetRecruitCommentWithImmer = (params: SetRecruitCommentParams) => {
         if (!prevComments) return;
 
         const nextComments = produce(prevComments, (draft) => {
-          const result = findArticleCommentById(draft, recruitCommentId);
+          const result = findArticleCommentById(draft, commentId);
 
           recipe(result);
         });
@@ -125,7 +125,7 @@ const useSetRecruitCommentWithImmer = (params: SetRecruitCommentParams) => {
 };
 
 interface UseReplyRecruitCommentParams {
-  recruitCommentId: number;
+  commentId: number;
   recruitId: number;
 }
 
@@ -137,27 +137,27 @@ type UseReplyRecruitCommentMutationBody = Omit<
 export const useReplyRecruitComment = (
   params: UseReplyRecruitCommentParams
 ) => {
-  const { recruitId, recruitCommentId } = params;
+  const { recruitId, commentId } = params;
   return useMutation({
     mutationFn: (body: UseReplyRecruitCommentMutationBody) =>
-      replyRecruitComment({ recruitId, recruitCommentId, ...body }),
+      replyRecruitComment({ recruitId, commentId, ...body }),
   });
 };
 
 type UseUpdateRecruitCommentMutationBody = Omit<
   UpdateRecruitCommentParams,
-  'recruitCommentId'
+  'commentId'
 >;
 
-export const useUpdateRecruitComment = (recruitCommentId: number) => {
+export const useUpdateRecruitComment = (commentId: number) => {
   return useMutation({
     mutationFn: (body: UseUpdateRecruitCommentMutationBody) =>
-      updateRecruitComment({ recruitCommentId, ...body }),
+      updateRecruitComment({ commentId, ...body }),
   });
 };
 
-export const useRemoveRecruitComment = (recruitCommentId: number) => {
+export const useRemoveRecruitComment = (commentId: number) => {
   return useMutation({
-    mutationFn: () => removeRecruitComment(recruitCommentId),
+    mutationFn: () => removeRecruitComment(commentId),
   });
 };

@@ -40,8 +40,8 @@ export type LikeRecruitCommentApiData = ApiSuccessResponse<
   Pick<CommentDetail, 'liked' | 'likeCount'>
 >;
 
-export const likeRecruitComment = (recruitCommentId: number) => {
-  const endpoint = endpoints.articleComments.like(recruitCommentId);
+export const likeRecruitComment = (commentId: number) => {
+  const endpoint = endpoints.articleComments.like(commentId);
 
   return privateAxios
     .post<LikeRecruitCommentApiData>(endpoint, null)
@@ -50,16 +50,16 @@ export const likeRecruitComment = (recruitCommentId: number) => {
 
 export interface ReplyRecruitCommentParams {
   recruitId: number;
-  recruitCommentId: number;
+  commentId: number;
   content: string;
 }
 
 export type ReplyRecruitCommentBody = CreateRecruitCommentBody;
 
 export const replyRecruitComment = (params: ReplyRecruitCommentParams) => {
-  const { recruitCommentId, recruitId, content } = params;
+  const { commentId, recruitId, content } = params;
   const endpoint = endpoints.recruitComments.reply({
-    recruitCommentId,
+    commentId,
     recruitId,
   });
 
@@ -71,15 +71,15 @@ export const replyRecruitComment = (params: ReplyRecruitCommentParams) => {
 };
 
 export interface UpdateRecruitCommentParams {
-  recruitCommentId: number;
+  commentId: number;
   content: string;
 }
 
 export type UpdateRecruitCommentBody = CreateRecruitCommentBody;
 
 export const updateRecruitComment = (params: UpdateRecruitCommentParams) => {
-  const { recruitCommentId, content } = params;
-  const endpoint = endpoints.recruitComments.detail(recruitCommentId);
+  const { commentId, content } = params;
+  const endpoint = endpoints.recruitComments.detail(commentId);
 
   const body: UpdateRecruitCommentBody = {
     content,
@@ -88,8 +88,8 @@ export const updateRecruitComment = (params: UpdateRecruitCommentParams) => {
   return privateAxios.put(endpoint, body).then((res) => res.data);
 };
 
-export const removeRecruitComment = (recruitCommentId: number) => {
-  const endpoint = endpoints.recruitComments.detail(recruitCommentId);
+export const removeRecruitComment = (commentId: number) => {
+  const endpoint = endpoints.recruitComments.detail(commentId);
 
   return privateAxios.delete(endpoint).then((res) => res.data);
 };
