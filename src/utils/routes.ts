@@ -56,6 +56,14 @@ export const routes = {
 
   //
   unauthorized: () => '/unauthorized',
+
+  //
+  recruit: {
+    self: () => '/recruit',
+    detail: (recruitId: number) => `${routes.recruit.self()}/${recruitId}`,
+    apply: (recruitId: number) => `${routes.recruit.self()}/apply/${recruitId}`,
+    applyRedirect: () => `${routes.recruit.self()}/apply/redirect`,
+  },
 };
 
 export enum EditableMyInfoFields {

@@ -38,7 +38,12 @@ export enum SkillName {
 }
 export const SkillNameSet = new Set<string>(Object.values(SkillName));
 
-export type RecruitType = '프론트엔드' | '백엔드' | '기획/디자인';
+export type RecruitType =
+  | '프론트엔드'
+  | '백엔드'
+  | '기획/디자인'
+  | '앱'
+  | '스터디';
 
 export interface LimitType {
   recruitType: RecruitType;

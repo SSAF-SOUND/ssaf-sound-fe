@@ -11,6 +11,7 @@ export const queryKeys = {
   meta: {
     self: () => ['meta'],
     campuses: () => [...queryKeys.meta.self(), 'campuses'],
+    recruitTypes: () => [...queryKeys.meta.self(), 'recruitTypes'],
   },
   articles: {
     categories: () => ['articles', 'categories'],
@@ -33,6 +34,7 @@ export const queryKeys = {
     detail: (recruitId: number) => ['recruits', recruitId],
     members: (recruitId: number) => ['recruits', 'members', recruitId],
     scrap: (recruitId: number) => ['recruits', 'scrap', recruitId],
+    apply: (recruitId: number) => ['recruits', 'apply', recruitId],
   },
   lunch: {
     menus: ({ campus, date }: any) => ['lunch', 'menus', campus, date],
@@ -119,7 +121,8 @@ export const endpoints = {
     detail: (commentId: number) => `/comments/${commentId}`,
     list: (articleId: number) => `/comments?postId=${articleId}`,
     create: (articleId: number) => `/comments?postId=${articleId}`,
-    like: (commentId: number) => `${endpoints.articleComments.detail(commentId)}/like`,
+    like: (commentId: number) =>
+      `${endpoints.articleComments.detail(commentId)}/like`,
     report: (commentId: number) =>
       `${endpoints.articleComments.detail(commentId)}/report`,
     reply: (params: { articleId: number; commentId: number }) => {
@@ -153,10 +156,12 @@ export const endpoints = {
     members: (recruitId: number) => `/recruits/${recruitId}/members` as const,
     detail: (recruitId: number) => `/recruits/${recruitId}/detail` as const,
     scrap: (recruitId: number) => `/recruits/${recruitId}/scrap` as const,
+    apply: (recruitId: number) => `/recruits/${recruitId}/application` as const,
   },
   meta: {
     campuses: () => '/meta/campuses' as const,
     skills: () => '/meta/skills' as const,
+    recruitTypes: () => '/meta/recruit-types' as const,
   },
   lunch: {
     menus: ({ campus, date }: any) => {

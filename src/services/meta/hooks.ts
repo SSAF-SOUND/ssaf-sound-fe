@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import { SsafyTrack } from '~/services/member';
-import { getCampuses } from '~/services/meta/apis';
+import { getCampuses, getRecruitTypes } from '~/services/meta/apis';
 
 export const initialCampuses = [
   { id: 1, name: '서울' },
@@ -38,4 +38,40 @@ export const useYears = () => {
       .fill(undefined)
       .map((_, i) => i + 1),
   };
+};
+
+export const initialRecruitType = {
+  recruitTypes: [
+    {
+      id: 4,
+      name: '앱',
+    },
+    {
+      id: 2,
+      name: '프론트엔드',
+    },
+    {
+      id: 3,
+      name: '백엔드',
+    },
+    {
+      id: 1,
+      name: '기획/디자인',
+    },
+    {
+      id: 0,
+      name: '스터디',
+    },
+  ],
+};
+
+export const useRecruitTypes = () => {
+  return useQuery({
+    queryKey: queryKeys.meta.recruitTypes(),
+    queryFn: getRecruitTypes,
+    initialData: initialRecruitType,
+    select: (data: any) => {
+      return data.recruitTypes.map(({ name }) => name);
+    },
+  });
 };
