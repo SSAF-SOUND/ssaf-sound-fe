@@ -1,5 +1,6 @@
 export { default as AlertText } from './AlertText';
 export { default as Avatar } from './Avatar';
+export * from './Accordion';
 export { default as Bar } from './Bar';
 export { default as Button } from './Button';
 export { default as Checkbox } from './Checkbox';
