@@ -10,7 +10,7 @@ type SelectBoxSize = 'sm' | 'md' | 'lg';
 type SelectBoxVariant = 'normal' | 'outlined';
 type SelectBoxTheme = 'primary' | 'secondary';
 
-interface SelectBoxProps<D = string> {
+export interface SelectBoxProps<D = string> {
   items: D[];
   /**
    * - item을 유저에게 보여줄 text로 변환하는 함수
@@ -45,6 +45,8 @@ interface SelectBoxProps<D = string> {
   value?: string;
   defaultValue?: string;
   disabled?: boolean;
+  //
+  withIcon?: boolean;
 }
 
 // eslint-disable-next-line
@@ -73,6 +75,8 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     value,
     defaultValue,
     disabled,
+    //
+    withIcon = true,
   } = props;
 
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -107,9 +111,16 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
         <div css={valueCss}>
           <Select.Value placeholder={placeholder} />
         </div>
-        <Select.Icon
-          css={[baseTriggerIconCss, triggerIconCss[variant], iconSizeCss[size]]}
-        />
+
+        {withIcon && (
+          <Select.Icon
+            css={[
+              baseTriggerIconCss,
+              triggerIconCss[variant],
+              iconSizeCss[size],
+            ]}
+          />
+        )}
       </Select.Trigger>
       <Select.Content
         css={contentCss}
