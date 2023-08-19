@@ -1,7 +1,7 @@
 import type {
   CommentDetail,
   CommentDetailWithoutReplies,
-} from '~/services/comment';
+} from '~/services/articleComment';
 
 import { faker } from '@faker-js/faker';
 

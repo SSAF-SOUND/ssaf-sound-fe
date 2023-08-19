@@ -1,7 +1,7 @@
 import type {
   CommentDetail,
   CommentDetailWithoutReplies,
-} from '~/services/comment';
+} from '~/services/articleComment';
 
 import { css } from '@emotion/react';
 import { memo } from 'react';

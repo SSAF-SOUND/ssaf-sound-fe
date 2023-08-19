@@ -24,7 +24,7 @@ export const queryKeys = {
     detail: (articleId: number) => ['articles', articleId],
     mine: () => [...queryKeys.auth(), 'articles'],
   },
-  comments: {
+  articleComments: {
     list: (articleId: number) => ['comments', articleId],
   },
 };
@@ -99,13 +99,13 @@ export const endpoints = {
     scrap: (articleId: number) =>
       `${endpoints.articles.detail(articleId)}/scrap`,
   },
-  comments: {
+  articleComments: {
     detail: (commentId: number) => `/comments/${commentId}`,
     list: (articleId: number) => `/comments?postId=${articleId}`,
     create: (articleId: number) => `/comments?postId=${articleId}`,
-    like: (commentId: number) => `${endpoints.comments.detail(commentId)}/like`,
+    like: (commentId: number) => `${endpoints.articleComments.detail(commentId)}/like`,
     report: (commentId: number) =>
-      `${endpoints.comments.detail(commentId)}/report`,
+      `${endpoints.articleComments.detail(commentId)}/report`,
     reply: (params: { articleId: number; commentId: number }) => {
       const { commentId, articleId } = params;
       const queryString = new URLSearchParams({
