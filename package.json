@@ -29,6 +29,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toggle": "^1.0.3",
+    "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-use-controllable-state": "^1.0.1",
     "@sentry/nextjs": "latest",
     "@tanstack/react-query": "^4.29.5",
