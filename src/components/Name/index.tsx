@@ -8,15 +8,17 @@ import { CertificationState } from '~/services/member/utils';
 import { fontCss, inlineFlex } from '~/styles/utils';
 
 export type NameProps = {
-  userInfo: UserInfo;
+  userInfo: NameUserInfo;
   withAvatar?: boolean;
   size?: NameSize;
+  anonymous?: boolean;
 };
 
+type NameUserInfo = Omit<UserInfo, 'memberId' | 'memberRole'>;
 type NameSize = 'sm' | 'md' | 'lg';
 
 const Name = (props: NameProps) => {
-  const { size = 'sm', withAvatar = true, userInfo } = props;
+  const { size = 'sm', withAvatar = true, userInfo, anonymous = false } = props;
   const {
     // basic info
     nickname,
@@ -32,7 +34,9 @@ const Name = (props: NameProps) => {
 
   return (
     <span css={selfCss}>
-      {withAvatar && <Avatar size={size} userInfo={userInfo} />}
+      {withAvatar && (
+        <Avatar size={size} userInfo={userInfo} anonymous={anonymous} />
+      )}
       <span css={[textBaseCss, textCss[size], fontCss.family.auto]}>
         {nickname}
       </span>

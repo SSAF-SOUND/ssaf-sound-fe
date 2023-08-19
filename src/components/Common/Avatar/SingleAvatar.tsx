@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import type { ComponentPropsWithoutRef } from 'react';
-import type { UserBasicInfo, UserInfo } from '~/services/member';
+import type { UserBasicInfo } from '~/services/member';
 
 import { css } from '@emotion/react';
 import React from 'react';
@@ -10,13 +10,14 @@ import { flex, fontCss, palettes } from '~/styles/utils';
 export interface SingleAvatarProps extends ComponentPropsWithoutRef<'div'> {
   size?: AvatarSize;
   userInfo?: AvatarUserInfo;
+  anonymous?: boolean;
 }
 
 type AvatarUserInfo = Omit<UserBasicInfo, 'memberId' | 'memberRole'>;
 type AvatarSize = 'sm' | 'md' | 'lg';
 
 const SingleAvatar = (props: SingleAvatarProps) => {
-  const { size = 'sm', userInfo, ...restProps } = props;
+  const { size = 'sm', userInfo, anonymous = false, ...restProps } = props;
 
   return (
     <div
@@ -24,6 +25,7 @@ const SingleAvatar = (props: SingleAvatarProps) => {
         selfCss,
         sizeCss[size],
         userInfo?.isMajor && majorCss,
+        anonymous && anonymousCss,
         !userInfo && emptyCss,
       ]}
       {...restProps}
@@ -70,6 +72,10 @@ const textCapitalizeCss = css({
 
 const majorCss = css({
   backgroundColor: palettes.major,
+});
+
+const anonymousCss = css({
+  backgroundColor: palettes.recruit.default,
 });
 
 const emptyCss = css({

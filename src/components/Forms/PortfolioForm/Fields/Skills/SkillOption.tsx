@@ -15,28 +15,31 @@ interface SkillSelectButtonProps {
   selectedOrderRef: MutableRefObject<number>;
 }
 
-const SkillSelectButton = (props: SkillSelectButtonProps) => {
+const SkillOption = (props: SkillSelectButtonProps) => {
   const { skillName, selectedOrderRef } = props;
+  const optionFieldName = `${fieldName}.${skillName}` as const;
   const { setCenter } = useTransformContext();
   const { setValue } = usePortfolioFormContext();
   const selectedOrder = useWatch<PortfolioFormValues>({
-    name: `${fieldName}.${skillName}`,
-    defaultValue: undefined,
+    name: optionFieldName,
   }) as number | undefined;
+  const getNextOrder = () => {
+    return selectedOrderRef.current++;
+  };
+  const handlePressedChange = (pressed: boolean) => {
+    setValue(optionFieldName, pressed ? getNextOrder() : undefined, {
+      shouldDirty: true,
+    });
+    setTimeout(() => setCenter());
+  };
 
   return (
     <SkillBadge
       defaultPressed={!!selectedOrder}
       name={skillName}
-      onPressedChange={(selectedOrder) => {
-        setValue(
-          `${fieldName}.${skillName}`,
-          selectedOrder ? selectedOrderRef.current++ : undefined
-        );
-        setTimeout(() => setCenter());
-      }}
+      onPressedChange={handlePressedChange}
     />
   );
 };
 
-export default SkillSelectButton;
+export default SkillOption;

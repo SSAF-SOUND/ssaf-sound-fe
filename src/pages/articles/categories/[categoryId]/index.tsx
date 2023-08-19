@@ -10,7 +10,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import ArticleCardList from '~/components/ArticleCardList';
-import { CircleButton } from '~/components/Common';
+import { CircleButton, PageHead, PageHeadingText } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
@@ -35,6 +35,9 @@ import {
 } from '~/styles/utils';
 import { customToast, routes } from '~/utils';
 
+const createMetaDescription = (categoryName = '게시판') =>
+  `SSAF SOUND의 ${categoryName}에 속하는 게시글들을 모아볼 수 있는 페이지입니다.`;
+
 const minKeywordLength = 3;
 const validateKeyword = (keyword?: string) =>
   keyword && keyword.trim().length >= minKeywordLength;
@@ -55,30 +58,46 @@ const ArticleCategoryPage = (
     router.push(routes.articles.create(categoryId));
   };
 
+  const metaDescription = createMetaDescription(categoryName);
+
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        css={fontCss.style.B16}
+    <>
+      <PageHead
         title={categoryName}
-        onClickBackward={routes.articles.categories()}
-        withoutClose
+        description={metaDescription}
+        openGraph={{
+          title: categoryName,
+          description: metaDescription,
+          url: routes.articles.category(categoryId),
+        }}
       />
 
-      <SearchBar categoryId={categoryId} />
+      <PageHeadingText text={categoryName ?? '게시판'} />
 
-      <div css={articleContainerCss}>
-        <ArticleLayer categoryId={categoryId} keyword={keyword} />
-      </div>
-
-      <div css={fabContainerCss}>
-        <CircleButton
-          css={fabCss}
-          name="pencil.plus"
-          label="게시글 작성 버튼"
-          onClick={navigateToCreateArticlePage}
+      <div css={selfCss}>
+        <TitleBar.Default
+          css={fontCss.style.B16}
+          title={categoryName}
+          onClickBackward={routes.articles.categories()}
+          withoutClose
         />
+
+        <SearchBar categoryId={categoryId} />
+
+        <div css={articleContainerCss}>
+          <ArticleLayer categoryId={categoryId} keyword={keyword} />
+        </div>
+
+        <div css={fabContainerCss}>
+          <CircleButton
+            css={fabCss}
+            name="pencil.plus"
+            label="게시글 작성 버튼"
+            onClick={navigateToCreateArticlePage}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

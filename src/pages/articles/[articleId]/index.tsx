@@ -13,9 +13,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { stripHtml } from 'string-strip-html';
 
 import { Article } from '~/components/Article';
-import { Button } from '~/components/Common';
+import { Button, PageHead, PageHeadingText } from '~/components/Common';
 import CommentForm from '~/components/Forms/CommentForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
@@ -35,6 +36,7 @@ import {
   titleBarHeight,
 } from '~/styles/utils';
 import { routes } from '~/utils';
+import { replaceMultipleSpacesWithSingle } from '~/utils/replaceMultipleSpacesWithSingle';
 
 /* temp */
 const CommentsLayer = (props: { articleId: number }) => {
@@ -106,24 +108,44 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
   const { title: categoryTitle, boardId: articleCategoryId } =
     articleDetail.category;
 
+  const metaTitle = articleDetail.title;
+  const metaDescription = replaceMultipleSpacesWithSingle(
+    stripHtml(articleDetail.content).result
+  );
+  const pageUrl = routes.articles.detail(articleDetail.postId);
+
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        css={titleBarCss}
-        title={categoryTitle}
-        withoutClose
-        onClickBackward={routes.articles.category(articleCategoryId)}
+    <>
+      <PageHead
+        title={metaTitle}
+        description={metaDescription}
+        openGraph={{
+          title: metaTitle,
+          description: metaDescription,
+          url: pageUrl,
+        }}
       />
 
-      <Article
-        css={[articleCss, expandCss, { marginBottom: 40 }]}
-        articleDetail={articleDetail}
-      />
+      <PageHeadingText text={metaTitle} />
 
-      <CommentsLayer articleId={articleId} />
+      <div css={selfCss}>
+        <TitleBar.Default
+          css={titleBarCss}
+          title={categoryTitle}
+          withoutClose
+          onClickBackward={routes.articles.category(articleCategoryId)}
+        />
 
-      <CommentFormLayer articleId={articleId} />
-    </div>
+        <Article
+          css={[articleCss, expandCss, { marginBottom: 40 }]}
+          articleDetail={articleDetail}
+        />
+
+        <CommentsLayer articleId={articleId} />
+
+        <CommentFormLayer articleId={articleId} />
+      </div>
+    </>
   );
 };
 

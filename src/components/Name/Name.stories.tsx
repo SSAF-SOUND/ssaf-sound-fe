@@ -92,3 +92,15 @@ export const LongName = () => {
   };
   return <Name userInfo={user} size="lg" />;
 };
+
+export const AnonymousName: NameStory = {
+  args: {
+    size: 'lg',
+  },
+  render: ({ size }) => {
+    const user = userInfo.uncertifiedSsafyUserInfo;
+    user.nickname = '익명119';
+
+    return <Name userInfo={user} size={size} anonymous />;
+  },
+};

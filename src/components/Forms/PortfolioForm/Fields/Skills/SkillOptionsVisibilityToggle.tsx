@@ -11,7 +11,7 @@ interface CheckboxProps {
   onCheckedChange: (value: boolean) => void;
 }
 
-const Checkbox = (props: CheckboxProps) => {
+const SkillOptionsVisibilityToggle = (props: CheckboxProps) => {
   const { className, checked, id, onCheckedChange } = props;
   return (
     <RadixCheckbox.Root
@@ -32,7 +32,7 @@ const Checkbox = (props: CheckboxProps) => {
   );
 };
 
-export default Checkbox;
+export default SkillOptionsVisibilityToggle;
 
 const indicatorSize = 60;
 
