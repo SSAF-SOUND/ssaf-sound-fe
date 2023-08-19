@@ -4,7 +4,7 @@ import type {
 } from '~/services/comment';
 
 import { css } from '@emotion/react';
-import { Fragment } from 'react';
+import { memo } from 'react';
 
 import CommentContent from '~/components/ArticleComment/CommentContent';
 import LikeLayer from '~/components/ArticleComment/LikeLayer';
@@ -18,15 +18,18 @@ import { flex, fontCss, palettes } from '~/styles/utils';
 import { formatDateTime } from '~/utils';
 
 interface ArticleCommentProps {
+  articleId: number;
   comment: CommentDetail | CommentDetailWithoutReplies;
   leaf?: boolean;
 }
 
-const ArticleComment = (props: ArticleCommentProps) => {
-  const { comment, leaf = false } = props;
+const ArticleComment = memo((props: ArticleCommentProps) => {
+  const { articleId, comment, leaf = false } = props;
   const { data: myInfo } = useMyInfo();
+
   const {
     author,
+    commentId,
     anonymity,
     mine,
     liked,
@@ -48,37 +51,41 @@ const ArticleComment = (props: ArticleCommentProps) => {
   const showReplyButton = isSignedIn && !leaf;
 
   return (
-    <div css={[selfCss, leaf && leafCss]}>
-      <header css={headerCss}>
-        {/* eslint-disable-next-line */}
-        {/* @ts-ignore */}
-        <Name userInfo={userInfo} size="sm" />
+    <div css={selfCss}>
+      <div css={[commentLayerCss, leaf && leafCss]}>
+        <header css={headerCss}>
+          {/* eslint-disable-next-line */}
+          {/* @ts-ignore */}
+          <Name userInfo={userInfo} size="sm" />
 
-        <div css={buttonLayerCss}>
-          {showReplyButton && <ReplyButton />}
-          <LikeLayer
-            liked={liked}
-            likeCount={likeCount}
-            onClickLikeButton={() => {}}
-          />
-          {isSignedIn && <MoreButton />}
+          <div css={buttonLayerCss}>
+            {showReplyButton && <ReplyButton />}
+            <LikeLayer
+              liked={liked}
+              likeCount={likeCount}
+              articleId={articleId}
+              commentId={commentId}
+              isSignedIn={isSignedIn}
+            />
+            {isSignedIn && <MoreButton />}
+          </div>
+        </header>
+
+        <div css={{ marginBottom: 4 }}>
+          <CommentContent content={content} />
+          {modified && <span css={modifiedCss}>(수정됨)</span>}
         </div>
-      </header>
 
-      <div css={{ marginBottom: 4 }}>
-        <CommentContent content={content} />
-        {modified && <span css={modifiedCss}>(수정됨)</span>}
-      </div>
-
-      <div css={dateTimeCss}>
-        <span>{date}</span>
-        <Separator
-          orientation="vertical"
-          backgroundColor={palettes.font.blueGrey}
-          css={{ margin: '0 8px' }}
-          height={12}
-        />
-        <span>{time}</span>
+        <div css={dateTimeCss}>
+          <span>{date}</span>
+          <Separator
+            orientation="vertical"
+            backgroundColor={palettes.font.blueGrey}
+            css={{ margin: '0 8px' }}
+            height={12}
+          />
+          <span>{time}</span>
+        </div>
       </div>
 
       {hasReplies && (
@@ -86,22 +93,26 @@ const ArticleComment = (props: ArticleCommentProps) => {
           {replies.map((reply) => (
             <div key={reply.commentId} css={replyCss}>
               <Icon name="reply" size={24} />
-              <ArticleComment leaf comment={reply} />
+              <ArticleComment articleId={articleId} leaf comment={reply} />
             </div>
           ))}
         </div>
       )}
     </div>
   );
-};
+});
+
+ArticleComment.displayName = 'ArticleComment';
 
 export default ArticleComment;
 
-const selfPaddingX = 20;
+const commentLayerPaddingX = 10;
 
-const selfCss = css({
+const selfCss = css({ width: '100%' });
+
+const commentLayerCss = css({
   width: '100%',
-  padding: `6px ${selfPaddingX}px`,
+  padding: `8px ${commentLayerPaddingX}px`,
   borderRadius: 12,
 });
 
@@ -124,14 +135,9 @@ const replyLayerCss = css({ marginTop: 6 }, flex('', '', 'column', 6));
 const replyCss = css(
   {
     width: '100%',
-    paddingLeft: selfPaddingX,
+    paddingLeft: commentLayerPaddingX,
   },
   flex('flex-start', '', 'row', 6)
 );
 
-const modifiedCss = css(
-  {
-    color: palettes.primary.default,
-  },
-  fontCss.style.R14
-);
+const modifiedCss = css({ color: palettes.primary.default }, fontCss.style.R14);

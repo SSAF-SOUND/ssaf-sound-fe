@@ -1,4 +1,9 @@
-import type { CreateCommentBody, GetCommentsApiData } from '~/services/comment';
+/* eslint-disable @typescript-eslint/ban-ts-comment*/
+import type {
+  CreateCommentBody,
+  GetCommentsApiData,
+  LikeCommentApiData,
+} from '~/services/comment';
 
 import { rest } from 'msw';
 
@@ -6,8 +11,9 @@ import {
   commentDetails,
   createMockCommentDetail,
 } from '~/mocks/handlers/comment/data';
-import { mockSuccess, restSuccess } from '~/mocks/utils';
+import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
+import { findCommentById } from '~/services/comment';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 export const getComments = restSuccess<GetCommentsApiData['data']>(
@@ -36,4 +42,41 @@ export const creatComment = rest.post(
   }
 );
 
-export const commentHandlers = [getComments, creatComment];
+export const likeComment = rest.post(
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.comments.like(':commentId')),
+  (req, res, ctx) => {
+    const params = req.params as { commentId: string };
+
+    const commentId = Number(params.commentId);
+    const target = findCommentById(commentDetails, commentId);
+    console.log(target);
+    console.log(commentDetails);
+    if (!target) return res(...mockError(ctx, '400', '존재하지 않는 댓글'));
+
+    target.liked = !target.liked;
+    const delta = target.liked ? 1 : -1;
+    target.likeCount += delta;
+    const latestLiked = target.liked;
+    const latestLikeCount = target.likeCount;
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<LikeCommentApiData['data']>(ctx, {
+        liked: latestLiked,
+        likeCount: latestLikeCount,
+      })
+    );
+  }
+);
+
+export const likeCommentError = restError(
+  'post',
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.comments.like(':commentId')),
+  {
+    message: '댓글 좋아요 실패',
+  }
+);
+
+export const commentHandlers = [getComments, creatComment, likeComment];

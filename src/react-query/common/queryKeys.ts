@@ -100,8 +100,20 @@ export const endpoints = {
       `${endpoints.articles.detail(articleId)}/scrap`,
   },
   comments: {
+    detail: (commentId: number) => `/comments/${commentId}`,
     list: (articleId: number) => `/comments?postId=${articleId}`,
     create: (articleId: number) => `/comments?postId=${articleId}`,
+    like: (commentId: number) => `${endpoints.comments.detail(commentId)}/like`,
+    report: (commentId: number) =>
+      `${endpoints.comments.detail(commentId)}/report`,
+    reply: (params: { articleId: number; commentId: number }) => {
+      const { commentId, articleId } = params;
+      const queryString = new URLSearchParams({
+        commentId,
+        postId: articleId,
+      } as never).toString();
+      return `/comments/reply?${queryString}`;
+    },
   },
   user: {
     myInfo: () => '/members' as const,
