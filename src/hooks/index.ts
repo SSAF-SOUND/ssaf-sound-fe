@@ -10,3 +10,4 @@ export * from './useStripHtml';
 // export * from './useComposedRefs';
 
 export * from './useAutoFocus';
+export * from './useQueryString';
