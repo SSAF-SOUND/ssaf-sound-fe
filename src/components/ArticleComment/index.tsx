@@ -16,11 +16,11 @@ import ReplyButton from '~/components/ArticleComment/ReplyButton';
 import { Icon } from '~/components/Common';
 import Name from '~/components/Name';
 import {
-  useInvalidateArticleComments,
-  useRemoveArticleComment,
-  useReplyArticleComment,
-  useUpdateArticleComment,
-} from '~/services/articleComment';
+  useInvalidateComments,
+  useRemoveComment,
+  useReplyComment,
+  useUpdateComment,
+} from '~/services/comment';
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
@@ -32,10 +32,12 @@ interface ArticleCommentProps {
   articleId: number;
   comment: CommentDetail | CommentDetailWithoutReplies;
   leaf?: boolean;
+
+  isRecruitComment?: boolean;
 }
 
 const ArticleComment = memo((props: ArticleCommentProps) => {
-  const { articleId, comment, leaf = false } = props;
+  const { articleId, comment, leaf = false, isRecruitComment = false } = props;
   const { data: myInfo } = useMyInfo();
   const {
     isOpen: isArticleCommentModalFormOpen,
@@ -59,25 +61,22 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
     deletedComment,
   } = comment;
 
-  const invalidateArticleComments = useInvalidateArticleComments(articleId);
-
-  const { mutateAsync: replyArticleComment } = useReplyArticleComment({
-    commentId,
-    articleId,
+  const invalidateComments = useInvalidateComments(articleId, {
+    recruit: isRecruitComment,
   });
 
-  const {
-    mutateAsync: updateArticleComment,
-    isLoading: isUpdatingArticleComment,
-  } = useUpdateArticleComment(commentId);
+  const { mutateAsync: replyComment } = useReplyComment(
+    { commentId, articleId },
+    { recruit: isRecruitComment }
+  );
 
-  const {
-    mutateAsync: removeArticleComment,
-    isLoading: isRemovingArticleComment,
-  } = useRemoveArticleComment(commentId);
+  const { mutateAsync: updateComment, isLoading: isUpdatingComment } =
+    useUpdateComment(commentId, { recruit: isRecruitComment });
 
-  const isLoadingMoreButton =
-    isUpdatingArticleComment || isRemovingArticleComment;
+  const { mutateAsync: removeComment, isLoading: isRemovingComment } =
+    useRemoveComment(commentId, { recruit: isRecruitComment });
+
+  const isLoadingMoreButton = isUpdatingComment || isRemovingComment;
   const isSignedIn = !!myInfo;
   const userInfo = populateDefaultUserInfo(author);
   const hasReplies = replies && replies.length > 0;
@@ -95,7 +94,7 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
         await callback();
         closeArticleCommentModalForm();
       }
-      invalidateArticleComments();
+      invalidateComments();
     } catch (err) {
       handleAxiosError(err);
     }
@@ -103,18 +102,18 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
 
   const handleCreateCommentReply: ArticleCommentFormProps['onValidSubmit'] =
     async (_, formValues) => {
-      await handleCommentRequest(() => replyArticleComment(formValues));
+      await handleCommentRequest(() => replyComment(formValues));
     };
 
   const handleEditComment: ArticleCommentFormProps['onValidSubmit'] = async (
     _,
     formValues
   ) => {
-    await handleCommentRequest(() => updateArticleComment(formValues));
+    await handleCommentRequest(() => updateComment(formValues));
   };
 
   const handleRemoveComment = () => {
-    handleCommentRequest(removeArticleComment, true);
+    handleCommentRequest(removeComment, true);
   };
 
   const onClickReplyButton = () => {
@@ -192,7 +191,12 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
           {replies.map((reply) => (
             <div key={reply.commentId} css={replyCss}>
               <Icon name="reply" size={24} />
-              <ArticleComment articleId={articleId} leaf comment={reply} />
+              <ArticleComment
+                articleId={articleId}
+                leaf
+                comment={reply}
+                isRecruitComment={isRecruitComment}
+              />
             </div>
           ))}
         </div>
