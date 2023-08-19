@@ -25,6 +25,7 @@ const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
     view: 100,
     skills: [],
     limits: [],
+    scrapCount: 2,
   },
   project: {
     userInfo: { ...userInfo.certifiedSsafyUserInfo },
@@ -60,6 +61,7 @@ const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
         currentNumber: 0,
       },
     ],
+    scrapCount: 100,
   },
 };
 
@@ -122,9 +124,14 @@ const recruitMembers: recruitMembersType = {
   },
 };
 
+const RecruitScrap = {
+  scrapCount: 87,
+};
+
 export const RecruitData = {
   recruitDetail,
   recruits,
   recruitSummary,
   recruitMembers,
+  RecruitScrap,
 };
