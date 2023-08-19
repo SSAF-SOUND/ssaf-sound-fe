@@ -7,11 +7,12 @@ import { flex, fontCss } from '~/styles/utils';
 
 interface RecruitParticipants {
   participants: RecruitParticipant[];
-  withLabel?: boolean;
 }
 
 const RecruitParticipants = (props: RecruitParticipants) => {
-  const { participants, withLabel = false } = props;
+  const { participants } = props;
+
+  const isSingleParticipants = participants.length === 1;
 
   return (
     <div css={[flex('', '', 'row', 6)]}>
@@ -19,7 +20,7 @@ const RecruitParticipants = (props: RecruitParticipants) => {
         <RecruitAvatars
           {...participant}
           key={participant.recruitType}
-          withLabel={withLabel}
+          withLabel={!isSingleParticipants}
         />
       ))}
     </div>
@@ -38,29 +39,29 @@ const RECRUIT_TYPE_TEXT = {
 
 const RecruitAvatars = (props: RecruitAvatarsProps) => {
   const { withLabel = false, recruitType, limit, members } = props;
+
   return (
     <div css={selfCss}>
       {withLabel && (
         <label css={textCss}>{RECRUIT_TYPE_TEXT[recruitType]}</label>
       )}
       <Avatar.Group maxCount={limit} visibleCount={limit >= 4 ? 4 : limit}>
-        {members.length &&
-          members.map((member) => (
-            <Avatar
-              size="md"
-              key={member.nickName}
-              userInfo={{
-                nickname: member.nickName,
-                isMajor: member.major,
-              }}
-            />
-          ))}
+        {members.map((member) => (
+          <Avatar
+            size="md2"
+            key={member.nickName}
+            userInfo={{
+              nickname: member.nickName,
+              isMajor: member.major,
+            }}
+          />
+        ))}
       </Avatar.Group>
     </div>
   );
 };
 
-const selfCss = css(flex('', '', 'row', 8));
+const selfCss = css(flex('center', '', 'row', 8));
 const textCss = css(fontCss.family.auto, fontCss.style.B14);
 
 export default RecruitParticipants;

@@ -14,7 +14,7 @@ export interface SingleAvatarProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 type AvatarUserInfo = Omit<UserBasicInfo, 'memberId' | 'memberRole'>;
-type AvatarSize = 'sm' | 'md' | 'lg';
+type AvatarSize = 'sm' | 'md' | 'md2' | 'lg';
 
 const SingleAvatar = (props: SingleAvatarProps) => {
   const { size = 'sm', userInfo, anonymous = false, ...restProps } = props;
@@ -55,6 +55,7 @@ const selfCss = css(
 const sizeCss: Record<AvatarSize, SerializedStyles> = {
   sm: css({ width: 16, height: 16 }),
   md: css({ width: 20, height: 20 }),
+  md2: css({ width: 30, height: 30 }),
   lg: css({ width: 40, height: 40 }),
 };
 
@@ -63,6 +64,7 @@ const lineHeightCss = css({ lineHeight: 1 });
 const textCss: Record<AvatarSize, SerializedStyles> = {
   sm: css(fontCss.style.B12),
   md: css(fontCss.style.B14),
+  md2: css(fontCss.style.B14),
   lg: css(fontCss.style.B28),
 };
 
