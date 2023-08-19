@@ -70,4 +70,5 @@ export const palettes = {
   grey4: '#EBEBEB',
   grey5: '#F8F7F7',
   white: '#FFFFFF',
+  white2: '#F5F5F5',
 } as const;
