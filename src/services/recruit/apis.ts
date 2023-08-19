@@ -156,13 +156,6 @@ export const postRecruitApply = ({
 
 // ---------------------------------------
 
-// export const reportArticle = (params: ReportArticleParams) => {
-//   const { articleId, content } = params;
-
-//   const endpoint = endpoints.articles.report(articleId);
-//   return privateAxios.post(endpoint, { content }).then((res) => res.data);
-// };
-
 export const recruitAPI = {
   getRecruits,
   getRecruitDetail,
