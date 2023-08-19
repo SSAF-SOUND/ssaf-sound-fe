@@ -48,7 +48,7 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
   const {
     author,
     commentId,
-    anonymity,
+    anonymity = false,
     mine,
     liked,
     likeCount,
