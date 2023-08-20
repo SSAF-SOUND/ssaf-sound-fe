@@ -1,30 +1,25 @@
-export const LunchData = {
-  menus: {
+import type { LunchMenuSummary } from '~/services/lunch';
+
+import { faker } from '@faker-js/faker';
+
+export const createMockLunchMenuSummary = (id: number): LunchMenuSummary => {
+  const mockImage =
+    'http://samsungwelstory.com/data/manager/recipe/E110/20230602/s20210325105806.png';
+  return {
+    lunchId: id,
+    imagePath: mockImage,
+    pollCount: faker.number.int({ min: 10, max: 100 }),
+    mainMenu: faker.company.name(),
+  };
+};
+
+export const lunchMock = {
+  menuSummaries: {
     totalPollCount: 2,
     polledAt: 1,
-    menus: [
-      {
-        mainMenu: '돼지갈비',
-        imagePath:
-          'https://images.unsplash.com/photo-1682685794304-99d3d07c57d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80',
-        pollCount: 124,
-        id: 2,
-      },
-      {
-        mainMenu: '치즈오븐 스파게티',
-        imagePath:
-          'https://images.unsplash.com/photo-1682685794304-99d3d07c57d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80',
-        pollCount: 40,
-        id: 3,
-      },
-      {
-        mainMenu: '냉모밀',
-        imagePath:
-          'https://images.unsplash.com/photo-1682685794304-99d3d07c57d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80',
-        pollCount: 66,
-        id: 4,
-      },
-    ],
+    menus: Array(3)
+      .fill(undefined)
+      .map((_, index) => createMockLunchMenuSummary(index + 1)),
   },
 
   detail: {

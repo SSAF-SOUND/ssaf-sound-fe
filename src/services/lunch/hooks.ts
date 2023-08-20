@@ -3,8 +3,7 @@ import type { LunchDateSpecifier } from '~/services/lunch/utils';
 import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { getLunchMenuSummaries } from '~/services/lunch/api';
-import { getDateFromLunchDateSpecifier } from '~/services/lunch/utils';
+import { getLunchMenuSummaries , getDateFromLunchDateSpecifier } from '~/services/lunch';
 
 export interface UseLunchMenuSummariesParams {
   campus: string;
