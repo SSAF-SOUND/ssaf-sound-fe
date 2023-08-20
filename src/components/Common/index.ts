@@ -16,6 +16,8 @@ export { default as Label } from './Label';
 export { default as Logo } from './Logo';
 export { default as Modal } from './Modal';
 export { default as NumberInput } from './NumberInput';
+export * from './PageHead';
+export * from './PageHeadingText';
 
 export { default as ProgressBar } from './ProgressBar';
 export { default as SelectBox } from './SelectBox';
