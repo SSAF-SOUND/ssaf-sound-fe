@@ -3,7 +3,7 @@ import { Toggle } from '@radix-ui/react-toggle';
 import React from 'react';
 
 import { Icon } from '~/components/Common';
-import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss, palettes } from '~/styles/utils';
 
 export interface LunchCardPollButtonProps {
   pollCount: number;
