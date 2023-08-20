@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { LunchMenuDetail } from '~/services/lunch';
 
 import { css } from '@emotion/react';
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 
 import lunchImageFallback from '~/assets/images/lunch-image-fallback.png';
 import { Button, Icon, NativeImageWithFallback } from '~/components/Common';
@@ -17,67 +17,69 @@ interface LunchCardMenuDescriptionProps {
   style?: CSSProperties;
 }
 
-export const LunchCardMenuDescription = (
-  props: LunchCardMenuDescriptionProps
-) => {
-  const { order, menu, ...restProps } = props;
-  const { imagePath, extraMenu, mainMenu, sumKcal } = menu;
+export const LunchCardMenuDescription = memo(
+  (props: LunchCardMenuDescriptionProps) => {
+    const { order, menu, ...restProps } = props;
+    const { imagePath, extraMenu, mainMenu, sumKcal } = menu;
 
-  const [showDetailDescription, setShowDetailDescription] = useState(false);
-  const onClickShowDetailToggleButton = () =>
-    setShowDetailDescription((p) => !p);
+    const [showDetailDescription, setShowDetailDescription] = useState(false);
+    const onClickShowDetailToggleButton = () =>
+      setShowDetailDescription((p) => !p);
 
-  return (
-    <div css={selfCss} {...restProps}>
-      <LunchCardOrder order={order} css={{ zIndex: zIndex.order }} />
+    return (
+      <div css={selfCss} {...restProps}>
+        <LunchCardOrder order={order} css={{ zIndex: zIndex.order }} />
 
-      <div css={imageLayerCss}>
-        <NativeImageWithFallback
-          css={imageCss}
-          src={imagePath}
-          alt={mainMenu}
-          fallbackSrc={lunchImageFallback.src}
-        />
+        <div css={imageLayerCss}>
+          <NativeImageWithFallback
+            css={imageCss}
+            src={imagePath}
+            alt={mainMenu}
+            fallbackSrc={lunchImageFallback.src}
+          />
+        </div>
+
+        <div
+          css={[
+            descriptionCss,
+            showDetailDescription && detailDescriptionContainerCss,
+          ]}
+        >
+          {showDetailDescription && (
+            <div css={detailDescriptionCss}>
+              <MainMenu css={fontCss.style.B16}>{mainMenu}</MainMenu>
+              <Button
+                variant="literal"
+                css={detailToggleButtonCss}
+                onClick={onClickShowDetailToggleButton}
+              >
+                <Icon name="arrow.down" size={iconSize} />
+                <span>간략히보기</span>
+              </Button>
+              <AdditionalInfo extraMenu={extraMenu} sumKcal={sumKcal} />
+            </div>
+          )}
+
+          {!showDetailDescription && (
+            <div>
+              <MainMenu>{mainMenu}</MainMenu>
+              <Button
+                variant="literal"
+                css={detailToggleButtonCss}
+                onClick={onClickShowDetailToggleButton}
+              >
+                <Icon name="arrow.right" size={iconSize} />
+                <span>자세히보기</span>
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
+    );
+  }
+);
 
-      <div
-        css={[
-          descriptionCss,
-          showDetailDescription && detailDescriptionContainerCss,
-        ]}
-      >
-        {showDetailDescription && (
-          <div css={detailDescriptionCss}>
-            <MainMenu css={fontCss.style.B16}>{mainMenu}</MainMenu>
-            <Button
-              variant="literal"
-              css={detailToggleButtonCss}
-              onClick={onClickShowDetailToggleButton}
-            >
-              <Icon name="arrow.down" size={iconSize} />
-              <span>간략히보기</span>
-            </Button>
-            <AdditionalInfo extraMenu={extraMenu} sumKcal={sumKcal} />
-          </div>
-        )}
-
-        {!showDetailDescription && (
-          <div>
-            <MainMenu>{mainMenu}</MainMenu>
-            <Button
-              variant="literal"
-              css={detailToggleButtonCss}
-              onClick={onClickShowDetailToggleButton}
-            >
-              <Icon name="arrow.right" size={iconSize} />
-              <span>자세히보기</span>
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+LunchCardMenuDescription.displayName = 'LunchCardMenuDescription';
 
 const zIndex = {
   image: 1,
