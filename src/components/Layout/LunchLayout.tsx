@@ -2,7 +2,12 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import { flex, pageMinWidth, topBarHeight } from '~/styles/utils';
+import {
+  flex,
+  pageMinHeight,
+  pageMinWidth,
+  topBarHeight,
+} from '~/styles/utils';
 
 interface LunchLayoutProps {
   children: ReactNode;
@@ -20,6 +25,7 @@ const selfCss = css(
   {
     padding: `${selfPaddingY}px ${selfPaddingX}px`,
     minWidth: pageMinWidth,
+    minHeight: `max(${pageMinHeight}px, 100vh)`,
   },
   flex('center', '', 'column', 40)
 );
