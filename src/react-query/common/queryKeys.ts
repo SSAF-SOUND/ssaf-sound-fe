@@ -37,7 +37,13 @@ export const queryKeys = {
     apply: (recruitId: number) => ['recruits', 'apply', recruitId],
   },
   lunch: {
-    menus: ({ campus, date }: any) => ['lunch', 'menus', campus, date],
+    summaries: ({ campus, date }: { campus: string; date: string }) => [
+      ...queryKeys.auth(),
+      'lunch',
+      'menus',
+      campus,
+      date,
+    ],
     detail: (lunchId: number) => ['lunch', lunchId],
   },
 };
@@ -164,7 +170,7 @@ export const endpoints = {
     recruitTypes: () => '/meta/recruit-types' as const,
   },
   lunch: {
-    menus: ({ campus, date }: any) => {
+    summaries: ({ campus, date }: { campus: string; date: string }) => {
       const queryString = new URLSearchParams({ campus, date }).toString();
       return `/lunch?${queryString}`;
     },
