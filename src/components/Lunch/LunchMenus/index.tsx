@@ -3,13 +3,14 @@ import type { LunchDateSpecifier } from '~/services/lunch';
 import { css } from '@emotion/react';
 
 import { LunchCard } from '~/components/Lunch/LunchCard';
+import { LunchErrorIndicator } from '~/components/Lunch/LunchErrorIndicator';
 import {
   useLunchMenusWithPollStatus,
   usePollLunchMenu,
   useRevertPolledLunchMenu,
 } from '~/services/lunch';
 import { flex } from '~/styles/utils';
-import { handleAxiosError } from '~/utils';
+import { getErrorResponse, handleAxiosError } from '~/utils';
 
 interface LunchMenusProps {
   className?: string;
@@ -24,6 +25,8 @@ const LunchMenus = (props: LunchMenusProps) => {
   const {
     data: lunchMenusWithPollStatus,
     isLoading: isLunchMenusWithPollStatusLoading,
+    isError: isLunchMenusWithPollStatusError,
+    error: lunchMenusWithPollStatusError,
     isFetching,
   } = useLunchMenusWithPollStatus({
     dateSpecifier,
@@ -49,6 +52,10 @@ const LunchMenus = (props: LunchMenusProps) => {
 
   return (
     <div css={selfCss} className={className}>
+      {isLunchMenusWithPollStatusError && (
+        <ErrorLayer error={lunchMenusWithPollStatusError} />
+      )}
+
       {isLunchMenusWithPollStatusLoading && (
         <LunchCard.Skeleton
           count={skeletonCount}
@@ -93,3 +100,12 @@ export default LunchMenus;
 const cardGap = 16;
 
 const selfCss = css({ width: '100%' }, flex('', '', 'column', cardGap));
+
+const ErrorLayer = (props: { error: unknown }) => {
+  const { error } = props;
+  const response = getErrorResponse(error);
+
+  return (
+    <LunchErrorIndicator css={{ marginTop: 48 }} message={response?.message} />
+  );
+};
