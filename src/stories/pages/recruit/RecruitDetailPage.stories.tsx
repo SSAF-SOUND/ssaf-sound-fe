@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import RecruitDetailPage from '~/pages/recruit/[id]';
 
+import RecruitDetailPage from '~/pages/recruit/[id]';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof RecruitDetailPage> = {
@@ -16,13 +16,10 @@ const meta: Meta<typeof RecruitDetailPage> = {
   parameters: {
     layout: 'fullscreen',
   },
-  argTypes: {},
 };
 
 export default meta;
 
 type RecruitApplyPageStory = StoryObj<typeof RecruitDetailPage>;
 
-export const Default: RecruitApplyPageStory = {
-  args: {},
-};
+export const Default: RecruitApplyPageStory = {};
