@@ -10,25 +10,33 @@ import { LunchCardMenuDescription } from './LunchCardMenuDescription';
 import { LunchCardPollButton } from './LunchCardPollButton';
 
 export interface LunchCardProps {
-  index: number;
   polled?: boolean;
-  summary: LunchMenuDetail;
+  menu: LunchMenuDetail;
   order: number;
+  onPolledChange: (polled: boolean) => void;
+  pollButtonDisabled?: boolean;
 }
 
 export const LunchCard = memo((props: LunchCardProps) => {
-  const { polled = false, summary, order } = props;
-  const { pollCount } = summary;
+  const {
+    polled = false,
+    menu,
+    order,
+    onPolledChange,
+    pollButtonDisabled,
+  } = props;
+  const { pollCount } = menu;
 
   return (
     <div css={selfCss}>
-      <LunchCardMenuDescription order={order} menu={summary} />
+      <LunchCardMenuDescription order={order} menu={menu} />
 
       <LunchCardPollButton
         css={{ width: likeButtonWidth }}
         pollCount={pollCount}
         polled={polled}
-        onPolledChange={() => {}}
+        onPolledChange={onPolledChange}
+        disabled={pollButtonDisabled}
       />
     </div>
   );
