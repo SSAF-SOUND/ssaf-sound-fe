@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 
 import { Button, Icon } from '~/components/Common';
 import { LunchCardOrder } from '~/components/Lunch/LunchCard/LunchCardOrder';
+import { lunchCardMinHeight } from '~/components/Lunch/LunchCard/utils';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 
 interface LunchCardMenuDescriptionProps {
@@ -81,13 +82,11 @@ const zIndex = {
 
 const iconSize = 20;
 
-const selfMinHeight = 182;
-
 const selfCss = css(
   {
     position: 'relative',
     width: '100%',
-    minHeight: selfMinHeight,
+    minHeight: lunchCardMinHeight,
     height: '100%',
     userSelect: 'none',
   },
