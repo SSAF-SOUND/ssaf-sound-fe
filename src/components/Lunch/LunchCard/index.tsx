@@ -1,55 +1,53 @@
+import type { LunchMenuSummary } from '~/services/lunch';
+
 import { css } from '@emotion/react';
 import React from 'react';
 
-import LikeProgress from './LikeProgress';
-import Menu from './Menu';
-import Order from './Order';
-import Place from './Place';
-import VoteButton from './VoteButton';
-import { palettes, position } from '~/styles/utils';
-import Image from 'next/image';
-import { Icon, ImageWithFallback } from '../../Common';
-import FallbackImage from '../../assets/images/싸피 로고 캐릭터@2x.png';
-import { Toggle } from '@radix-ui/react-toggle';
-export interface LunchCardProps extends Record<string, any> {}
+import { flex, palettes } from '~/styles/utils';
+
+import { LunchCardMenuDescription } from './LunchCardMenuDescription';
+import { LunchCardPollButton } from './LunchCardPollButton';
+
+export interface LunchCardProps {
+  polled?: boolean;
+  summary: LunchMenuSummary;
+  order: number;
+}
 
 const LunchCard = (props: LunchCardProps) => {
-  const { checked = false, mainMenu, extraMenu, order } = props;
+  const { polled = false, summary, order } = props;
+  const { pollCount } = summary;
+
   return (
     <div css={selfCss}>
-      <Order order={order} />
+      <LunchCardMenuDescription order={order} menu={summary} />
 
-      <LunchCardLikeButton />
+      <LunchCardPollButton
+        css={{ width: likeButtonWidth }}
+        pollCount={pollCount}
+        polled={polled}
+        onPolledChange={() => {}}
+      />
     </div>
   );
 };
-
-const LunchCardLikeButton = () => {
-  return (
-    <div
-      css={{
-        position: 'absolute',
-        right: 0,
-        width: 130,
-        height: '100%',
-        top: 0,
-        display: 'flex',
-      }}
-    >
-      <Toggle asChild>
-        <Icon name="like" size={36} />
-      </Toggle>
-      <span>134</span>
-    </div>
-  );
-};
-const selfCss = css({
-  position: 'relative',
-  maxWidth: 340,
-  height: 226,
-  backgroundColor: palettes.white,
-  borderRadius: 32,
-  overflow: 'hidden',
-});
-
 export default LunchCard;
+
+const selfHeight = 182;
+const descriptionMinWidth = 200;
+const likeButtonWidth = 100;
+
+const selfMinWidth = descriptionMinWidth + likeButtonWidth;
+
+const selfCss = css(
+  {
+    position: 'relative',
+    backgroundColor: palettes.white,
+    borderRadius: 20,
+    overflow: 'hidden',
+    color: palettes.black,
+    height: selfHeight,
+    minWidth: selfMinWidth,
+  },
+  flex('center', '', 'row')
+);
