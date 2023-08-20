@@ -4,7 +4,8 @@ import type { LunchMenuDetail } from '~/services/lunch';
 import { css } from '@emotion/react';
 import React, { useState } from 'react';
 
-import { Button, Icon } from '~/components/Common';
+import lunchImageFallback from '~/assets/images/lunch-image-fallback.png';
+import { Button, Icon, NativeImageWithFallback } from '~/components/Common';
 import { LunchCardOrder } from '~/components/Lunch/LunchCard/LunchCardOrder';
 import { lunchCardMinHeight } from '~/components/Lunch/LunchCard/utils';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
@@ -31,7 +32,12 @@ export const LunchCardMenuDescription = (
       <LunchCardOrder order={order} css={{ zIndex: zIndex.order }} />
 
       <div css={imageLayerCss}>
-        <img src={imagePath} alt={mainMenu} css={imageCss} />
+        <NativeImageWithFallback
+          css={imageCss}
+          src={imagePath}
+          alt={mainMenu}
+          fallbackSrc={lunchImageFallback.src}
+        />
       </div>
 
       <div
