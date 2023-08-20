@@ -1,30 +1,42 @@
 import type { ToggleGroupMultipleProps } from '@radix-ui/react-toggle-group';
-import type { SkillType } from '~/services/recruit';
+import type { Key } from 'react';
+import type { SkillName } from '~/services/recruit';
 
-import * as ToggleGroup from '@radix-ui/react-toggle-group';
+import * as RadixToggleGroup from '@radix-ui/react-toggle-group';
 
 import SkillBadge from './index';
+import { Badge } from '../Common';
 
-export interface SkillBadgeGroupProps
+export interface ToggleGroupProps
   extends Omit<ToggleGroupMultipleProps, 'type'> {
-  items: SkillType[];
+  items: string[];
+  asSkillBadge?: boolean;
 }
 
-export const SkillBadgeGroup = (props: SkillBadgeGroupProps) => {
-  const { items = ['React', 'NextJs'], ...restProps } = props;
+export const ToggleGroup = (props: ToggleGroupProps) => {
+  const { items, asSkillBadge = false, ...restProps } = props;
   return (
-    <ToggleGroup.Root type="multiple" {...restProps}>
+    <RadixToggleGroup.Root type="multiple" {...restProps}>
       {items.map((item) => (
-        <SkillBadgeGroupItem name={item} key={item} />
+        <ToggleGroupItem
+          item={item}
+          key={item as Key}
+          asSkillBadge={asSkillBadge}
+        />
       ))}
-    </ToggleGroup.Root>
+    </RadixToggleGroup.Root>
   );
 };
 
-const SkillBadgeGroupItem = (props: { name: SkillType }) => {
+const ToggleGroupItem = (props: { asSkillBadge: boolean; item: string }) => {
+  const { asSkillBadge, item } = props;
   return (
-    <ToggleGroup.Item asChild value={props.name}>
-      <SkillBadge name={props.name} />
-    </ToggleGroup.Item>
+    <RadixToggleGroup.Item asChild value={item}>
+      {asSkillBadge ? (
+        <SkillBadge name={item as SkillName} />
+      ) : (
+        <Badge>{item}</Badge>
+      )}
+    </RadixToggleGroup.Item>
   );
 };

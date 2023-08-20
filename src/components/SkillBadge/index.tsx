@@ -9,14 +9,15 @@ import { SkillIcon, Badge } from '../Common';
 
 interface SkillBadgeProps extends Omit<BadgeProps, 'asChild'> {
   name?: SkillType;
+  theme?: 'primary' | 'secondary';
 }
 
 const SkillBadge = (props: Omit<SkillBadgeProps, 'asChild'>) => {
-  const { name = 'React', ...restProps } = props;
+  const { name = 'React', theme = 'primary', ...restProps } = props;
   const displayName = nameMapper[name] ?? name;
 
   return (
-    <Badge {...restProps}>
+    <Badge theme={theme} {...restProps}>
       <SkillIcon name={name} size={SKILL_BADGE_ICON_SIZE} />
       <span css={textCss}>{displayName}</span>
     </Badge>
