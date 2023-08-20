@@ -20,7 +20,7 @@ export const LunchTabTriggerWithLink = (props: TabsTriggerProps) => {
   return (
     <Tabs.Trigger
       value={value}
-      css={[triggerCss, [TriggerHighLightCss[selected]]]}
+      css={[selfCss, triggerHighLightCss[selected]]}
       asChild
       {...restProps}
     >
@@ -39,16 +39,14 @@ export const LunchTabTriggerWithLink = (props: TabsTriggerProps) => {
   );
 };
 
-const triggerCss = css(
+const selfCss = css(
   resetStyle.button(),
   fontCss.family.auto,
-  fontCss.style.R24,
-  {
-    cursor: 'pointer',
-  }
+  fontCss.style.B24,
+  { cursor: 'pointer' }
 );
 
-const TriggerHighLightCss: Record<
+const triggerHighLightCss: Record<
   'selected' | 'notSelected',
   SerializedStyles
 > = {
