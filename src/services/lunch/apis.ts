@@ -19,7 +19,7 @@ export const getLunchMenuSummaries = (params: GetLunchMenuSummariesParams) => {
 
   return privateAxios
     .get<GetLunchMenuSummariesApiData>(endpoint)
-    .then((res) => res.data);
+    .then((res) => res.data.data);
 };
 
 // export const getLunchMenusError = () => {
