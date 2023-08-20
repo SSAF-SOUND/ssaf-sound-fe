@@ -34,6 +34,8 @@ const RecruitDetailPage = (
 ) => {
   const { data: recruitDetailData } = useRecruitDetail(props.recruitId);
   const { data: recruitMembersData } = useRecruitMembers(props.recruitId);
+  const router = useRouter();
+
   const {
     category,
     title,
@@ -140,20 +142,7 @@ const RecruitDetailPage = (
 export default RecruitDetailPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  // const queryClient = new QueryClient();
-  console.log(params?.id);
   const id = paramsToNumber(params!.id);
-  // const recruitDetailQueryKeys = queryKeys.recruit.detail(Id);
-
-  // const data = await queryClient.fetchQuery({
-  //   queryKey: recruitDetailQueryKeys,
-  //   queryFn: () => recruitAPI.getRecruitDetail(Id),
-  // });
-
-  // const membersData = await queryClient.fetchQuery({
-  //   queryKey: queryKeys.recruit.members(Id),
-  //   queryFn: () => recruitAPI.getRecruitMembers(Id),
-  // });
 
   const dehydrate = prefetch([
     {
