@@ -11,7 +11,7 @@ interface LunchCardOrderProps {
   style?: CSSProperties;
 }
 
-export const Order = (props: LunchCardOrderProps) => {
+export const LunchCardOrder = (props: LunchCardOrderProps) => {
   const { order, ...restProps } = props;
   return (
     <div css={selfCss} {...restProps}>
