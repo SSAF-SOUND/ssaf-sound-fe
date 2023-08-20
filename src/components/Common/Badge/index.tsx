@@ -5,9 +5,11 @@ import * as Toggle from '@radix-ui/react-toggle';
 
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
-export interface BadgeProps extends ToggleProps {}
+export interface BadgeProps extends ToggleProps {
+  theme?: 'primary' | 'secondary';
+}
 export const Badge = (props: BadgeProps) => {
-  const { children, ...restProps } = props;
+  const { children, theme = 'primary', ...restProps } = props;
 
   return (
     <Toggle.Root css={[selfCss, textCss]} {...restProps}>
