@@ -19,7 +19,8 @@ export const lunchMock = {
   menus: (() => {
     const menus = Array(6)
       .fill(undefined)
-      .map((_, index) => createMockLunchMenuSummary(index + 1));
+      .map((_, index) => createMockLunchMenuSummary(index + 1))
+      .sort((a, b) => b.pollCount - a.pollCount);
 
     const totalPollCount = menus
       .map(({ pollCount }) => pollCount)

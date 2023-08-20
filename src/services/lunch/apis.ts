@@ -12,7 +12,7 @@ export interface GetLunchMenusWithPollStatus {
 export type GetLunchMenusWithPollStatusApiData =
   ApiSuccessResponse<LunchMenusWithPollStatus>;
 
-export const getLunchMenuWithPollStatus = (
+export const getLunchMenusWithPollStatus = (
   params: GetLunchMenusWithPollStatus
 ) => {
   const { campus, date } = params;
@@ -24,7 +24,17 @@ export const getLunchMenuWithPollStatus = (
     .then((res) => res.data.data);
 };
 
-export const pollLunchMenu = () => {};
+export const pollLunchMenu = (lunchId: number) => {
+  const endpoint = endpoints.lunch.vote(lunchId);
+
+  return privateAxios.post(endpoint).then((res) => res.data);
+};
+
+export const revertPolledLunchMenu = (lunchId: number) => {
+  const endpoint = endpoints.lunch.revertVote(lunchId);
+
+  return privateAxios.post(endpoint).then((res) => res.data);
+};
 
 // export const getLunchMenusError = () => {
 //   const endPoint = endpoints.lunch.error();
