@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
+import React from 'react';
 
 import { LunchTitle } from '~/components/Lunch/LunchTitle';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
-export const LunchPageTitle = () => {
+export const LunchIntroduction = () => {
   return (
     <div css={selfCss}>
       <LunchTitle color={palettes.white} />

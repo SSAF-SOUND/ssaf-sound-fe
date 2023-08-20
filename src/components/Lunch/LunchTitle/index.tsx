@@ -1,22 +1,20 @@
-import { css } from '@emotion/react';
 import { memo } from 'react';
 
 import LunchTitleSVG from '~/assets/images/lunch-menu-title.svg';
 import { VisuallyHidden } from '~/components/Common';
-import { flex } from '~/styles/utils';
 
 export interface LunchTitleProps {
   color?: string;
+  className?: string;
 }
 
 export const LunchTitle = memo((props: LunchTitleProps) => {
-  const { color } = props;
+  const { color, className } = props;
   const style = { fill: color };
 
   return (
-    <div css={selfCss}>
+    <div className={className}>
       <LunchTitleSVG style={style} />
-      {/* NOTE: PageHeadingText */}
       <VisuallyHidden>
         <h2>싸피의 점심메뉴추천</h2>
       </VisuallyHidden>
@@ -25,5 +23,3 @@ export const LunchTitle = memo((props: LunchTitleProps) => {
 });
 
 LunchTitle.displayName = 'LunchTitle';
-
-const selfCss = css(flex('', '', 'row', 6));

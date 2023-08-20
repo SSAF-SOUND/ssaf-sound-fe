@@ -1,15 +1,17 @@
 import { useRouter } from 'next/router';
 
+import { css } from '@emotion/react';
 import React from 'react';
 
 import { DefaultFullPageLoader, SelectBox } from '~/components/Common';
-import { LunchPageTitle, LunchTabs, LunchPageLayout } from '~/components/Lunch';
-import LunchCard from '~/components/Lunch/LunchCard';
+import { LunchLayout } from '~/components/Layout';
+import { LunchTabs, LunchIntroduction } from '~/components/Lunch';
+import LunchMenus from '~/components/Lunch/LunchMenus';
 import NavigationGroup from '~/components/NavigationGroup';
 import { LunchDateSpecifier } from '~/services/lunch/utils';
 import { useCampuses } from '~/services/meta';
 
-const validateDateSpecifier = (date: string) => {
+const validateDateSpecifier = (date: string): date is LunchDateSpecifier => {
   return Object.values(LunchDateSpecifier).includes(date as LunchDateSpecifier);
 };
 
@@ -58,40 +60,57 @@ const Lunch = () => {
   };
 
   return (
-    <LunchPageLayout>
+    <LunchLayout>
       <NavigationGroup />
-      <LunchPageTitle />
+      <LunchIntroduction />
       <CampusSelectBox
         selectedCampus={campus}
         campuses={campuses}
         onCampusChange={onCampusChange}
       />
       <LunchTabs />
-      <LunchCard />
-    </LunchPageLayout>
+      <LunchMenus css={lunchMenusCss} campus={campus} dateSpecifier={date} />
+    </LunchLayout>
   );
 };
+
+const lunchPageZIndex = {
+  lunchMenu: 1,
+  selectBox: 2,
+};
+
+const lunchMenusCss = css({ zIndex: lunchPageZIndex.lunchMenu });
 
 export default Lunch;
 
-const CampusSelectBox = (props: {
+interface CampusSelectBoxProps {
+  className?: string;
   selectedCampus: string;
   campuses: string[];
   onCampusChange: (value: string) => void;
-}) => {
-  const { selectedCampus, campuses, onCampusChange } = props;
+}
+
+const CampusSelectBox = (props: CampusSelectBoxProps) => {
+  const { selectedCampus, campuses, onCampusChange, className } = props;
 
   return (
-    <SelectBox
-      items={campuses}
-      size="lg"
-      placeholder="캠퍼스 선택"
-      triggerTextAlign="center"
-      value={selectedCampus}
-      onValueChange={onCampusChange}
-    />
+    <div css={campusSelectBoxSelfCss} className={className}>
+      <SelectBox
+        items={campuses}
+        size="lg"
+        placeholder="캠퍼스 선택"
+        triggerTextAlign="center"
+        value={selectedCampus}
+        onValueChange={onCampusChange}
+      />
+    </div>
   );
 };
+
+const campusSelectBoxSelfCss = css({
+  width: '100%',
+  zIndex: lunchPageZIndex.selectBox,
+});
 
 export async function getServerSideProps() {
   return {
