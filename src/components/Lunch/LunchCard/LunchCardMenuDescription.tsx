@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { LunchMenuSummary } from '~/services/lunch';
 
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Button, Icon } from '~/components/Common';
 import { LunchCardOrder } from '~/components/Lunch/LunchCard/LunchCardOrder';
@@ -13,21 +13,17 @@ interface LunchCardMenuDescriptionProps {
   menu: LunchMenuSummary;
   className?: string;
   style?: CSSProperties;
-  showDetailDescription?: boolean;
-  onClickShowDetailToggleButton?: () => void;
 }
 
 export const LunchCardMenuDescription = (
   props: LunchCardMenuDescriptionProps
 ) => {
-  const {
-    order,
-    menu,
-    showDetailDescription = false,
-    onClickShowDetailToggleButton,
-    ...restProps
-  } = props;
+  const { order, menu, ...restProps } = props;
   const { imagePath, extraMenu, mainMenu, sumKcal } = menu;
+
+  const [showDetailDescription, setShowDetailDescription] = useState(false);
+  const onClickShowDetailToggleButton = () =>
+    setShowDetailDescription((p) => !p);
 
   return (
     <div css={selfCss} {...restProps}>
