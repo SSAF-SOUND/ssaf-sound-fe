@@ -1,26 +1,30 @@
-import type { LunchMenuSummaries } from '~/services/lunch/utils';
+import type { LunchMenusWithPollStatus } from '~/services/lunch/utils';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
 import { privateAxios, publicAxios } from '~/utils';
 
-export interface GetLunchMenuSummariesParams {
+export interface GetLunchMenusWithPollStatus {
   campus: string;
   date: string;
 }
 
-export type GetLunchMenuSummariesApiData =
-  ApiSuccessResponse<LunchMenuSummaries>;
+export type GetLunchMenusWithPollStatusApiData =
+  ApiSuccessResponse<LunchMenusWithPollStatus>;
 
-export const getLunchMenuSummaries = (params: GetLunchMenuSummariesParams) => {
+export const getLunchMenuWithPollStatus = (
+  params: GetLunchMenusWithPollStatus
+) => {
   const { campus, date } = params;
 
-  const endpoint = endpoints.lunch.summaries({ campus, date });
+  const endpoint = endpoints.lunch.list({ campus, date });
 
   return privateAxios
-    .get<GetLunchMenuSummariesApiData>(endpoint)
+    .get<GetLunchMenusWithPollStatusApiData>(endpoint)
     .then((res) => res.data.data);
 };
+
+export const pollLunchMenu = () => {};
 
 // export const getLunchMenusError = () => {
 //   const endPoint = endpoints.lunch.error();

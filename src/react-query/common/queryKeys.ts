@@ -170,7 +170,7 @@ export const endpoints = {
     recruitTypes: () => '/meta/recruit-types' as const,
   },
   lunch: {
-    summaries: ({ campus, date }: { campus: string; date: string }) => {
+    list: ({ campus, date }: { campus: string; date: string }) => {
       const queryString = new URLSearchParams({ campus, date }).toString();
       return `/lunch?${queryString}`;
     },

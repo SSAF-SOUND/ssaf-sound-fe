@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import type { LunchMenuSummary } from '~/services/lunch';
+import type { LunchMenuDetail } from '~/services/lunch';
 
 import { css } from '@emotion/react';
 import React, { useState } from 'react';
@@ -11,7 +11,7 @@ import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 
 interface LunchCardMenuDescriptionProps {
   order: number;
-  menu: LunchMenuSummary;
+  menu: LunchMenuDetail;
   className?: string;
   style?: CSSProperties;
 }

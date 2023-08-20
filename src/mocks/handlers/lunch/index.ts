@@ -1,6 +1,6 @@
 import type {
-  GetLunchMenuSummariesApiData,
-  LunchMenuSummaries,
+  GetLunchMenusWithPollStatusApiData,
+  LunchMenusWithPollStatus,
 } from '~/services/lunch';
 
 import { restError, restSuccess } from '~/mocks/utils';
@@ -20,15 +20,15 @@ import { lunchMock } from './data';
 // );
 
 export const getLunchMenuSummaries = restSuccess<
-  GetLunchMenuSummariesApiData['data']
+  GetLunchMenusWithPollStatusApiData['data']
 >(
   'get',
   composeUrls(
     API_URL,
-    endpoints.lunch.summaries({ campus: '서울', date: 'today' })
+    endpoints.lunch.list({ campus: '서울', date: 'today' })
   ),
   {
-    data: lunchMock.menuSummaries,
+    data: lunchMock.menus,
   }
 );
 //

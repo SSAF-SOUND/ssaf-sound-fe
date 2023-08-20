@@ -1,7 +1,7 @@
-import type { LunchMenuSummary } from '~/services/lunch';
+import type { LunchMenuDetail } from '~/services/lunch';
 
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { memo } from 'react';
 
 import { lunchCardMinHeight } from '~/components/Lunch/LunchCard/utils';
 import { flex, palettes } from '~/styles/utils';
@@ -10,12 +10,13 @@ import { LunchCardMenuDescription } from './LunchCardMenuDescription';
 import { LunchCardPollButton } from './LunchCardPollButton';
 
 export interface LunchCardProps {
+  index: number;
   polled?: boolean;
-  summary: LunchMenuSummary;
+  summary: LunchMenuDetail;
   order: number;
 }
 
-export const LunchCard = (props: LunchCardProps) => {
+export const LunchCard = memo((props: LunchCardProps) => {
   const { polled = false, summary, order } = props;
   const { pollCount } = summary;
 
@@ -31,7 +32,9 @@ export const LunchCard = (props: LunchCardProps) => {
       />
     </div>
   );
-};
+});
+
+LunchCard.displayName = 'LunchCard';
 
 const descriptionMinWidth = 200;
 const likeButtonWidth = 100;
