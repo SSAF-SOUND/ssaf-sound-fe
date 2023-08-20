@@ -5,14 +5,14 @@ import React from 'react';
 import { Icon } from '~/components/Common';
 import { flex, fontCss } from '~/styles/utils';
 
-export interface LunchCardLikeButtonProps {
+export interface LunchCardPollButtonProps {
   pollCount: number;
   polled: boolean;
   onPolledChange: (polled: boolean) => void;
   className?: string;
 }
 
-export const LunchCardLikeButton = (props: LunchCardLikeButtonProps) => {
+export const LunchCardPollButton = (props: LunchCardPollButtonProps) => {
   const { pollCount, polled = false, onPolledChange, className } = props;
   return (
     <Toggle
