@@ -156,35 +156,6 @@ export const postRecruitApply = ({
 
 // ---------------------------------------
 
-export interface RecruitApplication {}
-// "code": "200",
-// "message": "success",
-// "data": {
-//     "recruitApplications": [
-//         {
-//             "recruitApplicationId": 1,
-//             "recruitType": "기획/디자인",
-//             "matchStatus": "DONE",
-//             "type": {
-//                 "id": 1,
-//                 "name": "기획/디자인"
-//             },
-//             "memberId": 1,
-//             "nickname": "khs",
-//             "ssafyInfo": {
-//                 "semester": 9,
-//                 "campus": "서울",
-//                 "certificationState": "CERTIFIED",
-//                 "majorTrack": "자바백엔드",
-//             },
-//             "reply": "답변",
-//             "question": "질문이에요",
-//                           "isLike": true
-//         }
-//     ]
-// }
-// }
-
 export const recruitAPI = {
   getRecruits,
   getRecruitDetail,
