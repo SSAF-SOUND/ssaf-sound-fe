@@ -2,7 +2,13 @@ import type { CSSProperties } from 'react';
 
 import { css } from '@emotion/react';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import { AiFillApple, AiFillGithub, AiOutlineGoogle } from 'react-icons/ai';
+import {
+  AiFillApple,
+  AiFillCaretDown,
+  AiFillCaretRight,
+  AiFillGithub,
+  AiOutlineGoogle,
+} from 'react-icons/ai';
 import { BiImageAdd } from 'react-icons/bi';
 import {
   HiMinus,
@@ -91,6 +97,8 @@ export const icons = {
   [`chevron.down`]: <MdKeyboardArrowDown />,
   [`chevron.right`]: <HiOutlineChevronRight />,
   [`chevron.left`]: <HiOutlineChevronLeft />,
+  [`arrow.right`]: <AiFillCaretRight />,
+  [`arrow.down`]: <AiFillCaretDown />,
 
   image: <BiImageAdd />,
   link: <MdLink />,
