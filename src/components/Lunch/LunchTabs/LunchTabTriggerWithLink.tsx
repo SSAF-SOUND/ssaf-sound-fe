@@ -43,7 +43,14 @@ const selfCss = css(
   resetStyle.button(),
   fontCss.family.auto,
   fontCss.style.B24,
-  { cursor: 'pointer' }
+  {
+    cursor: 'pointer',
+    ':focus-visible': {
+      borderRadius: 8,
+      outline: `2px solid ${palettes.primary.default}`,
+      outlineOffset: 3,
+    },
+  }
 );
 
 const triggerHighLightCss: Record<
