@@ -61,7 +61,8 @@ const likeButtonSelfCss = css(
       backgroundColor: palettes.primary.dark,
     },
     '&:disabled': {
-      opacity: 0.8,
+      color: 'inherit',
+      opacity: 0.7,
       pointerEvents: 'none',
     },
   },

@@ -3,9 +3,13 @@ import type { LunchDateSpecifier } from '~/services/lunch';
 import { css } from '@emotion/react';
 
 import { LunchCard } from '~/components/Lunch/LunchCard';
-import { LunchMenu } from '~/components/Lunch/LunchMenus/LunchMenu';
-import { useLunchMenusWithPollStatus } from '~/services/lunch';
+import {
+  useLunchMenusWithPollStatus,
+  usePollLunchMenu,
+  useRevertPolledLunchMenu,
+} from '~/services/lunch';
 import { flex } from '~/styles/utils';
+import { handleAxiosError } from '~/utils';
 
 interface LunchMenusProps {
   className?: string;
@@ -20,10 +24,28 @@ const LunchMenus = (props: LunchMenusProps) => {
   const {
     data: lunchMenusWithPollStatus,
     isLoading: isLunchMenusWithPollStatusLoading,
+    isFetching,
   } = useLunchMenusWithPollStatus({
     dateSpecifier,
     campus,
   });
+
+  const { mutateAsync: pollLunchMenu, isLoading: isPollingLunchMenu } =
+    usePollLunchMenu({
+      campus,
+      dateSpecifier,
+    });
+
+  const {
+    mutateAsync: revertPolledLunchMenu,
+    isLoading: isRevertingPolledLunchMenu,
+  } = useRevertPolledLunchMenu({
+    campus,
+    dateSpecifier,
+  });
+
+  const isButtonDisabled =
+    isPollingLunchMenu || isRevertingPolledLunchMenu || isFetching;
 
   return (
     <div css={selfCss} className={className}>
@@ -37,15 +59,28 @@ const LunchMenus = (props: LunchMenusProps) => {
       {lunchMenusWithPollStatus &&
         lunchMenusWithPollStatus.menus.map((menu, index) => {
           const polled = index === lunchMenusWithPollStatus.polledAt;
+          const { lunchId } = menu;
+
+          const handlePolledChange = async (nextPolled: boolean) => {
+            const pollRequest = nextPolled
+              ? pollLunchMenu
+              : revertPolledLunchMenu;
+
+            try {
+              await pollRequest({ lunchId, polledIndex: index });
+            } catch (error) {
+              handleAxiosError(error);
+            }
+          };
 
           return (
-            <LunchMenu
+            <LunchCard
               key={menu.lunchId}
-              campus={campus}
-              dateSpecifier={dateSpecifier}
-              index={index}
               menu={menu}
+              order={index + 1}
               polled={polled}
+              onPolledChange={handlePolledChange}
+              pollButtonDisabled={isButtonDisabled}
             />
           );
         })}

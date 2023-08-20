@@ -53,6 +53,9 @@ export const pollLunchMenu = rest.post(
       (menu) => menu.lunchId === id
     );
 
+    const prevPolledAt = lunchMock.menus.polledAt;
+    if (prevPolledAt > -1) lunchMock.menus.menus[prevPolledAt].pollCount -= 1;
+
     lunchMock.menus.polledAt = targetIndex;
     if (targetIndex > -1) lunchMock.menus.menus[targetIndex].pollCount += 1;
 

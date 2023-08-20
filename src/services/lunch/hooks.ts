@@ -1,4 +1,3 @@
-import type { SetStateAction } from 'react';
 import type {
   LunchDateSpecifier,
   LunchMenusWithPollStatus,
@@ -34,14 +33,12 @@ export const useLunchMenusWithPollStatus = (
 };
 
 export interface UsePollLunchMenuParams {
-  polledIndex: number;
-  lunchId: number;
   campus: string;
   dateSpecifier: LunchDateSpecifier;
 }
 
 export const usePollLunchMenu = (params: UsePollLunchMenuParams) => {
-  const { campus, dateSpecifier, lunchId, polledIndex } = params;
+  const { campus, dateSpecifier } = params;
 
   const queryClient = useQueryClient();
   const setLunchMenusWithPollStatusWithImmer =
@@ -59,8 +56,10 @@ export const usePollLunchMenu = (params: UsePollLunchMenuParams) => {
   };
 
   return useMutation({
-    mutationFn: () => pollLunchMenu(lunchId),
-    onMutate: async () => {
+    mutationFn: (variables: { polledIndex: number; lunchId: number }) =>
+      pollLunchMenu(variables.lunchId),
+    onMutate: async (variables) => {
+      const { polledIndex } = variables;
       const lunchMenusWithPollStatus =
         queryClient.getQueryData<LunchMenusWithPollStatus>(queryKey);
 
@@ -69,6 +68,8 @@ export const usePollLunchMenu = (params: UsePollLunchMenuParams) => {
       setLunchMenusWithPollStatusWithImmer((target) => {
         if (!target) return;
 
+        const prevPolledAt = target.polledAt;
+        if (prevPolledAt > -1) target.menus[prevPolledAt].pollCount -= 1;
         target.polledAt = polledIndex;
         target.menus[polledIndex].pollCount += 1;
       });
@@ -94,7 +95,7 @@ export type UseRevertPolledLunchMenuParams = UsePollLunchMenuParams;
 export const useRevertPolledLunchMenu = (
   params: UseRevertPolledLunchMenuParams
 ) => {
-  const { campus, dateSpecifier, lunchId, polledIndex } = params;
+  const { campus, dateSpecifier } = params;
 
   const queryClient = useQueryClient();
   const setLunchMenusWithPollStatusWithImmer =
@@ -112,8 +113,10 @@ export const useRevertPolledLunchMenu = (
   };
 
   return useMutation({
-    mutationFn: () => revertPolledLunchMenu(lunchId),
-    onMutate: async () => {
+    mutationFn: (variables: { lunchId: number; polledIndex: number }) =>
+      revertPolledLunchMenu(variables.lunchId),
+    onMutate: async (variables) => {
+      const { polledIndex } = variables;
       const lunchMenusWithPollStatus =
         queryClient.getQueryData<LunchMenusWithPollStatus>(queryKey);
 
