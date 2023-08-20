@@ -46,8 +46,9 @@ const selfCss = css(
     borderRadius: 20,
     overflow: 'hidden',
     color: palettes.black,
-    height: selfHeight,
+    minHeight: selfHeight,
+    height: '100%',
     minWidth: selfMinWidth,
   },
-  flex('center', '', 'row')
+  flex('stretch', '', 'row')
 );

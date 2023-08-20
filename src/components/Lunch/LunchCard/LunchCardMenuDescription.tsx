@@ -81,10 +81,13 @@ const zIndex = {
 
 const iconSize = 20;
 
+const selfMinHeight = 182;
+
 const selfCss = css(
   {
     position: 'relative',
     width: '100%',
+    minHeight: selfMinHeight,
     height: '100%',
     userSelect: 'none',
   },

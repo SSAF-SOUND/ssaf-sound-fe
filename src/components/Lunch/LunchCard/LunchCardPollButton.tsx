@@ -29,7 +29,6 @@ export const LunchCardPollButton = (props: LunchCardPollButtonProps) => {
 
 const likeButtonSelfCss = css(
   {
-    height: '100%',
     flexShrink: 0,
     cursor: 'pointer',
   },
