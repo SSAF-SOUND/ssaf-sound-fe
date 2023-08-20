@@ -11,6 +11,7 @@ export { default as Dot } from './Dot';
 export { default as Gnb } from './Gnb';
 export * from './Icon';
 export * from './IconButton';
+export * from './ImageWithFallback';
 export * from './IntersectionArea';
 export { default as Label } from './Label';
 export { default as Logo } from './Logo';
