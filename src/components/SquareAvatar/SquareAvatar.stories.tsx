@@ -1,4 +1,3 @@
-import type { SquareAvatarProps } from './index';
 import type { Meta } from '@storybook/react';
 
 import { userInfo } from '~/mocks/handlers/member/data';
@@ -13,7 +12,7 @@ const meta: Meta<typeof SquareAvatar> = {
 
 export default meta;
 
-export const SquareAvatarStory = (props: SquareAvatarProps) => {
+export const SquareAvatarStory = () => {
   const d = userInfo.certifiedSsafyUserInfo;
   return <SquareAvatar userInfo={d} />;
 };
@@ -59,7 +58,5 @@ export const UnCertified = () => {
 };
 
 export const Vacant = () => {
-  const d = userInfo.uncertifiedSsafyUserInfo;
-
   return <SquareAvatar />;
 };

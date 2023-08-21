@@ -1,14 +1,14 @@
 import { css } from '@emotion/react';
 
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
-import RecruitMeta from '~/components/RecruitMeta';
+import { RecruitMeta } from '~/components/RecruitMeta';
 import TitleBar from '~/components/TitleBar';
 import { userInfo } from '~/mocks/handlers/member/data';
 import { RecruitData } from '~/mocks/handlers/recruit/data';
 import { flex, fontCss } from '~/styles/utils';
 import { routes } from '~/utils';
 
-const RecruitApplyPage = (props: any) => {
+const RecruitApplyPage = () => {
   return (
     <div css={{ padding: '0 20px', paddingTop: '50px' }}>
       <TitleBar.Default

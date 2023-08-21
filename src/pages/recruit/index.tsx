@@ -2,8 +2,7 @@ import type { GetServerSideProps } from 'next/types';
 
 import Link from 'next/link';
 
-const Recruit = (props: any) => {
-  console.log(props);
+const Recruit = () => {
   return (
     <div>
       <Link
@@ -28,16 +27,16 @@ const Recruit = (props: any) => {
 export default Recruit;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const res = await fetch(`http://localhost/recruits`);
+  // const res = await fetch(`http://localhost/recruits`);
 
-  // Only absolute URLs are supported
-  const data: any = await res.json();
+  // // Only absolute URLs are supported
+  // const data: any = await res.json();
 
-  console.log(res);
+  // console.log(res);
   // 추후에 prefetch 적용
   return {
     props: {
-      data: data.data,
+      data: 1,
     },
   };
 };

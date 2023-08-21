@@ -61,7 +61,7 @@ export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
     try {
       await applyRecruit({
         recruitId,
-        content,
+        body: content,
       });
 
       closeModal();

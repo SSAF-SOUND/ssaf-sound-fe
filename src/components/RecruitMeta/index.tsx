@@ -24,7 +24,7 @@ export interface RecruitMetaProps {
   className?: string;
 }
 
-const RecruitMeta = (props: RecruitMetaProps) => {
+export const RecruitMeta = (props: RecruitMetaProps) => {
   const { expanded = true, userInfo, title, recruitMeta, className } = props;
 
   if (expanded && userInfo && title)
@@ -39,8 +39,6 @@ const RecruitMeta = (props: RecruitMetaProps) => {
 
   return <RecruitTable {...recruitMeta} />;
 };
-
-export default RecruitMeta;
 
 const selfCss = css({
   background: palettes.background.grey,

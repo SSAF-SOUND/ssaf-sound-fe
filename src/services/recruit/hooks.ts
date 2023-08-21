@@ -12,14 +12,14 @@ export const useApplyRecruit = () => {
 
 export const useRecruitDetail = (recruitId: number) => {
   return useQuery({
-    queryKey: queryKeys.recruit.detail(recruitId),
-    queryFn: getRecruitDetail,
+    queryKey: queryKeys.articles.list(recruitId),
+    queryFn: () => getRecruitDetail(recruitId),
   });
 };
 
 export const useRecruitMembers = (recruitId: number) => {
   return useQuery({
     queryKey: queryKeys.recruit.members(recruitId),
-    queryFn: getRecruitMembers,
+    queryFn: () => getRecruitMembers(recruitId),
   });
 };

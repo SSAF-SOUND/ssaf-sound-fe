@@ -1,3 +1,5 @@
+import type { RecruitType } from '../recruit';
+
 import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
@@ -71,7 +73,7 @@ export const useRecruitTypes = () => {
     queryFn: getRecruitTypes,
     initialData: initialRecruitType,
     select: (data: any) => {
-      return data.recruitTypes.map(({ name }) => name);
+      return data.recruitTypes.map(({ name }: { name: RecruitType }) => name);
     },
   });
 };

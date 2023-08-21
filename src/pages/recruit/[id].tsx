@@ -2,16 +2,15 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next/types';
-import type { RecruitDetail, recruitMembersType } from '~/services/recruit';
+import type { recruitMembersType } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
 
 import Dday from '~/components/Dday';
 import { RecruitLayout } from '~/components/Layout';
 import Name from '~/components/Name';
-import { RecruitButtons, RecruitTabs } from '~/components/Recruit';
-import { ViewNumber } from '~/components/Recruit';
-import RecruitMeta from '~/components/RecruitMeta';
+import { RecruitButtons, RecruitTabs, ViewNumber } from '~/components/Recruit';
+import { RecruitMeta as RecruitMetaComponent } from '~/components/RecruitMeta';
 import { RecruitMetaTitle } from '~/components/RecruitMeta/RecruitMetaTitle';
 import SquareAvatar from '~/components/SquareAvatar';
 import TitleBar from '~/components/TitleBar';
@@ -25,16 +24,17 @@ import {
 import { flex, fontCss } from '~/styles/utils';
 import { paramsToNumber, routes } from '~/utils';
 
-interface RecruitDetailPageProps {
-  data: RecruitDetail;
-  membersData: recruitMembersType;
-}
 const RecruitDetailPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const { data: recruitDetailData } = useRecruitDetail(props.recruitId);
   const { data: recruitMembersData } = useRecruitMembers(props.recruitId);
   const router = useRouter();
+
+  if (!recruitDetailData || !recruitMembersData) {
+    router.push('/500');
+    return;
+  }
 
   const {
     category,
@@ -48,10 +48,10 @@ const RecruitDetailPage = (
     skills,
     scrapCount,
     // -------
-    createdAt,
-    modifiedAt,
-    deletedRecruit,
-    finishedRecruit,
+    // createdAt,
+    // modifiedAt,
+    // deletedRecruit,
+    // finishedRecruit,
   } = recruitDetailData;
 
   const ParsedMembersData = Object.values(
@@ -63,7 +63,7 @@ const RecruitDetailPage = (
   const totalLimit = ParsedMembersData.reduce((acc, cur) => acc + cur.limit, 0);
   const recruitedMembers = ParsedMembersData.map((v) => v.members).flat();
 
-  const { query } = useRouter();
+  const { query } = router;
 
   const recruitMeta = {
     recruitStart,
@@ -97,7 +97,7 @@ const RecruitDetailPage = (
       </div>
 
       <div css={{ marginBottom: 20 }}>
-        <RecruitMeta
+        <RecruitMetaComponent
           title={title}
           recruitMeta={recruitMeta}
           userInfo={userInfo}
@@ -142,7 +142,7 @@ const RecruitDetailPage = (
 export default RecruitDetailPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const id = paramsToNumber(params!.id);
+  const id = paramsToNumber(params?.id);
 
   const dehydrate = prefetch([
     {

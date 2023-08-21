@@ -5,8 +5,8 @@ import { css } from '@emotion/react';
 import { forwardRef } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
-import { resetStyle } from '~/styles/utils';
 import { useComposedRefs } from '~/hooks/useComposedRefs';
+import { resetStyle } from '~/styles/utils';
 
 interface CommentFormTextAreaProps extends TextareaAutosizeProps {
   loading?: boolean;

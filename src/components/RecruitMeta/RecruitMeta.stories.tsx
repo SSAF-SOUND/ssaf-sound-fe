@@ -2,7 +2,7 @@ import type { Meta } from '@storybook/react';
 
 import { RecruitData } from '~/mocks/handlers/recruit/data';
 
-import RecruitMeta from './index';
+import { RecruitMeta } from './index';
 
 const meta: Meta<typeof RecruitMeta> = {
   title: 'Recruit/RecruitMeta',

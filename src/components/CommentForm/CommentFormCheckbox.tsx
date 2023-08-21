@@ -1,8 +1,7 @@
 import type { CheckboxProps } from '../Common/Checkbox';
-import type { UseFormRegisterReturn } from 'react-hook-form';
 
 import { css } from '@emotion/react';
-import { Ref, forwardRef, useId } from 'react';
+import { useId } from 'react';
 
 import { Checkbox } from '~/components/Common';
 import { flex, fontCss, palettes } from '~/styles/utils';

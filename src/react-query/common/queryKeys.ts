@@ -35,7 +35,7 @@ export const queryKeys = {
   },
   recruit: {
     list: () => ['recruits'],
-    detail: (recruitId: number) => ['recruits', recruitId],
+    detail: (recruitId: number) => ['recruits', 'detail', recruitId],
     members: (recruitId: number) => ['recruits', 'members', recruitId],
     scrap: (recruitId: number) => ['recruits', 'scrap', recruitId],
     apply: (recruitId: number) => ['recruits', 'apply', recruitId],
@@ -50,11 +50,6 @@ export const queryKeys = {
     }) => [...queryKeys.auth(), 'lunch', 'menus', campus, dateSpecifier],
   },
 };
-// menus: ({ campus, date }: any) =>
-// `/lunch?campus=${campus}&date=${date}` as const,
-// detail: (lunchId: number) => `/lunch/${lunchId}` as const,
-// vote: (lunchId: number) => `/lunch/poll/${lunchId}` as const,
-// revertVote: (lunchId: number) => `/lunch/poll/revert/${lunchId}` as const,
 
 export const endpoints = {
   auth: {

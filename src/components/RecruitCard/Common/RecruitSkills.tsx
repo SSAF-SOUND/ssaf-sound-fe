@@ -1,8 +1,9 @@
 import type { RecruitSummary } from '~/services/recruit';
 
+import { css } from '@emotion/react';
+
 import { SkillIcon } from '~/components/Common';
 import { flex } from '~/styles/utils';
-import { css } from '@emotion/react';
 
 interface RecruitCardSkillsProps extends Pick<RecruitSummary, 'skills'> {}
 
