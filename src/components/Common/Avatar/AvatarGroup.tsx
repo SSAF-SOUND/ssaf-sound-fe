@@ -50,6 +50,7 @@ const textCss = css({ marginLeft: 4 });
 const textSizeCss = {
   sm: css(fontCss.style.B12),
   md: css(fontCss.style.B14),
+  md2: css(fontCss.style.R14),
   lg: css(fontCss.style.B28),
 };
 

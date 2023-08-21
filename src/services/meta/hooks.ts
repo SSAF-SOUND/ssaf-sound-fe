@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '~/react-query/common';
 import { SsafyTrack } from '~/services/member';
 import { getCampuses, getRecruitTypes } from '~/services/meta/apis';
+import { RecruitType } from '../recruit';
 
 export const initialCampuses = [
   { id: 1, name: '서울' },
@@ -71,7 +72,7 @@ export const useRecruitTypes = () => {
     queryFn: getRecruitTypes,
     initialData: initialRecruitType,
     select: (data: any) => {
-      return data.recruitTypes.map(({ name }) => name);
+      return data.recruitTypes.map(({ name }: { name: RecruitType }) => name);
     },
   });
 };

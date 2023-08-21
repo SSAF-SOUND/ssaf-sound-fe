@@ -36,6 +36,11 @@ const RecruitDetailPage = (
   const { data: recruitMembersData } = useRecruitMembers(props.recruitId);
   const router = useRouter();
 
+  if (!recruitDetailData || !recruitMembersData) {
+    router.push('/500');
+    return;
+  }
+
   const {
     category,
     title,

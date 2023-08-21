@@ -1,4 +1,4 @@
-import type { RecruitParticipant } from '~/services/recruit';
+import type { RecruitParticipant, RecruitType } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
@@ -35,6 +35,8 @@ const RECRUIT_TYPE_TEXT = {
   프론트엔드: 'F',
   백엔드: 'B',
   '기획/디자인': 'P',
+  앱: 'A',
+  스터디: 'S',
 };
 
 const RecruitAvatars = (props: RecruitAvatarsProps) => {
