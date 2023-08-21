@@ -1,4 +1,4 @@
-import type { RecruitParticipant, RecruitType } from '~/services/recruit';
+import type { RecruitParticipant } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 

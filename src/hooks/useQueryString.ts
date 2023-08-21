@@ -24,7 +24,7 @@ export const useGetQueryString = <T = string>(
   }
 };
 
-export const useSetQueryString = <T>(key: string, value: any) => {
+export const useSetQueryString = (key: string, value: any) => {
   const router = useRouter();
 
   if (!router.isReady) {

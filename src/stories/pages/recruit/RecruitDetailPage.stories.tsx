@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ComponentType } from 'react';
+import type { ComponentType } from 'react';
 
 import RecruitDetailPage from '~/pages/recruit/[id]';
 import { PageLayout } from '~/stories/Layout';

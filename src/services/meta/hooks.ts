@@ -1,9 +1,10 @@
+import type { RecruitType } from '../recruit';
+
 import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import { SsafyTrack } from '~/services/member';
 import { getCampuses, getRecruitTypes } from '~/services/meta/apis';
-import { RecruitType } from '../recruit';
 
 export const initialCampuses = [
   { id: 1, name: '서울' },

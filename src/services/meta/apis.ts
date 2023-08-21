@@ -1,5 +1,4 @@
 import type { CampusInfo } from './utils';
-import type { RecruitType } from '../recruit';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';

@@ -26,7 +26,7 @@ export const Default = (props: {
   );
 };
 
-export const WithMessage = (props: any) => {
+export const WithMessage = () => {
   return (
     <RecruitCard recruitSummary={RecruitData.recruitSummary} withMessage={true}>
       <p>메세지 부분은 진행중입니다!</p>

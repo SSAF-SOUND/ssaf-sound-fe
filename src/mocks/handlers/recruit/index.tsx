@@ -53,9 +53,6 @@ export const getRecruitScrap = restSuccess<RecruitScrap>(
 export const postRecruitScrap = rest.post(
   composeUrls(API_URL, endpoints.recruit.scrap(1)),
   (req, res, ctx) => {
-    const params = req.params as { articleId: string };
-
-    const scrapId = 1;
     const article = RecruitData.RecruitScrap;
     const delta = article.scrapCount ? 1 : -1;
     article.scrapCount += delta;

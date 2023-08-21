@@ -1,4 +1,5 @@
 import type { Meta } from '@storybook/react';
+
 import { IsRecruitingToggle } from './IsRecruitingToggle';
 
 const meta: Meta<typeof IsRecruitingToggle> = {
