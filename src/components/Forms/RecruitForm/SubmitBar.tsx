@@ -1,3 +1,5 @@
+import type { LinkProps } from 'next/link';
+
 import { memo } from 'react';
 
 import TitleBar from '~/components/TitleBar';

@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { css } from '@emotion/react';
 import { forwardRef } from 'react';
 
-import { fontCss, palettes } from '~/styles/utils';
+import { colorMix, fontCss, palettes } from '~/styles/utils';
 
 type TextInputSize = 'sm' | 'md' | 'lg';
 
@@ -41,6 +41,9 @@ const selfCss = css(
     border: `1px solid ${palettes.background.default}`,
     '::placeholder': {
       color: palettes.font.blueGrey,
+    },
+    ':disabled': {
+      backgroundColor: colorMix('50%', palettes.white),
     },
   },
   fontCss.family.auto

@@ -1,89 +1,118 @@
 import type { RecruitFormValues } from './utils';
-import type { SubmitHandler } from 'react-hook-form';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 
-import { useMemo } from 'react';
+import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { noop } from '~/utils';
+import { Button } from '~/components/Common';
+import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
+import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
+import { titleBarHeight } from '~/styles/utils';
 
 import {
   Category,
-  Participants,
-  EndDate,
   Title,
   Content,
-  Skills,
   QuestionToApplicants,
   Contact,
 } from './Fields';
 import SubmitBar from './SubmitBar';
-import { populateDefaultValues } from './utils';
+import { RecruitCategoryName } from './utils';
 
 interface RecruitFormOptions {
   // SubmitBar
   barTitle: string;
   submitButtonText: string;
+  onClickTitleBarClose: () => void;
 
-  // Category
-  isProjectDisabled: boolean;
-  isStudyDisabled: boolean;
+  // editMode
+  editMode?: boolean;
+
+  /** Negative margin 적용을 위한 `px`값 */
+  marginForExpand: string;
 }
 
 interface RecruitFormProps {
-  onSubmit?: SubmitHandler<RecruitFormValues>;
-  defaultValues?: Partial<RecruitFormValues>;
+  onValidSubmit: SubmitHandler<RecruitFormValues>;
+  onInvalidSubmit?: SubmitErrorHandler<RecruitFormValues>;
+  defaultValues?: RecruitFormValues;
   options?: Partial<RecruitFormOptions>;
 }
 
 const RecruitForm = (props: RecruitFormProps) => {
   const {
     options = {},
-    onSubmit = noop,
+    onValidSubmit,
+    onInvalidSubmit,
     defaultValues = defaultRecruitFormValues,
   } = props;
 
   const {
     barTitle = '',
     submitButtonText = '',
-    isProjectDisabled,
-    isStudyDisabled,
+    editMode = false,
+    marginForExpand = 0,
+    onClickTitleBarClose,
   } = options;
 
   const methods = useForm<RecruitFormValues>({
-    defaultValues: useMemo(
-      () => populateDefaultValues(defaultValues),
-      [defaultValues]
-    ),
+    defaultValues,
   });
 
   const { handleSubmit } = methods;
 
+  const style = { [recruitFormMarginForExpandCssVar.varName]: marginForExpand };
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <SubmitBar title={barTitle} submitButtonText={submitButtonText} />
-        <Category
-          isProjectDisabled={isProjectDisabled}
-          isStudyDisabled={isStudyDisabled}
+      <form
+        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+        css={selfCss}
+        style={style}
+      >
+        <SubmitBar
+          title={barTitle}
+          submitButtonText={submitButtonText}
+          onClickClose={onClickTitleBarClose}
         />
-        <Participants />
-        <EndDate />
-        <Skills />
+
+        <Category editMode={editMode} css={{ marginBottom: 32 }} />
+
+        <RecruitBasicInfo css={{ marginBottom: 24 }} />
+
         <Title />
-        <Content />
-        <QuestionToApplicants />
+        <Content css={{ marginBottom: 74 }} />
+
+        <QuestionToApplicants css={{ marginBottom: 48 }} editMode={editMode} />
         <Contact />
+
+        {editMode && (
+          <Button size="lg" css={completeButtonCss}>
+            리쿠르팅 모집완료
+          </Button>
+        )}
       </form>
     </FormProvider>
   );
 };
 
 const defaultRecruitFormValues: RecruitFormValues = {
-  category: '',
+  category: RecruitCategoryName.PROJECT,
   participants: {
-    project: [],
-    study: [],
+    project: [
+      {
+        part: '',
+        count: 1,
+      },
+    ],
+    study: [
+      {
+        part: '스터디',
+        count: 1,
+      },
+    ],
   },
+  myPart: '',
   endDate: '',
   skills: {},
   title: '',
@@ -93,3 +122,10 @@ const defaultRecruitFormValues: RecruitFormValues = {
 };
 
 export default RecruitForm;
+
+const selfCss = css({ paddingTop: titleBarHeight + 30, paddingBottom: 360 });
+
+const completeButtonCss = css({
+  width: '100%',
+  marginTop: 64,
+});

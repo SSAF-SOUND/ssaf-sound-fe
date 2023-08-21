@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
+import { ErrorMessage } from '@hookform/error-message';
 
-import { TextInput } from '~/components/Common';
+import { AlertText, TextInput } from '~/components/Common';
+import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
+import { palettes } from '~/styles/utils';
 
 const fieldName = 'contact';
 const maxLength = 500;
@@ -10,6 +13,7 @@ const validateContact = (value: string) => {
   if (value.length > maxLength) {
     return `연락처의 길이는 ${maxLength}자 이하여야 합니다.`;
   }
+  return true;
 };
 
 interface ContactProps {
@@ -25,6 +29,10 @@ export const Contact = (props: ContactProps) => {
 
   return (
     <div className={className}>
+      <div css={titleCss}>
+        오픈카톡방 또는 디스코드 등 연락할 수 있는 링크를 남겨주세요 (선택)
+      </div>
+
       <TextInput
         size="md"
         placeholder="링크를 입력해주세요"
@@ -34,10 +42,20 @@ export const Contact = (props: ContactProps) => {
           validate: validateContact,
         })}
       />
+      <ErrorMessage
+        name={fieldName}
+        render={({ message }) => <AlertText>{message}</AlertText>}
+      />
     </div>
   );
 };
 
 const inputCss = css({
   width: '100%',
+});
+
+const titleCss = css(recruitFormExpandCss, {
+  padding: '12px 25px',
+  backgroundColor: palettes.background.grey,
+  marginBottom: 32,
 });

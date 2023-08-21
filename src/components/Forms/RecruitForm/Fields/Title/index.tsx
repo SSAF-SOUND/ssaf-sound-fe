@@ -1,15 +1,17 @@
 import { css } from '@emotion/react';
+import { ErrorMessage } from '@hookform/error-message';
 
-import { TextInput } from '~/components/Common';
+import { AlertText, TextInput } from '~/components/Common';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { fontCss, palettes } from '~/styles/utils';
 
 const fieldName = 'title';
+const minTitleLength = 2;
 const maxTitleLength = 30;
 const validateTitle = (value: string) => {
-  if (!value.length) return '제목은 반드시 입력해야 합니다.';
-  if (value.length > maxTitleLength) {
-    return `제목의 길이는 ${maxTitleLength}자 이하여야 합니다.`;
+  const { length } = value;
+  if (length < minTitleLength || value.length > maxTitleLength) {
+    return `제목은 ${minTitleLength}자 이상, ${maxTitleLength}자 이하여야 합니다.`;
   }
 };
 
@@ -26,28 +28,43 @@ export const Title = (props: TitleProps) => {
   } = useRecruitFormContext();
 
   return (
-    <div className={className}>
+    <div css={selfCss} className={className}>
       <TextInput
         size="md"
         css={inputCss}
-        placeholder="리크루팅 제목"
+        placeholder="리쿠르팅 제목"
         defaultValue={defaultTitle}
         {...register(fieldName, {
           validate: validateTitle,
         })}
       />
+      <ErrorMessage
+        name={fieldName}
+        render={({ message }) => {
+          return <AlertText css={errorMessageCss}>{message}</AlertText>;
+        }}
+      />
     </div>
   );
 };
 
+const selfCss = css({
+  backgroundColor: palettes.white,
+  border: `1px solid ${palettes.grey3}`,
+  borderBottom: 0,
+});
+
 const inputCss = css(
   {
     width: '100%',
+    border: 0,
     borderRadius: 0,
     outline: 0,
-    border: `1px solid ${palettes.grey3}`,
-    borderBottom: 0,
     '&:focus': {},
   },
   fontCss.style.R18
 );
+
+const errorMessageCss = css({
+  padding: `0 16px 8px`,
+});
