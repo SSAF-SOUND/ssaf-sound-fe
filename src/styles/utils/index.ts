@@ -13,3 +13,4 @@ export * from './toCssVar';
 export * from './visuallyHidden';
 export * from './lineClamp';
 export * from './resetStyle';
+export * from './fixedFullWidth';

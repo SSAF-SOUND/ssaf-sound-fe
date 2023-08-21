@@ -1,9 +1,11 @@
 import type { RecruitCategory } from '~/services/recruit';
 
+import { css } from '@emotion/react';
+
 import { Toggle } from '~/components/Common';
 import { useGetQueryString, useSetQueryString } from '~/hooks';
 import { getRecruitThemeByCategory } from '~/services/recruit';
-import { fontCss } from '~/styles/utils';
+import { flex, fontCss } from '~/styles/utils';
 import { stringBooleanToBool } from '~/utils';
 
 const IS_RECRUITING_CONSTANT = 'isRecruiting';
@@ -33,12 +35,28 @@ export const IsRecruitingToggle = () => {
     <Toggle
       thumbSize={20}
       textWidth={40}
-      padding="3.2px 5px"
       text="모집 중"
-      css={[fontCss.family.auto, fontCss.style.R12]}
+      css={selfCss}
       defaultPressed={isRecruiting as boolean}
       onPressedChange={handleOnPressedChange}
       theme={theme}
     />
   );
 };
+
+const selfCss = css(
+  fontCss.family.auto,
+  fontCss.style.R12,
+  flex('center', 'center', 'row'),
+  {
+    padding: 0,
+    margin: 0,
+    '> *': {
+      padding: 0,
+      margin: 0,
+    },
+    height: 28,
+    width: 72,
+    cursor: 'pointer',
+  }
+);

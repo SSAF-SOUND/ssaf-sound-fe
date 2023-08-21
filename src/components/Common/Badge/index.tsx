@@ -3,14 +3,16 @@ import type { ToggleProps } from '@radix-ui/react-toggle';
 import { css } from '@emotion/react';
 import * as Toggle from '@radix-ui/react-toggle';
 
-import { fontCss, inlineFlex, palettes } from '~/styles/utils';
+import { fontCss, inlineFlex, palettes, themeColorVars } from '~/styles/utils';
 
-export interface BadgeProps extends ToggleProps {}
+export interface BadgeProps extends ToggleProps {
+  theme?: 'primary' | 'secondary';
+}
 export const Badge = (props: BadgeProps) => {
-  const { children, ...restProps } = props;
+  const { children, theme = 'primary', ...restProps } = props;
 
   return (
-    <Toggle.Root css={[selfCss, textCss]} {...restProps}>
+    <Toggle.Root css={[selfCss, textCss]} data-theme={theme} {...restProps}>
       {children}
     </Toggle.Root>
   );
@@ -27,15 +29,15 @@ const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
     'color 200ms, background-color 200ms, border-color 200ms, outline 200ms',
   backgroundColor: 'transparent',
   '&:hover': {
-    borderColor: palettes.primary.dark,
-    color: palettes.primary.dark,
+    borderColor: themeColorVars.mainColor.var,
+    color: themeColorVars.mainColor.var,
   },
   '&:focus-visible': {
-    outline: `3px solid ${palettes.primary.light}`,
+    outline: `3px solid ${themeColorVars.mainColor.var}`,
   },
   '&[data-state="on"]': {
-    background: palettes.primary.darkest,
-    borderColor: palettes.primary.darkest,
+    background: themeColorVars.mainDarkColor.var,
+    borderColor: themeColorVars.mainDarkColor.var,
     color: palettes.white,
   },
 });
