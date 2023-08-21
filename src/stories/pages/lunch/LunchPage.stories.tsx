@@ -17,14 +17,19 @@ import {
   pollLunchMenuError,
   revertPolledLunchMenuError,
 } from '~/mocks/handlers';
+import { userInfo } from '~/mocks/handlers/member/data';
 import { queryKeys } from '~/react-query/common';
 import { LunchDateSpecifier } from '~/services/lunch';
+import { useSetMyInfo } from '~/services/member';
 import { useCampuses } from '~/services/meta';
 import { PageLayout } from '~/stories/Layout';
 
 const LunchPageStoryComponent = () => {
   const { data: campuses } = useCampuses();
   const [campus, setCampus] = useState(campuses[0]);
+  const setMyInfo = useSetMyInfo();
+
+  setMyInfo(userInfo.certifiedSsafyUserInfo);
 
   return (
     <PageLayout>
@@ -100,4 +105,18 @@ export const FailToLoadLunchMenu: LunchPageStory = {
       },
     },
   },
+};
+
+export const NotSignedIn: LunchPageStory = {
+  decorators: [
+    (Story) => {
+      const setMyInfo = useSetMyInfo();
+      useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setMyInfo(null);
+      }, [setMyInfo]);
+      return <Story />;
+    },
+  ],
 };

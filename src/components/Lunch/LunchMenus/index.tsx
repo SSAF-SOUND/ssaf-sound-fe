@@ -4,11 +4,13 @@ import { css } from '@emotion/react';
 
 import { LunchCard } from '~/components/Lunch/LunchCard';
 import { LunchErrorIndicator } from '~/components/Lunch/LunchErrorIndicator';
+import { useSignInGuideModal } from '~/hooks';
 import {
   useLunchMenusWithPollStatus,
   usePollLunchMenu,
   useRevertPolledLunchMenu,
 } from '~/services/lunch';
+import { useMyInfo } from '~/services/member';
 import { flex } from '~/styles/utils';
 import { getErrorResponse, handleAxiosError } from '~/utils';
 
@@ -21,6 +23,9 @@ interface LunchMenusProps {
 const LunchMenus = (props: LunchMenusProps) => {
   const { className, campus, dateSpecifier } = props;
   const skeletonCount = 6;
+  const { openSignInGuideModal } = useSignInGuideModal();
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
 
   const {
     data: lunchMenusWithPollStatus,
@@ -69,6 +74,11 @@ const LunchMenus = (props: LunchMenusProps) => {
           const { lunchId } = menu;
 
           const handlePolledChange = async (nextPolled: boolean) => {
+            if (!isSignedIn) {
+              openSignInGuideModal();
+              return;
+            }
+
             const pollRequest = nextPolled
               ? pollLunchMenu
               : revertPolledLunchMenu;
