@@ -19,7 +19,6 @@ import { createBoundClamp } from '~/utils';
 
 const fieldArrayName = 'participants.project';
 
-const maxZIndex = possibleProjectParts.length;
 const clamp = createBoundClamp([minParticipantsCount, maxParticipantsCount]);
 
 interface FieldRowProps {
@@ -39,8 +38,6 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
     name: participantsFieldName,
   }) as RecruitParticipants;
   const { part, count } = participants;
-
-  const style = { zIndex: maxZIndex - index };
 
   const handleRemoveField = () => {
     if (!canRemoveField) return;
@@ -66,7 +63,7 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
   });
 
   return (
-    <div css={fieldRowCss} style={style}>
+    <div css={fieldRowCss}>
       <SelectBox
         triggerTextAlign="center"
         css={fieldCss}

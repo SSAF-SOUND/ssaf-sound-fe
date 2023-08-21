@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import * as Select from '@radix-ui/react-select';
 import { useEffect, useRef } from 'react';
 
-import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
+import { colorMix, flex, fontCss, palettes, zIndex } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 const triggerClassName = 'select-box-trigger';
@@ -224,6 +224,7 @@ const contentCss = css(
   {
     width: 'var(--radix-select-trigger-width)',
     maxHeight: 'var(--radix-select-content-available-height)',
+    zIndex: zIndex.fixed.selectBox,
   },
   fontCss.family.auto
 );
