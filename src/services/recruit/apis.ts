@@ -91,7 +91,7 @@ export type GetRecruitMembersApiData = ApiSuccessResponse<recruitMembersType>;
 
 export const getRecruitMembers = (recruitId: number) => {
   const endpoint = endpoints.recruit.members(recruitId);
-  return privateAxios
+  return publicAxios
     .get<GetRecruitMembersApiData>(endpoint)
     .then((res) => res.data.data);
 };
