@@ -24,7 +24,9 @@ export const getRecruits = restSuccess<Recruits>(
 
 export const getRecruitMembers = restSuccess<recruitMembersType>(
   'get',
-  composeUrls(API_URL, endpoints.recruit.members(1)),
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.members(':recruitId')),
   {
     data: RecruitData.recruitMembers,
   }
@@ -32,7 +34,9 @@ export const getRecruitMembers = restSuccess<recruitMembersType>(
 
 export const getRecruitDetail = restSuccess<RecruitDetail>(
   'get',
-  composeUrls(API_URL, endpoints.recruit.detail(1)),
+  // eslint-disable-next-line
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.detail(':recruitId')),
   {
     data: RecruitData.recruitDetail.project,
   }
@@ -75,7 +79,6 @@ export const postRecruitApply = restSuccess(
     data: null,
   }
 );
-
 export const recruitHandlers = [
   getRecruitDetail,
   getRecruits,

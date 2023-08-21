@@ -1,3 +1,5 @@
+import type { LunchDateSpecifier } from '~/services/lunch';
+
 export const queryKeys = {
   auth: () => ['auth'],
   user: {
@@ -28,7 +30,9 @@ export const queryKeys = {
   articleComments: {
     list: (articleId: number) => ['comments', articleId],
   },
-
+  recruitComments: {
+    list: (recruitId: number) => ['recruit-comments', recruitId],
+  },
   recruit: {
     list: () => ['recruits'],
     detail: (recruitId: number) => ['recruits', recruitId],
@@ -37,8 +41,13 @@ export const queryKeys = {
     apply: (recruitId: number) => ['recruits', 'apply', recruitId],
   },
   lunch: {
-    menus: ({ campus, date }: any) => ['lunch', 'menus', campus, date],
-    detail: (lunchId: number) => ['lunch', lunchId],
+    list: ({
+      campus,
+      dateSpecifier,
+    }: {
+      campus: string;
+      dateSpecifier: LunchDateSpecifier;
+    }) => [...queryKeys.auth(), 'lunch', 'menus', campus, dateSpecifier],
   },
 };
 // menus: ({ campus, date }: any) =>
@@ -158,17 +167,33 @@ export const endpoints = {
     scrap: (recruitId: number) => `/recruits/${recruitId}/scrap` as const,
     apply: (recruitId: number) => `/recruits/${recruitId}/application` as const,
   },
+  recruitComments: {
+    list: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
+    create: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
+    detail: (commentId: number) => `/recruit-comments/${commentId}` as const, // 삭제, 수정
+    like: (commentId: number) =>
+      `${endpoints.recruitComments.detail(commentId)}/like` as const,
+    report: (commentId: number) =>
+      `${endpoints.recruitComments.detail(commentId)}/report` as const,
+    reply: (params: { recruitId: number; commentId: number }) => {
+      const { recruitId, commentId } = params;
+      const queryString = new URLSearchParams({
+        recruitId,
+        commentId,
+      } as never).toString();
+      return `/recruit-comments/reply?${queryString}` as const;
+    },
+  },
   meta: {
     campuses: () => '/meta/campuses' as const,
     skills: () => '/meta/skills' as const,
     recruitTypes: () => '/meta/recruit-types' as const,
   },
   lunch: {
-    menus: ({ campus, date }: any) => {
+    list: ({ campus, date }: { campus: string; date: string }) => {
       const queryString = new URLSearchParams({ campus, date }).toString();
       return `/lunch?${queryString}`;
     },
-    detail: (lunchId: number) => `/lunch/${lunchId}` as const,
     vote: (lunchId: number) => `/lunch/poll/${lunchId}` as const,
     revertVote: (lunchId: number) => `/lunch/poll/revert/${lunchId}` as const,
     error: () => `/lunch/error` as const,

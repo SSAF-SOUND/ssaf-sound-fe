@@ -1,38 +1,37 @@
-export const LunchData = {
-  menus: {
-    totalPollCount: 2,
-    polledAt: 1,
-    menus: [
-      {
-        mainMenu: '돼지갈비',
-        imagePath:
-          'https://images.unsplash.com/photo-1682685794304-99d3d07c57d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80',
-        pollCount: 124,
-        id: 2,
-      },
-      {
-        mainMenu: '치즈오븐 스파게티',
-        imagePath:
-          'https://images.unsplash.com/photo-1682685794304-99d3d07c57d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80',
-        pollCount: 40,
-        id: 3,
-      },
-      {
-        mainMenu: '냉모밀',
-        imagePath:
-          'https://images.unsplash.com/photo-1682685794304-99d3d07c57d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80',
-        pollCount: 66,
-        id: 4,
-      },
-    ],
-  },
+import type { LunchMenuDetail } from '~/services/lunch';
 
-  detail: {
-    mainMenu: '비프카레라이스',
-    extraMenu:
-      '비프카레라이스,시금치된장국,아게다시도후,마늘종고추장무침,치커리들깨소스무침,일식양배추샐러드,드레싱,배추김치,아이스티',
-    sumKcal: '1,374Kcal',
-  },
+import { faker } from '@faker-js/faker';
+
+export const createMockLunchMenuSummary = (id: number): LunchMenuDetail => {
+  const mockImage =
+    'http://www.samsungwelstory.com/data/manager/recipe/E110/20230602/s20210325105806.png';
+  return {
+    lunchId: id,
+    imagePath: mockImage,
+    pollCount: faker.number.int({ min: 10, max: 100 }),
+    mainMenu: faker.company.name(),
+    extraMenu: faker.word.words({ count: 5 }),
+    sumKcal: '1,000kcal',
+  };
+};
+
+export const lunchMock = {
+  menus: (() => {
+    const menus = Array(6)
+      .fill(undefined)
+      .map((_, index) => createMockLunchMenuSummary(index + 1))
+      .sort((a, b) => b.pollCount - a.pollCount);
+
+    const totalPollCount = menus
+      .map(({ pollCount }) => pollCount)
+      .reduce((a, b) => a + b);
+
+    return {
+      totalPollCount,
+      polledAt: 1,
+      menus,
+    };
+  })(),
 
   vote: {
     pollCount: 125,

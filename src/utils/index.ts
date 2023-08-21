@@ -20,3 +20,4 @@ export * from './timeAgo';
 export * from './toWebp';
 export * from './webStorage';
 export * from './queryString';
+export * from './stringBooleanToBool';

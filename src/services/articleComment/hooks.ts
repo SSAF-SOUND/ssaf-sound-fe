@@ -1,4 +1,5 @@
 import type {
+  CreateArticleCommentParams,
   ReplyArticleCommentParams,
   UpdateArticleCommentParams,
 } from '~/services/articleComment/apis';
@@ -36,9 +37,19 @@ export const useInvalidateArticleComments = (articleId: number) => {
   return invalidate;
 };
 
-export const useCreateArticleComment = () => {
+interface UseCreateArticleCommentParams {
+  articleId: number;
+}
+
+type UseCreateArticleCommentMutationBody = Omit<
+  CreateArticleCommentParams,
+  keyof UseCreateArticleCommentParams
+>;
+
+export const useCreateArticleComment = (articleId: number) => {
   return useMutation({
-    mutationFn: createArticleComment,
+    mutationFn: (body: UseCreateArticleCommentMutationBody) =>
+      createArticleComment({ articleId, ...body }),
   });
 };
 

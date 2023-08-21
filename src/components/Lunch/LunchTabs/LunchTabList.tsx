@@ -6,10 +6,10 @@ import { flex } from '~/styles/utils';
 export const LunchTabList = (props: Tabs.TabsListProps) => {
   const { children, ...restProps } = props;
   return (
-    <Tabs.List css={listCss} {...restProps}>
+    <Tabs.List css={selfCss} {...restProps}>
       {children}
     </Tabs.List>
   );
 };
 
-const listCss = css(flex('center', 'center', 'row', 7));
+const selfCss = css(flex('center', 'center', 'row'));
