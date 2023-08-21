@@ -2,7 +2,7 @@ import type { UserInfo } from '~/services/member';
 
 export type CommentAuthor =
   | {
-      anonymity: false;
+      anonymity?: false;
       author: Omit<UserInfo, 'memberId'>;
     }
   | {

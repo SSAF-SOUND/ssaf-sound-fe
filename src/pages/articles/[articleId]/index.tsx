@@ -198,7 +198,8 @@ const commentsLayerSelfCss = css(flex('', '', 'column', 20));
 
 const ArticleCommentFormLayer = (props: { articleId: number }) => {
   const { articleId } = props;
-  const { mutateAsync: createArticleComment } = useCreateArticleComment();
+  const { mutateAsync: createArticleComment } =
+    useCreateArticleComment(articleId);
   const [formKey, setFormKey] = useState(1);
 
   const invalidateComments = useInvalidateArticleComments(articleId);
@@ -208,7 +209,7 @@ const ArticleCommentFormLayer = (props: { articleId: number }) => {
     formValues
   ) => {
     try {
-      await createArticleComment({ articleId, ...formValues });
+      await createArticleComment(formValues);
       await invalidateComments();
       setFormKey((p) => p + 1);
     } catch (err) {

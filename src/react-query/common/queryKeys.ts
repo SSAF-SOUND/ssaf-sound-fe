@@ -28,7 +28,9 @@ export const queryKeys = {
   articleComments: {
     list: (articleId: number) => ['comments', articleId],
   },
-
+  recruitComments: {
+    list: (recruitId: number) => ['recruit-comments', recruitId],
+  },
   recruit: {
     list: () => ['recruits'],
     detail: (recruitId: number) => ['recruits', recruitId],
@@ -157,6 +159,23 @@ export const endpoints = {
     detail: (recruitId: number) => `/recruits/${recruitId}/detail` as const,
     scrap: (recruitId: number) => `/recruits/${recruitId}/scrap` as const,
     apply: (recruitId: number) => `/recruits/${recruitId}/application` as const,
+  },
+  recruitComments: {
+    list: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
+    create: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
+    detail: (commentId: number) => `/recruit-comments/${commentId}` as const, // 삭제, 수정
+    like: (commentId: number) =>
+      `${endpoints.recruitComments.detail(commentId)}/like` as const,
+    report: (commentId: number) =>
+      `${endpoints.recruitComments.detail(commentId)}/report` as const,
+    reply: (params: { recruitId: number; commentId: number }) => {
+      const { recruitId, commentId } = params;
+      const queryString = new URLSearchParams({
+        recruitId,
+        commentId,
+      } as never).toString();
+      return `/recruit-comments/reply?${queryString}` as const;
+    },
   },
   meta: {
     campuses: () => '/meta/campuses' as const,
