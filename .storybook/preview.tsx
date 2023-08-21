@@ -8,9 +8,11 @@ import {
   articleHandlers,
   authHandlers,
   articleCommentHandlers,
+  recruitCommentHandlers,
   memberHandlers,
   metaHandlers,
   s3Handlers,
+  lunchHandlers,
 } from '../src/mocks/handlers';
 import { palettes } from '../src/styles/utils';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -51,8 +53,10 @@ const preview: Preview = {
         member: memberHandlers,
         article: articleHandlers,
         articleComment: articleCommentHandlers,
+        recruitComment: recruitCommentHandlers,
         meta: metaHandlers,
         s3: s3Handlers,
+        lunch: lunchHandlers,
       },
     },
   },

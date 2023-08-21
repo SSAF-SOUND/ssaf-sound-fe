@@ -4,7 +4,7 @@ import type {
 } from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormState } from 'react-hook-form';
 
 import { Button, Icon, SelectBox } from '~/components/Common';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
@@ -130,7 +130,6 @@ const fieldContainerCss = css(
 const myPartFieldName = 'myPart';
 const validateMyPart = (value: string, formValues: RecruitFormValues) => {
   if (formValues.category !== RecruitCategoryName.PROJECT) return true;
-
   return (
     possibleProjectParts.includes(value as RecruitParts) ||
     '본인의 파트를 선택해주세요'
@@ -138,11 +137,30 @@ const validateMyPart = (value: string, formValues: RecruitFormValues) => {
 };
 
 const MyPart = () => {
-  const { register } = useRecruitFormContext();
+  const { register, setValue, trigger } = useRecruitFormContext();
+  const {
+    errors: { myPart: myPartError },
+  } = useFormState({ name: myPartFieldName });
+
+  const onPartChange = (value: string) => {
+    setValue(myPartFieldName, value, {
+      shouldDirty: true,
+    });
+
+    if (myPartError) {
+      trigger(myPartFieldName);
+    }
+  };
 
   register(myPartFieldName, {
     validate: validateMyPart,
   });
 
-  return <SelectBox items={possibleProjectParts} size="md" />;
+  return (
+    <SelectBox
+      onValueChange={onPartChange}
+      items={possibleProjectParts}
+      size="md"
+    />
+  );
 };

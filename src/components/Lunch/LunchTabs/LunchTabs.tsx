@@ -1,34 +1,36 @@
-import type { ReactNode } from 'react';
-
 import * as Tabs from '@radix-ui/react-tabs';
 
 import { Separator } from '~/components/Common';
+import { LunchDateSpecifier } from '~/services/lunch/utils';
 import { palettes } from '~/styles/utils';
 
 import { LunchTabList } from './LunchTabList';
 import { LunchTabTriggerWithLink } from './LunchTabTriggerWithLink';
 
-interface LunchTabsProps {
-  content?: ReactNode;
-}
-
-export const LunchTabs = (props: LunchTabsProps) => {
-  const { content } = props;
+export const LunchTabs = () => {
   return (
-    <Tabs.Root css={{ width: '100%' }}>
+    <Tabs.Root>
       <LunchTabList>
-        <LunchTabTriggerWithLink value="today">오늘</LunchTabTriggerWithLink>
-        <Separator
-          orientation="vertical"
-          width={4}
-          height={30}
-          css={{
-            background: palettes.primary.default,
-          }}
-        />
-        <LunchTabTriggerWithLink value="tomorrow">내일</LunchTabTriggerWithLink>
+        <LunchTabTriggerWithLink value={LunchDateSpecifier.TODAY}>
+          오늘
+        </LunchTabTriggerWithLink>
+        <LunchTabSeparator />
+        <LunchTabTriggerWithLink value={LunchDateSpecifier.TOMORROW}>
+          내일
+        </LunchTabTriggerWithLink>
       </LunchTabList>
-      {content}
     </Tabs.Root>
+  );
+};
+
+const LunchTabSeparator = () => {
+  return (
+    <Separator
+      orientation="vertical"
+      width={2}
+      height={20}
+      backgroundColor={palettes.primary.default}
+      style={{ margin: '0 10px' }}
+    />
   );
 };

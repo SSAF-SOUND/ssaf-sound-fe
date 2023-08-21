@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import * as Select from '@radix-ui/react-select';
 import { useEffect, useRef } from 'react';
 
-import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
+import { colorMix, flex, fontCss, palettes, zIndex } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 const triggerClassName = 'select-box-trigger';
@@ -12,7 +12,7 @@ type SelectBoxSize = 'sm' | 'md' | 'lg';
 type SelectBoxVariant = 'normal' | 'outlined';
 type SelectBoxTheme = 'primary' | 'secondary';
 
-interface SelectBoxProps<D = string> {
+export interface SelectBoxProps<D = string> {
   items: D[];
   /**
    * - item을 유저에게 보여줄 text로 변환하는 함수
@@ -47,6 +47,8 @@ interface SelectBoxProps<D = string> {
   value?: string;
   defaultValue?: string;
   disabled?: boolean;
+  //
+  withIcon?: boolean;
 }
 
 // eslint-disable-next-line
@@ -75,6 +77,8 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     value,
     defaultValue,
     disabled,
+    //
+    withIcon = true,
   } = props;
 
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -109,9 +113,16 @@ const SelectBox = <D,>(props: SelectBoxProps<D>) => {
         <div css={valueCss}>
           <Select.Value placeholder={placeholder} />
         </div>
-        <Select.Icon
-          css={[baseTriggerIconCss, triggerIconCss[variant], iconSizeCss[size]]}
-        />
+
+        {withIcon && (
+          <Select.Icon
+            css={[
+              baseTriggerIconCss,
+              triggerIconCss[variant],
+              iconSizeCss[size],
+            ]}
+          />
+        )}
       </Select.Trigger>
       <Select.Content
         css={contentCss}
@@ -213,6 +224,7 @@ const contentCss = css(
   {
     width: 'var(--radix-select-trigger-width)',
     maxHeight: 'var(--radix-select-content-available-height)',
+    zIndex: zIndex.fixed.selectBox,
   },
   fontCss.family.auto
 );
