@@ -1,5 +1,3 @@
-import type { CustomNextPage } from 'next/types';
-
 import Link from 'next/link';
 
 import { css } from '@emotion/react';

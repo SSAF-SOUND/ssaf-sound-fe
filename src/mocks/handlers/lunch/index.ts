@@ -4,7 +4,7 @@ import type { GetLunchMenusWithPollStatusApiData } from '~/services/lunch';
 
 import { rest } from 'msw';
 
-import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
+import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 

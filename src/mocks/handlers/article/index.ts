@@ -20,7 +20,7 @@ import {
   restInfiniteArticlesError,
   restInfiniteArticlesSuccess,
 } from '~/mocks/handlers/article/utils';
-import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
+import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 

@@ -4,7 +4,6 @@ import { ErrorMessage } from '@hookform/error-message';
 import { AlertText } from '~/components/Common';
 import Editor from '~/components/Editor';
 import { useArticleFormContext } from '~/components/Forms/ArticleForm/utils';
-import { palettes } from '~/styles/utils';
 
 const fieldName = 'title';
 const minTitleLength = 2;
