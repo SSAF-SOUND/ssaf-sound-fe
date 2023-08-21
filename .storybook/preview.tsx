@@ -12,6 +12,7 @@ import {
   memberHandlers,
   metaHandlers,
   s3Handlers,
+  lunchHandlers,
 } from '../src/mocks/handlers';
 import { palettes } from '../src/styles/utils';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -55,6 +56,7 @@ const preview: Preview = {
         recruitComment: recruitCommentHandlers,
         meta: metaHandlers,
         s3: s3Handlers,
+        lunch: lunchHandlers,
       },
     },
   },

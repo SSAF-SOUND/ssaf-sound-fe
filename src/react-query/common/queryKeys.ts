@@ -1,3 +1,5 @@
+import type { LunchDateSpecifier } from '~/services/lunch';
+
 export const queryKeys = {
   auth: () => ['auth'],
   user: {
@@ -39,8 +41,13 @@ export const queryKeys = {
     apply: (recruitId: number) => ['recruits', 'apply', recruitId],
   },
   lunch: {
-    menus: ({ campus, date }: any) => ['lunch', 'menus', campus, date],
-    detail: (lunchId: number) => ['lunch', lunchId],
+    list: ({
+      campus,
+      dateSpecifier,
+    }: {
+      campus: string;
+      dateSpecifier: LunchDateSpecifier;
+    }) => [...queryKeys.auth(), 'lunch', 'menus', campus, dateSpecifier],
   },
 };
 // menus: ({ campus, date }: any) =>
@@ -183,11 +190,10 @@ export const endpoints = {
     recruitTypes: () => '/meta/recruit-types' as const,
   },
   lunch: {
-    menus: ({ campus, date }: any) => {
+    list: ({ campus, date }: { campus: string; date: string }) => {
       const queryString = new URLSearchParams({ campus, date }).toString();
       return `/lunch?${queryString}`;
     },
-    detail: (lunchId: number) => `/lunch/${lunchId}` as const,
     vote: (lunchId: number) => `/lunch/poll/${lunchId}` as const,
     revertVote: (lunchId: number) => `/lunch/poll/revert/${lunchId}` as const,
     error: () => `/lunch/error` as const,
