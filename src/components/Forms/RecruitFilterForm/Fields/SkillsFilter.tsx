@@ -1,21 +1,30 @@
 import type { MouseEvent } from 'react';
 import type { Control } from 'react-hook-form';
+import type { RecruitCategory } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { Controller } from 'react-hook-form';
 
 import { ToggleGroup } from '~/components/Common';
-import { SkillNameSet } from '~/services/recruit';
+import { SkillNameSet, getRecruitThemeByCategory } from '~/services/recruit';
 import { flex, fontCss } from '~/styles/utils';
 
 import { RecruitResetButton } from '../RecruitResetButton';
 
-export const SkillsFilter = (props: {
+interface SkillsFilterProps {
   reset: (e: MouseEvent<HTMLButtonElement>) => void;
   control: Control;
   defaultValue?: string[];
-}) => {
-  const { reset, control, defaultValue = ['React'] } = props;
+  category?: RecruitCategory;
+}
+export const SkillsFilter = (props: SkillsFilterProps) => {
+  const {
+    reset,
+    control,
+    defaultValue = ['React'],
+    category = 'project',
+  } = props;
+
   return (
     <label css={selfCss}>
       <div css={flex('', 'space-between', 'row')}>
@@ -29,7 +38,7 @@ export const SkillsFilter = (props: {
             <ToggleGroup
               items={[...SkillNameSet]}
               value={value}
-              theme="secondary"
+              theme={getRecruitThemeByCategory(category)}
               onValueChange={onChange}
               asSkillBadge
               css={flex('center', '', 'row', 10, 'wrap')}

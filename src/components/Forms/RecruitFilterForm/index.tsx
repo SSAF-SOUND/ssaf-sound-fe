@@ -8,20 +8,20 @@ import type {
 import { useForm } from 'react-hook-form';
 
 import { Button } from '~/components/Common';
-import { useRecruitTypes } from '~/services/meta';
+import { getRecruitThemeByCategory } from '~/services/recruit';
 
 import { RecruitTypeFilter, SkillsFilter } from './Fields';
 import { RecruitFormLabel } from './RecruitFormLabel';
 
-type DefaultValues = {
+export type RecruitFilterFormDefaultValues = {
   recruitType?: RecruitType[];
   skills?: SkillsType[];
 };
 
 interface RecruitFilterFormProps {
-  submitHandler?: SubmitHandler<DefaultValues>;
+  submitHandler?: SubmitHandler<RecruitFilterFormDefaultValues>;
   category?: RecruitCategory;
-  defaultValues: DefaultValues;
+  defaultValues?: RecruitFilterFormDefaultValues;
 }
 
 export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
@@ -35,9 +35,10 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
     defaultValues;
 
   const categoryIsProject = category === 'project';
-  const { control, handleSubmit, reset, watch } = useForm<DefaultValues>({
-    defaultValues,
-  });
+  const { control, handleSubmit, reset, watch } =
+    useForm<RecruitFilterFormDefaultValues>({
+      defaultValues,
+    });
 
   return (
     <form
@@ -45,7 +46,6 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
         display: 'flex',
         flexDirection: 'column',
         gap: 40,
-        width: '100%',
       }}
       onSubmit={handleSubmit(submitHandler)}
     >
@@ -62,9 +62,12 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
         reset={() => reset({ ...watch(), skills: [] })}
         control={control}
         defaultValue={defaultSkills as unknown as string[]}
+        category={category}
       />
 
-      <Button type="submit">선택완료</Button>
+      <Button type="submit" theme={getRecruitThemeByCategory(category)}>
+        선택완료
+      </Button>
     </form>
   );
 };
