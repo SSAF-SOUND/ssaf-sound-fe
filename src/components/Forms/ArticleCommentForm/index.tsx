@@ -7,7 +7,6 @@ import type {
 
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { AlertText, Checkbox, Icon, IconButton } from '~/components/Common';

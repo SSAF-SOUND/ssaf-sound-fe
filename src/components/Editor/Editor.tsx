@@ -8,7 +8,7 @@ import 'react-quill/dist/quill.snow.css';
 import { classnames as cn } from '~/components/Editor/classnames';
 import EditorSkeleton from '~/components/Editor/EditorSkeleton';
 import { articleCss } from '~/services/article';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { fontCss, palettes } from '~/styles/utils';
 
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false,

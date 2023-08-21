@@ -2,7 +2,7 @@ import type { LunchMenusWithPollStatus } from '~/services/lunch/utils';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
-import { privateAxios, publicAxios } from '~/utils';
+import { privateAxios } from '~/utils';
 
 export interface GetLunchMenusWithPollStatus {
   campus: string;

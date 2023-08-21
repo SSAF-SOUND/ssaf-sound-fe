@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { Bar, Icon, IconButton } from '~/components/Common';
-import { fixTopCenter, fontCss, zIndex } from '~/styles/utils';
+import { fixTopCenter, zIndex } from '~/styles/utils';
 
 interface DefaultTitleBarProps {
   title?: string;

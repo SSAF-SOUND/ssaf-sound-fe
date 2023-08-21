@@ -25,6 +25,8 @@ const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
   }
 );
 
+AccordionItem.displayName = 'AccordionItem';
+
 export default AccordionItem;
 
 const selfCss = css({
