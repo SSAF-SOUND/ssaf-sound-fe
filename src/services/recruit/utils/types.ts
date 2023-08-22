@@ -40,6 +40,8 @@ export type RecruitCategoryType = 'study' | 'project';
 
 /* enums */
 
+// ---- SkillName ----
+
 export enum SkillName {
   SPRING = 'Spring',
   REACT = 'React',
@@ -77,4 +79,19 @@ export enum RecruitParts {
 export enum RecruitCategoryName {
   PROJECT = '프로젝트',
   STUDY = '스터디',
+}
+
+// ---- Applicants ----
+
+export enum MatchStatus {
+  /** 신청 -> 등록자가 수락하길 기다리는 상태 */
+  WAITING_REGISTER_APPROVE = 'WAITING_REGISTER_APPROVE',
+  /** 신청 -> 등록자 수락 -> 신청자 수락 대기 상태 */
+  WAITING_APPLICANT = 'WAITING_APPLICANT',
+  /** 완료 */
+  DONE = 'DONE',
+  /** 거절 */
+  REJECT = 'REJECT',
+  /** 취소 */
+  CANCEL = 'CANCEL',
 }
