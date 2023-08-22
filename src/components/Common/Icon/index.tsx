@@ -8,6 +8,9 @@ import {
   AiFillCaretRight,
   AiFillGithub,
   AiOutlineGoogle,
+  AiFillHeart,
+  AiOutlineHeart,
+  AiOutlineRight,
 } from 'react-icons/ai';
 import { BiImageAdd } from 'react-icons/bi';
 import {
@@ -112,6 +115,10 @@ export const icons = {
   apple: <AiFillApple />,
 
   reply: <MdOutlineSubdirectoryArrowRight />,
+
+  heart: <AiFillHeart />,
+  [`heart.outlined`]: <AiOutlineHeart />,
+  [`right.outlined`]: <AiOutlineRight />,
 } as const;
 
 export type IconNames = keyof typeof icons;
