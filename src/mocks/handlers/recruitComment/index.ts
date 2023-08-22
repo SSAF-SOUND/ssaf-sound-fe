@@ -26,7 +26,10 @@ export const getRecruitComments = restSuccess<
   GetRecruitCommentsApiData['data']
 >(
   'get',
-  removeQueryParams(composeUrls(API_URL, endpoints.recruitComments.list(1))),
+  removeQueryParams(
+    // @ts-ignore
+    composeUrls(API_URL, endpoints.recruitComments.list(':recruitId'))
+  ),
   {
     data: {
       comments: recruitCommentDetails,
@@ -35,7 +38,13 @@ export const getRecruitComments = restSuccess<
 );
 
 export const createRecruitComment = rest.post(
-  removeQueryParams(composeUrls(API_URL, endpoints.recruitComments.create(1))),
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      // @ts-ignore
+      endpoints.recruitComments.create(':recruitId')
+    )
+  ),
   async (req, res, ctx) => {
     const { content } = (await req.json()) as CreateRecruitCommentBody;
     const lastComment = recruitCommentDetails.at(-1);

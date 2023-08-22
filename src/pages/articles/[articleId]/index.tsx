@@ -27,6 +27,8 @@ import {
   useCreateArticleComment,
   useInvalidateArticleComments,
 } from '~/services/articleComment';
+import { useCreateComment } from '~/services/comment';
+import { useRecruitComments } from '~/services/recruitComment';
 import {
   flex,
   fontCss,
@@ -187,6 +189,7 @@ const ArticleCommentsLayer = (props: {
               key={comment.commentId}
               comment={comment}
               articleId={articleId}
+              isRecruitComment={false}
             />
           );
         })}
@@ -198,8 +201,11 @@ const commentsLayerSelfCss = css(flex('', '', 'column', 20));
 
 const ArticleCommentFormLayer = (props: { articleId: number }) => {
   const { articleId } = props;
-  const { mutateAsync: createArticleComment } =
-    useCreateArticleComment(articleId);
+  // const { mutateAsync: createArticleComment } =
+  //   useCreateArticleComment(articleId);
+  const { mutateAsync: createArticleComment } = useCreateComment(articleId, {
+    recruit: true,
+  });
   const [formKey, setFormKey] = useState(1);
 
   const invalidateComments = useInvalidateArticleComments(articleId);
