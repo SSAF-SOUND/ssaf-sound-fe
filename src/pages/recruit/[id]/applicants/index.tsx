@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 
 import { Avatar, Toggle } from '~/components/Common';
 import { RecruitLayout } from '~/components/Layout';
-import { RecruitApplicantBar } from '~/components/RecruitApplicantBar';
+import { RecruitApplicantBar } from '~/components/RecruitApplicants';
 import TitleBar from '~/components/TitleBar';
 import { useGetQueryString } from '~/hooks';
 import { flex, fontCss, palettes } from '~/styles/utils';
@@ -19,7 +19,7 @@ const b = css(fontCss.family.auto, fontCss.style.R12, {
 const recruitIdQueryKey = 'id';
 
 /**
- * NOTE: 내 리쿠르트인 경우에만 접근 가능한 페이지
+ * NOTE: 내 리쿠르트인 경우에만 접근 가능한 페이지 (서버에서 검증)
  */
 const RecruitApplicantsPage = () => {
   const recruitId = useGetQueryString(recruitIdQueryKey);

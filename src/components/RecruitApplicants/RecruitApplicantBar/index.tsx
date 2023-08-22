@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 
+import { Avatar, Icon } from '~/components/Common';
 import { flex, fontCss, lineClamp, palettes } from '~/styles/utils';
 
 import { Prefix } from './Prefix';
-import { Avatar, Icon } from '../Common';
 
 // 백엔드의 matchingState 관련부분이 정리되면, 수정할 예정이에요
 type Status = 'confirmed' | 'waiting' | 'declined' | 'withHeart';
