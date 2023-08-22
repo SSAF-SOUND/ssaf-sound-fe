@@ -4,6 +4,7 @@ import type { ReactNode, ComponentPropsWithoutRef } from 'react';
 import { css } from '@emotion/react';
 import { Children, isValidElement } from 'react';
 
+import { classnames as cn } from '~/components/Common/Avatar/classnames';
 import { fontCss, inlineFlex } from '~/styles/utils';
 
 import SingleAvatar from './SingleAvatar';
@@ -41,7 +42,7 @@ const AvatarGroup = (props: AvatarGroupProps) => {
 };
 
 const selfCss = css(
-  { '> div': { marginLeft: -4 } },
+  { [`> .${cn.avatar}`]: { marginLeft: -4 } },
   inlineFlex('center', 'center', 'row'),
   fontCss.family.auto
 );
