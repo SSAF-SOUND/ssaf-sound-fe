@@ -2,7 +2,7 @@ import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 
 import { useWatch } from 'react-hook-form';
 
-import { RecruitCategoryName } from '~/components/Forms/RecruitForm/utils';
+import { RecruitCategoryName } from '~/services/recruit';
 
 import ProjectParticipants from './ProjectParticipants';
 import StudyParticipants from './StudyParticipants';
