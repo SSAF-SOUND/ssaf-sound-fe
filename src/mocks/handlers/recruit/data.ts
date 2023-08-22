@@ -1,4 +1,7 @@
+import type { UserInfo } from '~/services/member';
 import type {
+  GetRecruitApplicantsApiData,
+  RecruitApplicant,
   RecruitCategory,
   RecruitDetail,
   recruitMembersType,
@@ -8,12 +11,15 @@ import type {
   SkillsType,
 } from '~/services/recruit';
 
-import { SkillName } from '~/services/recruit';
+import { faker } from '@faker-js/faker';
 
-import { userInfo } from '../member/data';
+import { MatchStatus, RecruitParts, SkillName } from '~/services/recruit';
+
+import { createMockUser, userInfo } from '../member/data';
 
 const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
   study: {
+    recruitId: 1,
     userInfo: { ...userInfo.certifiedSsafyUserInfo },
     category: 'study',
     title: 'string',
@@ -30,6 +36,7 @@ const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
     scrapCount: 2,
   },
   project: {
+    recruitId: 2,
     userInfo: { ...userInfo.certifiedSsafyUserInfo },
     category: 'project',
     title: 'prject test',
@@ -51,18 +58,11 @@ const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
         name: SkillName.SPRING,
       },
     ],
-    limits: [
-      {
-        recruitType: '기획/디자인',
-        limit: 2,
-        currentNumber: 1,
-      },
-      {
-        recruitType: '프론트엔드',
-        limit: 3,
-        currentNumber: 0,
-      },
-    ],
+    limits: Object.values(RecruitParts).map((part) => ({
+      recruitType: part,
+      limit: faker.number.int({ min: 10, max: 20 }),
+      currentNumber: faker.number.int({ min: 1, max: 10 }),
+    })),
     scrapCount: 100,
   },
 };
@@ -107,27 +107,66 @@ const recruits: Recruits = {
   lastPage: true,
 };
 
+const recruitTypesOfRecruitMembers = Object.fromEntries(
+  Object.values(RecruitParts).map((part, partIndex) => [
+    part,
+    {
+      limit: faker.number.int({ min: 10, max: 20 }),
+      members: [5001, 5002, 5003, 5004, 5005].map((memberId) => {
+        return createMockUser(memberId * (partIndex + 1));
+      }),
+    },
+  ])
+);
+
 const recruitMembers: recruitMembersType = {
-  recruitTypes: {
-    '기획/디자인': {
-      limit: 3,
-      members: [
-        { ...userInfo.certifiedSsafyUserInfo },
-        { ...userInfo.nonSsafyUserInfo },
-      ],
-    },
-    백엔드: {
-      limit: 3,
-      members: [
-        { ...userInfo.certifiedSsafyUserInfo },
-        { ...userInfo.nonSsafyUserInfo },
-      ],
-    },
-  },
+  recruitTypes: recruitTypesOfRecruitMembers,
 };
 
 const RecruitScrap = {
   scrapCount: 87,
+};
+
+const createMockRecruitApplicant = (userId: number): RecruitApplicant => {
+  const liked = Boolean(userId % 2);
+  const author: UserInfo = {
+    ...userInfo.certifiedSsafyUserInfo,
+    memberId: userId,
+  };
+
+  const matchStatusValues = Object.values(MatchStatus);
+  const matchStatus =
+    matchStatusValues[
+      faker.number.int({ min: 0, max: matchStatusValues.length - 1 })
+    ];
+
+  return {
+    liked,
+    question: 'QuestionQuestionQuestionQuestion',
+    reply: 'ReplyReplyReplyReplyReplyReply',
+    matchStatus,
+    author,
+    recruitApplicationId: userId,
+    appliedAt: faker.date.past().toISOString(),
+  };
+};
+
+const recruitApplicants: GetRecruitApplicantsApiData['data'] = {
+  recruitId: 1,
+  recruitApplications: {
+    ...Object.fromEntries(
+      Object.values(RecruitParts).map((recruitPart, recruitPartIndex) => {
+        const userIds = [10000, 10001, 10002, 10003].map(
+          (userId) => userId * (recruitPartIndex + 1)
+        );
+
+        return [
+          [recruitPart],
+          userIds.map((userId) => createMockRecruitApplicant(userId)),
+        ];
+      })
+    ),
+  },
 };
 
 export const RecruitData = {
@@ -136,4 +175,5 @@ export const RecruitData = {
   recruitSummary,
   recruitMembers,
   RecruitScrap,
+  recruitApplicants,
 };
