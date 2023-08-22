@@ -19,22 +19,24 @@ export type SkillType =
   | 'Flutter';
 
 export enum SkillName {
+  SPRING = 'Spring',
   REACT = 'React',
+  IOS = 'IOS',
+  VUE = 'Vue',
+  JAVA = 'Java',
   JAVASCRIPT = 'JavaScript',
   TYPESCRIPT = 'TypeScript',
-  VUE = 'Vue',
-  SVELTE = 'Svelte',
-  NEXTJS = 'NextJs',
-  NODEJS = 'NodeJs',
-  JAVA = 'Java',
-  SPRING = 'Spring',
-  SWIFT = 'Swift',
-  ANDROID = 'Android',
-  FIGMA = 'Figma',
+  NODEJS = 'Nodejs',
+  NEXTJS = 'Nextjs',
+  NUXTJS = 'Nuxtjs',
   XD = 'XD',
-  DJANGO = 'Django',
-  IOS = 'IOS',
+  SWIFT = 'Swift',
+  FIGMA = 'Figma',
+  SVELTE = 'Svelte',
+  ANDROID = 'Android',
   FLUTTER = 'Flutter',
+  DJANGO = 'Django',
+  ETC = '기타',
 }
 export const SkillNameSet = new Set<string>(Object.values(SkillName));
 
@@ -52,8 +54,12 @@ export interface LimitType {
 }
 
 export interface SkillsType {
-  name: SkillType;
+  name: SkillName;
   skillId: number;
 }
 
 export type RecruitCategoryType = 'study' | 'project';
+
+// ---- Parts ----
+
+// ---- Applicants ----

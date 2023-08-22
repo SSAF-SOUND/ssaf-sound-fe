@@ -1,12 +1,14 @@
 import type {
   RecruitCategory,
-  Recruits,
   RecruitDetail,
-  SkillsType,
-  RecruitParticipant,
-  RecruitSummary,
   recruitMembersType,
+  RecruitParticipant,
+  Recruits,
+  RecruitSummary,
+  SkillsType,
 } from '~/services/recruit';
+
+import { SkillName } from '~/services/recruit';
 
 import { userInfo } from '../member/data';
 
@@ -42,11 +44,11 @@ const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
     skills: [
       {
         skillId: 1,
-        name: 'Spring',
+        name: SkillName.REACT,
       },
       {
         skillId: 2,
-        name: 'React',
+        name: SkillName.SPRING,
       },
     ],
     limits: [
