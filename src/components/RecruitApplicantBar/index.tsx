@@ -8,7 +8,7 @@ import { Avatar, Icon } from '../Common';
 // 백엔드의 matchingState 관련부분이 정리되면, 수정할 예정이에요
 type Status = 'confirmed' | 'waiting' | 'declined' | 'withHeart';
 
-export const RecruitApplicationList = (props: any) => {
+export const RecruitApplicantBar = (props: any) => {
   const {
     status,
     nickname = 'James',

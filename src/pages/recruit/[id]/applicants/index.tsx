@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 
-import { Accordion, Avatar, Toggle } from '~/components/Common';
+import { Avatar, Toggle } from '~/components/Common';
 import { RecruitLayout } from '~/components/Layout';
-import { RecruitApplicationList } from '~/components/RecruitApplicationList';
+import { RecruitApplicantBar } from '~/components/RecruitApplicantBar';
 import TitleBar from '~/components/TitleBar';
+import { useGetQueryString } from '~/hooks';
 import { flex, fontCss, palettes } from '~/styles/utils';
+import { routes } from '~/utils';
 
 const a = css(fontCss.family.auto, fontCss.style.B28, {
   color: palettes.white,
@@ -13,10 +15,24 @@ const a = css(fontCss.family.auto, fontCss.style.B28, {
 const b = css(fontCss.family.auto, fontCss.style.R12, {
   color: palettes.recruit.default,
 });
-const ApplicationsPage = () => {
+
+const recruitIdQueryKey = 'id';
+
+/**
+ * NOTE: 내 리쿠르트인 경우에만 접근 가능한 페이지
+ */
+const RecruitApplicantsPage = () => {
+  const recruitId = useGetQueryString(recruitIdQueryKey);
+  const backwardRoute = recruitId && routes.recruit.detail(Number(recruitId));
+
   return (
     <RecruitLayout>
-      <TitleBar.Default title="리쿠르팅 신청 목록" />
+      <TitleBar.Default
+        title="리쿠르팅 신청 목록"
+        withoutClose
+        onClickBackward={backwardRoute}
+      />
+
       <div>
         <div css={flex('', '', 'column', 0)}>
           <span css={a}>기획/디자인</span>
@@ -48,11 +64,11 @@ const ApplicationsPage = () => {
             />
           </div>
           <ol>
-            <RecruitApplicationList withHeart />
-            <RecruitApplicationList withHeart />
-            <RecruitApplicationList withHeart />
-            <RecruitApplicationList withHeart />
-            <RecruitApplicationList withHeart />
+            <RecruitApplicantBar withHeart />
+            <RecruitApplicantBar withHeart />
+            <RecruitApplicantBar withHeart />
+            <RecruitApplicantBar withHeart />
+            <RecruitApplicantBar withHeart />
           </ol>
         </div>
       </div>
@@ -60,4 +76,4 @@ const ApplicationsPage = () => {
   );
 };
 
-export default ApplicationsPage;
+export default RecruitApplicantsPage;
