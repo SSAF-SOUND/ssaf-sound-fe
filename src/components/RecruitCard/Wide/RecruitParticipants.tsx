@@ -11,7 +11,6 @@ interface RecruitParticipants {
 
 const RecruitParticipants = (props: RecruitParticipants) => {
   const { participants } = props;
-
   const isSingleParticipants = participants.length === 1;
 
   return (
@@ -51,9 +50,9 @@ const RecruitAvatars = (props: RecruitAvatarsProps) => {
         {members.map((member) => (
           <Avatar
             size="md2"
-            key={member.nickName}
+            key={member.nickname}
             userInfo={{
-              nickname: member.nickName,
+              nickname: member.nickname,
               isMajor: member.major,
             }}
           />
