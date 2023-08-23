@@ -2,17 +2,16 @@ import type {
   LimitType,
   RecruitApplicant,
   RecruitDetail,
+  RecruitMembers,
   RecruitParts,
 } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
-import { Avatar } from '~/components/Common';
-import { classnames as avatarClassnames } from '~/components/Common/Avatar/classnames';
-import {
-  RecruitApplicantBar,
-  RecruitApplicantsAccordion,
-} from '~/components/RecruitApplicants';
+import { RecruitApplicantsAccordion } from '~/components/RecruitApplicants';
+import { RecruitApplicantBarList } from '~/components/RecruitApplicants/RecruitApplicantBarList';
+import { RecruitApplicantsCount } from '~/components/RecruitApplicants/RecruitApplicantsCount';
+import { RecruitMembersAvatars } from '~/components/RecruitApplicants/RecruitMembersAvatars';
 import { MatchStatus, useRecruitMembers } from '~/services/recruit';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
@@ -57,44 +56,51 @@ export const RecruitApplicantsDetail = (
       >
         {part}
       </RecruitApplicantsAccordion.Trigger>
+
       <RecruitApplicantsAccordion.Content>
-        <p css={joinMemberCountCss}>
-          {limit}명 중 {currentNumber}명 모집완료
-        </p>
+        <div css={{ marginBottom: 52 }}>
+          <p css={joinMemberCountCss}>
+            {limit}명 중 {currentNumber}명 모집완료
+          </p>
 
-        {isRecruitMembersLoading && (
-          <RecruitMemberAvatarSkeletons skeletonCount={limit} />
-        )}
-
-        {recruitMembers && (
-          <Avatar.Group
-            css={avatarGroupCss}
-            visibleCount={limit}
-            maxCount={limit}
-          >
-            {recruitMembers.recruitTypes[part]?.members.map((userInfo) => (
-              <Avatar size="lg" key={userInfo.memberId} userInfo={userInfo} />
-            ))}
-          </Avatar.Group>
-        )}
-
-        <p css={unTouchedApplicantsCountContainerCss}>
-          <span>리쿠르팅 신청</span>
-          <strong css={unTouchedApplicantsCountCss}>
-            {unTouchedApplicantsCount}
-          </strong>
-        </p>
-
-        <div css={likeContainerCss}>
-          <RecruitApplicantSortToggle />
+          {isRecruitMembersLoading ? (
+            <RecruitMembersAvatars.Skeleton skeletonCount={limit} />
+          ) : (
+            recruitMembers && (
+              <RecruitMembersAvatars
+                limit={limit}
+                recruitMembers={
+                  recruitMembers.recruitTypes[part] ??
+                  ([] as unknown as RecruitMembers)
+                }
+              />
+            )
+          )}
         </div>
 
-        {/*  3개 보여주고 더보기 */}
-        <div css={flex('', '', 'column', 12)}>
-          <RecruitApplicantBar applicant={applicants[0]} />
-          <RecruitApplicantBar applicant={applicants[1]} />
-          <RecruitApplicantBar applicant={applicants[2]} />
-          <RecruitApplicantBar applicant={applicants[3]} />
+        <div css={{ marginBottom: 52 }}>
+          <RecruitApplicantsCount
+            title="리쿠르팅 신청"
+            count={unTouchedApplicantsCount}
+          />
+
+          {unTouchedApplicantsCount > 0 && (
+            <div css={likeContainerCss}>
+              <RecruitApplicantSortToggle />
+            </div>
+          )}
+
+          <RecruitApplicantBarList applicants={unTouchedApplicants} />
+        </div>
+
+        <div css={{ marginBottom: 40 }}>
+          <RecruitApplicantsCount
+            title="리쿠르팅 응답"
+            count={touchedApplicants.length}
+            css={{ marginBottom: 12 }}
+          />
+
+          <RecruitApplicantBarList applicants={touchedApplicants} />
         </div>
       </RecruitApplicantsAccordion.Content>
     </RecruitApplicantsAccordion.Item>
@@ -106,48 +112,7 @@ const joinMemberCountCss = css(
   fontCss.style.R12
 );
 
-const unTouchedApplicantsCountContainerCss = css(
-  fontCss.style.B18,
-  flex('center', '', 'row', 4)
-);
-
-const unTouchedApplicantsCountCss = css({ color: palettes.recruit.default });
-
 const likeContainerCss = css(
   { marginBottom: 12 },
   flex('center', 'flex-end', 'row')
 );
-
-interface RecruitMemberAvatarSkeletonsProps {
-  skeletonCount: number;
-}
-
-const RecruitMemberAvatarSkeletons = (
-  props: RecruitMemberAvatarSkeletonsProps
-) => {
-  const { skeletonCount } = props;
-
-  return (
-    <Avatar.Group
-      visibleCount={skeletonCount}
-      maxCount={skeletonCount}
-      css={avatarGroupCss}
-    >
-      {Array(skeletonCount)
-        .fill(undefined)
-        .map((_, index) => (
-          <Avatar.Skeleton key={index} size="lg" />
-        ))}
-    </Avatar.Group>
-  );
-};
-
-const avatarGroupCss = css({
-  flexWrap: 'wrap',
-  justifyContent: 'flex-start',
-  marginBottom: 52,
-  gap: 4,
-  [`> .${avatarClassnames.avatar}`]: {
-    marginLeft: 0,
-  },
-});
