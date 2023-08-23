@@ -1,9 +1,14 @@
 import type { ReactNode } from 'react';
-import type { RecruitCategoryType, RecruitSummary } from '~/services/recruit';
+import type {
+  RecruitCategoryType,
+  RecruitParticipant,
+  RecruitSkills,
+} from '~/services/recruit';
 
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
+import Skeleton from 'react-loading-skeleton';
 
 import Dday from '~/components/Dday';
 import { flex, palettes } from '~/styles/utils';
@@ -18,7 +23,14 @@ export interface RecruitCardProps {
   withBadge?: boolean;
   children?: ReactNode;
   withMessage?: boolean;
-  recruitSummary: RecruitSummary;
+
+  // --------------------------
+  recruitId: number;
+  title: string;
+  finishedRecruit: boolean;
+  recruitEnd: string;
+  skills?: RecruitSkills;
+  participants: RecruitParticipant[];
 }
 
 const RecruitCard = (props: RecruitCardProps) => {
@@ -36,13 +48,15 @@ const RecruitCard = (props: RecruitCardProps) => {
 
 const RecruitCardImpl = (props: RecruitCardProps) => {
   const {
-    recruitSummary,
+    recruitId,
+    title,
+    recruitEnd,
+    skills,
+    participants,
     withBadge = false,
     withMessage,
     category = 'project',
   } = props;
-
-  const { recruitId, title, recruitEnd, skills, participants } = recruitSummary;
 
   return (
     <Link css={withMessage || selfCss} href={`/recruit/${recruitId}`}>
@@ -58,7 +72,7 @@ const RecruitCardImpl = (props: RecruitCardProps) => {
 
           <Dday recruitEnd={recruitEnd} category={category} css={DdayCss} />
         </div>
-        <RecruitCardSkills skills={skills} />
+        {/* <RecruitCardSkills skills={skills} /> */}
       </div>
       <RecruitParticipants participants={participants} />
     </Link>
@@ -79,5 +93,19 @@ const selfCss = css(flex('', 'space-between', 'column'), {
 const DdayCss = css({
   lineHeight: '20px',
 });
+
+export const SkeletonRecruitCard = () => {
+  return (
+    <Skeleton
+      css={{
+        width: '100%',
+        minWidth: 340,
+        maxWidth: 400,
+        minHeight: 150,
+        borderRadius: 30,
+      }}
+    />
+  );
+};
 
 export default RecruitCard;
