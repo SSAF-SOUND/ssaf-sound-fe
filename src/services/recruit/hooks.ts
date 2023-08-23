@@ -17,7 +17,7 @@ export const useApplyRecruit = () => {
 
 export const useRecruitDetail = (recruitId: number) => {
   return useQuery({
-    queryKey: queryKeys.articles.list(recruitId),
+    queryKey: queryKeys.recruit.detail(recruitId),
     queryFn: () => getRecruitDetail(recruitId),
   });
 };
