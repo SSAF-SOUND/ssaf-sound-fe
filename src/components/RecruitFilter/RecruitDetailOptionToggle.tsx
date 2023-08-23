@@ -1,28 +1,44 @@
 import type { BadgeProps } from '../Common';
+import type { Ref } from 'react';
+import type { RecruitCategory } from '~/services/recruit';
 
 import { css } from '@emotion/react';
+import { forwardRef } from 'react';
 
-import { fontCss, palettes } from '~/styles/utils';
+import { getRecruitThemeByCategory } from '~/services/recruit';
+import { fontCss, palettes, themeColorVars } from '~/styles/utils';
 
 import { Badge, Icon } from '../Common';
 
-interface RecruitDetailOptionToggleProps extends BadgeProps {}
+interface RecruitDetailOptionToggleProps extends Omit<BadgeProps, 'theme'> {
+  category?: RecruitCategory;
+  isActive?: boolean;
+}
 
-export const RecruitDetailOptionToggle = (
-  props: RecruitDetailOptionToggleProps
-) => {
-  return (
-    <Badge css={[selfCss, textCss]} {...props}>
-      상세 옵션
-      <Icon name="triangle" css={{ transform: 'rotate(180deg)' }} size={16} />
-    </Badge>
-  );
-};
+export const RecruitDetailOptionToggle = forwardRef(
+  (props: RecruitDetailOptionToggleProps, ref: Ref<HTMLButtonElement>) => {
+    const { category = 'project', isActive = false, ...restProps } = props;
+    return (
+      <Badge
+        css={[selfCss, textCss, isActive && activeCss]}
+        theme={getRecruitThemeByCategory(category)}
+        {...restProps}
+      >
+        상세 옵션
+        <Icon name="triangle" css={{ transform: 'rotate(180deg)' }} size={16} />
+      </Badge>
+    );
+  }
+);
 
+RecruitDetailOptionToggle.displayName = 'RecruitDetailOptionToggle';
+
+const activeCss = css({
+  background: themeColorVars.mainDarkColor.var,
+  borderColor: themeColorVars.mainDarkColor.var,
+  color: palettes.white,
+});
 const selfCss = css({
-  '&[data-hasQueries="true"]': {
-    background: palettes.primary.default,
-  },
   width: 97,
   height: 28,
   cursor: 'pointer',
