@@ -3,14 +3,15 @@ import { css } from '@emotion/react';
 import { Toggle } from '~/components/Common';
 import { fontCss } from '~/styles/utils';
 
-interface RecruitApplicantsPinToggleProps {
+interface RecruitApplicantSortToggleProps {
   onPressedChange?: (pressed: boolean) => void;
   pressed?: boolean;
   defaultPressed?: boolean;
 }
 
-export const RecruitApplicantLikeToggle = (
-  props: RecruitApplicantsPinToggleProps
+// TODO: SortToggle로 이름 변경하기
+export const RecruitApplicantSortToggle = (
+  props: RecruitApplicantSortToggleProps
 ) => {
   return (
     <Toggle

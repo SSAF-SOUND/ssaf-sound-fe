@@ -9,9 +9,14 @@ import { css } from '@emotion/react';
 
 import { Avatar } from '~/components/Common';
 import { classnames as avatarClassnames } from '~/components/Common/Avatar/classnames';
-import { RecruitApplicantsAccordion } from '~/components/RecruitApplicants';
+import {
+  RecruitApplicantBar,
+  RecruitApplicantsAccordion,
+} from '~/components/RecruitApplicants';
 import { MatchStatus, useRecruitMembers } from '~/services/recruit';
 import { flex, fontCss, palettes } from '~/styles/utils';
+
+import { RecruitApplicantSortToggle } from '../RecruitApplicantSortToggle';
 
 interface RecruitApplicantsDetailProps {
   part: RecruitParts;
@@ -79,6 +84,18 @@ export const RecruitApplicantsDetail = (
             {unTouchedApplicantsCount}
           </strong>
         </p>
+
+        <div css={likeContainerCss}>
+          <RecruitApplicantSortToggle />
+        </div>
+
+        {/*  3개 보여주고 더보기 */}
+        <div css={flex('', '', 'column', 12)}>
+          <RecruitApplicantBar applicant={applicants[0]} />
+          <RecruitApplicantBar applicant={applicants[1]} />
+          <RecruitApplicantBar applicant={applicants[2]} />
+          <RecruitApplicantBar applicant={applicants[3]} />
+        </div>
       </RecruitApplicantsAccordion.Content>
     </RecruitApplicantsAccordion.Item>
   );
@@ -93,7 +110,13 @@ const unTouchedApplicantsCountContainerCss = css(
   fontCss.style.B18,
   flex('center', '', 'row', 4)
 );
+
 const unTouchedApplicantsCountCss = css({ color: palettes.recruit.default });
+
+const likeContainerCss = css(
+  { marginBottom: 12 },
+  flex('center', 'flex-end', 'row')
+);
 
 interface RecruitMemberAvatarSkeletonsProps {
   skeletonCount: number;
