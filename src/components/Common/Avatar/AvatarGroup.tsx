@@ -13,9 +13,16 @@ export interface AvatarGroupProps extends ComponentPropsWithoutRef<'div'> {
   children: ReactNode;
   visibleCount?: number;
   maxCount: number;
+  overridableSize?: SingleAvatarProps['size'];
 }
 const AvatarGroup = (props: AvatarGroupProps) => {
-  const { children, maxCount, visibleCount = 4, ...rest } = props;
+  const {
+    children,
+    maxCount,
+    visibleCount = 4,
+    overridableSize,
+    ...rest
+  } = props;
 
   const validAvatars = Children.toArray(children).filter(
     isValidElement<SingleAvatarProps>
@@ -24,7 +31,9 @@ const AvatarGroup = (props: AvatarGroupProps) => {
   const visibleAvatars = validAvatars.slice(0, visibleCount);
   const emptyAvatarsCount = visibleCount - validAvatars.length;
   const restAvatarsCount = maxCount - visibleCount;
-  const avatarSize = validAvatars[0].props?.size || 'sm';
+  const avatarSize = overridableSize
+    ? overridableSize
+    : validAvatars[0].props?.size || 'sm';
 
   return (
     <div css={selfCss} {...rest}>
