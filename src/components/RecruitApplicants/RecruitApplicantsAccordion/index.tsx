@@ -108,7 +108,7 @@ const accordionContentCss = css({
   padding: '8px 16px 20px',
 });
 
-export const RecruitApplicantAccordion = {
+export const RecruitApplicantsAccordion = {
   Root: AccordionRoot,
   Item: AccordionItem,
   Content: AccordionContent,
