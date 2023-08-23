@@ -112,11 +112,13 @@ const recruitTypesOfRecruitMembers = Object.fromEntries(
     const partInfo = recruitDetail.project.limits.find(
       ({ recruitType }) => part === recruitType
     );
+
     const currentNumber = partInfo?.currentNumber as number;
     const limit = partInfo?.limit as number;
 
     const memberIds = Array(20)
       .fill(5000)
+      .map((v, index) => v + index)
       .map((v) => v * (partIndex + 1))
       .slice(0, currentNumber);
 
@@ -169,7 +171,8 @@ const recruitApplicants: GetRecruitApplicantsApiData['data'] = {
       Object.values(RecruitParts).map((part, partIndex) => {
         const userIds = Array(16)
           .fill(1_000_000)
-          .map(({ memberId }) => memberId * (partIndex + 1));
+          .map((v, index) => v + index)
+          .map((v) => v * (partIndex + 1));
 
         return [
           [part],
