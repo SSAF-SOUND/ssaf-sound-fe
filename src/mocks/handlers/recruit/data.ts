@@ -108,15 +108,26 @@ const recruits: Recruits = {
 };
 
 const recruitTypesOfRecruitMembers = Object.fromEntries(
-  Object.values(RecruitParts).map((part, partIndex) => [
-    part,
-    {
-      limit: faker.number.int({ min: 10, max: 20 }),
-      members: [5001, 5002, 5003, 5004, 5005].map((memberId) => {
-        return createMockUser(memberId * (partIndex + 1));
-      }),
-    },
-  ])
+  Object.values(RecruitParts).map((part, partIndex) => {
+    const partInfo = recruitDetail.project.limits.find(
+      ({ recruitType }) => part === recruitType
+    );
+    const currentNumber = partInfo?.currentNumber as number;
+    const limit = partInfo?.limit as number;
+
+    const memberIds = Array(20)
+      .fill(5000)
+      .map((v) => v * (partIndex + 1))
+      .slice(0, currentNumber);
+
+    return [
+      part,
+      {
+        limit: limit,
+        members: memberIds.map((memberId) => createMockUser(memberId)),
+      },
+    ];
+  })
 );
 
 const recruitMembers: recruitMembersType = {
@@ -155,10 +166,10 @@ const recruitApplicants: GetRecruitApplicantsApiData['data'] = {
   recruitId: 1,
   recruitApplications: {
     ...Object.fromEntries(
-      Object.values(RecruitParts).map((recruitPart, recruitPartIndex) => {
-        const userIds = [10000, 10001, 10002, 10003].map(
-          (userId) => userId * (recruitPartIndex + 1)
-        );
+      Object.values(RecruitParts).map((recruitPart) => {
+        const userIds = recruitMembers.recruitTypes[recruitPart]?.members?.map(
+          ({ memberId }) => memberId
+        ) as number[];
 
         return [
           [recruitPart],
