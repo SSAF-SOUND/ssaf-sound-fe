@@ -1,46 +1,12 @@
 import { css } from '@emotion/react';
 
-import { Icon } from '~/components/Common';
 import { MatchStatus } from '~/services/recruit';
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
-interface RecruitApplicantBarHeaderProps {
-  matchStatus: MatchStatus;
-  liked?: boolean;
-}
-
-export const RecruitApplicantBarHeader = (
-  props: RecruitApplicantBarHeaderProps
-) => {
-  const { matchStatus, liked } = props;
-
-  const touched = matchStatus !== MatchStatus.WAITING_REGISTER_APPROVE;
-
-  return (
-    <div css={selfCss}>
-      {!touched && <LikeIndicator liked={liked} />}
-      {touched && <StatusText matchStatus={matchStatus} />}
-    </div>
-  );
-};
-
-const selfCss = css(
-  {
-    width: 46,
-    flexShrink: 0,
-  },
-  inlineFlex('center', 'center')
-);
-
-const LikeIndicator = (props: { liked?: boolean }) => {
-  const { liked } = props;
-
-  return <Icon name={liked ? 'heart' : 'heart.outlined'} size={24} />;
-};
-
-const StatusText = (props: {
+interface MatchStatusTextProps {
   matchStatus: Exclude<MatchStatus, MatchStatus.WAITING_REGISTER_APPROVE>;
-}) => {
+}
+export const MatchStatusText = (props: MatchStatusTextProps) => {
   const { matchStatus } = props;
 
   return (
