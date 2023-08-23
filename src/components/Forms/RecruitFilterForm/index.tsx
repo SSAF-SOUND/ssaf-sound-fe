@@ -14,7 +14,7 @@ import { RecruitTypeFilter, SkillsFilter } from './Fields';
 import { RecruitFormLabel } from './RecruitFormLabel';
 
 export type RecruitFilterFormDefaultValues = {
-  recruitType?: RecruitType[];
+  recruitTypes?: RecruitType[];
   skills?: SkillsType[];
 };
 
@@ -28,10 +28,10 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
   //   const { data } = useRecruitTypes();
   const {
     category = 'project',
-    defaultValues = { skills: [], recruitType: [] },
+    defaultValues = { skills: [], recruitTypes: [] },
     submitHandler = console.log,
   } = props;
-  const { skills: defaultSkills, recruitType: defaultRecruitType } =
+  const { skills: defaultSkills, recruitTypes: defaultRecruitType } =
     defaultValues;
 
   const categoryIsProject = category === 'project';
@@ -52,7 +52,7 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
       <RecruitFormLabel />
       {categoryIsProject && (
         <RecruitTypeFilter
-          reset={() => reset({ ...watch(), recruitType: [] })}
+          reset={() => reset({ ...watch(), recruitTypes: [] })}
           control={control}
           defaultValue={defaultRecruitType}
         />

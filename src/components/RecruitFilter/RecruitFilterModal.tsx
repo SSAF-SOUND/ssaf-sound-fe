@@ -25,13 +25,13 @@ export const RecruitFilterModal = (props: RecruitFilterModalProps) => {
   const router = useRouter();
   const { pathname, query } = router;
   const skills = useGetQueryString('skills');
-  const recruitType = useGetQueryString('recruitType');
+  const recruitTypes = useGetQueryString('recruitTypes');
 
-  const hasQueries = !!skills || !!recruitType;
+  const hasQueries = !!skills || !!recruitTypes;
 
   const newValues = {
     skills: !!skills ? skills.split(',') : [],
-    recruitType: !!recruitType ? recruitType.split(',') : [],
+    recruitTypes: !!recruitTypes ? recruitTypes.split(',') : [],
   } as unknown as RecruitFilterFormDefaultValues;
 
   const submitHandler = (d: RecruitFilterFormDefaultValues) => {
@@ -40,7 +40,7 @@ export const RecruitFilterModal = (props: RecruitFilterModalProps) => {
       query: {
         ...query,
         skills: d.skills?.join(','),
-        recruitType: d.recruitType?.join(','),
+        recruitTypes: d.recruitTypes?.join(','),
       },
     });
 
