@@ -166,13 +166,13 @@ const recruitApplicants: GetRecruitApplicantsApiData['data'] = {
   recruitId: 1,
   recruitApplications: {
     ...Object.fromEntries(
-      Object.values(RecruitParts).map((recruitPart) => {
-        const userIds = recruitMembers.recruitTypes[recruitPart]?.members?.map(
-          ({ memberId }) => memberId
-        ) as number[];
+      Object.values(RecruitParts).map((part, partIndex) => {
+        const userIds = Array(16)
+          .fill(1_000_000)
+          .map(({ memberId }) => memberId * (partIndex + 1));
 
         return [
-          [recruitPart],
+          [part],
           userIds.map((userId) => createMockRecruitApplicant(userId)),
         ];
       })
