@@ -1,55 +1,80 @@
+import type { RecruitApplicant } from '~/services/recruit';
+
 import { css } from '@emotion/react';
 
-import { Avatar, Icon } from '~/components/Common';
+import { Avatar, Dot, Icon, IconButton } from '~/components/Common';
 import { flex, fontCss, lineClamp, palettes } from '~/styles/utils';
+import { formatFullDate } from '~/utils';
 
-import { Prefix } from './Prefix';
+import { RecruitApplicantBarHeader } from './RecruitApplicantBarHeader';
 
-// 백엔드의 matchingState 관련부분이 정리되면, 수정할 예정이에요
-type Status = 'confirmed' | 'waiting' | 'declined' | 'withHeart';
+export interface RecruitApplicantBar {
+  applicant: RecruitApplicant;
+}
 
-export const RecruitApplicantBar = (props: any) => {
-  const {
-    status,
-    nickname = 'James',
-    isMajor = false,
-    des = '데스크립션',
-    date = '2023-07-12',
-  } = props;
+export const RecruitApplicantBar = (props: RecruitApplicantBar) => {
+  const { applicant } = props;
+
+  const { author, liked, appliedAt, matchStatus, reply } = applicant;
+
+  const { nickname } = author;
+  const date = formatFullDate(appliedAt);
 
   return (
-    <li css={[selfCss, status === 'decline' && declinedCss]}>
-      <div css={flex('center', '', 'row', 10)}>
-        <span css={[{ width: 30 }, flex('center')]}>
-          {status === 'withHeart' ? (
-            <Icon name="heart" color={palettes.recruit.default} size={16} />
-          ) : (
-            <Prefix status={status} />
-          )}
-        </span>
-        <div css={flex('center', '', 'row', 10)}>
-          <Avatar size="lg" userInfo={{ nickname, isMajor }} />
-          <div>
-            <p css={headingCss}>{nickname}님의 리쿠르팅 신청</p>
-            <p css={textCss}>{des}</p>
-            <span css={dateCss}>{date}</span>
+    <li css={selfCss}>
+      <RecruitApplicantBarHeader matchStatus={matchStatus} liked={liked} />
+
+      <div css={applicantInfoContainerCss}>
+        <Avatar size="lg" userInfo={author} />
+
+        <div css={applicantInfoDetailContainerCss}>
+          <div css={applicantInfoDetailCss}>
+            <div>
+              <p css={applicantInfoHeaderCss}>{nickname}님의 리쿠르팅 신청</p>
+              <p css={applicantInfoReplyCss}>{reply}</p>
+            </div>
+            <div css={applicantInfoLinkCss}>
+              <Dot theme="recruit" />
+              <IconButton size={32}>
+                <Icon name="chevron.right" size={24} />
+              </IconButton>
+            </div>
           </div>
+
+          <time dateTime={date} css={dateCss}>
+            {date}
+          </time>
         </div>
       </div>
-
-      <Icon name="right.outlined" size={16} />
     </li>
   );
 };
 
-const selfCss = css(flex('center', 'space-between', 'row', 6));
+const selfCss = css(flex('center', '', 'row', 10));
+const applicantInfoContainerCss = css(
+  { flexGrow: 1 },
+  flex('center', 'space-between', 'row', 16)
+);
+const applicantInfoDetailCss = css(flex('center', 'space-between', 'row', 12));
+const applicantInfoDetailContainerCss = css(
+  { flexGrow: 1 },
+  flex('', 'flex-start')
+);
 
-const declinedCss = css({
-  opacity: 0.5,
-});
+const applicantInfoHeaderCss = css(
+  fontCss.family.auto,
+  fontCss.style.B16,
+  lineClamp(1)
+);
 
-const headingCss = css(fontCss.family.auto, fontCss.style.B16, lineClamp(1));
-const textCss = css(fontCss.family.auto, fontCss.style.B12, lineClamp(1));
+const applicantInfoReplyCss = css(
+  fontCss.family.auto,
+  fontCss.style.B12,
+  lineClamp(1)
+);
+
+const applicantInfoLinkCss = css({}, flex('center', 'center', 'row', 6));
+
 const dateCss = css(fontCss.family.auto, fontCss.style.R12, {
   color: palettes.font.blueGrey,
 });
