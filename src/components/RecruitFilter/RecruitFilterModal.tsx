@@ -61,7 +61,8 @@ export const RecruitFilterModal = (props: RecruitFilterModalProps) => {
       trigger={
         <RecruitDetailOptionToggle
           onClick={() => setOpen(!open)}
-          data-hasQueries={hasQueries}
+          category={category}
+          isActive={hasQueries}
         />
       }
       onPointerDownOutside={() => setOpen(false)}
