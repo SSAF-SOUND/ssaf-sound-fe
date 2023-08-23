@@ -36,6 +36,7 @@ const triggerCss = css(flex('center', 'center', 'row'), fontCss.style.B20, {
     zIndex: 2,
   },
   color: palettes.font.blueGrey,
+  cursor: 'pointer',
 });
 
 const variantCss: Record<TriggerVariantProps, SerializedStyles> = {
