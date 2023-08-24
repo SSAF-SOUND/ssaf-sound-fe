@@ -140,7 +140,7 @@ const RecruitScrap = {
   scrapCount: 87,
 };
 
-const createMockRecruitApplicant = (userId: number): RecruitApplicant => {
+export const createMockRecruitApplicant = (userId: number): RecruitApplicant => {
   const liked = Boolean(userId % 2);
   const author: UserInfo = {
     ...userInfo.certifiedSsafyUserInfo,
