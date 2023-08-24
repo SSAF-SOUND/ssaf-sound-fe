@@ -15,7 +15,7 @@ import { RecruitMembersAvatars } from '~/components/RecruitApplicants/RecruitMem
 import { MatchStatus, useRecruitMembers } from '~/services/recruit';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
-import { RecruitApplicantSortToggle } from '../RecruitApplicantSortToggle';
+import { RecruitApplicantsSortToggle } from '../RecruitApplicantsSortToggle';
 
 interface RecruitApplicantsDetailProps {
   part: RecruitParts;
@@ -86,7 +86,7 @@ export const RecruitApplicantsDetail = (
 
           {unTouchedApplicantsCount > 0 && (
             <div css={likeContainerCss}>
-              <RecruitApplicantSortToggle />
+              <RecruitApplicantsSortToggle />
             </div>
           )}
 
