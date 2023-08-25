@@ -39,7 +39,7 @@ export const RecruitTypeFilter = (props: RecruitTypeFilterProps) => {
             />
           );
         }}
-        name="recruitType"
+        name="recruitTypes"
         control={control}
         defaultValue={defaultValue}
       />

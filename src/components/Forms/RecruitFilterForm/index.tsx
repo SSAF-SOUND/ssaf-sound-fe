@@ -35,7 +35,7 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
     defaultValues;
 
   const categoryIsProject = category === 'project';
-  const { control, handleSubmit, reset, watch } =
+  const { control, handleSubmit, reset, getValues } =
     useForm<RecruitFilterFormDefaultValues>({
       defaultValues,
     });
@@ -52,14 +52,14 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
       <RecruitFormLabel />
       {categoryIsProject && (
         <RecruitTypeFilter
-          reset={() => reset({ ...watch(), recruitTypes: [] })}
+          reset={() => reset({ ...getValues(), recruitTypes: [] })}
           control={control}
           defaultValue={defaultRecruitType}
         />
       )}
 
       <SkillsFilter
-        reset={() => reset({ ...watch(), skills: [] })}
+        reset={() => reset({ ...getValues(), skills: [] })}
         control={control}
         defaultValue={defaultSkills as unknown as string[]}
         category={category}
