@@ -1,8 +1,4 @@
-import type {
-  CustomNextPage,
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-} from 'next/types';
+import type { CustomNextPage } from 'next/types';
 import type { RecruitParts } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
@@ -19,17 +15,17 @@ import { useRecruitApplicants, useRecruitDetail } from '~/services/recruit';
 import { flex, fontCss, palettes, titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 
-interface RecruitApplicantsPageProps
-  extends InferGetServerSidePropsType<typeof getServerSideProps> {}
+type QueryString = {
+  id: string;
+};
 
 /**
  * NOTE: 내 리쿠르트인 경우에만 접근 가능한 페이지 (서버에서 검증)
  */
-const RecruitApplicantsPage: CustomNextPage<RecruitApplicantsPageProps> = (
-  props
-) => {
-  const { recruitId } = props;
+const RecruitApplicantsPage: CustomNextPage = () => {
   const router = useRouter();
+  const query = router.query as QueryString;
+  const recruitId = Number(query.id);
 
   const {
     data: recruitApplicants,
@@ -121,30 +117,4 @@ RecruitApplicantsPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
-};
-
-interface Props {
-  recruitId: number;
-}
-
-type Params = {
-  id: string;
-};
-
-export const getServerSideProps: GetServerSideProps<Props, Params> = async (
-  context
-) => {
-  const id = Number(context.params?.id);
-
-  if (Number.isNaN(id)) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      recruitId: id,
-    },
-  };
 };
