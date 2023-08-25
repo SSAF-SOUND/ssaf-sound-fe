@@ -1,4 +1,5 @@
 import type { LunchDateSpecifier } from '~/services/lunch';
+import type { RecruitParams } from '~/services/recruit';
 
 export const queryKeys = {
   auth: () => ['auth'],
@@ -34,7 +35,19 @@ export const queryKeys = {
     list: (recruitId: number) => ['recruit-comments', recruitId],
   },
   recruit: {
-    list: () => ['recruits'],
+    // todo 객체형태로 수정
+    list: (params: RecruitParams) => {
+      return [
+        'recruits',
+        'list',
+        {
+          isFinished: params.isFinished ?? false,
+          skills: params.skills ? params.skills : 'All',
+          recruitTypes: params.recruitTypes ? params.recruitTypes : 'All',
+        },
+        params.keyword ?? null,
+      ];
+    },
     detail: (recruitId: number) => ['recruits', 'detail', recruitId],
     members: (recruitId: number) => ['recruits', 'members', recruitId],
     scrap: (recruitId: number) => ['recruits', 'scrap', recruitId],
@@ -156,11 +169,42 @@ export const endpoints = {
   },
   recruit: {
     // todo 이름, 파라미터 수정
-    list: () => '/recruits' as const,
     members: (recruitId: number) => `/recruits/${recruitId}/members` as const,
     detail: (recruitId: number) => `/recruits/${recruitId}/detail` as const,
     scrap: (recruitId: number) => `/recruits/${recruitId}/scrap` as const,
     apply: (recruitId: number) => `/recruits/${recruitId}/application` as const,
+    list: (params: Partial<RecruitParams> & { cursor: number | null }) => {
+      const {
+        recruitTypes = [],
+        skills = [],
+        keyword = '',
+        // -------------
+        category = 'project',
+        isFinished = false,
+        cursor,
+      } = params || {};
+
+      const defaultQueries = {
+        size: (10).toString(),
+        category: 'project',
+        isFinished: 'false',
+      };
+
+      const searchParams = new URLSearchParams(defaultQueries);
+
+      if (keyword?.length) searchParams.set('keyword', keyword);
+      if (skills?.length)
+        skills.forEach((skill) => searchParams.append('skills', skill));
+
+      if (recruitTypes?.length)
+        recruitTypes.forEach((recruitType) =>
+          searchParams.append('recruitType', recruitType)
+        );
+      if (category) searchParams.set('category', category);
+      if (isFinished) searchParams.set('isFinished', isFinished.toString());
+      if (cursor) searchParams.set('cursor', cursor.toString());
+      return `/recruits?${searchParams.toString()}`;
+    },
   },
   recruitComments: {
     list: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
