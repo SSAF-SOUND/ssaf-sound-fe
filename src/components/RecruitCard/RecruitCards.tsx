@@ -1,77 +1,69 @@
 import type { ForwardedRef } from 'react';
-import type { Recruit, SkillName, RecruitCategory } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
 
-import { forwardRef, memo } from 'react';
+import { css } from '@emotion/react';
+import { forwardRef } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
-import { Button } from '~/components/Common';
-import { useRecruits } from '~/services/recruit';
+import ErrorCard from '~/components/ErrorCard';
+import { RecruitCard } from '~/components/RecruitCard';
+import { SkeletonRecruitCard } from '~/components/RecruitCard/Wide';
+import { useInfiniteRecruits } from '~/services/recruit';
+import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConvertor';
 import { flex } from '~/styles/utils';
 import { concat, scrollUpBy } from '~/utils';
 
-import { RecruitCard } from './index';
-import { SkeletonRecruitCard } from './Wide';
+const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
+  return <div css={listCss} {...props} ref={ref} />;
+});
+const listCss = css(flex('center', '', 'column', 15));
+
+List.displayName = 'RecruitCardList';
 
 export const RecruitCards = () => {
   const router = useRouter();
-  const { keyword, recruitType, skills, category } = router?.query as Record<
-    string,
-    string
-  >;
 
   const {
     data,
-    status,
     isError,
     fetchNextPage,
     hasNextPage,
     refetch,
     isFetchingNextPage,
     isRefetching,
-  } = useRecruits({
-    keyword: keyword ? keyword : '',
-    skills: skills ? (skills.split(',') as SkillName[]) : [],
-    category: (category ?? 'project') as RecruitCategory,
-  });
+    isRefetchError,
+  } = useInfiniteRecruits(recruitTypeConvertor(router?.query));
 
-  const articles = data?.pages
-    .map((pages: { recruits: Recruit[] }) => pages.recruits)
-    .reduce(concat);
+  const articles = data?.pages.map((pages) => pages.recruits).reduce(concat);
+  // 조건에 맞지 않는 데이터 처리 어떻게 해주실 지 여쭈어보고 수정
+  if (data?.pages === null) return <div>조건에 맞는 카드가 없어요</div>;
 
   return (
-    <>
+    <div css={flex('center', '', 'column', 15)}>
       <Virtuoso
         data={articles}
-        css={[
-          flex('center', '', 'column', 15),
-          {
-            width: '100%',
-          },
-        ]}
         components={{ List }}
         itemContent={(index, article) => {
           return (
             <RecruitCard
-              key={article.recruitId}
-              recruitId={article.recruitId}
-              title={article.title}
-              participants={article.participants}
-              recruitEnd={article.recruitEnd}
-              finishedRecruit={article.finishedRecruit}
+              key={article?.recruitId}
+              recruitId={article?.recruitId}
+              title={article?.title}
+              participants={article?.participants}
+              recruitEnd={article?.recruitEnd}
+              finishedRecruit={article?.finishedRecruit}
               // skills={['React']}
             />
           );
         }}
         useWindowScroll
         endReached={() => {
-          if (status === 'error') return;
+          if (isError || isRefetchError) return;
           fetchNextPage();
-          scrollUpBy(10);
+          scrollUpBy(5);
         }}
       />
-
       {isFetchingNextPage && hasNextPage && (
         <div css={flex('', '', 'column', 15)}>
           <SkeletonRecruitCard />
@@ -80,19 +72,15 @@ export const RecruitCards = () => {
         </div>
       )}
 
-      {isError && (
-        <div>
-          <Button onClick={() => refetch()} loading={isRefetching}>
-            다시 시도하기
-          </Button>
-        </div>
+      {(isError || isRefetchError) && (
+        <ErrorCard
+          onClickRetry={refetch}
+          css={{
+            maxWidth: 400,
+          }}
+          isLoading={isRefetching}
+        />
       )}
-    </>
+    </div>
   );
 };
-
-const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
-  return <div {...props} ref={ref} css={flex('center', '', 'column', '20')} />;
-});
-
-List.displayName = 'RecruitCardsContainer';
