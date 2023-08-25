@@ -11,6 +11,7 @@ import { stringBooleanToBool } from '~/utils';
 
 const IS_RECRUITING_CONSTANT = 'isFinished';
 
+// isFinished 관련 이야기해보고 수정 예정
 export const IsRecruitingToggle = () => {
   const category = useGetQueryString('category');
   const isRecruiting = useGetQueryString(IS_RECRUITING_CONSTANT, {
