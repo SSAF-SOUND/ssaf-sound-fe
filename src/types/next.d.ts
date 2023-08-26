@@ -1,7 +1,9 @@
 import type { AppProps } from 'next/app';
 import type { NextPage, NextComponentType, NextPageContext } from 'next/types';
 import type { ReactElement } from 'react';
+import type { PageHeadProps } from '~/components/Common';
 import type { UserRole } from '~/services/member';
+
 
 type NextPageConfig = {
   auth: {
@@ -19,6 +21,7 @@ type NextPageConfig = {
      */
     unauthorized: ReactElement | string;
   };
+  meta: PageHeadProps;
 };
 
 declare module 'next/types' {
