@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { DefaultFullPageLoader } from '~/components/Common';
 import { LunchLayout } from '~/components/Layout';
 import {
   LunchTabs,
@@ -36,23 +35,10 @@ const Lunch = () => {
     dateSpecifier && validateDateSpecifier(dateSpecifier);
   const isValidQueryParams = isValidCampus && isValidDateSpecifier;
 
-  if (!isValidQueryParams) {
-    const safeCampus = isValidCampus ? campus : campuses[0];
-    const safeDateSpecifier = isValidDateSpecifier
-      ? dateSpecifier
-      : LunchDateSpecifier.TODAY;
-
-    router.push({
-      pathname: router.pathname,
-      query: {
-        ...router.query,
-        campus: safeCampus,
-        date: safeDateSpecifier,
-      },
-    });
-
-    return <DefaultFullPageLoader />;
-  }
+  const safeCampus = isValidCampus ? campus : campuses[0];
+  const safeDateSpecifier = isValidDateSpecifier
+    ? dateSpecifier
+    : LunchDateSpecifier.TODAY;
 
   const onCampusChange = (value: string) => {
     router.push({
@@ -64,21 +50,34 @@ const Lunch = () => {
     });
   };
 
+  useEffect(() => {
+    if (isValidQueryParams) return;
+
+    router.replace({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        campus: safeCampus,
+        date: safeDateSpecifier,
+      },
+    });
+  }, [isValidQueryParams, router, safeCampus, safeDateSpecifier]);
+
   return (
     <LunchLayout>
       <NavigationGroup />
       <LunchIntroduction />
       <LunchCampusSelectBox
         css={lunchCampusSelectBoxCss}
-        selectedCampus={campus}
+        selectedCampus={safeCampus}
         campuses={campuses}
         onCampusChange={onCampusChange}
       />
       <LunchTabs />
       <LunchMenus
         css={lunchMenusCss}
-        campus={campus}
-        dateSpecifier={dateSpecifier}
+        campus={safeCampus}
+        dateSpecifier={safeDateSpecifier}
       />
     </LunchLayout>
   );
