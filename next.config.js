@@ -26,6 +26,18 @@ const nextConfig = {
         pathname: '/**',
       },
       {
+        protocol: 'http',
+        hostname: process.env.NEXT_PUBLIC_LUNCH_IMAGE_HOSTNAME,
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: process.env.NEXT_PUBLIC_LUNCH_IMAGE_HOSTNAME,
+        port: '',
+        pathname: '/**',
+      },
+      {
         protocol: 'https',
         hostname: 'images.unsplash.com',
         port: '',
