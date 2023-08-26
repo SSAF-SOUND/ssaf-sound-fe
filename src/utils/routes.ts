@@ -64,6 +64,24 @@ export const routes = {
     apply: (recruitId: number) => `${routes.recruit.self()}/apply/${recruitId}`,
     applyRedirect: () => `${routes.recruit.self()}/apply/redirect`,
   },
+
+  lunch: {
+    self: () => '/lunch',
+    detail: ({
+      campus,
+      dateSpecifier,
+    }: {
+      campus: string;
+      dateSpecifier: string;
+    }) => {
+      const queryString = new URLSearchParams({
+        campus,
+        dateSpecifier,
+      }).toString();
+
+      return `${routes.lunch.self()}/${queryString}`;
+    },
+  },
 };
 
 export enum EditableMyInfoFields {

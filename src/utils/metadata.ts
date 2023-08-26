@@ -1,8 +1,10 @@
 const url = (process.env.NEXT_PUBLIC_APP_URL as string) || '';
 
+const title = 'SSAF SOUND';
+
 export const globalMetaData = {
-  title: 'SSAF SOUND',
-  description: 'SSAFY 멤버를 위한 커뮤니티',
+  title,
+  description: `${title}는 삼성 청년 SW 아카데미(SSAFY) 학생들과 예비 SSAFY인들의 커뮤니티 공간입니다.`,
   locale: 'ko_KR',
   url,
   imageUrl: '',

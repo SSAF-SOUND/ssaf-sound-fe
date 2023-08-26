@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import React, { useEffect } from 'react';
 
+import { PageHead, PageHeadingText } from '~/components/Common';
 import { LunchLayout } from '~/components/Layout';
 import {
   LunchTabs,
@@ -13,6 +14,11 @@ import LunchMenus from '~/components/Lunch/LunchMenus';
 import NavigationGroup from '~/components/NavigationGroup';
 import { LunchDateSpecifier } from '~/services/lunch/utils';
 import { useCampuses } from '~/services/meta';
+import { routes } from '~/utils';
+import { globalMetaData } from '~/utils/metadata';
+
+const metaTitle = '점심 메뉴';
+const metaDescription = `${globalMetaData.description} 삼성 청년 SW 아카데미(SSAFY)의 각 캠퍼스별 점심 메뉴를 확인해보세요.`;
 
 const validateDateSpecifier = (date?: string): date is LunchDateSpecifier => {
   return Object.values(LunchDateSpecifier).includes(date as LunchDateSpecifier);
@@ -64,22 +70,36 @@ const Lunch = () => {
   }, [isValidQueryParams, router, safeCampus, safeDateSpecifier]);
 
   return (
-    <LunchLayout>
-      <NavigationGroup />
-      <LunchIntroduction />
-      <LunchCampusSelectBox
-        css={lunchCampusSelectBoxCss}
-        selectedCampus={safeCampus}
-        campuses={campuses}
-        onCampusChange={onCampusChange}
+    <>
+      <PageHead
+        title={metaTitle}
+        description={metaDescription}
+        openGraph={{
+          title: metaTitle,
+          description: metaDescription,
+          url: routes.lunch.self(),
+        }}
       />
-      <LunchTabs />
-      <LunchMenus
-        css={lunchMenusCss}
-        campus={safeCampus}
-        dateSpecifier={safeDateSpecifier}
-      />
-    </LunchLayout>
+
+      <PageHeadingText text={metaTitle} />
+
+      <LunchLayout>
+        <NavigationGroup />
+        <LunchIntroduction />
+        <LunchCampusSelectBox
+          css={lunchCampusSelectBoxCss}
+          selectedCampus={safeCampus}
+          campuses={campuses}
+          onCampusChange={onCampusChange}
+        />
+        <LunchTabs />
+        <LunchMenus
+          css={lunchMenusCss}
+          campus={safeCampus}
+          dateSpecifier={safeDateSpecifier}
+        />
+      </LunchLayout>
+    </>
   );
 };
 
