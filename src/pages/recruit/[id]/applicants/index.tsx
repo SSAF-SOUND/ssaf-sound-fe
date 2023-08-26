@@ -5,7 +5,11 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { DefaultFullPageLoader, loaderText } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  loaderText,
+  PageHeadingText,
+} from '~/components/Common';
 import {
   RecruitApplicantsDetail,
   RecruitApplicantsAccordion,
@@ -14,6 +18,8 @@ import TitleBar from '~/components/TitleBar';
 import { useRecruitApplicants, useRecruitDetail } from '~/services/recruit';
 import { flex, fontCss, palettes, titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
+
+const metaTitle = '리쿠르팅 신청 목록';
 
 type QueryString = {
   id: string;
@@ -62,29 +68,31 @@ const RecruitApplicantsPage: CustomNextPage = () => {
   );
 
   return (
-    <div css={selfCss}>
-      <TitleBar.Default
-        title="리쿠르팅 신청 목록"
-        withoutClose
-        onClickBackward={routes.recruit.detail(recruitId)}
-      />
+    <>
+      <PageHeadingText text={metaTitle} />
 
-      <div css={headerCss}>
-        <p css={categoryNameCss}>{recruitDetail.category}</p>
-        <p css={titleCss}>{recruitDetail.title}</p>
+      <div css={selfCss}>
+        <TitleBar.Default
+          title="리쿠르팅 신청 목록"
+          withoutClose
+          onClickBackward={routes.recruit.detail(recruitId)}
+        />
+        <div css={headerCss}>
+          <p css={categoryNameCss}>{recruitDetail.category}</p>
+          <p css={titleCss}>{recruitDetail.title}</p>
+        </div>
+        <RecruitApplicantsAccordion.Root>
+          {partAndApplicantsEntries.map(([part, applicants]) => (
+            <RecruitApplicantsDetail
+              key={part}
+              part={part as RecruitParts}
+              applicants={applicants}
+              recruitDetail={recruitDetail}
+            />
+          ))}
+        </RecruitApplicantsAccordion.Root>
       </div>
-
-      <RecruitApplicantsAccordion.Root>
-        {partAndApplicantsEntries.map(([part, applicants]) => (
-          <RecruitApplicantsDetail
-            key={part}
-            part={part as RecruitParts}
-            applicants={applicants}
-            recruitDetail={recruitDetail}
-          />
-        ))}
-      </RecruitApplicantsAccordion.Root>
-    </div>
+    </>
   );
 };
 
@@ -117,4 +125,9 @@ RecruitApplicantsPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
+};
+RecruitApplicantsPage.meta = {
+  title: metaTitle,
+  robots: { index: false, follow: false },
+  openGraph: { title: metaTitle },
 };

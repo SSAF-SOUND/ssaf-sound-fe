@@ -3,11 +3,7 @@ import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 
 import { useRouter } from 'next/router';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import { useArticleDetail, useUpdateArticle } from '~/services/article';
@@ -57,8 +53,6 @@ const ArticleEditPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ follow: false, index: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div>
@@ -85,4 +79,9 @@ ArticleEditPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader />,
   unauthorized: routes.unauthorized(),
+};
+ArticleEditPage.meta = {
+  title: metaTitle,
+  robots: { index: false, follow: false },
+  openGraph: { title: metaTitle },
 };
