@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
         <Background />
         <Toaster />
         <MainLayout>
-          {Component.meta && <PageHead {...Component.metas} />}
+          {Component.meta && <PageHead {...Component.meta} />}
           {Component.auth ? (
             <AuthChecker auth={Component.auth}>
               <Component {...pageProps} />
