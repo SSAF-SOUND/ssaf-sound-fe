@@ -7,7 +7,6 @@ import { isValidElement } from 'react';
 
 import { DefaultFullPageLoader } from '~/components/Common';
 import { role, useMyInfo } from '~/services/member';
-import { flex } from '~/styles/utils';
 
 export interface AuthCheckerProps {
   auth: NextPageAuthConfig;
