@@ -18,22 +18,22 @@ const TopBar = (props: TopBarProps) => {
       css={selfCss}
       {...props}
       left={<Logo navigateToMainPage />}
-      right={
-        <div css={rightSelfCss}>
-          <div css={rightIconContainerCss}>
-            <Dot size="md" theme="secondary" />
-            <IconButton size={iconSize + 4}>
-              <Icon name="notification" size={iconSize} />
-            </IconButton>
-          </div>
-          <div css={rightIconContainerCss}>
-            <Dot size="md" theme="secondary" />
-            <IconButton size={iconSize + 4}>
-              <Icon name="chat" size={iconSize} />
-            </IconButton>
-          </div>
-        </div>
-      }
+      // right={
+      //   <div css={rightSelfCss}>
+      //     <div css={rightIconContainerCss}>
+      //       <Dot size="md" theme="secondary" />
+      //       <IconButton size={iconSize + 4}>
+      //         <Icon name="notification" size={iconSize} />
+      //       </IconButton>
+      //     </div>
+      //     <div css={rightIconContainerCss}>
+      //       <Dot size="md" theme="secondary" />
+      //       <IconButton size={iconSize + 4}>
+      //         <Icon name="chat" size={iconSize} />
+      //       </IconButton>
+      //     </div>
+      //   </div>
+      // }
     />
   );
 };
