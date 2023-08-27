@@ -9,7 +9,7 @@ import { flex, palettes } from '~/styles/utils';
 import { Accordion } from './index';
 
 const meta: Meta<typeof Accordion> = {
-  title: 'System/Accordion',
+  title: 'Navigation/Accordion',
   component: () => <div />,
   decorators: [
     (Story) => (
