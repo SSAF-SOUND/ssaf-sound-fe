@@ -3,7 +3,7 @@ import type { ArticleDetail } from '~/services/article';
 import { css } from '@emotion/react';
 
 import { Icon, IconButton } from '~/components/Common';
-import { useModal } from '~/components/GlobalModal';
+import { useSignInGuideModal } from '~/hooks';
 import { useLikeArticle, useScrapArticle } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
@@ -21,8 +21,8 @@ const ArticleStats = (props: ArticleStatsProps) => {
   const { articleDetail, className } = props;
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
-  const { openModal, closeModal } = useModal();
 
+  const { openSignInGuideModal } = useSignInGuideModal();
   const { liked, likeCount, scraped, scrapCount, commentCount } = articleDetail;
   const { postId: articleId } = articleDetail;
   const { mutateAsync: likeArticle, isLoading: isTogglingLike } =
@@ -31,12 +31,7 @@ const ArticleStats = (props: ArticleStatsProps) => {
     useScrapArticle(articleId);
 
   const handleNotSignedInUser = () => {
-    openModal('alert', {
-      title: '알림',
-      description: '로그인이 필요한 기능입니다.',
-      actionText: '확인',
-      onClickAction: closeModal,
-    });
+    openSignInGuideModal();
   };
 
   const handleClickLike = async () => {
