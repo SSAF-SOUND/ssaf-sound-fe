@@ -33,6 +33,9 @@ const createWebStorage = () => {
         sessionStorage.getItem(AUTH_RETURN_PAGE_KEY) ?? DEFAULT_RETURN_PAGE
       );
     },
+    clearSignInReturnPage: () => {
+      sessionStorage.removeItem(AUTH_RETURN_PAGE_KEY);
+    },
     clearPrivateData: () => {},
     DEV__setTokens: (tokens: Tokens) => {
       localStorage.setItem(DEV__ACCESS_TOKEN_KEY, tokens.accessToken);
