@@ -4,15 +4,19 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { forwardRef } from 'react';
+import { ClipLoader } from 'react-spinners';
 import { Virtuoso } from 'react-virtuoso';
 
 import ErrorCard from '~/components/ErrorCard';
 import { RecruitCard } from '~/components/RecruitCard';
 import { SkeletonRecruitCard } from '~/components/RecruitCard/Wide';
+import { useGetQueryString } from '~/hooks';
 import { useInfiniteRecruits } from '~/services/recruit';
 import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConvertor';
-import { flex } from '~/styles/utils';
+import { flex, palettes } from '~/styles/utils';
 import { concat, scrollUpBy } from '~/utils';
+
+import { LoadingSpinner } from '../Common';
 
 const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
   return <div css={listCss} {...props} ref={ref} />;
@@ -33,16 +37,24 @@ export const RecruitCards = () => {
     isFetchingNextPage,
     isRefetching,
     isRefetchError,
+    isLoading,
   } = useInfiniteRecruits(recruitTypeConvertor(router?.query));
 
-  const articles = data?.pages.map((pages) => pages.recruits).reduce(concat);
+  const category = useGetQueryString('category');
+  const cards = data?.pages.map((pages) => pages.recruits).reduce(concat);
   // 조건에 맞지 않는 데이터 처리 어떻게 해주실 지 여쭈어보고 수정
-  if (data?.pages === null) return <div>조건에 맞는 카드가 없어요</div>;
 
+  if (data?.pages === null) return <div>조건에 맞는 카드가 없어요</div>;
+  if (isLoading)
+    return (
+      <LoadingSpinner
+        color={category === 'study' ? palettes.secondary.default : undefined}
+      />
+    );
   return (
     <div css={flex('center', '', 'column', 15)}>
       <Virtuoso
-        data={articles}
+        data={cards}
         components={{ List }}
         itemContent={(index, article) => {
           return (
