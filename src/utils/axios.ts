@@ -6,7 +6,7 @@ import axios, { isAxiosError } from 'axios';
 
 import { reissueToken } from '~/services/auth';
 import { createRequestInfiniteLoopDetector } from '~/utils/createRequestInfiniteLoopDetector';
-import customToast from '~/utils/customToast';
+import { customToast } from '~/utils/customToast';
 import { webStorage } from '~/utils/webStorage';
 
 import { API_URL, isDevMode, ResponseCode } from './constants';

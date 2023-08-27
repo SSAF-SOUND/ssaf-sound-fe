@@ -3,7 +3,7 @@ export * from './axios';
 export * from './clearPrivateData';
 export * from './constants';
 export * from './createRequestInfiniteLoopDetector';
-export { default as customToast } from './customToast';
+export * from './customToast';
 export * from './date';
 export * from './defaultify';
 export * from './getPathname';
