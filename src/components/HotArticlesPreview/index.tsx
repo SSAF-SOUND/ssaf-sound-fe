@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 
 import { HotArticlesPreviewArticleItem } from '~/components/HotArticlesPreview/HotArticlesPreviewArticleItem';
+import TitleBar from '~/components/TitleBar';
 import { useHotArticles } from '~/services/article';
 import { flex } from '~/styles/utils';
-
-import { HotArticlesPreviewHeader } from './HotArticlesPreviewHeader';
+import { routes } from '~/utils';
 
 export interface HotArticlesPreviewProps {
   className?: string;
@@ -19,7 +19,11 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
 
   return (
     <div className={className}>
-      <HotArticlesPreviewHeader css={{ marginBottom: 16 }} />
+      <TitleBar.Preview
+        title="HOT 게시글"
+        moreLinkRoute={routes.articles.hot()}
+        css={{ marginBottom: 16 }}
+      />
 
       <div css={articlesContainerCss}>
         {latestHotArticles?.map((article) => (
