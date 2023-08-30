@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 
+import { Clock } from '~/components/Clock';
 import { PageHead, PageHeadingText } from '~/components/Common';
 import { HotArticlesPreview } from '~/components/HotArticlesPreview';
 import { LunchMenusPreview } from '~/components/Lunch';
@@ -29,6 +30,7 @@ const MainPage = () => {
 
       <div css={selfCss}>
         <NavigationGroup />
+        <Clock css={{ marginBottom: 32 }} />
         <LunchMenusPreview css={{ marginBottom: 80 }} />
         <HotArticlesPreview css={{ marginBottom: 50 }} />
         <RecruitsPreview
