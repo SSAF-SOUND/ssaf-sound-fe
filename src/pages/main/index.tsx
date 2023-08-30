@@ -6,6 +6,7 @@ import { HotArticlesPreview } from '~/components/HotArticlesPreview';
 import { LunchMenusPreview } from '~/components/Lunch';
 import NavigationGroup from '~/components/NavigationGroup';
 import RecruitsPreview from '~/components/RecruitsPreview';
+import { useMyInfo } from '~/services/member';
 import { globalVars, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
@@ -14,6 +15,9 @@ const metaTitle = '홈';
 const metaDescription = `${globalMetaData.description} 점심 메뉴, 리쿠르팅, 핫 게시글 등 다양한 SSAF SOUND의 기능을 활용해보세요.`;
 
 const MainPage = () => {
+  const { data: myInfo } = useMyInfo();
+  const myCampus = myInfo?.ssafyInfo?.campus;
+
   return (
     <>
       <PageHead
@@ -31,7 +35,7 @@ const MainPage = () => {
       <div css={selfCss}>
         <NavigationGroup />
         <Clock css={{ marginBottom: 32 }} />
-        <LunchMenusPreview css={{ marginBottom: 80 }} />
+        <LunchMenusPreview css={{ marginBottom: 80 }} campus={myCampus} />
         <HotArticlesPreview css={{ marginBottom: 50 }} />
         <RecruitsPreview
           css={{ marginBottom: 50 }}
