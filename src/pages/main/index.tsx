@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 
-import { ArticlesPreview } from '~/components/ArticlesPreview';
 import { PageHead, PageHeadingText } from '~/components/Common';
+import { HotArticlesPreview } from '~/components/HotArticlesPreview';
 import { LunchMenusPreview } from '~/components/Lunch';
 import NavigationGroup from '~/components/NavigationGroup';
 import { topBarHeight } from '~/styles/utils';
@@ -29,7 +29,7 @@ const MainPage = () => {
       <div css={selfCss}>
         <NavigationGroup />
         <LunchMenusPreview css={{ marginBottom: 80 }} />
-        <ArticlesPreview css={{ marginBottom: 50 }} />
+        <HotArticlesPreview css={{ marginBottom: 50 }} />
         {/*<RecruitsPreview />*/}
       </div>
     </>
