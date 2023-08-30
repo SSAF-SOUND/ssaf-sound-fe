@@ -1,18 +1,9 @@
 import { css } from '@emotion/react';
 
-import {
-  Bar,
-  // Icon,
-  // IconButton,
-  Logo,
-  // Dot
-} from '~/components/Common';
-import {
-  // flex,
-  topBarHeight,
-  fixTopCenter,
-  zIndex,
-} from '~/styles/utils';
+import { Bar, Logo } from '~/components/Common';
+import { topBarHeight, fixTopCenter, zIndex } from '~/styles/utils';
+
+import { PrivateButtonsLayer } from './PrivateButtonsLayer';
 
 interface TopBarProps {
   className?: string;
@@ -29,31 +20,12 @@ const TopBar = (props: TopBarProps) => {
       css={selfCss}
       {...props}
       left={<Logo navigateToMainPage />}
-      // right={
-      //   <div css={rightSelfCss}>
-      //     <div css={rightIconContainerCss}>
-      //       <Dot size="md" theme="secondary" />
-      //       <IconButton size={iconSize + 4}>
-      //         <Icon name="notification" size={iconSize} />
-      //       </IconButton>
-      //     </div>
-      //     <div css={rightIconContainerCss}>
-      //       <Dot size="md" theme="secondary" />
-      //       <IconButton size={iconSize + 4}>
-      //         <Icon name="chat" size={iconSize} />
-      //       </IconButton>
-      //     </div>
-      //   </div>
-      // }
+      right={<PrivateButtonsLayer />}
     />
   );
 };
 
 export default TopBar;
-
-// const iconSize = 28;
-// const iconContainerGap = 4;
-// const iconContainerWidth = iconSize + iconContainerGap + 10;
 
 const selfCss = css(
   {
@@ -63,9 +35,3 @@ const selfCss = css(
   },
   fixTopCenter
 );
-
-// const rightSelfCss = css(flex('center', '', 'row', 10));
-// const rightIconContainerCss = css(
-//   { minWidth: iconContainerWidth },
-//   flex('center', 'flex-end', 'row', iconContainerGap)
-// );
