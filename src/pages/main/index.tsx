@@ -1,5 +1,10 @@
+import { css } from '@emotion/react';
+
+import { ArticlesPreview } from '~/components/ArticlesPreview';
 import { PageHead, PageHeadingText } from '~/components/Common';
+import { LunchMenusPreview } from '~/components/Lunch';
 import NavigationGroup from '~/components/NavigationGroup';
+import { topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
@@ -21,11 +26,19 @@ const MainPage = () => {
 
       <PageHeadingText text={metaTitle} />
 
-      <div>
+      <div css={selfCss}>
         <NavigationGroup />
+        <LunchMenusPreview css={{ marginBottom: 80 }} />
+        <ArticlesPreview css={{ marginBottom: 50 }} />
+        {/*<RecruitsPreview />*/}
       </div>
     </>
   );
 };
 
 export default MainPage;
+
+const selfPaddingY = topBarHeight + 30;
+const selfCss = css({
+  padding: `${selfPaddingY}px 15px`,
+});
