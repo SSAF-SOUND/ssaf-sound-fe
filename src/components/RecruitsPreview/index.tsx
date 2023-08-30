@@ -1,13 +1,7 @@
-import Link from 'next/link';
-
-import { css } from '@emotion/react';
-
-import { SmallRecruitCard } from '~/components/RecruitCard';
-import { RecruitsPreviewRecruitItem } from '~/components/RecruitsPreview/RecruitsPreviewRecruitItem';
+import { RecruitsPreviewRecruitList } from '~/components/RecruitsPreview/RecruitsPreviewRecruitList';
+import { recruitPreviewMarginForExpandCssVar } from '~/components/RecruitsPreview/utils';
 import TitleBar from '~/components/TitleBar';
 import { SkillName } from '~/services/recruit';
-import { flex, toCssVar } from '~/styles/utils';
-import { hideScrollBar } from '~/styles/utils/hideScrollBar';
 import { routes } from '~/utils';
 
 interface RecruitsPreviewProps {
@@ -45,10 +39,6 @@ const mockRecruitSummaries = Array(20)
   .fill(undefined)
   .map((_, index) => createMockRecruitSummary(index));
 
-const recruitPreviewMarginForExpandCssVar = toCssVar(
-  'recruitPreviewMarginForExpand'
-);
-
 const RecruitsPreview = (props: RecruitsPreviewProps) => {
   const { className, marginForExpand = '0px' } = props;
   const maxViewCount = 10;
@@ -66,26 +56,9 @@ const RecruitsPreview = (props: RecruitsPreviewProps) => {
         css={{ marginBottom: 16 }}
       />
 
-      <div css={recruitsContainerCss}>
-        {latestRecruits.map((recruit) => (
-          <RecruitsPreviewRecruitItem
-            recruit={recruit}
-            key={recruit.recruitId}
-          />
-        ))}
-      </div>
+      <RecruitsPreviewRecruitList recruits={latestRecruits} />
     </div>
   );
 };
 
 export default RecruitsPreview;
-
-const recruitsContainerCss = css(
-  {
-    margin: `0 calc(-1 * ${recruitPreviewMarginForExpandCssVar.var})`,
-    padding: `4px ${recruitPreviewMarginForExpandCssVar.var} 10px`,
-    overflowX: 'scroll',
-  },
-  flex('center', 'flex-start', 'row', 16),
-  hideScrollBar()
-);
