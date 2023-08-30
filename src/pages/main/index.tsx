@@ -4,7 +4,8 @@ import { PageHead, PageHeadingText } from '~/components/Common';
 import { HotArticlesPreview } from '~/components/HotArticlesPreview';
 import { LunchMenusPreview } from '~/components/Lunch';
 import NavigationGroup from '~/components/NavigationGroup';
-import { topBarHeight } from '~/styles/utils';
+import RecruitsPreview from '~/components/RecruitsPreview';
+import { globalVars, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
@@ -30,7 +31,10 @@ const MainPage = () => {
         <NavigationGroup />
         <LunchMenusPreview css={{ marginBottom: 80 }} />
         <HotArticlesPreview css={{ marginBottom: 50 }} />
-        {/*<RecruitsPreview />*/}
+        <RecruitsPreview
+          css={{ marginBottom: 50 }}
+          marginForExpand={marginForExpand}
+        />
       </div>
     </>
   );
@@ -39,6 +43,9 @@ const MainPage = () => {
 export default MainPage;
 
 const selfPaddingY = topBarHeight + 30;
+const selfPaddingX = 15;
+const marginForExpand = `calc(${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var})`;
+
 const selfCss = css({
-  padding: `${selfPaddingY}px 15px`,
+  padding: `${selfPaddingY}px ${selfPaddingX}px`,
 });
