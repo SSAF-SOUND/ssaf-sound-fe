@@ -1,9 +1,11 @@
 import { css } from '@emotion/react';
+import Skeleton from 'react-loading-skeleton';
 
 import { HotArticlesPreviewArticleItem } from '~/components/HotArticlesPreview/HotArticlesPreviewArticleItem';
+import { PreviewErrorCard } from '~/components/PreviewErrorCard';
 import TitleBar from '~/components/TitleBar';
 import { useHotArticles } from '~/services/article';
-import { flex } from '~/styles/utils';
+import { flex, palettes } from '~/styles/utils';
 import { routes } from '~/utils';
 
 export interface HotArticlesPreviewProps {
@@ -12,7 +14,12 @@ export interface HotArticlesPreviewProps {
 
 export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
   const { className } = props;
-  const { data: hotArticles } = useHotArticles();
+  const {
+    data: hotArticles,
+    isLoading: isHotArticlesLoading,
+    isError: isHotArticlesError,
+    refetch,
+  } = useHotArticles();
 
   const maxViewCount = 5;
   const latestHotArticles = hotArticles?.pages[0].posts.slice(0, maxViewCount);
@@ -26,15 +33,36 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
       />
 
       <div css={articlesContainerCss}>
-        {latestHotArticles?.map((article) => (
-          <HotArticlesPreviewArticleItem
-            key={article.postId}
-            article={article}
-          />
-        ))}
+        {isHotArticlesLoading && <HotArticlesPreviewSkeleton />}
+
+        {isHotArticlesError && (
+          <PreviewErrorCard css={{ height: 200 }} onClickRetry={refetch} />
+        )}
+
+        {latestHotArticles &&
+          latestHotArticles.map((article) => (
+            <HotArticlesPreviewArticleItem
+              key={article.postId}
+              article={article}
+            />
+          ))}
       </div>
     </div>
   );
 };
 
 const articlesContainerCss = css(flex('', '', 'column'));
+
+const HotArticlesPreviewSkeleton = () => {
+  const skeletonCount = 5;
+  return (
+    <Skeleton
+      count={skeletonCount}
+      width="100%"
+      height={30}
+      style={{ marginBottom: 4 }}
+      baseColor={palettes.background.grey}
+      enableAnimation={false}
+    />
+  );
+};

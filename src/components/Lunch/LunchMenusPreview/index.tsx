@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
-import { Button } from '~/components/Common';
+import { PreviewErrorCard } from '~/components/PreviewErrorCard';
 import {
   LunchDateSpecifier,
   useLunchMenusWithPollStatus,
@@ -50,7 +50,7 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
         )}
 
         {isLunchMenusWithPollStatusError && (
-          <LunchMenusPreviewMenuDescriptionError onClickRetry={refetch} />
+          <PreviewErrorCard onClickRetry={refetch} />
         )}
 
         {lunchMenusWithPollStatus?.menus
@@ -96,29 +96,3 @@ const LunchMenusPreviewMenuDescriptionSkeleton = () => {
   );
 };
 const skeletonContainerCss = css(flex('center', '', 'column', 4));
-
-const LunchMenusPreviewMenuDescriptionError = (props: {
-  onClickRetry: () => void;
-}) => {
-  const { onClickRetry } = props;
-  return (
-    <div css={lunchMenusPreviewMenuDescriptionErrorSelfCss}>
-      <p css={[{ marginBottom: 12 }, fontCss.style.B16]}>
-        오류가 발생했습니다.
-      </p>
-      <Button
-        variant="filled"
-        theme="error"
-        onClick={onClickRetry}
-        css={{ width: 130, color: palettes.white }}
-      >
-        재시도
-      </Button>
-    </div>
-  );
-};
-
-const lunchMenusPreviewMenuDescriptionErrorSelfCss = css(
-  { width: '100%', height: 140 },
-  flex('center', 'center')
-);
