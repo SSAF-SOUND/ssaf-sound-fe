@@ -3,19 +3,20 @@ import { css } from '@emotion/react';
 import { AlertText, SsafyIcon, TrackSize } from '~/components/Common';
 import { flex } from '~/styles/utils';
 
-export interface LunchErrorIndicatorProps {
-  message?: string;
+export interface ErrorMessageWithSsafyIconProps {
   className?: string;
+  message: string;
+  iconSize?: TrackSize;
 }
 
-export const LunchErrorIndicator = (props: LunchErrorIndicatorProps) => {
-  const {
-    message = '점심 데이터를 불러오는 중 오류가 발생했습니다.',
-    className,
-  } = props;
+export const ErrorMessageWithSsafyIcon = (
+  props: ErrorMessageWithSsafyIconProps
+) => {
+  const { className, message, iconSize = TrackSize.LG2 } = props;
+
   return (
     <div css={selfCss} className={className}>
-      <SsafyIcon.Track size={TrackSize.LG2} />
+      <SsafyIcon.Track size={iconSize} />
       <AlertText size="lg" bold>
         {message}
       </AlertText>
