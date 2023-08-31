@@ -6,23 +6,13 @@ import { rest } from 'msw';
 
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { API_URL, composeUrls } from '~/utils';
+import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import { lunchMock } from './data';
 
-// export const getLunchMenusErrorMocking = restError(
-//   'get',
-//   composeUrls(API_URL, 'lunch/error'),
-//   {
-//     code: '500',
-//     data: null,
-//     statusCode: 500,
-//   }
-// );
-
 const getLunchMenusWithPollStatusEndpoint = composeUrls(
   API_URL,
-  endpoints.lunch.list({ campus: '서울', date: 'today' })
+  removeQueryParams(endpoints.lunch.list({ campus: '서울', date: 'today' }))
 );
 
 export const getLunchMenusWithPollStatus = restSuccess<
@@ -94,31 +84,6 @@ export const revertPolledLunchMenuError = restError(
     message: '메뉴 투표 취소 실패',
   }
 );
-
-//
-// export const getLunchDetailMocking = restSuccess<LunchMenuDetail>(
-//   'get',
-//   composeUrls(API_URL, endpoints.lunch.detail(2)),
-//   {
-//     data: LunchData.detail,
-//   }
-// );
-//
-// export const voteLunchMenuMocking = restSuccess<{ pollCount: number }>(
-//   'post',
-//   composeUrls(API_URL, endpoints.lunch.vote(2)),
-//   {
-//     data: LunchData.vote,
-//   }
-// );
-//
-// export const revertVoteLunchMenuMocking = restSuccess<{ pollCount: number }>(
-//   'post',
-//   composeUrls(API_URL, endpoints.lunch.revertVote(2)),
-//   {
-//     data: LunchData.revertVote,
-//   }
-// );
 
 export const lunchHandlers = [
   getLunchMenusWithPollStatus,

@@ -3,6 +3,9 @@ import type { ReactNode } from 'react';
 
 import { useRouter } from 'next/router';
 
+import { isValidElement } from 'react';
+
+import { DefaultFullPageLoader } from '~/components/Common';
 import { role, useMyInfo } from '~/services/member';
 import { flex } from '~/styles/utils';
 
@@ -18,7 +21,7 @@ const AuthChecker = (props: AuthCheckerProps) => {
   const { data: myInfo, isInitialLoading, isError } = useMyInfo();
 
   if (isInitialLoading) {
-    return auth.loading || <DefaultLoadingComponent />;
+    return auth.loading || <DefaultFullPageLoader />;
   }
 
   const isUnauthorized =
@@ -31,14 +34,14 @@ const AuthChecker = (props: AuthCheckerProps) => {
       router.replace(auth.unauthorized);
     }
 
-    return <>{auth.unauthorized}</>;
+    if (isValidElement(auth.unauthorized)) {
+      return auth.unauthorized;
+    }
+
+    return <DefaultFullPageLoader />;
   }
 
   return <>{children}</>;
 };
-
-const DefaultLoadingComponent = () => (
-  <div css={flex('center', 'center')}>로딩중...</div>
-);
 
 export default AuthChecker;

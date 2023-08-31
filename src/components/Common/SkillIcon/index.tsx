@@ -1,9 +1,9 @@
-import type { SkillType } from '~/services/recruit';
+import type { SkillName } from '~/services/recruit';
 
 import { Skills } from './skills';
 
 export interface SkillIconProps {
-  name: SkillType;
+  name: SkillName;
   size?: number;
 }
 

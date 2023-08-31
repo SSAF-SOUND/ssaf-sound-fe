@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { commentIconSize } from '~/components/ArticleComment/utils';
 import { Icon, IconButton } from '~/components/Common';
 import { useSignInGuideModal } from '~/hooks';
-import { useLikeArticleComment } from '~/services/articleComment';
+import { useLikeComment } from '~/services/comment';
 import { flex, fontCss } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
@@ -13,14 +13,22 @@ interface LikeButtonProps {
   articleId: number;
   commentId: number;
   isSignedIn: boolean;
+  isRecruitComment?: boolean;
 }
 
 const LikeLayer = (props: LikeButtonProps) => {
-  const { liked, likeCount, articleId, commentId, isSignedIn } = props;
+  const {
+    liked,
+    likeCount,
+    articleId,
+    commentId,
+    isSignedIn,
+    isRecruitComment,
+  } = props;
   const { openSignInGuideModal } = useSignInGuideModal();
   const iconName = liked ? 'like' : 'like.outline';
   const { mutateAsync: likeArticleComment, isLoading: isLikingArticleComment } =
-    useLikeArticleComment({ commentId, articleId });
+    useLikeComment({ commentId, articleId }, { recruit: isRecruitComment });
 
   const handleLikeArticleComment = async () => {
     if (!isSignedIn) {

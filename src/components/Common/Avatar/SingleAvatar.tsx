@@ -7,17 +7,27 @@ import React from 'react';
 
 import { flex, fontCss, palettes } from '~/styles/utils';
 
+import { classnames as cn } from './classnames';
+
 export interface SingleAvatarProps extends ComponentPropsWithoutRef<'div'> {
   size?: AvatarSize;
   userInfo?: AvatarUserInfo;
   anonymous?: boolean;
 }
 
-type AvatarUserInfo = Omit<UserBasicInfo, 'memberId' | 'memberRole'>;
-type AvatarSize = 'sm' | 'md' | 'md2' | 'lg';
+export type AvatarUserInfo = Omit<UserBasicInfo, 'memberId' | 'memberRole'>;
+export type AvatarSize = 'sm' | 'md' | 'md2' | 'lg';
 
 const SingleAvatar = (props: SingleAvatarProps) => {
-  const { size = 'sm', userInfo, anonymous = false, ...restProps } = props;
+  const {
+    size = 'sm',
+    userInfo,
+    anonymous = false,
+    className,
+    ...restProps
+  } = props;
+
+  const classNames = [cn.avatar, className].join(' ');
 
   return (
     <div
@@ -28,6 +38,7 @@ const SingleAvatar = (props: SingleAvatarProps) => {
         anonymous && anonymousCss,
         !userInfo && emptyCss,
       ]}
+      className={classNames}
       {...restProps}
     >
       {userInfo && (
@@ -52,7 +63,7 @@ const selfCss = css(
   fontCss.family.auto
 );
 
-const sizeCss: Record<AvatarSize, SerializedStyles> = {
+export const sizeCss: Record<AvatarSize, SerializedStyles> = {
   sm: css({ width: 16, height: 16 }),
   md: css({ width: 20, height: 20 }),
   md2: css({ width: 30, height: 30 }),

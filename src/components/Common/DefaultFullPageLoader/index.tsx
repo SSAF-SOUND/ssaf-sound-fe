@@ -29,4 +29,5 @@ const textCss = css(fontCss.family.auto);
 
 export const loaderText = {
   checkUser: '유저 정보를 확인중입니다.',
+  loadingData: '데이터를 로딩중입니다.',
 } as const;

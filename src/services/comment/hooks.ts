@@ -29,7 +29,7 @@ export const useCreateComment = (
   const articleCommentMutation = useCreateArticleComment(articleId);
   const recruitCommentMutation = useCreateRecruitComment(recruitId);
 
-  return recruit ? articleCommentMutation : recruitCommentMutation;
+  return recruit ? recruitCommentMutation : articleCommentMutation;
 };
 
 export const useUpdateComment = (

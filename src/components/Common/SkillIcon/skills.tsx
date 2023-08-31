@@ -14,25 +14,25 @@ import Swift from '~/assets/stacks/swift.svg';
 import TypeScript from '~/assets/stacks/typeScript.svg';
 import Vue from '~/assets/stacks/vue.svg';
 import XD from '~/assets/stacks/xd.svg';
+import { SkillName } from '~/services/recruit';
 
 export const Skills = {
-  React: React,
-  JavaScript: JavaScript,
-  TypeScript: TypeScript,
-  Vue: Vue,
-  Svelte: Svelte,
-  NextJs: Next,
-  // ---- 프론트
-  Java: Java,
-  NodeJs: NodeJs,
-  Spring: Spring,
-  Django: Django,
-  // ---- 백엔드
-  Android: Android,
-  IOS: Ios,
-  Swift: Swift,
-  Flutter: Flutter,
-  // ---- 모바일
-  XD: XD,
-  Figma: Figma,
+  [SkillName.SPRING]: Spring,
+  [SkillName.REACT]: React,
+  [SkillName.IOS]: Ios,
+  [SkillName.VUE]: Vue,
+  [SkillName.JAVA]: Java,
+  [SkillName.JAVASCRIPT]: JavaScript,
+  [SkillName.TYPESCRIPT]: TypeScript,
+  [SkillName.NODEJS]: NodeJs,
+  [SkillName.NEXTJS]: Next,
+  [SkillName.NUXTJS]: Next, // NOTE: NuxtJS 추가
+  [SkillName.XD]: XD,
+  [SkillName.SWIFT]: Swift,
+  [SkillName.FIGMA]: Figma,
+  [SkillName.SVELTE]: Svelte,
+  [SkillName.ANDROID]: Android,
+  [SkillName.FLUTTER]: Flutter,
+  [SkillName.DJANGO]: Django,
+  [SkillName.ETC]: Next, // NOTE: ETC 추가
 };

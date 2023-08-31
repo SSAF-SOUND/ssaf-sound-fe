@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 
-import { inlineFlex, palettes } from '~/styles/utils';
+import { inlineFlex, themeColorVars } from '~/styles/utils';
 
-type DotTheme = 'primary' | 'secondary';
+type DotTheme = 'primary' | 'secondary' | 'recruit';
 type DotSize = 'sm' | 'md' | 'lg';
 
 interface DotProps {
@@ -12,24 +12,19 @@ interface DotProps {
 
 const Dot = (props: DotProps) => {
   const { theme = 'primary', size = 'sm' } = props;
-  return <div css={[selfCss, themeCss[theme], sizeCss[size]]} />;
+  return <div data-theme={theme} css={[selfCss, themeCss, sizeCss[size]]} />;
 };
 
 export default Dot;
 
 const selfCss = css({ borderRadius: '50%' }, inlineFlex());
 
-const themeCss = {
-  primary: css({
-    backgroundColor: palettes.primary.darken,
-  }),
-  secondary: css({
-    backgroundColor: palettes.secondary.default,
-  }),
-};
+const themeCss = css({
+  backgroundColor: themeColorVars.mainColor.var,
+});
 
 const sizeCss = {
-  sm: css({ width: 6, height: 6 }),
-  md: css({ width: 10, height: 10 }),
-  lg: css({ width: 16, height: 16 }),
+  sm: css({ width: 10, height: 10 }),
+  md: css({ width: 16, height: 16 }),
+  lg: css({ width: 24, height: 24 }),
 };

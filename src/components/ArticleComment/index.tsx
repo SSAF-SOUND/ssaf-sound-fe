@@ -165,6 +165,7 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
                   articleId={articleId}
                   commentId={commentId}
                   isSignedIn={isSignedIn}
+                  isRecruitComment={isRecruitComment}
                 />
                 {isSignedIn && (
                   <MoreButton

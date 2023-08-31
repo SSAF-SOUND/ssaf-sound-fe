@@ -39,7 +39,13 @@ export const Default: IconButtonStory = {
 
 export const Examples: IconButtonStory = {
   render: () => {
-    const themes = ['white', 'black', 'primary', 'secondary'] as const;
+    const themes = [
+      'white',
+      'black',
+      'primary',
+      'secondary',
+      'recruit',
+    ] as const;
     const backgroundColors = [
       palettes.black,
       palettes.background.default,

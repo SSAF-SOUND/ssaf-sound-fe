@@ -4,6 +4,7 @@ import type { ReactNode, ComponentPropsWithoutRef } from 'react';
 import { css } from '@emotion/react';
 import { Children, isValidElement } from 'react';
 
+import { classnames as cn } from '~/components/Common/Avatar/classnames';
 import { fontCss, inlineFlex } from '~/styles/utils';
 
 import SingleAvatar from './SingleAvatar';
@@ -12,9 +13,16 @@ export interface AvatarGroupProps extends ComponentPropsWithoutRef<'div'> {
   children: ReactNode;
   visibleCount?: number;
   maxCount: number;
+  overridableSize?: SingleAvatarProps['size'];
 }
 const AvatarGroup = (props: AvatarGroupProps) => {
-  const { children, maxCount, visibleCount = 4, ...rest } = props;
+  const {
+    children,
+    maxCount,
+    visibleCount = 4,
+    overridableSize,
+    ...rest
+  } = props;
 
   const validAvatars = Children.toArray(children).filter(
     isValidElement<SingleAvatarProps>
@@ -23,7 +31,9 @@ const AvatarGroup = (props: AvatarGroupProps) => {
   const visibleAvatars = validAvatars.slice(0, visibleCount);
   const emptyAvatarsCount = visibleCount - validAvatars.length;
   const restAvatarsCount = maxCount - visibleCount;
-  const avatarSize = validAvatars[0].props?.size || 'sm';
+  const avatarSize = overridableSize
+    ? overridableSize
+    : validAvatars[0].props?.size || 'sm';
 
   return (
     <div css={selfCss} {...rest}>
@@ -41,7 +51,7 @@ const AvatarGroup = (props: AvatarGroupProps) => {
 };
 
 const selfCss = css(
-  { '> div': { marginLeft: -4 } },
+  { [`> .${cn.avatar}`]: { marginLeft: -4 } },
   inlineFlex('center', 'center', 'row'),
   fontCss.family.auto
 );

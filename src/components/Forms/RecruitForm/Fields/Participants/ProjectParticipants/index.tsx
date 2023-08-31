@@ -12,10 +12,9 @@ import {
   maxParticipantsCount,
   minParticipantsCount,
   possibleProjectParts,
-  RecruitCategoryName,
-  RecruitParts,
   useRecruitFormContext,
 } from '~/components/Forms/RecruitForm/utils';
+import { RecruitCategoryName, RecruitParts } from '~/services/recruit';
 import { flex } from '~/styles/utils';
 
 import ProjectParticipantsFieldRow from './ProjectParticipantsFieldRow';

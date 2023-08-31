@@ -10,7 +10,7 @@ import { rest } from 'msw';
 
 import { mockSuccess, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { API_URL, composeUrls } from '~/utils';
+import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import { RecruitData } from './data';
 
@@ -76,6 +76,18 @@ export const postRecruitApply = restSuccess(
     data: null,
   }
 );
+
+const getRecruitApplicantsEndpoint = removeQueryParams(
+  composeUrls(API_URL, endpoints.recruit.application.applicants(1))
+);
+export const getRecruitApplicants = restSuccess(
+  'get',
+  getRecruitApplicantsEndpoint,
+  {
+    data: RecruitData.recruitApplicants,
+  }
+);
+
 export const recruitHandlers = [
   getRecruitDetail,
   getRecruits,
@@ -83,4 +95,5 @@ export const recruitHandlers = [
   getRecruitScrap,
   postRecruitScrap,
   postRecruitApply,
+  getRecruitApplicants,
 ];

@@ -187,6 +187,7 @@ const ArticleCommentsLayer = (props: {
               key={comment.commentId}
               comment={comment}
               articleId={articleId}
+              isRecruitComment={false}
             />
           );
         })}
@@ -205,7 +206,7 @@ const ArticleCommentFormLayer = (props: { articleId: number }) => {
   const invalidateComments = useInvalidateArticleComments(articleId);
 
   const onValidSubmit: ArticleCommentFormProps['onValidSubmit'] = async (
-    reset,
+    _,
     formValues
   ) => {
     try {

@@ -11,9 +11,9 @@ import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import {
   maxParticipantsCount,
   minParticipantsCount,
-  RecruitCategoryName,
   useRecruitFormContext,
 } from '~/components/Forms/RecruitForm/utils';
+import { RecruitCategoryName } from '~/services/recruit';
 import { createBoundClamp } from '~/utils';
 
 const fieldArrayName = 'participants.study';

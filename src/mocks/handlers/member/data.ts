@@ -1,4 +1,4 @@
-import type { UserPortfolio, UserInfo } from '~/services/member';
+import type { UserInfo, UserPortfolio } from '~/services/member';
 
 import { faker } from '@faker-js/faker';
 
@@ -62,4 +62,34 @@ export const portfolio: UserPortfolio = {
       linkName: faker.lorem.words(1),
       path: `https://www.naver.com`,
     })),
+};
+
+export const createMockUser = (id: number, certified?: boolean): UserInfo => {
+  const isMajor = Boolean(id % 2);
+  const tracks = Object.values(SsafyTrack);
+  const campuses = ['서울', '구미', '광주', '부울경', '대전'];
+
+  const certifiedInfo = certified
+    ? ({
+        certificationState: CertificationState.CERTIFIED,
+        majorTrack:
+          tracks[faker.number.int({ min: 0, max: tracks.length - 1 })],
+      } as const)
+    : ({
+        certificationState: CertificationState.UNCERTIFIED,
+        majorTrack: null,
+      } as const);
+
+  return {
+    isMajor,
+    memberId: id,
+    nickname: faker.person.fullName(),
+    memberRole: 'user',
+    ssafyMember: true,
+    ssafyInfo: {
+      campus: campuses[faker.number.int({ min: 0, max: campuses.length - 1 })],
+      semester: faker.number.int({ min: 1, max: 9 }),
+      ...certifiedInfo,
+    },
+  };
 };

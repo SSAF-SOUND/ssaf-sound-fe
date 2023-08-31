@@ -3,6 +3,8 @@ import type {
   RecruitCategoryType,
   RecruitType,
   SkillsType,
+  MatchStatus,
+  RecruitParts,
 } from './utils';
 import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
@@ -29,6 +31,7 @@ export const getRecruits = () => {
 export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetail>;
 
 export interface RecruitDetail {
+  recruitId: number;
   userInfo: UserInfo;
   category: RecruitCategoryType;
   title: string;
@@ -156,9 +159,35 @@ export const postRecruitApply = ({
 
 // ---------------------------------------
 
+export interface RecruitApplicant {
+  recruitApplicationId: number;
+  matchStatus: MatchStatus;
+  author: UserInfo;
+  reply: string;
+  question: string;
+  liked: boolean;
+  appliedAt: string;
+}
+
+export type GetRecruitApplicantsApiData = ApiSuccessResponse<{
+  recruitId: number;
+  recruitApplications: {
+    [key in RecruitParts]?: RecruitApplicant[];
+  };
+}>;
+
+export const getRecruitApplicants = (recruitId: number) => {
+  const endpoint = endpoints.recruit.application.applicants(recruitId);
+
+  return privateAxios
+    .get<GetRecruitApplicantsApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
 export const recruitAPI = {
   getRecruits,
   getRecruitDetail,
   getRecruitMembers,
+  getRecruitApplicants,
   postRecruitApply,
 };
