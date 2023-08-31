@@ -22,7 +22,9 @@ export interface SignInParams {
 }
 
 const signInDevPlugin = (tokens: Tokens) => {
-  webStorage.DEV__setTokens(tokens);
+  if (isDevMode) {
+    webStorage.DEV__setTokens(tokens);
+  }
 };
 
 export const signIn = (params: SignInParams) => {
