@@ -10,6 +10,10 @@ export enum ResponseCode {
   INTERNAL_SERVER_ERROR = '500',
 
   //
+  INVALID_LUNCH_DATE = '601',
+  NOT_EXIST_LUNCH_MENUS = '603',
+
+  //
   NOT_EXIST_USER = '704',
   INVALID_TOKEN = '705',
   EXPIRED_TOKEN = '706',

@@ -1,16 +1,16 @@
 import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
-import { PreviewErrorCard } from '~/components/PreviewErrorCard';
+import { LunchMenusPreviewError } from '~/components/Lunch/LunchMenusPreview/LunchMenusPreviewError';
+import { LunchMenusPreviewMenuDescription } from '~/components/Lunch/LunchMenusPreview/LunchMenusPreviewMenuDescription';
 import {
   LunchDateSpecifier,
   useLunchMenusWithPollStatus,
 } from '~/services/lunch';
 import { useCampuses } from '~/services/meta';
-import { flex, fontCss, pageMinWidth, palettes } from '~/styles/utils';
+import { flex, pageMinWidth, palettes } from '~/styles/utils';
 
 import { LunchMenusPreviewHeader } from './LunchMenusPreviewHeader';
-import { LunchMenusPreviewMenuDescription } from './LunchMenusPreviewMenuDescription';
 
 export interface LunchMenusPreviewProps {
   className?: string;
@@ -28,6 +28,7 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
     data: lunchMenusWithPollStatus,
     isLoading: isLunchMenusWithPollStatusLoading,
     isError: isLunchMenusWithPollStatusError,
+    error: lunchMenusWithPollStatusError,
     refetch,
   } = useLunchMenusWithPollStatus({
     campus: safeCampus,
@@ -50,7 +51,10 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
         )}
 
         {isLunchMenusWithPollStatusError && (
-          <PreviewErrorCard onClickRetry={refetch} />
+          <LunchMenusPreviewError
+            error={lunchMenusWithPollStatusError}
+            onClickRetry={refetch}
+          />
         )}
 
         {lunchMenusWithPollStatus?.menus
