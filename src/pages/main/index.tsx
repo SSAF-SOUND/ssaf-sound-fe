@@ -6,7 +6,7 @@ import { PageHead, PageHeadingText } from '~/components/Common';
 import { HotArticlesPreview } from '~/components/HotArticlesPreview';
 import { LunchMenusPreview } from '~/components/Lunch';
 import NavigationGroup from '~/components/NavigationGroup';
-import RecruitsPreview from '~/components/RecruitsPreview';
+import { RecruitsPreview } from '~/components/RecruitsPreview';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import { getHotArticles } from '~/services/article';

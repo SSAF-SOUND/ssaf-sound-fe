@@ -1,7 +1,10 @@
+import { css } from '@emotion/react';
+
 import { RecruitsPreviewRecruitList } from '~/components/RecruitsPreview/RecruitsPreviewRecruitList';
 import { recruitPreviewMarginForExpandCssVar } from '~/components/RecruitsPreview/utils';
 import TitleBar from '~/components/TitleBar';
 import { SkillName } from '~/services/recruit';
+import { flex } from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface RecruitsPreviewProps {
@@ -39,10 +42,11 @@ const mockRecruitSummaries = Array(20)
   .fill(undefined)
   .map((_, index) => createMockRecruitSummary(index));
 
-const RecruitsPreview = (props: RecruitsPreviewProps) => {
+export const RecruitsPreview = (props: RecruitsPreviewProps) => {
   const { className, marginForExpand = '0px' } = props;
   const maxViewCount = 10;
   const latestRecruits = mockRecruitSummaries.slice(0, maxViewCount);
+  const notExistRecruits = latestRecruits.length === 0;
 
   const style = {
     [recruitPreviewMarginForExpandCssVar.varName]: marginForExpand,
@@ -56,9 +60,23 @@ const RecruitsPreview = (props: RecruitsPreviewProps) => {
         css={{ marginBottom: 16 }}
       />
 
-      <RecruitsPreviewRecruitList recruits={latestRecruits} />
+      {notExistRecruits ? (
+        <NotExistRecruits />
+      ) : (
+        <RecruitsPreviewRecruitList recruits={latestRecruits} />
+      )}
     </div>
   );
 };
 
-export default RecruitsPreview;
+const NotExistRecruits = () => {
+  return <div css={notExistRecruitsCss}>아직 리쿠르팅이 없습니다.</div>;
+};
+
+const notExistRecruitsCss = css(
+  {
+    width: '100%',
+    height: 170,
+  },
+  flex('center', 'center', 'column')
+);

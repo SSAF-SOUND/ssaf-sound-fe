@@ -1,9 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { InfiniteData } from '@tanstack/query-core';
+import type { GetHotArticlesApiData } from '~/services/article';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import { getHotArticles, getLunchMenusWithPollStatus } from '~/mocks/handlers';
+import {
+  getHotArticles,
+  getLunchMenusWithPollStatus,
+  getLunchMenusWithPollStatusNotExistLunchMenusError,
+} from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
 import MainPage from '~/pages/main';
 import { queryKeys } from '~/react-query/common';
@@ -15,6 +21,16 @@ const meta: Meta<typeof MainPage> = {
   component: MainPage,
   decorators: [
     (Story) => {
+      const queryClient = useQueryClient();
+      const [queryRemoved, setQueryRemoved] = useState(false);
+
+      if (!queryRemoved) {
+        queryClient.removeQueries(queryKeys.lunch.self());
+        queryClient.removeQueries(queryKeys.articles.hot());
+        queryClient.removeQueries(queryKeys.recruit.list());
+        setQueryRemoved(true);
+      }
+
       return (
         <PageLayout>
           <Story />
@@ -72,17 +88,30 @@ export const NotSignedIn: MainPageStory = {
 };
 
 export const Error: MainPageStory = {
+  parameters: {
+    msw: {
+      handlers: {
+        lunch: [],
+        article: [],
+        recruit: [],
+      },
+    },
+  },
+};
+
+const emptyHotArticles = {
+  pages: [{ posts: [], cursor: null }],
+  pageParams: [null],
+};
+
+export const NotExistData: MainPageStory = {
   decorators: [
     (Story) => {
       const queryClient = useQueryClient();
-      const [removed, setRemoved] = useState(false);
-
-      if (!removed) {
-        queryClient.removeQueries(queryKeys.lunch.self());
-        queryClient.removeQueries(queryKeys.articles.hot());
-        queryClient.removeQueries(queryKeys.recruit.list());
-        setRemoved(true);
-      }
+      queryClient.setQueryData<InfiniteData<GetHotArticlesApiData['data']>>(
+        queryKeys.articles.hot(),
+        emptyHotArticles
+      );
 
       return <Story />;
     },
@@ -90,7 +119,7 @@ export const Error: MainPageStory = {
   parameters: {
     msw: {
       handlers: {
-        lunch: [],
+        lunch: [getLunchMenusWithPollStatusNotExistLunchMenusError],
         article: [],
         recruit: [],
       },

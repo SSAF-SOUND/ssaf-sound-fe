@@ -23,6 +23,7 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
 
   const maxViewCount = 5;
   const latestHotArticles = hotArticles?.pages[0].posts.slice(0, maxViewCount);
+  const notExistHotArticles = latestHotArticles?.length === 0;
 
   return (
     <div className={className}>
@@ -40,11 +41,15 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
         )}
 
         {latestHotArticles &&
-          latestHotArticles.map((article) => (
-            <HotArticlesPreviewArticleItem
-              key={article.postId}
-              article={article}
-            />
+          (notExistHotArticles ? (
+            <NotExistHotArticles />
+          ) : (
+            latestHotArticles.map((article) => (
+              <HotArticlesPreviewArticleItem
+                key={article.postId}
+                article={article}
+              />
+            ))
           ))}
       </div>
     </div>
@@ -66,3 +71,15 @@ const HotArticlesPreviewSkeleton = () => {
     />
   );
 };
+
+const NotExistHotArticles = () => {
+  return <div css={notExistHotArticlesCss}>아직 게시글이 없습니다.</div>;
+};
+
+const notExistHotArticlesCss = css(
+  {
+    width: '100%',
+    height: 170,
+  },
+  flex('center', 'center', 'column')
+);
