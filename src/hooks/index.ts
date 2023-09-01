@@ -3,6 +3,7 @@ export * from './useIsClient';
 export * from './useIsImageLoading';
 export * from './useStack';
 export * from './useSignInGuideModal';
+export * from './useSignOutReconfirmModal';
 export * from './useMSW';
 export * from './useStripHtml';
 
