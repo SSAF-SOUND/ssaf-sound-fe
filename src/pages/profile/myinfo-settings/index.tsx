@@ -36,7 +36,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   const router = useRouter();
 
   const { openSignOutReconfirmModal, isSigningOut } = useSignOutReconfirmModal({
-    onSignOutSuccess: () => router.push(routes.main()),
+    onSignOutSuccess: () => router.replace(routes.main()),
   });
 
   return (

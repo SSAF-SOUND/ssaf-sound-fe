@@ -3,21 +3,28 @@ import type { IconNames } from '~/components/Common';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { ClipLoader } from 'react-spinners';
 
 import { Dot, Icon, IconButton } from '~/components/Common';
+import { useSignOutReconfirmModal } from '~/hooks';
 import { useMyInfo } from '~/services/member';
-import { flex } from '~/styles/utils';
+import { flex, palettes } from '~/styles/utils';
 import { getPathname, routes, webStorage } from '~/utils';
 
 export const PrivateButtonsLayer = () => {
-  const { data: myInfo } = useMyInfo();
+  const { data: myInfo, isLoading } = useMyInfo();
   const router = useRouter();
   const isSignedIn = !!myInfo;
+  const { openSignOutReconfirmModal } = useSignOutReconfirmModal();
 
   const onClickSignInButton = () => {
     webStorage.setSignInReturnPage(getPathname());
     router.push(routes.signIn());
   };
+
+  if (isLoading) {
+    return <ClipLoader size={20} color={palettes.grey.dark} />;
+  }
 
   return (
     <div css={privateButtonLayerSelfCss}>
@@ -35,6 +42,12 @@ export const PrivateButtonsLayer = () => {
           {/*  label="쪽지"*/}
           {/*  hasUnreadMessage={false}*/}
           {/*/>*/}
+          <PrivateButton
+            iconName="signOut"
+            label="로그아웃"
+            onClick={openSignOutReconfirmModal}
+            hasUnreadMessage={false}
+          />
         </>
       ) : (
         <PrivateButton
