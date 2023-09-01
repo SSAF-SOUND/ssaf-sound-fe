@@ -51,6 +51,7 @@ import {
   MdThumbUp,
   MdSearch,
   MdOutlineSubdirectoryArrowRight,
+  MdLogout,
 } from 'react-icons/md';
 import { RiKakaoTalkFill, RiSendPlane2Line } from 'react-icons/ri';
 import { TbPencilPlus, TbSquareRoundedCheckFilled } from 'react-icons/tb';
@@ -122,6 +123,7 @@ export const icons = {
   [`right.outlined`]: <AiOutlineRight />,
 
   signIn: <BsPersonFillLock />,
+  signOut: <MdLogout />,
 } as const;
 
 export type IconNames = keyof typeof icons;
