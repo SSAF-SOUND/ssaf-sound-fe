@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from '~/components/Common';
 import { palettes } from '~/styles/utils';
 
-import IconButton from './index';
+import { IconButton } from './index';
 
 const meta: Meta<typeof IconButton> = {
   title: 'Button/IconButton',

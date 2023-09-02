@@ -5,11 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { produce } from 'immer';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateIsMajor } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
@@ -53,8 +49,6 @@ const MyInfoSettingsIsMajorEditPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
@@ -79,6 +73,11 @@ MyInfoSettingsIsMajorEditPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader />,
   unauthorized: routes.unauthorized(),
+};
+MyInfoSettingsIsMajorEditPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
 };
 
 const selfCss = css(

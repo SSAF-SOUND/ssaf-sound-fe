@@ -10,7 +10,6 @@ import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import {
   DefaultFullPageLoader,
   loaderText,
-  PageHead,
   PageHeadingText,
 } from '~/components/Common';
 import RedirectionGuide from '~/components/RedirectionGuide';
@@ -110,8 +109,6 @@ const PortfolioEditPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
@@ -160,6 +157,11 @@ PortfolioEditPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
+};
+PortfolioEditPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
 };
 
 const selfPaddingX = '15px';

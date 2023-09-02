@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
-import { Avatar, Dot, Icon, IconButton } from '~/components/Common';
+import { Avatar, Icon, IconButton } from '~/components/Common';
 import { MatchStatusText } from '~/components/RecruitApplicants/RecruitApplicantBar/MatchStatusText';
 import { RecruitApplicantLikeButton } from '~/components/RecruitApplicants/RecruitApplicantBar/RecruitApplicantLikeButton';
 import { MatchStatus } from '~/services/recruit';

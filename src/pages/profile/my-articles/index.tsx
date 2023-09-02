@@ -6,7 +6,6 @@ import ArticleCardList from '~/components/ArticleCardList';
 import {
   DefaultFullPageLoader,
   loaderText,
-  PageHead,
   PageHeadingText,
 } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
@@ -27,8 +26,6 @@ const MyArticlesPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={titleBarTitle} />
 
       <div css={selfCss}>
@@ -61,6 +58,11 @@ MyArticlesPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
+};
+MyArticlesPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
 };
 
 const selfPaddingTop = titleBarHeight + 24;

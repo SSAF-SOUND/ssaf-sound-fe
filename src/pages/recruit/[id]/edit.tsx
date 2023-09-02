@@ -10,6 +10,8 @@ import { useMyInfo } from '~/services/member';
 import { globalVars } from '~/styles/utils';
 import { routes } from '~/utils';
 
+const metaTitle = '리쿠르팅 수정';
+
 const RecruitEditPage: CustomNextPage = () => {
   const router = useRouter();
   const { data: myInfo } = useMyInfo();
@@ -42,6 +44,11 @@ RecruitEditPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
+};
+RecruitEditPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
 };
 
 const selfPaddingX = 15;

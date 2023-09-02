@@ -11,10 +11,10 @@ import { dehydrate } from '~/react-query/server';
 import { getArticleCategories, useArticleCategories } from '~/services/article';
 import { flex, fontCss, palettes, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
+import { globalMetaData } from '~/utils/metadata';
 
-const metaTitle = '게시글 카테고리 모음';
-const metaDescription =
-  'SSAF SOUND의 모든 게시글 카테고리를 모아볼 수 있는 페이지입니다.';
+const metaTitle = '게시판 모음';
+const metaDescription = `${globalMetaData.description} 다양한 주제로 소통할 수 있는 게시판 기능을 이용해보세요.`;
 
 const ArticleCategoriesPage = () => {
   const { data: articleCategories } = useArticleCategories();

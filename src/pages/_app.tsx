@@ -8,6 +8,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import AuthChecker from '~/components/AuthChecker';
 import Background from '~/components/Background';
+import { PageHead } from '~/components/Common';
 import { GlobalModal } from '~/components/GlobalModal';
 import { MainLayout } from '~/components/Layout';
 import { useMSW } from '~/hooks';
@@ -33,6 +34,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
         <Background />
         <Toaster />
         <MainLayout>
+          {Component.meta && <PageHead {...Component.meta} />}
           {Component.auth ? (
             <AuthChecker auth={Component.auth}>
               <Component {...pageProps} />

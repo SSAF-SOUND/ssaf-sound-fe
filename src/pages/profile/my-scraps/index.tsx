@@ -9,7 +9,6 @@ import ArticleCardList from '~/components/ArticleCardList';
 import {
   DefaultFullPageLoader,
   loaderText,
-  PageHead,
   PageHeadingText,
   Separator,
   Tabs,
@@ -64,8 +63,6 @@ const MyScrapsPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={titleBarTitle} />
 
       <div css={selfCss}>
@@ -135,6 +132,11 @@ MyScrapsPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
+};
+MyScrapsPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
 };
 
 const tabListContainerTop = titleBarHeight;
