@@ -32,6 +32,7 @@ export const LunchMenusPreviewMenuDescription = (
             fallbackSrc={lunchImageFallback.src}
             alt={mainMenu}
             fill={true}
+            priority={true}
           />
 
           <strong className={cn.mainMenu} css={mainMenuCss}>
