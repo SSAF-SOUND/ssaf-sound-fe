@@ -1,6 +1,11 @@
-const FALLBACK = 'http://localhost';
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || FALLBACK;
-export const isDevMode = process.env.NODE_ENV === 'development';
+const fallback = 'http://localhost';
+const devEnvStrings = ['preview', 'development'];
+
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || fallback;
+
+export const isDevMode =
+  devEnvStrings.includes(process.env.NODE_ENV) ||
+  devEnvStrings.includes(process.env.NEXT_PUBLIC_VERCEL_ENV as string);
 
 export enum ResponseCode {
   //
