@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
 
+import { DevPageLink } from '~/components/__dev__/DevPageLink';
 import { Dot, Icon, IconButton } from '~/components/Common';
 import { useSignOutReconfirmModal } from '~/hooks';
 import { useMyInfo } from '~/services/member';
@@ -28,6 +29,7 @@ export const PrivateButtonsLayer = () => {
 
   return (
     <div css={privateButtonLayerSelfCss}>
+      <DevPageLink />
       {isSignedIn ? (
         <>
           {/*<PrivateButton*/}
@@ -47,6 +49,7 @@ export const PrivateButtonsLayer = () => {
             label="로그아웃"
             onClick={openSignOutReconfirmModal}
             hasUnreadMessage={false}
+            withUnreadMessageLayer={false}
           />
         </>
       ) : (
@@ -55,6 +58,7 @@ export const PrivateButtonsLayer = () => {
           iconName="signIn"
           label="로그인"
           hasUnreadMessage={false}
+          withUnreadMessageLayer={false}
         />
       )}
     </div>
@@ -63,23 +67,38 @@ export const PrivateButtonsLayer = () => {
 
 const iconSize = 28;
 const iconContainerGap = 4;
-const iconContainerWidth = iconSize + iconContainerGap + 10;
+const unreadMessageMarkSize = 10;
+const iconContainerWidth = iconSize + iconContainerGap + unreadMessageMarkSize;
 
 interface PrivateButtonProps {
   iconName: IconNames;
   label: string;
   hasUnreadMessage?: boolean;
   onClick: () => void;
+  withUnreadMessageLayer?: boolean;
 }
 
 const PrivateButton = (props: PrivateButtonProps) => {
-  const { iconName, hasUnreadMessage = false, label, onClick } = props;
+  const {
+    iconName,
+    hasUnreadMessage = false,
+    label,
+    onClick,
+    withUnreadMessageLayer = true,
+  } = props;
 
   return (
-    <div css={privateButtonSelfCss}>
-      <div css={unreadMessageIndicatorCss}>
-        {hasUnreadMessage && <Dot size="sm" theme="recruit" />}
-      </div>
+    <div
+      css={[
+        privateButtonSelfCss,
+        withUnreadMessageLayer && withUnreadMessageLayerCss,
+      ]}
+    >
+      {withUnreadMessageLayer && (
+        <div css={unreadMessageIndicatorCss}>
+          {hasUnreadMessage && <Dot size="sm" theme="recruit" />}
+        </div>
+      )}
       <IconButton onClick={onClick} size={iconSize + 4}>
         <Icon name={iconName} size={iconSize} label={label} />
       </IconButton>
@@ -89,8 +108,11 @@ const PrivateButton = (props: PrivateButtonProps) => {
 
 const privateButtonLayerSelfCss = css(flex('center', '', 'row', 10));
 const privateButtonSelfCss = css(
-  { minWidth: iconContainerWidth },
+  { minWidth: iconContainerWidth - unreadMessageMarkSize },
   flex('center', 'flex-end', 'row', iconContainerGap)
 );
+const withUnreadMessageLayerCss = css({
+  minWidth: iconContainerWidth,
+});
 
 const unreadMessageIndicatorCss = css({ width: 10 }, flex('center', 'center'));

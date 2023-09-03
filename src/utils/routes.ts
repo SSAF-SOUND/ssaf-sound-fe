@@ -82,6 +82,7 @@ export const routes = {
       return `${routes.lunch.self()}?${queryString}`;
     },
   },
+  dev: () => `/__dev__`,
 };
 
 export enum EditableMyInfoFields {
