@@ -76,6 +76,7 @@ export const createMockArticleSummary = (id: number): ArticleSummary => {
   const anonymity = Boolean(id % 2);
   const numberRange = { min: 1000, max: 100000 };
   return {
+    boardId: 1,
     title: faker.lorem.sentence(4),
     content: ` 
       <p>

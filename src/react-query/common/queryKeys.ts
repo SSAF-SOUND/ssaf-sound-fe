@@ -69,7 +69,7 @@ export const endpoints = {
     preSignedUrl: () => `/store/image`,
   },
   articles: {
-    categories: () => '/boards',
+    categories: () => '/boards' as const,
     list: (params: {
       categoryId: number;
       cursor: number;
@@ -86,7 +86,7 @@ export const endpoints = {
           cursor,
           keyword,
         } as never).toString();
-        return `/posts/search?${queryString}`;
+        return `/posts/search?${queryString}` as const;
       }
 
       const queryString = new URLSearchParams({
@@ -95,7 +95,7 @@ export const endpoints = {
         cursor,
       } as never).toString();
 
-      return `/posts?${queryString}`;
+      return `/posts?${queryString}` as const;
     },
     hot: (params: { cursor: number; size: number; keyword?: string }) => {
       const { size, cursor, keyword = '' } = params;
@@ -106,7 +106,7 @@ export const endpoints = {
           cursor,
           keyword,
         } as never).toString();
-        return `/posts/hot/search?${queryString}`;
+        return `/posts/hot/search?${queryString}` as const;
       }
 
       const queryString = new URLSearchParams({
@@ -114,35 +114,36 @@ export const endpoints = {
         cursor,
       } as never).toString();
 
-      return `/posts/hot?${queryString}`;
+      return `/posts/hot?${queryString}` as const;
     },
     mine: (params: { cursor: number; size: number }) => {
       const queryString = new URLSearchParams(params as never).toString();
-      return `/posts/my?${queryString}`;
+      return `/posts/my?${queryString}` as const;
     },
-    create: (categoryId: number) => `/posts?boardId=${categoryId}`,
-    detail: (articleId: number) => `/posts/${articleId}`,
+    create: (categoryId: number) => `/posts?boardId=${categoryId}` as const,
+    detail: (articleId: number) => `/posts/${articleId}` as const,
     report: (articleId: number) =>
-      `${endpoints.articles.detail(articleId)}/report`,
-    like: (articleId: number) => `${endpoints.articles.detail(articleId)}/like`,
+      `${endpoints.articles.detail(articleId)}/report` as const,
+    like: (articleId: number) =>
+      `${endpoints.articles.detail(articleId)}/like` as const,
     scrap: (articleId: number) =>
-      `${endpoints.articles.detail(articleId)}/scrap`,
+      `${endpoints.articles.detail(articleId)}/scrap` as const,
   },
   articleComments: {
-    detail: (commentId: number) => `/comments/${commentId}`,
-    list: (articleId: number) => `/comments?postId=${articleId}`,
-    create: (articleId: number) => `/comments?postId=${articleId}`,
+    detail: (commentId: number) => `/comments/${commentId}` as const,
+    list: (articleId: number) => `/comments?postId=${articleId}` as const,
+    create: (articleId: number) => `/comments?postId=${articleId}` as const,
     like: (commentId: number) =>
-      `${endpoints.articleComments.detail(commentId)}/like`,
+      `${endpoints.articleComments.detail(commentId)}/like` as const,
     report: (commentId: number) =>
-      `${endpoints.articleComments.detail(commentId)}/report`,
+      `${endpoints.articleComments.detail(commentId)}/report` as const,
     reply: (params: { articleId: number; commentId: number }) => {
       const { commentId, articleId } = params;
       const queryString = new URLSearchParams({
         commentId,
         postId: articleId,
       } as never).toString();
-      return `/comments/reply?${queryString}`;
+      return `/comments/reply?${queryString}` as const;
     },
   },
   user: {

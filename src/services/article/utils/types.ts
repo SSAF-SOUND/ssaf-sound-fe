@@ -55,11 +55,16 @@ export interface ArticleDetailError {
 
 export interface ArticleSummary {
   postId: number;
+
+  boardId: number;
   boardTitle: string;
+
   title: string;
   content: string;
+
   likeCount: number;
   commentCount: number;
+
   createdAt: string;
   nickname: string;
   anonymity: boolean;
