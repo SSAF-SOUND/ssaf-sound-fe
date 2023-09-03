@@ -205,7 +205,7 @@ export const endpoints = {
   lunch: {
     list: ({ campus, date }: { campus: string; date: string }) => {
       const queryString = new URLSearchParams({ campus, date }).toString();
-      return `/lunch?${queryString}`;
+      return `/lunch?${queryString}` as const;
     },
     vote: (lunchId: number) => `/lunch/poll/${lunchId}` as const,
     revertVote: (lunchId: number) => `/lunch/poll/revert/${lunchId}` as const,

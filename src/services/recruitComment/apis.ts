@@ -5,7 +5,7 @@ import { endpoints } from '~/react-query/common';
 import { privateAxios, publicAxios } from '~/utils';
 
 export type GetRecruitCommentsApiData = ApiSuccessResponse<{
-  comments: CommentDetail[];
+  recruitComments: CommentDetail[];
 }>;
 
 export const getRecruitComments = (recruitId: number) => {
@@ -13,7 +13,7 @@ export const getRecruitComments = (recruitId: number) => {
 
   return publicAxios
     .get<GetRecruitCommentsApiData>(endpoint)
-    .then((res) => res.data.data.comments);
+    .then((res) => res.data.data.recruitComments);
 };
 
 export interface CreateRecruitCommentParams {
