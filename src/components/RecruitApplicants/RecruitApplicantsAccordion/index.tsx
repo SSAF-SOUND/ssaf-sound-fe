@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import { Accordion } from '~/components/Common';
+import { Accordion } from '~/components/Common/Accordion';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 interface AccordionRootProps {

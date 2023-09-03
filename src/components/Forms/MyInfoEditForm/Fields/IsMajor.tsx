@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
-import { SelectBox } from '~/components/Common';
+import { SelectBox } from '~/components/Common/SelectBox';
 import { useMyInfoEditFormContext } from '~/components/Forms/MyInfoEditForm/utils';
 
 enum Major {

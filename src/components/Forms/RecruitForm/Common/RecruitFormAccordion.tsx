@@ -4,7 +4,8 @@ import type { IconNames } from '~/components/Common';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
-import { Accordion, Icon } from '~/components/Common';
+import { Icon } from '~/components/Common';
+import { Accordion } from '~/components/Common/Accordion';
 import { accordionTimingFunction } from '~/components/Common/Accordion/utils';
 import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { flex, fontCss, palettes } from '~/styles/utils';

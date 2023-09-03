@@ -55,7 +55,7 @@ export interface SelectBoxProps<D = string> {
 const defaultTextAs = (item: any) => item;
 // eslint-disable-next-line
 const defaultValueAs = (item: any) => item;
-const SelectBox = <D,>(props: SelectBoxProps<D>) => {
+export const SelectBox = <D,>(props: SelectBoxProps<D>) => {
   const {
     items,
     placeholder,

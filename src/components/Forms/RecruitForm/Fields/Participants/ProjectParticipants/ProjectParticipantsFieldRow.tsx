@@ -7,7 +7,8 @@ import { css } from '@emotion/react';
 import { memo } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { Icon, IconButton, NumberInput, SelectBox } from '~/components/Common';
+import { Icon, IconButton, NumberInput } from '~/components/Common';
+import { SelectBox } from '~/components/Common/SelectBox';
 import {
   maxParticipantsCount,
   minParticipantsCount,

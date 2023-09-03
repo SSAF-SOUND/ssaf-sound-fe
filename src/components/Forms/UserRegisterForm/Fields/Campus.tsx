@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { SelectBox } from '~/components/Common';
+import { SelectBox } from '~/components/Common/SelectBox';
 import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { flex, fontCss } from '~/styles/utils';
 
