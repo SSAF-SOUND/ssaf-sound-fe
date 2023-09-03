@@ -220,7 +220,7 @@ export const getUserPortfolio = restSuccess<GetUserPortfolioApiData['data']>(
   composeUrls(API_URL, endpoints.user.portfolio(':id')),
   {
     data: {
-      portfolio,
+      portfolioElement: portfolio,
     },
   }
 );
@@ -230,7 +230,7 @@ export const getMyPortfolio = restSuccess<GetMyPortfolioApiData['data']>(
   composeUrls(API_URL, endpoints.user.myPortfolio()),
   {
     data: {
-      portfolio,
+      portfolioElement: portfolio,
     },
   }
 );

@@ -66,53 +66,94 @@ export const updateMyInfo = (params: UpdateMyInfoParams) => {
 
 export interface UpdateSsafyBasicInfoParams {
   ssafyMember: boolean;
-  semester: null | number;
-  campus: null | string;
+  year: number | undefined;
+  campus: string | undefined;
+}
+
+export interface UpdateSsafyBasicInfoBody {
+  ssafyMember: boolean;
+  semester: number | undefined;
+  campus: string | undefined;
 }
 
 export const updateSsafyBasicInfo = (params: UpdateSsafyBasicInfoParams) => {
   const endpoint = endpoints.user.ssafyBasicInfo();
+  const { year, ...restParams } = params;
+  const body: UpdateSsafyBasicInfoBody = {
+    semester: year,
+    ...restParams,
+  };
 
-  return privateAxios.patch(endpoint, params).then((res) => res.data);
+  return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
 export interface UpdateIsMajorParams {
   isMajor: boolean;
 }
 
+export interface UpdateIsMajorBody {
+  isMajor: boolean;
+}
+
 export const updateIsMajor = (params: UpdateIsMajorParams) => {
   const endpoint = endpoints.user.isMajor();
+  const body: UpdateIsMajorBody = params;
 
-  return privateAxios.patch(endpoint, params).then((res) => res.data);
+  return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
 export interface UpdateTrackParams {
   track: string;
 }
 
+export interface UpdateTrackBody {
+  majorTrack: string;
+}
+
 export const updateTrack = (params: UpdateTrackParams) => {
   const endpoint = endpoints.user.track();
+  const { track } = params;
+  const body: UpdateTrackBody = {
+    majorTrack: track,
+  };
 
-  return privateAxios.patch(endpoint, params).then((res) => res.data);
+  return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
 export interface UpdateNicknameParams {
   nickname: string;
 }
+
+export interface UpdateNicknameBody {
+  nickname: string;
+}
+
 export const updateNickname = (params: UpdateNicknameParams) => {
   const endpoint = endpoints.user.nickname();
+  const body: UpdateNicknameBody = params;
 
-  return privateAxios.patch(endpoint, params).then((res) => res.data);
+  return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
 export interface ValidateNicknameParams {
   nickname: string;
 }
 
+export interface ValidateNicknameBody {
+  nickname: string;
+}
+
+export type ValidateNicknameApiData = ApiSuccessResponse<{
+  possible: boolean;
+}>;
+
 export const validateNickname = (params: ValidateNicknameParams) => {
   const endpoint = endpoints.user.nickname();
+  const body: ValidateNicknameBody = params;
 
-  return privateAxios.post(endpoint, params).then((res) => res.data);
+  return privateAxios
+    .post<ValidateNicknameApiData>(endpoint, body)
+    .then((res) => res.data.data.possible);
 };
 
 export interface CertifyStudentParams {
@@ -167,7 +208,11 @@ export const getUserProfileVisibility = (id: number) => {
     .then((res) => res.data.data);
 };
 
-interface UpdateProfileVisibilityParams {
+export interface UpdateProfileVisibilityParams {
+  isPublic: boolean;
+}
+
+export interface UpdateProfileVisibilityBody {
   isPublic: boolean;
 }
 
@@ -175,31 +220,33 @@ export const updateProfileVisibility = (
   params: UpdateProfileVisibilityParams
 ) => {
   const endpoint = endpoints.user.profileVisibility();
-  return privateAxios.patch(endpoint, params).then((res) => res.data);
+  const body: UpdateProfileVisibilityBody = params;
+
+  return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
 // 포트폴리오
 
 export type GetUserPortfolioApiData = ApiSuccessResponse<{
-  portfolio: UserPortfolio;
+  portfolioElement: UserPortfolio;
 }>;
 export const getUserPortfolio = (id: number) => {
   const endpoint = endpoints.user.portfolio(id);
 
   return privateAxios
     .get<GetUserPortfolioApiData>(endpoint)
-    .then((res) => res.data.data.portfolio);
+    .then((res) => res.data.data.portfolioElement);
 };
 
 export type GetMyPortfolioApiData = ApiSuccessResponse<{
-  portfolio: UserPortfolio;
+  portfolioElement: UserPortfolio;
 }>;
 export const getMyPortfolio = () => {
   const endpoint = endpoints.user.myPortfolio();
 
   return privateAxios
     .get<GetMyPortfolioApiData>(endpoint)
-    .then((res) => res.data.data.portfolio);
+    .then((res) => res.data.data.portfolioElement);
 };
 
 export interface UpdateMyPortfolioParams extends UserPortfolio {}
@@ -208,9 +255,7 @@ export type UpdateMyPortfolioBody = UpdateMyPortfolioParams;
 
 export const updateMyPortfolio = (params: UpdateMyPortfolioParams) => {
   const endpoint = endpoints.user.myPortfolio();
-  const body: UpdateMyPortfolioBody = {
-    ...params,
-  };
+  const body: UpdateMyPortfolioBody = params;
 
   return privateAxios.put(endpoint, body).then((res) => res.data);
 };

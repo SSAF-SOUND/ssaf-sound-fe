@@ -163,9 +163,9 @@ export const endpoints = {
     nickname: () => '/members/nickname' as const,
     isMajor: () => '/members/major' as const,
     track: () => '/members/major-track' as const,
-    profileVisibility: () => '/members/profile-public' as const,
+    profileVisibility: () => '/members/public-profile' as const,
     userProfileVisibility: (id: number) =>
-      `/members/${id}/profile-public` as const,
+      `/members/${id}/public-profile` as const,
   },
   recruit: {
     // todo 이름, 파라미터 수정

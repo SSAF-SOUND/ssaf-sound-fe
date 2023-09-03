@@ -35,17 +35,12 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
 
   const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (
     reset,
-    value
+    formValues
   ) => {
-    const newSsafyBasicInfo = value.ssafyBasicInfo;
-    // eslint-disable-next-line
-    const { year: _, ...restNewSsafyBasicInfo } = value.ssafyBasicInfo;
+    const newSsafyBasicInfo = formValues.ssafyBasicInfo;
 
     try {
-      await updateSsafyBasicInfo({
-        ...restNewSsafyBasicInfo,
-        semester: newSsafyBasicInfo.year,
-      });
+      await updateSsafyBasicInfo(newSsafyBasicInfo);
 
       setMyInfo(
         produce(myInfo, (draft) => {
