@@ -64,7 +64,7 @@ export const updateMyInfo = rest.put<
         ssafyMember: true,
         ssafyInfo: {
           campus: body.campus as string,
-          semester: body.semester as number,
+          semester: body.year as number,
           certificationState: CertificationState.UNCERTIFIED,
           majorTrack: null,
         },

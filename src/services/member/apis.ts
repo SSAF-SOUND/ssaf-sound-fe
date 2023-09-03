@@ -38,15 +38,29 @@ export interface UpdateMyInfoParams {
   nickname: string;
   ssafyMember: boolean;
   isMajor: boolean;
-  campus?: string;
-  semester?: number;
+  year: number | undefined;
+  campus: string | undefined;
+}
+
+export interface UpdateMyInfoBody {
+  nickname: string;
+  ssafyMember: boolean;
+  isMajor: boolean;
+  campus: string | undefined;
+  semester: number | undefined;
 }
 
 export const updateMyInfo = (params: UpdateMyInfoParams) => {
   const endpoint = endpoints.user.myInfo();
+  const { year, ...restParams } = params;
+
+  const body: UpdateMyInfoBody = {
+    ...restParams,
+    semester: year,
+  };
 
   return privateAxios
-    .put<UpdateMyInfoApiData>(endpoint, params)
+    .put<UpdateMyInfoApiData>(endpoint, body)
     .then((res) => res.data.data);
 };
 
@@ -102,6 +116,12 @@ export const validateNickname = (params: ValidateNicknameParams) => {
 };
 
 export interface CertifyStudentParams {
+  track: SsafyTrack;
+  year: number;
+  answer: string;
+}
+
+export interface CertifyStudentBody {
   majorTrack: SsafyTrack;
   semester: number;
   answer: string;
@@ -114,9 +134,16 @@ export type CertifyStudentApiData = ApiSuccessResponse<{
 
 export const certifyStudent = (params: CertifyStudentParams) => {
   const endpoint = endpoints.user.studentCertification();
+  const { year, answer, track } = params;
+
+  const body: CertifyStudentBody = {
+    answer,
+    semester: year,
+    majorTrack: track,
+  };
 
   return privateAxios
-    .post<CertifyStudentApiData>(endpoint, params)
+    .post<CertifyStudentApiData>(endpoint, body)
     .then((res) => res.data.data);
 };
 

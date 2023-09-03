@@ -105,14 +105,12 @@ const StudentCertificationPage: CustomNextPage = () => {
     );
   };
 
-  const onSubmit = async (value: StudentCertificationFormValues) => {
-    const { track, answer, year } = value;
+  const onSubmit = async (formValues: StudentCertificationFormValues) => {
+    const { track, year } = formValues;
     try {
-      const { certificationInquiryCount, possible } = await certifyStudent({
-        answer,
-        majorTrack: track,
-        semester: year,
-      });
+      const { certificationInquiryCount, possible } = await certifyStudent(
+        formValues
+      );
 
       if (!possible) {
         handleIncorrectAnswer(maxAttempts - certificationInquiryCount);
