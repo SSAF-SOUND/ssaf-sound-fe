@@ -47,7 +47,7 @@ export const queryKeys = {
     ],
   },
   lunch: {
-    self: () => [...queryKeys.auth(), 'lunch', 'menus'],
+    self: () => [...queryKeys.auth(), 'lunch'],
     list: ({
       campus,
       dateSpecifier,
