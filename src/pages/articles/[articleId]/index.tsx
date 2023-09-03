@@ -59,8 +59,8 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
     return <NotExistsArticle articleError={articleDetail} />;
   }
 
-  const { title: categoryTitle, boardId: articleCategoryId } =
-    articleDetail.category;
+  const { boardTitle: articleCategoryTitle, boardId: articleCategoryId } =
+    articleDetail;
 
   const metaTitle = articleDetail.title;
   const metaDescription = stripHtmlTags(articleDetail.content);
@@ -84,7 +84,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
       <div css={selfCss}>
         <TitleBar.Default
           css={titleBarCss}
-          title={categoryTitle}
+          title={articleCategoryTitle}
           withoutClose
           onClickBackward={routes.articles.category(articleCategoryId)}
         />

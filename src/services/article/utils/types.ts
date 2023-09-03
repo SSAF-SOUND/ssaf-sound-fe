@@ -24,7 +24,9 @@ export type ArticleAuthor =
 
 export interface ArticleDetailWithoutAuthor {
   postId: number;
-  category: ArticleCategory;
+
+  boardId: number;
+  boardTitle: string;
 
   title: string;
   content: string;
