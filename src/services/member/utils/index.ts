@@ -1,4 +1,3 @@
-export * from './createRandomNickname';
 export * from './extractNumericText';
 export * from './isEmptyPortfolio';
 export * from './nicknameValidator';

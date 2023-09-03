@@ -5,7 +5,8 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useFormContext } from 'react-hook-form';
 
 import { AlertText, Icon, IconButton, TextInput } from '~/components/Common';
-import { createRandomNickname, nicknameValidator } from '~/services/member';
+import { nicknameValidator } from '~/services/member';
+import { createRandomNickname } from '~/services/member/utils/createRandomNickname';
 import { flex } from '~/styles/utils';
 
 interface NicknameInputProps {
