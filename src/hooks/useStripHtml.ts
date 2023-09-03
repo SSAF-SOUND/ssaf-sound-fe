@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
-import stripTags from 'striptags';
 
-import { replaceMultipleSpacesWithSingle } from '~/utils/replaceMultipleSpacesWithSingle';
+import { stripHtmlTags } from '~/utils/stripHtmlTags';
 
 export const useStripHtml = (str: string) => {
-  return useMemo(() => replaceMultipleSpacesWithSingle(stripTags(str)), [str]);
+  return useMemo(() => stripHtmlTags(str), [str]);
 };
