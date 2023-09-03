@@ -6,14 +6,17 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 import {
+  getEmptyLunchMenusWithPollStatus,
   getHotArticles,
   getLunchMenusWithPollStatus,
-  getLunchMenusWithPollStatusNotExistLunchMenusError,
-} from '~/mocks/handlers';
+  getLunchMenusWithPollStatusError
+} from "~/mocks/handlers";
 import { userInfo } from '~/mocks/handlers/member/data';
 import MainPage from '~/pages/main';
 import { queryKeys } from '~/react-query/common';
-import { useSetMyInfo } from '~/services/member';
+import { LunchDateSpecifier } from '~/services/lunch';
+import { useMyInfo, useSetMyInfo } from '~/services/member';
+import { useCampuses } from '~/services/meta';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof MainPage> = {
@@ -119,7 +122,7 @@ export const NotExistData: MainPageStory = {
   parameters: {
     msw: {
       handlers: {
-        lunch: [getLunchMenusWithPollStatusNotExistLunchMenusError],
+        lunch: [getEmptyLunchMenusWithPollStatus],
         article: [],
         recruit: [],
       },

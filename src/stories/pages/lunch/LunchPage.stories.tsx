@@ -12,6 +12,7 @@ import {
 import LunchMenus from '~/components/Lunch/LunchMenus';
 import NavigationGroup from '~/components/NavigationGroup';
 import {
+  getEmptyLunchMenusWithPollStatus,
   getLunchMenusWithPollStatus,
   getLunchMenusWithPollStatusError,
   pollLunchMenuError,
@@ -27,9 +28,14 @@ import { PageLayout } from '~/stories/Layout';
 const LunchPageStoryComponent = () => {
   const { data: campuses } = useCampuses();
   const [campus, setCampus] = useState(campuses[0]);
+  const queryClient = useQueryClient();
   const setMyInfo = useSetMyInfo();
 
   setMyInfo(userInfo.certifiedSsafyUserInfo);
+
+  useEffect(() => {
+    queryClient.resetQueries(queryKeys.lunch.self());
+  }, [queryClient]);
 
   return (
     <PageLayout>
@@ -37,17 +43,12 @@ const LunchPageStoryComponent = () => {
         <NavigationGroup />
         <LunchIntroduction />
         <LunchCampusSelectBox
-          css={{ zIndex: 2 }}
           selectedCampus={campus}
           campuses={campuses}
           onCampusChange={(value) => setCampus(value)}
         />
         <LunchTabs />
-        <LunchMenus
-          css={{ zIndex: 1 }}
-          campus={campus}
-          dateSpecifier={LunchDateSpecifier.TODAY}
-        />
+        <LunchMenus campus={campus} dateSpecifier={LunchDateSpecifier.TODAY} />
       </LunchLayout>
     </PageLayout>
   );
@@ -87,12 +88,7 @@ export const FailToLoadLunchMenu: LunchPageStory = {
       const queryClient = useQueryClient();
 
       useEffect(() => {
-        queryClient.resetQueries(
-          queryKeys.lunch.list({
-            dateSpecifier: LunchDateSpecifier.TODAY,
-            campus: '서울',
-          })
-        );
+        queryClient.resetQueries(queryKeys.lunch.self());
       }, [queryClient]);
 
       return <Story />;
@@ -119,4 +115,14 @@ export const NotSignedIn: LunchPageStory = {
       return <Story />;
     },
   ],
+};
+
+export const NotExistData: LunchPageStory = {
+  parameters: {
+    msw: {
+      handlers: {
+        lunch: [getEmptyLunchMenusWithPollStatus],
+      },
+    },
+  },
 };

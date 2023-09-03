@@ -33,6 +33,12 @@ export const lunchMock = {
     };
   })(),
 
+  emptyMenus: {
+    totalPollCount: 0,
+    polledAt: -1,
+    menus: [],
+  },
+
   vote: {
     pollCount: 125,
   },

@@ -13,16 +13,16 @@ export const LunchMenusPreviewError = (props: LunchMenusPreviewErrorProps) => {
   const { error, onClickRetry } = props;
   const errorResponse = getErrorResponse(error);
   const errorCode = errorResponse?.code;
-  const notExistLunchMenus = errorCode === ResponseCode.NOT_EXIST_LUNCH_MENUS;
+  const invalidLunchDate = errorCode === ResponseCode.INVALID_LUNCH_DATE;
 
-  if (notExistLunchMenus) {
-    return <div css={notExistLunchMenusCss}>{errorResponse?.message}</div>;
+  if (invalidLunchDate) {
+    return <div css={invalidLunchDateCss}>{errorResponse?.message}</div>;
   }
 
   return <PreviewErrorCard onClickRetry={onClickRetry} />;
 };
 
-const notExistLunchMenusCss = css(
+const invalidLunchDateCss = css(
   { width: '100%', height: 140 },
   flex('center', 'center'),
   fontCss.style.B14
