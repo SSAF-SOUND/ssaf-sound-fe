@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import { stripHtml } from 'string-strip-html';
+import stripTags from 'striptags';
 
 import { Article } from '~/components/Article';
 import ArticleComment from '~/components/ArticleComment';
@@ -65,7 +65,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
   const metaTitle = articleDetail.title;
   const metaDescription = replaceMultipleSpacesWithSingle(
-    stripHtml(articleDetail.content).result
+    stripTags(articleDetail.content)
   );
   const pageUrl = routes.articles.detail(articleDetail.postId);
 
