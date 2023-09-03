@@ -25,6 +25,7 @@ import {
   getArticles,
   getHotArticles,
   getMyArticles,
+  getMyScrapedArticles,
 } from '~/services/article/apis';
 
 export const useArticleCategories = () => {
@@ -233,6 +234,16 @@ export const useMyArticles = () => {
   return useInfiniteQuery({
     queryKey: queryKeys.articles.mine(),
     queryFn: ({ pageParam }) => getMyArticles({ cursor: pageParam }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.cursor ?? undefined;
+    },
+  });
+};
+
+export const useMyScrapedArticles = () => {
+  return useInfiniteQuery({
+    queryKey: queryKeys.articles.myScraped(),
+    queryFn: ({ pageParam }) => getMyScrapedArticles({ cursor: pageParam }),
     getNextPageParam: (lastPage) => {
       return lastPage.cursor ?? undefined;
     },

@@ -14,7 +14,7 @@ import {
   Tabs,
 } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
-import { useMyArticles } from '~/services/article';
+import { useMyScrapedArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import {
   pageMaxWidth,
@@ -116,7 +116,7 @@ const TabTrigger = (props: { category: PossibleMyScrapsCategories }) => {
 };
 
 const ArticleLayer = () => {
-  const myArticlesInfiniteQuery = useMyArticles();
+  const myArticlesInfiniteQuery = useMyScrapedArticles();
 
   return (
     <ArticleCardList

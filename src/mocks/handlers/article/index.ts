@@ -356,8 +356,24 @@ export const getMyArticlesError = rest.get(
   restInfiniteArticlesError
 );
 
+export const getMyScrapedArticles = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.myScraped({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getMyScrapedArticlesError = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.myScraped({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesError
+);
+
 export const articleHandlers = [
   getMyArticles, // /posts/my
+  getMyScrapedArticles, // /posts/my-scrap
+  // getMyScrapedArticlesError,
   getHotArticles, // /posts/hot?
   getHotArticlesByKeyword, // /posts/hot/search?
   getArticlesByKeyword, // /posts/search?

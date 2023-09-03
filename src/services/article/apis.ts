@@ -219,3 +219,18 @@ export const getMyArticles = (params: GetMyArticlesParams) => {
     .get<GetMyArticlesApiData>(endpoint)
     .then((res) => res.data.data);
 };
+
+export interface GetMyScrapedArticlesParams {
+  cursor?: number;
+  size?: number;
+}
+
+export type GetMyScrapedArticlesApiData = GetArticlesApiData;
+
+export const getMyScrapedArticles = (params: GetMyScrapedArticlesParams) => {
+  const { cursor = defaultCursor, size = defaultSize } = params;
+  const endpoint = endpoints.articles.myScraped({ cursor, size });
+  return privateAxios
+    .get<GetMyScrapedArticlesApiData>(endpoint)
+    .then((res) => res.data.data);
+};

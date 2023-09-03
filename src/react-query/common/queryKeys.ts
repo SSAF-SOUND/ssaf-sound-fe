@@ -25,7 +25,8 @@ export const queryKeys = {
     ],
     hot: (searchKeyword?: string) => ['articles', 'hot', searchKeyword ?? null],
     detail: (articleId: number) => ['articles', articleId],
-    mine: () => [...queryKeys.auth(), 'articles'],
+    mine: () => [...queryKeys.auth(), 'my-articles'],
+    myScraped: () => [...queryKeys.auth(), 'my-scraped-articles'],
   },
   articleComments: {
     list: (articleId: number) => ['comments', articleId],
@@ -119,6 +120,10 @@ export const endpoints = {
     mine: (params: { cursor: number; size: number }) => {
       const queryString = new URLSearchParams(params as never).toString();
       return `/posts/my?${queryString}` as const;
+    },
+    myScraped: (params: { cursor: number; size: number }) => {
+      const queryString = new URLSearchParams(params as never).toString();
+      return `/posts/my-scrap?${queryString}`;
     },
     create: (categoryId: number) => `/posts?boardId=${categoryId}` as const,
     detail: (articleId: number) => `/posts/${articleId}` as const,
