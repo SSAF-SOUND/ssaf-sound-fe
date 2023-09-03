@@ -9,14 +9,11 @@ import {
   getEmptyLunchMenusWithPollStatus,
   getHotArticles,
   getLunchMenusWithPollStatus,
-  getLunchMenusWithPollStatusError
-} from "~/mocks/handlers";
+} from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
 import MainPage from '~/pages/main';
 import { queryKeys } from '~/react-query/common';
-import { LunchDateSpecifier } from '~/services/lunch';
-import { useMyInfo, useSetMyInfo } from '~/services/member';
-import { useCampuses } from '~/services/meta';
+import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof MainPage> = {
