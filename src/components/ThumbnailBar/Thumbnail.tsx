@@ -76,6 +76,7 @@ const darkerCss = {
 const selfCss = css(
   {
     position: 'relative',
+    zIndex: 1,
     ':hover': darkerCss,
   },
   inlineFlex('center', 'center')
@@ -126,4 +127,7 @@ const removeButtonCss = css(
   inlineFlex('center', 'center')
 );
 
-const imageLoadIndicatorCss = css({ position: 'absolute', zIndex: 10 });
+const imageLoadIndicatorCss = css({
+  position: 'absolute',
+  zIndex: 1,
+});
