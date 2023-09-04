@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
 
-import { DevPageLink } from '~/components/__dev__/DevPageLink';
+import { DevSignInModalTrigger } from '~/components/__dev__/DevSignInModalTrigger';
 import { Dot, Icon, IconButton } from '~/components/Common';
 import { useSignOutReconfirmModal } from '~/hooks';
 import { useMyInfo } from '~/services/member';
@@ -29,7 +29,7 @@ export const PrivateButtonsLayer = () => {
 
   return (
     <div css={privateButtonLayerSelfCss}>
-      <DevPageLink />
+      <DevSignInModalTrigger />
       {isSignedIn ? (
         <>
           {/*<PrivateButton*/}
