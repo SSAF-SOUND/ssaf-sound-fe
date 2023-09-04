@@ -98,24 +98,6 @@ export const removeArticleError = restError(
   }
 );
 
-export const reportArticle = restSuccess(
-  'post',
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.articles.report(':articleId')),
-  {
-    data: null,
-  }
-);
-
-export const reportArticleError = restError(
-  'post',
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.articles.report(':articleId')),
-  {
-    message: '게시글 신고에 실패했습니다.',
-  }
-);
-
 export const updateArticle = rest.patch(
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.detail(':articleId')),
@@ -375,7 +357,6 @@ export const articleHandlers = [
   getArticleDetail, // /posts/:id
   createArticle,
   removeArticle,
-  reportArticle,
   updateArticle,
   likeArticle,
   // likeArticleError,
