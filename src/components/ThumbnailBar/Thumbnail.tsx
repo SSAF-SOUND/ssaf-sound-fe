@@ -37,6 +37,7 @@ const Thumbnail = (props: ThumbnailProps) => {
   return (
     <li css={[selfCss, showSpinner && darkerCss]}>
       <button
+        type="button"
         css={imageContainerCss}
         style={{ width: size, height: size }}
         onClick={handleClickThumbnail}
