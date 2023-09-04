@@ -4,8 +4,27 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const sentryConfig = require('./config/sentry');
 const svgrConfig = require('./config/svgr');
 
+const shouldNoIndex = ['preview', 'development'].includes(
+  process.env.NEXT_PUBLIC_VERCEL_ENV
+);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async headers() {
+    const headers = [];
+    if (shouldNoIndex) {
+      headers.push({
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex',
+          },
+        ],
+        source: '/:path*',
+      });
+    }
+    return headers;
+  },
   reactStrictMode: true,
   webpack(config, context) {
     svgrConfig(config);
