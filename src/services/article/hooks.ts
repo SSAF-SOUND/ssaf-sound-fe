@@ -18,7 +18,6 @@ import {
   getArticleCategories,
   getArticleDetail,
   removeArticle,
-  reportArticle,
   updateArticle,
   likeArticle,
   scrapArticle,
@@ -45,12 +44,6 @@ export const useCreateArticle = () => {
 export const useRemoveArticle = () => {
   return useMutation({
     mutationFn: removeArticle,
-  });
-};
-
-export const useReportArticle = () => {
-  return useMutation({
-    mutationFn: reportArticle,
   });
 };
 
