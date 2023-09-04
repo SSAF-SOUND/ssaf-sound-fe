@@ -1,5 +1,7 @@
 import type { CustomAppProps } from 'next/app';
 
+import Head from 'next/head';
+
 import { QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
@@ -16,7 +18,6 @@ import { initServerMocks } from '~/mocks';
 import { getQueryClient } from '~/react-query/common';
 import GlobalStyles from '~/styles/GlobalStyles';
 
-import Head from 'next/head';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') initServerMocks();
 
