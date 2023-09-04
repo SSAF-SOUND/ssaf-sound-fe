@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import type {
-  ArticleCategory,
   CreateArticleApiData,
   CreateArticleBody,
+  GetArticleCategoriesApiData,
   GetArticleDetailApiData,
   LikeArticleApiData,
   ScrapArticleApiData,
@@ -26,11 +26,13 @@ import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-export const getArticleCategories = restSuccess<ArticleCategory[]>(
-  'get',
-  composeUrls(API_URL, endpoints.articles.categories()),
-  { data: articleCategories }
-);
+export const getArticleCategories = restSuccess<
+  GetArticleCategoriesApiData['data']
+>('get', composeUrls(API_URL, endpoints.articles.categories()), {
+  data: {
+    boards: articleCategories,
+  },
+});
 
 export const getArticleCategoriesError = restError(
   'get',
