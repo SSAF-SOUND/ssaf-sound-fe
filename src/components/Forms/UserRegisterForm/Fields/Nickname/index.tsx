@@ -5,7 +5,10 @@ import { useWatch } from 'react-hook-form';
 import { Button, VisuallyHidden } from '~/components/Common';
 import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { useModal } from '~/components/GlobalModal';
-import { useValidateNickname } from '~/services/member';
+import {
+  duplicateNicknameMessage,
+  useValidateNickname,
+} from '~/services/member';
 import { flex, fontCss } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
@@ -29,7 +32,7 @@ const Nickname = (props: NicknameProps) => {
     buttonText = '확인',
   } = props;
   const [isValidNickname, setIsValidNickname] = useState(false);
-  const { mutate: validateNickname, isLoading: isValidatingNickname } =
+  const { mutateAsync: validateNickname, isLoading: isValidatingNickname } =
     useValidateNickname();
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -71,27 +74,32 @@ const Nickname = (props: NicknameProps) => {
       return;
     }
 
-    validateNickname(
-      { nickname },
-      {
-        onSuccess: () => {
-          setIsValidNickname(true);
-          handleOpenReconfirmModal(nickname);
+    try {
+      const available = await validateNickname({ nickname });
+      resetField(fieldName, { defaultValue: nickname });
+
+      if (!available) {
+        setError(
+          fieldName,
+          { message: duplicateNicknameMessage },
+          { shouldFocus: true }
+        );
+        return;
+      }
+
+      setIsValidNickname(true);
+      handleOpenReconfirmModal(nickname);
+    } catch (err) {
+      handleAxiosError(err, {
+        onClientError: (response) => {
+          setIsValidNickname(false);
           resetField(fieldName, { defaultValue: nickname });
-        },
-        onError: (error) => {
-          handleAxiosError(error, {
-            onClientError: (response) => {
-              setIsValidNickname(false);
-              resetField(fieldName, { defaultValue: nickname });
-              setError(fieldName, {
-                message: response.message,
-              });
-            },
+          setError(fieldName, {
+            message: response.message,
           });
         },
-      }
-    );
+      });
+    }
   };
 
   useEffect(() => {

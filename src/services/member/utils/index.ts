@@ -1,4 +1,5 @@
 export * from './extractNumericText';
+export * from './duplicateNicknameMessage';
 export * from './isEmptyPortfolio';
 export * from './nicknameValidator';
 export * from './portfolioLinkColors';
