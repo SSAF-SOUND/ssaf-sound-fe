@@ -36,7 +36,7 @@ interface UseMyInfoOptions {
 }
 
 export const useMyInfo = (options: UseMyInfoOptions = {}) => {
-  const { enabled = true, retry } = options;
+  const { enabled = false, retry } = options;
 
   return useQuery({
     queryKey: queryKeys.user.myInfo(),
