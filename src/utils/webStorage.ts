@@ -18,22 +18,22 @@ const createWebStorage = () => {
   const authReturnPageKey = 'auth-return-page';
 
   // `devMode`에서만 사용합니다.
-  const dev__accessTokenKey = 'accessToken';
-  const dev__refreshTokenKey = 'refreshToken';
-  const dev__storedAccessTokenKey = 'stored-accessToken';
-  const dev__storedRefreshTokenKey = 'stored-refreshToken';
-  const dev__storedExpiredAccessTokenKey = 'stored-expired-refreshToken';
-  const dev__storedExpiredRefreshTokenKey = 'stored-expired-refreshToken';
+  const dev__accessTokenKey = 'dev__accessToken';
+  const dev__refreshTokenKey = 'dev__refreshToken';
+  const dev__storedAccessTokenKey = 'dev__stored-accessToken';
+  const dev__storedRefreshTokenKey = 'dev__stored-refreshToken';
+  const dev__storedExpiredAccessTokenKey = 'dev__stored-expired-refreshToken';
+  const dev__storedExpiredRefreshTokenKey = 'dev__stored-expired-refreshToken';
 
   // Default Value
-  const DEFAULT_RETURN_PAGE = routes.main();
+  const defaultReturnPage = routes.main();
 
   return {
     setSignInReturnPage: (returnPage: string) => {
       sessionStorage.setItem(authReturnPageKey, returnPage);
     },
     getSignInReturnPage: () => {
-      return sessionStorage.getItem(authReturnPageKey) ?? DEFAULT_RETURN_PAGE;
+      return sessionStorage.getItem(authReturnPageKey) ?? defaultReturnPage;
     },
     clearSignInReturnPage: () => {
       sessionStorage.removeItem(authReturnPageKey);
