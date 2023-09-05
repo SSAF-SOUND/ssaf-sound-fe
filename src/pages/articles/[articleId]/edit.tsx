@@ -3,9 +3,9 @@ import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 
 import { useRouter } from 'next/router';
 
+import { ArticleError } from '~/components/Article/ArticleError';
 import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
-import RedirectionGuide from '~/components/RedirectionGuide';
 import { useArticleDetail, useUpdateArticle } from '~/services/article';
 import { handleAxiosError, routes } from '~/utils';
 
@@ -15,22 +15,20 @@ const ArticleEditPage: CustomNextPage = () => {
   const router = useRouter();
   const query = router.query as { articleId: string };
   const articleId = Number(query.articleId);
-  const { data: articleDetail } = useArticleDetail(articleId);
+  const {
+    data: articleDetail,
+    isLoading: isArticleDetailLoading,
+    isError: isArticleDetailError,
+    error: articleDetailError,
+  } = useArticleDetail(articleId);
   const { mutateAsync: updateArticle } = useUpdateArticle(articleId);
 
-  if (!articleDetail) {
+  if (isArticleDetailLoading) {
     return <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />;
   }
 
-  if ('error' in articleDetail) {
-    return (
-      <RedirectionGuide
-        title="게시글을 불러오는데 실패했습니다."
-        description={articleDetail.error.message}
-        redirectionText="게시판 모아보기 페이지로"
-        redirectionTo={routes.articles.categories()}
-      />
-    );
+  if (isArticleDetailError) {
+    return <ArticleError error={articleDetailError} />;
   }
 
   const { mine, title, content, images, anonymity } = articleDetail;

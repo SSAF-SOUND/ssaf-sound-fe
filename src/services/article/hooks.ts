@@ -1,9 +1,6 @@
 import type { SetStateAction } from 'react';
 import type { UpdateArticleParams } from '~/services/article/apis';
-import type {
-  ArticleDetail,
-  ArticleDetailError,
-} from '~/services/article/utils';
+import type { ArticleDetail } from '~/services/article/utils';
 
 import {
   useInfiniteQuery,
@@ -59,19 +56,10 @@ export const useUpdateArticle = (articleId: number) => {
   });
 };
 
-interface UseArticleDetailOptions {
-  initialData: ArticleDetail | ArticleDetailError;
-}
-
-export const useArticleDetail = (
-  articleId: number,
-  options: Partial<UseArticleDetailOptions> = {}
-) => {
-  const { initialData } = options;
+export const useArticleDetail = (articleId: number) => {
   return useQuery({
     queryKey: queryKeys.articles.detail(articleId),
     queryFn: () => getArticleDetail(articleId),
-    initialData,
   });
 };
 

@@ -1,7 +1,6 @@
 import type {
   ArticleCategory,
   ArticleDetail,
-  ArticleDetailError,
   ArticleSummary,
 } from '~/services/article';
 
@@ -64,13 +63,6 @@ export const articles: ArticleDetail[] = Array(5)
 
 // TODO: 없는 article 요청시 응답할 데이터로 바꾸기
 export const articleFallback = createMockArticle(100);
-
-export const articleError: ArticleDetailError = {
-  error: {
-    isUnknownError: false,
-    message: '삭제된 게시글입니다.',
-  },
-};
 
 export const createMockArticleSummary = (id: number): ArticleSummary => {
   const anonymity = Boolean(id % 2);

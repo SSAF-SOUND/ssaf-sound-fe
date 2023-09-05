@@ -3,20 +3,20 @@ import type {
   InferGetServerSidePropsType,
 } from 'next/types';
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
-import type { ArticleDetailError } from '~/services/article';
-
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { Article } from '~/components/Article';
+import { ArticleError } from '~/components/Article/ArticleError';
 import ArticleComment from '~/components/ArticleComment';
-import { Button, PageHead, PageHeadingText } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  PageHead,
+  PageHeadingText,
+} from '~/components/Common';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
-import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
@@ -42,21 +42,24 @@ interface ArticleDetailPageProps
 
 const ArticleDetailPage = (props: ArticleDetailPageProps) => {
   const { articleId } = props;
-  const { data: articleDetail } = useArticleDetail(articleId);
+  const {
+    data: articleDetail,
+    isError: isArticleDetailError,
+    error: articleDetailError,
+    isLoading: isArticleDetailLoading,
+    refetch,
+  } = useArticleDetail(articleId);
 
-  if (!articleDetail) {
-    return (
-      <RedirectionGuide
-        title="Error"
-        description="게시글을 불러오는데 실패했습니다."
-        redirectionText="게시글 모아보기 페이지로"
-        redirectionTo={routes.articles.categories()}
-      />
-    );
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  if (isArticleDetailLoading) {
+    return <DefaultFullPageLoader text="게시글을 불러오는 중입니다." />;
   }
 
-  if ('error' in articleDetail) {
-    return <NotExistsArticle articleError={articleDetail} />;
+  if (isArticleDetailError) {
+    return <ArticleError error={articleDetailError} />;
   }
 
   const { boardTitle: articleCategoryTitle, boardId: articleCategoryId } =
@@ -125,39 +128,6 @@ const articleCss = css({
 });
 
 const titleBarCss = css(fontCss.style.B16);
-
-interface NotExistsArticleProps {
-  articleError: ArticleDetailError;
-}
-
-const NotExistsArticle = (props: NotExistsArticleProps) => {
-  const { articleError } = props;
-  const router = useRouter();
-
-  return (
-    <RedirectionGuide
-      title="Error"
-      description={articleError.error.message}
-      customLinkElements={
-        <div css={flex('', '', 'column', 10)}>
-          <Button size="lg" asChild>
-            <Link href={routes.articles.categories()}>
-              게시판 모아보기 페이지로
-            </Link>
-          </Button>
-          <Button
-            variant="literal"
-            size="lg"
-            onClick={() => router.back()}
-            style={{ textDecoration: 'underline', alignSelf: 'center' }}
-          >
-            뒤로 가기
-          </Button>
-        </div>
-      }
-    />
-  );
-};
 
 const ArticleCommentsLayer = (props: {
   articleId: number;
