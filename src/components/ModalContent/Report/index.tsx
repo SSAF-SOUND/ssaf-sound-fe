@@ -32,9 +32,7 @@ export interface ReportProps {
 
 export const Report = (props: ReportProps) => {
   const { domain, onClickReport, onClickCancel } = props;
-  const [reportReasonId, setReportReasonId] = useState<string | undefined>(
-    undefined
-  );
+  const [reportReasonId, setReportReasonId] = useState<string>('1');
 
   return (
     <div css={selfCss}>
@@ -48,7 +46,6 @@ export const Report = (props: ReportProps) => {
         items={reportReasons}
         textAs={({ reason }) => reason}
         valueAs={({ reasonId }) => String(reasonId)}
-        placeholder="신고사유 선택"
         value={reportReasonId}
         onValueChange={(value) => setReportReasonId(value)}
       />
@@ -72,12 +69,12 @@ export const Report = (props: ReportProps) => {
 
         <Modal.Close
           css={[buttonCss, reportButtonCss]}
-          onClick={() =>
+          onClick={() => {
             onClickReport({
               reportReasonId: Number(reportReasonId),
               domain,
-            })
-          }
+            });
+          }}
         >
           신고
         </Modal.Close>
