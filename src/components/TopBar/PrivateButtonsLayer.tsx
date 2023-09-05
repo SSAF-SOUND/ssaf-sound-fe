@@ -13,7 +13,7 @@ import { flex, palettes } from '~/styles/utils';
 import { getPathname, routes, webStorage } from '~/utils';
 
 export const PrivateButtonsLayer = () => {
-  const { data: myInfo, isLoading } = useMyInfo();
+  const { data: myInfo, isFetching } = useMyInfo();
   const router = useRouter();
   const isSignedIn = !!myInfo;
   const { openSignOutReconfirmModal } = useSignOutReconfirmModal();
@@ -23,7 +23,7 @@ export const PrivateButtonsLayer = () => {
     router.push(routes.signIn());
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return <ClipLoader size={20} color={palettes.grey.dark} />;
   }
 
