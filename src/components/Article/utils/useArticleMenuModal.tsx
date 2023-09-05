@@ -1,11 +1,13 @@
+import type { ReportProps } from '~/components/ModalContent';
 import type { ArticleDetail } from '~/services/article';
 
 import { useRouter } from 'next/router';
 
 import { Modal } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
-import { Alert, BottomMenu } from '~/components/ModalContent';
-import { useRemoveArticle, useReportArticle } from '~/services/article';
+import { Alert, BottomMenu, Report } from '~/components/ModalContent';
+import { useRemoveArticle } from '~/services/article';
+import { ReportDomain, useReport } from '~/services/report';
 import { customToast, handleAxiosError, routes } from '~/utils';
 
 interface UseArticleMenuModalParams {
@@ -111,29 +113,28 @@ const ArticleReportButton = (props: ArticleReportButtonProps) => {
   const { articleDetail, onReportSuccess } = props;
   const { postId: articleId } = articleDetail;
   const { mutateAsync: reportArticle, isLoading: isReportingArticle } =
-    useReportArticle();
+    useReport();
 
-  const handleReportArticle = async () => {
+  const handleReportArticle: ReportProps['onClickReport'] = async (params) => {
+    const { reportReasonId, domain } = params;
     try {
-      // TODO: 신고 사유를 SelectBox에서 선택할 수 있음
-      await reportArticle({ articleId, content: '' });
+      await reportArticle({
+        domain,
+        reasonId: reportReasonId,
+        sourceId: articleId,
+      });
       onReportSuccess();
     } catch (err) {
       handleAxiosError(err);
     }
   };
 
-  // TODO: 신고 Modal Content 만들기
-
   return (
     <Modal
       content={
-        <Alert
-          title="알림"
-          description="게시글을 신고하시겠습니까?"
-          cancelText="취소"
-          actionText="삭제"
-          onClickAction={handleReportArticle}
+        <Report
+          domain={ReportDomain.ARTICLE}
+          onClickReport={handleReportArticle}
         />
       }
       trigger={

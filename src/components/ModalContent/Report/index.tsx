@@ -23,7 +23,10 @@ const modalTitle = {
 
 export interface ReportProps {
   domain: ReportDomain;
-  onClickReport: (reportReasonId?: number) => void;
+  onClickReport: (params: {
+    reportReasonId: number;
+    domain: ReportDomain;
+  }) => void | Promise<void>;
   onClickCancel?: () => void;
 }
 
@@ -36,7 +39,7 @@ export const Report = (props: ReportProps) => {
   return (
     <div css={selfCss}>
       <Modal.Title css={titleCss}>
-        해당 {modalTitle[domain]}리쿠르트를 정말 신고하시겠습니까?
+        해당 {modalTitle[domain]} 정말 신고하시겠습니까?
       </Modal.Title>
 
       <SelectBox
@@ -69,7 +72,12 @@ export const Report = (props: ReportProps) => {
 
         <Modal.Close
           css={[buttonCss, reportButtonCss]}
-          onClick={() => onClickReport(Number(reportReasonId))}
+          onClick={() =>
+            onClickReport({
+              reportReasonId: Number(reportReasonId),
+              domain,
+            })
+          }
         >
           신고
         </Modal.Close>
@@ -77,7 +85,6 @@ export const Report = (props: ReportProps) => {
     </div>
   );
 };
-
 
 const selfCss = css(
   {
