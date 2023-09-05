@@ -1,4 +1,5 @@
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
+import type { ReportProps } from '~/components/ModalContent';
 import type {
   CommentDetail,
   CommentDetailWithoutReplies,
@@ -23,6 +24,7 @@ import {
 } from '~/services/comment';
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';
+import { useReport } from '~/services/report';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
@@ -51,7 +53,6 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
     author,
     commentId,
     anonymity = false,
-    mine,
     liked,
     likeCount,
     content,
@@ -76,7 +77,12 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
   const { mutateAsync: removeComment, isLoading: isRemovingComment } =
     useRemoveComment(commentId, { recruit: isRecruitComment });
 
-  const isLoadingMoreButton = isUpdatingComment || isRemovingComment;
+  const { mutateAsync: reportComment, isLoading: isReportingComment } =
+    useReport();
+
+  const isMutating =
+    isUpdatingComment || isRemovingComment || isReportingComment;
+
   const isSignedIn = !!myInfo;
   const userInfo = populateDefaultUserInfo(author);
   const hasReplies = replies && replies.length > 0;
@@ -116,22 +122,30 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
     handleCommentRequest(removeComment, true);
   };
 
+  const handleReportComment: ReportProps['onClickReport'] = ({
+    domain,
+    reportReasonId,
+  }) => {
+    handleCommentRequest(() =>
+      reportComment({ domain, reasonId: reportReasonId, sourceId: commentId })
+    );
+  };
+
   const onClickReplyButton = () => {
     openArticleCommentModalForm({ onValidSubmit: handleCreateCommentReply });
   };
 
   const onClickMoreButton = () => {
     openArticleCommentMenu({
-      mine,
+      comment,
+      isRecruitComment,
       onClickEdit: () =>
         openArticleCommentModalForm({
           defaultValues: { content, anonymous: anonymity },
           onValidSubmit: handleEditComment,
         }),
       onClickRemoveAction: handleRemoveComment,
-      onClickReport: () => {
-        console.log('신고페이지로');
-      },
+      onClickReportAction: handleReportComment,
     });
   };
 
@@ -151,9 +165,7 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
         {!deletedComment && (
           <>
             <header css={headerCss}>
-              {/* eslint-disable-next-line */}
-              {/* @ts-ignore */}
-              <Name userInfo={userInfo} size="sm" />
+              <Name anonymous={anonymity} userInfo={userInfo} size="sm" />
 
               <div css={buttonLayerCss}>
                 {showReplyButton && (
@@ -170,7 +182,7 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
                 {isSignedIn && (
                   <MoreButton
                     onClick={onClickMoreButton}
-                    loading={isLoadingMoreButton}
+                    loading={isMutating}
                   />
                 )}
               </div>

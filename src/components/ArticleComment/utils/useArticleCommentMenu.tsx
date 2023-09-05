@@ -1,11 +1,25 @@
+import type { ReportProps } from '~/components/ModalContent';
+import type {
+  CommentDetail,
+  CommentDetailWithoutReplies,
+} from '~/services/articleComment';
 import type { AnyFunction } from '~/types';
 
 import { Modal } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
-import { Alert, BottomMenu } from '~/components/ModalContent';
+import { Alert, BottomMenu, Report } from '~/components/ModalContent';
+import { ReportDomain } from '~/services/report';
 
 const ArticleCommentMenuButtons = (props: OpenArticleCommentMenuParams) => {
-  const { mine, onClickEdit, onClickRemoveAction, onClickReport } = props;
+  const {
+    comment,
+    isRecruitComment,
+    onClickEdit,
+    onClickRemoveAction,
+    onClickReportAction,
+  } = props;
+
+  const { mine } = comment;
 
   return mine ? (
     <>
@@ -25,16 +39,29 @@ const ArticleCommentMenuButtons = (props: OpenArticleCommentMenuParams) => {
     </>
   ) : (
     <>
-      <BottomMenu.Button onClick={onClickReport}>신고하기</BottomMenu.Button>
+      <Modal
+        content={
+          <Report
+            domain={
+              isRecruitComment
+                ? ReportDomain.RECRUIT_COMMENT
+                : ReportDomain.ARTICLE_COMMENT
+            }
+            onClickReport={onClickReportAction}
+          />
+        }
+        trigger={<BottomMenu.Button>신고하기</BottomMenu.Button>}
+      />
     </>
   );
 };
 
 interface OpenArticleCommentMenuParams {
-  mine: boolean;
   onClickEdit?: AnyFunction;
   onClickRemoveAction?: AnyFunction;
-  onClickReport?: AnyFunction;
+  onClickReportAction: ReportProps['onClickReport'];
+  comment: CommentDetail | CommentDetailWithoutReplies;
+  isRecruitComment: boolean;
 }
 
 export const useArticleCommentMenu = () => {
