@@ -42,3 +42,9 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
 };
 
 export default RecruitDetailPage;
+
+export const getServerSideProps = () => {
+  return {
+    props: {},
+  };
+};
