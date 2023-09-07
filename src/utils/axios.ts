@@ -13,12 +13,12 @@ import { API_URL, isDevMode, ResponseCode } from './constants';
 
 export const publicAxios = axios.create({
   baseURL: API_URL,
-  withCredentials: isDevMode,
+  withCredentials: true,
 });
 
 export const privateAxios = axios.create({
   baseURL: API_URL,
-  withCredentials: isDevMode,
+  withCredentials: true,
 });
 
 const devPlugin = (config: InternalAxiosRequestConfig) => {

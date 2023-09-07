@@ -9,7 +9,7 @@ import { useModal } from '~/components/GlobalModal';
 import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';
 import { ProfileVisibilityToggle } from '~/components/Toggles';
-import { useSignOut } from '~/services/auth';
+import { useSignOutReconfirmModal } from '~/hooks';
 import {
   CertificationState,
   useMyInfo,
@@ -34,29 +34,10 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   const isCertified =
     myInfo?.ssafyInfo?.certificationState === CertificationState.CERTIFIED;
   const router = useRouter();
-  const { openModal, closeModal } = useModal();
-  const { mutate: signOut, isLoading: isSigningOut } = useSignOut();
 
-  const handleSignOut = () => {
-    signOut(undefined, {
-      onSuccess: () => {
-        closeModal();
-        router.push(routes.main());
-      },
-      onError: (err) => handleAxiosError(err),
-    });
-  };
-
-  const openSignOutReconfirmModal = () => {
-    openModal('alert', {
-      title: '알림',
-      description: `${myInfo?.nickname}님 로그아웃 하시겠습니까?`,
-      cancelText: '취소',
-      actionText: '로그아웃',
-      onClickAction: handleSignOut,
-      onClickCancel: closeModal,
-    });
-  };
+  const { openSignOutReconfirmModal, isSigningOut } = useSignOutReconfirmModal({
+    onSignOutSuccess: () => router.replace(routes.main()),
+  });
 
   return (
     <>

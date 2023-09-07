@@ -2,8 +2,8 @@ import type { LunchDateSpecifier } from '~/services/lunch';
 
 import { css } from '@emotion/react';
 
+import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIcon';
 import { LunchCard } from '~/components/Lunch/LunchCard';
-import { LunchErrorIndicator } from '~/components/Lunch/LunchErrorIndicator';
 import { useSignInGuideModal } from '~/hooks';
 import {
   useLunchMenusWithPollStatus,
@@ -114,8 +114,10 @@ const selfCss = css({ width: '100%' }, flex('', '', 'column', cardGap));
 const ErrorLayer = (props: { error: unknown }) => {
   const { error } = props;
   const response = getErrorResponse(error);
+  const errorMessage =
+    response?.message ?? '점심 데이터를 불러오는 중 오류가 발생했습니다.';
 
   return (
-    <LunchErrorIndicator css={{ marginTop: 48 }} message={response?.message} />
+    <ErrorMessageWithSsafyIcon css={{ marginTop: 48 }} message={errorMessage} />
   );
 };

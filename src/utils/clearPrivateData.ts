@@ -6,6 +6,6 @@ import { webStorage } from '~/utils/webStorage';
 export const clearPrivateData = (
   queryClient: QueryClient = getQueryClient()
 ) => {
-  queryClient.removeQueries(queryKeys.auth());
+  queryClient.resetQueries(queryKeys.auth());
   webStorage.clearPrivateData();
 };

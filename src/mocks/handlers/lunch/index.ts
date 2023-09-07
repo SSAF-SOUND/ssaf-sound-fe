@@ -6,7 +6,7 @@ import { rest } from 'msw';
 
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { API_URL, composeUrls, removeQueryParams } from '~/utils';
+import { API_URL, composeUrls, removeQueryParams, ResponseCode } from '~/utils';
 
 import { lunchMock } from './data';
 
@@ -26,6 +26,15 @@ export const getLunchMenusWithPollStatusError = restError(
   getLunchMenusWithPollStatusEndpoint,
   {
     message: '데이터가 없습니다.',
+  }
+);
+
+export const getLunchMenusWithPollStatusNotExistLunchMenusError = restError(
+  'get',
+  getLunchMenusWithPollStatusEndpoint,
+  {
+    code: ResponseCode.NOT_EXIST_LUNCH_MENUS,
+    message: '점심 데이터가 존재하지 않는 날짜입니다.',
   }
 );
 

@@ -44,6 +44,7 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+    deviceSizes: [576],
   },
 };
 

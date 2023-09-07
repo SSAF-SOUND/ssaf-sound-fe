@@ -76,10 +76,10 @@ export const routes = {
     }) => {
       const queryString = new URLSearchParams({
         campus,
-        dateSpecifier,
+        date: dateSpecifier,
       }).toString();
 
-      return `${routes.lunch.self()}/${queryString}`;
+      return `${routes.lunch.self()}?${queryString}`;
     },
   },
 };

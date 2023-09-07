@@ -19,6 +19,6 @@ export const getDateFromLunchDateSpecifier = (
   }
 
   throw new Error(
-    `[in getDateFromSpecifier]: 잘못된 파라미터가 전달되었습니다. ${specifier}`
+    `[In getDateFromLunchDateSpecifier]: 잘못된 파라미터가 전달되었습니다. ${specifier}`
   );
 };

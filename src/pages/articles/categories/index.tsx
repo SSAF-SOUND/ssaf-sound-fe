@@ -1,13 +1,12 @@
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
-import { QueryClient } from '@tanstack/react-query';
 
 import { ArticleCategoryCard } from '~/components/ArticleCategoryCard';
 import { PageHead, PageHeadingText } from '~/components/Common';
 import NavigationGroup from '~/components/NavigationGroup';
 import { queryKeys } from '~/react-query/common';
-import { dehydrate } from '~/react-query/server';
+import { prefetch } from '~/react-query/server';
 import { getArticleCategories, useArticleCategories } from '~/services/article';
 import { flex, fontCss, palettes, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
@@ -82,18 +81,12 @@ const hotLinkCss = css(
 const categoriesCss = css(flex('', '', 'column', 12));
 
 export const getStaticProps = async () => {
-  const queryClient = new QueryClient();
+  const dehydrate = prefetch({
+    queryKey: queryKeys.articles.categories(),
+    queryFn: getArticleCategories,
+  });
 
-  try {
-    await queryClient.fetchQuery({
-      queryKey: queryKeys.articles.categories(),
-      queryFn: getArticleCategories,
-    });
-  } catch (err) {
-    throw new Error('getArticleCategories 실패');
-  }
-
-  const { dehydratedState } = dehydrate(queryClient);
+  const dehydratedState = await dehydrate();
 
   return {
     props: {
