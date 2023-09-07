@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type {
   CreateRecruitApiData,
   RecruitDetail,
@@ -29,7 +30,6 @@ export const getRecruits = rest.get(
 
 export const getRecruitMembers = restSuccess<recruitMembersType>(
   'get',
-  // eslint-disable-next-line
   // @ts-ignore
   composeUrls(API_URL, endpoints.recruit.members(':recruitId')),
   {
@@ -39,19 +39,10 @@ export const getRecruitMembers = restSuccess<recruitMembersType>(
 
 export const getRecruitDetail = restSuccess<RecruitDetail>(
   'get',
-  // eslint-disable-next-line
   // @ts-ignore
   composeUrls(API_URL, endpoints.recruit.detail(':recruitId')),
   {
     data: RecruitData.recruitDetail.project,
-  }
-);
-
-export const getRecruitScrap = restSuccess<RecruitScrap>(
-  'get',
-  composeUrls(API_URL, endpoints.recruit.scrap(1)),
-  {
-    data: RecruitData.RecruitScrap,
   }
 );
 
@@ -169,7 +160,6 @@ export const recruitHandlers = [
   getRecruitDetail,
   getRecruits,
   getRecruitMembers,
-  getRecruitScrap,
   postRecruitScrap,
   postRecruitApply,
   getRecruitApplicants,

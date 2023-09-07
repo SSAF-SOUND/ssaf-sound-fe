@@ -10,6 +10,7 @@ import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
+import { getRecruitDetail } from '~/services/recruit/apis';
 import { privateAxios, publicAxios } from '~/utils';
 
 export type RecruitParams = {
@@ -53,35 +54,6 @@ export interface RecruitParticipant {
   }[];
 }
 
-export type GetRecruitDetailAPiData = ApiSuccessResponse<RecruitDetail>;
-
-export interface RecruitDetail {
-  recruitId: number;
-  title: string;
-  content: string;
-  contactURI: string;
-  view: number;
-  finishedRecruit: boolean;
-  recruitStart: string;
-  recruitEnd: string;
-  skills: RecruitSkills[];
-  limits: {
-    recruitType: RecruitParts;
-    limit: number;
-    currentNumber: number;
-  }[];
-  // question ?
-  // recruting - 등록자, 신청자, 이외의 사람인지 구분필요함
-  question: string[];
-  author: UserInfo;
-  scrapCount: number;
-  scraped: boolean;
-  // category 필요함
-  category: RecruitCategoryType;
-}
-
-// recruitDetail에 category 필요
-
 export interface RecruitMembers {
   limit: number;
   members: UserInfo[];
@@ -109,14 +81,6 @@ export const getRecruits = (params: {
   }
 };
 
-export const getRecruitDetail = (recruitId: number) => {
-  const endpoint = endpoints.recruit.detail(recruitId);
-
-  return publicAxios
-    .get<GetRecruitDetailAPiData>(endpoint)
-    .then((res) => res.data.data);
-};
-
 export type RecruitMember = UserInfo;
 
 export type PartialRecruitType = Partial<RecruitType>;
@@ -132,8 +96,6 @@ export const getRecruitMembers = (recruitId: number) => {
     .get<GetRecruitMembersApiData>(endpoint)
     .then((res) => res.data.data);
 };
-
-export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetail>;
 
 export interface RecruitSummary {
   recruitId: number;

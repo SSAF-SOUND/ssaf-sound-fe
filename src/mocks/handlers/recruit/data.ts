@@ -1,14 +1,21 @@
 import type { UserInfo } from '~/services/member';
 import type {
   GetRecruitApplicantsApiData,
+  Recruit,
   RecruitApplicant,
+  RecruitDetail,
   recruitMembersType,
+  RecruitParticipantsProgress,
 } from '~/services/recruit';
-import type { RecruitDetail, Recruit } from '~/services/recruit/apis2';
 
 import { faker } from '@faker-js/faker';
 
-import { MatchStatus, RecruitParts, SkillName } from '~/services/recruit';
+import {
+  MatchStatus,
+  RecruitCategoryName,
+  RecruitParts,
+  SkillName,
+} from '~/services/recruit';
 
 import { mockHtmlString } from '../common';
 import { createMockUser, userInfo } from '../member/data';
@@ -59,36 +66,65 @@ export const createMockRecruits = (id: number): Recruit => {
   };
 };
 
+export const createMockRecruitParticipantsProgress =
+  (): RecruitParticipantsProgress[] => {
+    const maxCount = faker.number.int({ min: 5, max: 10 });
+    const currentCount = faker.number.int({ min: 1, max: maxCount });
+
+    return Object.values(RecruitParts).map((recruitPart) => {
+      return {
+        recruitType: recruitPart,
+        limit: maxCount,
+        currentNumber: currentCount,
+      };
+    });
+  };
+
+export const createMockRecruitDetail = (
+  recruitId: number,
+  isStudy = false
+): RecruitDetail => {
+  const finishedRecruit = Boolean(recruitId % 2);
+  const scraped = finishedRecruit;
+
+  const progress = createMockRecruitParticipantsProgress();
+  const limits = isStudy
+    ? progress.filter(({ recruitType }) => recruitType === RecruitParts.STUDY)
+    : progress;
+
+  const skills = Object.values(SkillName).map((skillName, index) => ({
+    skillId: index + 1,
+    name: skillName,
+  }));
+
+  return {
+    recruitId,
+    contactURI: 'https://www.naver.com',
+    questions: ['Question'],
+    author: userInfo.certifiedSsafyUserInfo,
+    category: isStudy ? RecruitCategoryName.STUDY : RecruitCategoryName.PROJECT,
+    title: faker.word.words({ count: 2 }),
+    content: mockHtmlString,
+    recruitStart: faker.date.past().toISOString(),
+    recruitEnd: faker.date.future().toISOString(),
+    finishedRecruit,
+    scrapCount: faker.number.int(),
+    scraped,
+    limits,
+    skills,
+    view: faker.number.int({ min: 1, max: 1000000 }),
+  };
+};
+
 export const recruitMocks = Array(100)
   .fill(undefined)
   .map((_, index) => {
     return createMockRecruits(index);
   });
 
-const recruitDetail: Record<string, RecruitDetail> = {
-  project: {
-    recruitId: 1,
-    contactURI: 'https://open.kakao.com/o/sA8Kb83b',
-    question: ['Test Question'],
-    author: userInfo.certifiedSsafyUserInfo,
-    category: 'study',
-    title: 'string',
-    recruitStart: '2023-06-01',
-    recruitEnd: '2023-06-30',
-    content: 'string',
-    finishedRecruit: false,
-    view: 100,
-    skills: [],
-    limits: [
-      {
-        recruitType: RecruitParts.APP,
-        limit: 6,
-        currentNumber: 2,
-      },
-    ],
-    scrapCount: 2,
-    scraped: false,
-  },
+const recruitDetail: Record<RecruitCategoryName, RecruitDetail> = {
+  [RecruitCategoryName.PROJECT]: createMockRecruitDetail(1),
+  [RecruitCategoryName.STUDY]: createMockRecruitDetail(2, true),
 };
 
 const recruitSummary: any = {
@@ -227,6 +263,8 @@ const RecruitApplicationDetail = {
 
 export const RecruitData = {
   recruitDetail,
+
+  //
   recruitMocks,
   recruitSummary,
   recruitMembers,

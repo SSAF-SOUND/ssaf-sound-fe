@@ -3,14 +3,13 @@ import type { RecruitParams } from './apis2';
 import { useMutation, useQuery, useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { createRecruit } from '~/services/recruit/apis';
+import { createRecruit, getRecruitDetail } from '~/services/recruit/apis';
 import {
   postRecruitApplicationCancel,
   postRecruitApplicationReject,
   postRecruitApplicationApprove,
   getRecruitApplicationDetail,
   getRecruitApplicants,
-  getRecruitDetail,
   getRecruitMembers,
   getRecruits,
   recruitAPI,
@@ -19,14 +18,6 @@ import {
 export const useApplyRecruit = () => {
   return useMutation({
     mutationFn: recruitAPI.postRecruitApply,
-  });
-};
-
-export const useRecruitDetail = (recruitId: number, enabled = true) => {
-  return useQuery({
-    queryKey: queryKeys.recruit.detail(recruitId),
-    queryFn: () => getRecruitDetail(recruitId),
-    enabled: enabled,
   });
 };
 
@@ -93,5 +84,21 @@ export const useRecruitApplicationCancel = () => {
 export const useCreateRecruit = () => {
   return useMutation({
     mutationFn: createRecruit,
+  });
+};
+
+export interface UseRecruitDetailOptions {
+  enabled: boolean;
+}
+
+export const useRecruitDetail = (
+  recruitId: number,
+  options: Partial<UseRecruitDetailOptions> = {}
+) => {
+  const { enabled } = options;
+  return useQuery({
+    queryKey: queryKeys.recruit.detail(recruitId),
+    queryFn: () => getRecruitDetail(recruitId),
+    enabled,
   });
 };
