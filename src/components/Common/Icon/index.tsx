@@ -13,6 +13,7 @@ import {
   AiOutlineRight,
 } from 'react-icons/ai';
 import { BiImageAdd } from 'react-icons/bi';
+import { BsPersonFillLock } from 'react-icons/bs';
 import {
   HiMinus,
   HiOutlineArrowLeft,
@@ -119,6 +120,8 @@ export const icons = {
   heart: <AiFillHeart />,
   [`heart.outlined`]: <AiOutlineHeart />,
   [`right.outlined`]: <AiOutlineRight />,
+
+  signIn: <BsPersonFillLock />,
 } as const;
 
 export type IconNames = keyof typeof icons;

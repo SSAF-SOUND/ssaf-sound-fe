@@ -10,9 +10,7 @@ const successToast = (message: string) => {
   return toast((t) => <Toast.Success message={message} t={t} />);
 };
 
-const customToast = {
+export const customToast = {
   clientError: clientErrorToast,
   success: successToast,
 };
-
-export default customToast;

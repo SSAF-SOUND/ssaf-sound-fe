@@ -25,13 +25,16 @@ const createWebStorage = () => {
   const DEFAULT_RETURN_PAGE = routes.main();
 
   return {
-    setReturnPage: (returnPage: string) => {
+    setSignInReturnPage: (returnPage: string) => {
       sessionStorage.setItem(AUTH_RETURN_PAGE_KEY, returnPage);
     },
-    getReturnPage: () => {
+    getSignInReturnPage: () => {
       return (
         sessionStorage.getItem(AUTH_RETURN_PAGE_KEY) ?? DEFAULT_RETURN_PAGE
       );
+    },
+    clearSignInReturnPage: () => {
+      sessionStorage.removeItem(AUTH_RETURN_PAGE_KEY);
     },
     clearPrivateData: () => {},
     DEV__setTokens: (tokens: Tokens) => {

@@ -27,6 +27,7 @@ import {
   useCreateArticleComment,
   useInvalidateArticleComments,
 } from '~/services/articleComment';
+import { useMyInfo } from '~/services/member';
 import {
   flex,
   fontCss,
@@ -199,11 +200,13 @@ const commentsLayerSelfCss = css(flex('', '', 'column', 20));
 
 const ArticleCommentFormLayer = (props: { articleId: number }) => {
   const { articleId } = props;
+  const { data: myInfo } = useMyInfo();
   const { mutateAsync: createArticleComment } =
     useCreateArticleComment(articleId);
   const [formKey, setFormKey] = useState(1);
 
   const invalidateComments = useInvalidateArticleComments(articleId);
+  const isSignedIn = !!myInfo;
 
   const onValidSubmit: ArticleCommentFormProps['onValidSubmit'] = async (
     _,
@@ -218,7 +221,15 @@ const ArticleCommentFormLayer = (props: { articleId: number }) => {
     }
   };
 
-  return <ArticleCommentForm onValidSubmit={onValidSubmit} key={formKey} />;
+  return (
+    <ArticleCommentForm
+      onValidSubmit={onValidSubmit}
+      key={formKey}
+      options={{
+        showNotSignedInFallback: !isSignedIn,
+      }}
+    />
+  );
 };
 
 /* ssr */

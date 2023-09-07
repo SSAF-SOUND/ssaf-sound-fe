@@ -5,12 +5,15 @@ import type {
   SubmitHandlerWithReset,
 } from '~/components/Forms/utils';
 
+import { useRouter } from 'next/router';
+
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import { AlertText, Checkbox, Icon, IconButton } from '~/components/Common';
 import { flex, fontCss, palettes } from '~/styles/utils';
+import { getPathname, routes, webStorage } from '~/utils';
 
 const contentFieldName = 'content';
 const anonymousFieldName = 'anonymous';
@@ -28,6 +31,7 @@ const validateComment = (value: string) => {
 
 interface ArticleCommentFormOptions {
   showAnonymous: boolean;
+  showNotSignedInFallback: boolean;
 }
 
 export interface ArticleCommentFormProps {
@@ -46,20 +50,18 @@ const ArticleCommentForm = (props: ArticleCommentFormProps) => {
     options = {},
     className,
   } = props;
-  const { showAnonymous = true } = options;
+  const { showAnonymous = true, showNotSignedInFallback = false } = options;
 
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    reset,
-    formState: { isSubmitting, errors },
-  } = useForm<ArticleCommentFormValues>({
+  const methods = useForm<ArticleCommentFormValues>({
     defaultValues,
   });
 
-  const onAnonymousChange = (value: boolean) =>
-    setValue(anonymousFieldName, value, { shouldDirty: true });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting, errors },
+  } = methods;
 
   const handleValidSubmit: SubmitHandler<ArticleCommentFormValues> = async (
     ...args
@@ -74,65 +76,61 @@ const ArticleCommentForm = (props: ArticleCommentFormProps) => {
     await onInvalidSubmit?.(errorMessage, errors, event);
   };
 
-  register(anonymousFieldName);
+  if (showNotSignedInFallback) {
+    return <NotSignedInFallback />;
+  }
 
   return (
-    <form
-      css={selfCss}
-      className={className}
-      onSubmit={handleSubmit(handleValidSubmit, handleInvalidSubmit)}
-    >
-      <div css={fieldsLayerCss}>
-        <textarea
-          css={textAreaCss}
-          placeholder="댓글을 입력하세요"
-          {...register(contentFieldName, {
-            validate: validateComment,
-          })}
+    <FormProvider {...methods}>
+      <form
+        css={selfCss}
+        className={className}
+        onSubmit={handleSubmit(handleValidSubmit, handleInvalidSubmit)}
+      >
+        <div css={fieldsLayerCss}>
+          <textarea
+            css={textAreaCss}
+            placeholder="댓글을 입력하세요"
+            {...register(contentFieldName, {
+              validate: validateComment,
+            })}
+          />
+
+          {showAnonymous && <Anonymous />}
+
+          <IconButton
+            type="submit"
+            theme="black"
+            disabled={isSubmitting}
+            size={24}
+            css={submitButtonCss}
+          >
+            <Icon name="send" label="댓글 작성" size={20} />
+          </IconButton>
+        </div>
+
+        <ErrorMessage
+          name={contentFieldName}
+          errors={errors}
+          render={({ message }) =>
+            message && (
+              <AlertText css={errorMessageCss} bold>
+                {message}
+              </AlertText>
+            )
+          }
         />
-
-        {showAnonymous && (
-          <label css={checkboxLabelCss}>
-            <Checkbox
-              onCheckedChange={onAnonymousChange}
-              defaultChecked={defaultValues.anonymous}
-            />
-            <span>익명</span>
-          </label>
-        )}
-
-        <IconButton
-          type="submit"
-          theme="black"
-          disabled={isSubmitting}
-          size={24}
-          css={submitButtonCss}
-        >
-          <Icon name="send" label="댓글 작성" size={20} />
-        </IconButton>
-      </div>
-
-      <ErrorMessage
-        name={contentFieldName}
-        errors={errors}
-        render={({ message }) =>
-          message && (
-            <AlertText css={errorMessageCss} bold>
-              {message}
-            </AlertText>
-          )
-        }
-      />
-    </form>
+      </form>
+    </FormProvider>
   );
 };
+
+export default ArticleCommentForm;
 
 const defaultArticleCommentFormValues: ArticleCommentFormValues = {
   content: '',
   anonymous: false,
 };
-
-export default ArticleCommentForm;
 
 const selfCss = css({
   background: palettes.white,
@@ -175,4 +173,76 @@ const submitButtonCss = css({
 const errorMessageCss = css({
   paddingLeft: 20,
   marginTop: 8,
+});
+
+const Anonymous = () => {
+  const {
+    register,
+    setValue,
+    formState: { defaultValues: { anonymous: defaultAnonymous } = {} },
+  } = useFormContext<ArticleCommentFormValues>();
+  const onAnonymousChange = (value: boolean) =>
+    setValue(anonymousFieldName, value, { shouldDirty: true });
+
+  register(anonymousFieldName);
+
+  return (
+    <label css={checkboxLabelCss}>
+      <Checkbox
+        onCheckedChange={onAnonymousChange}
+        defaultChecked={defaultAnonymous}
+      />
+      <span>익명</span>
+    </label>
+  );
+};
+
+const NotSignedInFallback = () => {
+  const router = useRouter();
+  const onClickSignInButton = () => {
+    webStorage.setSignInReturnPage(getPathname());
+    router.push(routes.signIn());
+  };
+
+  return (
+    <div css={notSignedInFallbackSelfCss}>
+      <div css={notSignedInFallbackMessageContainerCss}>
+        <Icon name="signIn" size={16} />
+        <div>
+          <span>댓글을 쓰려면</span>{' '}
+          <button
+            type="button"
+            css={signInButtonCss}
+            onClick={onClickSignInButton}
+          >
+            로그인
+          </button>
+          <span>이 필요합니다.</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const notSignedInFallbackSelfCss = css(
+  {
+    backgroundColor: palettes.font.lightGrey,
+    color: palettes.font.grey,
+    height: 68,
+    borderRadius: 20,
+    padding: '10px 10px 10px 20px',
+  },
+  fontCss.style.R14
+);
+
+const notSignedInFallbackMessageContainerCss = css(
+  flex('center', 'flex-start', 'row', 10)
+);
+
+const signInButtonCss = css(fontCss.style.B14, {
+  padding: 0,
+  color: palettes.primary.darken,
+  textDecoration: 'underline',
+  backgroundColor: 'inherit',
+  cursor: 'pointer',
 });

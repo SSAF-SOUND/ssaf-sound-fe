@@ -23,7 +23,6 @@ export { default as ProgressBar } from './ProgressBar';
 export { default as SelectBox } from './SelectBox';
 export * from './Separator';
 export { default as SkillIcon } from './SkillIcon';
-export { default as SliderInput } from './SliderInput';
 
 export { default as SsafyIcon } from './SsafyIcon';
 export * from './SsafyIcon';
