@@ -82,7 +82,7 @@ export interface RecruitDetail {
 
 // recruitDetail에 category 필요
 
-interface RecruitMembers {
+export interface RecruitMembers {
   limit: number;
   members: UserInfo[];
 }
