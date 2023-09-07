@@ -27,7 +27,7 @@ const meta: Meta<typeof MainPage> = {
       if (!queryRemoved) {
         queryClient.removeQueries(queryKeys.lunch.self());
         queryClient.removeQueries(queryKeys.articles.hot());
-        queryClient.removeQueries(queryKeys.recruit.list());
+        queryClient.removeQueries(queryKeys.recruit.list({}));
         setQueryRemoved(true);
       }
 
