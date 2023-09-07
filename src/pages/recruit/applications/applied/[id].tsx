@@ -1,17 +1,74 @@
-import { Button, Icon } from '~/components/Common';
+import type { GetServerSideProps } from 'next';
+
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { Button, DefaultFullPageLoader, Icon } from '~/components/Common';
 import { ApplySelectBox } from '~/components/Forms/RecruitApplyForm/Fields/ApplySelectBox';
 import { ApplyTextArea } from '~/components/Forms/RecruitApplyForm/Fields/ApplyTextArea';
-import { ProfileVisibilityCheckbox } from '~/components/Forms/RecruitApplyForm/Fields/ProfileVisibilityCheckbox';
 import { RecruitLayout } from '~/components/Layout';
-import Name from '~/components/Name';
 import NameCard from '~/components/NameCard';
 import TitleBar from '~/components/TitleBar';
 import { userInfo } from '~/mocks/handlers/member/data';
-import { useRecruitTypes } from '~/services/meta';
+import { queryKeys } from '~/react-query/common';
+import { prefetch } from '~/react-query/server';
+import {
+  recruitAPI,
+  useRecruitApplicationApprove,
+  useRecruitApplicationDetail,
+  useRecruitApplicationReject,
+} from '~/services/recruit';
 import { flex, fontCss, palettes } from '~/styles/utils';
-import { routes } from '~/utils';
+import { handleAxiosError, paramsToNumber, routes } from '~/utils';
 
-const Applied = () => {
+const Applied = (props: any) => {
+  const router = useRouter();
+  const { recruitApplicationId } = props;
+  const {
+    data: recruitApplicationDetailData,
+    isLoading: isApplicationLoading,
+    isError: isApplicationError,
+  } = useRecruitApplicationDetail(recruitApplicationId);
+  const { mutateAsync: approveApplication, isLoading: isApproveLoading } =
+    useRecruitApplicationApprove();
+  const { mutateAsync: rejectApplication, isLoading: isRejectLoading } =
+    useRecruitApplicationReject();
+
+  const disabledState = isApproveLoading || isRejectLoading;
+
+  if (isApplicationError) return router.push('/500');
+  if (isApplicationLoading) return <DefaultFullPageLoader />;
+  const { author, matchStatus, reply, question, recruitType } =
+    recruitApplicationDetailData;
+
+  const postApprove = async () => {
+    try {
+      await approveApplication(recruitApplicationId);
+
+      router.replace({
+        pathname: routes.recruit.applyRedirect(),
+        query: {
+          type: 'APPROVE',
+        },
+      });
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
+  const postReject = async () => {
+    try {
+      await rejectApplication(recruitApplicationId);
+      router.replace({
+        pathname: routes.recruit.applyRedirect(),
+        query: {
+          type: 'REJECT',
+        },
+      });
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
   return (
     <RecruitLayout>
       {/* route 어디? */}
@@ -28,10 +85,12 @@ const Applied = () => {
         ]}
       >
         2023년 07월 20일
+        {/* 날짜 필요함 */}
       </span>
 
       <div css={flex('center', 'space-between', 'row')}>
         <NameCard
+          // 수정 필요
           userInfo={userInfo.certifiedSsafyUserInfo}
           css={{
             padding: 0,
@@ -53,7 +112,9 @@ const Applied = () => {
           css={{ width: '55%', color: palettes.white }}
           size="sm"
         >
-          포트폴리오 보러가기
+          <Link href={routes.profile.detail(author.memberId)}>
+            포트폴리오 보러가기
+          </Link>
         </Button>
       </div>
 
@@ -61,18 +122,18 @@ const Applied = () => {
       <div css={flex('', '', 'column', 12)}>
         <ApplySelectBox
           readOnly
-          items={['프론트']}
-          defaultValue="프론트"
+          items={[recruitType]}
+          value={recruitType}
           order={1}
           question="지원 파트"
         />
 
         <ApplyTextArea
           order={2}
-          question="test"
+          question={question}
           withMax={false}
           disabled
-          defaultValue={'123123213123123'}
+          value={reply}
         />
       </div>
       <div css={{ height: 40 }} />
@@ -82,10 +143,20 @@ const Applied = () => {
           theme="recruit"
           variant="inverse"
           css={{ width: '50%' }}
+          onClick={postReject}
+          loading={isRejectLoading}
+          disabled={disabledState}
         >
           거절
         </Button>
-        <Button size="lg" theme="recruit" css={{ width: '50%' }}>
+        <Button
+          size="lg"
+          theme="recruit"
+          css={{ width: '50%' }}
+          onClick={postApprove}
+          loading={isApproveLoading}
+          disabled={disabledState}
+        >
           수락
         </Button>
       </div>
@@ -94,3 +165,21 @@ const Applied = () => {
 };
 
 export default Applied;
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const id = paramsToNumber(params?.id);
+
+  const dehydrate = prefetch({
+    queryKey: queryKeys.recruit.applicationDetail(id),
+    queryFn: () => recruitAPI.getRecruitApplicationDetail(id),
+  });
+
+  const dehydratedState = await dehydrate();
+
+  return {
+    props: {
+      recruitApplicationId: id,
+      dehydratedState,
+    },
+  };
+};
