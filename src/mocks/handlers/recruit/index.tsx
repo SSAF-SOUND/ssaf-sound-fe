@@ -1,4 +1,5 @@
 import type {
+  CreateRecruitApiData,
   RecruitDetail,
   recruitMembersType,
   RecruitScrap,
@@ -7,7 +8,7 @@ import type {
 
 import { rest } from 'msw';
 
-import { mockSuccess, restSuccess } from '~/mocks/utils';
+import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
@@ -141,6 +142,29 @@ export const postRecruitApplicationCancel = restSuccess(
   }
 );
 
+const createRecruitEndpoint = endpoints.recruit.self();
+const createRecruitHttpMethod = 'post';
+
+export const createRecruit = restSuccess<CreateRecruitApiData['data']>(
+  createRecruitHttpMethod,
+  createRecruitEndpoint,
+  {
+    data: {
+      recruitId: 1,
+    },
+  }
+);
+
+export const createRecruitError = restError(
+  createRecruitHttpMethod,
+  createRecruitEndpoint,
+  {
+    data: {
+      message: '리쿠르팅 생성 실패',
+    },
+  }
+);
+
 export const recruitHandlers = [
   getRecruitDetail,
   getRecruits,
@@ -153,4 +177,6 @@ export const recruitHandlers = [
   postRecruitApplicationReject,
   postRecruitApplicationApprove,
   postRecruitApplicationCancel,
+  //
+  createRecruit,
 ];
