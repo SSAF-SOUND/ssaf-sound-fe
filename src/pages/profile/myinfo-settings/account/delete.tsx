@@ -9,7 +9,6 @@ import {
   Button,
   DefaultFullPageLoader,
   loaderText,
-  PageHead,
   PageHeadingText,
 } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
@@ -37,13 +36,11 @@ const DeleteAccountPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ follow: false, index: false }} />
-
       <PageHeadingText text={titleBarTitle} />
 
       <div css={selfCss}>
         <TitleBar.Default
-          title="회원탈퇴"
+          title={titleBarTitle}
           withoutClose
           onClickBackward={routes.profile.myInfoSettings()}
         />
@@ -74,6 +71,11 @@ DeleteAccountPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
+};
+DeleteAccountPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
 };
 
 const selfCss = css(

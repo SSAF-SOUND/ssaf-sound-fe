@@ -18,3 +18,13 @@ export const formatDateTime = (dateString: string) => {
     time: formattedTime,
   };
 };
+
+/**
+ * YYYY-MM-DD
+ */
+export const formatFullDate = (dateString: string) => {
+  const dayjsInstance = dayjs(dateString);
+  const formattedDate = dayjsInstance.format('YYYY-MM-DD');
+
+  return formattedDate;
+};

@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from '~/components/Common';
 import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
+import { RecruitCategoryName } from '~/services/recruit';
 import { titleBarHeight } from '~/styles/utils';
 
 import {
@@ -17,7 +18,6 @@ import {
   Contact,
 } from './Fields';
 import SubmitBar from './SubmitBar';
-import { RecruitCategoryName } from './utils';
 
 interface RecruitFormOptions {
   // SubmitBar

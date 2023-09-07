@@ -7,7 +7,6 @@ import {
   Button,
   DefaultFullPageLoader,
   loaderText,
-  PageHead,
   PageHeadingText,
   SsafyIcon,
   TrackSize,
@@ -33,8 +32,6 @@ const StudentCertificationIntroPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
@@ -105,6 +102,11 @@ StudentCertificationIntroPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
+};
+StudentCertificationIntroPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
 };
 
 const selfCss = css({ padding: '120px 0' }, flex('stretch', 'center'));

@@ -13,7 +13,7 @@ import {
   Participants,
   Skills,
 } from '~/components/Forms/RecruitForm/Fields';
-import { RecruitCategoryName } from '~/components/Forms/RecruitForm/utils';
+import { RecruitCategoryName } from '~/services/recruit';
 
 interface RecruitBasicInfoProps {
   className?: string;

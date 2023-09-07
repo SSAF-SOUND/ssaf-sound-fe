@@ -1,5 +1,5 @@
 import type { BadgeProps } from '../Common';
-import type { SkillType } from '~/services/recruit';
+import type { SkillName } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
@@ -8,12 +8,12 @@ import { fontCss } from '~/styles/utils';
 import { SkillIcon, Badge } from '../Common';
 
 interface SkillBadgeProps extends Omit<BadgeProps, 'asChild'> {
-  name?: SkillType;
+  name: SkillName;
   theme?: 'primary' | 'secondary';
 }
 
 const SkillBadge = (props: Omit<SkillBadgeProps, 'asChild'>) => {
-  const { name = 'React', theme = 'primary', ...restProps } = props;
+  const { name, theme = 'primary', ...restProps } = props;
   const displayName = nameMapper[name] ?? name;
 
   return (
@@ -24,10 +24,8 @@ const SkillBadge = (props: Omit<SkillBadgeProps, 'asChild'>) => {
   );
 };
 
-const nameMapper: Partial<Record<SkillType, string>> = {
+const nameMapper: Partial<Record<SkillName, string>> = {
   IOS: 'iOS',
-  NextJs: 'Nextjs',
-  NodeJs: 'Nodejs',
 };
 
 const textCss = css(fontCss.style.R14, fontCss.family.auto);

@@ -26,11 +26,11 @@ import {
   titleBarHeight,
 } from '~/styles/utils';
 import { customToast, routes } from '~/utils';
+import { globalMetaData } from '~/utils/metadata';
 
 const titleBarTitle = 'HOT 게시판';
 const metaTitle = titleBarTitle;
-const metaDescription =
-  'SSAF SOUND에서 인기있는 게시글들을 모아볼 수 있는 페이지입니다.';
+const metaDescription = `${globalMetaData.description} 삼성 청년 SW 아카데미(SSAFY) 학생들의 최대 관심사를 모아볼 수 있는 Hot 게시판 기능을 이용해보세요.`;
 
 const minKeywordLength = 3;
 const validateKeyword = (keyword?: string) =>

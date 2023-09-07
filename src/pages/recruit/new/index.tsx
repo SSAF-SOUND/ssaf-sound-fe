@@ -7,7 +7,6 @@ import { css } from '@emotion/react';
 import {
   DefaultFullPageLoader,
   loaderText,
-  PageHead,
   PageHeadingText,
 } from '~/components/Common';
 import RecruitForm from '~/components/Forms/RecruitForm';
@@ -34,8 +33,6 @@ const RecruitCreatePage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
@@ -61,6 +58,11 @@ RecruitCreatePage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
   unauthorized: routes.unauthorized(),
+};
+RecruitCreatePage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
 };
 
 const selfPaddingX = 15;

@@ -52,6 +52,12 @@ export const queryKeys = {
     members: (recruitId: number) => ['recruits', 'members', recruitId],
     scrap: (recruitId: number) => ['recruits', 'scrap', recruitId],
     apply: (recruitId: number) => ['recruits', 'apply', recruitId],
+    applicants: (recruitId: number) => [
+      ...queryKeys.auth(),
+      'recruits',
+      recruitId,
+      'applicants',
+    ],
   },
   lunch: {
     list: ({
@@ -173,6 +179,11 @@ export const endpoints = {
     detail: (recruitId: number) => `/recruits/${recruitId}/detail` as const,
     scrap: (recruitId: number) => `/recruits/${recruitId}/scrap` as const,
     apply: (recruitId: number) => `/recruits/${recruitId}/application` as const,
+    application: {
+      self: () => `/recruit-applications`,
+      applicants: (recruitId: number) =>
+        `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+    },
   },
   recruitComments: {
     list: (recruitId: number) => `/recruits/${recruitId}/comments` as const,

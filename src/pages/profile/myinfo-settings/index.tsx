@@ -4,11 +4,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
 import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';
@@ -64,8 +60,6 @@ const MyInfoSettingsPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
@@ -151,6 +145,46 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   );
 };
 
+const selfPaddingX = '15px';
+const selfPaddingY = `${titleBarHeight + 30}px`;
+const totalPaddingX = `calc(${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var})`;
+const selfCss = css(
+  {
+    padding: `${selfPaddingY} ${selfPaddingX}`,
+    minHeight: pageMinHeight,
+    height: '100vh',
+  },
+  flex('', '', 'column')
+);
+
+const expandCss = css({
+  margin: `0 calc(-1 * ${totalPaddingX})`,
+});
+
+const separatorCss = css({
+  width: 'auto',
+  height: 1,
+  backgroundColor: palettes.font.blueGrey,
+});
+
+const navTitleCss = css({ padding: `0 ${totalPaddingX}` });
+
+const bottomNavLayerCss = css({ flexGrow: 1 }, flex('', 'flex-end'));
+
+const cursorCss = css({ cursor: 'pointer' });
+
+export default MyInfoSettingsPage;
+MyInfoSettingsPage.auth = {
+  role: 'user',
+  loading: <DefaultFullPageLoader />,
+  unauthorized: routes.unauthorized(),
+};
+MyInfoSettingsPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
+};
+
 const ProfileVisibilityToggleLayer = () => {
   const { openModal, closeModal } = useModal();
   const { data: profileVisibility } = useProfileVisibility();
@@ -193,38 +227,3 @@ const ProfileVisibilityToggleLayer = () => {
     />
   );
 };
-
-export default MyInfoSettingsPage;
-MyInfoSettingsPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader />,
-  unauthorized: routes.unauthorized(),
-};
-
-const selfPaddingX = '15px';
-const selfPaddingY = `${titleBarHeight + 30}px`;
-const totalPaddingX = `calc(${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var})`;
-const selfCss = css(
-  {
-    padding: `${selfPaddingY} ${selfPaddingX}`,
-    minHeight: pageMinHeight,
-    height: '100vh',
-  },
-  flex('', '', 'column')
-);
-
-const expandCss = css({
-  margin: `0 calc(-1 * ${totalPaddingX})`,
-});
-
-const separatorCss = css({
-  width: 'auto',
-  height: 1,
-  backgroundColor: palettes.font.blueGrey,
-});
-
-const navTitleCss = css({ padding: `0 ${totalPaddingX}` });
-
-const bottomNavLayerCss = css({ flexGrow: 1 }, flex('', 'flex-end'));
-
-const cursorCss = css({ cursor: 'pointer' });

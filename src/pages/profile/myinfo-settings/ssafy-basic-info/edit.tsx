@@ -7,11 +7,7 @@ import { css } from '@emotion/react';
 import { produce } from 'immer';
 import { isBoolean } from 'is-what';
 
-import {
-  DefaultFullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import {
   CertificationState,
@@ -89,8 +85,6 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
@@ -115,13 +109,17 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
     </>
   );
 };
-
+export default MyInfoSettingsSsafyBasicInfoEditPage;
 MyInfoSettingsSsafyBasicInfoEditPage.auth = {
   role: 'user',
   loading: <DefaultFullPageLoader />,
   unauthorized: routes.unauthorized(),
 };
-export default MyInfoSettingsSsafyBasicInfoEditPage;
+MyInfoSettingsSsafyBasicInfoEditPage.meta = {
+  title: metaTitle,
+  openGraph: { title: metaTitle },
+  robots: { index: false, follow: false },
+};
 
 const selfCss = css(
   { padding: `${titleBarHeight}px 15px`, height: '100vh' },

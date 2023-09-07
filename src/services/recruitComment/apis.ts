@@ -23,6 +23,7 @@ export interface CreateRecruitCommentParams {
 
 export interface CreateRecruitCommentBody {
   content: string;
+  commentGroup: number; // parentCommentId
 }
 
 export const createRecruitComment = (params: CreateRecruitCommentParams) => {
@@ -31,6 +32,7 @@ export const createRecruitComment = (params: CreateRecruitCommentParams) => {
 
   const body: CreateRecruitCommentBody = {
     content,
+    commentGroup: -1,
   };
 
   return privateAxios.post(endpoint, body).then((res) => res.data);
@@ -65,6 +67,7 @@ export const replyRecruitComment = (params: ReplyRecruitCommentParams) => {
 
   const body: ReplyRecruitCommentBody = {
     content,
+    commentGroup: commentId,
   };
 
   return privateAxios.post(endpoint, body).then((res) => res.data);
@@ -75,7 +78,9 @@ export interface UpdateRecruitCommentParams {
   content: string;
 }
 
-export type UpdateRecruitCommentBody = CreateRecruitCommentBody;
+export type UpdateRecruitCommentBody = {
+  content: string;
+};
 
 export const updateRecruitComment = (params: UpdateRecruitCommentParams) => {
   const { commentId, content } = params;

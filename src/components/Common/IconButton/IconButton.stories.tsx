@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from '~/components/Common';
 import { palettes } from '~/styles/utils';
 
-import IconButton from './index';
+import { IconButton } from './index';
 
 const meta: Meta<typeof IconButton> = {
   title: 'Button/IconButton',
@@ -39,7 +39,13 @@ export const Default: IconButtonStory = {
 
 export const Examples: IconButtonStory = {
   render: () => {
-    const themes = ['white', 'black', 'primary', 'secondary'] as const;
+    const themes = [
+      'white',
+      'black',
+      'primary',
+      'secondary',
+      'recruit',
+    ] as const;
     const backgroundColors = [
       palettes.black,
       palettes.background.default,

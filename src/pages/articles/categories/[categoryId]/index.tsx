@@ -34,9 +34,10 @@ import {
   titleBarHeight,
 } from '~/styles/utils';
 import { customToast, routes } from '~/utils';
+import { globalMetaData } from '~/utils/metadata';
 
 const createMetaDescription = (categoryName = '게시판') =>
-  `SSAF SOUND의 ${categoryName}에 속하는 게시글들을 모아볼 수 있는 페이지입니다.`;
+  `${globalMetaData.description} 다양한 주제로 소통할 수 있는 ${categoryName}을 이용해보세요.`;
 
 const minKeywordLength = 3;
 const validateKeyword = (keyword?: string) =>
