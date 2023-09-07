@@ -140,8 +140,6 @@ export const endpoints = {
     },
     create: (categoryId: number) => `/posts?boardId=${categoryId}` as const,
     detail: (articleId: number) => `/posts/${articleId}` as const,
-    report: (articleId: number) =>
-      `${endpoints.articles.detail(articleId)}/report` as const,
     like: (articleId: number) =>
       `${endpoints.articles.detail(articleId)}/like` as const,
     scrap: (articleId: number) =>
@@ -153,8 +151,6 @@ export const endpoints = {
     create: (articleId: number) => `/comments?postId=${articleId}` as const,
     like: (commentId: number) =>
       `${endpoints.articleComments.detail(commentId)}/like` as const,
-    report: (commentId: number) =>
-      `${endpoints.articleComments.detail(commentId)}/report` as const,
     reply: (params: { articleId: number; commentId: number }) => {
       const { commentId, articleId } = params;
       const queryString = new URLSearchParams({
@@ -230,8 +226,6 @@ export const endpoints = {
     detail: (commentId: number) => `/recruit-comments/${commentId}` as const, // 삭제, 수정
     like: (commentId: number) =>
       `${endpoints.recruitComments.detail(commentId)}/like` as const,
-    report: (commentId: number) =>
-      `${endpoints.recruitComments.detail(commentId)}/report` as const,
     reply: (params: { recruitId: number; commentId: number }) => {
       const { recruitId, commentId } = params;
       const queryString = new URLSearchParams({
@@ -255,4 +249,5 @@ export const endpoints = {
     revertVote: (lunchId: number) => `/lunch/poll/revert/${lunchId}` as const,
     error: () => `/lunch/error` as const,
   },
+  report: () => '/report' as const,
 };

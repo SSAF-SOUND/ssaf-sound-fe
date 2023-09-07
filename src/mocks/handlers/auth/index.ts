@@ -30,7 +30,7 @@ const signIn = rest.post<never, never, SignInApiData>(
   }
 );
 
-const signOut = rest.post(
+const signOut = rest.delete(
   composeUrls(API_URL, endpoints.auth.signOut()),
   (req, res, ctx) => {
     removeTokens();

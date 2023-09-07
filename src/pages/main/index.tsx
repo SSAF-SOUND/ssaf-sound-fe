@@ -15,7 +15,7 @@ import { globalVars, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
-const metaTitle = '홈';
+const metaTitle = '메인';
 const metaDescription = `${globalMetaData.description} 점심 메뉴, 리쿠르팅, 핫 게시글 등 다양한 SSAF SOUND의 기능을 활용해보세요.`;
 
 const MainPage = () => {

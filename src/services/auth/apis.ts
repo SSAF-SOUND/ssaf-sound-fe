@@ -40,7 +40,7 @@ export const signIn = (params: SignInParams) => {
 export const signOut = () => {
   const endpoint = endpoints.auth.signOut();
 
-  return publicAxios.post(endpoint, null).then(() => {
+  return publicAxios.delete(endpoint).then(() => {
     if (isDevMode) {
       webStorage.DEV__removeTokens();
     }

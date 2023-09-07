@@ -72,18 +72,6 @@ export type GetArticleDetailApiData = ApiSuccessResponse<{
   post: ArticleDetail;
 }>;
 
-export interface ReportArticleParams {
-  articleId: number;
-  content: string;
-}
-
-export const reportArticle = (params: ReportArticleParams) => {
-  const { articleId, content } = params;
-
-  const endpoint = endpoints.articles.report(articleId);
-  return privateAxios.post(endpoint, { content }).then((res) => res.data);
-};
-
 export interface UpdateArticleParams
   extends Omit<CreateArticleParams, 'categoryId'> {
   articleId: number;

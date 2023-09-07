@@ -1,12 +1,15 @@
+import type { CustomNextPage } from 'next/types';
+
 import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
 import { DefaultFullPageLoader, loaderText } from '~/components/Common';
 import { useMyAccountStatus, useMyInfo } from '~/services/member';
+import { routes } from '~/utils';
 import { webStorage } from '~/utils/webStorage';
 
-const HomePage = () => {
+const HomePage: CustomNextPage = () => {
   const router = useRouter();
   const { isFetching } = useMyInfo({ enabled: true, retry: 1 });
   const { isRegisterRequired } = useMyAccountStatus();
@@ -28,3 +31,9 @@ const HomePage = () => {
 };
 
 export default HomePage;
+HomePage.meta = {
+  title: '홈',
+  openGraph: {
+    url: routes.root(),
+  },
+};
