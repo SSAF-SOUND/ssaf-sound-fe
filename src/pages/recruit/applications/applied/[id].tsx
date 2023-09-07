@@ -38,9 +38,8 @@ const Applied = (props: { recruitApplicationId: number }) => {
 
   if (isApplicationError) return router.push('/500');
   if (isApplicationLoading) return <DefaultFullPageLoader />;
-  const { author, matchStatus, reply, question, recruitType } =
+  const { author, matchStatus, reply, question, recruitType, liked } =
     recruitApplicationDetailData;
-
   const postApprove = async () => {
     try {
       await approveApplication(recruitApplicationId);
@@ -96,7 +95,15 @@ const Applied = (props: { recruitApplicationId: number }) => {
             padding: 0,
           }}
         />
-        <Icon name="heart" size={22} color={palettes.recruit.default} />
+        {liked ? (
+          <Icon name="heart" size={22} color={palettes.recruit.default} />
+        ) : (
+          <Icon
+            name="heart.outlined"
+            size={22}
+            color={palettes.recruit.default}
+          />
+        )}
       </div>
       <div css={{ height: 20 }} />
       <div css={flex('', '', 'row', 10)}>
