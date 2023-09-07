@@ -1,7 +1,8 @@
+import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 import type {
-  RecruitParticipants,
-  RecruitFormValues,
-} from '~/components/Forms/RecruitForm/utils';
+  RecruitParticipantsCount,
+  RecruitParts,
+} from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { memo } from 'react';
@@ -37,7 +38,7 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
   const { register, setValue, trigger } = useRecruitFormContext();
   const participants = useWatch<RecruitFormValues>({
     name: participantsFieldName,
-  }) as RecruitParticipants;
+  }) as RecruitParticipantsCount;
   const { part, count } = participants;
 
   const handleRemoveField = () => {
@@ -50,8 +51,8 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
       shouldDirty: true,
     });
   };
-  const handleChangePart = (value: string) => {
-    setValue(partFieldName, value, {
+  const onPartChange = (value: string) => {
+    setValue(partFieldName, value as RecruitParts, {
       shouldDirty: true,
     });
     trigger(fieldArrayName);
@@ -71,9 +72,10 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
         items={possibleProjectParts}
         size="md"
         value={part}
-        onValueChange={handleChangePart}
+        onValueChange={onPartChange}
         triggerPaddingX={20}
       />
+
       <NumberInput
         css={fieldCss}
         min={minParticipantsCount}

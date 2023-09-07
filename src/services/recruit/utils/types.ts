@@ -77,3 +77,8 @@ export enum MatchStatus {
   /** 취소 */
   CANCEL = 'CANCEL',
 }
+
+export interface RecruitParticipantsCount {
+  part: RecruitParts;
+  count: number;
+}

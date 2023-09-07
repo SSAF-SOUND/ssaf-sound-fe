@@ -1,10 +1,13 @@
-import type { RecruitCategoryName } from '~/services/recruit';
+import type {
+  RecruitCategoryName,
+  RecruitParticipantsCount,
+} from '~/services/recruit';
 
 export interface RecruitFormValues {
   category: RecruitCategoryName;
   participants: {
-    study: RecruitParticipants[];
-    project: RecruitParticipants[];
+    study: RecruitParticipantsCount[];
+    project: RecruitParticipantsCount[];
   };
   myPart: string;
   endDate: string;
@@ -14,10 +17,3 @@ export interface RecruitFormValues {
   questionToApplicants: string;
   contact: string;
 }
-
-export type RecruitParticipants = {
-  /** 스터디 | 프론트엔드 | 백엔드 | 앱 | 기획/디자인 */
-  part: string;
-  /** 1 ~ 20 */
-  count: number;
-};

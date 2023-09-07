@@ -7,15 +7,15 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from '~/components/Common';
 import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
-import { RecruitCategoryName } from '~/services/recruit';
+import { RecruitCategoryName, RecruitParts } from '~/services/recruit';
 import { titleBarHeight } from '~/styles/utils';
 
 import {
   Category,
-  Title,
+  Contact,
   Content,
   QuestionToApplicants,
-  Contact,
+  Title,
 } from './Fields';
 import SubmitBar from './SubmitBar';
 
@@ -101,13 +101,13 @@ const defaultRecruitFormValues: RecruitFormValues = {
   participants: {
     project: [
       {
-        part: '',
+        part: '' as RecruitParts,
         count: 1,
       },
     ],
     study: [
       {
-        part: '스터디',
+        part: RecruitParts.STUDY,
         count: 1,
       },
     ],

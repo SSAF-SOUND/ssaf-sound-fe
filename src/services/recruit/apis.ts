@@ -5,6 +5,8 @@ import type {
   RecruitParts,
   SkillName,
   RecruitCategoryType,
+  RecruitCategoryName,
+  RecruitParticipantsCount,
 } from './utils';
 import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
@@ -294,15 +296,27 @@ export const recruitAPI = {
 };
 
 // 리쿠르트 생성
-export interface CreateRecruitParams {
 
+export interface RecruitParticipantsCountForServer {
+  recruitType: RecruitParts;
+  limit: number;
+}
+
+export interface CreateRecruitParams {
+  category: RecruitCategoryName;
+  participants: {};
 }
 
 export interface CreateRecruitBody {
-  category: string;
-
+  category: RecruitCategoryName;
+  recruitEnd: string;
+  title: string;
+  content: string;
+  contactURI: string;
+  registerRecruitType: RecruitParts;
+  skills: SkillName[];
+  question: string[];
+  limitations: RecruitParticipantsCount[];
 }
 
-export const createRecruit = () => {
-
-}
+export const createRecruit = (params: CreateRecruitParams) => {};

@@ -1,7 +1,5 @@
-import type {
-  RecruitParticipants,
-  RecruitFormValues,
-} from '~/components/Forms/RecruitForm/utils';
+import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
+import type { RecruitParticipantsCount } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
@@ -23,7 +21,7 @@ import ProjectParticipantsFieldRow from './ProjectParticipantsFieldRow';
 
 const fieldArrayName = 'participants.project';
 const initialParticipantsFieldValue = {
-  part: '',
+  part: '' as RecruitParts,
   count: 1,
 };
 const projectParticipantsMaxLength = Object.values(RecruitParts).filter(
@@ -36,7 +34,7 @@ const possibleParts = Object.values(RecruitParts).filter(
 );
 
 const validateProjectParticipants = (
-  value: RecruitParticipants[],
+  value: RecruitParticipantsCount[],
   formValues: RecruitFormValues
 ) => {
   // 카테고리가 선택되어 있는 경우, 프로젝트 필드들은 유효성 검사에 무조건 통과
