@@ -1,7 +1,6 @@
 import type { ForwardedRef } from 'react';
 import type { RecruitCategory } from '~/services/recruit';
 
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
@@ -11,10 +10,7 @@ import { Virtuoso } from 'react-virtuoso';
 import ErrorCard from '~/components/ErrorCard';
 import { RecruitCard } from '~/components/RecruitCard';
 import { SkeletonRecruitCard } from '~/components/RecruitCard/Wide';
-import {
-  getRecruitThemeByCategory,
-  useInfiniteRecruits,
-} from '~/services/recruit';
+import { useInfiniteRecruits } from '~/services/recruit';
 import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConvertor';
 import { flex, palettes } from '~/styles/utils';
 import { concat, scrollUpBy } from '~/utils';
