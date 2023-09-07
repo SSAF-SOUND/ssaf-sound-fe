@@ -1,6 +1,7 @@
 import type { ForwardedRef } from 'react';
 import type { RecruitCategory } from '~/services/recruit';
 
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
@@ -10,12 +11,16 @@ import { Virtuoso } from 'react-virtuoso';
 import ErrorCard from '~/components/ErrorCard';
 import { RecruitCard } from '~/components/RecruitCard';
 import { SkeletonRecruitCard } from '~/components/RecruitCard/Wide';
-import { useInfiniteRecruits } from '~/services/recruit';
+import {
+  getRecruitThemeByCategory,
+  useInfiniteRecruits,
+} from '~/services/recruit';
 import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConvertor';
-import { flex, palettes } from '~/styles/utils';
-import { concat, scrollUpBy } from '~/utils';
+import { flex, fontCss, palettes } from '~/styles/utils';
+import { concat, routes, scrollUpBy } from '~/utils';
 
-import { HalfLoadingSpinner } from '../Common';
+import { EmptyCardFallback } from './EmptyCardFallback';
+import { Button, HalfLoadingSpinner, SsafyIcon, TrackSize } from '../Common';
 
 const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
   return <div css={listCss} {...props} ref={ref} />;
@@ -23,7 +28,22 @@ const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
 const listCss = css(flex('center', '', 'column', 15));
 
 List.displayName = 'RecruitCardList';
-
+// const NoSearchResults = (props: NoSearchResultsProps) => {
+//   const { keyword = '' } = props;
+//   return (
+//     <div css={selfCss}>
+//       <p css={[fontCss.style.R18, { marginBottom: 'max(20vh, 120px)' }]}>
+//         {keyword} 검색 결과
+//       </p>
+//       <div css={indicatorCss}>
+//         <SsafyIcon.Track size={TrackSize.LG2} />
+//         <AlertText size="lg" bold>
+//           검색된 결과가 없습니다.
+//         </AlertText>
+//       </div>
+//     </div>
+//   );
+// };
 export const RecruitCards = ({ category }: { category: RecruitCategory }) => {
   const router = useRouter();
 
@@ -41,7 +61,7 @@ export const RecruitCards = ({ category }: { category: RecruitCategory }) => {
 
   const cards = data?.pages.map((pages) => pages.recruits).reduce(concat);
 
-  if (cards?.length === 0) return <div>조건에 맞는 카드가 없어요</div>;
+  if (cards?.length === 0) return <EmptyCardFallback category={category} />;
   if (isLoading)
     return (
       <HalfLoadingSpinner
