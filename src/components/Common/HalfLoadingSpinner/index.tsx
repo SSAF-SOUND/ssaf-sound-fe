@@ -3,7 +3,7 @@ import { ClipLoader } from 'react-spinners';
 
 import { flex, palettes } from '~/styles/utils';
 
-export const LoadingSpinner = (props: {
+export const HalfLoadingSpinner = (props: {
   color?: string;
   className?: string;
   size?: number;

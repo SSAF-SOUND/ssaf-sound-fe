@@ -1,7 +1,6 @@
 import type {
   RecruitDetail,
   recruitMembersType,
-  Recruits,
   RecruitScrap,
   RecruitScrapApiData,
 } from '~/services/recruit';
@@ -13,13 +12,18 @@ import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import { RecruitData } from './data';
+import { restInfiniteRecruitsSuccess } from './utils';
 
-export const getRecruits = restSuccess<Recruits>(
-  'get',
-  composeUrls(API_URL, endpoints.recruit.list()),
-  {
-    data: RecruitData.recruits,
-  }
+export const getRecruits = rest.get(
+  removeQueryParams(
+    composeUrls(
+      API_URL,
+      endpoints.recruit.list({
+        cursor: null,
+      })
+    )
+  ),
+  restInfiniteRecruitsSuccess
 );
 
 export const getRecruitMembers = restSuccess<recruitMembersType>(
@@ -38,7 +42,7 @@ export const getRecruitDetail = restSuccess<RecruitDetail>(
   // @ts-ignore
   composeUrls(API_URL, endpoints.recruit.detail(':recruitId')),
   {
-    data: RecruitData.recruitDetail.project,
+    data: RecruitData.recruitDetail.study,
   }
 );
 

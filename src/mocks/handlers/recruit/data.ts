@@ -2,72 +2,96 @@ import type { UserInfo } from '~/services/member';
 import type {
   GetRecruitApplicantsApiData,
   RecruitApplicant,
-  RecruitCategory,
-  RecruitDetail,
   recruitMembersType,
-  RecruitParticipant,
-  Recruits,
-  RecruitSummary,
-  SkillsType,
 } from '~/services/recruit';
+import type { RecruitDetail, Recruit } from '~/services/recruit/apis';
 
 import { faker } from '@faker-js/faker';
 
 import { MatchStatus, RecruitParts, SkillName } from '~/services/recruit';
 
+import { mockHtmlString } from '../common';
 import { createMockUser, userInfo } from '../member/data';
 
-const recruitDetail: Record<RecruitCategory, RecruitDetail> = {
-  study: {
+export const createMockRecruits = (id: number): Recruit => {
+  const booleanValue = Boolean(id % 2);
+
+  return {
+    recruitId: id,
+    title: `${id} 리쿠르트`,
+    finishedRecruit: booleanValue,
+    recruitEnd: faker.date.recent().toISOString(),
+    content: mockHtmlString,
+
+    skills: [
+      {
+        id: 1,
+        name: SkillName.ANDROID,
+      },
+      {
+        id: 2,
+        name: SkillName.REACT,
+      },
+    ],
+
+    participants: [
+      {
+        recruitType: RecruitParts.APP,
+        limit: 4,
+        members: [
+          {
+            nickname: 'KIM',
+            major: true,
+          },
+        ],
+      },
+      {
+        recruitType: RecruitParts.BACKEND,
+        limit: 3,
+        members: [
+          {
+            nickname: 'KIM',
+            major: false,
+          },
+        ],
+      },
+    ],
+  };
+};
+
+export const recruitMocks = Array(100)
+  .fill(undefined)
+  .map((_, index) => {
+    return createMockRecruits(index);
+  });
+
+const recruitDetail: Record<string, RecruitDetail> = {
+  project: {
     recruitId: 1,
-    userInfo: { ...userInfo.certifiedSsafyUserInfo },
+    contactURI: 'https://open.kakao.com/o/sA8Kb83b',
+    question: ['Test Question'],
+    author: userInfo.certifiedSsafyUserInfo,
     category: 'study',
     title: 'string',
     recruitStart: '2023-06-01',
     recruitEnd: '2023-06-30',
     content: 'string',
-    createdAt: '2023-06-01',
-    modifiedAt: '2023-06-05',
-    deletedRecruit: false,
     finishedRecruit: false,
     view: 100,
     skills: [],
-    limits: [],
-    scrapCount: 2,
-  },
-  project: {
-    recruitId: 2,
-    userInfo: { ...userInfo.certifiedSsafyUserInfo },
-    category: 'project',
-    title: 'prject test',
-    recruitStart: '2023-06-12',
-    recruitEnd: '2023-06-15',
-    content: 'tttttt',
-    createdAt: '2023-06-07',
-    modifiedAt: '2023-06-05',
-    deletedRecruit: false,
-    finishedRecruit: true,
-    view: 100,
-    skills: [
+    limits: [
       {
-        skillId: 1,
-        name: SkillName.REACT,
-      },
-      {
-        skillId: 2,
-        name: SkillName.SPRING,
+        recruitType: RecruitParts.APP,
+        limit: 6,
+        currentNumber: 2,
       },
     ],
-    limits: Object.values(RecruitParts).map((part) => ({
-      recruitType: part,
-      limit: faker.number.int({ min: 10, max: 20 }),
-      currentNumber: faker.number.int({ min: 1, max: 10 }),
-    })),
-    scrapCount: 100,
+    scrapCount: 2,
+    scraped: false,
   },
 };
 
-const recruitSummary: RecruitSummary = {
+const recruitSummary: any = {
   recruitId: 1,
   title: '제목1',
   finishedRecruit: true,
@@ -81,7 +105,7 @@ const recruitSummary: RecruitSummary = {
       skillId: 2,
       name: 'React',
     },
-  ] as unknown as SkillsType[],
+  ] as any,
   participants: [
     {
       recruitType: '기획/디자인',
@@ -97,14 +121,7 @@ const recruitSummary: RecruitSummary = {
         },
       ],
     },
-  ] as unknown as RecruitParticipant[],
-};
-
-const recruits: Recruits = {
-  recruits: [recruitSummary],
-  currentPage: 0,
-  totalPages: 1,
-  lastPage: true,
+  ] as any,
 };
 
 const recruitTypesOfRecruitMembers = Object.fromEntries(
@@ -140,7 +157,9 @@ const RecruitScrap = {
   scrapCount: 87,
 };
 
-export const createMockRecruitApplicant = (userId: number): RecruitApplicant => {
+export const createMockRecruitApplicant = (
+  userId: number
+): RecruitApplicant => {
   const liked = Boolean(userId % 2);
   const author: UserInfo = {
     ...userInfo.certifiedSsafyUserInfo,
@@ -185,7 +204,7 @@ const recruitApplicants: GetRecruitApplicantsApiData['data'] = {
 
 export const RecruitData = {
   recruitDetail,
-  recruits,
+  recruitMocks,
   recruitSummary,
   recruitMembers,
   RecruitScrap,

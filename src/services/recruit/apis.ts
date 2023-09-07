@@ -1,10 +1,10 @@
 import type {
-  LimitType,
-  RecruitCategoryType,
   RecruitType,
   SkillsType,
   MatchStatus,
   RecruitParts,
+  SkillName,
+  RecruitCategoryType,
 } from './utils';
 import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
@@ -12,75 +12,112 @@ import type { ApiSuccessResponse } from '~/types';
 import { endpoints } from '~/react-query/common';
 import { privateAxios, publicAxios } from '~/utils';
 
-export type GetRecruitsApiData = ApiSuccessResponse<Recruits>;
-
-export interface Recruits {
-  recruits: RecruitSummary[];
-  currentPage: number;
-  totalPages: number;
-  lastPage: boolean;
-}
-
-export const getRecruits = () => {
-  const endpoint = endpoints.recruit.list();
-  return publicAxios.get<GetRecruitsApiData>(endpoint).then((res) => res);
+export type RecruitParams = {
+  category?: RecruitCategoryType;
+  keyword?: string;
+  isFinished?: boolean;
+  recruitTypes?: RecruitParts[];
+  skills?: SkillName[];
 };
 
-// ------------------------------------------
+export type GetRecruitsApiData = ApiSuccessResponse<{
+  recruits: Recruit[];
+  cursor: number | null;
+  isLast: boolean;
+}>;
 
-export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetail>;
-
-export interface RecruitDetail {
+export interface Recruit {
   recruitId: number;
-  userInfo: UserInfo;
-  category: RecruitCategoryType;
   title: string;
-  recruitStart: string;
+  finishedRecruit: boolean;
   recruitEnd: string;
+
   content: string;
-  createdAt: string;
-  modifiedAt: string;
-  deletedRecruit: boolean;
-  finishedRecruit: boolean;
-  view: number;
-  skills: SkillsType[];
-  limits: LimitType[];
-  scrapCount: number;
-}
 
-export const getRecruitDetail = (recruitId: number) => {
-  const endpoint = endpoints.recruit.detail(recruitId);
-  return privateAxios
-    .get<GetRecruitDetailApiData>(endpoint)
-    .then((res) => res.data.data);
-};
+  skills: RecruitSkills[];
 
-// ------------------------------------------
-
-export interface RecruitSummary {
-  recruitId: number;
-  title: string;
-  finishedRecruit: boolean;
-  recruitEnd: string;
-  skills: SkillsType[];
   participants: RecruitParticipant[];
 }
 
+export interface RecruitSkills {
+  id: number;
+  name: SkillName;
+}
+
 export interface RecruitParticipant {
-  recruitType: RecruitType;
+  recruitType: RecruitParts;
   limit: number;
   members: {
-    nickName: string;
+    nickname: string;
     major: boolean;
   }[];
 }
 
-export type RecruitMember = UserInfo;
+export type GetRecruitDetailAPiData = ApiSuccessResponse<RecruitDetail>;
 
-export type RecruitMembers = {
-  members: RecruitMember[];
+export interface RecruitDetail {
+  recruitId: number;
+  title: string;
+  content: string;
+  contactURI: string;
+  view: number;
+  finishedRecruit: boolean;
+  recruitStart: string;
+  recruitEnd: string;
+  skills: RecruitSkills[];
+  limits: {
+    recruitType: RecruitParts;
+    limit: number;
+    currentNumber: number;
+  }[];
+  // question ?
+  // recruting - 등록자, 신청자, 이외의 사람인지 구분필요함
+  question: string[];
+  author: UserInfo;
+  scrapCount: number;
+  scraped: boolean;
+  // category 필요함
+  category: RecruitCategoryType;
+}
+
+// recruitDetail에 category 필요
+
+interface RecruitMembers {
   limit: number;
+  members: UserInfo[];
+}
+
+export type RecruitMembersByParts = { [key in RecruitParts]?: RecruitMembers };
+
+export type RecruitMembersApiData = ApiSuccessResponse<{
+  recruitTypes: RecruitMembersByParts;
+}>;
+
+export const getRecruits = (params: {
+  recruits: RecruitParams;
+  cursor: number | null;
+  isLast?: boolean;
+}) => {
+  const endpoint = endpoints.recruit.list({ ...params, cursor: params.cursor });
+
+  try {
+    return publicAxios
+      .get<GetRecruitsApiData>(endpoint)
+      .then((res) => res.data.data);
+  } catch {
+    throw new Error('error');
+  }
 };
+
+export const getRecruitDetail = (recruitId: number) => {
+  const endpoint = endpoints.recruit.detail(recruitId);
+
+  return publicAxios
+    .get<GetRecruitDetailAPiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
+export type RecruitMember = UserInfo;
 
 // ------------------------------------------
 // 수정 예정
@@ -98,6 +135,17 @@ export const getRecruitMembers = (recruitId: number) => {
     .get<GetRecruitMembersApiData>(endpoint)
     .then((res) => res.data.data);
 };
+
+export type GetRecruitDetailApiData = ApiSuccessResponse<RecruitDetail>;
+
+export interface RecruitSummary {
+  recruitId: number;
+  title: string;
+  finishedRecruit: boolean;
+  recruitEnd: string;
+  skills: SkillsType[];
+  participants: RecruitParticipant[];
+}
 
 // -----------------------------------------
 

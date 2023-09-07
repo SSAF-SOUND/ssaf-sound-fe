@@ -1,22 +1,21 @@
 import type { ForwardedRef } from 'react';
+import type { RecruitCategory } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { forwardRef } from 'react';
-import { ClipLoader } from 'react-spinners';
 import { Virtuoso } from 'react-virtuoso';
 
 import ErrorCard from '~/components/ErrorCard';
 import { RecruitCard } from '~/components/RecruitCard';
 import { SkeletonRecruitCard } from '~/components/RecruitCard/Wide';
-import { useGetQueryString } from '~/hooks';
 import { useInfiniteRecruits } from '~/services/recruit';
 import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConvertor';
 import { flex, palettes } from '~/styles/utils';
 import { concat, scrollUpBy } from '~/utils';
 
-import { LoadingSpinner } from '../Common';
+import { HalfLoadingSpinner } from '../Common';
 
 const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
   return <div css={listCss} {...props} ref={ref} />;
@@ -25,7 +24,7 @@ const listCss = css(flex('center', '', 'column', 15));
 
 List.displayName = 'RecruitCardList';
 
-export const RecruitCards = () => {
+export const RecruitCards = ({ category }: { category: RecruitCategory }) => {
   const router = useRouter();
 
   const {
@@ -40,14 +39,12 @@ export const RecruitCards = () => {
     isLoading,
   } = useInfiniteRecruits(recruitTypeConvertor(router?.query));
 
-  const category = useGetQueryString('category');
   const cards = data?.pages.map((pages) => pages.recruits).reduce(concat);
-  // 조건에 맞지 않는 데이터 처리 어떻게 해주실 지 여쭈어보고 수정
 
-  if (data?.pages === null) return <div>조건에 맞는 카드가 없어요</div>;
+  if (cards?.length === 0) return <div>조건에 맞는 카드가 없어요</div>;
   if (isLoading)
     return (
-      <LoadingSpinner
+      <HalfLoadingSpinner
         color={category === 'study' ? palettes.secondary.default : undefined}
       />
     );

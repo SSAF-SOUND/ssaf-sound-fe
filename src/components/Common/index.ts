@@ -40,4 +40,4 @@ export * from './Table';
 export * from './TextArea';
 export * from './Badge';
 export * from './ToggleGroup';
-export * from './LoadingSpinner';
+export * from './HalfLoadingSpinner';
