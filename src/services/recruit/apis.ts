@@ -267,7 +267,7 @@ export const postRecruitApplicationApprove = (recruitApplicationId: number) => {
 };
 
 export const postRecruitApplicationReject = (recruitApplicationId: number) => {
-  const endpoint = endpoints.recruit.application.approve(recruitApplicationId);
+  const endpoint = endpoints.recruit.application.reject(recruitApplicationId);
   const body = {
     recruitApplicationId,
     matchStatus: 'DONE',
