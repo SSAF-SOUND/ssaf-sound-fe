@@ -2,7 +2,6 @@ import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
 import type { RecruitParticipantsCount } from '~/services/recruit';
 
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
 import { useFieldArray, useFormState, useWatch } from 'react-hook-form';
 
 import { Button, Icon } from '~/components/Common';
@@ -147,7 +146,7 @@ const MyPart = () => {
   }) as string;
 
   const onPartChange = (value: string) => {
-    setValue(myPartFieldName, value, {
+    setValue(myPartFieldName, value as RecruitParts, {
       shouldDirty: true,
     });
 

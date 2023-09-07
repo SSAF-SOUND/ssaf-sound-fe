@@ -4,7 +4,7 @@ import type {
   RecruitApplicant,
   recruitMembersType,
 } from '~/services/recruit';
-import type { RecruitDetail, Recruit } from '~/services/recruit/apis';
+import type { RecruitDetail, Recruit } from '~/services/recruit/apis2';
 
 import { faker } from '@faker-js/faker';
 

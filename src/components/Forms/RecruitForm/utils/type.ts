@@ -1,6 +1,7 @@
 import type {
   RecruitCategoryName,
   RecruitParticipantsCount,
+  RecruitParts,
 } from '~/services/recruit';
 
 export interface RecruitFormValues {
@@ -9,7 +10,7 @@ export interface RecruitFormValues {
     study: RecruitParticipantsCount[];
     project: RecruitParticipantsCount[];
   };
-  myPart: string;
+  myPart: RecruitParts;
   endDate: string;
   title: string;
   content: string;
