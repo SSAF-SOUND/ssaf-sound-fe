@@ -1,23 +1,5 @@
 export type RecruitCategory = 'study' | 'project';
 
-export type SkillType =
-  | 'React'
-  | 'JavaScript'
-  | 'TypeScript'
-  | 'Vue'
-  | 'Svelte'
-  | 'NextJs'
-  | 'NodeJs'
-  | 'Java'
-  | 'Spring'
-  | 'Swift'
-  | 'Android'
-  | 'Figma'
-  | 'XD'
-  | 'Django'
-  | 'IOS'
-  | 'Flutter';
-
 export type RecruitType =
   | '프론트엔드'
   | '백엔드'
@@ -77,8 +59,8 @@ export enum RecruitParts {
 // ---- Category ----
 
 export enum RecruitCategoryName {
-  PROJECT = '프로젝트',
-  STUDY = '스터디',
+  PROJECT = 'project',
+  STUDY = 'study',
 }
 
 // ---- Applicants ----

@@ -1,5 +1,7 @@
+import type { RecruitCategoryName } from '~/services/recruit';
+
 export interface RecruitFormValues {
-  category: string;
+  category: RecruitCategoryName;
   participants: {
     study: RecruitParticipants[];
     project: RecruitParticipants[];

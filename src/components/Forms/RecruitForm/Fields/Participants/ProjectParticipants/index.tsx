@@ -87,6 +87,16 @@ const ProjectParticipants = () => {
     <div>
       <div css={{ marginBottom: 24 }}>
         <FieldOverview>모집파트 별 인원</FieldOverview>
+        <Button
+          css={addFieldButtonCss}
+          variant="outlined"
+          theme="primary"
+          onClick={handleAddField}
+          disabled={!canAddField}
+        >
+          <Icon name="circle.plus" label="필드 추가" size={14} />
+        </Button>
+
         <div css={fieldContainerCss}>
           {fields.map((field, index) => (
             <ProjectParticipantsFieldRow
@@ -97,15 +107,6 @@ const ProjectParticipants = () => {
             />
           ))}
         </div>
-        <Button
-          css={addFieldButtonCss}
-          variant="outlined"
-          theme="primary"
-          onClick={handleAddField}
-          disabled={!canAddField}
-        >
-          <Icon name="circle.plus" label="필드 추가" size={14} />
-        </Button>
       </div>
 
       <div>
@@ -124,7 +125,7 @@ const addFieldButtonCss = css({
 });
 
 const fieldContainerCss = css(
-  { position: 'relative', marginBottom: 12, zIndex: 1 },
+  { position: 'relative', marginTop: 12, zIndex: 1 },
   flex('', '', 'column', 10)
 );
 

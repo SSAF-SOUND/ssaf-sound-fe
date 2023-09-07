@@ -119,9 +119,6 @@ export const getRecruitDetail = (recruitId: number) => {
 
 export type RecruitMember = UserInfo;
 
-// ------------------------------------------
-// 수정 예정
-
 export type PartialRecruitType = Partial<RecruitType>;
 export type recruitMembersType = {
   recruitTypes: Partial<Record<PartialRecruitType, RecruitMembers>>;
@@ -295,3 +292,17 @@ export const recruitAPI = {
   postRecruitApplicationReject,
   postRecruitApplicationCancel,
 };
+
+// 리쿠르트 생성
+export interface CreateRecruitParams {
+
+}
+
+export interface CreateRecruitBody {
+  category: string;
+
+}
+
+export const createRecruit = () => {
+
+}

@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
+import { RecruitCategoryName } from '~/services/recruit';
 import {
   colorMix,
   flex,
@@ -27,7 +28,7 @@ export const Category = (props: CategoryProps) => {
     formState: { defaultValues: { category: defaultCategory } = {} },
   } = useRecruitFormContext();
 
-  const onValueChange = (value: string) =>
+  const onCategoryChange = (value: RecruitCategoryName) =>
     setValue(fieldName, value, { shouldDirty: true });
 
   return (
@@ -36,23 +37,15 @@ export const Category = (props: CategoryProps) => {
       <RadioGroup.Root
         defaultValue={defaultCategory}
         css={radioGroupCss}
-        onValueChange={onValueChange}
+        onValueChange={onCategoryChange}
         disabled={editMode}
       >
-        <RadioGroup.Item
-          value="프로젝트"
-          css={radioItemCss}
-          data-theme="primary"
-        >
-          <RadioGroup.Indicator forceMount>프로젝트</RadioGroup.Indicator>
-        </RadioGroup.Item>
-        <RadioGroup.Item
-          value="스터디"
-          css={radioItemCss}
-          data-theme="secondary"
-        >
-          <RadioGroup.Indicator forceMount>스터디</RadioGroup.Indicator>
-        </RadioGroup.Item>
+        <RadioItem value={RecruitCategoryName.PROJECT} theme="primary">
+          프로젝트
+        </RadioItem>
+        <RadioItem value={RecruitCategoryName.STUDY} theme="secondary">
+          스터디
+        </RadioItem>
       </RadioGroup.Root>
     </div>
   );
@@ -70,6 +63,21 @@ const radioGroupCss = css(
   flex('center', '', 'row'),
   fontCss.family.auto
 );
+
+interface RadioItemProps {
+  value: RecruitCategoryName;
+  theme: string;
+  children: string;
+}
+
+const RadioItem = (props: RadioItemProps) => {
+  const { children, value, theme } = props;
+  return (
+    <RadioGroup.Item value={value} css={radioItemCss} data-theme={theme}>
+      <RadioGroup.Indicator forceMount>{children}</RadioGroup.Indicator>
+    </RadioGroup.Item>
+  );
+};
 
 const radioItemCss = css(
   {
