@@ -183,11 +183,15 @@ export const endpoints = {
       `/members/${id}/public-profile` as const,
   },
   recruit: {
-    // todo 이름, 파라미터 수정
-    members: (recruitId: number) => `/recruits/${recruitId}/members` as const,
-    detail: (recruitId: number) => `/recruits/${recruitId}/detail` as const,
-    scrap: (recruitId: number) => `/recruits/${recruitId}/scrap` as const,
-    apply: (recruitId: number) => `/recruits/${recruitId}/application` as const,
+    self: () => `/recruits` as const,
+    members: (recruitId: number) =>
+      `${endpoints.recruit.self()}/${recruitId}/members` as const,
+    detail: (recruitId: number) =>
+      `${endpoints.recruit.self()}/${recruitId}/detail` as const,
+    scrap: (recruitId: number) =>
+      `${endpoints.recruit.self()}/${recruitId}/scrap` as const,
+    apply: (recruitId: number) =>
+      `${endpoints.recruit.self()}/${recruitId}/application` as const,
     application: {
       self: () => `/recruit-applications`,
       applicants: (recruitId: number) =>
@@ -232,7 +236,7 @@ export const endpoints = {
       if (category) searchParams.set('category', category);
       if (isFinished) searchParams.set('isFinished', isFinished.toString());
       if (cursor) searchParams.set('cursor', cursor.toString());
-      return `/recruits?${searchParams.toString()}`;
+      return `${endpoints.recruit.self()}?${searchParams.toString()}`;
     },
   },
   recruitComments: {
