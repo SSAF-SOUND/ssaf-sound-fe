@@ -1,4 +1,5 @@
 import type { CustomNextPage } from 'next/types';
+import type { RecruitFormProps } from '~/components/Forms/RecruitForm';
 
 import { useRouter } from 'next/router';
 
@@ -10,26 +11,58 @@ import {
   PageHeadingText,
 } from '~/components/Common';
 import RecruitForm from '~/components/Forms/RecruitForm';
+import {
+  convertSkillsObjectToArray,
+  invalidSubmitMessage,
+} from '~/components/Forms/RecruitForm/utils';
 import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
+import {
+  reconfirmRecruitFormUnload,
+  RecruitCategoryName,
+  useCreateRecruit,
+} from '~/services/recruit';
 import { globalVars } from '~/styles/utils';
-import { routes } from '~/utils';
+import { customToast, handleAxiosError, routes } from '~/utils';
 
 const metaTitle = '리쿠르팅 등록';
 
 const RecruitCreatePage: CustomNextPage = () => {
   const router = useRouter();
+  const { mutateAsync: createRecruit } = useCreateRecruit();
+
   useUnloadReconfirmEffect();
 
   const onClickTitleBarClose = () => {
-    if (
-      window.confirm(
-        '작성중인 리쿠르팅 내용이 사라집니다. 페이지를 이동할까요?'
-      )
-    ) {
-      // FIXME: routes.recruit()
-      router.push('/main');
+    if (reconfirmRecruitFormUnload()) {
+      router.push(routes.recruit.self());
     }
   };
+
+  const onValidSubmit: RecruitFormProps['onValidSubmit'] = async (
+    formValues
+  ) => {
+    const { participants, category, skills, ...restFormValues } = formValues;
+
+    const isCategoryProject = category === RecruitCategoryName.PROJECT;
+    const targetParticipants = isCategoryProject
+      ? participants.project
+      : participants.study;
+
+    try {
+      const recruitId = await createRecruit({
+        category,
+        participants: targetParticipants,
+        skills: convertSkillsObjectToArray(skills),
+        ...restFormValues,
+      });
+
+      router.replace(routes.recruit.detail(recruitId));
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
+  const onInvalidSubmit = () => customToast.clientError(invalidSubmitMessage);
 
   return (
     <>
@@ -37,11 +70,9 @@ const RecruitCreatePage: CustomNextPage = () => {
 
       <div css={selfCss}>
         <RecruitForm
-          onValidSubmit={(v) => {
-            console.log(v);
-          }}
+          onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
           options={{
-            // FIXME: routes.recruit()
             onClickTitleBarClose: onClickTitleBarClose,
             barTitle: '리쿠르팅 등록하기',
             submitButtonText: '완료',

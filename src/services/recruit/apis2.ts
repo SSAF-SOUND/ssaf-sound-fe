@@ -119,9 +119,6 @@ export const getRecruitDetail = (recruitId: number) => {
 
 export type RecruitMember = UserInfo;
 
-// ------------------------------------------
-// 수정 예정
-
 export type PartialRecruitType = Partial<RecruitType>;
 export type recruitMembersType = {
   recruitTypes: Partial<Record<PartialRecruitType, RecruitMembers>>;

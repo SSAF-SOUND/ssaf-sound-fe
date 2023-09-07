@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import RecruitApplyPage from '~/pages/recruit/apply/[id]';
+import RecruitApplyPage from '~/pages/recruits/apply/[id]';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof RecruitApplyPage> = {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import RecruitRedirectionPage from '~/pages/recruit/apply/redirect';
+import RecruitRedirectionPage from '~/pages/recruits/apply/redirect';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof RecruitRedirectionPage> = {

@@ -1,5 +1,5 @@
 import type { RecruitCategory, RecruitParts, SkillName } from './types';
-import type { RecruitParams } from '../apis';
+import type { RecruitParams } from '../apis2';
 
 import { stringBooleanToBool } from '~/utils';
 

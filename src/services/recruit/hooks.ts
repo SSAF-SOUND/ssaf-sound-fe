@@ -1,9 +1,9 @@
-import type { RecruitParams } from './apis';
+import type { RecruitParams } from './apis2';
 
 import { useMutation, useQuery, useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-
+import { createRecruit } from '~/services/recruit/apis';
 import {
   postRecruitApplicationCancel,
   postRecruitApplicationReject,
@@ -14,7 +14,7 @@ import {
   getRecruitMembers,
   getRecruits,
   recruitAPI,
-} from './apis';
+} from '~/services/recruit/apis2';
 
 export const useApplyRecruit = () => {
   return useMutation({
@@ -85,5 +85,13 @@ export const useRecruitApplicationReject = () => {
 export const useRecruitApplicationCancel = () => {
   return useMutation({
     mutationFn: postRecruitApplicationCancel,
+  });
+};
+
+//
+
+export const useCreateRecruit = () => {
+  return useMutation({
+    mutationFn: createRecruit,
   });
 };

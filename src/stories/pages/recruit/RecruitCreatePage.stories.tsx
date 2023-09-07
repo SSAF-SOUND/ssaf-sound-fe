@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { userInfo } from '~/mocks/handlers/member/data';
-import RecruitCreatePage from '~/pages/recruit/new';
+import RecruitCreatePage from '~/pages/recruits/new';
 import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 

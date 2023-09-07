@@ -1,7 +1,5 @@
-import type {
-  RecruitParticipants,
-  RecruitFormValues,
-} from '~/components/Forms/RecruitForm/utils';
+import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
+import type { RecruitParticipantsCount } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
@@ -25,7 +23,7 @@ interface StudyParticipantsProps {
 }
 
 const validateStudyParticipants = (
-  { count }: RecruitParticipants,
+  { count }: RecruitParticipantsCount,
   formValues: RecruitFormValues
 ) => {
   if (formValues.category !== RecruitCategoryName.STUDY) {
@@ -44,7 +42,7 @@ const StudyParticipants = (props: StudyParticipantsProps) => {
   const { register, setValue } = useRecruitFormContext();
   const participants = useWatch<RecruitFormValues>({
     name: participantsFieldName,
-  }) as RecruitParticipants;
+  }) as RecruitParticipantsCount;
   const { count } = participants;
 
   const countFieldName = `${fieldArrayName}.0.count` as const;

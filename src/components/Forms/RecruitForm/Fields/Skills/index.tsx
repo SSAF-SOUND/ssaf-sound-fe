@@ -42,7 +42,7 @@ const Skill = (props: SkillProps) => {
   const { setValue, getValues } = useRecruitFormContext();
   const pressed = useWatch<RecruitFormValues>({
     name: `${fieldName}.${name}`,
-  }) as boolean;
+  }) as unknown as boolean;
 
   const onPressedChange = (pressed: boolean) => {
     const prevValue = getValues(fieldName);

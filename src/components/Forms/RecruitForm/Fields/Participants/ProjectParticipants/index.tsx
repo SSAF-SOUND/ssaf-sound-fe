@@ -1,10 +1,7 @@
-import type {
-  RecruitParticipants,
-  RecruitFormValues,
-} from '~/components/Forms/RecruitForm/utils';
+import type { RecruitFormValues } from '~/components/Forms/RecruitForm/utils';
+import type { RecruitParticipantsCount } from '~/services/recruit';
 
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
 import { useFieldArray, useFormState, useWatch } from 'react-hook-form';
 
 import { Button, Icon } from '~/components/Common';
@@ -23,7 +20,7 @@ import ProjectParticipantsFieldRow from './ProjectParticipantsFieldRow';
 
 const fieldArrayName = 'participants.project';
 const initialParticipantsFieldValue = {
-  part: '',
+  part: '' as RecruitParts,
   count: 1,
 };
 const projectParticipantsMaxLength = Object.values(RecruitParts).filter(
@@ -36,7 +33,7 @@ const possibleParts = Object.values(RecruitParts).filter(
 );
 
 const validateProjectParticipants = (
-  value: RecruitParticipants[],
+  value: RecruitParticipantsCount[],
   formValues: RecruitFormValues
 ) => {
   // 카테고리가 선택되어 있는 경우, 프로젝트 필드들은 유효성 검사에 무조건 통과
@@ -87,6 +84,16 @@ const ProjectParticipants = () => {
     <div>
       <div css={{ marginBottom: 24 }}>
         <FieldOverview>모집파트 별 인원</FieldOverview>
+        <Button
+          css={addFieldButtonCss}
+          variant="outlined"
+          theme="primary"
+          onClick={handleAddField}
+          disabled={!canAddField}
+        >
+          <Icon name="circle.plus" label="필드 추가" size={14} />
+        </Button>
+
         <div css={fieldContainerCss}>
           {fields.map((field, index) => (
             <ProjectParticipantsFieldRow
@@ -97,15 +104,6 @@ const ProjectParticipants = () => {
             />
           ))}
         </div>
-        <Button
-          css={addFieldButtonCss}
-          variant="outlined"
-          theme="primary"
-          onClick={handleAddField}
-          disabled={!canAddField}
-        >
-          <Icon name="circle.plus" label="필드 추가" size={14} />
-        </Button>
       </div>
 
       <div>
@@ -124,7 +122,7 @@ const addFieldButtonCss = css({
 });
 
 const fieldContainerCss = css(
-  { position: 'relative', marginBottom: 12, zIndex: 1 },
+  { position: 'relative', marginTop: 12, zIndex: 1 },
   flex('', '', 'column', 10)
 );
 
@@ -148,7 +146,7 @@ const MyPart = () => {
   }) as string;
 
   const onPartChange = (value: string) => {
-    setValue(myPartFieldName, value, {
+    setValue(myPartFieldName, value as RecruitParts, {
       shouldDirty: true,
     });
 

@@ -1,4 +1,4 @@
-const fallback = 'http://localhost';
+const fallback = 'http://localhost:8081';
 const devEnvStrings = ['preview', 'development'];
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || fallback;
