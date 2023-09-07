@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import type {
-  ArticleCategory,
   CreateArticleApiData,
   CreateArticleBody,
+  GetArticleCategoriesApiData,
   GetArticleDetailApiData,
   LikeArticleApiData,
   ScrapArticleApiData,
@@ -24,11 +26,13 @@ import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-export const getArticleCategories = restSuccess<ArticleCategory[]>(
-  'get',
-  composeUrls(API_URL, endpoints.articles.categories()),
-  { data: articleCategories }
-);
+export const getArticleCategories = restSuccess<
+  GetArticleCategoriesApiData['data']
+>('get', composeUrls(API_URL, endpoints.articles.categories()), {
+  data: {
+    boards: articleCategories,
+  },
+});
 
 export const getArticleCategoriesError = restError(
   'get',
@@ -69,7 +73,6 @@ export const createArticle = rest.post(
 
 export const createArticleError = restError(
   'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, removeQueryParams(endpoints.articles.create(1))),
   {
@@ -79,7 +82,6 @@ export const createArticleError = restError(
 
 export const removeArticle = restSuccess(
   'delete',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.detail(':articleId')),
   {
@@ -89,7 +91,6 @@ export const removeArticle = restSuccess(
 
 export const removeArticleError = restError(
   'delete',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.detail(':articleId')),
   {
@@ -99,7 +100,6 @@ export const removeArticleError = restError(
 
 export const reportArticle = restSuccess(
   'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.report(':articleId')),
   {
@@ -109,7 +109,6 @@ export const reportArticle = restSuccess(
 
 export const reportArticleError = restError(
   'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.report(':articleId')),
   {
@@ -117,8 +116,7 @@ export const reportArticleError = restError(
   }
 );
 
-export const updateArticle = rest.put(
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+export const updateArticle = rest.patch(
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.detail(':articleId')),
   async (req, res, ctx) => {
@@ -140,8 +138,7 @@ export const updateArticle = rest.put(
 );
 
 export const updateArticleError = restError(
-  'put',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  'patch',
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.detail(':articleId')),
   {
@@ -150,7 +147,6 @@ export const updateArticleError = restError(
 );
 
 export const getArticleDetail = rest.get(
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.detail(':articleId')),
   (req, res, ctx) => {
@@ -167,7 +163,6 @@ export const getArticleDetail = rest.get(
 
 export const getArticleDetailError = restError(
   'get',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.detail(':articleId'))
 );
@@ -199,7 +194,6 @@ export const likeArticle = rest.post(
 
 export const likeArticleError = restError(
   'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.like(':articleId')),
   {
@@ -208,7 +202,6 @@ export const likeArticleError = restError(
 );
 
 export const scrapArticle = rest.post(
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.scrap(':articleId')),
   (req, res, ctx) => {
@@ -234,7 +227,6 @@ export const scrapArticle = rest.post(
 
 export const scrapArticleError = restError(
   'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   composeUrls(API_URL, endpoints.articles.scrap(':articleId')),
   {
@@ -356,8 +348,24 @@ export const getMyArticlesError = rest.get(
   restInfiniteArticlesError
 );
 
+export const getMyScrapedArticles = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.myScraped({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesSuccess
+);
+
+export const getMyScrapedArticlesError = rest.get(
+  removeQueryParams(
+    composeUrls(API_URL, endpoints.articles.myScraped({ cursor: 0, size: 0 }))
+  ),
+  restInfiniteArticlesError
+);
+
 export const articleHandlers = [
   getMyArticles, // /posts/my
+  getMyScrapedArticles, // /posts/my-scrap
+  // getMyScrapedArticlesError,
   getHotArticles, // /posts/hot?
   getHotArticlesByKeyword, // /posts/hot/search?
   getArticlesByKeyword, // /posts/search?

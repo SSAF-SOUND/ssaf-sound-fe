@@ -1,5 +1,7 @@
 import type { CustomAppProps } from 'next/app';
 
+import Head from 'next/head';
+
 import { QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
@@ -16,6 +18,7 @@ import { initServerMocks } from '~/mocks';
 import { getQueryClient } from '~/react-query/common';
 import GlobalStyles from '~/styles/GlobalStyles';
 
+
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') initServerMocks();
 
 export default function App({ Component, pageProps }: CustomAppProps) {
@@ -30,6 +33,13 @@ export default function App({ Component, pageProps }: CustomAppProps) {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <Hydrate state={pageProps.dehydratedState}>
+        <Head>
+          {/* https://nextjs.org/docs/messages/no-document-viewport-meta */}
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+        </Head>
         <GlobalStyles />
         <Background />
         <Toaster />

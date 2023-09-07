@@ -17,7 +17,11 @@ const AuthChecker = (props: AuthCheckerProps) => {
   const { auth, children } = props;
 
   const router = useRouter();
-  const { data: myInfo, isInitialLoading, isError } = useMyInfo();
+  const {
+    data: myInfo,
+    isInitialLoading,
+    isError,
+  } = useMyInfo({ enabled: true });
 
   if (isInitialLoading) {
     return auth.loading || <DefaultFullPageLoader />;

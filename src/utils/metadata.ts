@@ -1,3 +1,5 @@
+import ogImage from '~/assets/images/og-image.png';
+
 const url = (process.env.NEXT_PUBLIC_APP_URL as string) || '';
 
 const title = 'SSAF SOUND';
@@ -7,7 +9,7 @@ export const globalMetaData = {
   description: `${title}는 삼성 청년 SW 아카데미(SSAFY) 학생들과 예비 SSAFY인들의 커뮤니티 공간입니다.`,
   locale: 'ko_KR',
   url,
-  imageUrl: '',
+  imageUrl: ogImage.src,
   imageWidth: '1200',
   imageHeight: '630',
   pageType: 'website',

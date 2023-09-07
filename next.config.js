@@ -46,6 +46,15 @@ const nextConfig = {
     ],
     deviceSizes: [576],
   },
+  /* proxy */
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: 'https://dev.ssafsound.com',
+  //     },
+  //   ];
+  // },
 };
 
 // eslint-disable-next-line import/order

@@ -4,11 +4,12 @@ import Skeleton from 'react-loading-skeleton';
 import { LunchMenusPreviewError } from '~/components/Lunch/LunchMenusPreview/LunchMenusPreviewError';
 import { LunchMenusPreviewMenuDescription } from '~/components/Lunch/LunchMenusPreview/LunchMenusPreviewMenuDescription';
 import {
+  emptyLunchMenuDescription,
   LunchDateSpecifier,
   useLunchMenusWithPollStatus,
 } from '~/services/lunch';
 import { useCampuses } from '~/services/meta';
-import { flex, pageMinWidth, palettes } from '~/styles/utils';
+import { flex, fontCss, pageMinWidth, palettes } from '~/styles/utils';
 
 import { LunchMenusPreviewHeader } from './LunchMenusPreviewHeader';
 
@@ -29,6 +30,7 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
     isLoading: isLunchMenusWithPollStatusLoading,
     isError: isLunchMenusWithPollStatusError,
     error: lunchMenusWithPollStatusError,
+    isSuccess: lunchMenusWithPollStatusSuccess,
     refetch,
   } = useLunchMenusWithPollStatus({
     campus: safeCampus,
@@ -36,6 +38,9 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
   });
 
   const lunchMenusViewCount = 3;
+  const isLunchMenusEmpty =
+    lunchMenusWithPollStatusSuccess &&
+    lunchMenusWithPollStatus.menus.length === 0;
 
   return (
     <div css={selfCss} className={className}>
@@ -57,16 +62,17 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
           />
         )}
 
-        {lunchMenusWithPollStatus?.menus
-          .slice(0, lunchMenusViewCount)
-          .map((menu) => {
-            return (
+        {isLunchMenusEmpty && <LunchMenusPreviewEmptyDescription />}
+
+        {lunchMenusWithPollStatusSuccess &&
+          lunchMenusWithPollStatus.menus
+            .slice(0, lunchMenusViewCount)
+            .map((menu) => (
               <LunchMenusPreviewMenuDescription
                 key={menu.lunchId}
                 menu={menu}
               />
-            );
-          })}
+            ))}
       </div>
     </div>
   );
@@ -100,3 +106,13 @@ const LunchMenusPreviewMenuDescriptionSkeleton = () => {
   );
 };
 const skeletonContainerCss = css(flex('center', '', 'column', 4));
+
+const LunchMenusPreviewEmptyDescription = () => {
+  return <div css={emptyDescriptionCss}>{emptyLunchMenuDescription}</div>;
+};
+
+const emptyDescriptionCss = css(
+  { width: '100%', height: 140 },
+  flex('center', 'center'),
+  fontCss.style.B14
+);

@@ -9,6 +9,7 @@ import {
   useLunchMenusWithPollStatus,
   usePollLunchMenu,
   useRevertPolledLunchMenu,
+  emptyLunchMenuDescription,
 } from '~/services/lunch';
 import { useMyInfo } from '~/services/member';
 import { flex } from '~/styles/utils';
@@ -32,11 +33,16 @@ const LunchMenus = (props: LunchMenusProps) => {
     isLoading: isLunchMenusWithPollStatusLoading,
     isError: isLunchMenusWithPollStatusError,
     error: lunchMenusWithPollStatusError,
+    isSuccess: lunchMenusWithPollStatusSuccess,
     isFetching,
   } = useLunchMenusWithPollStatus({
     dateSpecifier,
     campus,
   });
+
+  const isLunchMenusEmpty =
+    lunchMenusWithPollStatusSuccess &&
+    lunchMenusWithPollStatus.menus.length === 0;
 
   const { mutateAsync: pollLunchMenu, isLoading: isPollingLunchMenu } =
     usePollLunchMenu({
@@ -58,7 +64,7 @@ const LunchMenus = (props: LunchMenusProps) => {
   return (
     <div css={selfCss} className={className}>
       {isLunchMenusWithPollStatusError && (
-        <ErrorLayer error={lunchMenusWithPollStatusError} />
+        <LunchMenusError error={lunchMenusWithPollStatusError} />
       )}
 
       {isLunchMenusWithPollStatusLoading && (
@@ -68,7 +74,9 @@ const LunchMenus = (props: LunchMenusProps) => {
         />
       )}
 
-      {lunchMenusWithPollStatus &&
+      {isLunchMenusEmpty && <LunchMenusEmptyDescription />}
+
+      {lunchMenusWithPollStatusSuccess &&
         lunchMenusWithPollStatus.menus.map((menu, index) => {
           const polled = index === lunchMenusWithPollStatus.polledAt;
           const { lunchId } = menu;
@@ -111,7 +119,7 @@ const cardGap = 16;
 
 const selfCss = css({ width: '100%' }, flex('', '', 'column', cardGap));
 
-const ErrorLayer = (props: { error: unknown }) => {
+const LunchMenusError = (props: { error: unknown }) => {
   const { error } = props;
   const response = getErrorResponse(error);
   const errorMessage =
@@ -121,3 +129,14 @@ const ErrorLayer = (props: { error: unknown }) => {
     <ErrorMessageWithSsafyIcon css={{ marginTop: 48 }} message={errorMessage} />
   );
 };
+
+const LunchMenusEmptyDescription = () => {
+  return (
+    <div css={emptyLunchMenusDescriptionCss}>{emptyLunchMenuDescription}</div>
+  );
+};
+
+const emptyLunchMenusDescriptionCss = css(
+  { height: 300 },
+  flex('center', 'center')
+);

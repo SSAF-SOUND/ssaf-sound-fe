@@ -7,6 +7,7 @@ import type {
   GetUserPortfolioApiData,
   UpdateMyInfoParams,
   UserInfo,
+  ValidateNicknameApiData,
 } from '~/services/member';
 import type { ApiErrorResponse } from '~/types';
 
@@ -64,7 +65,7 @@ export const updateMyInfo = rest.put<
         ssafyMember: true,
         ssafyInfo: {
           campus: body.campus as string,
-          semester: body.semester as number,
+          semester: body.year as number,
           certificationState: CertificationState.UNCERTIFIED,
           majorTrack: null,
         },
@@ -86,17 +87,25 @@ export const updateMyInfo = rest.put<
   );
 });
 
-export const validateNickname = restSuccess(
+export const validateNickname = restSuccess<ValidateNicknameApiData['data']>(
   'post',
   composeUrls(API_URL, endpoints.user.nickname()),
-  { data: null }
+  {
+    data: { possible: true },
+  }
 );
+
+export const validateNicknameRespondWithDuplicatedNickname = restSuccess<
+  ValidateNicknameApiData['data']
+>('post', composeUrls(API_URL, endpoints.user.nickname()), {
+  data: { possible: false },
+});
 
 export const validateNicknameError = restError(
   'post',
   composeUrls(API_URL, endpoints.user.nickname()),
   {
-    message: '닉네임이 중복됩니다',
+    message: '닉네임이 유효하지 않습니다.',
   }
 );
 
@@ -220,7 +229,7 @@ export const getUserPortfolio = restSuccess<GetUserPortfolioApiData['data']>(
   composeUrls(API_URL, endpoints.user.portfolio(':id')),
   {
     data: {
-      portfolio,
+      portfolioElement: portfolio,
     },
   }
 );
@@ -230,7 +239,7 @@ export const getMyPortfolio = restSuccess<GetMyPortfolioApiData['data']>(
   composeUrls(API_URL, endpoints.user.myPortfolio()),
   {
     data: {
-      portfolio,
+      portfolioElement: portfolio,
     },
   }
 );

@@ -25,18 +25,16 @@ export const getLunchMenusWithPollStatusError = restError(
   'get',
   getLunchMenusWithPollStatusEndpoint,
   {
-    message: '데이터가 없습니다.',
+    code: ResponseCode.INVALID_LUNCH_DATE,
+    message: '조회할 수 없는 날짜입니다.',
   }
 );
 
-export const getLunchMenusWithPollStatusNotExistLunchMenusError = restError(
-  'get',
-  getLunchMenusWithPollStatusEndpoint,
-  {
-    code: ResponseCode.NOT_EXIST_LUNCH_MENUS,
-    message: '점심 데이터가 존재하지 않는 날짜입니다.',
-  }
-);
+export const getEmptyLunchMenusWithPollStatus = restSuccess<
+  GetLunchMenusWithPollStatusApiData['data']
+>('get', getLunchMenusWithPollStatusEndpoint, {
+  data: lunchMock.emptyMenus,
+});
 
 export const pollLunchMenuEndpoint =
   // @ts-ignore

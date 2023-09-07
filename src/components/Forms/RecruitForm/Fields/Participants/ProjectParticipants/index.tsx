@@ -4,7 +4,8 @@ import type {
 } from '~/components/Forms/RecruitForm/utils';
 
 import { css } from '@emotion/react';
-import { useFieldArray, useFormState } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useFieldArray, useFormState, useWatch } from 'react-hook-form';
 
 import { Button, Icon } from '~/components/Common';
 import { SelectBox } from '~/components/Common/SelectBox';
@@ -142,6 +143,10 @@ const MyPart = () => {
     errors: { myPart: myPartError },
   } = useFormState({ name: myPartFieldName });
 
+  const myPart = useWatch<RecruitFormValues>({
+    name: myPartFieldName,
+  }) as string;
+
   const onPartChange = (value: string) => {
     setValue(myPartFieldName, value, {
       shouldDirty: true,
@@ -158,6 +163,7 @@ const MyPart = () => {
 
   return (
     <SelectBox
+      value={myPart}
       onValueChange={onPartChange}
       items={possibleProjectParts}
       size="md"

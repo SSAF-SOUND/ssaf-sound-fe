@@ -89,7 +89,7 @@ export const updateArticleComment = (params: UpdateArticleCommentParams) => {
     anonymity: anonymous,
   };
 
-  return privateAxios.put(endpoint, body).then((res) => res.data);
+  return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
 export const removeArticleComment = (commentId: number) => {

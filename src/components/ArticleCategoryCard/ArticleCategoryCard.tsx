@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
+import { isNullOrUndefined } from 'is-what';
 
 import { flex, fontCss, palettes } from '~/styles/utils';
 import { routes } from '~/utils';
@@ -17,6 +18,7 @@ interface ArticleCategoryCardProps {
 const ArticleCategoryCard = (props: ArticleCategoryCardProps) => {
   const { articleCategory } = props;
   const { boardId, title, description, imageUrl } = articleCategory;
+  const isValidImageUrl = !isNullOrUndefined(imageUrl);
 
   return (
     <Link css={selfCss} href={routes.articles.category(boardId)}>
@@ -24,13 +26,16 @@ const ArticleCategoryCard = (props: ArticleCategoryCardProps) => {
         <h2 css={titleCss}>{title}</h2>
         <p css={descriptionCss}>{description}</p>
       </div>
-      <Image
-        css={imageCss}
-        src={imageUrl}
-        alt="게시판 이미지"
-        width={imageSize}
-        height={imageSize}
-      />
+      {/* https://stackoverflow.com/questions/73570140/typeerror-cannot-read-properties-of-null-reading-default-in-next-js */}
+      {isValidImageUrl && (
+        <Image
+          css={imageCss}
+          src={imageUrl}
+          alt="게시판 이미지"
+          width={imageSize}
+          height={imageSize}
+        />
+      )}
     </Link>
   );
 };

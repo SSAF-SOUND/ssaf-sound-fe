@@ -47,15 +47,11 @@ const RegisterPage: CustomNextPage = () => {
     return <DefaultFullPageLoader text={loaderText.checkUser} />;
   }
 
-  const onSubmit = async (value: UserRegisterFormValues) => {
+  const onSubmit = async (formValues: UserRegisterFormValues) => {
     setShouldCheckUserInfo(false);
 
-    const { year, ...restValue } = value;
     try {
-      const response = await updateMyInfo({
-        ...restValue,
-        semester: year,
-      });
+      const response = await updateMyInfo(formValues);
       setMyInfo(response);
       await router.replace(routes.intro.studentCertification());
     } catch (error) {

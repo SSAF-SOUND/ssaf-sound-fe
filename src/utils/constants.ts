@@ -16,7 +16,6 @@ export enum ResponseCode {
 
   //
   INVALID_LUNCH_DATE = '601',
-  NOT_EXIST_LUNCH_MENUS = '603',
 
   //
   NOT_EXIST_USER = '704',

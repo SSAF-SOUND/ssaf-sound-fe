@@ -7,7 +7,7 @@ import type {
 
 import { faker } from '@faker-js/faker';
 
-import { mockHtmlString } from "~/mocks/handlers/common";
+import { mockHtmlString } from '~/mocks/handlers/common';
 import { userInfo } from '~/mocks/handlers/member/data';
 
 export const articleCategories: ArticleCategory[] = [
@@ -37,6 +37,7 @@ const createMockImages = (urls: string[]) => {
 export const createMockArticle = (id: number): ArticleDetail => {
   const booleanValue = Boolean(id % 2);
   const numberRange = { min: 1000, max: 100000 };
+  const { boardId, title: boardTitle } = articleCategories[id % 5];
   return {
     title: `${id}번째 게시글`,
     content: mockHtmlString,
@@ -52,7 +53,8 @@ export const createMockArticle = (id: number): ArticleDetail => {
     postId: id,
     anonymity: booleanValue,
     author: userInfo.certifiedSsafyUserInfo,
-    category: articleCategories[id % 5],
+    boardId,
+    boardTitle,
   };
 };
 
@@ -74,6 +76,7 @@ export const createMockArticleSummary = (id: number): ArticleSummary => {
   const anonymity = Boolean(id % 2);
   const numberRange = { min: 1000, max: 100000 };
   return {
+    boardId: 1,
     title: faker.lorem.sentence(4),
     content: ` 
       <p>

@@ -15,11 +15,7 @@ interface UseArticleMenuModalParams {
 export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
   const { openModal, closeModal } = useModal();
   const { articleDetail } = params;
-  const {
-    mine,
-    postId: articleId,
-    category: { boardId: categoryId },
-  } = articleDetail;
+  const { mine, postId: articleId, boardId: categoryId } = articleDetail;
   const router = useRouter();
 
   const onRemoveSuccess = () => {

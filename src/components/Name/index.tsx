@@ -29,6 +29,7 @@ const Name = (props: NameProps) => {
   } = userInfo;
 
   const showBadge =
+    !anonymous &&
     ssafyMember &&
     ssafyInfo?.certificationState === CertificationState.CERTIFIED;
 

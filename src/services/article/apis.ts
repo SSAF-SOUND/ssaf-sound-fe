@@ -11,13 +11,15 @@ import { isAxiosError } from 'axios';
 import { endpoints } from '~/react-query/common';
 import { getErrorResponse, privateAxios, publicAxios } from '~/utils';
 
-export type GetArticleCategoriesApiData = ApiSuccessResponse<ArticleCategory[]>;
+export type GetArticleCategoriesApiData = ApiSuccessResponse<{
+  boards: ArticleCategory[];
+}>;
 
 export const getArticleCategories = () => {
   const endpoint = endpoints.articles.categories();
   return publicAxios
     .get<GetArticleCategoriesApiData>(endpoint)
-    .then((res) => res.data.data);
+    .then((res) => res.data.data.boards);
 };
 
 export interface CreateArticleImagePayload {
@@ -87,11 +89,17 @@ export interface UpdateArticleParams
   articleId: number;
 }
 
+export type UpdateArticleBody = CreateArticleBody;
+
 export const updateArticle = (params: UpdateArticleParams) => {
-  const { articleId, ...body } = params;
+  const { articleId, anonymous, ...restParams } = params;
+  const body: UpdateArticleBody = {
+    ...restParams,
+    anonymity: anonymous,
+  };
 
   const endpoint = endpoints.articles.detail(articleId);
-  return privateAxios.put(endpoint, body).then((res) => res.data);
+  return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
 const createArticleDetailErrorData = (
@@ -209,5 +217,20 @@ export const getMyArticles = (params: GetMyArticlesParams) => {
   const endpoint = endpoints.articles.mine({ cursor, size });
   return privateAxios
     .get<GetMyArticlesApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
+export interface GetMyScrapedArticlesParams {
+  cursor?: number;
+  size?: number;
+}
+
+export type GetMyScrapedArticlesApiData = GetArticlesApiData;
+
+export const getMyScrapedArticles = (params: GetMyScrapedArticlesParams) => {
+  const { cursor = defaultCursor, size = defaultSize } = params;
+  const endpoint = endpoints.articles.myScraped({ cursor, size });
+  return privateAxios
+    .get<GetMyScrapedArticlesApiData>(endpoint)
     .then((res) => res.data.data);
 };

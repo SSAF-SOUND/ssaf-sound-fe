@@ -32,7 +32,7 @@ export const getRecruitComments = restSuccess<
   ),
   {
     data: {
-      comments: recruitCommentDetails,
+      recruitComments: recruitCommentDetails,
     },
   }
 );

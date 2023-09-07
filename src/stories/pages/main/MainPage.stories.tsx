@@ -6,9 +6,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 import {
+  getEmptyLunchMenusWithPollStatus,
   getHotArticles,
   getLunchMenusWithPollStatus,
-  getLunchMenusWithPollStatusNotExistLunchMenusError,
 } from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
 import MainPage from '~/pages/main';
@@ -119,7 +119,7 @@ export const NotExistData: MainPageStory = {
   parameters: {
     msw: {
       handlers: {
-        lunch: [getLunchMenusWithPollStatusNotExistLunchMenusError],
+        lunch: [getEmptyLunchMenusWithPollStatus],
         article: [],
         recruit: [],
       },

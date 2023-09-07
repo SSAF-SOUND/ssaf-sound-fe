@@ -31,10 +31,10 @@ export enum CertificationState {
 }
 
 export enum SsafyTrack {
-  PYTHON = 'python',
-  EMBEDDED = 'embedded',
-  JAVA = 'java',
-  MOBILE = 'mobile',
+  PYTHON = 'Python',
+  EMBEDDED = 'Embedded',
+  JAVA = 'Java',
+  MOBILE = 'Mobile',
 }
 
 export interface UserBasicInfo {

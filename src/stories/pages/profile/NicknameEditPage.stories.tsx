@@ -2,7 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { useEffect } from 'react';
 
-import { updateNickname, validateNickname } from '~/mocks/handlers/member';
+import {
+  updateNickname,
+  validateNickname,
+  validateNicknameRespondWithDuplicatedNickname,
+} from '~/mocks/handlers/member';
 import { userInfo } from '~/mocks/handlers/member/data';
 import MyInfoSettingsNicknameEditPage from '~/pages/profile/myinfo-settings/nickname/edit';
 import { useSetMyInfo } from '~/services/member';
@@ -33,7 +37,7 @@ export default meta;
 
 type NicknameEditPageStory = StoryObj<typeof MyInfoSettingsNicknameEditPage>;
 
-export const Default: NicknameEditPageStory = {
+export const Success: NicknameEditPageStory = {
   decorators: [
     (Story) => {
       const setMyInfo = useSetMyInfo();
@@ -44,4 +48,15 @@ export const Default: NicknameEditPageStory = {
       return <Story />;
     },
   ],
+};
+
+export const DuplicatedNickname: NicknameEditPageStory = {
+  ...Success,
+  parameters: {
+    msw: {
+      handlers: {
+        member: [validateNicknameRespondWithDuplicatedNickname],
+      },
+    },
+  },
 };
