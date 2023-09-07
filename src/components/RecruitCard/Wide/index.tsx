@@ -16,7 +16,6 @@ import { flex, palettes } from '~/styles/utils';
 import RecruitParticipants from './RecruitParticipants';
 import RecruitTitle from './RecruitTitle';
 import WithMyBadge from './WithMyBadge';
-import RecruitCardSkills from '../Common/RecruitSkills';
 
 export interface RecruitCardProps {
   category?: RecruitCategoryType;
@@ -51,7 +50,9 @@ const RecruitCardImpl = (props: RecruitCardProps) => {
     recruitId,
     title,
     recruitEnd,
-    skills,
+
+    // ----
+
     participants,
     withBadge = false,
     withMessage,

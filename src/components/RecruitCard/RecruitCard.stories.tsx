@@ -19,7 +19,7 @@ export const Default = (props: {
 }) => {
   return (
     <RecruitCard
-      recruitSummary={RecruitData.recruitSummary}
+      {...RecruitData.recruitSummary}
       category={props.category}
       withBadge={props.withBadge}
     />
@@ -28,7 +28,7 @@ export const Default = (props: {
 
 export const WithMessage = () => {
   return (
-    <RecruitCard recruitSummary={RecruitData.recruitSummary} withMessage={true}>
+    <RecruitCard {...RecruitData.recruitSummary} withMessage={true}>
       <p>메세지 부분은 진행중입니다!</p>
     </RecruitCard>
   );

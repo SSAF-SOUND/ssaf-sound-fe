@@ -1,5 +1,5 @@
 import type { UserInfo } from '~/services/member';
-import type { LimitType, SkillsType } from '~/services/recruit';
+import type { LimitType, RecruitSkills } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
@@ -13,7 +13,7 @@ export interface RecruitMeta {
   recruitStart: string;
   recruitEnd: string;
   limits: LimitType[];
-  skills: SkillsType[];
+  skills: RecruitSkills[];
 }
 
 export interface RecruitMetaProps {

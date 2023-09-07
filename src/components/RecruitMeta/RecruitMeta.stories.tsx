@@ -42,7 +42,7 @@ export const Expanded = () => {
     skills,
     // ---
 
-    userInfo,
+    author,
   } = RecruitData.recruitDetail.project;
 
   const recruitMetaData = {
@@ -55,7 +55,7 @@ export const Expanded = () => {
   return (
     <RecruitMeta
       recruitMeta={recruitMetaData}
-      userInfo={userInfo}
+      userInfo={author}
       title={title}
     />
   );

@@ -82,7 +82,7 @@ export interface RecruitDetail {
 
 // recruitDetail에 category 필요
 
-interface RecruitMembers {
+export interface RecruitMembers {
   limit: number;
   members: UserInfo[];
 }
@@ -232,10 +232,66 @@ export const getRecruitApplicants = (recruitId: number) => {
     .then((res) => res.data.data);
 };
 
+// ---------------------------------
+
+export const getRecruitApplicationDetail = (recruitApplicationId: number) => {
+  const endpoint = endpoints.recruit.application.detail(recruitApplicationId);
+
+  return privateAxios
+    .get<GetRecruitApplicationDetailApiData>(endpoint)
+    .then((res) => res.data.data);
+};
+
+interface RecruitApplicationDetail {
+  recruitId: number;
+  recruitApplicationId: number;
+  recruitType: RecruitParts;
+  matchStatus: MatchStatus;
+  author: UserInfo;
+  reply: string;
+  question: string;
+  liked: boolean;
+}
+export type GetRecruitApplicationDetailApiData =
+  ApiSuccessResponse<RecruitApplicationDetail>;
+
+// ------------------------------
+
+export const postRecruitApplicationApprove = (recruitApplicationId: number) => {
+  const endpoint = endpoints.recruit.application.approve(recruitApplicationId);
+  const body = {
+    recruitApplicationId,
+    matchStatus: 'DONE',
+  };
+  return privateAxios.post(endpoint, body).then((res) => res.data.data);
+};
+
+export const postRecruitApplicationReject = (recruitApplicationId: number) => {
+  const endpoint = endpoints.recruit.application.reject(recruitApplicationId);
+  const body = {
+    recruitApplicationId,
+    matchStatus: 'DONE',
+  };
+  return privateAxios.post(endpoint, body).then((res) => res.data.data);
+};
+
+export const postRecruitApplicationCancel = (recruitApplicationId: number) => {
+  const endpoint = endpoints.recruit.application.cancel(recruitApplicationId);
+  const body = {
+    recruitApplicationId,
+    matchStatus: 'CANCEL',
+  };
+  return privateAxios.post(endpoint, body).then((res) => res.data.data);
+};
+
 export const recruitAPI = {
   getRecruits,
   getRecruitDetail,
   getRecruitMembers,
   getRecruitApplicants,
   postRecruitApply,
+  getRecruitApplicationDetail,
+  postRecruitApplicationApprove,
+  postRecruitApplicationReject,
+  postRecruitApplicationCancel,
 };

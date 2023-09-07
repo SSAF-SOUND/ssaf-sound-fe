@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { getRecruitThemeByCategory } from '~/services/recruit';
+import { routes } from '~/utils';
 
 import { CircleButton } from '../Common';
 
@@ -18,7 +19,7 @@ export const RecruitCreateButton = (props: { category: RecruitCategory }) => {
   }, [category]);
 
   return (
-    <Link href={'/recruit/new'}>
+    <Link href={routes.recruit.new()}>
       <CircleButton
         name="pencil.plus"
         theme={getRecruitThemeByCategory(value)}

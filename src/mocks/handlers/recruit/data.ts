@@ -202,6 +202,29 @@ const recruitApplicants: GetRecruitApplicantsApiData['data'] = {
   },
 };
 
+const RecruitApplicationDetail = {
+  recruitId: 1,
+  recruitApplicationId: 1,
+  recruitType: '프론트엔드',
+  matchStatus: 'WAITING_REGISTER_APPROVE',
+  author: {
+    memberId: 100,
+    nickname: 'TIM',
+    memberRole: 'user',
+    ssafyMember: true,
+    isMajor: true,
+    ssafyInfo: {
+      semester: 9,
+      campus: '서울',
+      certificationState: 'CERTIFIED',
+      majorTrack: 'Java',
+    },
+  },
+  reply: '취업 준비를 위해서 신청하게되었습니다.',
+  question: '프로젝트에 참여하고자 하는 동기가 무엇인가요?',
+  liked: false,
+};
+
 export const RecruitData = {
   recruitDetail,
   recruitMocks,
@@ -209,4 +232,5 @@ export const RecruitData = {
   recruitMembers,
   RecruitScrap,
   recruitApplicants,
+  RecruitApplicationDetail,
 };

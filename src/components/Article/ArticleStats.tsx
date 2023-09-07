@@ -96,6 +96,7 @@ interface InterestButtonProps {
   pressed: boolean;
   onClick?: () => void;
   disabled: boolean;
+  theme?: 'primary' | 'secondary';
 }
 
 const LikeButton = (props: InterestButtonProps) => {
@@ -116,18 +117,22 @@ const LikeButton = (props: InterestButtonProps) => {
   );
 };
 
-const ScrapButton = (props: InterestButtonProps) => {
-  const { pressed, ...restProps } = props;
+export const ScrapButton = (props: InterestButtonProps) => {
+  const { pressed, theme = 'primary', ...restProps } = props;
   return (
     <IconButton
-      theme="primary"
+      theme={theme}
       css={iconContainerCss}
       size={iconButtonSize}
       {...restProps}
     >
       <Icon
         name={pressed ? 'bookmark' : 'bookmark.outline'}
-        color={palettes.primary.default}
+        color={
+          theme === 'primary'
+            ? palettes.primary.default
+            : palettes.secondary.default
+        }
         size={iconSize}
       />
     </IconButton>

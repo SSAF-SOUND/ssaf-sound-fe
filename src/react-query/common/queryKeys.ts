@@ -59,6 +59,12 @@ export const queryKeys = {
       recruitId,
       'applicants',
     ],
+    applicationDetail: (recruitId: number) => [
+      ...queryKeys.auth(),
+      'recruits',
+      recruitId,
+      'applicationDetail',
+    ],
   },
   lunch: {
     self: () => [...queryKeys.auth(), 'lunch'],
@@ -186,7 +192,16 @@ export const endpoints = {
       self: () => `/recruit-applications`,
       applicants: (recruitId: number) =>
         `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+      detail: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
+      approve: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.self()}/${recruitApplicationId}/approve` as const,
+      reject: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.self()}/${recruitApplicationId}/reject` as const,
+      cancel: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.self()}/${recruitApplicationId}/cancel` as const,
     },
+
     list: (params: Partial<RecruitParams> & { cursor: number | null }) => {
       const {
         recruitTypes = [],

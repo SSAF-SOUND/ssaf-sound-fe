@@ -15,6 +15,7 @@ import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConver
 import { flex, palettes } from '~/styles/utils';
 import { concat, scrollUpBy } from '~/utils';
 
+import { EmptyCardFallback } from './EmptyCardFallback';
 import { HalfLoadingSpinner } from '../Common';
 
 const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
@@ -41,7 +42,7 @@ export const RecruitCards = ({ category }: { category: RecruitCategory }) => {
 
   const cards = data?.pages.map((pages) => pages.recruits).reduce(concat);
 
-  if (cards?.length === 0) return <div>조건에 맞는 카드가 없어요</div>;
+  if (cards?.length === 0) return <EmptyCardFallback category={category} />;
   if (isLoading)
     return (
       <HalfLoadingSpinner

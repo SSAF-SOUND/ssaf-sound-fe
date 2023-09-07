@@ -42,7 +42,7 @@ export const getRecruitDetail = restSuccess<RecruitDetail>(
   // @ts-ignore
   composeUrls(API_URL, endpoints.recruit.detail(':recruitId')),
   {
-    data: RecruitData.recruitDetail.study,
+    data: RecruitData.recruitDetail.project,
   }
 );
 
@@ -92,6 +92,55 @@ export const getRecruitApplicants = restSuccess(
   }
 );
 
+const getRecruitApplicationDetail = restSuccess(
+  'get',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.application.detail(':recruitId')),
+  {
+    data: RecruitData.RecruitApplicationDetail,
+  }
+);
+
+export const postRecruitApplicationApprove = restSuccess(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.application.approve(':recruitId')),
+  {
+    data: {
+      recruitApplicationId: 1,
+      matchStatus: 'DONE',
+    },
+  }
+);
+
+export const postRecruitApplicationReject = restSuccess(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.application.reject(':recruitId')),
+  {
+    data: {
+      recruitApplicationId: 1,
+      matchStatus: 'REJECT',
+    },
+  }
+);
+
+export const postRecruitApplicationCancel = restSuccess(
+  'post',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.application.cancel(':recruitId')),
+  {
+    data: {
+      recruitApplicationId: 1,
+      matchStatus: 'CANCEL',
+    },
+  }
+);
+
 export const recruitHandlers = [
   getRecruitDetail,
   getRecruits,
@@ -100,4 +149,8 @@ export const recruitHandlers = [
   postRecruitScrap,
   postRecruitApply,
   getRecruitApplicants,
+  getRecruitApplicationDetail,
+  postRecruitApplicationReject,
+  postRecruitApplicationApprove,
+  postRecruitApplicationCancel,
 ];
