@@ -173,38 +173,6 @@ export const endpoints = {
     detail: (recruitId: number) => `/recruits/${recruitId}/detail` as const,
     scrap: (recruitId: number) => `/recruits/${recruitId}/scrap` as const,
     apply: (recruitId: number) => `/recruits/${recruitId}/application` as const,
-    list: (params: Partial<RecruitParams> & { cursor: number | null }) => {
-      const {
-        recruitTypes = [],
-        skills = [],
-        keyword = '',
-        // -------------
-        category = 'project',
-        isFinished = false,
-        cursor,
-      } = params || {};
-
-      const defaultQueries = {
-        size: (10).toString(),
-        category: 'project',
-        isFinished: 'false',
-      };
-
-      const searchParams = new URLSearchParams(defaultQueries);
-
-      if (keyword?.length) searchParams.set('keyword', keyword);
-      if (skills?.length)
-        skills.forEach((skill) => searchParams.append('skills', skill));
-
-      if (recruitTypes?.length)
-        recruitTypes.forEach((recruitType) =>
-          searchParams.append('recruitType', recruitType)
-        );
-      if (category) searchParams.set('category', category);
-      if (isFinished) searchParams.set('isFinished', isFinished.toString());
-      if (cursor) searchParams.set('cursor', cursor.toString());
-      return `/recruits?${searchParams.toString()}`;
-    },
   },
   recruitComments: {
     list: (recruitId: number) => `/recruits/${recruitId}/comments` as const,
