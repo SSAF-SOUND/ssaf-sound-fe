@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { useEffect } from 'react';
 
-import { SelectBox } from '~/components/Common';
+import { SelectBox } from '~/components/Common/SelectBox';
 import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
 import { extractNumericText } from '~/services/member';
 import { flex, fontCss } from '~/styles/utils';

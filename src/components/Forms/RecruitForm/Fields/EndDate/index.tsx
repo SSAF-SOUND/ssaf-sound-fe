@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import dayjs from 'dayjs';
 import { useFormState, useWatch } from 'react-hook-form';
 
-import { DatePicker } from '~/components/Common';
+import { DatePicker } from '~/components/Common/DatePicker';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { RecruitCategoryName } from '~/services/recruit';
 import { flex } from '~/styles/utils';

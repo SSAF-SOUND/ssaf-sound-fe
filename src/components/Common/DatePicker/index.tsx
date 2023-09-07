@@ -55,7 +55,7 @@ const navigationHeight = 44;
 const formatDay: CalendarProps['formatDay'] = (locale, date) =>
   date.getDate().toString();
 
-const DatePicker = (props: DatePickerProps) => {
+export const DatePicker = (props: DatePickerProps) => {
   const { theme = 'primary', ...restProps } = props;
 
   return (
@@ -85,8 +85,6 @@ const DatePicker = (props: DatePickerProps) => {
     </div>
   );
 };
-
-export default DatePicker;
 
 const selfCss = css(inlineFlex('center', 'center'));
 

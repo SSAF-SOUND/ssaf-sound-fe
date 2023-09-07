@@ -5,8 +5,8 @@ import { isBoolean } from 'is-what';
 import { useId } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { SelectBox } from '~/components/Common';
 import Label from '~/components/Common/Label';
+import { SelectBox } from '~/components/Common/SelectBox';
 import { useMyInfoEditFormContext } from '~/components/Forms/MyInfoEditForm/utils';
 import { extractNumericText } from '~/services/member';
 import { useCampuses, useYears } from '~/services/meta';

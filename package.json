@@ -51,7 +51,7 @@
     "react-textarea-autosize": "^8.5.2",
     "react-virtuoso": "^4.4.2",
     "react-zoom-pan-pinch": "^3.1.0",
-    "string-strip-html": "^13.4.2",
+    "striptags": "^3.2.0",
     "unique-names-generator": "^4.7.1"
   },
   "packageManager": "yarn@3.5.1",

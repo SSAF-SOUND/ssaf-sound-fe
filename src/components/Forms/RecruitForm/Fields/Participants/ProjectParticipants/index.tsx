@@ -6,7 +6,8 @@ import type {
 import { css } from '@emotion/react';
 import { useFieldArray, useFormState } from 'react-hook-form';
 
-import { Button, Icon, SelectBox } from '~/components/Common';
+import { Button, Icon } from '~/components/Common';
+import { SelectBox } from '~/components/Common/SelectBox';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import {
   maxParticipantsCount,

@@ -6435,15 +6435,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash-es@npm:^4.17.8":
-  version: 4.17.8
-  resolution: "@types/lodash-es@npm:4.17.8"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 36356169a1862e2a1b09cde3b11b3790ab2c2e477778d70f825b216479ea93bd1a960767dbefcd00d6604312170a1b15209f0fa1c35ddf8861bc233c9b0d3e56
-  languageName: node
-  linkType: hard
-
 "@types/lodash.memoize@npm:^4.1.7":
   version: 4.1.7
   resolution: "@types/lodash.memoize@npm:4.1.7"
@@ -8844,15 +8835,6 @@ __metadata:
   version: 4.6.0
   resolution: "co@npm:4.6.0"
   checksum: 5210d9223010eb95b29df06a91116f2cf7c8e0748a9013ed853b53f362ea0e822f1e5bb054fb3cefc645239a4cf966af1f6133a3b43f40d591f3b68ed6cf0510
-  languageName: node
-  linkType: hard
-
-"codsen-utils@npm:^1.6.1":
-  version: 1.6.1
-  resolution: "codsen-utils@npm:1.6.1"
-  dependencies:
-    rfdc: ^1.3.0
-  checksum: fa948db8e1dc9fc06c50262dfd9f9609091a05388dd16ac921e841e3d2f20dd4b2e14575944d249b4885bc41bf07b9b310211fa6c02d6d1818dd8a00f745fa29
   languageName: node
   linkType: hard
 
@@ -12069,13 +12051,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-entities@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "html-entities@npm:2.4.0"
-  checksum: 25bea32642ce9ebd0eedc4d24381883ecb0335ccb8ac26379a0958b9b16652fdbaa725d70207ce54a51db24103436a698a8e454397d3ba8ad81460224751f1dc
-  languageName: node
-  linkType: hard
-
 "html-escaper@npm:^2.0.0":
   version: 2.0.2
   resolution: "html-escaper@npm:2.0.2"
@@ -14443,13 +14418,6 @@ __metadata:
   dependencies:
     p-locate: ^5.0.0
   checksum: 72eb661788a0368c099a184c59d2fee760b3831c9c1c33955e8a19ae4a21b4116e53fa736dc086cdeb9fce9f7cc508f2f92d2d3aae516f133e16a2bb59a39f5a
-  languageName: node
-  linkType: hard
-
-"lodash-es@npm:^4.17.21":
-  version: 4.17.21
-  resolution: "lodash-es@npm:4.17.21"
-  checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
   languageName: node
   linkType: hard
 
@@ -16889,45 +16857,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ranges-apply@npm:^7.0.11":
-  version: 7.0.11
-  resolution: "ranges-apply@npm:7.0.11"
-  dependencies:
-    ranges-merge: ^9.0.11
-    tiny-invariant: ^1.3.1
-  checksum: f92727020b564d3255d9dac964c7242d8ef155d55aff39a5e1fd52008db41c1bd635d0fa348657d35d489b87347244ffddad5b0ed0ee7c42bff1d534c073700c
-  languageName: node
-  linkType: hard
-
-"ranges-merge@npm:^9.0.11":
-  version: 9.0.11
-  resolution: "ranges-merge@npm:9.0.11"
-  dependencies:
-    ranges-push: ^7.0.11
-    ranges-sort: ^6.0.9
-  checksum: a393718ffa15ab5058fa8e853e88edf5f4ca6ef24513c479f94b29850609a5513408f60bdc236c65b2b5a8d7d10fd05481e3d16655a81b6cb6905f41ec650f82
-  languageName: node
-  linkType: hard
-
-"ranges-push@npm:^7.0.11":
-  version: 7.0.11
-  resolution: "ranges-push@npm:7.0.11"
-  dependencies:
-    codsen-utils: ^1.6.1
-    ranges-sort: ^6.0.9
-    string-collapse-leading-whitespace: ^7.0.6
-    string-trim-spaces-only: ^5.0.8
-  checksum: 8f35f5d5d97237cb2d9f4709cf86b093832ed0199bc490b2ad93a225bdf49487d2c481843f8e440d004d4044348865bdd7d7599fa32d26737bfad0cc83be75c0
-  languageName: node
-  linkType: hard
-
-"ranges-sort@npm:^6.0.9":
-  version: 6.0.9
-  resolution: "ranges-sort@npm:6.0.9"
-  checksum: fb0381d0d815ad7fa106cdd6195fe171bd0d835bd585a4c5c40e7204257cb096a0eb71540c67f3e026f34b141187843e48be9e93978733ffa02765f86ac745d1
-  languageName: node
-  linkType: hard
-
 "raw-body@npm:2.5.1":
   version: 2.5.1
   resolution: "raw-body@npm:2.5.1"
@@ -17729,13 +17658,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rfdc@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "rfdc@npm:1.3.0"
-  checksum: fb2ba8512e43519983b4c61bd3fa77c0f410eff6bae68b08614437bc3f35f91362215f7b4a73cbda6f67330b5746ce07db5dd9850ad3edc91271ad6deea0df32
-  languageName: node
-  linkType: hard
-
 "rimraf@npm:^2.6.1":
   version: 2.7.1
   resolution: "rimraf@npm:2.7.1"
@@ -18529,7 +18451,7 @@ __metadata:
     react-zoom-pan-pinch: ^3.1.0
     sharp: ^0.32.4
     storybook: ^7.0.27
-    string-strip-html: ^13.4.2
+    striptags: ^3.2.0
     tsconfig-paths-webpack-plugin: ^4.0.1
     type-fest: ^4.0.0
     typescript: 5.0.4
@@ -18695,23 +18617,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-collapse-leading-whitespace@npm:^7.0.6":
-  version: 7.0.6
-  resolution: "string-collapse-leading-whitespace@npm:7.0.6"
-  checksum: 15bc5aca02f657205d07d6fb2cb30693515afe9b47a82e05c78c4176dad4bb0151eda80bd18a416e0211ba87f82511937e4c3e8d784865e368e0ae332e17ce61
-  languageName: node
-  linkType: hard
-
-"string-left-right@npm:^6.0.14":
-  version: 6.0.14
-  resolution: "string-left-right@npm:6.0.14"
-  dependencies:
-    codsen-utils: ^1.6.1
-    rfdc: ^1.3.0
-  checksum: 020f70630c344f00e5813956b9046e40ea7dd8e62f1a2277e7c6b69cb9928f1d82e3204ed36c7c6041aa92b7557c1dba592283ed13ce14fc6379cefbc43d3890
-  languageName: node
-  linkType: hard
-
 "string-length@npm:^4.0.1":
   version: 4.0.2
   resolution: "string-length@npm:4.0.2"
@@ -18729,28 +18634,6 @@ __metadata:
     char-regex: ^2.0.0
     strip-ansi: ^7.0.1
   checksum: 71f73b8c8a743e01dcd001bcf1b197db78d5e5e53b12bd898cddaf0961be09f947dfd8c429783db3694b55b05cb5a51de6406c5085ff1aaa10c4771440c8396d
-  languageName: node
-  linkType: hard
-
-"string-strip-html@npm:^13.4.2":
-  version: 13.4.2
-  resolution: "string-strip-html@npm:13.4.2"
-  dependencies:
-    "@types/lodash-es": ^4.17.8
-    codsen-utils: ^1.6.1
-    html-entities: ^2.4.0
-    lodash-es: ^4.17.21
-    ranges-apply: ^7.0.11
-    ranges-push: ^7.0.11
-    string-left-right: ^6.0.14
-  checksum: d9c8a92e5abe180c2a3cfd5d2b9ce32dcb6019166a1993756babbb1b41de04cddec497a3fbac619bbd7857ca198a0d3961244a578f3e9a29617939ba7689fb34
-  languageName: node
-  linkType: hard
-
-"string-trim-spaces-only@npm:^5.0.8":
-  version: 5.0.8
-  resolution: "string-trim-spaces-only@npm:5.0.8"
-  checksum: 571158f5f2af3d22ebe9b71743643a21d69466a8c530947363247f53396584ed061d806764bbf6797c4425ae38d399c303af6f3b5095c1662f93e270748738c7
   languageName: node
   linkType: hard
 
@@ -18909,6 +18792,13 @@ __metadata:
   version: 2.0.1
   resolution: "strip-json-comments@npm:2.0.1"
   checksum: 1074ccb63270d32ca28edfb0a281c96b94dc679077828135141f27d52a5a398ef5e78bcf22809d23cadc2b81dfbe345eb5fd8699b385c8b1128907dec4a7d1e1
+  languageName: node
+  linkType: hard
+
+"striptags@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "striptags@npm:3.2.0"
+  checksum: 1b1f127ab46394665bd4f4dc3dc10f5f98c012cbdea93a68b10d78693671e98efc9ae7609f546af997ae0a02b81a5c9b7b916fa119482c31741406cdabaebf3b
   languageName: node
   linkType: hard
 
@@ -19244,13 +19134,6 @@ __metadata:
   dependencies:
     setimmediate: ^1.0.4
   checksum: ec37ae299066bef6c464dcac29c7adafba1999e7227a9bdc4e105a459bee0f0b27234a46bfd7ab4041da79619e06a58433472867a913d01c26f8a203f87cee70
-  languageName: node
-  linkType: hard
-
-"tiny-invariant@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "tiny-invariant@npm:1.3.1"
-  checksum: 872dbd1ff20a21303a2fd20ce3a15602cfa7fcf9b228bd694a52e2938224313b5385a1078cb667ed7375d1612194feaca81c4ecbe93121ca1baebe344de4f84c
   languageName: node
   linkType: hard
 

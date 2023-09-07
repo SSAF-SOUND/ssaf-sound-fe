@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { SelectBox } from '~/components/Common';
+import { SelectBox } from '~/components/Common/SelectBox';
 import { useMyInfoEditFormContext } from '~/components/Forms/MyInfoEditForm/utils';
 import { useTracks } from '~/services/meta';
 import { capitalize } from '~/utils';

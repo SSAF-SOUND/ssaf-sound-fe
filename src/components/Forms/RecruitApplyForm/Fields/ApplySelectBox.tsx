@@ -3,7 +3,7 @@ import type { SelectBoxProps } from '~/components/Common/SelectBox';
 
 import { css } from '@emotion/react';
 
-import { SelectBox } from '~/components/Common';
+import { SelectBox } from '~/components/Common/SelectBox';
 
 import { ApplyQuestion } from './ApplyQuestion';
 import { LabelWrapper } from './LabelWrapper';

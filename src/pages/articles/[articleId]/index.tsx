@@ -11,7 +11,6 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import { stripHtml } from 'string-strip-html';
 
 import { Article } from '~/components/Article';
 import ArticleComment from '~/components/ArticleComment';
@@ -36,7 +35,7 @@ import {
   titleBarHeight,
 } from '~/styles/utils';
 import { handleAxiosError, routes } from '~/utils';
-import { replaceMultipleSpacesWithSingle } from '~/utils/replaceMultipleSpacesWithSingle';
+import { stripHtmlTags } from '~/utils/stripHtmlTags';
 
 interface ArticleDetailPageProps
   extends InferGetServerSidePropsType<typeof getServerSideProps> {}
@@ -64,9 +63,8 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
     articleDetail.category;
 
   const metaTitle = articleDetail.title;
-  const metaDescription = replaceMultipleSpacesWithSingle(
-    stripHtml(articleDetail.content).result
-  );
+  const metaDescription = stripHtmlTags(articleDetail.content);
+
   const pageUrl = routes.articles.detail(articleDetail.postId);
 
   return (

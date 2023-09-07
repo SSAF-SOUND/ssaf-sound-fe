@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useId, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { SelectBox } from '~/components/Common';
+import { SelectBox } from '~/components/Common/SelectBox';
 import { useStudentCertificationFormContext } from '~/components/Forms/StudentCertificationForm/utils';
 import { years } from '~/services/member';
 import { flex, fontCss, palettes } from '~/styles/utils';
