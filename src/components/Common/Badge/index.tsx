@@ -36,8 +36,8 @@ const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
     outline: `3px solid ${themeColorVars.mainColor.var}`,
   },
   '&[data-state="on"]': {
-    background: themeColorVars.mainDarkColor.var,
-    borderColor: themeColorVars.mainDarkColor.var,
+    background: themeColorVars.mainDarkestColor.var,
+    borderColor: themeColorVars.mainDarkestColor.var,
     color: palettes.white,
   },
 });
