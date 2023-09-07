@@ -42,7 +42,7 @@ export const getRecruitDetail = restSuccess<RecruitDetail>(
   // @ts-ignore
   composeUrls(API_URL, endpoints.recruit.detail(':recruitId')),
   {
-    data: RecruitData.recruitDetail.study,
+    data: RecruitData.recruitDetail.project,
   }
 );
 
