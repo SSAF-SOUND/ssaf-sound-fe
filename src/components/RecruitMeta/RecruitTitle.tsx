@@ -6,7 +6,7 @@ interface RecruitTitleProps {
   title: string;
 }
 
-const RecruitTitle = (props: RecruitTitleProps) => {
+export const RecruitTitle = (props: RecruitTitleProps) => {
   const { title } = props;
   return <h3 css={selfCss}>{title}</h3>;
 };

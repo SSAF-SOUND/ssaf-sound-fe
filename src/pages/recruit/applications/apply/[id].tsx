@@ -32,7 +32,7 @@ const RecruitApplyPage = (props: { recruitApplicationId: number }) => {
     isLoading: isApplicationLoading,
     isError: isApplicationError,
   } = useRecruitApplicationDetail(recruitApplicationId);
-  if (isApplicationLoading) return <DefaultFullPageLoader />;
+
   const {
     data: recruitDetailData,
     isLoading: isRecruitDetailLoading,

@@ -1,11 +1,8 @@
 import type { RecruitParams } from './apis';
 
-import { useRouter } from 'next/router';
-
 import { useMutation, useQuery, useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { routes } from '~/utils';
 
 import {
   postRecruitApplicationCancel,
@@ -29,7 +26,7 @@ export const useRecruitDetail = (recruitId: number, enabled = true) => {
   return useQuery({
     queryKey: queryKeys.recruit.detail(recruitId),
     queryFn: () => getRecruitDetail(recruitId),
-    enabled,
+    enabled: enabled,
   });
 };
 

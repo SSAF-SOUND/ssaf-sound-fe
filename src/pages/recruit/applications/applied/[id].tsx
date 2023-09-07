@@ -21,7 +21,7 @@ import {
 import { flex, fontCss, palettes } from '~/styles/utils';
 import { handleAxiosError, paramsToNumber, routes } from '~/utils';
 
-const Applied = (props: any) => {
+const Applied = (props: { recruitApplicationId: number }) => {
   const router = useRouter();
   const { recruitApplicationId } = props;
   const {

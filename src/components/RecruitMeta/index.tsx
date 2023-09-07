@@ -1,5 +1,5 @@
 import type { UserInfo } from '~/services/member';
-import type { LimitType, RecruitSkills, SkillsType } from '~/services/recruit';
+import type { LimitType, RecruitSkills } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 

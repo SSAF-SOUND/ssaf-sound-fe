@@ -16,6 +16,7 @@ interface RecruitDetailOptionToggleProps extends Omit<BadgeProps, 'theme'> {
 }
 
 export const RecruitDetailOptionToggle = forwardRef(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (props: RecruitDetailOptionToggleProps, ref: Ref<HTMLButtonElement>) => {
     const { category = 'project', isActive = false, ...restProps } = props;
     return (
