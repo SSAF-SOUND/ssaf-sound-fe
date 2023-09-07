@@ -47,7 +47,7 @@ const RecruitTable = (props: RecruitTableProps) => {
           <Table.RowHead {...PROJECT_INFO.stack} />
           <Table.RowData>
             {skills.map((skill) => (
-              <SkillIcon name={skill.name} key={skill.skillId} size={21} />
+              <SkillIcon name={skill.name} key={skill.name} size={21} />
             ))}
           </Table.RowData>
         </Table.Row>

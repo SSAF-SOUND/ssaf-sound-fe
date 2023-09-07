@@ -1,15 +1,23 @@
+import type { RecruitCategory } from '~/services/recruit';
+
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
+import { getRecruitThemeByCategory } from '~/services/recruit';
 import { flex } from '~/styles/utils';
 import { removeQueryString } from '~/utils';
 
 import { Tabs } from '../Common';
 
-export const RecruitTabs = () => {
+export const RecruitTabs = ({
+  category = 'project',
+}: {
+  category: RecruitCategory;
+}) => {
   const router = useRouter();
 
+  const theme = getRecruitThemeByCategory(category);
   const { asPath } = router;
   return (
     <Tabs.Root defaultValue="projectInfo">
@@ -21,6 +29,7 @@ export const RecruitTabs = () => {
             value: 'projectInfo',
             variant: 'fit',
             css: triggerCss,
+            theme,
           }}
           linkProps={{
             href: {
@@ -38,6 +47,7 @@ export const RecruitTabs = () => {
             value: 'recruitInfo',
             variant: 'fit',
             css: triggerCss,
+            theme,
           }}
           linkProps={{
             href: {
