@@ -16,11 +16,11 @@ import {
   useInfiniteRecruits,
 } from '~/services/recruit';
 import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConvertor';
-import { flex, fontCss, palettes } from '~/styles/utils';
-import { concat, routes, scrollUpBy } from '~/utils';
+import { flex, palettes } from '~/styles/utils';
+import { concat, scrollUpBy } from '~/utils';
 
 import { EmptyCardFallback } from './EmptyCardFallback';
-import { Button, HalfLoadingSpinner, SsafyIcon, TrackSize } from '../Common';
+import { HalfLoadingSpinner } from '../Common';
 
 const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
   return <div css={listCss} {...props} ref={ref} />;
@@ -28,22 +28,7 @@ const List = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
 const listCss = css(flex('center', '', 'column', 15));
 
 List.displayName = 'RecruitCardList';
-// const NoSearchResults = (props: NoSearchResultsProps) => {
-//   const { keyword = '' } = props;
-//   return (
-//     <div css={selfCss}>
-//       <p css={[fontCss.style.R18, { marginBottom: 'max(20vh, 120px)' }]}>
-//         {keyword} 검색 결과
-//       </p>
-//       <div css={indicatorCss}>
-//         <SsafyIcon.Track size={TrackSize.LG2} />
-//         <AlertText size="lg" bold>
-//           검색된 결과가 없습니다.
-//         </AlertText>
-//       </div>
-//     </div>
-//   );
-// };
+
 export const RecruitCards = ({ category }: { category: RecruitCategory }) => {
   const router = useRouter();
 
