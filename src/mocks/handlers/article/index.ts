@@ -14,7 +14,6 @@ import { rest } from 'msw';
 
 import {
   articleCategories,
-  articleError,
   articles,
   createMockArticle,
 } from '~/mocks/handlers/article/data';
@@ -134,7 +133,7 @@ export const getArticleDetail = rest.get(
   (req, res, ctx) => {
     const params = req.params as { articleId: string };
     const articleId = Number(params.articleId);
-    const article = articles[Number(articleId)] || articleError;
+    const article = articles[Number(articleId)];
 
     return res(
       ctx.delay(500),
@@ -146,7 +145,10 @@ export const getArticleDetail = rest.get(
 export const getArticleDetailError = restError(
   'get',
   // @ts-ignore
-  composeUrls(API_URL, endpoints.articles.detail(':articleId'))
+  composeUrls(API_URL, endpoints.articles.detail(':articleId')),
+  {
+    message: '삭제된 게시글입니다.',
+  }
 );
 
 export const likeArticle = rest.post(

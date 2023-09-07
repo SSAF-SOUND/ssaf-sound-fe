@@ -47,16 +47,27 @@ export const signOut = () => {
   });
 };
 
+const getReissueRequestConfig = () => {
+  let config;
+
+  if (isDevMode) {
+    const devRefreshToken = webStorage.DEV__getRefreshToken();
+    if (devRefreshToken) {
+      config = {
+        headers: {
+          Authorization: `Bearer ${devRefreshToken}`,
+        },
+      };
+    }
+  }
+
+  return config;
+};
+
 export const reissueToken = () => {
   const endpoint = endpoints.auth.refresh();
   const tag = '[In reissueToken api request]';
-  const config = isDevMode
-    ? {
-        headers: {
-          Authorization: `Bearer ${webStorage.DEV__getRefreshToken()}`,
-        },
-      }
-    : {};
+  const config = getReissueRequestConfig();
 
   // 인터셉터 내부에서 무한루프가 발생할 수 있으니 publicAxios 사용
   return publicAxios.post(endpoint, null, config).catch(async (error) => {

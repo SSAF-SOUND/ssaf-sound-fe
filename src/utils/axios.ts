@@ -22,8 +22,9 @@ export const privateAxios = axios.create({
 });
 
 const devPlugin = (config: InternalAxiosRequestConfig) => {
-  if (isDevMode)
-    config.headers.Authorization = `Bearer ${webStorage.DEV__getAccessToken()}`;
+  const accessToken = webStorage.DEV__getAccessToken();
+  if (isDevMode && accessToken)
+    config.headers.Authorization = `Bearer ${accessToken}`;
 };
 
 const detectRequestInfiniteLoop = createRequestInfiniteLoopDetector(5, {
@@ -36,6 +37,13 @@ const detectRequestInfiniteLoop = createRequestInfiniteLoopDetector(5, {
     Sentry.captureException(new Error('Error: Detect request infinite loop'));
   },
 });
+
+const configurePublicAxiosInterceptors = () => {
+  publicAxios.interceptors.request.use((config) => {
+    devPlugin(config);
+    return config;
+  });
+};
 
 const configurePrivateAxiosInterceptors = (
   reissueToken: () => Promise<unknown>,
@@ -108,3 +116,5 @@ const configurePrivateAxiosInterceptors = (
 };
 
 configurePrivateAxiosInterceptors(reissueToken, [ResponseCode.EXPIRED_TOKEN]);
+
+configurePublicAxiosInterceptors();

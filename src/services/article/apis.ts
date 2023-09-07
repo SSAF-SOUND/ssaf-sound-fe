@@ -1,15 +1,8 @@
-import type {
-  ArticleCategory,
-  ArticleDetail,
-  ArticleDetailError,
-  ArticleSummary,
-} from './utils';
+import type { ArticleCategory, ArticleDetail, ArticleSummary } from './utils';
 import type { ApiSuccessResponse } from '~/types';
 
-import { isAxiosError } from 'axios';
-
 import { endpoints } from '~/react-query/common';
-import { getErrorResponse, privateAxios, publicAxios } from '~/utils';
+import { privateAxios, publicAxios } from '~/utils';
 
 export type GetArticleCategoriesApiData = ApiSuccessResponse<{
   boards: ArticleCategory[];
@@ -90,37 +83,11 @@ export const updateArticle = (params: UpdateArticleParams) => {
   return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
-const createArticleDetailErrorData = (
-  message: string,
-  isUnknownError = false
-): ArticleDetailError => {
-  return {
-    error: {
-      isUnknownError,
-      message,
-    },
-  };
-};
-
 export const getArticleDetail = (articleId: number) => {
   const endpoint = endpoints.articles.detail(articleId);
   return publicAxios
     .get<GetArticleDetailApiData>(endpoint)
-    .then((res) => res.data.data.post)
-    .catch((err) => {
-      if (isAxiosError(err)) {
-        const response = getErrorResponse(err);
-
-        if (response) {
-          return createArticleDetailErrorData(response.message);
-        }
-      }
-
-      return createArticleDetailErrorData(
-        '알 수 없는 에러가 발생했습니다.',
-        true
-      );
-    });
+    .then((res) => res.data.data.post);
 };
 
 export type LikeArticleApiData = ApiSuccessResponse<

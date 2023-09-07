@@ -46,13 +46,6 @@ export interface ArticleDetailWithoutAuthor {
 
 export type ArticleDetail = ArticleDetailWithoutAuthor & ArticleAuthor;
 
-export interface ArticleDetailError {
-  error: {
-    isUnknownError: boolean;
-    message: string;
-  };
-}
-
 export interface ArticleSummary {
   postId: number;
 
