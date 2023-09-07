@@ -1,4 +1,5 @@
 import type { CustomNextPage } from 'next/types';
+import type { RecruitFormProps } from '~/components/Forms/RecruitForm';
 
 import { useRouter } from 'next/router';
 
@@ -10,15 +11,25 @@ import {
   PageHeadingText,
 } from '~/components/Common';
 import RecruitForm from '~/components/Forms/RecruitForm';
+import {
+  convertSkillsObjectToArray,
+  invalidSubmitMessage,
+} from '~/components/Forms/RecruitForm/utils';
 import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
-import { reconfirmRecruitFormUnload } from '~/services/recruit';
+import {
+  reconfirmRecruitFormUnload,
+  RecruitCategoryName,
+  useCreateRecruit,
+} from '~/services/recruit';
 import { globalVars } from '~/styles/utils';
-import { routes } from '~/utils';
+import { customToast, handleAxiosError, routes } from '~/utils';
 
 const metaTitle = '리쿠르팅 등록';
 
 const RecruitCreatePage: CustomNextPage = () => {
   const router = useRouter();
+  const { mutateAsync: createRecruit } = useCreateRecruit();
+
   useUnloadReconfirmEffect();
 
   const onClickTitleBarClose = () => {
@@ -27,9 +38,31 @@ const RecruitCreatePage: CustomNextPage = () => {
     }
   };
 
-  const onValidSubmit = () => {
+  const onValidSubmit: RecruitFormProps['onValidSubmit'] = async (
+    formValues
+  ) => {
+    const { participants, category, skills, ...restFormValues } = formValues;
 
-  }
+    const isCategoryProject = category === RecruitCategoryName.PROJECT;
+    const targetParticipants = isCategoryProject
+      ? participants.project
+      : participants.study;
+
+    try {
+      const recruitId = await createRecruit({
+        category,
+        participants: targetParticipants,
+        skills: convertSkillsObjectToArray(skills),
+        ...restFormValues,
+      });
+
+      router.replace(routes.recruit.detail(recruitId));
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
+  const onInvalidSubmit = () => customToast.clientError(invalidSubmitMessage);
 
   return (
     <>
@@ -37,9 +70,8 @@ const RecruitCreatePage: CustomNextPage = () => {
 
       <div css={selfCss}>
         <RecruitForm
-          onValidSubmit={(v) => {
-            console.log(v);
-          }}
+          onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
           options={{
             onClickTitleBarClose: onClickTitleBarClose,
             barTitle: '리쿠르팅 등록하기',

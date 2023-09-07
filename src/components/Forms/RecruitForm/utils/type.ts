@@ -2,6 +2,7 @@ import type {
   RecruitCategoryName,
   RecruitParticipantsCount,
   RecruitParts,
+  SkillName,
 } from '~/services/recruit';
 
 export interface RecruitFormValues {
@@ -14,7 +15,7 @@ export interface RecruitFormValues {
   endDate: string;
   title: string;
   content: string;
-  skills: Partial<Record<string, boolean>>;
+  skills: Partial<Record<SkillName, boolean>>;
   questionToApplicants: string;
   contact: string;
 }

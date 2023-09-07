@@ -32,7 +32,7 @@ interface RecruitFormOptions {
   marginForExpand: string;
 }
 
-interface RecruitFormProps {
+export interface RecruitFormProps {
   onValidSubmit: SubmitHandler<RecruitFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<RecruitFormValues>;
   defaultValues?: RecruitFormValues;
