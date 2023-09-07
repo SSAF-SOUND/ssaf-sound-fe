@@ -11,6 +11,7 @@ import {
 } from '~/components/Common';
 import RecruitForm from '~/components/Forms/RecruitForm';
 import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
+import { reconfirmRecruitFormUnload } from '~/services/recruit';
 import { globalVars } from '~/styles/utils';
 import { routes } from '~/utils';
 
@@ -21,13 +22,8 @@ const RecruitCreatePage: CustomNextPage = () => {
   useUnloadReconfirmEffect();
 
   const onClickTitleBarClose = () => {
-    if (
-      window.confirm(
-        '작성중인 리쿠르팅 내용이 사라집니다. 페이지를 이동할까요?'
-      )
-    ) {
-      // FIXME: routes.recruit()
-      router.push('/main');
+    if (reconfirmRecruitFormUnload()) {
+      router.push(routes.recruit.self());
     }
   };
 
@@ -41,7 +37,6 @@ const RecruitCreatePage: CustomNextPage = () => {
             console.log(v);
           }}
           options={{
-            // FIXME: routes.recruit()
             onClickTitleBarClose: onClickTitleBarClose,
             barTitle: '리쿠르팅 등록하기',
             submitButtonText: '완료',
