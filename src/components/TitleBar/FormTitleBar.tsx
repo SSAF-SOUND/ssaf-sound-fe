@@ -5,10 +5,8 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Bar, Button, Icon } from '~/components/Common';
+import { Bar, Button, Icon, IconButton } from '~/components/Common';
 import { fixTopCenter, fontCss, zIndex } from '~/styles/utils';
-
-import IconButton from '../Common/IconButton';
 
 interface FormTitleBarProps {
   title: string;
@@ -16,6 +14,7 @@ interface FormTitleBarProps {
   isSubmitting?: boolean;
   isSubmitDisabled?: boolean;
   onClickClose?: Route | MouseEventHandler<HTMLButtonElement>;
+  onClickSubmitButton?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
 }
 
@@ -26,6 +25,7 @@ const FormTitleBar = (props: FormTitleBarProps) => {
     isSubmitDisabled = false,
     isSubmitting = false,
     onClickClose,
+    onClickSubmitButton,
     ...restProps
   } = props;
 
@@ -68,6 +68,7 @@ const FormTitleBar = (props: FormTitleBarProps) => {
           css={submitButtonCss}
           loading={isSubmitting}
           disabled={isSubmitButtonDisabled}
+          onClick={onClickSubmitButton}
         >
           {submitButtonText}
         </Button>

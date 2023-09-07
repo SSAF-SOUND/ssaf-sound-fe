@@ -62,18 +62,17 @@ const RecruitForm = (props: RecruitFormProps) => {
   const { handleSubmit } = methods;
 
   const style = { [recruitFormMarginForExpandCssVar.varName]: marginForExpand };
+  const onSubmit = handleSubmit(onValidSubmit, onInvalidSubmit);
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
-        css={selfCss}
-        style={style}
-      >
+      <form css={selfCss} style={style}>
         <SubmitBar
+          editMode={editMode}
           title={barTitle}
           submitButtonText={submitButtonText}
           onClickClose={onClickTitleBarClose}
+          onSubmit={onSubmit}
         />
 
         <Category editMode={editMode} css={{ marginBottom: 32 }} />

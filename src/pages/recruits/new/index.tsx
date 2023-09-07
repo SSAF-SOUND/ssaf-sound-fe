@@ -27,6 +27,10 @@ const RecruitCreatePage: CustomNextPage = () => {
     }
   };
 
+  const onValidSubmit = () => {
+
+  }
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
