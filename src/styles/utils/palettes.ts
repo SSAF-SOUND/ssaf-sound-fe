@@ -15,8 +15,9 @@ export const palettes = {
   },
   grey: {
     default: '#8890A8',
-    light: '#c7ced9', // 임의로 넣은 값
+    light: '#EBEBEB', // 임의로 넣은 값
     dark: '#5B647C',
+    darken: '#303F6B',
   },
   recruit: {
     default: '#86FFF8',
