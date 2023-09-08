@@ -1,11 +1,12 @@
-import type { RecruitCategory } from '~/services/recruit';
-
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import { Toggle } from '~/components/Common';
 import { useGetQueryString, useSetQueryString } from '~/hooks';
-import { getRecruitThemeByCategory } from '~/services/recruit';
+import {
+  getRecruitThemeByCategory,
+  RecruitCategoryName,
+} from '~/services/recruit';
 import { flex, fontCss } from '~/styles/utils';
 import { stringBooleanToBool } from '~/utils';
 
@@ -31,7 +32,7 @@ export const IsRecruitingToggle = () => {
   };
 
   const theme = getRecruitThemeByCategory(
-    (category ?? 'project') as RecruitCategory
+    (category as RecruitCategoryName) ?? RecruitCategoryName.PROJECT
   );
 
   useEffect(() => {

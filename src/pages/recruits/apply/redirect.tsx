@@ -1,4 +1,4 @@
-import type { RecruitCategory } from '~/services/recruit';
+import type { RecruitCategoryName } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
 
@@ -42,7 +42,7 @@ const ApplyRedirectPage = () => {
         description="마이페이지에서 리쿠르팅 현황을 확인하실 수 있습니다."
         redirectionTo={routes.profile.self()}
         redirectionText="마이페이지 가기"
-        theme={getRecruitThemeByCategory(category as RecruitCategory)}
+        theme={getRecruitThemeByCategory(category as RecruitCategoryName)}
       />
     </>
   );

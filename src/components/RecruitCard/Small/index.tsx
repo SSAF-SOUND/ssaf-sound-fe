@@ -1,8 +1,8 @@
-import type { RecruitCategoryType, RecruitSummary } from '~/services/recruit';
+import type { RecruitCategoryType, RecruitSummary , RecruitCategoryName } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
-import Dday from '~/components/Dday';
+import { Dday } from '~/components/Dday';
 import { flex, fontCss, lineClamp, palettes } from '~/styles/utils';
 
 import RecruitBadge from './RecruitBadge';
@@ -23,7 +23,11 @@ const SmallRecruitCard = (props: RecruitCardProps) => {
     <div css={selfCss}>
       <div css={flex('center', 'space-between', 'row')}>
         <RecruitBadge category={category} />
-        <Dday recruitEnd={recruitEnd} size="sm" category={category} />
+        <Dday
+          endDate={recruitEnd}
+          size="sm"
+          category={category as RecruitCategoryName}
+        />
       </div>
 
       <div>

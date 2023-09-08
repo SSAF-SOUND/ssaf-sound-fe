@@ -3,14 +3,14 @@ import type {
   RecruitCategoryType,
   RecruitParticipant,
   RecruitSkills,
-} from '~/services/recruit';
+ RecruitCategoryName } from '~/services/recruit';
 
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
-import Dday from '~/components/Dday';
+import { Dday } from '~/components/Dday';
 import { flex, palettes } from '~/styles/utils';
 
 import RecruitParticipants from './RecruitParticipants';
@@ -71,7 +71,11 @@ const RecruitCardImpl = (props: RecruitCardProps) => {
             <RecruitTitle title={title} />
           )}
 
-          <Dday recruitEnd={recruitEnd} category={category} css={DdayCss} />
+          <Dday
+            endDate={recruitEnd}
+            category={category as RecruitCategoryName}
+            css={DdayCss}
+          />
         </div>
         {/* <RecruitCardSkills skills={skills} /> */}
       </div>
