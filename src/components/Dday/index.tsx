@@ -8,6 +8,7 @@ import { fontCss, inlineFlex, themeColorVars } from '~/styles/utils';
 import { getDateDiff } from '~/utils';
 
 export interface DdayProps {
+  className?: string;
   endDate: string;
   category: RecruitCategoryName;
   size?: 'sm' | 'md';
@@ -16,7 +17,7 @@ export interface DdayProps {
 export type DdaySize = 'sm' | 'md';
 
 export const Dday = (props: DdayProps) => {
-  const { endDate = '2023-06-30', category, size = 'sm' } = props;
+  const { endDate = '2023-06-30', category, size = 'sm', ...restProps } = props;
 
   const diff = getDateDiff(new Date(endDate));
   const expired = diff > 0;
@@ -26,6 +27,7 @@ export const Dday = (props: DdayProps) => {
     <span
       css={[selfCss, textCss, sizeCss[size]]}
       data-theme={getRecruitThemeByCategory(category)}
+      {...restProps}
     >
       {dDay}
     </span>
