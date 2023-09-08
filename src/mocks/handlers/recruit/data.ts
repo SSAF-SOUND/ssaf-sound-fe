@@ -68,14 +68,13 @@ export const createMockRecruits = (id: number): Recruit => {
 
 export const createMockRecruitParticipantsProgress =
   (): RecruitParticipantsProgress[] => {
-    const maxCount = faker.number.int({ min: 5, max: 10 });
-    const currentCount = faker.number.int({ min: 1, max: maxCount });
-
     return Object.values(RecruitParts).map((recruitPart) => {
+      const maxParticipantsCount = faker.number.int({ min: 5, max: 10 });
+      const currentParticipantsCount = faker.number.int({ min: 1, max: maxParticipantsCount });
       return {
         recruitType: recruitPart,
-        limit: maxCount,
-        currentNumber: currentCount,
+        limit: maxParticipantsCount,
+        currentNumber: currentParticipantsCount,
       };
     });
   };
@@ -88,9 +87,10 @@ export const createMockRecruitDetail = (
   const scraped = finishedRecruit;
 
   const progress = createMockRecruitParticipantsProgress();
+
   const limits = isStudy
     ? progress.filter(({ recruitType }) => recruitType === RecruitParts.STUDY)
-    : progress;
+    : progress.filter(({ recruitType }) => recruitType !== RecruitParts.STUDY);
 
   const skills = Object.values(SkillName).map((skillName, index) => ({
     skillId: index + 1,

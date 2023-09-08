@@ -3,7 +3,6 @@ import type {
   CreateRecruitApiData,
   RecruitDetail,
   recruitMembersType,
-  RecruitScrap,
   RecruitScrapApiData,
 } from '~/services/recruit';
 

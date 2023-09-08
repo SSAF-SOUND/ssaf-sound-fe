@@ -6,4 +6,6 @@ export enum Theme {
   SUCCESS = 'success',
   ERROR = 'error',
   WARNING = 'warning',
+  WHITE = 'white',
+  BLACK = 'black',
 }
