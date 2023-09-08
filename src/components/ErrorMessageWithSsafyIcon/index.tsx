@@ -7,17 +7,18 @@ export interface ErrorMessageWithSsafyIconProps {
   className?: string;
   message: string;
   iconSize?: TrackSize;
+  textSize?: 'sm' | 'md' | 'lg';
 }
 
 export const ErrorMessageWithSsafyIcon = (
   props: ErrorMessageWithSsafyIconProps
 ) => {
-  const { className, message, iconSize = TrackSize.LG2 } = props;
+  const { className, message, iconSize = TrackSize.LG2, textSize } = props;
 
   return (
     <div css={selfCss} className={className}>
       <SsafyIcon.Track size={iconSize} />
-      <AlertText size="lg" bold>
+      <AlertText size={textSize} bold>
         {message}
       </AlertText>
     </div>
