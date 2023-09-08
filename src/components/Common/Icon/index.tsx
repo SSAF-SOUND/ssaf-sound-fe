@@ -12,7 +12,7 @@ import {
   AiOutlineHeart,
   AiOutlineRight,
 } from 'react-icons/ai';
-import { BiImageAdd } from 'react-icons/bi';
+import { BiCodeBlock, BiImageAdd } from 'react-icons/bi';
 import { BsPersonFillLock } from 'react-icons/bs';
 import {
   HiMinus,
@@ -124,6 +124,7 @@ export const icons = {
 
   signIn: <BsPersonFillLock />,
   signOut: <MdLogout />,
+  code: <BiCodeBlock />,
 } as const;
 
 export type IconNames = keyof typeof icons;

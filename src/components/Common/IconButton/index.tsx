@@ -3,20 +3,21 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
 
-import { colorMix, inlineFlex } from '~/styles/utils';
+import { Theme, colorMix, inlineFlex } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
-type IconTheme = 'primary' | 'secondary' | 'white' | 'black' | 'recruit';
-
 export interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
-  theme?: IconTheme;
+  theme?: Extract<
+    Theme,
+    Theme.PRIMARY | Theme.SECONDARY | Theme.WHITE | Theme.BLACK | Theme.RECRUIT
+  >;
   size?: number;
   asChild?: boolean;
 }
 
 export const IconButton = (props: IconButtonProps) => {
   const {
-    theme = 'white',
+    theme = Theme.WHITE,
     size = 'auto',
     asChild = false,
     ...restProps
