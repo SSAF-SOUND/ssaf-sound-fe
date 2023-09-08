@@ -86,7 +86,7 @@ export const getStaticProps = async () => {
     queryFn: getArticleCategories,
   });
 
-  const dehydratedState = await dehydrate();
+  const { dehydratedState } = await dehydrate();
 
   return {
     props: {

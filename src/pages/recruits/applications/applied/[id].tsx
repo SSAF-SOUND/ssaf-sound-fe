@@ -181,7 +181,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     queryFn: () => recruitAPI.getRecruitApplicationDetail(id),
   });
 
-  const dehydratedState = await dehydrate();
+  const { dehydratedState } = await dehydrate();
 
   return {
     props: {

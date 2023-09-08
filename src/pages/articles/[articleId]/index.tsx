@@ -230,7 +230,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
     queryFn: () => getArticleDetail(articleId),
   });
 
-  const dehydratedState = await dehydrate();
+  const { dehydratedState } = await dehydrate();
 
   return {
     props: {

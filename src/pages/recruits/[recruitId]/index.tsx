@@ -1,8 +1,19 @@
-import TitleBar from '~/components/TitleBar';
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+} from 'next/types';
 
-interface RecruitDetailPageProps {}
+import TitleBar from '~/components/TitleBar';
+import { queryKeys } from '~/react-query/common';
+import { prefetch } from '~/react-query/server';
+import { getRecruitDetail } from '~/services/recruit';
+
+interface RecruitDetailPageProps
+  extends InferGetServerSidePropsType<typeof getServerSideProps> {}
 
 const RecruitDetailPage = (props: RecruitDetailPageProps) => {
+  const { recruitId } = props;
+
   return (
     <div>
       <TitleBar.Default
@@ -43,8 +54,38 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
 
 export default RecruitDetailPage;
 
-export const getServerSideProps = () => {
+/* ssr */
+
+interface Props {
+  recruitId: number;
+}
+
+type Params = {
+  recruitId: string;
+};
+
+export const getServerSideProps: GetServerSideProps<Props, Params> = async (
+  context
+) => {
+  const recruitId = Number(context.params?.recruitId);
+
+  if (Number.isNaN(recruitId)) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const dehydrate = prefetch({
+    queryKey: queryKeys.recruit.detail(recruitId),
+    queryFn: () => getRecruitDetail(recruitId),
+  });
+
+  const { dehydratedState } = await dehydrate();
+
   return {
-    props: {},
+    props: {
+      recruitId,
+      dehydratedState,
+    },
   };
 };

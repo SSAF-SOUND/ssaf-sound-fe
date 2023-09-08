@@ -12,7 +12,7 @@ type QueryOption = { queryKey: QueryKey; queryFn: QueryFn };
  *
  * @example
  *   const dehydrate = prefetch({ queryKey, queryFn });
- *   const dehydratedState = await dehydrate();
+ *   const { dehydratedState } = await dehydrate();
  */
 export const prefetch = (option: QueryOption | QueryOption[]) => {
   const queryClient = new QueryClient();
@@ -24,5 +24,10 @@ export const prefetch = (option: QueryOption | QueryOption[]) => {
     )
   );
 
-  return () => result.then(() => dehydrate(queryClient));
+  return () =>
+    result.then(() => {
+      return {
+        dehydratedState: dehydrate(queryClient),
+      };
+    });
 };
