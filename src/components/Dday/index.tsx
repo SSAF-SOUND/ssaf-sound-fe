@@ -1,35 +1,48 @@
 import type { SerializedStyles } from '@emotion/react';
-import type { RecruitCategoryName } from '~/services/recruit';
 
 import { css } from '@emotion/react';
+import dayjs from 'dayjs';
 
-import { getRecruitThemeByCategory } from '~/services/recruit';
-import { fontCss, inlineFlex, themeColorVars } from '~/styles/utils';
+import { Theme, fontCss, inlineFlex, themeColorVars } from '~/styles/utils';
 import { getDateDiff } from '~/utils';
 
 export interface DdayProps {
   className?: string;
   endDate: string;
-  category: RecruitCategoryName;
+  theme?: Extract<Theme, Theme.PRIMARY | Theme.SECONDARY>;
   size?: 'sm' | 'md';
 }
 
 export type DdaySize = 'sm' | 'md';
 
-export const Dday = (props: DdayProps) => {
-  const { endDate = '2023-06-30', category, size = 'sm', ...restProps } = props;
+const getDisplayText = (endDate: string) => {
+  const diff = getDateDiff(dayjs(endDate).endOf('day'));
 
-  const diff = getDateDiff(new Date(endDate));
-  const expired = diff > 0;
-  const dDay = expired ? `D - ${diff}` : '모집 완료';
+  const isDDay = diff === 0;
+  const expired = diff < 0;
+
+  if (isDDay) {
+    return 'D - Day';
+  }
+
+  if (expired) {
+    return '모집 완료';
+  }
+
+  return `D - ${diff}`;
+};
+
+export const Dday = (props: DdayProps) => {
+  const { endDate, theme = Theme.PRIMARY, size = 'sm', ...restProps } = props;
+  const displayText = getDisplayText(endDate);
 
   return (
     <span
       css={[selfCss, textCss, sizeCss[size]]}
-      data-theme={getRecruitThemeByCategory(category)}
+      data-theme={theme}
       {...restProps}
     >
-      {dDay}
+      {displayText}
     </span>
   );
 };

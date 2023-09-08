@@ -3,9 +3,13 @@ import type {
   InferGetServerSidePropsType,
 } from 'next/types';
 
+import { css } from '@emotion/react';
+
 import { DefaultFullPageLoader, loaderText } from '~/components/Common';
-import { Dday } from '~/components/Dday';
+import { RecruitDetailLayout } from '~/components/Layout';
+import Name from '~/components/Name';
 import { Recruit } from '~/components/Recruit/Recruit';
+import { RecruitDeadline } from '~/components/Recruit/RecruitDeadline';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
@@ -13,8 +17,10 @@ import { prefetch } from '~/react-query/server';
 import {
   getDisplayCategoryName,
   getRecruitDetail,
+  getRecruitThemeByCategory,
   useRecruitDetail,
 } from '~/services/recruit';
+import { flex, fontCss, inlineFlex, palettes, Theme } from '~/styles/utils';
 import { ErrorMessage, getErrorResponse, routes } from '~/utils';
 
 interface RecruitDetailPageProps
@@ -49,11 +55,21 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
     );
   }
 
-  const { recruitEnd, category, view } = recruitDetail;
+  const {
+    recruitEnd,
+    category,
+    view,
+    title,
+    author,
+    scraped,
+    scrapCount,
+    contactURI,
+  } = recruitDetail;
   const titleBarTitle = getDisplayCategoryName(category);
+  const recruitTheme = getRecruitThemeByCategory(category);
 
   return (
-    <div>
+    <RecruitDetailLayout>
       <TitleBar.Default
         css={{ marginBottom: 12 }}
         title={titleBarTitle}
@@ -61,26 +77,79 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
       />
 
       <div>
-        <div>
-          <Dday endDate={recruitEnd} category={category} />
+        <div css={[headerCss, { marginBottom: 20 }]}>
+          <RecruitDeadline
+            endDate={recruitEnd}
+            size="md"
+            theme={recruitTheme}
+          />
+
           <Recruit.ViewCount>{view}</Recruit.ViewCount>
+
+          <div css={titleLayerCss}>
+            <Recruit.Title>{title}</Recruit.Title>
+            <Recruit.IconButton iconName="more" label="더보기" />
+          </div>
+
+          <Name userInfo={author} size="md" />
         </div>
-        <div>조회수 1234</div>
-        <div>
-          <div>Title</div>
-          <div>More Button</div>
-        </div>
-        <div>UserInfo</div>
-        <div>Recruit Outline</div>
-        <div>
-          <div>Bookmark</div>
-          <div>Share</div>
+
+        <Recruit.BasicInfo
+          css={{ margin: '0 -25px', marginBottom: 20 }}
+          recruitDetail={recruitDetail}
+        />
+
+        <div css={[recruitStatsCss, { marginBottom: 40 }]}>
+          <div css={iconButtonsLayerCss}>
+            <div css={bookmarkButtonLayerCss}>
+              <Recruit.IconButton
+                iconName={scraped ? 'bookmark' : 'bookmark.outline'}
+                iconColor={palettes.primary.default}
+                label="스크랩"
+                theme={recruitTheme}
+              />
+              <strong>{scrapCount}</strong>
+            </div>
+
+            <div>
+              <Recruit.IconButton
+                iconColor={palettes.primary.default}
+                iconName="share"
+                label="URL 복사"
+                theme={recruitTheme}
+              />
+            </div>
+          </div>
+
+          <div css={commentIconLayerCss}>
+            <Recruit.Icon
+              iconName="chat.rect"
+              label="댓글"
+              color={palettes.secondary.default}
+            />
+            {/* TODO: commentCount */}
+            <strong>{1}</strong>
+          </div>
         </div>
       </div>
 
-      <div>
-        <div>Contact</div>
-        <div>Action Button</div> {/* 유저에 따라 달라짐 */}
+      <div css={buttonsLayerCss}>
+        <Recruit.ContactLink
+          href={contactURI}
+          css={contactButtonCss}
+          theme={recruitTheme}
+        />
+        <Recruit.ApplyLink
+          recruitId={recruitId}
+          css={dynamicButtonCss}
+          theme={recruitTheme}
+        />
+        {/*<Recruit.MyApplicationLink*/}
+        {/*  css={dynamicButtonCss}*/}
+        {/*  recruitId={recruitId}*/}
+        {/*/>*/}
+        {/*<Recruit.ApplicantsLink css={dynamicButtonCss} recruitId={recruitId} />*/}
+        {/* 유저에 따라 달라짐 */}
       </div>
 
       <div>
@@ -89,9 +158,35 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
       </div>
 
       <div>comment</div>
-    </div>
+    </RecruitDetailLayout>
   );
 };
+
+const headerCss = css(flex('flex-start', '', 'column'));
+const titleLayerCss = css(
+  { width: '100%' },
+  flex('center', 'space-between', 'row', 12)
+);
+const recruitStatsCss = css(
+  { margin: '0 -5px' },
+  flex('center', 'space-between', 'row', 24)
+);
+const iconButtonsLayerCss = css(flex('center', 'flex-start', 'row', 8));
+const bookmarkButtonLayerCss = css(
+  { color: palettes.primary.default },
+  fontCss.style.B16,
+  inlineFlex('center', 'flex-start', 'row')
+);
+const commentIconLayerCss = css(
+  { color: palettes.secondary.default },
+  fontCss.style.B16,
+  flex('center', '', 'row', 6)
+);
+
+const buttonsLayerCss = css(flex('center', '', 'row', 12));
+
+const contactButtonCss = css({ width: '33%', minWidth: 120 });
+const dynamicButtonCss = css({ width: '66%' });
 
 export default RecruitDetailPage;
 
