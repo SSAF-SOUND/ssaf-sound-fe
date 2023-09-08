@@ -7,18 +7,25 @@ import { Avatar, SsafyIcon, TrackSize } from '~/components/Common';
 import { CertificationState } from '~/services/member/utils';
 import { fontCss, inlineFlex } from '~/styles/utils';
 
-export type NameProps = {
+export interface NameProps {
   userInfo: NameUserInfo;
   withAvatar?: boolean;
   size?: NameSize;
   anonymous?: boolean;
-};
+  className?: string;
+}
 
 type NameUserInfo = Omit<UserInfo, 'memberId' | 'memberRole'>;
 type NameSize = 'sm' | 'md' | 'lg';
 
 const Name = (props: NameProps) => {
-  const { size = 'sm', withAvatar = true, userInfo, anonymous = false } = props;
+  const {
+    className,
+    size = 'sm',
+    withAvatar = true,
+    userInfo,
+    anonymous = false,
+  } = props;
   const {
     // basic info
     nickname,
@@ -34,7 +41,7 @@ const Name = (props: NameProps) => {
     ssafyInfo?.certificationState === CertificationState.CERTIFIED;
 
   return (
-    <span css={selfCss}>
+    <span css={selfCss} className={className}>
       {withAvatar && (
         <Avatar size={size} userInfo={userInfo} anonymous={anonymous} />
       )}
