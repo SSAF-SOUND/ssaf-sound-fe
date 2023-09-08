@@ -10,7 +10,12 @@ export interface RecruitViewCountProps {
 }
 
 export const RecruitViewCount = (props: RecruitViewCountProps) => {
-  return <span {...props} css={selfCss} />;
+  const { children, ...restProps } = props;
+  return (
+    <span {...restProps} css={selfCss}>
+      조회수 {children}
+    </span>
+  );
 };
 
 const selfCss = css({ color: palettes.font.blueGrey }, fontCss.style.R12);
