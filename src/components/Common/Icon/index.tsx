@@ -22,7 +22,6 @@ import {
   HiPlus,
 } from 'react-icons/hi';
 import { HiChatBubbleOvalLeftEllipsis } from 'react-icons/hi2';
-import { IoMdListBox } from 'react-icons/io';
 import { IoTriangle } from 'react-icons/io5';
 import {
   MdAccountCircle,
@@ -52,6 +51,7 @@ import {
   MdSearch,
   MdOutlineSubdirectoryArrowRight,
   MdLogout,
+  MdOutlineChat,
 } from 'react-icons/md';
 import { RiKakaoTalkFill, RiSendPlane2Line } from 'react-icons/ri';
 import { TbPencilPlus, TbSquareRoundedCheckFilled } from 'react-icons/tb';
@@ -68,13 +68,13 @@ export const icons = {
 
   group: <MdGroup />,
   calendar: <MdCalendarToday />,
-  skill: <IoMdListBox />,
 
   like: <MdThumbUp />,
   [`like.outline`]: <MdOutlineThumbUp />,
 
   chat: <HiChatBubbleOvalLeftEllipsis />,
   [`chat.rect`]: <MdChatBubbleOutline />,
+  [`chat.multiline`]: <MdOutlineChat />,
 
   triangle: <IoTriangle />,
   pencil: <MdCreate />,
@@ -124,7 +124,7 @@ export const icons = {
 
   signIn: <BsPersonFillLock />,
   signOut: <MdLogout />,
-  code: <BiCodeBlock />,
+  skill: <BiCodeBlock />,
 } as const;
 
 export type IconNames = keyof typeof icons;

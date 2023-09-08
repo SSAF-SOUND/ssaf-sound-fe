@@ -6,7 +6,7 @@ import { Icon, IconButton } from '~/components/Common';
 import { useSignInGuideModal } from '~/hooks';
 import { useLikeArticle, useScrapArticle } from '~/services/article';
 import { useMyInfo } from '~/services/member';
-import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
+import { flex, fontCss, inlineFlex, palettes, Theme } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
 const iconSize = 20;
@@ -96,16 +96,16 @@ interface InterestButtonProps {
   pressed: boolean;
   onClick?: () => void;
   disabled: boolean;
-  theme?: 'primary' | 'secondary';
+  theme?: Extract<Theme, Theme.PRIMARY | Theme.SECONDARY>;
 }
 
 const LikeButton = (props: InterestButtonProps) => {
-  const { pressed, ...restProps } = props;
+  const { pressed, theme = Theme.PRIMARY, ...restProps } = props;
   return (
     <IconButton
-      theme="primary"
       css={iconContainerCss}
       size={iconButtonSize}
+      theme={theme}
       {...restProps}
     >
       <Icon
@@ -118,12 +118,12 @@ const LikeButton = (props: InterestButtonProps) => {
 };
 
 export const ScrapButton = (props: InterestButtonProps) => {
-  const { pressed, theme = 'primary', ...restProps } = props;
+  const { pressed, theme = Theme.PRIMARY, ...restProps } = props;
   return (
     <IconButton
-      theme={theme}
       css={iconContainerCss}
       size={iconButtonSize}
+      theme={theme}
       {...restProps}
     >
       <Icon
