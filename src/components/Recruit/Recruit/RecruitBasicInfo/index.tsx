@@ -41,7 +41,7 @@ export const RecruitBasicInfo = (props: RecruitBasicInfoProps) => {
         <RecruitDateInfo startDate={recruitStart} endDate={recruitEnd} />
       </RecruitBasicInfoRow>
 
-      <RecruitBasicInfoRow iconName="code" rowTitle="기술 스택">
+      <RecruitBasicInfoRow iconName="skill" rowTitle="기술 스택">
         <RecruitSkillInfo skills={skills.map(({ name }) => name)} />
       </RecruitBasicInfoRow>
     </div>

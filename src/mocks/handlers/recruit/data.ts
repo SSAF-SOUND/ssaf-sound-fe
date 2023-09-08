@@ -70,7 +70,10 @@ export const createMockRecruitParticipantsProgress =
   (): RecruitParticipantsProgress[] => {
     return Object.values(RecruitParts).map((recruitPart) => {
       const maxParticipantsCount = faker.number.int({ min: 5, max: 10 });
-      const currentParticipantsCount = faker.number.int({ min: 1, max: maxParticipantsCount });
+      const currentParticipantsCount = faker.number.int({
+        min: 1,
+        max: maxParticipantsCount,
+      });
       return {
         recruitType: recruitPart,
         limit: maxParticipantsCount,
@@ -108,7 +111,7 @@ export const createMockRecruitDetail = (
     recruitStart: faker.date.past().toISOString(),
     recruitEnd: faker.date.future().toISOString(),
     finishedRecruit,
-    scrapCount: faker.number.int(),
+    scrapCount: faker.number.int({ min: 1, max: 1000 }),
     scraped,
     limits,
     skills,
