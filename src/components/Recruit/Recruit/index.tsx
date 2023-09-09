@@ -2,6 +2,7 @@ import { RecruitApplicantsLink } from './RecruitApplicantsLink';
 import { RecruitApplyLink } from './RecruitApplyLink';
 import { RecruitBasicInfo } from './RecruitBasicInfo';
 import { RecruitContactLink } from './RecruitContactLink';
+import { RecruitHeader } from './RecruitHeader';
 import { RecruitIconButton, RecruitIcon } from './RecruitIconButton';
 import { RecruitMyApplicationLink } from './RecruitMyApplicationLink';
 import {
@@ -27,4 +28,5 @@ export const Recruit = {
     DescriptionContent: RecruitTabsDescriptionContent,
     ParticipantsContent: RecruitTabsParticipantsProgressContent,
   },
+  Header: RecruitHeader,
 };
