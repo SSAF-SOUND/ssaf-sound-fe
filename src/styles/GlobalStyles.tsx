@@ -223,7 +223,7 @@ const themeColorVarCss = css({
 
 const globalVarCss = css({
   ':root': {
-    [globalVars.mainLayoutPaddingX.varName]: '10px',
+    [globalVars.mainLayoutPaddingX.varName]: '25px',
   },
 });
 
