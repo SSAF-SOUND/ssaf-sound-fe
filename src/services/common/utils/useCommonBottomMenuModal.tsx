@@ -4,6 +4,7 @@ import type { ReportDomain } from '~/services/report';
 import { Modal } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
 import { Alert, BottomMenu, Report } from '~/components/ModalContent';
+import { useAsyncState } from '~/hooks';
 
 interface UseCommonBottomMenuModalOptions {
   modalTitle: string;
@@ -66,6 +67,8 @@ interface MineBottomMenuButtonsProps
 }
 const MineBottomMenuButtons = (props: MineBottomMenuButtonsProps) => {
   const { removeAlertDescription, onClickRemove, onClickEdit } = props;
+  const { handleAsync: handleClickRemove, loading: isRemoving } =
+    useAsyncState(onClickRemove);
 
   const { closeModal } = useModal();
   const handleClickEdit = () => {
@@ -77,14 +80,16 @@ const MineBottomMenuButtons = (props: MineBottomMenuButtonsProps) => {
     <>
       <BottomMenu.Button onClick={handleClickEdit}>수정하기</BottomMenu.Button>
       <Modal
-        trigger={<BottomMenu.Button>삭제하기</BottomMenu.Button>}
+        trigger={
+          <BottomMenu.Button loading={isRemoving}>삭제하기</BottomMenu.Button>
+        }
         content={
           <Alert
             title="알림"
             description={removeAlertDescription}
             actionText="삭제"
             cancelText="취소"
-            onClickAction={onClickRemove}
+            onClickAction={handleClickRemove}
           />
         }
       />
@@ -99,11 +104,17 @@ interface NotMineBottomMenuButtonsProps
   > {}
 const NotMineBottomMenuButtons = (props: NotMineBottomMenuButtonsProps) => {
   const { onClickReport, reportDomain } = props;
+  const { handleAsync: handleClickReport, loading: isReporting } =
+    useAsyncState(onClickReport);
 
   return (
     <Modal
-      trigger={<BottomMenu.Button>신고하기</BottomMenu.Button>}
-      content={<Report domain={reportDomain} onClickReport={onClickReport} />}
+      trigger={
+        <BottomMenu.Button loading={isReporting}>신고하기</BottomMenu.Button>
+      }
+      content={
+        <Report domain={reportDomain} onClickReport={handleClickReport} />
+      }
     />
   );
 };
