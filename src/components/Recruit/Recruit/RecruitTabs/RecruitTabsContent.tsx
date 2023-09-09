@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
@@ -6,6 +5,9 @@ import ArticleContent from '~/components/Article/ArticleContent';
 import { Tabs } from '~/components/Common';
 
 import { RecruitTabsValue } from './constants';
+import {
+  RecruitParticipantsProgressDetail
+} from "./RecruitParticipantsProgressDetail";
 
 interface RecruitTabsDescriptionContentProps {
   html: string;
@@ -30,9 +32,10 @@ export const RecruitTabsParticipantsProgressContent = (
   props: RecruitTabsParticipantsProgressContentProps
 ) => {
   const { recruitId } = props;
+
   return (
     <Tabs.Content css={selfCss} value={RecruitTabsValue.PARTICIPANTS_PROGRESS}>
-      {recruitId}
+      <RecruitParticipantsProgressDetail recruitId={recruitId} />
     </Tabs.Content>
   );
 };

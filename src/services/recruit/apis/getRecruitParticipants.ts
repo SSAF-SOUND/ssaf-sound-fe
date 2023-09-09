@@ -8,7 +8,7 @@ import { endpoints } from '~/react-query/common';
 import { privateAxios } from '~/utils';
 
 export type GetRecruitParticipantsApiData = ApiSuccessResponse<{
-  recruitTypes: Record<RecruitParts, RecruitParticipantsDetail>;
+  recruitTypes: Partial<Record<RecruitParts, RecruitParticipantsDetail>>;
 }>;
 
 export const getRecruitParticipants = (recruitId: number) => {
