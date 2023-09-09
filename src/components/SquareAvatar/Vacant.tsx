@@ -17,13 +17,13 @@ const VacantSquareAvatar = memo(() => {
 VacantSquareAvatar.displayName = 'VacantSquareAvatar';
 
 const selfCss = css(flex('center', 'center', 'column'), {
-  width: 104,
-  height: 113,
+  width: 120,
+  height: 120,
   borderRadius: 8,
   border: `1px solid ${palettes.font.blueGrey}}`,
 });
 
-const titleCss = css(fontCss.family.auto, fontCss.style.R18, {
+const titleCss = css(fontCss.family.auto, fontCss.style.B18, {
   color: palettes.font.blueGrey,
 });
 
