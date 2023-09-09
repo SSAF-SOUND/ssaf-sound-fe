@@ -8,6 +8,7 @@ export * from './date';
 export * from './defaultify';
 export * from './getPathname';
 export * from './handleAxiosError';
+export * from './isEqualString';
 export * from './isStorybookMode';
 export * from './metadata';
 export * from './misc';
