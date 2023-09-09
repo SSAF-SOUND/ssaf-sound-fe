@@ -207,6 +207,23 @@ export const scrapRecruitError = restError('post', scrapRecruitEndpoint, {
   message: '스크랩 업데이트에 실패했습니다.',
 });
 
+const removeRecruitEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.detail(':recruitId'));
+const removeRecruitMethod = 'delete';
+
+export const removeRecruit = restSuccess(
+  removeRecruitMethod,
+  removeRecruitEndpoint,
+  { data: null }
+);
+
+export const removeRecruitError = restError(
+  removeRecruitMethod,
+  removeRecruitEndpoint,
+  { message: '리쿠르팅 삭제 실패' }
+);
+
 export const recruitHandlers = [
   getRecruits,
   postRecruitApply,
@@ -220,4 +237,5 @@ export const recruitHandlers = [
   getRecruitDetail,
   getRecruitParticipants,
   scrapRecruit,
+  removeRecruit,
 ];

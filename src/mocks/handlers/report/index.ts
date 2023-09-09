@@ -15,4 +15,4 @@ export const reportError = restError('post', reportEndpoint, {
   message: '신고 실패',
 });
 
-export const reportHandlers = [report];
+export const reportHandlers = [reportError];

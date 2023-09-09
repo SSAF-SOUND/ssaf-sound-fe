@@ -1,7 +1,6 @@
 import type { RecruitParams } from './apis2';
 import type { SetStateAction } from 'react';
-import type {
-  RecruitDetail} from '~/services/recruit/apis';
+import type { RecruitDetail } from '~/services/recruit/apis';
 
 import {
   useMutation,
@@ -15,6 +14,7 @@ import {
   createRecruit,
   getRecruitDetail,
   getRecruitParticipants,
+  removeRecruit,
   scrapRecruit,
 } from '~/services/recruit/apis';
 import {
@@ -165,6 +165,12 @@ export const useScrapRecruit = (recruitId: number) => {
       const prevRecruit = context?.prevRecruit;
       setRecruitDetail(prevRecruit);
     },
+  });
+};
+
+export const useRemoveRecruit = (recruitId: number) => {
+  return useMutation({
+    mutationFn: () => removeRecruit(recruitId),
   });
 };
 
