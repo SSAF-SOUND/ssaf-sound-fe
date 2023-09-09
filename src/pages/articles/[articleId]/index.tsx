@@ -66,8 +66,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
     articleDetail;
 
   const metaTitle = articleDetail.title;
-  const metaDescription = stripHtmlTags(articleDetail.content);
-
+  const metaDescription = stripHtmlTags(articleDetail.content).slice(0, 100);
   const pageUrl = routes.articles.detail(articleDetail.postId);
 
   return (

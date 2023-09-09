@@ -9,7 +9,11 @@ import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import ArticleComment from '~/components/ArticleComment';
-import { DefaultFullPageLoader, loaderText } from '~/components/Common';
+import {
+  DefaultFullPageLoader,
+  loaderText,
+  PageHead,
+} from '~/components/Common';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import { RecruitDetailLayout } from '~/components/Layout';
 import Name from '~/components/Name';
@@ -32,13 +36,14 @@ import {
   useInvalidateRecruitComments,
   useRecruitComments,
 } from '~/services/recruitComment';
-import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
+import { expandCss, flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 import {
   ErrorMessage,
   getErrorResponse,
   handleAxiosError,
   routes,
 } from '~/utils';
+import { stripHtmlTags } from '~/utils/stripHtmlTags';
 
 interface RecruitDetailPageProps
   extends InferGetServerSidePropsType<typeof getServerSideProps> {}
@@ -76,124 +81,145 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
     recruitEnd,
     category,
     view,
-    title,
     author,
     scraped,
     scrapCount,
     contactURI,
 
+    title,
     content,
   } = recruitDetail;
   const titleBarTitle = getDisplayCategoryName(category);
   const recruitTheme = getRecruitThemeByCategory(category);
 
+  const metaTitle = title;
+  const metaDescription = stripHtmlTags(content).slice(0, 100);
+  const pageUrl = routes.recruit.detail(recruitId);
+
   return (
-    <RecruitDetailLayout>
-      <TitleBar.Default
-        css={{ marginBottom: 12 }}
-        title={titleBarTitle}
-        withoutClose
-      />
-
-      <div css={{ marginBottom: 40 }}>
-        <div css={[headerCss, { marginBottom: 20 }]}>
-          <RecruitDeadline
-            endDate={recruitEnd}
-            size="md"
-            theme={recruitTheme}
-          />
-
-          <Recruit.ViewCount>{view}</Recruit.ViewCount>
-
-          <div css={titleLayerCss}>
-            <Recruit.Title>{title}</Recruit.Title>
-            <Recruit.IconButton iconName="more" label="더보기" />
-          </div>
-
-          <Name userInfo={author} size="md" />
-        </div>
-
-        <Recruit.BasicInfo
-          css={{ margin: '0 -25px', marginBottom: 20 }}
-          recruitDetail={recruitDetail}
-        />
-
-        <div css={recruitStatsCss}>
-          <div css={iconButtonsLayerCss}>
-            <div css={bookmarkButtonLayerCss}>
-              <Recruit.IconButton
-                iconName={scraped ? 'bookmark' : 'bookmark.outline'}
-                iconColor={palettes.primary.default}
-                label="스크랩"
-                theme={recruitTheme}
-              />
-              <strong>{scrapCount}</strong>
-            </div>
-
-            <div>
-              <Recruit.IconButton
-                iconColor={palettes.primary.default}
-                iconName="share"
-                label="URL 복사"
-                theme={recruitTheme}
-              />
-            </div>
-          </div>
-
-          <div css={commentIconLayerCss}>
-            <Recruit.Icon
-              iconName="chat.rect"
-              label="댓글"
-              color={palettes.secondary.default}
-            />
-            {/* TODO: commentCount */}
-            <strong>{1}</strong>
-          </div>
-        </div>
-      </div>
-
-      <div css={[buttonsLayerCss, { marginBottom: 60 }]}>
-        <Recruit.ContactLink
-          href={contactURI}
-          css={contactButtonCss}
-          theme={recruitTheme}
-        />
-        <Recruit.ApplyLink
-          recruitId={recruitId}
-          css={dynamicButtonCss}
-          theme={recruitTheme}
-        />
-        {/*<Recruit.MyApplicationLink*/}
-        {/*  css={dynamicButtonCss}*/}
-        {/*  recruitId={recruitId}*/}
-        {/*/>*/}
-        {/*<Recruit.ApplicantsLink css={dynamicButtonCss} recruitId={recruitId} />*/}
-        {/* 유저에 따라 달라짐 */}
-      </div>
-
-      <Recruit.Tabs.Root
-        css={{ marginBottom: 50 }}
-        theme={recruitTheme}
-        descriptionText={getDescriptionTabText(category)}
-      >
-        <Recruit.Tabs.DescriptionContent html={content} />
-
-        <Recruit.Tabs.ParticipantsContent recruitId={recruitId} />
-      </Recruit.Tabs.Root>
-
-      <div
-        css={{
-          width: 'auto',
-          margin: '0 -25px 44px',
-          height: 20,
-          backgroundColor: palettes.background.grey,
+    <>
+      <PageHead
+        title={metaTitle}
+        description={metaDescription}
+        openGraph={{
+          title: metaTitle,
+          description: metaDescription,
+          url: pageUrl,
         }}
       />
 
-      <RecruitCommentsLayer recruitId={recruitId} css={{ marginBottom: 40 }} />
+      <RecruitDetailLayout>
+        <TitleBar.Default
+          css={{ marginBottom: 12 }}
+          title={titleBarTitle}
+          withoutClose
+        />
 
-      <RecruitCommentFormLayer recruitId={recruitId} />
-    </RecruitDetailLayout>
+        <div css={{ marginBottom: 40 }}>
+          <div css={[headerCss, { marginBottom: 20 }]}>
+            <RecruitDeadline
+              endDate={recruitEnd}
+              size="md"
+              theme={recruitTheme}
+            />
+
+            <Recruit.ViewCount>{view}</Recruit.ViewCount>
+
+            <div css={titleLayerCss}>
+              <Recruit.Title>{title}</Recruit.Title>
+              <Recruit.IconButton iconName="more" label="더보기" />
+            </div>
+
+            <Name userInfo={author} size="md" />
+          </div>
+
+          <Recruit.BasicInfo
+            css={[pageExpandCss, { marginBottom: 20 }]}
+            recruitDetail={recruitDetail}
+          />
+
+          <div css={recruitStatsCss}>
+            <div css={iconButtonsLayerCss}>
+              <div css={bookmarkButtonLayerCss}>
+                <Recruit.IconButton
+                  iconName={scraped ? 'bookmark' : 'bookmark.outline'}
+                  iconColor={palettes.primary.default}
+                  label="스크랩"
+                  theme={recruitTheme}
+                />
+                <strong>{scrapCount}</strong>
+              </div>
+
+              <div>
+                <Recruit.IconButton
+                  iconColor={palettes.primary.default}
+                  iconName="share"
+                  label="URL 복사"
+                  theme={recruitTheme}
+                />
+              </div>
+            </div>
+
+            <div css={commentIconLayerCss}>
+              <Recruit.Icon
+                iconName="chat.rect"
+                label="댓글"
+                color={palettes.secondary.default}
+              />
+              {/* TODO: commentCount */}
+              <strong>{1}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div css={[buttonsLayerCss, { marginBottom: 60 }]}>
+          <Recruit.ContactLink
+            href={contactURI}
+            css={contactButtonCss}
+            theme={recruitTheme}
+          />
+          <Recruit.ApplyLink
+            recruitId={recruitId}
+            css={dynamicButtonCss}
+            theme={recruitTheme}
+          />
+          {/*<Recruit.MyApplicationLink*/}
+          {/*  css={dynamicButtonCss}*/}
+          {/*  recruitId={recruitId}*/}
+          {/*/>*/}
+          {/*<Recruit.ApplicantsLink css={dynamicButtonCss} recruitId={recruitId} />*/}
+          {/* 유저에 따라 달라짐 */}
+        </div>
+
+        <Recruit.Tabs.Root
+          css={{ marginBottom: 50 }}
+          theme={recruitTheme}
+          descriptionText={getDescriptionTabText(category)}
+        >
+          <Recruit.Tabs.DescriptionContent html={content} />
+
+          <Recruit.Tabs.ParticipantsContent recruitId={recruitId} />
+        </Recruit.Tabs.Root>
+
+        <div
+          css={[
+            pageExpandCss,
+            {
+              marginBottom: 44,
+              height: 20,
+              backgroundColor: palettes.background.grey,
+            },
+          ]}
+        />
+
+        <RecruitCommentsLayer
+          recruitId={recruitId}
+          css={{ marginBottom: 40 }}
+        />
+
+        <RecruitCommentFormLayer recruitId={recruitId} />
+      </RecruitDetailLayout>
+    </>
   );
 };
 
@@ -204,6 +230,8 @@ const getDescriptionTabText = (category: RecruitCategoryName) => {
     `잘못된 카테고리가 전달되었습니다. \n> category: ${category}`
   );
 };
+
+const pageExpandCss = expandCss();
 
 const headerCss = css(flex('flex-start', '', 'column'));
 const titleLayerCss = css(
