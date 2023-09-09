@@ -1,6 +1,7 @@
 import type { IconButtonProps, IconNames } from '~/components/Common';
 
 import { Icon, IconButton } from '~/components/Common';
+import { colorMix } from '~/styles/utils';
 
 interface RecruitIconButtonProps {
   iconName: IconNames;
@@ -9,14 +10,28 @@ interface RecruitIconButtonProps {
   theme?: IconButtonProps['theme'];
   iconColor?: string;
   label?: string;
+  disabled?: boolean;
 }
 
 export const RecruitIconButton = (props: RecruitIconButtonProps) => {
-  const { iconName, iconColor, theme, label, ...restProps } = props;
+  const {
+    iconName,
+    iconColor = '',
+    theme,
+    label,
+    disabled = false,
+    ...restProps
+  } = props;
+  const color = disabled ? colorMix('50%', iconColor) : iconColor;
 
   return (
-    <IconButton {...restProps} theme={theme} size={iconButtonSize}>
-      <Icon name={iconName} size={iconSize} label={label} color={iconColor} />
+    <IconButton
+      {...restProps}
+      theme={theme}
+      size={iconButtonSize}
+      disabled={disabled}
+    >
+      <Icon name={iconName} size={iconSize} label={label} color={color} />
     </IconButton>
   );
 };
