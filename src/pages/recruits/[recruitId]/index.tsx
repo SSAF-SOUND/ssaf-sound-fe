@@ -18,9 +18,10 @@ import {
   getDisplayCategoryName,
   getRecruitDetail,
   getRecruitThemeByCategory,
+  RecruitCategoryName,
   useRecruitDetail,
 } from '~/services/recruit';
-import { flex, fontCss, inlineFlex, palettes, Theme } from '~/styles/utils';
+import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 import { ErrorMessage, getErrorResponse, routes } from '~/utils';
 
 interface RecruitDetailPageProps
@@ -76,7 +77,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
         withoutClose
       />
 
-      <div>
+      <div css={{ marginBottom: 40 }}>
         <div css={[headerCss, { marginBottom: 20 }]}>
           <RecruitDeadline
             endDate={recruitEnd}
@@ -99,7 +100,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
           recruitDetail={recruitDetail}
         />
 
-        <div css={[recruitStatsCss, { marginBottom: 40 }]}>
+        <div css={recruitStatsCss}>
           <div css={iconButtonsLayerCss}>
             <div css={bookmarkButtonLayerCss}>
               <Recruit.IconButton
@@ -133,7 +134,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
         </div>
       </div>
 
-      <div css={buttonsLayerCss}>
+      <div css={[buttonsLayerCss, { marginBottom: 60 }]}>
         <Recruit.ContactLink
           href={contactURI}
           css={contactButtonCss}
@@ -152,13 +153,30 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
         {/* 유저에 따라 달라짐 */}
       </div>
 
-      <div>
-        <div>tab</div>
-        <div>tab-content</div>
-      </div>
+      <Recruit.Tabs.Root
+        css={{ marginBottom: 50 }}
+        theme={recruitTheme}
+        descriptionText={getDescriptionTabText(category)}
+      >
+        <Recruit.Tabs.DescriptionContent>
+          프로젝트 설명
+        </Recruit.Tabs.DescriptionContent>
+
+        <Recruit.Tabs.ParticipantsContent>
+          리쿠르팅 현황
+        </Recruit.Tabs.ParticipantsContent>
+      </Recruit.Tabs.Root>
 
       <div>comment</div>
     </RecruitDetailLayout>
+  );
+};
+
+const getDescriptionTabText = (category: RecruitCategoryName) => {
+  if (category === RecruitCategoryName.PROJECT) return '프로젝트 설명';
+  if (category === RecruitCategoryName.STUDY) return '스터디 설명';
+  throw new Error(
+    `잘못된 카테고리가 전달되었습니다. \n> category: ${category}`
   );
 };
 
