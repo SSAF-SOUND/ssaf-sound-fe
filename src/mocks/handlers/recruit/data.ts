@@ -19,21 +19,27 @@ import {
 import { mockHtmlString } from '../common';
 import { createMockUser, userInfo } from '../member/data';
 
-export const createMockRecruitParticipantsProgress =
-  (): RecruitParticipantsProgress[] => {
-    return Object.values(RecruitParts).map((recruitPart) => {
-      const maxParticipantsCount = faker.number.int({ min: 5, max: 10 });
-      const currentParticipantsCount = faker.number.int({
-        min: 1,
-        max: maxParticipantsCount,
-      });
-      return {
-        recruitType: recruitPart,
-        limit: maxParticipantsCount,
-        currentNumber: currentParticipantsCount,
-      };
+export const createMockRecruitParticipantsProgress = (
+  isStudy: boolean
+): RecruitParticipantsProgress[] => {
+  const recruitParts = Object.values(RecruitParts);
+  const filteredRecruitParts = isStudy
+    ? recruitParts.filter((name) => name === RecruitParts.STUDY)
+    : recruitParts.filter((name) => name !== RecruitParts.STUDY);
+
+  return filteredRecruitParts.map((recruitPart) => {
+    const maxParticipantsCount = faker.number.int({ min: 5, max: 10 });
+    const currentParticipantsCount = faker.number.int({
+      min: 1,
+      max: maxParticipantsCount,
     });
-  };
+    return {
+      recruitType: recruitPart,
+      limit: maxParticipantsCount,
+      currentNumber: currentParticipantsCount,
+    };
+  });
+};
 
 export const createMockRecruitDetail = (
   recruitId: number,
@@ -42,11 +48,7 @@ export const createMockRecruitDetail = (
   const finishedRecruit = Boolean(recruitId % 2);
   const scraped = finishedRecruit;
 
-  const progress = createMockRecruitParticipantsProgress();
-
-  const limits = isStudy
-    ? progress.filter(({ recruitType }) => recruitType === RecruitParts.STUDY)
-    : progress.filter(({ recruitType }) => recruitType !== RecruitParts.STUDY);
+  const limits = createMockRecruitParticipantsProgress(isStudy);
 
   const skills = Object.values(SkillName).map((skillName, index) => ({
     skillId: index + 1,
@@ -76,32 +78,38 @@ export const recruitDetails = Array(5)
   .fill(undefined)
   .map((_, index) => createMockRecruitDetail(index, Boolean(index % 2)));
 
-export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) =>
-  Object.fromEntries(
-    Object.values(RecruitParts).map((part, partIndex) => {
-      const partInfo = recruitDetail.limits.find(
-        ({ recruitType }) => part === recruitType
-      );
+export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
+  const { limits } = recruitDetail;
 
-      const currentNumber = partInfo?.currentNumber as number;
-      const limit = partInfo?.limit as number;
-
-      const memberIds = Array(10)
-        .fill(5000)
-        .map((v, index) => v + index)
-        .map((v) => v * (partIndex + 1))
-        .slice(0, currentNumber);
-
-      return [
-        part,
+  return Object.fromEntries(
+    limits.map(
+      (
         {
-          limit: limit,
-          members: memberIds.map((memberId) => createMockUser(memberId, true)),
+          recruitType: part,
+          currentNumber: currentParticipantsCount,
+          limit: maxParticipantsCount,
         },
-      ];
-    })
-  ) as Record<RecruitParts, RecruitParticipantsDetail>;
+        partIndex
+      ) => {
 
+        const memberIds = Array(currentParticipantsCount)
+          .fill(5000)
+          .map((v, index) => v + index)
+          .map((v) => v * (partIndex + 1));
+
+        return [
+          part,
+          {
+            limit: maxParticipantsCount,
+            members: memberIds.map((memberId) =>
+              createMockUser(memberId, true)
+            ),
+          },
+        ];
+      }
+    )
+  ) as Record<RecruitParts, RecruitParticipantsDetail>;
+};
 export const recruitParticipantsList = recruitDetails.map((recruitDetail) =>
   createMockRecruitParticipants(recruitDetail)
 );
@@ -175,8 +183,6 @@ const RecruitApplicationDetail = {
 };
 
 export const RecruitData = {
-  recruitDetail: recruitDetails,
-
   //
   recruitApplicants,
   RecruitApplicationDetail,
