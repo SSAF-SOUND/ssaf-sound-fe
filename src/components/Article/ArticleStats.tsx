@@ -35,13 +35,9 @@ const ArticleStats = (props: ArticleStatsProps) => {
 
   const commentCount = comments && countAllComments(comments);
 
-  const handleNotSignedInUser = () => {
-    openSignInGuideModal();
-  };
-
   const handleClickLike = async () => {
     if (!isSignedIn) {
-      handleNotSignedInUser();
+      openSignInGuideModal();
       return;
     }
 
@@ -54,7 +50,7 @@ const ArticleStats = (props: ArticleStatsProps) => {
 
   const handleClickScrap = async () => {
     if (!isSignedIn) {
-      handleNotSignedInUser();
+      openSignInGuideModal();
       return;
     }
 
