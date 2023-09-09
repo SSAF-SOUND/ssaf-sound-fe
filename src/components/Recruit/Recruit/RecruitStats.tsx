@@ -6,10 +6,13 @@ import {
   RecruitIcon,
   RecruitIconButton,
 } from '~/components/Recruit/Recruit/RecruitIconButton';
+import { useSignInGuideModal } from '~/hooks';
 import { countAllComments } from '~/services/comment/utils';
-import { getRecruitThemeByCategory } from '~/services/recruit';
+import { useMyInfo } from '~/services/member';
+import { getRecruitThemeByCategory, useScrapRecruit } from '~/services/recruit';
 import { useRecruitComments } from '~/services/recruitComment';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
+import { customToast, handleAxiosError } from '~/utils';
 
 interface RecruitStatsProps {
   recruitDetail: RecruitDetail;
@@ -20,9 +23,37 @@ export const RecruitStats = (props: RecruitStatsProps) => {
   const { recruitDetail, className } = props;
   const { recruitId, scraped, scrapCount, category } = recruitDetail;
 
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
+  const { openSignInGuideModal } = useSignInGuideModal();
+
   const recruitTheme = getRecruitThemeByCategory(category);
   const { data: comments } = useRecruitComments(recruitId);
   const commentCount = comments && countAllComments(comments);
+  const { mutateAsync: scrapRecruit, isLoading: isScrapingRecruit } =
+    useScrapRecruit(recruitId);
+
+  const copyUrlToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      customToast.success('리쿠르팅 링크가 복사되었습니다.');
+    } catch (err) {
+      customToast.clientError('리쿠르팅 링크 복사에 실패했습니다.');
+    }
+  };
+
+  const handleClickScrap = async () => {
+    if (!isSignedIn) {
+      openSignInGuideModal();
+      return;
+    }
+
+    try {
+      await scrapRecruit();
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
 
   return (
     <div css={selfCss} className={className}>
@@ -33,6 +64,8 @@ export const RecruitStats = (props: RecruitStatsProps) => {
             iconColor={palettes.primary.default}
             label="스크랩"
             theme={recruitTheme}
+            onClick={handleClickScrap}
+            disabled={isScrapingRecruit}
           />
           <strong>{scrapCount}</strong>
         </div>
@@ -43,6 +76,7 @@ export const RecruitStats = (props: RecruitStatsProps) => {
             iconName="share"
             label="URL 복사"
             theme={recruitTheme}
+            onClick={copyUrlToClipboard}
           />
         </div>
       </div>
