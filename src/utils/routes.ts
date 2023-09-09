@@ -68,6 +68,7 @@ export const routes = {
     apply: (recruitId: number) => `${routes.recruit.detail(recruitId)}/apply`,
     applyRedirect: () => `${routes.recruit.self()}/apply/redirect`,
     new: () => `${routes.recruit.self()}/new`,
+    edit: (recruitId: number) => `${routes.recruit.detail(recruitId)}/edit`,
   },
 
   lunch: {

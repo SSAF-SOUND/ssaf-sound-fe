@@ -46,6 +46,7 @@ export const createMockRecruitDetail = (
   isStudy = false
 ): RecruitDetail => {
   const finishedRecruit = Boolean(recruitId % 2);
+  const mine = Boolean(recruitId % 2);
   const scraped = finishedRecruit;
 
   const limits = createMockRecruitParticipantsProgress(isStudy);
@@ -71,6 +72,7 @@ export const createMockRecruitDetail = (
     limits,
     skills,
     view: faker.number.int({ min: 1, max: 1000000 }),
+    mine,
   };
 };
 
@@ -91,7 +93,6 @@ export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
         },
         partIndex
       ) => {
-
         const memberIds = Array(currentParticipantsCount)
           .fill(5000)
           .map((v, index) => v + index)

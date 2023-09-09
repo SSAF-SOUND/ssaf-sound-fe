@@ -29,6 +29,7 @@ export type RecruitDetail = {
   author: UserInfo;
 
   view: number;
+  mine: boolean;
 } & ScrapStatus;
 
 export interface RecruitParticipantsDetail {
