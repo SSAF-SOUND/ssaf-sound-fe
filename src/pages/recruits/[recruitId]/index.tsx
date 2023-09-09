@@ -2,10 +2,15 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next/types';
+import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
+import { useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 
+import ArticleComment from '~/components/ArticleComment';
 import { DefaultFullPageLoader, loaderText } from '~/components/Common';
+import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import { RecruitDetailLayout } from '~/components/Layout';
 import Name from '~/components/Name';
 import { Recruit } from '~/components/Recruit/Recruit';
@@ -14,6 +19,7 @@ import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
+import { useMyInfo } from '~/services/member';
 import {
   getDisplayCategoryName,
   getRecruitDetail,
@@ -21,8 +27,18 @@ import {
   RecruitCategoryName,
   useRecruitDetail,
 } from '~/services/recruit';
+import {
+  useCreateRecruitComment,
+  useInvalidateRecruitComments,
+  useRecruitComments,
+} from '~/services/recruitComment';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
-import { ErrorMessage, getErrorResponse, routes } from '~/utils';
+import {
+  ErrorMessage,
+  getErrorResponse,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 interface RecruitDetailPageProps
   extends InferGetServerSidePropsType<typeof getServerSideProps> {}
@@ -165,7 +181,18 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
         <Recruit.Tabs.ParticipantsContent recruitId={recruitId} />
       </Recruit.Tabs.Root>
 
-      <div></div>
+      <div
+        css={{
+          width: 'auto',
+          margin: '0 -25px 44px',
+          height: 20,
+          backgroundColor: palettes.background.grey,
+        }}
+      />
+
+      <RecruitCommentsLayer recruitId={recruitId} css={{ marginBottom: 40 }} />
+
+      <RecruitCommentFormLayer recruitId={recruitId} />
     </RecruitDetailLayout>
   );
 };
@@ -205,6 +232,81 @@ const contactButtonCss = css({ width: '33%', minWidth: 120 });
 const dynamicButtonCss = css({ width: '66%' });
 
 export default RecruitDetailPage;
+
+const RecruitCommentsLayer = (props: {
+  recruitId: number;
+  className?: string;
+}) => {
+  const { recruitId, className } = props;
+  const skeletonCount = 8;
+  const {
+    data: comments,
+    isLoading,
+    isSuccess,
+  } = useRecruitComments(recruitId);
+
+  return (
+    <div css={commentsLayerSelfCss} className={className}>
+      <h3 css={fontCss.style.B20}>Q&A</h3>
+
+      {isLoading && (
+        <Skeleton
+          count={skeletonCount}
+          height={120}
+          style={{ marginBottom: 20 }}
+          baseColor={palettes.background.grey}
+          enableAnimation={false}
+        />
+      )}
+
+      {isSuccess &&
+        comments.map((comment) => {
+          return (
+            <ArticleComment
+              key={comment.commentId}
+              articleId={recruitId}
+              comment={comment}
+              isRecruitComment={true}
+            />
+          );
+        })}
+    </div>
+  );
+};
+
+const commentsLayerSelfCss = css(flex('', '', 'column', 20));
+
+const RecruitCommentFormLayer = (props: { recruitId: number }) => {
+  const { recruitId } = props;
+  const { data: myInfo } = useMyInfo();
+  const { mutateAsync: createRecruitComment } =
+    useCreateRecruitComment(recruitId);
+  const [formKey, setFormKey] = useState(1);
+
+  const invalidateComments = useInvalidateRecruitComments(recruitId);
+  const isSignedIn = !!myInfo;
+
+  const onValidSubmit: ArticleCommentFormProps['onValidSubmit'] = async (
+    _,
+    formValues
+  ) => {
+    try {
+      await createRecruitComment(formValues);
+      await invalidateComments();
+      setFormKey((p) => p + 1);
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
+  return (
+    <ArticleCommentForm
+      onValidSubmit={onValidSubmit}
+      key={formKey}
+      options={{ showNotSignedInFallback: !isSignedIn, showAnonymous: false }}
+    />
+  );
+};
 
 /* ssr */
 

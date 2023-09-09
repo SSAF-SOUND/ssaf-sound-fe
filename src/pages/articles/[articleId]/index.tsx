@@ -135,7 +135,11 @@ const ArticleCommentsLayer = (props: {
 }) => {
   const { articleId, className } = props;
   const skeletonCount = 8;
-  const { data: comments, isLoading } = useArticleComments(articleId);
+  const {
+    data: comments,
+    isLoading,
+    isSuccess,
+  } = useArticleComments(articleId);
 
   return (
     <div css={commentsLayerSelfCss} className={className}>
@@ -149,7 +153,7 @@ const ArticleCommentsLayer = (props: {
         />
       )}
 
-      {comments &&
+      {isSuccess &&
         comments.map((comment) => {
           return (
             <ArticleComment
