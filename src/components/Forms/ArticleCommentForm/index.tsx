@@ -12,7 +12,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 import { AlertText, Checkbox, Icon, IconButton } from '~/components/Common';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss, palettes, Theme } from '~/styles/utils';
 import { getPathname, routes, webStorage } from '~/utils';
 
 const contentFieldName = 'content';
@@ -100,7 +100,7 @@ const ArticleCommentForm = (props: ArticleCommentFormProps) => {
 
           <IconButton
             type="submit"
-            theme="black"
+            theme={Theme.BLACK}
             disabled={isSubmitting}
             size={24}
             css={submitButtonCss}

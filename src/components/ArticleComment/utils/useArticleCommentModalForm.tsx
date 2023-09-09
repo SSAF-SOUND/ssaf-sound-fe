@@ -7,6 +7,7 @@ import { useModal } from '~/components/GlobalModal';
 interface OpenArticleCommentModalFormParams {
   onValidSubmit: ArticleCommentFormProps['onValidSubmit'];
   defaultValues?: ArticleCommentFormProps['defaultValues'];
+  isRecruitComment?: boolean;
 }
 
 export const useArticleCommentModalForm = () => {

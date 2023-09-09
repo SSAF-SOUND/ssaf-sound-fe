@@ -34,7 +34,6 @@ interface ArticleCommentProps {
   articleId: number;
   comment: CommentDetail | CommentDetailWithoutReplies;
   leaf?: boolean;
-
   isRecruitComment?: boolean;
 }
 
@@ -132,7 +131,10 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
   };
 
   const onClickReplyButton = () => {
-    openArticleCommentModalForm({ onValidSubmit: handleCreateCommentReply });
+    openArticleCommentModalForm({
+      onValidSubmit: handleCreateCommentReply,
+      isRecruitComment,
+    });
   };
 
   const onClickMoreButton = () => {
