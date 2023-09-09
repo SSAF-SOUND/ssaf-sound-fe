@@ -23,10 +23,11 @@ const ArticleMain = (props: ArticleMainProps) => {
 
   return (
     <div className={className}>
-      <h2 css={[titleCss, { marginBottom: 10 }]}>
+      <h2 css={[titleCss, { marginBottom: 24 }]}>
         <span>{title}</span>
         {modified && <strong css={modifyIndicator}>(수정됨)</strong>}
       </h2>
+
       <ArticleContent html={content} css={{ marginBottom: 20 }} />
       {hasImage && (
         <ThumbnailBar
@@ -41,8 +42,10 @@ const ArticleMain = (props: ArticleMainProps) => {
 
 export default ArticleMain;
 
-const titleCss = css(fontCss.style.B16, flex('center', '', 'row', 10));
+const titleCss = css(fontCss.style.B20, flex('center', '', 'row', 10));
+
 const modifyIndicator = css({ color: palettes.primary.dark });
+
 const thumbnailBarCss = css({
   backgroundColor: palettes.background.grey,
   padding: 0,

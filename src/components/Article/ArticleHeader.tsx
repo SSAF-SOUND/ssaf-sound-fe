@@ -29,36 +29,41 @@ const ArticleHeader = (props: ArticleHeaderProps) => {
 
   return (
     <header css={selfCss} className={className}>
-      <div css={metaCss}>
+      <div css={topDivisionCss}>
         <Name
           userInfo={populateDefaultUserInfo(author)}
           size="md"
           anonymous={anonymity}
         />
-        <time dateTime={createdAt} css={timeCss}>
-          <span>{date}</span>
-          <Separator
-            orientation="vertical"
-            css={{ margin: '0 8px' }}
-            height={16}
+        {isSignedIn && (
+          <ArticleIconButton
+            iconName="more"
+            label="더보기"
+            onClick={openArticleMenuModal}
           />
-          <span>{time}</span>
-        </time>
+        )}
       </div>
 
-      {isSignedIn && (
-        <ArticleIconButton
-          iconName="more"
-          label="더보기"
-          onClick={openArticleMenuModal}
+      <time dateTime={createdAt} css={timeCss}>
+        <span>{date}</span>
+        <Separator
+          orientation="vertical"
+          css={{ margin: '0 8px' }}
+          height={16}
         />
-      )}
+        <span>{time}</span>
+      </time>
     </header>
   );
 };
 
 export default ArticleHeader;
 
-const selfCss = css({ height: 32 }, flex('center', 'space-between', 'row'));
-const metaCss = css(flex('center', '', 'row', 10));
+const selfCss = css(flex('', '', 'column', 6));
+
+const topDivisionCss = css(
+  { minHeight: 32 },
+  flex('center', 'space-between', 'row', 16)
+);
+
 const timeCss = css(fontCss.style.R12, flex('center', '', 'row'));
