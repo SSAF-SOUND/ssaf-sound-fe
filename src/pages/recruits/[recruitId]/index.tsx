@@ -65,6 +65,8 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
     scraped,
     scrapCount,
     contactURI,
+
+    content,
   } = recruitDetail;
   const titleBarTitle = getDisplayCategoryName(category);
   const recruitTheme = getRecruitThemeByCategory(category);
@@ -158,16 +160,12 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
         theme={recruitTheme}
         descriptionText={getDescriptionTabText(category)}
       >
-        <Recruit.Tabs.DescriptionContent>
-          프로젝트 설명
-        </Recruit.Tabs.DescriptionContent>
+        <Recruit.Tabs.DescriptionContent html={content} />
 
-        <Recruit.Tabs.ParticipantsContent>
-          리쿠르팅 현황
-        </Recruit.Tabs.ParticipantsContent>
+        <Recruit.Tabs.ParticipantsContent recruitId={recruitId} />
       </Recruit.Tabs.Root>
 
-      <div>comment</div>
+      <div></div>
     </RecruitDetailLayout>
   );
 };

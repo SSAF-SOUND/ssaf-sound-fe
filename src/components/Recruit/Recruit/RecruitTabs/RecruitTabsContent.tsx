@@ -2,35 +2,38 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
+import ArticleContent from '~/components/Article/ArticleContent';
 import { Tabs } from '~/components/Common';
 
 import { RecruitTabsValue } from './constants';
 
-interface RecruitTabsContentProps {
-  children: ReactNode;
+interface RecruitTabsDescriptionContentProps {
+  html: string;
 }
 
 export const RecruitTabsDescriptionContent = (
-  props: RecruitTabsContentProps
+  props: RecruitTabsDescriptionContentProps
 ) => {
+  const { html } = props;
   return (
-    <Tabs.Content
-      css={selfCss}
-      value={RecruitTabsValue.DESCRIPTION}
-      {...props}
-    />
+    <Tabs.Content css={selfCss} value={RecruitTabsValue.DESCRIPTION} {...props}>
+      <ArticleContent html={html} />
+    </Tabs.Content>
   );
 };
 
+interface RecruitTabsParticipantsProgressContentProps {
+  recruitId: number;
+}
+
 export const RecruitTabsParticipantsProgressContent = (
-  props: RecruitTabsContentProps
+  props: RecruitTabsParticipantsProgressContentProps
 ) => {
+  const { recruitId } = props;
   return (
-    <Tabs.Content
-      css={selfCss}
-      value={RecruitTabsValue.PARTICIPANTS_PROGRESS}
-      {...props}
-    />
+    <Tabs.Content css={selfCss} value={RecruitTabsValue.PARTICIPANTS_PROGRESS}>
+      {recruitId}
+    </Tabs.Content>
   );
 };
 
