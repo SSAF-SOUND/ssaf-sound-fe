@@ -23,8 +23,10 @@ export const RecruitParticipantsInfo = memo(
     return (
       <span>
         {recruitPart}{' '}
-        <RecruitInfoHighlightText>{currentParticipantsCount}</RecruitInfoHighlightText>/
-        {maxParticipantsCount}명
+        <RecruitInfoHighlightText>
+          {currentParticipantsCount}
+        </RecruitInfoHighlightText>
+        /{maxParticipantsCount}명
         {!isLastInfo && <RecruitParticipantsSeparator />}
       </span>
     );
@@ -32,4 +34,6 @@ export const RecruitParticipantsInfo = memo(
 );
 RecruitParticipantsInfo.displayName = 'RecruitParticipantsInfo';
 
-const RecruitParticipantsSeparator = () => <span>, </span>;
+const RecruitParticipantsSeparator = () => (
+  <span css={{ marginRight: 6 }}>, </span>
+);
