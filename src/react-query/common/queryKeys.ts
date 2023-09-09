@@ -36,7 +36,11 @@ export const queryKeys = {
     list: (recruitId: number) => ['recruit-comments', recruitId],
   },
   recruit: {
-    // todo 객체형태로 수정
+    detail: (recruitId: number) => ['recruit', recruitId],
+    participants: (recruitId: number) => [
+      ...queryKeys.recruit.detail(recruitId),
+      'participants',
+    ],
     list: (params: RecruitParams) => {
       return [
         'recruits',
@@ -49,7 +53,6 @@ export const queryKeys = {
         params.keyword ?? null,
       ];
     },
-    detail: (recruitId: number) => ['recruits', 'detail', recruitId],
     members: (recruitId: number) => ['recruits', 'members', recruitId],
     scrap: (recruitId: number) => ['recruits', 'scrap', recruitId],
     apply: (recruitId: number) => ['recruits', 'apply', recruitId],
@@ -186,6 +189,8 @@ export const endpoints = {
     self: () => `/recruits` as const,
     members: (recruitId: number) =>
       `${endpoints.recruit.self()}/${recruitId}/members` as const,
+    participants: (recruitId: number) =>
+      `${endpoints.recruit.detail(recruitId)}/members` as const,
     detail: (recruitId: number) =>
       `${endpoints.recruit.self()}/${recruitId}` as const,
     scrap: (recruitId: number) =>

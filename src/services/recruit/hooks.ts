@@ -3,7 +3,11 @@ import type { RecruitParams } from './apis2';
 import { useMutation, useQuery, useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { createRecruit, getRecruitDetail } from '~/services/recruit/apis';
+import {
+  createRecruit,
+  getRecruitDetail,
+  getRecruitParticipants,
+} from '~/services/recruit/apis';
 import {
   postRecruitApplicationCancel,
   postRecruitApplicationReject,
@@ -100,5 +104,12 @@ export const useRecruitDetail = (
     queryKey: queryKeys.recruit.detail(recruitId),
     queryFn: () => getRecruitDetail(recruitId),
     enabled,
+  });
+};
+
+export const useRecruitParticipants = (recruitId: number) => {
+  return useQuery({
+    queryKey: queryKeys.recruit.participants(recruitId),
+    queryFn: () => getRecruitParticipants(recruitId),
   });
 };

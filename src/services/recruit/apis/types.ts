@@ -30,3 +30,8 @@ export type RecruitDetail = {
 
   view: number;
 } & ScrapStatus;
+
+export interface RecruitParticipantsDetail {
+  limit: number;
+  members: UserInfo[];
+}
