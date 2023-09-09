@@ -163,6 +163,7 @@ const textAreaCss = css(
     borderRadius: 20,
     resize: 'vertical',
     minHeight: 48,
+    maxHeight: 240,
   },
   fontCss.style.R14
 );
