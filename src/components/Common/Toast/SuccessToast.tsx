@@ -7,17 +7,18 @@ import ToastRoot from '~/components/Common/Toast/ToastRoot';
 import { palettes } from '~/styles/utils';
 
 interface SuccessToastProps {
-  t: Toast;
+  t?: Toast;
+  onClick?: () => void;
   message: string;
 }
 
 const SuccessToast = (props: SuccessToastProps) => {
-  const { t, message } = props;
+  const { t, message, onClick } = props;
+  const handleClick = onClick ? onClick : () => t && toast.dismiss(t.id);
+
   return (
     <ToastRoot
-      onClick={() => {
-        toast.dismiss(t.id);
-      }}
+      onClick={handleClick}
       icon={<Icon name="check" color={palettes.success.default} size={24} />}
     >
       {message}
