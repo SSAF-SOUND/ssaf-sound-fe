@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import TextAreaAutoSize from 'react-textarea-autosize';
 
 import { AlertText, Checkbox, Icon, IconButton } from '~/components/Common';
 import { flex, fontCss, palettes, Theme } from '~/styles/utils';
@@ -88,7 +89,7 @@ const ArticleCommentForm = (props: ArticleCommentFormProps) => {
         onSubmit={handleSubmit(handleValidSubmit, handleInvalidSubmit)}
       >
         <div css={fieldsLayerCss}>
-          <textarea
+          <TextAreaAutoSize
             css={textAreaCss}
             placeholder="댓글을 입력하세요"
             {...register(contentFieldName, {
