@@ -39,9 +39,10 @@ export const RecruitParticipantsProgressDetail = memo(
         <RecruitParticipantsProgressDetailHeader css={{ marginBottom: 40 }} />
 
         {Object.entries(recruitParticipants).map(
-          ([part, { members, limit }]) => {
-            const memberCount = members.length;
-            const requiredCount = limit - memberCount;
+          ([part, { members, limit: maxParticipantsCount }]) => {
+            const currentParticipantsCount = members.length;
+            const requiredCount =
+              maxParticipantsCount - currentParticipantsCount;
 
             return (
               <div key={part} css={{ marginBottom: 40 }}>
