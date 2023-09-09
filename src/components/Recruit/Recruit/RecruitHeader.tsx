@@ -4,6 +4,7 @@ import type { RecruitDetail } from '~/services/recruit';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import toast from 'react-hot-toast';
 
 import Name from '~/components/Name';
 import { RecruitIconButton } from '~/components/Recruit/Recruit/RecruitIconButton';
@@ -13,9 +14,9 @@ import { RecruitDeadline } from '~/components/Recruit/RecruitDeadline';
 import { useCommonBottomMenuModal } from '~/services/common';
 import { useMyInfo } from '~/services/member';
 import { getRecruitThemeByCategory } from '~/services/recruit';
-import { ReportDomain } from '~/services/report';
+import { ReportDomain, useReport } from '~/services/report';
 import { flex } from '~/styles/utils';
-import { routes } from '~/utils';
+import { customToast, routes } from '~/utils';
 
 interface RecruitHeaderProps {
   className?: string;
@@ -30,6 +31,7 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
   const { recruitDetail, ...restProps } = props;
   const { recruitId, category, recruitEnd, view, title, author, mine } =
     recruitDetail;
+  const { mutateAsync: reportRecruit } = useReport();
 
   const recruitTheme = getRecruitThemeByCategory(category);
 
@@ -38,7 +40,19 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
   const onClickReport: ReportProps['onClickReport'] = ({
     domain,
     reportReasonId,
-  }) => {};
+  }) => {
+    customToast.promise(
+      reportRecruit({
+        domain,
+        reasonId: reportReasonId,
+        sourceId: recruitId,
+      }),
+      {
+        loading: '신고 요청을 처리중입니다.',
+        success: '해당 리쿠르팅을 성공적으로 신고하였습니다.',
+      }
+    );
+  };
 
   const { openCommonBottomMenuModal } = useCommonBottomMenuModal({
     mine,
