@@ -41,7 +41,7 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
     domain,
     reportReasonId,
   }) => {
-    customToast.promise(
+    return customToast.promise(
       reportRecruit({
         domain,
         reasonId: reportReasonId,
