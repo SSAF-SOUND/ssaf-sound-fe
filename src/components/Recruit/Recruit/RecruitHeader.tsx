@@ -29,7 +29,7 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
     <header css={[selfCss, { marginBottom: 20 }]} {...restProps}>
       <RecruitDeadline endDate={recruitEnd} size="md" theme={recruitTheme} />
 
-      <RecruitViewCount>{view}</RecruitViewCount>
+      <RecruitViewCount>{view.toLocaleString()}</RecruitViewCount>
 
       <div css={titleLayerCss}>
         <RecruitTitle>{title}</RecruitTitle>
