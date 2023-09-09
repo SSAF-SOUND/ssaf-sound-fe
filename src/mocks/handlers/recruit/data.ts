@@ -5,6 +5,7 @@ import type {
   RecruitApplicant,
   RecruitDetail,
   recruitMembersType,
+  RecruitParticipantsDetail,
   RecruitParticipantsProgress,
 } from '~/services/recruit';
 
@@ -163,7 +164,7 @@ const recruitSummary: any = {
   ] as any,
 };
 
-const recruitTypesOfRecruitMembers = Object.fromEntries(
+export const recruitParticipants = Object.fromEntries(
   Object.values(RecruitParts).map((part, partIndex) => {
     const partInfo = recruitDetail.project.limits.find(
       ({ recruitType }) => part === recruitType
@@ -172,7 +173,7 @@ const recruitTypesOfRecruitMembers = Object.fromEntries(
     const currentNumber = partInfo?.currentNumber as number;
     const limit = partInfo?.limit as number;
 
-    const memberIds = Array(20)
+    const memberIds = Array(10)
       .fill(5000)
       .map((v, index) => v + index)
       .map((v) => v * (partIndex + 1))
@@ -182,14 +183,14 @@ const recruitTypesOfRecruitMembers = Object.fromEntries(
       part,
       {
         limit: limit,
-        members: memberIds.map((memberId) => createMockUser(memberId)),
+        members: memberIds.map((memberId) => createMockUser(memberId, true)),
       },
     ];
   })
-);
+) as Record<RecruitParts, RecruitParticipantsDetail>;
 
 const recruitMembers: recruitMembersType = {
-  recruitTypes: recruitTypesOfRecruitMembers,
+  recruitTypes: recruitParticipants,
 };
 
 const RecruitScrap = {
@@ -266,6 +267,7 @@ const RecruitApplicationDetail = {
 
 export const RecruitData = {
   recruitDetail,
+  recruitParticipants,
 
   //
   recruitMocks,

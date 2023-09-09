@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type {
   CreateRecruitApiData,
+  GetRecruitParticipantsApiData,
   RecruitDetail,
-  recruitMembersType,
   RecruitScrapApiData,
 } from '~/services/recruit';
 
@@ -10,9 +10,10 @@ import { rest } from 'msw';
 
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
+import { RecruitParts } from '~/services/recruit';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-import { RecruitData } from './data';
+import { RecruitData, recruitParticipants } from './data';
 import { restInfiniteRecruitsSuccess } from './utils';
 
 export const getRecruits = rest.get(
@@ -27,12 +28,25 @@ export const getRecruits = rest.get(
   restInfiniteRecruitsSuccess
 );
 
-export const getRecruitMembers = restSuccess<recruitMembersType>(
+const projectParticipants = {
+  ...recruitParticipants,
+} as Partial<typeof recruitParticipants>;
+delete projectParticipants[RecruitParts.STUDY];
+
+const studyParticipants = {
+  [RecruitParts.STUDY]: recruitParticipants[RecruitParts.STUDY],
+};
+
+export const getRecruitParticipants = restSuccess<
+  GetRecruitParticipantsApiData['data']
+>(
   'get',
   // @ts-ignore
   composeUrls(API_URL, endpoints.recruit.members(':recruitId')),
   {
-    data: RecruitData.recruitMembers,
+    data: {
+      recruitTypes: projectParticipants,
+    },
   }
 );
 
@@ -158,7 +172,7 @@ export const createRecruitError = restError(
 export const recruitHandlers = [
   getRecruitDetail,
   getRecruits,
-  getRecruitMembers,
+  getRecruitParticipants,
   postRecruitScrap,
   postRecruitApply,
   getRecruitApplicants,
