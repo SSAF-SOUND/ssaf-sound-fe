@@ -16,9 +16,7 @@ import {
 } from '~/components/Common';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import { RecruitDetailLayout } from '~/components/Layout';
-import Name from '~/components/Name';
 import { Recruit } from '~/components/Recruit/Recruit';
-import { RecruitDeadline } from '~/components/Recruit/RecruitDeadline';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
@@ -36,7 +34,7 @@ import {
   useInvalidateRecruitComments,
   useRecruitComments,
 } from '~/services/recruitComment';
-import { expandCss, flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
+import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
 import {
   ErrorMessage,
   getErrorResponse,
@@ -50,12 +48,12 @@ interface RecruitDetailPageProps
 
 const RecruitDetailPage = (props: RecruitDetailPageProps) => {
   const { recruitId } = props;
+
   const {
     data: recruitDetail,
     isLoading: isRecruitDetailLoading,
     isError: isRecruitDetailError,
     error: recruitDetailError,
-    isSuccess: isRecruitDetailSuccess,
   } = useRecruitDetail(recruitId);
 
   if (isRecruitDetailLoading) {
@@ -78,13 +76,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
   }
 
   const {
-    recruitEnd,
     category,
-    view,
-    author,
-    scraped,
-    scrapCount,
-    contactURI,
 
     title,
     content,
@@ -115,81 +107,24 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
           withoutClose
         />
 
-        <div css={{ marginBottom: 40 }}>
-          <div css={[headerCss, { marginBottom: 20 }]}>
-            <RecruitDeadline
-              endDate={recruitEnd}
-              size="md"
-              theme={recruitTheme}
-            />
-
-            <Recruit.ViewCount>{view}</Recruit.ViewCount>
-
-            <div css={titleLayerCss}>
-              <Recruit.Title>{title}</Recruit.Title>
-              <Recruit.IconButton iconName="more" label="더보기" />
-            </div>
-
-            <Name userInfo={author} size="md" />
-          </div>
+        <article css={{ marginBottom: 40 }}>
+          <Recruit.Header
+            css={{ marginBottom: 20 }}
+            recruitDetail={recruitDetail}
+          />
 
           <Recruit.BasicInfo
             css={[pageExpandCss, { marginBottom: 20 }]}
             recruitDetail={recruitDetail}
           />
 
-          <div css={recruitStatsCss}>
-            <div css={iconButtonsLayerCss}>
-              <div css={bookmarkButtonLayerCss}>
-                <Recruit.IconButton
-                  iconName={scraped ? 'bookmark' : 'bookmark.outline'}
-                  iconColor={palettes.primary.default}
-                  label="스크랩"
-                  theme={recruitTheme}
-                />
-                <strong>{scrapCount}</strong>
-              </div>
+          <Recruit.Stats recruitDetail={recruitDetail} />
+        </article>
 
-              <div>
-                <Recruit.IconButton
-                  iconColor={palettes.primary.default}
-                  iconName="share"
-                  label="URL 복사"
-                  theme={recruitTheme}
-                />
-              </div>
-            </div>
-
-            <div css={commentIconLayerCss}>
-              <Recruit.Icon
-                iconName="chat.rect"
-                label="댓글"
-                color={palettes.secondary.default}
-              />
-              {/* TODO: commentCount */}
-              <strong>{1}</strong>
-            </div>
-          </div>
-        </div>
-
-        <div css={[buttonsLayerCss, { marginBottom: 60 }]}>
-          <Recruit.ContactLink
-            href={contactURI}
-            css={contactButtonCss}
-            theme={recruitTheme}
-          />
-          <Recruit.ApplyLink
-            recruitId={recruitId}
-            css={dynamicButtonCss}
-            theme={recruitTheme}
-          />
-          {/*<Recruit.MyApplicationLink*/}
-          {/*  css={dynamicButtonCss}*/}
-          {/*  recruitId={recruitId}*/}
-          {/*/>*/}
-          {/*<Recruit.ApplicantsLink css={dynamicButtonCss} recruitId={recruitId} />*/}
-          {/* 유저에 따라 달라짐 */}
-        </div>
+        <Recruit.Links
+          css={{ marginBottom: 60 }}
+          recruitDetail={recruitDetail}
+        />
 
         <Recruit.Tabs.Root
           css={{ marginBottom: 50 }}
@@ -232,32 +167,6 @@ const getDescriptionTabText = (category: RecruitCategoryName) => {
 };
 
 const pageExpandCss = expandCss();
-
-const headerCss = css(flex('flex-start', '', 'column'));
-const titleLayerCss = css(
-  { width: '100%' },
-  flex('center', 'space-between', 'row', 12)
-);
-const recruitStatsCss = css(
-  { margin: '0 -5px' },
-  flex('center', 'space-between', 'row', 24)
-);
-const iconButtonsLayerCss = css(flex('center', 'flex-start', 'row', 8));
-const bookmarkButtonLayerCss = css(
-  { color: palettes.primary.default },
-  fontCss.style.B16,
-  inlineFlex('center', 'flex-start', 'row')
-);
-const commentIconLayerCss = css(
-  { color: palettes.secondary.default },
-  fontCss.style.B16,
-  flex('center', '', 'row', 6)
-);
-
-const buttonsLayerCss = css(flex('center', '', 'row', 12));
-
-const contactButtonCss = css({ width: '33%', minWidth: 120 });
-const dynamicButtonCss = css({ width: '66%' });
 
 export default RecruitDetailPage;
 
