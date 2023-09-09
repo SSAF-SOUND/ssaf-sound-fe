@@ -1,5 +1,7 @@
+export * from './arithmetic';
 export * from './colorMix';
 export * from './constants';
+export * from './expandCss';
 export * from './filter';
 export * from './fixedPosition';
 export * from './flex';

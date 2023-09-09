@@ -110,11 +110,10 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
 export default ArticleDetailPage;
 
-const selfPaddingX = 10;
-const negativeMarginForExpand = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
+const negativeMarginForExpand = `calc(-1 * ${globalVars.mainLayoutPaddingX.var})`;
 
 const selfCss = css({
-  padding: `${titleBarHeight}px ${selfPaddingX}px 240px`,
+  padding: `${titleBarHeight}px 0 240px`,
 });
 
 const expandCss = css({

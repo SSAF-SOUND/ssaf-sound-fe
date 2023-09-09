@@ -67,5 +67,5 @@ MyArticlesPage.meta = {
 
 const selfPaddingTop = titleBarHeight + 24;
 const selfCss = css({
-  padding: `${selfPaddingTop}px 15px 0`,
+  padding: `${selfPaddingTop}px 0 0`,
 });

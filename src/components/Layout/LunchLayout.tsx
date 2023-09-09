@@ -19,11 +19,10 @@ export const LunchLayout = (props: LunchLayoutProps) => {
 };
 
 const selfPaddingY = topBarHeight + 44;
-const selfPaddingX = 15;
 
 const selfCss = css(
   {
-    padding: `${selfPaddingY}px ${selfPaddingX}px`,
+    padding: `${selfPaddingY}px 0`,
     minWidth: pageMinWidth,
     minHeight: `max(${pageMinHeight}px, 100vh)`,
   },

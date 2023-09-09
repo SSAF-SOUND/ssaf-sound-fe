@@ -4,8 +4,6 @@ import type { UserPortfolio } from '~/services/member';
 
 import { useRouter } from 'next/router';
 
-import { css } from '@emotion/react';
-
 import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import {
   DefaultFullPageLoader,
@@ -102,16 +100,11 @@ const PortfolioEditPage: CustomNextPage = () => {
     }
   };
 
-  const skillsContainerStyle = {
-    width: 'auto',
-    margin: `0 calc(-1 * (${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var}))`,
-  };
-
   return (
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <div>
         <PortfolioForm
           defaultValues={{
             selfIntroduction: myPortfolio.selfIntroduction,
@@ -119,7 +112,7 @@ const PortfolioEditPage: CustomNextPage = () => {
             skills: portfolioSkillsToFormSkillsField(myPortfolio.skills),
           }}
           options={{
-            skillsContainerStyle,
+            marginForExpand: globalVars.mainLayoutPaddingX.var,
             titleBarCloseRoute: routes.profile.detail(myInfo.memberId),
           }}
           onInvalidSubmit={onInvalidSubmit}
@@ -163,8 +156,3 @@ PortfolioEditPage.meta = {
   openGraph: { title: metaTitle },
   robots: { index: false, follow: false },
 };
-
-const selfPaddingX = '15px';
-const selfCss = css({
-  padding: `0 ${selfPaddingX}`,
-});

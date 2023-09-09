@@ -14,7 +14,6 @@ export const RecruitDetailLayout = (props: RecruitDetailLayoutProps) => {
 };
 
 const selfPaddingY = titleBarHeight + 12;
-const selfPaddingX = 15;
 const selfCss = css({
-  padding: `${selfPaddingY}px ${selfPaddingX}px`,
+  padding: `${selfPaddingY}px 0`,
 });

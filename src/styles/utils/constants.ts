@@ -1,4 +1,4 @@
-export const pageMinHeight = 700;
+export const pageMinHeight = 600;
 
 export const pageMinWidth = 350;
 export const pageMaxWidth = 576;

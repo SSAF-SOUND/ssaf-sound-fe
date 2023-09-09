@@ -86,7 +86,7 @@ RegisterPage.auth = {
 
 export default RegisterPage;
 
-const selfCss = css({ minHeight: '100vh', padding: '10px 15px' }, flex());
+const selfCss = css({ minHeight: '100vh', padding: '10px 0' }, flex());
 const formCss = css({ flexGrow: 1 });
 
 const Welcome = () => {

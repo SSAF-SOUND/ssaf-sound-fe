@@ -1,12 +1,10 @@
-import type { CSSProperties } from 'react';
-
 import { css } from '@emotion/react';
 import { useId, useRef, useState } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import { SkillName } from '~/services/recruit';
-import { flex, fontCss, palettes, position } from '~/styles/utils';
+import { expandStyle, flex, fontCss, palettes, position } from '~/styles/utils';
 import { clamp } from '~/utils';
 
 import SelectedSkills from './SelectedSkills';
@@ -17,11 +15,11 @@ const fieldName = 'skills';
 
 interface SkillsProps {
   className?: string;
-  skillsContainerStyle?: CSSProperties;
+  marginForExpand?: number | string;
 }
 
 export const Skills = (props: SkillsProps) => {
-  const { className, skillsContainerStyle } = props;
+  const { className, marginForExpand } = props;
   const {
     register,
     formState: { defaultValues: { skills: defaultSkills = {} } = {} },
@@ -48,7 +46,11 @@ export const Skills = (props: SkillsProps) => {
         disablePadding={true}
       >
         <div css={selectedSkillsCss}>
-          <TransformComponent wrapperStyle={skillsContainerStyle}>
+          <TransformComponent
+            wrapperStyle={
+              marginForExpand ? expandStyle(marginForExpand) : undefined
+            }
+          >
             <SelectedSkills />
           </TransformComponent>
           <SkillOptionsVisibilityToggle

@@ -76,4 +76,4 @@ const selfCss = css(
 
 const logoContainerCss = css(flex('center', 'center', 'column', 18));
 
-const buttonGroupCss = css({ padding: 30 }, flex('', '', 'column', 10));
+const buttonGroupCss = css({ padding: '30px 0' }, flex('', '', 'column', 10));
