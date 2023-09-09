@@ -136,12 +136,6 @@ export interface RecruitComment {
 
 // --------------------------------------
 
-export interface RecruitScrap {
-  scrapCount: number;
-}
-
-export type RecruitScrapApiData = ApiSuccessResponse<RecruitScrap>;
-
 // ---------------------------------------
 
 export interface RecruitApplyParams {

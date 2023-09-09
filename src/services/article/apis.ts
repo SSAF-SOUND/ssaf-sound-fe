@@ -1,4 +1,5 @@
 import type { ArticleCategory, ArticleDetail, ArticleSummary } from './utils';
+import type { LikeStatus, ScrapStatus } from '~/services/common';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
@@ -90,9 +91,7 @@ export const getArticleDetail = (articleId: number) => {
     .then((res) => res.data.data.post);
 };
 
-export type LikeArticleApiData = ApiSuccessResponse<
-  Pick<ArticleDetail, 'liked' | 'likeCount'>
->;
+export type LikeArticleApiData = ApiSuccessResponse<LikeStatus>;
 
 export const likeArticle = (articleId: number) => {
   const endpoint = endpoints.articles.like(articleId);
@@ -102,9 +101,7 @@ export const likeArticle = (articleId: number) => {
     .then((res) => res.data.data);
 };
 
-export type ScrapArticleApiData = ApiSuccessResponse<
-  Pick<ArticleDetail, 'scraped' | 'scrapCount'>
->;
+export type ScrapArticleApiData = ApiSuccessResponse<ScrapStatus>;
 
 export const scrapArticle = (articleId: number) => {
   const endpoint = endpoints.articles.scrap(articleId);
