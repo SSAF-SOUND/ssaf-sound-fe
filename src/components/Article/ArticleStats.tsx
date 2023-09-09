@@ -2,15 +2,17 @@ import type { ArticleDetail } from '~/services/article';
 
 import { css } from '@emotion/react';
 
-import { Icon, IconButton } from '~/components/Common';
+import { ArticleIconButton } from '~/components/Article/ArticleIconButton';
+import { Icon } from '~/components/Common';
 import { useSignInGuideModal } from '~/hooks';
 import { useLikeArticle, useScrapArticle } from '~/services/article';
+import { useArticleComments } from '~/services/articleComment';
+import { countAllComments } from '~/services/comment/utils';
 import { useMyInfo } from '~/services/member';
 import { flex, fontCss, inlineFlex, palettes, Theme } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
-const iconSize = 20;
-const iconButtonSize = 24;
+const iconSize = 24;
 
 interface ArticleStatsProps {
   articleDetail: ArticleDetail;
@@ -19,16 +21,19 @@ interface ArticleStatsProps {
 
 const ArticleStats = (props: ArticleStatsProps) => {
   const { articleDetail, className } = props;
+  const { data: comments } = useArticleComments(articleDetail.postId);
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
 
   const { openSignInGuideModal } = useSignInGuideModal();
-  const { liked, likeCount, scraped, scrapCount, commentCount } = articleDetail;
+  const { liked, likeCount, scraped, scrapCount } = articleDetail;
   const { postId: articleId } = articleDetail;
   const { mutateAsync: likeArticle, isLoading: isTogglingLike } =
     useLikeArticle(articleId);
   const { mutateAsync: scrapArticle, isLoading: isTogglingScrap } =
     useScrapArticle(articleId);
+
+  const commentCount = comments && countAllComments(comments);
 
   const handleNotSignedInUser = () => {
     openSignInGuideModal();
@@ -69,7 +74,7 @@ const ArticleStats = (props: ArticleStatsProps) => {
             onClick={handleClickLike}
             disabled={isTogglingLike}
           />
-          <strong>{likeCount}</strong>
+          <strong css={countCss}>{likeCount}</strong>
         </div>
 
         <div css={iconContainerCss}>
@@ -78,14 +83,14 @@ const ArticleStats = (props: ArticleStatsProps) => {
             onClick={handleClickScrap}
             disabled={isTogglingScrap}
           />
-          <strong>{scrapCount}</strong>
+          <strong css={countCss}>{scrapCount}</strong>
         </div>
       </div>
 
       <div css={commentStatCss}>
         <div css={[iconContainerCss, { gap: 6 }]}>
           <Icon name="chat.rect" size={iconSize} />
-          <strong>{commentCount}</strong>
+          <strong css={countCss}>{commentCount}</strong>
         </div>
       </div>
     </div>
@@ -102,40 +107,26 @@ interface InterestButtonProps {
 const LikeButton = (props: InterestButtonProps) => {
   const { pressed, theme = Theme.PRIMARY, ...restProps } = props;
   return (
-    <IconButton
-      css={iconContainerCss}
-      size={iconButtonSize}
+    <ArticleIconButton
+      iconName={pressed ? 'like' : 'like.outline'}
+      label="좋아요"
+      iconColor={palettes.primary.default}
       theme={theme}
       {...restProps}
-    >
-      <Icon
-        name={pressed ? 'like' : 'like.outline'}
-        color={palettes.primary.default}
-        size={iconSize}
-      />
-    </IconButton>
+    />
   );
 };
 
 export const ScrapButton = (props: InterestButtonProps) => {
   const { pressed, theme = Theme.PRIMARY, ...restProps } = props;
   return (
-    <IconButton
-      css={iconContainerCss}
-      size={iconButtonSize}
+    <ArticleIconButton
+      iconName={pressed ? 'bookmark' : 'bookmark.outline'}
+      label="스크랩"
+      iconColor={palettes.primary.default}
       theme={theme}
       {...restProps}
-    >
-      <Icon
-        name={pressed ? 'bookmark' : 'bookmark.outline'}
-        color={
-          theme === 'primary'
-            ? palettes.primary.default
-            : palettes.secondary.default
-        }
-        size={iconSize}
-      />
-    </IconButton>
+    />
   );
 };
 
@@ -147,6 +138,8 @@ const interestStatCss = css(
   { color: palettes.primary.default },
   flex('center', '', 'row', 8)
 );
+
+const countCss = css(fontCss.style.B16);
 
 const iconContainerCss = css(inlineFlex('center', '', 'row', 2));
 

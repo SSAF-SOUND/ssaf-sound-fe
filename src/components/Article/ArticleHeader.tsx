@@ -2,6 +2,7 @@ import type { ArticleDetail } from '~/services/article';
 
 import { css } from '@emotion/react';
 
+import { ArticleIconButton } from '~/components/Article/ArticleIconButton';
 import { useArticleMenuModal } from '~/components/Article/utils';
 import { Icon, IconButton, Separator } from '~/components/Common';
 import Name from '~/components/Name';
@@ -46,9 +47,11 @@ const ArticleHeader = (props: ArticleHeaderProps) => {
       </div>
 
       {isSignedIn && (
-        <IconButton size={24} onClick={openArticleMenuModal}>
-          <Icon name="more" size={24} />
-        </IconButton>
+        <ArticleIconButton
+          iconName="more"
+          label="더보기"
+          onClick={openArticleMenuModal}
+        />
       )}
     </header>
   );
@@ -56,6 +59,6 @@ const ArticleHeader = (props: ArticleHeaderProps) => {
 
 export default ArticleHeader;
 
-const selfCss = css(flex('center', 'space-between', 'row'));
+const selfCss = css({ height: 32 }, flex('center', 'space-between', 'row'));
 const metaCss = css(flex('center', '', 'row', 10));
 const timeCss = css(fontCss.style.R12, flex('center', '', 'row'));
