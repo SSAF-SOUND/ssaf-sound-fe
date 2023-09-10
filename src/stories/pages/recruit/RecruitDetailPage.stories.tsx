@@ -28,10 +28,12 @@ const recruitId = 10000;
 const projectDetail = createMockRecruitDetail(recruitId, false, {
   completed: false,
   mine: false,
+  matchStatus: MatchStatus.INITIAL,
 });
 const studyDetail = createMockRecruitDetail(recruitId, true, {
   completed: false,
   mine: false,
+  matchStatus: MatchStatus.INITIAL,
 });
 
 const signedInProjectDetail = { ...projectDetail };
@@ -157,7 +159,7 @@ export const SignedIn: RecruitDetailPageSignedInStory = {
     matchStatus: {
       name: '매칭 상태',
       options: Object.values(MatchStatus),
-      controls: {
+      control: {
         type: 'radio',
         labels: {
           [MatchStatus.INITIAL]: '신청 전',

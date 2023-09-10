@@ -7,8 +7,9 @@ import { palettes, Theme } from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface RecruitMyApplicationLinkProps {
-  className?: string;
   recruitId: number;
+  className?: string;
+  loading?: boolean;
 }
 
 export const RecruitMyApplicationLink = (

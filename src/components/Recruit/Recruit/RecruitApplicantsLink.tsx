@@ -5,8 +5,9 @@ import { Theme } from '~/styles/utils';
 import { routes } from '~/utils';
 
 interface RecruitApplicantsLinkProps {
-  className?: string;
   recruitId: number;
+  className?: string;
+  loading?: boolean;
 }
 
 export const RecruitApplicantsLink = (props: RecruitApplicantsLinkProps) => {

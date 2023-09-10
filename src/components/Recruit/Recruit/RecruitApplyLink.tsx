@@ -8,7 +8,9 @@ import { routes } from '~/utils';
 interface RecruitApplyLinkProps {
   className?: string;
   onClick?: () => void;
-  theme: Extract<Theme, Theme.PRIMARY | Theme.SECONDARY>;
+  loading?: boolean;
+  disabled?: boolean;
+  theme: Theme.PRIMARY | Theme.SECONDARY;
   recruitId: number;
 }
 
