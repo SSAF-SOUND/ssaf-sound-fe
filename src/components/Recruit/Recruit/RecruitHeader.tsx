@@ -58,8 +58,7 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
       });
 
       closeModal();
-      // TODO: 조회 페이지로 이동해야함
-      await router.replace(routes.main());
+      await router.replace(routes.recruit.self());
     } catch (err) {}
   };
   const onClickReport: ReportProps['onClickReport'] = ({
