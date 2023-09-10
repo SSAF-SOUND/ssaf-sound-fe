@@ -3,76 +3,89 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-import {
-  getRecruitDetail,
-  getRecruitParticipantsError,
-  removeRecruitError,
-  reportError,
-  scrapRecruitError,
-} from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
-import { recruitDetails } from '~/mocks/handlers/recruit/data';
+import {
+  createMockRecruitDetail,
+  createMockRecruitParticipants,
+} from '~/mocks/handlers/recruit/data';
 import RecruitDetailPage from '~/pages/recruits/[recruitId]';
 import { queryKeys } from '~/react-query/common';
 import { useSetMyInfo } from '~/services/member';
-import { useSetRecruitDetail } from '~/services/recruit';
+import {
+  MatchStatus,
+  RecruitCategoryName,
+  useSetRecruitDetail,
+} from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
 import { disableArgs } from '~/stories/utils';
 
-const projectRecruitId = 0;
-const studyRecruitId = 1;
+// 리쿠르팅 상태: 모집 미완료 | 모집 완료
+// 리쿠르팅 종류: 프로젝트 | 스터디
+// 리쿠르팅 유저: 지원자 | 참여자 | 작성자(mine) | 로그아웃 유저
 
-const mineRecruitId = 1;
-const notMineRecruitId = 0;
+const recruitId = 10000;
+
+const projectDetail = createMockRecruitDetail(recruitId, false, {
+  completed: false,
+  mine: false,
+});
+const studyDetail = createMockRecruitDetail(recruitId, true, {
+  completed: false,
+  mine: false,
+});
+
+const signedInProjectDetail = { ...projectDetail };
+const signedInStudyDetail = { ...studyDetail };
+
+const notSignedInProjectDetail = { ...projectDetail, mine: false };
+const notSignedInStudyDetail = { ...studyDetail, mine: false };
+
+const projectParticipantsDetail = createMockRecruitParticipants(projectDetail);
+const studyParticipantsDetail = createMockRecruitParticipants(studyDetail);
 
 const meta: Meta<typeof RecruitDetailPage> = {
-  title: 'Page/Recruit/Detail',
+  title: 'Page/Recruit/리쿠르팅 상세정보',
   component: RecruitDetailPage,
   decorators: [
-    (Story) => (
-      <PageLayout>
-        <Story />
-      </PageLayout>
-    ),
+    (Story) => {
+      const queryClient = useQueryClient();
+      const setMyInfo = useSetMyInfo();
+      const setRecruitDetail = useSetRecruitDetail(recruitId);
+
+      setMyInfo(userInfo.certifiedSsafyUserInfo);
+      setRecruitDetail(projectDetail);
+      queryClient.setQueryData(
+        queryKeys.recruit.participants(recruitId),
+        projectParticipantsDetail
+      );
+
+      useEffect(() => {
+        queryClient.cancelQueries(queryKeys.recruit.detail(recruitId));
+      }, [queryClient]);
+
+      return (
+        <PageLayout>
+          <Story />
+        </PageLayout>
+      );
+    },
   ],
+  args: { recruitId },
+  argTypes: { ...disableArgs(['recruitId']) },
   parameters: {
     layout: 'fullscreen',
-  },
-  argTypes: {
-    recruitId: {
-      options: [projectRecruitId, studyRecruitId],
-      control: {
-        type: 'radio',
-        labels: {
-          [0]: 'Project',
-          [1]: 'Study',
-        },
-      },
-    },
-  },
-  args: {
-    recruitId: projectRecruitId,
   },
 };
 
 export default meta;
 
-type RecruitDetailPageStory = StoryObj<typeof RecruitDetailPage>;
-
-export const Success: RecruitDetailPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      useEffect(() => {
-        setMyInfo(userInfo.certifiedSsafyUserInfo);
-      }, [setMyInfo]);
-
-      return <Story />;
-    },
-  ],
-};
+interface RecruitDetailPageStoryArgs {
+  category: RecruitCategoryName;
+}
+type RecruitDetailPageStory = StoryObj<RecruitDetailPageStoryArgs>;
 
 export const NotSignedIn: RecruitDetailPageStory = {
+  name: '미로그인',
   decorators: [
     (Story) => {
       const setMyInfo = useSetMyInfo();
@@ -85,77 +98,98 @@ export const NotSignedIn: RecruitDetailPageStory = {
       return <Story />;
     },
   ],
-};
-
-export const NotMine: RecruitDetailPageStory = {
-  args: { recruitId: notMineRecruitId },
-  argTypes: { ...disableArgs(['recruitId']) },
-  render: function Render(args) {
-    const { recruitId } = args;
-    const setMyInfo = useSetMyInfo();
-    const setRecruitDetail = useSetRecruitDetail(recruitId);
-
-    useEffect(() => {
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-
-      setRecruitDetail((p) => {
-        if (!p) return;
-        return { ...p, mine: false };
-      });
-    }, [setRecruitDetail, setMyInfo]);
-
-    return <RecruitDetailPage {...args} />;
+  args: {
+    category: RecruitCategoryName.PROJECT,
   },
-};
-
-export const Mine: RecruitDetailPageStory = {
-  args: { recruitId: mineRecruitId },
-  argTypes: { ...disableArgs(['recruitId']) },
-  render: function Render(args) {
-    const setMyInfo = useSetMyInfo();
-
-    useEffect(() => {
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-    }, [setMyInfo]);
-
-    return <RecruitDetailPage {...args} />;
-  },
-};
-
-export const Completed: RecruitDetailPageStory = {
-  args: { recruitId: 10 },
-  argTypes: { ...disableArgs(['recruitId']) },
-  render: function Render(args) {
-    const { recruitId } = args;
-    const setMyInfo = useSetMyInfo();
-    const setRecruitDetail = useSetRecruitDetail(recruitId);
-    const queryClient = useQueryClient();
-
-    useEffect(() => {
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-      setRecruitDetail({
-        ...recruitDetails[mineRecruitId],
-        finishedRecruit: true,
-      });
-      queryClient.cancelQueries(queryKeys.recruit.detail(recruitId));
-    }, [setMyInfo, setRecruitDetail, queryClient, recruitId]);
-
-    return <RecruitDetailPage {...args} />;
-  },
-};
-
-export const Error: RecruitDetailPageStory = {
-  parameters: {
-    msw: {
-      handlers: {
-        recruit: [
-          getRecruitDetail,
-          getRecruitParticipantsError,
-          scrapRecruitError,
-          removeRecruitError,
-        ],
-        report: [reportError],
+  argTypes: {
+    category: {
+      name: '카테고리',
+      options: [RecruitCategoryName.PROJECT, RecruitCategoryName.STUDY],
+      control: {
+        type: 'radio',
+        labels: {
+          [RecruitCategoryName.PROJECT]: '프로젝트',
+          [RecruitCategoryName.STUDY]: '스터디',
+        },
       },
     },
+  },
+  render: function Render(args) {
+    const { category } = args;
+    const queryClient = useQueryClient();
+    const participantsQueryKey = queryKeys.recruit.participants(recruitId);
+    const setRecruitDetail = useSetRecruitDetail(recruitId);
+
+    if (category === RecruitCategoryName.STUDY) {
+      setRecruitDetail(notSignedInStudyDetail);
+      queryClient.setQueryData(participantsQueryKey, studyParticipantsDetail);
+    } else {
+      setRecruitDetail(notSignedInProjectDetail);
+      queryClient.setQueryData(participantsQueryKey, projectParticipantsDetail);
+    }
+
+    return <RecruitDetailPage recruitId={recruitId} />;
+  },
+};
+
+interface RecruitDetailPageSignedInStoryArgs
+  extends RecruitDetailPageStoryArgs {
+  mine: boolean;
+  completed: boolean;
+  matchStatus: MatchStatus;
+}
+
+type RecruitDetailPageSignedInStory =
+  StoryObj<RecruitDetailPageSignedInStoryArgs>;
+export const SignedIn: RecruitDetailPageSignedInStory = {
+  ...NotSignedIn,
+  name: '로그인',
+  decorators: [],
+  args: { ...NotSignedIn.args, mine: false, completed: false },
+  argTypes: {
+    ...NotSignedIn.argTypes,
+    completed: {
+      name: '모집 완료',
+    },
+    mine: {
+      name: '리쿠르트 작성자',
+    },
+    matchStatus: {
+      name: '매칭 상태',
+      options: Object.values(MatchStatus),
+      controls: {
+        type: 'radio',
+        labels: {
+          [MatchStatus.INITIAL]: '신청 전',
+          [MatchStatus.PENDING]: '수락 대기',
+          [MatchStatus.SUCCESS]: '참가 확정',
+          [MatchStatus.REJECTED]: '거절됨',
+        },
+      },
+    },
+  },
+  render: function Render(args) {
+    const { category, mine, completed, matchStatus } = args;
+    const queryClient = useQueryClient();
+    const participantsQueryKey = queryKeys.recruit.participants(recruitId);
+    const setRecruitDetail = useSetRecruitDetail(recruitId);
+
+    if (category === RecruitCategoryName.STUDY) {
+      signedInStudyDetail.mine = mine;
+      signedInStudyDetail.finishedRecruit = completed;
+      signedInStudyDetail.matchStatus = matchStatus;
+      setRecruitDetail(signedInStudyDetail);
+
+      queryClient.setQueryData(participantsQueryKey, studyParticipantsDetail);
+    } else {
+      signedInProjectDetail.mine = mine;
+      signedInProjectDetail.finishedRecruit = completed;
+      signedInProjectDetail.matchStatus = matchStatus;
+      setRecruitDetail(signedInProjectDetail);
+
+      queryClient.setQueryData(participantsQueryKey, projectParticipantsDetail);
+    }
+
+    return <RecruitDetailPage recruitId={recruitId} />;
   },
 };
