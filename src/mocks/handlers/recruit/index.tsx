@@ -13,7 +13,12 @@ import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-import { RecruitData, recruitParticipantsList, recruitDetails } from './data';
+import {
+  RecruitData,
+  recruitParticipantsList,
+  recruitDetails,
+  scrapStatus,
+} from './data';
 import { restInfiniteRecruitsSuccess } from './utils';
 
 export const getRecruits = rest.get(
@@ -186,19 +191,18 @@ const scrapRecruitEndpoint =
   composeUrls(API_URL, endpoints.recruit.scrap(':recruitId'));
 
 export const scrapRecruit = rest.post(scrapRecruitEndpoint, (req, res, ctx) => {
-  const recruitId = Number(req.params.recruitId as string);
+  const { scraped, scrapCount } = scrapStatus;
+  const nextScraped = !scraped;
+  const nextScrapCount = nextScraped ? scrapCount + 1 : scrapCount - 1;
 
-  const recruit = recruitDetails[recruitId];
-  recruit.scraped = !recruit.scraped;
-  const delta = recruit.scraped ? 1 : -1;
-  recruit.scrapCount += delta;
-  const latestScraped = recruit.scraped;
-  const latestScrapCount = recruit.scrapCount;
+  scrapStatus.scraped = nextScraped;
+  scrapStatus.scrapCount = nextScrapCount;
+
   return res(
     ctx.delay(500),
     ...mockSuccess<ScrapRecruitApiData['data']>(ctx, {
-      scraped: latestScraped,
-      scrapCount: latestScrapCount,
+      scraped: nextScraped,
+      scrapCount: nextScrapCount,
     })
   );
 });

@@ -19,6 +19,11 @@ import {
 import { mockHtmlString } from '../common';
 import { createMockUser, userInfo } from '../member/data';
 
+export const scrapStatus = {
+  scraped: true,
+  scrapCount: 777,
+};
+
 // 리쿠르팅 모집 현황 간략정보 (파트당 모집인원, 모집된 인원)
 export const createMockRecruitParticipantsProgress = (
   isStudy: boolean
@@ -89,8 +94,8 @@ export const createMockRecruitDetail = (
     recruitStart: faker.date.past().toISOString(),
     recruitEnd: faker.date.future().toISOString(),
     finishedRecruit,
-    scrapCount: faker.number.int({ min: 1, max: 1000 }),
-    scraped,
+    scrapCount: scrapStatus.scrapCount,
+    scraped: scrapStatus.scraped,
     limits,
     skills,
     view: faker.number.int({ min: 1, max: 1000000 }),

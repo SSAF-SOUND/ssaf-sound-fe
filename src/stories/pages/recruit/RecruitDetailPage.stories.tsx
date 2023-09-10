@@ -139,6 +139,7 @@ interface RecruitDetailPageSignedInStoryArgs
   mine: boolean;
   completed: boolean;
   matchStatus: MatchStatus;
+  existsContact?: boolean;
 }
 
 type RecruitDetailPageSignedInStory =
@@ -147,14 +148,19 @@ export const SignedIn: RecruitDetailPageSignedInStory = {
   ...NotSignedIn,
   name: '로그인',
   decorators: [],
-  args: { ...NotSignedIn.args, mine: false, completed: false },
+  args: {
+    ...NotSignedIn.args,
+    mine: false,
+    completed: false,
+    existsContact: true,
+  },
   argTypes: {
     ...NotSignedIn.argTypes,
     completed: {
       name: '모집 완료',
     },
     mine: {
-      name: '리쿠르트 작성자',
+      name: '내 리쿠르팅',
     },
     matchStatus: {
       name: '매칭 상태',
@@ -169,14 +175,24 @@ export const SignedIn: RecruitDetailPageSignedInStory = {
         },
       },
     },
+    existsContact: {
+      name: '연락처 유무',
+    },
   },
   render: function Render(args) {
-    const { category, mine, completed, matchStatus } = args;
+    const {
+      category,
+      mine,
+      completed,
+      matchStatus,
+      existsContact = true,
+    } = args;
     const queryClient = useQueryClient();
     const participantsQueryKey = queryKeys.recruit.participants(recruitId);
     const setRecruitDetail = useSetRecruitDetail(recruitId);
 
     if (category === RecruitCategoryName.STUDY) {
+      signedInStudyDetail.contactURI = existsContact ? 'www.example.com' : '';
       signedInStudyDetail.mine = mine;
       signedInStudyDetail.finishedRecruit = completed;
       signedInStudyDetail.matchStatus = matchStatus;
@@ -184,6 +200,7 @@ export const SignedIn: RecruitDetailPageSignedInStory = {
 
       queryClient.setQueryData(participantsQueryKey, studyParticipantsDetail);
     } else {
+      signedInProjectDetail.contactURI = existsContact ? 'www.example.com' : '';
       signedInProjectDetail.mine = mine;
       signedInProjectDetail.finishedRecruit = completed;
       signedInProjectDetail.matchStatus = matchStatus;
