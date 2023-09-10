@@ -3,8 +3,6 @@ import type { RecruitFormProps } from '~/components/Forms/RecruitForm';
 
 import { useRouter } from 'next/router';
 
-import { css } from '@emotion/react';
-
 import {
   DefaultFullPageLoader,
   loaderText,
@@ -68,7 +66,7 @@ const RecruitCreatePage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <div>
         <RecruitForm
           onValidSubmit={onValidSubmit}
           onInvalidSubmit={onInvalidSubmit}
@@ -96,8 +94,4 @@ RecruitCreatePage.meta = {
   robots: { index: false, follow: false },
 };
 
-const selfPaddingX = 15;
-const marginForExpand = `calc(${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var})`;
-const selfCss = css({
-  padding: `0 ${selfPaddingX}px`,
-});
+const marginForExpand = globalVars.mainLayoutPaddingX.var;

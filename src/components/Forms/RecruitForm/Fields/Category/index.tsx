@@ -97,6 +97,7 @@ const radioItemCss = css(
     },
     '&[data-state="checked"]': {
       backgroundColor: themeColorVars.mainColor.var,
+      color: colorMix('70%', palettes.black),
     },
   },
   fontCss.style.B14

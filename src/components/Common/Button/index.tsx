@@ -9,6 +9,7 @@ import {
   colorMix,
   flex,
   fontCss,
+  inlineFlex,
   palettes,
   themeColorVars,
 } from '~/styles/utils';
@@ -78,7 +79,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
       css={[baseCss, heightsCss[size], variantsCss[variant]]}
       {...restProps}
     >
-      {loading ? <ButtonLoader color={loaderColor[variant]} /> : children}
+      {loading ? (
+        <div css={inlineFlex('center', 'center')}>
+          <ButtonLoader color={loaderColor[variant]} />
+        </div>
+      ) : (
+        children
+      )}
     </Component>
   );
 });
@@ -97,7 +104,7 @@ const baseCss = css(
     margin: 0,
     transition:
       'color 200ms, background-color 200ms, border-color 200ms, outline 200ms',
-    '&:disabled': {
+    '&:disabled, &[disabled]': {
       pointerEvents: 'none',
     },
   },
@@ -125,7 +132,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       backgroundColor: themeColorVars.mainColor.var,
       color: palettes.white,
     },
-    '&:disabled': {
+    '&:disabled, &[disabled]': {
       color: colorMix('50%', themeColorVars.mainColor.var),
     },
   }),
@@ -140,7 +147,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     '&:focus-visible': {
       outline: `3px solid ${themeColorVars.mainLightColor.var}`,
     },
-    '&:disabled': {
+    '&:disabled, &[disabled]': {
       backgroundColor: colorMix('50%', themeColorVars.mainColor.var),
     },
   }),
@@ -154,7 +161,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       color: palettes.white,
     },
     '&:focus-visible': { outline: `3px solid ${themeColorVars.mainColor.var}` },
-    '&:disabled': {
+    '&:disabled, &[disabled]': {
       backgroundColor: colorMix('50%', palettes.white),
     },
   }),
@@ -170,7 +177,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
     '&:active': {
       color: themeColorVars.mainDarkColor.var,
     },
-    '&:disabled': {
+    '&:disabled, &[disabled]': {
       color: palettes.font.blueGrey,
     },
   }),
@@ -189,7 +196,7 @@ const variantsCss: Record<ButtonVariant, SerializedStyles> = {
       backgroundColor: themeColorVars.mainDarkColor.var,
       color: palettes.white,
     },
-    '&:disabled': {
+    '&:disabled, &[disabled]': {
       color: colorMix('50%', palettes.white),
       borderColor: colorMix('50%', palettes.white),
     },

@@ -73,7 +73,7 @@ const RecruitCardImpl = (props: RecruitCardProps) => {
 
           <Dday
             endDate={recruitEnd}
-            category={category as RecruitCategoryName}
+            // category={category as RecruitCategoryName}
             css={DdayCss}
           />
         </div>

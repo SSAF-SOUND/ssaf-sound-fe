@@ -187,14 +187,16 @@ export const endpoints = {
   },
   recruit: {
     self: () => `/recruits` as const,
-    members: (recruitId: number) =>
-      `${endpoints.recruit.self()}/${recruitId}/members` as const,
-    participants: (recruitId: number) =>
-      `${endpoints.recruit.detail(recruitId)}/members` as const,
     detail: (recruitId: number) =>
       `${endpoints.recruit.self()}/${recruitId}` as const,
+    members: (recruitId: number) =>
+      `${endpoints.recruit.detail(recruitId)}/members` as const,
+    participants: (recruitId: number) =>
+      `${endpoints.recruit.detail(recruitId)}/members` as const,
     scrap: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
+    complete: (recruitId: number) =>
+      `${endpoints.recruit.detail(recruitId)}/expired` as const,
     apply: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/application` as const,
     application: {

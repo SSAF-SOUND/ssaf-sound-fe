@@ -1,5 +1,4 @@
 import type { RecruitFilterFormDefaultValues } from '../Forms/RecruitFilterForm';
-import type { RecruitCategory } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
 
@@ -7,6 +6,7 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 
 import { useGetQueryString } from '~/hooks';
+import { RecruitCategoryName } from '~/services/recruit';
 import { position, pageMinWidth, pageMaxWidth, palettes } from '~/styles/utils';
 
 import { RecruitDetailOptionToggle } from './RecruitDetailOptionToggle';
@@ -15,12 +15,12 @@ import { RecruitFilterForm } from '../Forms/RecruitFilterForm';
 
 interface RecruitFilterModalProps {
   defaultValues?: RecruitFilterFormDefaultValues;
-  category?: RecruitCategory;
+  category?: RecruitCategoryName;
 }
 
 export const RecruitFilterModal = (props: RecruitFilterModalProps) => {
   const [open, setOpen] = useState(false);
-  const { category = 'study' } = props;
+  const { category = RecruitCategoryName.STUDY } = props;
 
   const router = useRouter();
   const { pathname, query } = router;

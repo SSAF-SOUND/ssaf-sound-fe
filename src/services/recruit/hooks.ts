@@ -1,6 +1,7 @@
 import type { RecruitParams } from './apis2';
 import type { SetStateAction } from 'react';
 import type { RecruitDetail } from '~/services/recruit/apis';
+import type { UpdateRecruitParams } from '~/services/recruit/apis/updateRecruit';
 
 import {
   useMutation,
@@ -11,11 +12,13 @@ import {
 
 import { queryKeys } from '~/react-query/common';
 import {
+  completeRecruit,
   createRecruit,
   getRecruitDetail,
   getRecruitParticipants,
   removeRecruit,
   scrapRecruit,
+  updateRecruit,
 } from '~/services/recruit/apis';
 import {
   postRecruitApplicationCancel,
@@ -174,6 +177,13 @@ export const useRemoveRecruit = (recruitId: number) => {
   });
 };
 
+export const useUpdateRecruit = (recruitId: number) => {
+  return useMutation({
+    mutationFn: (params: UpdateRecruitParams) =>
+      updateRecruit(recruitId, params),
+  });
+};
+
 export const useSetRecruitDetail = (recruitId: number) => {
   const queryClient = useQueryClient();
   const queryKey = queryKeys.recruit.detail(recruitId);
@@ -184,4 +194,10 @@ export const useSetRecruitDetail = (recruitId: number) => {
   };
 
   return setArticleDetail;
+};
+
+export const useCompleteRecruit = (recruitId: number) => {
+  return useMutation({
+    mutationFn: () => completeRecruit(recruitId),
+  });
 };

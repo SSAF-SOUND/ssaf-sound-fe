@@ -1,7 +1,11 @@
 import type { ScrapStatus } from '~/services/common';
 import type { UserInfo } from '~/services/member';
 import type { SkillInfo } from '~/services/meta/utils';
-import type { RecruitParts, RecruitCategoryName } from '~/services/recruit';
+import type {
+  RecruitParts,
+  RecruitCategoryName,
+  MatchStatus,
+} from '~/services/recruit';
 
 export interface RecruitParticipantsCountForServer {
   recruitType: RecruitParts;
@@ -29,7 +33,9 @@ export type RecruitDetail = {
   author: UserInfo;
 
   view: number;
+
   mine: boolean;
+  matchStatus?: MatchStatus;
 } & ScrapStatus;
 
 export interface RecruitParticipantsDetail {

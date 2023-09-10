@@ -1,24 +1,29 @@
 import type { BadgeProps } from '../Common';
 import type { Ref } from 'react';
-import type { RecruitCategory } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { forwardRef } from 'react';
 
-import { getRecruitThemeByCategory } from '~/services/recruit';
+import {
+  getRecruitThemeByCategory,
+  RecruitCategoryName,
+} from '~/services/recruit';
 import { fontCss, palettes, themeColorVars } from '~/styles/utils';
 
 import { Badge, Icon } from '../Common';
 
 interface RecruitDetailOptionToggleProps extends Omit<BadgeProps, 'theme'> {
-  category?: RecruitCategory;
+  category?: RecruitCategoryName;
   isActive?: boolean;
 }
 
 export const RecruitDetailOptionToggle = forwardRef(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (props: RecruitDetailOptionToggleProps, ref: Ref<HTMLButtonElement>) => {
-    const { category = 'project', isActive = false, ...restProps } = props;
+    const {
+      category = RecruitCategoryName.PROJECT,
+      isActive = false,
+      ...restProps
+    } = props;
     return (
       <Badge
         css={[selfCss, textCss, isActive && activeCss]}

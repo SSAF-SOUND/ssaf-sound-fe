@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Icon } from '~/components/Common';
-import { palettes } from '~/styles/utils';
+import { palettes, Theme } from '~/styles/utils';
 
 import { IconButton } from './index';
 
@@ -32,7 +32,7 @@ export const Default: IconButtonStory = {
     );
   },
   args: {
-    theme: 'white',
+    theme: Theme.WHITE,
     size: 40,
   },
 };
@@ -40,11 +40,11 @@ export const Default: IconButtonStory = {
 export const Examples: IconButtonStory = {
   render: () => {
     const themes = [
-      'white',
-      'black',
-      'primary',
-      'secondary',
-      'recruit',
+      Theme.WHITE,
+      Theme.BLACK,
+      Theme.PRIMARY,
+      Theme.SECONDARY,
+      Theme.RECRUIT,
     ] as const;
     const backgroundColors = [
       palettes.black,

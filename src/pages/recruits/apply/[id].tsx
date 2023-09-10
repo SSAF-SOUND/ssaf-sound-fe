@@ -1,10 +1,7 @@
 import { css } from '@emotion/react';
 
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
-import { RecruitMeta } from '~/components/RecruitMeta';
 import TitleBar from '~/components/TitleBar';
-import { userInfo } from '~/mocks/handlers/member/data';
-import { RecruitData } from '~/mocks/handlers/recruit/data';
 import { flex, fontCss } from '~/styles/utils';
 import { routes } from '~/utils';
 
@@ -25,12 +22,12 @@ const RecruitApplyPage = () => {
         ]}
       >
         <h2 css={titleCss}>스터디</h2>
-        <RecruitMeta
-          recruitMeta={RecruitData.recruitDetail.project}
-          userInfo={userInfo.certifiedSsafyUserInfo}
-          expanded
-          title={'test'}
-        />
+        {/*<RecruitMeta*/}
+        {/*  recruitMeta={RecruitData.recruitDetail.project}*/}
+        {/*  userInfo={userInfo.certifiedSsafyUserInfo}*/}
+        {/*  expanded*/}
+        {/*  title={'test'}*/}
+        {/*/>*/}
       </div>
 
       <RecruitApplyForm recruitId={1} />

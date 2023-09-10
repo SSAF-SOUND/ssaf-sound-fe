@@ -7,7 +7,9 @@ import { flex } from '~/styles/utils';
 
 interface RecruitContactLinkProps {
   className?: string;
-  theme?: Extract<Theme, Theme.PRIMARY | Theme.SECONDARY>;
+  theme?: Theme.PRIMARY | Theme.SECONDARY;
+  loading?: boolean;
+  disabled?: boolean;
   href: string;
 }
 

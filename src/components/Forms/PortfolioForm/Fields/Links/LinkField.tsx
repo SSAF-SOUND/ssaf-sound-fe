@@ -11,7 +11,7 @@ import { Icon, IconButton } from '~/components/Common';
 import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import PortfolioLinkInputGroup from '~/components/PortfolioLinkInputGroup';
 import { getPortfolioLinkColor } from '~/services/member';
-import { inlineFlex } from '~/styles/utils';
+import { inlineFlex, Theme } from '~/styles/utils';
 import { regex } from '~/utils';
 
 const fieldArrayName = 'links';
@@ -68,7 +68,7 @@ const LinkField = (props: LinkFieldProps) => {
           onClick={removeField}
           className={removeButtonClassname}
           css={{ position: 'absolute', right: `-${removeIconSize + 8}px` }}
-          theme="white"
+          theme={Theme.WHITE}
           size={removeIconSize}
         >
           <Icon name="circle.minus" size={18} />

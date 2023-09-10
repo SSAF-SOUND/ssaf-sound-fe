@@ -7,6 +7,7 @@ import Skeleton from 'react-loading-skeleton';
 
 import { Icon, IconButton } from '~/components/Common';
 import {
+  Theme,
   colorMix,
   flex,
   fontCss,
@@ -44,7 +45,7 @@ type CustomCalendarProps = Pick<
 >;
 
 interface DatePickerProps extends CustomCalendarProps {
-  theme?: 'primary' | 'secondary';
+  theme?: Theme.PRIMARY | Theme.SECONDARY;
 }
 
 /* constants */
@@ -56,7 +57,7 @@ const formatDay: CalendarProps['formatDay'] = (locale, date) =>
   date.getDate().toString();
 
 export const DatePicker = (props: DatePickerProps) => {
-  const { theme = 'primary', ...restProps } = props;
+  const { theme = Theme.PRIMARY, ...restProps } = props;
 
   return (
     <div data-theme={theme} css={selfCss}>

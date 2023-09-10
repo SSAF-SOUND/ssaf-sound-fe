@@ -1,13 +1,9 @@
 import type { RecruitParticipantsCountForServer } from './types';
-import type {
-  RecruitCategoryName,
-  RecruitParticipantsCount,
-  RecruitParts,
-  SkillName,
-} from '~/services/recruit';
+import type { RecruitParticipantsCount, SkillName } from '~/services/recruit';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
+import { RecruitCategoryName, RecruitParts } from '~/services/recruit';
 import { privateAxios } from '~/utils';
 
 export interface CreateRecruitParams {
@@ -37,7 +33,19 @@ export interface CreateRecruitBody {
 export type CreateRecruitApiData = ApiSuccessResponse<{ recruitId: number }>;
 
 export const createRecruit = (params: CreateRecruitParams) => {
+  const endpoint = endpoints.recruit.self();
+  const body: CreateRecruitBody = convertCreateRecruitParamsToBody(params);
+
+  return privateAxios
+    .post<CreateRecruitApiData>(endpoint, body)
+    .then((res) => res.data.data.recruitId);
+};
+
+export const convertCreateRecruitParamsToBody = (
+  params: CreateRecruitParams
+) => {
   const {
+    category,
     participants,
     myPart,
     endDate,
@@ -45,23 +53,24 @@ export const createRecruit = (params: CreateRecruitParams) => {
     questionToApplicants,
     ...restParams
   } = params;
-  const endpoint = endpoints.recruit.self();
 
   const limitations = participants.map(({ part, count }) => ({
     recruitType: part,
     limit: count,
   }));
 
+  const registerRecruitType =
+    category === RecruitCategoryName.PROJECT ? myPart : RecruitParts.STUDY;
+
   const body: CreateRecruitBody = {
     ...restParams,
+    category,
     limitations,
-    registerRecruitType: myPart,
+    registerRecruitType,
     recruitEnd: endDate,
     contactURI: contact,
     question: [questionToApplicants],
   };
 
-  return privateAxios
-    .post<CreateRecruitApiData>(endpoint, body)
-    .then((res) => res.data.data.recruitId);
+  return body;
 };

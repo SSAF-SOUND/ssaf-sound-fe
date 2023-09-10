@@ -1,11 +1,11 @@
-import type { RecruitCategoryType } from '~/services/recruit';
+import type { RecruitCategoryName } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
 import { getRecruitThemeByCategory } from '~/services/recruit';
 import { fontCss, inlineFlex, palettes, themeColorVars } from '~/styles/utils';
 
-const RecruitBadge = (props: { category: RecruitCategoryType }) => {
+const RecruitBadge = (props: { category: RecruitCategoryName }) => {
   const { category } = props;
   return (
     <span css={[badgeCss]} data-theme={getRecruitThemeByCategory(category)}>

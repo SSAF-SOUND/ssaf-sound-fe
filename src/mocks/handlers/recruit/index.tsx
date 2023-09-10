@@ -13,7 +13,12 @@ import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-import { RecruitData, recruitParticipantsList, recruitDetails } from './data';
+import {
+  RecruitData,
+  recruitParticipantsList,
+  recruitDetails,
+  scrapStatus,
+} from './data';
 import { restInfiniteRecruitsSuccess } from './utils';
 
 export const getRecruits = rest.get(
@@ -186,19 +191,18 @@ const scrapRecruitEndpoint =
   composeUrls(API_URL, endpoints.recruit.scrap(':recruitId'));
 
 export const scrapRecruit = rest.post(scrapRecruitEndpoint, (req, res, ctx) => {
-  const recruitId = Number(req.params.recruitId as string);
+  const { scraped, scrapCount } = scrapStatus;
+  const nextScraped = !scraped;
+  const nextScrapCount = nextScraped ? scrapCount + 1 : scrapCount - 1;
 
-  const recruit = recruitDetails[recruitId];
-  recruit.scraped = !recruit.scraped;
-  const delta = recruit.scraped ? 1 : -1;
-  recruit.scrapCount += delta;
-  const latestScraped = recruit.scraped;
-  const latestScrapCount = recruit.scrapCount;
+  scrapStatus.scraped = nextScraped;
+  scrapStatus.scrapCount = nextScrapCount;
+
   return res(
     ctx.delay(500),
     ...mockSuccess<ScrapRecruitApiData['data']>(ctx, {
-      scraped: latestScraped,
-      scrapCount: latestScrapCount,
+      scraped: nextScraped,
+      scrapCount: nextScrapCount,
     })
   );
 });
@@ -207,9 +211,7 @@ export const scrapRecruitError = restError('post', scrapRecruitEndpoint, {
   message: '스크랩 업데이트에 실패했습니다.',
 });
 
-const removeRecruitEndpoint =
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.detail(':recruitId'));
+const removeRecruitEndpoint = getRecruitDetailEndpoint;
 const removeRecruitMethod = 'delete';
 
 export const removeRecruit = restSuccess(
@@ -222,6 +224,45 @@ export const removeRecruitError = restError(
   removeRecruitMethod,
   removeRecruitEndpoint,
   { message: '리쿠르팅 삭제 실패' }
+);
+
+const updateRecruitEndpoint = getRecruitDetailEndpoint;
+const updateRecruitMethod = 'patch';
+
+export const updateRecruit = restSuccess(
+  updateRecruitMethod,
+  updateRecruitEndpoint,
+  {
+    data: null,
+  }
+);
+export const updateRecruitError = restError(
+  updateRecruitMethod,
+  updateRecruitEndpoint,
+  {
+    message: '리쿠르트 업데이트 실패',
+  }
+);
+
+const completeRecruitEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.complete(':recruitId'));
+const completeRecruitMethod = 'post';
+
+export const completeRecruit = restSuccess(
+  completeRecruitMethod,
+  completeRecruitEndpoint,
+  {
+    data: null,
+  }
+);
+
+export const completeRecruitError = restError(
+  completeRecruitMethod,
+  completeRecruitEndpoint,
+  {
+    message: '리쿠르팅 모집 완료 실패',
+  }
 );
 
 export const recruitHandlers = [
@@ -238,4 +279,6 @@ export const recruitHandlers = [
   getRecruitParticipants,
   scrapRecruit,
   removeRecruit,
+  updateRecruit,
+  completeRecruit,
 ];

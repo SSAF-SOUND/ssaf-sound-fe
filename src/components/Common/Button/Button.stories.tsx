@@ -16,6 +16,7 @@ const ButtonGroup = (props: ButtonGroupProps) => {
     'success',
     'warning',
     'error',
+    'recruit',
   ] as const;
 
   return (

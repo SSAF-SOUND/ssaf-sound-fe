@@ -1,5 +1,4 @@
 import type { GetServerSideProps } from 'next';
-import type { RecruitCategory } from '~/services/recruit';
 
 import { QueryClient } from '@tanstack/react-query';
 
@@ -16,13 +15,14 @@ import TopBar from '~/components/TopBar';
 import { useGetQueryString } from '~/hooks';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
-import { getRecruits } from '~/services/recruit';
+import { getRecruits, RecruitCategoryName } from '~/services/recruit';
 import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConvertor';
 import { flex } from '~/styles/utils';
 
 const Recruit = () => {
   const categoryQuery = useGetQueryString('category');
-  const category = (categoryQuery ?? 'project') as RecruitCategory;
+  const category = (categoryQuery ??
+    RecruitCategoryName) as RecruitCategoryName;
 
   return (
     <RecruitLayout>

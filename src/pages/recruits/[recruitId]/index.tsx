@@ -80,12 +80,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
     );
   }
 
-  const {
-    category,
-
-    title,
-    content,
-  } = recruitDetail;
+  const { category, title, content } = recruitDetail;
   const titleBarTitle = getDisplayCategoryName(category);
   const recruitTheme = getRecruitThemeByCategory(category);
 
@@ -141,16 +136,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
           <Recruit.Tabs.ParticipantsContent recruitId={recruitId} />
         </Recruit.Tabs.Root>
 
-        <div
-          css={[
-            pageExpandCss,
-            {
-              marginBottom: 44,
-              height: 20,
-              backgroundColor: palettes.background.grey,
-            },
-          ]}
-        />
+        <div css={separtorCss} />
 
         <RecruitCommentsLayer
           recruitId={recruitId}
@@ -172,6 +158,11 @@ const getDescriptionTabText = (category: RecruitCategoryName) => {
 };
 
 const pageExpandCss = expandCss();
+const separtorCss = css(pageExpandCss, {
+  marginBottom: 44,
+  height: 20,
+  backgroundColor: palettes.background.grey,
+});
 
 export default RecruitDetailPage;
 

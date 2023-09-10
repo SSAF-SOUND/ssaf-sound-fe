@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { Theme } from '~/styles/utils';
+
 import { DatePicker } from './index';
 
 const meta: Meta<typeof DatePicker> = {
@@ -35,7 +37,7 @@ export default meta;
 type DatePickerStory = StoryObj<typeof DatePicker>;
 
 export const Default: DatePickerStory = {
-  args: { theme: 'primary' },
+  args: { theme: Theme.PRIMARY },
   render: (args) => {
     const { minDate = undefined, maxDate = undefined, ...props } = args;
 
