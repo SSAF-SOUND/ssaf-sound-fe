@@ -6,6 +6,7 @@ import { useFormState, useWatch } from 'react-hook-form';
 
 import { DatePicker } from '~/components/Common/DatePicker';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
+import { toEndDateFormValue } from '~/components/Forms/RecruitForm/utils/toEndDateFormValue';
 import { RecruitCategoryName } from '~/services/recruit';
 import { flex, Theme } from '~/styles/utils';
 
@@ -51,7 +52,7 @@ export const EndDate = (props: EndDateProps) => {
 
   const handleChangeDate = (value: unknown) => {
     if (value instanceof Date) {
-      setValue(fieldName, dayjs(value).format('YYYY-MM-DD'), {
+      setValue(fieldName, toEndDateFormValue(value), {
         shouldDirty: true,
         shouldValidate: !!endDateErrors,
       });
