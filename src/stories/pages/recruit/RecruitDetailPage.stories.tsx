@@ -46,7 +46,7 @@ const projectParticipantsDetail = createMockRecruitParticipants(projectDetail);
 const studyParticipantsDetail = createMockRecruitParticipants(studyDetail);
 
 const meta: Meta<typeof RecruitDetailPage> = {
-  title: 'Page/Recruit/리쿠르팅 상세정보',
+  title: 'Page/Recruit/Detail',
   component: RecruitDetailPage,
   decorators: [
     (Story) => {
@@ -87,7 +87,6 @@ interface RecruitDetailPageStoryArgs {
 type RecruitDetailPageStory = StoryObj<RecruitDetailPageStoryArgs>;
 
 export const NotSignedIn: RecruitDetailPageStory = {
-  name: '미로그인',
   decorators: [
     (Story) => {
       const setMyInfo = useSetMyInfo();
@@ -146,7 +145,6 @@ type RecruitDetailPageSignedInStory =
   StoryObj<RecruitDetailPageSignedInStoryArgs>;
 export const SignedIn: RecruitDetailPageSignedInStory = {
   ...NotSignedIn,
-  name: '로그인',
   decorators: [],
   args: {
     ...NotSignedIn.args,

@@ -1,18 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { RecruitDetail } from '~/services/recruit';
 
-import {
-  getRecruitDetail,
-  updateRecruit,
-  updateRecruitError,
-} from '~/mocks/handlers';
+import { updateRecruit, updateRecruitError } from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
-import { recruitDetails } from '~/mocks/handlers/recruit/data';
+import { createMockRecruitDetail } from '~/mocks/handlers/recruit/data';
 import RecruitEditPage from '~/pages/recruits/[recruitId]/edit';
 import { useSetMyInfo } from '~/services/member';
 import { useSetRecruitDetail } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
 
-const myRecruitDetail = recruitDetails[1];
+// `query string`에서 id를 읽어오는데, 스토리북에선 `undefined`이므로, 숫자로 변환시 NaN이 됨.
+const myRecruitId = NaN;
+const myRecruitDetail = createMockRecruitDetail(myRecruitId, false, {
+  completed: false,
+  mine: true,
+});
+const completedRecruitDetail: RecruitDetail = {
+  ...myRecruitDetail,
+  finishedRecruit: true,
+};
 
 const meta: Meta<typeof RecruitEditPage> = {
   title: 'Page/Recruit/Edit',
@@ -22,9 +28,7 @@ const meta: Meta<typeof RecruitEditPage> = {
       const setMyInfo = useSetMyInfo();
       setMyInfo(userInfo.certifiedSsafyUserInfo);
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const setRecruitDetail = useSetRecruitDetail(NaN);
+      const setRecruitDetail = useSetRecruitDetail(myRecruitId);
       setRecruitDetail(myRecruitDetail);
 
       return (
@@ -50,6 +54,7 @@ export default meta;
 type RecruitEditPageStory = StoryObj<typeof RecruitEditPage>;
 
 export const Success: RecruitEditPageStory = {};
+
 export const Error: RecruitEditPageStory = {
   parameters: {
     msw: {
@@ -58,5 +63,13 @@ export const Error: RecruitEditPageStory = {
         recruit: [updateRecruitError],
       },
     },
+  },
+};
+
+export const CompletedRecruit: RecruitEditPageStory = {
+  render: function Render() {
+    const setRecruitDetail = useSetRecruitDetail(myRecruitId);
+    setRecruitDetail(completedRecruitDetail);
+    return <RecruitEditPage />;
   },
 };
