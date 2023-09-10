@@ -11,7 +11,7 @@ const LoadingToast = (props: LoadingToastProps) => {
   const { message } = props;
 
   return (
-    <ToastRoot icon={<ClipLoader size={16} color={palettes.font.blueGrey} />}>
+    <ToastRoot icon={<ClipLoader size={24} color={palettes.font.blueGrey} />}>
       {message ?? '로딩'}
     </ToastRoot>
   );
