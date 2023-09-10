@@ -66,16 +66,17 @@ export enum RecruitCategoryName {
 // ---- Applicants ----
 
 export enum MatchStatus {
-  /** 신청 -> 등록자가 수락하길 기다리는 상태 */
-  WAITING_REGISTER_APPROVE = 'WAITING_REGISTER_APPROVE',
-  /** 신청 -> 등록자 수락 -> 신청자 수락 대기 상태 */
-  WAITING_APPLICANT = 'WAITING_APPLICANT',
-  /** 완료 */
-  DONE = 'DONE',
-  /** 거절 */
-  REJECT = 'REJECT',
-  /** 취소 */
-  CANCEL = 'CANCEL',
+  /** 신청하기 전 */
+  INITIAL = 'INITIAL',
+
+  /** 등록자의 수락을 기다리는 상태 */
+  PENDING = 'PENDING',
+
+  /** 등록자가 수락 */
+  SUCCESS = 'SUCCESS',
+
+  /** 등록자가 거절 */
+  REJECTED = 'REJECTED',
 }
 
 export interface RecruitParticipantsCount {

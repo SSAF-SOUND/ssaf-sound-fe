@@ -47,14 +47,29 @@ export const createMockRecruitDetail = (
   isStudy = false,
   options: {
     completed?: boolean;
-    matchStatus?: string;
+    matchStatus?: MatchStatus;
+    mine?: boolean;
   } = {}
 ): RecruitDetail => {
-  const { completed = false, matchStatus } = options;
+  const {
+    completed = false,
+    matchStatus: matchStatusOption,
+    mine: mineOption,
+  } = options;
 
   const finishedRecruit = completed;
-  const mine = Boolean(recruitId % 2); // 1, 3
+  const mine = mineOption === undefined ? Boolean(recruitId % 2) : mineOption; // 1, 3
   const scraped = finishedRecruit;
+  const matchStatusArray = Object.values(MatchStatus);
+  const matchStatusIndex = faker.number.int({
+    min: 0,
+    max: matchStatusArray.length - 1,
+  });
+
+  const matchStatus =
+    matchStatusOption === undefined
+      ? matchStatusArray[matchStatusIndex]
+      : matchStatusOption;
 
   const limits = createMockRecruitParticipantsProgress(isStudy);
 
@@ -79,7 +94,9 @@ export const createMockRecruitDetail = (
     limits,
     skills,
     view: faker.number.int({ min: 1, max: 1000000 }),
+
     mine,
+    matchStatus,
   };
 };
 
