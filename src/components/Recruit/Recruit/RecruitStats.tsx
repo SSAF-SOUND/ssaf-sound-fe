@@ -11,7 +11,7 @@ import { countAllComments } from '~/services/comment/utils';
 import { useMyInfo } from '~/services/member';
 import { getRecruitThemeByCategory, useScrapRecruit } from '~/services/recruit';
 import { useRecruitComments } from '~/services/recruitComment';
-import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
+import { flex, fontCss, inlineFlex, palettes, Theme } from '~/styles/utils';
 import { customToast, handleAxiosError } from '~/utils';
 
 interface RecruitStatsProps {
@@ -63,7 +63,7 @@ export const RecruitStats = (props: RecruitStatsProps) => {
             iconName={scraped ? 'bookmark' : 'bookmark.outline'}
             iconColor={palettes.primary.default}
             label="스크랩"
-            theme={recruitTheme}
+            theme={Theme.PRIMARY}
             onClick={handleClickScrap}
             disabled={isScrapingRecruit}
           />
@@ -75,7 +75,7 @@ export const RecruitStats = (props: RecruitStatsProps) => {
             iconColor={palettes.primary.default}
             iconName="share"
             label="URL 복사"
-            theme={recruitTheme}
+            theme={Theme.PRIMARY}
             onClick={copyUrlToClipboard}
           />
         </div>
