@@ -69,12 +69,23 @@ const RecruitEditPage: CustomNextPage = () => {
     );
   }
 
-  const { mine } = recruitDetail;
+  const { mine, finishedRecruit } = recruitDetail;
 
   // 내 리쿠르팅이 아니라면 리다이렉션
   if (!mine) {
     router.replace(routes.unauthorized());
     return <DefaultFullPageLoader />;
+  }
+
+  if (finishedRecruit) {
+    return (
+      <RedirectionGuide
+        title="Error"
+        description="모집이 완료된 리쿠르팅은 수정이 불가능합니다."
+        redirectionText="리쿠르팅 상세 페이지로"
+        redirectionTo={routes.recruit.detail(recruitDetail.recruitId)}
+      />
+    );
   }
 
   return (
