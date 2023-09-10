@@ -50,6 +50,7 @@ export const useCommonBottomMenuModal = (
           onClickReport={onClickReport}
         />
       ),
+      onClickDefaultCloseButton: closeModal,
     });
   };
   const closeCommonBottomMenuModal = closeModal;
