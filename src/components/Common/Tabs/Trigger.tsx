@@ -4,7 +4,14 @@ import type { TabsTriggerProps } from '@radix-ui/react-tabs';
 import { css } from '@emotion/react';
 import * as Tabs from '@radix-ui/react-tabs';
 
-import { flex, fontCss, palettes, themeColorVars } from '~/styles/utils';
+import { Button } from '~/components/Common';
+import {
+  colorMix,
+  flex,
+  fontCss,
+  palettes,
+  themeColorVars,
+} from '~/styles/utils';
 
 export interface TriggerProps extends TabsTriggerProps {
   theme?: TriggerColorProps;
@@ -37,6 +44,9 @@ const triggerCss = css(flex('center', 'center', 'row'), fontCss.style.B20, {
   },
   color: palettes.font.blueGrey,
   cursor: 'pointer',
+  '&:focus-visible': {
+    backgroundColor: colorMix('10%', palettes.white),
+  },
 });
 
 const variantCss: Record<TriggerVariantProps, SerializedStyles> = {

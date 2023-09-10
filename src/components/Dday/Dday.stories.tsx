@@ -1,13 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Dday from './index';
+import { RecruitCategoryName } from '~/services/recruit';
+
+import { Dday } from './index';
 
 const meta: Meta<typeof Dday> = {
   title: 'Recruit/Dday',
   component: Dday,
   tags: ['autodocs'],
   argTypes: {
-    recruitEnd: {
+    endDate: {
       control: 'date',
     },
   },
@@ -19,5 +21,9 @@ type DdayStory = StoryObj<typeof Dday>;
 
 export const DdayStory: DdayStory = {
   name: 'Dday',
-  args: {},
+  args: {
+    category: RecruitCategoryName.PROJECT,
+    size: 'sm',
+    endDate: new Date().toISOString(),
+  },
 };

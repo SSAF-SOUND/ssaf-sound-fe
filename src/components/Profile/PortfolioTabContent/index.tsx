@@ -1,5 +1,3 @@
-import type { CSSProperties } from 'react';
-
 import { css } from '@emotion/react';
 
 import { Tabs } from '~/components/Common';
@@ -15,11 +13,11 @@ interface ProfilePortfolioTabContentProps {
   className?: string;
   mine?: boolean;
   userId: number;
-  skillsContainerStyle?: CSSProperties;
+  marginForExpand?: number | string;
 }
 
 const ProfilePortfolioTabContent = (props: ProfilePortfolioTabContentProps) => {
-  const { mine = false, userId, className, skillsContainerStyle } = props;
+  const { mine = false, userId, className, marginForExpand } = props;
   const myPortfolioQuery = useMyPortfolio({
     enabled: mine,
   });
@@ -44,10 +42,7 @@ const ProfilePortfolioTabContent = (props: ProfilePortfolioTabContentProps) => {
         <>
           {mine && <PortfolioEditLink css={{ marginBottom: 52 }} />}
 
-          <Portfolio
-            portfolio={portfolio}
-            skillsContainerStyle={skillsContainerStyle}
-          />
+          <Portfolio portfolio={portfolio} marginForExpand={marginForExpand} />
         </>
       )}
     </Tabs.Content>

@@ -69,7 +69,7 @@ export const createMockUser = (id: number, certified?: boolean): UserInfo => {
   const tracks = Object.values(SsafyTrack);
   const campuses = ['서울', '구미', '광주', '부울경', '대전'];
 
-  const certifiedInfo = certified
+  const ssafyInfo = certified
     ? ({
         certificationState: CertificationState.CERTIFIED,
         majorTrack:
@@ -83,13 +83,13 @@ export const createMockUser = (id: number, certified?: boolean): UserInfo => {
   return {
     isMajor,
     memberId: id,
-    nickname: faker.person.fullName(),
+    nickname: faker.word.words(3).slice(0, 11),
     memberRole: 'user',
     ssafyMember: true,
     ssafyInfo: {
       campus: campuses[faker.number.int({ min: 0, max: campuses.length - 1 })],
       semester: faker.number.int({ min: 1, max: 9 }),
-      ...certifiedInfo,
+      ...ssafyInfo,
     },
   };
 };

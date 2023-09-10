@@ -169,10 +169,9 @@ export default ArticleCategoryPage;
 
 /* css */
 
-const selfPaddingX = 10;
 const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
 const searchBarTop = titleBarHeight;
-const searchBarContainerPaddingX = `calc(${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var})`;
+const searchBarContainerPaddingX = globalVars.mainLayoutPaddingX.var;
 const searchBarContainerHeight = 72;
 const selfPaddingTop = searchBarTop + searchBarContainerHeight;
 
@@ -182,7 +181,7 @@ const fabZIndex = 30;
 
 const selfCss = css(
   {
-    padding: `${selfPaddingTop}px ${selfPaddingX}px 15px`,
+    padding: `${selfPaddingTop}px 0 15px`,
     minHeight: selfMinHeight,
   },
   flex('', '', 'column')

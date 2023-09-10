@@ -13,7 +13,7 @@ import {
 } from '~/components/Common';
 import RollingAllTracks from '~/components/RollingAllTracks';
 import { CertificationState, useMyInfo } from '~/services/member';
-import { flex, fontCss, globalVars, palettes } from '~/styles/utils';
+import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
 import { routes } from '~/utils';
 
 const metaTitle = '학생 인증 가이드';
@@ -52,16 +52,12 @@ const StudentCertificationIntroPage = () => {
         </div>
 
         <RollingAllTracks
-          css={{
-            width: 'auto',
-            margin: `0 -${globalVars.mainLayoutPaddingX}`,
-            overflow: 'hidden',
-          }}
+          css={[expandCss(), { overflow: 'hidden' }]}
           seconds={15}
           gap={15}
         />
 
-        <div css={{ padding: '0 15px' }}>
+        <div>
           <div css={questionLayerCss}>
             <p>SSAFY 재학생</p>
             <p>인증하시겠습니까?</p>

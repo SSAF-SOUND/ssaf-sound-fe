@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import type { PortfolioExternalLink, UserPortfolio } from '~/services/member';
 
 import { css } from '@emotion/react';
@@ -14,17 +13,23 @@ import SkillsSorter from '~/components/Forms/PortfolioForm/Fields/Skills/SkillsS
 import PortfolioLink from '~/components/PortfolioLink';
 import { articleCss } from '~/services/article';
 import { getPortfolioLinkColor, isEmptyPortfolio } from '~/services/member';
-import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
+import {
+  expandStyle,
+  flex,
+  fontCss,
+  inlineFlex,
+  palettes,
+} from '~/styles/utils';
 import { sanitizeHtml } from '~/utils';
 
 interface PortfolioProps {
   portfolio: UserPortfolio;
   className?: string;
-  skillsContainerStyle?: CSSProperties;
+  marginForExpand?: string | number;
 }
 
 const Portfolio = (props: PortfolioProps) => {
-  const { portfolio, skillsContainerStyle, ...restProps } = props;
+  const { portfolio, marginForExpand, ...restProps } = props;
   const isEmpty = isEmptyPortfolio(portfolio);
   return (
     <div {...restProps}>
@@ -33,7 +38,7 @@ const Portfolio = (props: PortfolioProps) => {
       ) : (
         <NormalPortfolio
           portfolio={portfolio}
-          skillsContainerStyle={skillsContainerStyle}
+          marginForExpand={marginForExpand}
         />
       )}
     </div>
@@ -43,7 +48,7 @@ const Portfolio = (props: PortfolioProps) => {
 export default Portfolio;
 
 const NormalPortfolio = (props: PortfolioProps) => {
-  const { portfolio, skillsContainerStyle } = props;
+  const { portfolio, marginForExpand } = props;
   const { selfIntroduction, memberLinks, skills } = portfolio;
   const sanitized = sanitizeHtml(selfIntroduction);
   const hasSkills = skills.length > 0;
@@ -61,10 +66,7 @@ const NormalPortfolio = (props: PortfolioProps) => {
           limitToBounds={true}
           disablePadding={true}
         >
-          <PortfolioSkills
-            skills={skills}
-            skillsContainerStyle={skillsContainerStyle}
-          />
+          <PortfolioSkills skills={skills} marginForExpand={marginForExpand} />
         </TransformWrapper>
       )}
 
@@ -97,10 +99,10 @@ const emptyPortfolioMessageCss = css(
 
 interface PortfolioSkillsProps {
   skills: string[];
-  skillsContainerStyle?: CSSProperties;
+  marginForExpand?: number | string;
 }
 const PortfolioSkills = (props: PortfolioSkillsProps) => {
-  const { skills, skillsContainerStyle } = props;
+  const { skills, marginForExpand } = props;
   const { setCenter } = useTransformContext();
 
   useEffect(() => {
@@ -109,7 +111,7 @@ const PortfolioSkills = (props: PortfolioSkillsProps) => {
 
   return (
     <TransformComponent
-      wrapperStyle={{ ...skillsContainerStyle, width: 'auto' }}
+      wrapperStyle={marginForExpand ? expandStyle(marginForExpand) : undefined}
     >
       <div css={inlineFlex('center', 'center', 'row', 28)}>
         <SkillsSorter skillNames={skills} maxOrder={skills.length} />

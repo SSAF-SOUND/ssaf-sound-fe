@@ -117,7 +117,7 @@ MyInfoSettingsSsafyBasicInfoEditPage.meta = {
 };
 
 const selfCss = css(
-  { padding: `${titleBarHeight}px 15px`, height: '100vh' },
+  { padding: `${titleBarHeight}px 0`, height: '100vh' },
   flex()
 );
 

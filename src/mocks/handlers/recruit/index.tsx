@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import type {
   CreateRecruitApiData,
-  RecruitDetail,
-  recruitMembersType,
-  RecruitScrap,
-  RecruitScrapApiData,
+  GetRecruitDetailApiData,
+  GetRecruitParticipantsApiData,
+  ScrapRecruitApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -12,7 +13,7 @@ import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-import { RecruitData } from './data';
+import { RecruitData, recruitParticipantsList, recruitDetails } from './data';
 import { restInfiniteRecruitsSuccess } from './utils';
 
 export const getRecruits = rest.get(
@@ -25,51 +26,6 @@ export const getRecruits = rest.get(
     )
   ),
   restInfiniteRecruitsSuccess
-);
-
-export const getRecruitMembers = restSuccess<recruitMembersType>(
-  'get',
-  // eslint-disable-next-line
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.members(':recruitId')),
-  {
-    data: RecruitData.recruitMembers,
-  }
-);
-
-export const getRecruitDetail = restSuccess<RecruitDetail>(
-  'get',
-  // eslint-disable-next-line
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.detail(':recruitId')),
-  {
-    data: RecruitData.recruitDetail.project,
-  }
-);
-
-export const getRecruitScrap = restSuccess<RecruitScrap>(
-  'get',
-  composeUrls(API_URL, endpoints.recruit.scrap(1)),
-  {
-    data: RecruitData.RecruitScrap,
-  }
-);
-
-export const postRecruitScrap = rest.post(
-  composeUrls(API_URL, endpoints.recruit.scrap(1)),
-  (req, res, ctx) => {
-    const article = RecruitData.RecruitScrap;
-    const delta = article.scrapCount ? 1 : -1;
-    article.scrapCount += delta;
-    const latestScrapCount = article.scrapCount;
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<RecruitScrapApiData['data']>(ctx, {
-        scrapCount: latestScrapCount,
-      })
-    );
-  }
 );
 
 export const postRecruitApply = restSuccess(
@@ -142,6 +98,8 @@ export const postRecruitApplicationCancel = restSuccess(
   }
 );
 
+// 리쿠르팅 생성
+
 const createRecruitEndpoint = endpoints.recruit.self();
 const createRecruitHttpMethod = 'post';
 
@@ -165,12 +123,109 @@ export const createRecruitError = restError(
   }
 );
 
+// 리쿠르팅 상세정보 조회
+
+const getRecruitDetailEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.detail(':recruitId'));
+
+export const getRecruitDetail = rest.get(
+  getRecruitDetailEndpoint,
+  (req, res, ctx) => {
+    const recruitId = Number(req.params.recruitId as string);
+    const recruitDetail = recruitDetails[recruitId];
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<GetRecruitDetailApiData['data']>(ctx, recruitDetail)
+    );
+  }
+);
+
+export const getRecruitDetailError = restError(
+  'get',
+  getRecruitDetailEndpoint,
+  {
+    message: '리쿠르트 디테일 조회 에러',
+  }
+);
+
+// 리쿠르팅 참가자 조회
+const getRecruitParticipantsEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.members(':recruitId'));
+
+export const getRecruitParticipants = rest.get(
+  getRecruitParticipantsEndpoint,
+  (req, res, ctx) => {
+    const recruitId = Number(req.params.recruitId as string);
+
+    const recruitParticipants = recruitParticipantsList[recruitId];
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<GetRecruitParticipantsApiData['data']>(ctx, {
+        recruitTypes: recruitParticipants,
+      })
+    );
+  }
+);
+
+export const getRecruitParticipantsError = restError(
+  'get',
+  getRecruitParticipantsEndpoint,
+  {
+    message: '리쿠르팅 참가자 조회에 실패했습니다.',
+  }
+);
+
+// 리쿠르팅 스크랩
+
+const scrapRecruitEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.scrap(':recruitId'));
+
+export const scrapRecruit = rest.post(scrapRecruitEndpoint, (req, res, ctx) => {
+  const recruitId = Number(req.params.recruitId as string);
+
+  const recruit = recruitDetails[recruitId];
+  recruit.scraped = !recruit.scraped;
+  const delta = recruit.scraped ? 1 : -1;
+  recruit.scrapCount += delta;
+  const latestScraped = recruit.scraped;
+  const latestScrapCount = recruit.scrapCount;
+  return res(
+    ctx.delay(500),
+    ...mockSuccess<ScrapRecruitApiData['data']>(ctx, {
+      scraped: latestScraped,
+      scrapCount: latestScrapCount,
+    })
+  );
+});
+
+export const scrapRecruitError = restError('post', scrapRecruitEndpoint, {
+  message: '스크랩 업데이트에 실패했습니다.',
+});
+
+const removeRecruitEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.detail(':recruitId'));
+const removeRecruitMethod = 'delete';
+
+export const removeRecruit = restSuccess(
+  removeRecruitMethod,
+  removeRecruitEndpoint,
+  { data: null }
+);
+
+export const removeRecruitError = restError(
+  removeRecruitMethod,
+  removeRecruitEndpoint,
+  { message: '리쿠르팅 삭제 실패' }
+);
+
 export const recruitHandlers = [
-  getRecruitDetail,
   getRecruits,
-  getRecruitMembers,
-  getRecruitScrap,
-  postRecruitScrap,
   postRecruitApply,
   getRecruitApplicants,
   getRecruitApplicationDetail,
@@ -179,4 +234,8 @@ export const recruitHandlers = [
   postRecruitApplicationCancel,
   //
   createRecruit,
+  getRecruitDetail,
+  getRecruitParticipants,
+  scrapRecruit,
+  removeRecruit,
 ];

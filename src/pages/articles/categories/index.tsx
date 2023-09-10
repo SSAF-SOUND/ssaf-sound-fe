@@ -66,7 +66,7 @@ const ArticleCategoriesPage = () => {
 
 export default ArticleCategoriesPage;
 
-const selfCss = css({ padding: `${topBarHeight + 40}px 15px` });
+const selfCss = css({ padding: `${topBarHeight + 40}px 0` });
 
 const hotLinkCss = css(
   {
@@ -86,7 +86,7 @@ export const getStaticProps = async () => {
     queryFn: getArticleCategories,
   });
 
-  const dehydratedState = await dehydrate();
+  const { dehydratedState } = await dehydrate();
 
   return {
     props: {

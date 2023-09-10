@@ -22,6 +22,7 @@ import {
   useUserProfileVisibility,
 } from '~/services/member';
 import {
+  expandCss,
   flex,
   globalVars,
   gnbHeight,
@@ -105,14 +106,14 @@ const ProfilePage: CustomNextPage = () => {
         {mine && (
           <div css={navLayerCss}>
             <Profile.NavItem
-              css={expandCss}
+              css={pageExpandCss}
               iconName="bookmark.outline"
               href={routes.profile.myScraps()}
               text="나의 스크랩"
             />
 
             <Profile.NavItem
-              css={expandCss}
+              css={pageExpandCss}
               iconName="document"
               href={routes.profile.myArticles()}
               text="내가 작성한 게시글"
@@ -122,12 +123,12 @@ const ProfilePage: CustomNextPage = () => {
 
         {isProfilePublic ? (
           <Tabs.Root defaultValue={ProfileTabs.PORTFOLIO}>
-            <Profile.TabsTriggers css={expandCss} />
+            <Profile.TabsTriggers css={pageExpandCss} />
 
             <Profile.PortfolioTabContent
               mine={mine}
               userId={id}
-              skillsContainerStyle={{ margin: `0 ${expandNegativeMarginX}` }}
+              marginForExpand={globalVars.mainLayoutPaddingX.var}
             />
 
             <Tabs.Content value="2">
@@ -150,16 +151,15 @@ export default ProfilePage;
 
 const privateProfileCss = css({ flexGrow: 1 });
 
-const selfPaddingX = 15;
-const expandNegativeMarginX = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
-
 const selfCss = css(
   {
-    padding: `${topBarHeight + 30}px ${selfPaddingX}px ${gnbHeight + 30}px`,
+    padding: `${topBarHeight + 30}px 0 ${gnbHeight + 30}px`,
     minHeight: `max(${pageMinHeight}, 100vh)`,
   },
   flex('', '', 'column')
 );
+
+const pageExpandCss = expandCss(globalVars.mainLayoutPaddingX.var);
 
 const userInfoLayerCss = css(
   { marginBottom: 44 },
@@ -169,8 +169,3 @@ const userInfoLayerCss = css(
 const nameCardCss = css({ padding: 0 });
 
 const navLayerCss = css({ marginBottom: 50 }, flex('', 'center', 'column', 8));
-
-const expandCss = css({
-  width: 'auto',
-  margin: `0 ${expandNegativeMarginX}`,
-});

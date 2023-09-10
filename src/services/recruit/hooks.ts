@@ -1,16 +1,28 @@
 import type { RecruitParams } from './apis2';
+import type { SetStateAction } from 'react';
+import type { RecruitDetail } from '~/services/recruit/apis';
 
-import { useMutation, useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useInfiniteQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { createRecruit } from '~/services/recruit/apis';
+import {
+  createRecruit,
+  getRecruitDetail,
+  getRecruitParticipants,
+  removeRecruit,
+  scrapRecruit,
+} from '~/services/recruit/apis';
 import {
   postRecruitApplicationCancel,
   postRecruitApplicationReject,
   postRecruitApplicationApprove,
   getRecruitApplicationDetail,
   getRecruitApplicants,
-  getRecruitDetail,
   getRecruitMembers,
   getRecruits,
   recruitAPI,
@@ -19,14 +31,6 @@ import {
 export const useApplyRecruit = () => {
   return useMutation({
     mutationFn: recruitAPI.postRecruitApply,
-  });
-};
-
-export const useRecruitDetail = (recruitId: number, enabled = true) => {
-  return useQuery({
-    queryKey: queryKeys.recruit.detail(recruitId),
-    queryFn: () => getRecruitDetail(recruitId),
-    enabled: enabled,
   });
 };
 
@@ -94,4 +98,90 @@ export const useCreateRecruit = () => {
   return useMutation({
     mutationFn: createRecruit,
   });
+};
+
+export interface UseRecruitDetailOptions {
+  enabled: boolean;
+}
+
+export const useRecruitDetail = (
+  recruitId: number,
+  options: Partial<UseRecruitDetailOptions> = {}
+) => {
+  const { enabled } = options;
+  return useQuery({
+    queryKey: queryKeys.recruit.detail(recruitId),
+    queryFn: () => getRecruitDetail(recruitId),
+    enabled,
+  });
+};
+
+export const useRecruitParticipants = (recruitId: number) => {
+  return useQuery({
+    queryKey: queryKeys.recruit.participants(recruitId),
+    queryFn: () => getRecruitParticipants(recruitId),
+  });
+};
+
+export const useScrapRecruit = (recruitId: number) => {
+  const setRecruitDetail = useSetRecruitDetail(recruitId);
+  const queryClient = useQueryClient();
+  const queryKey = queryKeys.recruit.detail(recruitId);
+
+  return useMutation({
+    mutationFn: () => scrapRecruit(recruitId),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey });
+      const recruit = queryClient.getQueryData<RecruitDetail>(queryKey);
+      if (!recruit) return;
+
+      const { scraped: prevScraped, scrapCount: prevScrapCount } = recruit;
+      const nextScraped = !prevScraped;
+      const nextScrapCount = nextScraped
+        ? prevScrapCount + 1
+        : prevScrapCount - 1;
+
+      setRecruitDetail((prevRecruit) => {
+        if (!prevRecruit) return;
+        return {
+          ...prevRecruit,
+          scraped: nextScraped,
+          scrapCount: nextScrapCount,
+        };
+      });
+      return { prevRecruit: recruit };
+    },
+    onSuccess: ({ scraped, scrapCount }) => {
+      setRecruitDetail((prevRecruit) => {
+        if (!prevRecruit) return;
+        return {
+          ...prevRecruit,
+          scraped,
+          scrapCount,
+        };
+      });
+    },
+    onError: (err, _, context) => {
+      const prevRecruit = context?.prevRecruit;
+      setRecruitDetail(prevRecruit);
+    },
+  });
+};
+
+export const useRemoveRecruit = (recruitId: number) => {
+  return useMutation({
+    mutationFn: () => removeRecruit(recruitId),
+  });
+};
+
+export const useSetRecruitDetail = (recruitId: number) => {
+  const queryClient = useQueryClient();
+  const queryKey = queryKeys.recruit.detail(recruitId);
+  const setArticleDetail = (
+    updater: SetStateAction<RecruitDetail | undefined>
+  ) => {
+    queryClient.setQueryData<RecruitDetail>(queryKey, updater);
+  };
+
+  return setArticleDetail;
 };

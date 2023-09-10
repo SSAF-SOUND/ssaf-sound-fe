@@ -10,12 +10,13 @@ import { position } from '~/styles/utils/position';
 export interface ArticleCommentModalFormProps {
   defaultValues?: ArticleCommentFormProps['defaultValues'];
   onValidSubmit: ArticleCommentFormProps['onValidSubmit'];
+  isRecruitComment?: boolean;
 }
 
 export const ArticleCommentModalForm = (
   props: ArticleCommentModalFormProps
 ) => {
-  const { onValidSubmit, defaultValues } = props;
+  const { onValidSubmit, defaultValues, isRecruitComment = false } = props;
 
   return (
     <div css={selfCss}>
@@ -26,6 +27,7 @@ export const ArticleCommentModalForm = (
       <ArticleCommentForm
         onValidSubmit={onValidSubmit}
         defaultValues={defaultValues}
+        options={{ showAnonymous: !isRecruitComment }}
       />
     </div>
   );

@@ -5,8 +5,7 @@ import { css } from '@emotion/react';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 import VacantSquareAvatar from './Vacant';
-import { SsafyIcon } from '../Common';
-import { TrackSize } from '../Common/SsafyIcon/Track';
+import { SsafyIcon, TrackSize } from '../Common';
 
 export interface SquareAvatarProps {
   userInfo?: UserInfo;
@@ -16,13 +15,11 @@ const SquareAvatar = (props: SquareAvatarProps) => {
   if (!userInfo) return <VacantSquareAvatar />;
 
   const { isMajor, nickname, ssafyMember, ssafyInfo } = userInfo;
+  const trackName = ssafyInfo?.majorTrack ?? 'uncertified';
 
   return (
     <div css={[selfCss, backgroundCss[isMajor ? 'major' : 'nonMajor']]}>
-      <SsafyIcon.Track
-        name={ssafyMember ? ssafyInfo?.majorTrack : 'uncertified'}
-        size={TrackSize.SM4}
-      />
+      <SsafyIcon.Track name={trackName} size={TrackSize.SM4} />
       <div css={textBoxCss}>
         <span css={nickNameCss}>{nickname}</span>
         {ssafyMember && (
@@ -46,8 +43,8 @@ const backgroundCss = {
 
 const selfCss = css(
   {
-    width: 104,
-    height: 113,
+    width: 120,
+    height: 120,
     borderRadius: 8,
   },
   flex('center', 'center', 'column', 6)
@@ -63,6 +60,7 @@ const nickNameCss = css(fontCss.style.B16, fontCss.family.auto, {
 
 const textCss = css(fontCss.style.R12, fontCss.family.auto, {
   color: palettes.primary.light,
+  marginTop: 6,
 });
 
 export default SquareAvatar;

@@ -1,51 +1,59 @@
 import type { SerializedStyles } from '@emotion/react';
-import type { ComponentPropsWithoutRef } from 'react';
-import type { RecruitCategory } from '~/services/recruit';
 
 import { css } from '@emotion/react';
+import dayjs from 'dayjs';
 
-import { getRecruitThemeByCategory } from '~/services/recruit';
-import { fontCss, themeColorVars } from '~/styles/utils';
+import { Theme, fontCss, inlineFlex, themeColorVars } from '~/styles/utils';
 import { getDateDiff } from '~/utils';
 
-export interface DdayProps extends ComponentPropsWithoutRef<'span'> {
-  recruitEnd: string;
-  category: RecruitCategory;
+export interface DdayProps {
+  className?: string;
+  endDate: string;
+  theme?: Extract<Theme, Theme.PRIMARY | Theme.SECONDARY>;
   size?: 'sm' | 'md';
 }
 
-type DdaySizes = 'sm' | 'md';
+export type DdaySize = 'sm' | 'md';
 
-const Dday = (props: DdayProps) => {
-  const {
-    recruitEnd = '2023-06-30',
-    category = 'project',
-    size = 'md',
-    ...restProps
-  } = props;
+const getDisplayText = (endDate: string) => {
+  const diff = getDateDiff(dayjs(endDate).endOf('day'));
 
-  const diff = getDateDiff(new Date(recruitEnd));
-  const isAbleDate = diff >= 0;
-  const dDay = isAbleDate ? `D - ${diff}` : '모집 완료';
+  const isDDay = diff === 0;
+  const expired = diff < 0;
+
+  if (isDDay) {
+    return 'D - Day';
+  }
+
+  if (expired) {
+    return '모집 완료';
+  }
+
+  return `D - ${diff}`;
+};
+
+export const Dday = (props: DdayProps) => {
+  const { endDate, theme = Theme.PRIMARY, size = 'sm', ...restProps } = props;
+  const displayText = getDisplayText(endDate);
 
   return (
     <span
-      css={[textCss, sizeCss[size]]}
-      data-theme={getRecruitThemeByCategory(category)}
+      css={[selfCss, textCss, sizeCss[size]]}
+      data-theme={theme}
       {...restProps}
     >
-      {dDay}
+      {displayText}
     </span>
   );
 };
 
+const selfCss = css(inlineFlex('center', 'center'));
+
 const textCss = css(fontCss.family.auto, {
-  color: themeColorVars.mainColor.var,
+  color: themeColorVars.mainDarkColor.var,
 });
 
-const sizeCss: Record<DdaySizes, SerializedStyles> = {
+const sizeCss: Record<DdaySize, SerializedStyles> = {
   sm: css(fontCss.style.B16),
   md: css(fontCss.style.B20),
 };
-
-export default Dday;

@@ -148,7 +148,7 @@ const selfPaddingTop =
   tabListContainerTop + tabListHeight + tabListContainerPaddingY * 2 + 30;
 
 const selfCss = css({
-  padding: `${selfPaddingTop}px 15px 0`,
+  padding: `${selfPaddingTop}px 0 0`,
 });
 const tabListContainerCss = css(
   {

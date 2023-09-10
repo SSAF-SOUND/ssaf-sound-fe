@@ -21,7 +21,7 @@ import {
   useMyInfo,
   useSetMyInfo,
 } from '~/services/member';
-import { flex, titleBarHeight } from '~/styles/utils';
+import { flex, pageMinHeight, titleBarHeight } from '~/styles/utils';
 import {
   customToast,
   handleAxiosError,
@@ -173,8 +173,8 @@ StudentCertificationPage.meta = {
 
 const selfCss = css(
   {
-    minHeight: '100vh',
-    padding: `${titleBarHeight}px 15px`,
+    minHeight: `max(${pageMinHeight}px, 100vh)`,
+    padding: `${titleBarHeight}px 0`,
   },
   flex()
 );

@@ -1,0 +1,287 @@
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+} from 'next/types';
+import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
+
+import { css } from '@emotion/react';
+import { useEffect, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
+
+import ArticleComment from '~/components/ArticleComment';
+import {
+  DefaultFullPageLoader,
+  loaderText,
+  PageHead,
+} from '~/components/Common';
+import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
+import { RecruitDetailLayout } from '~/components/Layout';
+import { Recruit } from '~/components/Recruit/Recruit';
+import RedirectionGuide from '~/components/RedirectionGuide';
+import TitleBar from '~/components/TitleBar';
+import { queryKeys } from '~/react-query/common';
+import { prefetch } from '~/react-query/server';
+import { useMyInfo } from '~/services/member';
+import {
+  getDisplayCategoryName,
+  getRecruitDetail,
+  getRecruitThemeByCategory,
+  RecruitCategoryName,
+  useRecruitDetail,
+} from '~/services/recruit';
+import {
+  useCreateRecruitComment,
+  useInvalidateRecruitComments,
+  useRecruitComments,
+} from '~/services/recruitComment';
+import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
+import {
+  ErrorMessage,
+  getErrorResponse,
+  handleAxiosError,
+  routes,
+} from '~/utils';
+import { stripHtmlTags } from '~/utils/stripHtmlTags';
+
+interface RecruitDetailPageProps
+  extends InferGetServerSidePropsType<typeof getServerSideProps> {}
+
+const RecruitDetailPage = (props: RecruitDetailPageProps) => {
+  const { recruitId } = props;
+
+  const {
+    data: recruitDetail,
+    isLoading: isRecruitDetailLoading,
+    isError: isRecruitDetailError,
+    error: recruitDetailError,
+    refetch,
+  } = useRecruitDetail(recruitId);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  if (isRecruitDetailLoading) {
+    return <DefaultFullPageLoader text={loaderText.loadingData} />;
+  }
+
+  if (isRecruitDetailError) {
+    const errorResponse = getErrorResponse(recruitDetailError);
+
+    const errorMessage = errorResponse?.message ?? ErrorMessage.LOADING_ERROR;
+
+    return (
+      <RedirectionGuide
+        title="Error"
+        description={errorMessage}
+        redirectionText={'리쿠르팅 목록으로 이동'}
+        redirectionTo={routes.recruit.self()}
+      />
+    );
+  }
+
+  const {
+    category,
+
+    title,
+    content,
+  } = recruitDetail;
+  const titleBarTitle = getDisplayCategoryName(category);
+  const recruitTheme = getRecruitThemeByCategory(category);
+
+  const metaTitle = title;
+  const metaDescription = stripHtmlTags(content).slice(0, 100);
+  const pageUrl = routes.recruit.detail(recruitId);
+
+  return (
+    <>
+      <PageHead
+        title={metaTitle}
+        description={metaDescription}
+        openGraph={{
+          title: metaTitle,
+          description: metaDescription,
+          url: pageUrl,
+        }}
+      />
+
+      <RecruitDetailLayout>
+        <TitleBar.Default
+          css={{ marginBottom: 12 }}
+          title={titleBarTitle}
+          withoutClose
+        />
+
+        <article css={{ marginBottom: 40 }}>
+          <Recruit.Header
+            css={{ marginBottom: 20 }}
+            recruitDetail={recruitDetail}
+          />
+
+          <Recruit.BasicInfo
+            css={[pageExpandCss, { marginBottom: 20 }]}
+            recruitDetail={recruitDetail}
+          />
+
+          <Recruit.Stats recruitDetail={recruitDetail} />
+        </article>
+
+        <Recruit.Links
+          css={{ marginBottom: 60 }}
+          recruitDetail={recruitDetail}
+        />
+
+        <Recruit.Tabs.Root
+          css={{ marginBottom: 50 }}
+          theme={recruitTheme}
+          descriptionText={getDescriptionTabText(category)}
+        >
+          <Recruit.Tabs.DescriptionContent html={content} />
+
+          <Recruit.Tabs.ParticipantsContent recruitId={recruitId} />
+        </Recruit.Tabs.Root>
+
+        <div
+          css={[
+            pageExpandCss,
+            {
+              marginBottom: 44,
+              height: 20,
+              backgroundColor: palettes.background.grey,
+            },
+          ]}
+        />
+
+        <RecruitCommentsLayer
+          recruitId={recruitId}
+          css={{ marginBottom: 40 }}
+        />
+
+        <RecruitCommentFormLayer recruitId={recruitId} />
+      </RecruitDetailLayout>
+    </>
+  );
+};
+
+const getDescriptionTabText = (category: RecruitCategoryName) => {
+  if (category === RecruitCategoryName.PROJECT) return '프로젝트 설명';
+  if (category === RecruitCategoryName.STUDY) return '스터디 설명';
+  throw new Error(
+    `잘못된 카테고리가 전달되었습니다. \n> category: ${category}`
+  );
+};
+
+const pageExpandCss = expandCss();
+
+export default RecruitDetailPage;
+
+const RecruitCommentsLayer = (props: {
+  recruitId: number;
+  className?: string;
+}) => {
+  const { recruitId, className } = props;
+  const skeletonCount = 8;
+  const {
+    data: comments,
+    isLoading,
+    isSuccess,
+  } = useRecruitComments(recruitId);
+
+  return (
+    <div css={commentsLayerSelfCss} className={className}>
+      <h3 css={fontCss.style.B20}>Q&A</h3>
+
+      {isLoading && (
+        <Skeleton
+          count={skeletonCount}
+          height={120}
+          style={{ marginBottom: 20 }}
+          baseColor={palettes.background.grey}
+          enableAnimation={false}
+        />
+      )}
+
+      {isSuccess &&
+        comments.map((comment) => {
+          return (
+            <ArticleComment
+              key={comment.commentId}
+              articleId={recruitId}
+              comment={comment}
+              isRecruitComment={true}
+            />
+          );
+        })}
+    </div>
+  );
+};
+
+const commentsLayerSelfCss = css(flex('', '', 'column', 20));
+
+const RecruitCommentFormLayer = (props: { recruitId: number }) => {
+  const { recruitId } = props;
+  const { data: myInfo } = useMyInfo();
+  const { mutateAsync: createRecruitComment } =
+    useCreateRecruitComment(recruitId);
+  const [formKey, setFormKey] = useState(1);
+
+  const invalidateComments = useInvalidateRecruitComments(recruitId);
+  const isSignedIn = !!myInfo;
+
+  const onValidSubmit: ArticleCommentFormProps['onValidSubmit'] = async (
+    _,
+    formValues
+  ) => {
+    try {
+      await createRecruitComment(formValues);
+      await invalidateComments();
+      setFormKey((p) => p + 1);
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
+  return (
+    <ArticleCommentForm
+      onValidSubmit={onValidSubmit}
+      key={formKey}
+      options={{ showNotSignedInFallback: !isSignedIn, showAnonymous: false }}
+    />
+  );
+};
+
+/* ssr */
+
+interface Props {
+  recruitId: number;
+}
+
+type Params = {
+  recruitId: string;
+};
+
+export const getServerSideProps: GetServerSideProps<Props, Params> = async (
+  context
+) => {
+  const recruitId = Number(context.params?.recruitId);
+
+  if (Number.isNaN(recruitId)) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const dehydrate = prefetch({
+    queryKey: queryKeys.recruit.detail(recruitId),
+    queryFn: () => getRecruitDetail(recruitId),
+  });
+
+  const { dehydratedState } = await dehydrate();
+
+  return {
+    props: {
+      recruitId,
+      dehydratedState,
+    },
+  };
+};

@@ -66,8 +66,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
     articleDetail;
 
   const metaTitle = articleDetail.title;
-  const metaDescription = stripHtmlTags(articleDetail.content);
-
+  const metaDescription = stripHtmlTags(articleDetail.content).slice(0, 100);
   const pageUrl = routes.articles.detail(articleDetail.postId);
 
   return (
@@ -110,11 +109,10 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
 export default ArticleDetailPage;
 
-const selfPaddingX = 10;
-const negativeMarginForExpand = `calc(-1 * (${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var}))`;
+const negativeMarginForExpand = `calc(-1 * ${globalVars.mainLayoutPaddingX.var})`;
 
 const selfCss = css({
-  padding: `${titleBarHeight}px ${selfPaddingX}px 240px`,
+  padding: `${titleBarHeight}px 0 240px`,
 });
 
 const expandCss = css({
@@ -135,7 +133,11 @@ const ArticleCommentsLayer = (props: {
 }) => {
   const { articleId, className } = props;
   const skeletonCount = 8;
-  const { data: comments, isLoading } = useArticleComments(articleId);
+  const {
+    data: comments,
+    isLoading,
+    isSuccess,
+  } = useArticleComments(articleId);
 
   return (
     <div css={commentsLayerSelfCss} className={className}>
@@ -149,7 +151,7 @@ const ArticleCommentsLayer = (props: {
         />
       )}
 
-      {comments &&
+      {isSuccess &&
         comments.map((comment) => {
           return (
             <ArticleComment
@@ -230,7 +232,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
     queryFn: () => getArticleDetail(articleId),
   });
 
-  const dehydratedState = await dehydrate();
+  const { dehydratedState } = await dehydrate();
 
   return {
     props: {

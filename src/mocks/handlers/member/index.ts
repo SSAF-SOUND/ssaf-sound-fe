@@ -36,8 +36,8 @@ export const getUserInfo = restSuccess<GetUserInfoApiData['data']>(
   // @ts-ignore
   composeUrls(API_URL, endpoints.user.userInfo(':id')),
   {
-    // data: userInfo.initialUserInfo,
-    data: userInfo.certifiedSsafyUserInfo,
+    data: userInfo.initialUserInfo,
+    // data: userInfo.certifiedSsafyUserInfo,
     // data: userInfo.uncertifiedSsafyUserInfo,
     // data: userInfo.nonSsafyUserInfo,
   }

@@ -127,7 +127,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
   ]);
 
-  const dehydratedState = await dehydrate();
+  const { dehydratedState } = await dehydrate();
 
   return {
     props: {

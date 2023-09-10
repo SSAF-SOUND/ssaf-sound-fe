@@ -17,6 +17,7 @@ import {
   useUpdateProfileVisibility,
 } from '~/services/member';
 import {
+  expandCss,
   flex,
   globalVars,
   pageMinHeight,
@@ -51,7 +52,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
             onClickBackward={routes.profile.self()}
           />
 
-          <nav css={[expandCss, { marginBottom: 40 }]}>
+          <nav css={[pageExpandCss, { marginBottom: 40 }]}>
             <MyInfoSettings.NavTitle css={navTitleCss}>
               내 정보
             </MyInfoSettings.NavTitle>
@@ -84,7 +85,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
             </MyInfoSettings.NavItem>
           </nav>
 
-          <nav css={[expandCss, { marginBottom: 40 }]}>
+          <nav css={[pageExpandCss, { marginBottom: 40 }]}>
             <MyInfoSettings.NavTitle css={navTitleCss}>
               SSAFY 정보
             </MyInfoSettings.NavTitle>
@@ -106,7 +107,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
           </nav>
         </div>
 
-        <div css={[expandCss, bottomNavLayerCss]}>
+        <div css={[pageExpandCss, bottomNavLayerCss]}>
           <div css={[separatorCss, { marginBottom: 20 }]} />
 
           <MyInfoSettings.NavButton
@@ -126,21 +127,17 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   );
 };
 
-const selfPaddingX = '15px';
 const selfPaddingY = `${titleBarHeight + 30}px`;
-const totalPaddingX = `calc(${selfPaddingX} + ${globalVars.mainLayoutPaddingX.var})`;
 const selfCss = css(
   {
-    padding: `${selfPaddingY} ${selfPaddingX}`,
+    padding: `${selfPaddingY} 0`,
     minHeight: pageMinHeight,
     height: '100vh',
   },
   flex('', '', 'column')
 );
 
-const expandCss = css({
-  margin: `0 calc(-1 * ${totalPaddingX})`,
-});
+const pageExpandCss = expandCss(globalVars.mainLayoutPaddingX.var);
 
 const separatorCss = css({
   width: 'auto',
@@ -148,7 +145,7 @@ const separatorCss = css({
   backgroundColor: palettes.font.blueGrey,
 });
 
-const navTitleCss = css({ padding: `0 ${totalPaddingX}` });
+const navTitleCss = css({ padding: `0 ${globalVars.mainLayoutPaddingX.var}` });
 
 const bottomNavLayerCss = css({ flexGrow: 1 }, flex('', 'flex-end'));
 

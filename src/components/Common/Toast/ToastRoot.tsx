@@ -2,9 +2,9 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import { flex, fontCss } from '~/styles/utils';
+import { flex, fontCss, palettes } from '~/styles/utils';
 
-interface ToastRootProps extends ComponentPropsWithoutRef<'div'> {
+interface ToastRootProps extends ComponentPropsWithoutRef<'button'> {
   children: ReactNode;
   icon: ReactNode;
 }
@@ -13,10 +13,10 @@ const ToastRoot = (props: ToastRootProps) => {
   const { children, icon, ...restProps } = props;
 
   return (
-    <div css={selfCss} {...restProps}>
+    <button type="button" css={selfCss} {...restProps}>
       <div css={iconLayerCss}>{icon}</div>
       <div>{children}</div>
-    </div>
+    </button>
   );
 };
 
@@ -26,6 +26,7 @@ const selfCss = css(
   {
     cursor: 'pointer',
     transition: 'transform 200ms',
+    backgroundColor: palettes.white,
     padding: 10,
     paddingLeft: 6,
     margin: '-4px -10px', // 기본 스타일때문에.

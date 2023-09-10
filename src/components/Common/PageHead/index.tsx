@@ -75,7 +75,7 @@ export const PageHead = (props: PageHeadProps) => {
       <meta property="og:locale" content={globalMetaData.locale} />
       <meta property="og:image:width" content={globalMetaData.imageWidth} />
       <meta property="og:image:height" content={globalMetaData.imageHeight} />
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large" />
       <meta name="twitter:title" content={openGraphTitle} />
       <meta name="twitter:description" content={openGraphDescription} />
       <meta name="twitter:image" content={image} />

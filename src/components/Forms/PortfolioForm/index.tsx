@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils';
 import type { SubmitErrorHandlerWithErrorMessage } from '~/components/Forms/utils';
@@ -12,7 +11,7 @@ import { fontCss, palettes, titleBarHeight } from '~/styles/utils';
 import { Links, SelfIntroduction, Skills } from './Fields';
 
 interface PortfolioFormOptions {
-  skillsContainerStyle: CSSProperties;
+  marginForExpand: number | string;
   titleBarCloseRoute: string;
 }
 
@@ -30,7 +29,7 @@ const PortfolioForm = (props: PortfolioFormProps) => {
     onValidSubmit,
     onInvalidSubmit,
     defaultValues,
-    options: { skillsContainerStyle, titleBarCloseRoute } = {},
+    options: { marginForExpand, titleBarCloseRoute } = {},
   } = props;
 
   const methods = useForm({
@@ -74,10 +73,7 @@ const PortfolioForm = (props: PortfolioFormProps) => {
         </section>
 
         <SelfIntroduction css={{ marginBottom: 72 }} />
-        <Skills
-          css={{ marginBottom: 86 }}
-          skillsContainerStyle={skillsContainerStyle}
-        />
+        <Skills marginForExpand={marginForExpand} css={{ marginBottom: 86 }} />
         <Links css={{ paddingBottom: 400 }} />
       </form>
     </FormProvider>

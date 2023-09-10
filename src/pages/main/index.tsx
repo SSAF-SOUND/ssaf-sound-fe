@@ -43,7 +43,7 @@ const MainPage = () => {
         <HotArticlesPreview css={{ marginBottom: 50 }} />
         <RecruitsPreview
           css={{ marginBottom: 50 }}
-          marginForExpand={marginForExpand}
+          marginForExpand={globalVars.mainLayoutPaddingX.var}
         />
       </div>
     </>
@@ -53,11 +53,9 @@ const MainPage = () => {
 export default MainPage;
 
 const selfPaddingY = topBarHeight + 30;
-const selfPaddingX = 15;
-const marginForExpand = `calc(${selfPaddingX}px + ${globalVars.mainLayoutPaddingX.var})`;
 
 const selfCss = css({
-  padding: `${selfPaddingY}px ${selfPaddingX}px`,
+  padding: `${selfPaddingY}px 0px`,
 });
 
 export const getServerSideProps = async () => {

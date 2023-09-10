@@ -7,6 +7,10 @@ export const isDevMode =
   devEnvStrings.includes(process.env.NODE_ENV) ||
   devEnvStrings.includes(process.env.NEXT_PUBLIC_VERCEL_ENV as string);
 
+export enum ErrorMessage {
+  LOADING_ERROR = '데이터를 불러오는 중 오류가 발생했습니다.',
+}
+
 export enum ResponseCode {
   //
   TOKEN_NOT_EXISTS = '401',
