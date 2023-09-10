@@ -1,12 +1,15 @@
 import type { MouseEvent } from 'react';
 import type { Control } from 'react-hook-form';
-import type { RecruitCategory } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { Controller } from 'react-hook-form';
 
 import { ToggleGroup } from '~/components/Common';
-import { SkillNameSet, getRecruitThemeByCategory } from '~/services/recruit';
+import {
+  SkillNameSet,
+  getRecruitThemeByCategory,
+  RecruitCategoryName,
+} from '~/services/recruit';
 import { flex, fontCss } from '~/styles/utils';
 
 import { RecruitResetButton } from '../RecruitResetButton';
@@ -15,14 +18,14 @@ interface SkillsFilterProps {
   reset: (e: MouseEvent<HTMLButtonElement>) => void;
   control: Control;
   defaultValue?: string[];
-  category?: RecruitCategory;
+  category?: RecruitCategoryName;
 }
 export const SkillsFilter = (props: SkillsFilterProps) => {
   const {
     reset,
     control,
     defaultValue = ['React'],
-    category = 'project',
+    category = RecruitCategoryName.PROJECT,
   } = props;
 
   return (

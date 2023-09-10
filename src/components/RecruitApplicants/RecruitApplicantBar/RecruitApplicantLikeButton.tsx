@@ -1,7 +1,7 @@
 import * as RadixToggle from '@radix-ui/react-toggle';
 
 import { Icon, IconButton } from '~/components/Common';
-import { palettes } from '~/styles/utils';
+import { palettes, Theme } from '~/styles/utils';
 
 interface RecruitApplicantLikeButtonProps {
   liked?: boolean;
@@ -14,7 +14,7 @@ export const RecruitApplicantLikeButton = (
   const { liked, onLikedChange } = props;
 
   return (
-    <IconButton asChild theme="recruit" size={32}>
+    <IconButton asChild theme={Theme.RECRUIT} size={32}>
       <RadixToggle.Root pressed={liked} onPressedChange={onLikedChange}>
         <Icon
           name={liked ? 'heart' : 'heart.outlined'}

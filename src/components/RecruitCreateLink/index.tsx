@@ -20,11 +20,11 @@ export const RecruitCreateButton = (props: { category: RecruitCategory }) => {
 
   return (
     <Link href={routes.recruit.new()}>
-      <CircleButton
-        name="pencil.plus"
-        theme={getRecruitThemeByCategory(value)}
-        css={{ width: 43, height: 43 }}
-      />
+      {/*<CircleButton*/}
+      {/*  name="pencil.plus"*/}
+      {/*  theme={getRecruitThemeByCategory(value)}*/}
+      {/*  css={{ width: 43, height: 43 }}*/}
+      {/*/>*/}
     </Link>
   );
 };

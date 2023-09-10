@@ -22,12 +22,12 @@ const SmallRecruitCard = (props: RecruitCardProps) => {
   return (
     <div css={selfCss}>
       <div css={flex('center', 'space-between', 'row')}>
-        <RecruitBadge category={category} />
-        <Dday
-          endDate={recruitEnd}
-          size="sm"
-          category={category as RecruitCategoryName}
-        />
+        {/*<RecruitBadge category={category} />*/}
+        {/*<Dday*/}
+        {/*  endDate={recruitEnd}*/}
+        {/*  size="sm"*/}
+        {/*  category={category as RecruitCategoryName}*/}
+        {/*/>*/}
       </div>
 
       <div>

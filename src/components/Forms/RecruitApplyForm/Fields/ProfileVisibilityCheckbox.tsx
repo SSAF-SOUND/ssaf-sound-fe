@@ -1,11 +1,11 @@
 import type { QuestionProps } from './ApplyQuestion';
 import type { CheckboxProps } from '~/components/Common/Checkbox';
-import type { RecruitCategory } from '~/services/recruit';
+
 
 import { css } from '@emotion/react';
 
 import { Checkbox } from '~/components/Common';
-import { getRecruitThemeByCategory } from '~/services/recruit';
+import { RecruitCategoryName , getRecruitThemeByCategory } from '~/services/recruit';
 import { flex, palettes } from '~/styles/utils';
 
 import { ApplyQuestion } from './ApplyQuestion';
@@ -14,7 +14,7 @@ import { disabledCss } from './utils';
 
 interface ProfileVisibilityCheckbox extends CheckboxProps {
   loading?: boolean;
-  category?: RecruitCategory;
+  category?: RecruitCategoryName;
 }
 
 type ProfileVisibilityCheckboxWithQuestion = ProfileVisibilityCheckbox &
@@ -24,7 +24,7 @@ export const ProfileVisibilityCheckbox = (
   props: ProfileVisibilityCheckboxWithQuestion
 ) => {
   const {
-    category = 'project',
+    category = RecruitCategoryName.PROJECT,
     order = 1,
     question = '리쿠르팅 등록자에게 프로필이 공개됩니다. 이에 동의하십니까?',
     disabled,

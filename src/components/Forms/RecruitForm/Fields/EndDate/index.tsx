@@ -7,7 +7,7 @@ import { useFormState, useWatch } from 'react-hook-form';
 import { DatePicker } from '~/components/Common/DatePicker';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { RecruitCategoryName } from '~/services/recruit';
-import { flex } from '~/styles/utils';
+import { flex, Theme } from '~/styles/utils';
 
 const fieldName = 'endDate';
 const validateEndDate = (value: string) => {
@@ -46,7 +46,7 @@ export const EndDate = (props: EndDateProps) => {
   } = useFormState({ name: fieldName });
 
   const datePickerTheme =
-    category === RecruitCategoryName.PROJECT ? 'primary' : 'secondary';
+    category === RecruitCategoryName.PROJECT ? Theme.PRIMARY : Theme.SECONDARY;
   const tomorrow = dayjs().add(1, 'day').toDate();
 
   const handleChangeDate = (value: unknown) => {

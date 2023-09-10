@@ -9,7 +9,7 @@ import { css } from '@emotion/react';
 import { useForm } from 'react-hook-form';
 
 import { Icon, IconButton, TextInput } from '~/components/Common';
-import { position } from '~/styles/utils';
+import { position, Theme } from '~/styles/utils';
 
 const fieldName = 'keyword';
 const defaultMinKeywordLength = 3;
@@ -85,7 +85,12 @@ const SearchBarForm = (props: SearchBarFormProps) => {
             validate: validateKeyword(minKeywordLength),
           })}
         />
-        <IconButton type="submit" css={searchButtonCss} theme="black" size={34}>
+        <IconButton
+          type="submit"
+          css={searchButtonCss}
+          theme={Theme.BLACK}
+          size={34}
+        >
           <Icon name="search" size={28} />
         </IconButton>
       </div>

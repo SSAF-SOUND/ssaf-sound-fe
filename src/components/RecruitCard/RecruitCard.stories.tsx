@@ -17,28 +17,13 @@ export const Default = (props: {
   category: 'study' | 'project';
   withBadge: boolean;
 }) => {
-  return (
-    <RecruitCard
-      {...RecruitData.recruitSummary}
-      category={props.category}
-      withBadge={props.withBadge}
-    />
-  );
+  return <>임시</>;
 };
 
 export const WithMessage = () => {
-  return (
-    <RecruitCard {...RecruitData.recruitSummary} withMessage={true}>
-      <p>메세지 부분은 진행중입니다!</p>
-    </RecruitCard>
-  );
+  return <>임시</>;
 };
 
 export const Small = (props: { category: 'study' | 'project' }) => {
-  return (
-    <SmallRecruitCard
-      recruitSummary={RecruitData.recruitSummary}
-      category={props.category}
-    />
-  );
+  return <>임시</>;
 };

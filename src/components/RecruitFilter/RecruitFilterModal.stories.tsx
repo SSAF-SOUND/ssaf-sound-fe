@@ -1,5 +1,7 @@
 import type { Meta } from '@storybook/react';
 
+import { RecruitCategoryName } from '~/services/recruit';
+
 import { RecruitFilterModal } from './RecruitFilterModal';
 
 const meta: Meta<typeof RecruitFilterModal> = {
@@ -11,9 +13,9 @@ const meta: Meta<typeof RecruitFilterModal> = {
 export default meta;
 
 export const Project = () => {
-  return <RecruitFilterModal category="project" />;
+  return <RecruitFilterModal category={RecruitCategoryName.PROJECT} />;
 };
 
 export const Study = () => {
-  return <RecruitFilterModal category="study" />;
+  return <RecruitFilterModal category={RecruitCategoryName.STUDY} />;
 };

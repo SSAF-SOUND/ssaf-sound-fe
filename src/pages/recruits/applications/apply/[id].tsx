@@ -11,7 +11,6 @@ import {
   ProfileVisibilityCheckbox,
 } from '~/components/Forms/RecruitApplyForm/Fields';
 import { RecruitLayout } from '~/components/Layout';
-import { RecruitMeta as RecruitMetaComponent } from '~/components/RecruitMeta';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
@@ -24,6 +23,8 @@ import {
 import { flex, fontCss } from '~/styles/utils';
 import { handleAxiosError, paramsToNumber, routes } from '~/utils';
 
+// import { RecruitMeta as RecruitMetaComponent } from '~/components/RecruitMeta';
+
 const RecruitApplyPage = (props: { recruitApplicationId: number }) => {
   const router = useRouter();
   const { recruitApplicationId } = props;
@@ -33,27 +34,27 @@ const RecruitApplyPage = (props: { recruitApplicationId: number }) => {
     isError: isApplicationError,
   } = useRecruitApplicationDetail(recruitApplicationId);
 
-  const {
-    data: recruitDetailData,
-    isLoading: isRecruitDetailLoading,
-    isError: isRecruitDetailError,
-  } = useRecruitDetail(
-    recruitApplicationDetailData!.recruitId,
-    !!recruitApplicationDetailData
-  );
+  // const {
+  //   data: recruitDetailData,
+  //   isLoading: isRecruitDetailLoading,
+  //   isError: isRecruitDetailError,
+  // } = useRecruitDetail(
+  //   recruitApplicationDetailData!.recruitId,
+  //   !!recruitApplicationDetailData
+  // );
 
   const { mutateAsync: cancelApplication, isLoading: isCancelLoading } =
     useRecruitApplicationCancel();
 
-  if (isApplicationLoading || isRecruitDetailLoading)
-    return <DefaultFullPageLoader />;
-  if (isApplicationError || isRecruitDetailError) return router.push('/500');
+  // if (isApplicationLoading || isRecruitDetailLoading)
+  //   return <DefaultFullPageLoader />;
+  // if (isApplicationError || isRecruitDetailError) return router.push('/500');
+  //
+  // const { category, recruitStart, recruitEnd, limits, skills, author, title } =
+  //   recruitDetailData;
 
-  const { category, recruitStart, recruitEnd, limits, skills, author, title } =
-    recruitDetailData;
-
-  const { recruitType, matchStatus, reply, question } =
-    recruitApplicationDetailData;
+  // const { recruitType, matchStatus, reply, question } =
+  //   recruitApplicationDetailData;
 
   const postCancel = async () => {
     try {
@@ -83,29 +84,29 @@ const RecruitApplyPage = (props: { recruitApplicationId: number }) => {
           flex('', '', 'column', 8),
         ]}
       >
-        <h2 css={titleCss}>{category === 'project' ? '프로젝트' : '스터디'}</h2>
-        <RecruitMetaComponent
-          recruitMeta={{ recruitStart, recruitEnd, limits, skills }}
-          userInfo={author}
-          expanded
-          title={title}
-        />
+        {/*<h2 css={titleCss}>{category === 'project' ? '프로젝트' : '스터디'}</h2>*/}
+        {/*<RecruitMetaComponent*/}
+        {/*  recruitMeta={{ recruitStart, recruitEnd, limits, skills }}*/}
+        {/*  userInfo={author}*/}
+        {/*  expanded*/}
+        {/*  title={title}*/}
+        {/*/>*/}
       </div>
       <div css={[flex('', '', 'column', 30), { marginBottom: 80 }]}>
-        <ApplySelectBox items={[recruitType]} readOnly value={recruitType} />
+        {/*<ApplySelectBox items={[recruitType]} readOnly value={recruitType} />*/}
         <ProfileVisibilityCheckbox
           disabled
           defaultChecked
           order={2}
           question="리쿠르팅 등록자에게 프로필이 공개됩니다. 이에 동의하십니까?"
         />
-        <ApplyTextArea
-          disabled
-          withMax={false}
-          order={3}
-          question={`[등록자 질문] ${question}`}
-          defaultValue={reply}
-        />
+        {/*<ApplyTextArea*/}
+        {/*  disabled*/}
+        {/*  withMax={false}*/}
+        {/*  order={3}*/}
+        {/*  question={`[등록자 질문] ${question}`}*/}
+        {/*  defaultValue={reply}*/}
+        {/*/>*/}
       </div>
       <Button onClick={postCancel} loading={isCancelLoading}>
         리쿠르팅 신청 취소

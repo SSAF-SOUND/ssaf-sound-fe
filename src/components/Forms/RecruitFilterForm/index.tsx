@@ -1,14 +1,14 @@
 import type { SubmitHandler } from 'react-hook-form';
 import type {
-  RecruitCategory,
   RecruitType,
-  SkillsType,
+  SkillsType
 } from '~/services/recruit';
 
 import { useForm } from 'react-hook-form';
 
 import { Button } from '~/components/Common';
-import { getRecruitThemeByCategory } from '~/services/recruit';
+import { getRecruitThemeByCategory ,
+  RecruitCategoryName} from '~/services/recruit';
 
 import { RecruitTypeFilter, SkillsFilter } from './Fields';
 import { RecruitFormLabel } from './RecruitFormLabel';
@@ -20,14 +20,14 @@ export type RecruitFilterFormDefaultValues = {
 
 interface RecruitFilterFormProps {
   submitHandler?: SubmitHandler<RecruitFilterFormDefaultValues>;
-  category?: RecruitCategory;
+  category?: RecruitCategoryName;
   defaultValues?: RecruitFilterFormDefaultValues;
 }
 
 export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
   //   const { data } = useRecruitTypes();
   const {
-    category = 'project',
+    category = RecruitCategoryName.PROJECT,
     defaultValues = { skills: [], recruitTypes: [] },
     submitHandler = console.log,
   } = props;

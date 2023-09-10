@@ -1,8 +1,4 @@
-import type {
-  RecruitApplyParams,
-  RecruitCategory,
-  RecruitType,
-} from '~/services/recruit';
+import type { RecruitApplyParams, RecruitType } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
 
@@ -11,7 +7,11 @@ import { useForm } from 'react-hook-form';
 import { Button } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
 import { useRecruitTypes } from '~/services/meta';
-import { getRecruitThemeByCategory, useApplyRecruit } from '~/services/recruit';
+import {
+  getRecruitThemeByCategory,
+  RecruitCategoryName,
+  useApplyRecruit,
+} from '~/services/recruit';
 import { flex } from '~/styles/utils';
 import { handleAxiosError, routes } from '~/utils';
 
@@ -30,11 +30,11 @@ interface DefaultValues {
 interface RecruitApplyFormProps {
   recruitId: number;
   defaultValues?: DefaultValues;
-  category?: RecruitCategory;
+  category?: RecruitCategoryName;
 }
 
 export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
-  const { recruitId = 1, category = 'study' } = props;
+  const { recruitId = 1, category = RecruitCategoryName.STUDY } = props;
 
   const {
     defaultValues = {

@@ -7,10 +7,12 @@ import { Theme, colorMix, inlineFlex } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
 
 export interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
-  theme?: Extract<
-    Theme,
-    Theme.PRIMARY | Theme.SECONDARY | Theme.WHITE | Theme.BLACK | Theme.RECRUIT
-  >;
+  theme?:
+    | Theme.PRIMARY
+    | Theme.SECONDARY
+    | Theme.WHITE
+    | Theme.BLACK
+    | Theme.RECRUIT;
   size?: number;
   asChild?: boolean;
 }

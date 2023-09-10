@@ -1,6 +1,7 @@
 import type { IconNames } from '~/components/Common';
 
 import { Icon, IconButton } from '~/components/Common';
+import { Theme } from '~/styles/utils';
 
 interface CustomToolbarItemProps {
   name: IconNames;
@@ -10,7 +11,7 @@ interface CustomToolbarItemProps {
 const ToolBarItem = (props: CustomToolbarItemProps) => {
   const { name, onClick } = props;
   return (
-    <IconButton theme="black" size={32} onClick={onClick}>
+    <IconButton theme={Theme.BLACK} size={32} onClick={onClick}>
       <Icon name={name} size={24} />
     </IconButton>
   );
