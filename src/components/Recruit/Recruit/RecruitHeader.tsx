@@ -34,8 +34,16 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
 
   const { closeModal } = useModal();
   const { recruitDetail, ...restProps } = props;
-  const { recruitId, category, recruitEnd, view, title, author, mine } =
-    recruitDetail;
+  const {
+    recruitId,
+    category,
+    recruitEnd,
+    view,
+    title,
+    author,
+    mine,
+    finishedRecruit,
+  } = recruitDetail;
   const { mutateAsync: reportRecruit } = useReport();
   const { mutateAsync: removeRecruit } = useRemoveRecruit(recruitId);
 
@@ -78,6 +86,7 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
     onClickRemove,
     onClickReport,
     options: {
+      disableEdit: finishedRecruit,
       modalTitle: '리쿠르팅 메뉴',
       removeAlertDescription: '리쿠르팅을 삭제하시겠습니까?',
     },
@@ -85,7 +94,12 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
 
   return (
     <header css={[selfCss, { marginBottom: 20 }]} {...restProps}>
-      <RecruitDeadline endDate={recruitEnd} size="md" theme={recruitTheme} />
+      <RecruitDeadline
+        endDate={recruitEnd}
+        size="md"
+        theme={recruitTheme}
+        completed={finishedRecruit}
+      />
 
       <RecruitViewCount>{view.toLocaleString()}</RecruitViewCount>
 

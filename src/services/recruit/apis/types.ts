@@ -29,7 +29,9 @@ export type RecruitDetail = {
   author: UserInfo;
 
   view: number;
+
   mine: boolean;
+  // matchStatus: MatchStatus;
 } & ScrapStatus;
 
 export interface RecruitParticipantsDetail {

@@ -9,6 +9,7 @@ import { useAsyncState } from '~/hooks';
 interface UseCommonBottomMenuModalOptions {
   modalTitle: string;
   removeAlertDescription: string;
+  disableEdit: boolean;
 }
 
 interface UseCommonBottomMenuModalParams {
@@ -29,7 +30,7 @@ export const useCommonBottomMenuModal = (
     onClickRemove,
     onClickReport,
     onClickEdit,
-    options: { modalTitle = '메뉴', removeAlertDescription } = {},
+    options: { modalTitle = '메뉴', removeAlertDescription, disableEdit } = {},
   } = params;
   const { openModal, closeModal } = useModal();
 
@@ -38,6 +39,7 @@ export const useCommonBottomMenuModal = (
       title: modalTitle,
       buttonElements: mine ? (
         <MineBottomMenuButtons
+          disableEdit={disableEdit}
           removeAlertDescription={removeAlertDescription}
           onClickRemove={onClickRemove}
           onClickEdit={onClickEdit}
@@ -64,9 +66,11 @@ interface MineBottomMenuButtonsProps
     'onClickRemove' | 'onClickEdit'
   > {
   removeAlertDescription?: string;
+  disableEdit?: boolean;
 }
 const MineBottomMenuButtons = (props: MineBottomMenuButtonsProps) => {
-  const { removeAlertDescription, onClickRemove, onClickEdit } = props;
+  const { removeAlertDescription, disableEdit, onClickRemove, onClickEdit } =
+    props;
   const { handleAsync: handleClickRemove, loading: isRemoving } =
     useAsyncState(onClickRemove);
 
@@ -78,7 +82,11 @@ const MineBottomMenuButtons = (props: MineBottomMenuButtonsProps) => {
 
   return (
     <>
-      <BottomMenu.Button onClick={handleClickEdit}>수정하기</BottomMenu.Button>
+      {!disableEdit && (
+        <BottomMenu.Button onClick={handleClickEdit}>
+          수정하기
+        </BottomMenu.Button>
+      )}
       <Modal
         trigger={
           <BottomMenu.Button loading={isRemoving}>삭제하기</BottomMenu.Button>

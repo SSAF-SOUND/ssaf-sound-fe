@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 import {
@@ -10,7 +11,9 @@ import {
   scrapRecruitError,
 } from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
+import { recruitDetails } from '~/mocks/handlers/recruit/data';
 import RecruitDetailPage from '~/pages/recruits/[recruitId]';
+import { queryKeys } from '~/react-query/common';
 import { useSetMyInfo } from '~/services/member';
 import { useSetRecruitDetail } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
@@ -18,8 +21,9 @@ import { disableArgs } from '~/stories/utils';
 
 const projectRecruitId = 0;
 const studyRecruitId = 1;
-const mineRecruitId = 0;
-const notMineRecruitId = 1;
+
+const mineRecruitId = 1;
+const notMineRecruitId = 0;
 
 const meta: Meta<typeof RecruitDetailPage> = {
   title: 'Page/Recruit/Detail',
@@ -84,7 +88,7 @@ export const NotSignedIn: RecruitDetailPageStory = {
 };
 
 export const NotMine: RecruitDetailPageStory = {
-  args: { recruitId: mineRecruitId },
+  args: { recruitId: notMineRecruitId },
   argTypes: { ...disableArgs(['recruitId']) },
   render: function Render(args) {
     const { recruitId } = args;
@@ -105,7 +109,7 @@ export const NotMine: RecruitDetailPageStory = {
 };
 
 export const Mine: RecruitDetailPageStory = {
-  args: { recruitId: notMineRecruitId },
+  args: { recruitId: mineRecruitId },
   argTypes: { ...disableArgs(['recruitId']) },
   render: function Render(args) {
     const setMyInfo = useSetMyInfo();
@@ -113,6 +117,28 @@ export const Mine: RecruitDetailPageStory = {
     useEffect(() => {
       setMyInfo(userInfo.certifiedSsafyUserInfo);
     }, [setMyInfo]);
+
+    return <RecruitDetailPage {...args} />;
+  },
+};
+
+export const Completed: RecruitDetailPageStory = {
+  args: { recruitId: 10 },
+  argTypes: { ...disableArgs(['recruitId']) },
+  render: function Render(args) {
+    const { recruitId } = args;
+    const setMyInfo = useSetMyInfo();
+    const setRecruitDetail = useSetRecruitDetail(recruitId);
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+      setMyInfo(userInfo.certifiedSsafyUserInfo);
+      setRecruitDetail({
+        ...recruitDetails[mineRecruitId],
+        finishedRecruit: true,
+      });
+      queryClient.cancelQueries(queryKeys.recruit.detail(recruitId));
+    }, [setMyInfo, setRecruitDetail, queryClient, recruitId]);
 
     return <RecruitDetailPage {...args} />;
   },
