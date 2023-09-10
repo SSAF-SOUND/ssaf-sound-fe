@@ -244,6 +244,27 @@ export const updateRecruitError = restError(
   }
 );
 
+const completeRecruitEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.complete(':recruitId'));
+const completeRecruitMethod = 'post';
+
+export const completeRecruit = restSuccess(
+  completeRecruitMethod,
+  completeRecruitEndpoint,
+  {
+    data: null,
+  }
+);
+
+export const completeRecruitError = restError(
+  completeRecruitMethod,
+  completeRecruitEndpoint,
+  {
+    message: '리쿠르팅 모집 완료 실패',
+  }
+);
+
 export const recruitHandlers = [
   getRecruits,
   postRecruitApply,
@@ -259,4 +280,5 @@ export const recruitHandlers = [
   scrapRecruit,
   removeRecruit,
   updateRecruit,
+  completeRecruit,
 ];

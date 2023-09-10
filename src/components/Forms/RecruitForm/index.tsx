@@ -7,8 +7,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from '~/components/Common';
 import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
+import { RecruitCompleteButton } from '~/components/Forms/RecruitForm/RecruitCompleteButton';
 import { RecruitCategoryName, RecruitParts } from '~/services/recruit';
-import { titleBarHeight } from '~/styles/utils';
+import { Theme, titleBarHeight } from '~/styles/utils';
 
 import {
   Category,
@@ -26,7 +27,8 @@ interface RecruitFormOptions {
   onClickTitleBarClose: () => void;
 
   // editMode
-  editMode?: boolean;
+  editMode: boolean;
+  onClickRecruitComplete: () => void;
 
   /** Negative margin 적용을 위한 `px`값 */
   marginForExpand: string;
@@ -53,6 +55,7 @@ const RecruitForm = (props: RecruitFormProps) => {
     editMode = false,
     marginForExpand = 0,
     onClickTitleBarClose,
+    onClickRecruitComplete,
   } = options;
 
   const methods = useForm<RecruitFormValues>({
@@ -85,11 +88,7 @@ const RecruitForm = (props: RecruitFormProps) => {
         <QuestionToApplicants css={{ marginBottom: 48 }} editMode={editMode} />
         <Contact />
 
-        {editMode && (
-          <Button size="lg" css={completeButtonCss}>
-            리쿠르팅 모집완료
-          </Button>
-        )}
+        {editMode && <RecruitCompleteButton onClickRecruitComplete={onClickRecruitComplete} />}
       </form>
     </FormProvider>
   );
@@ -123,8 +122,3 @@ const defaultRecruitFormValues: RecruitFormValues = {
 export default RecruitForm;
 
 const selfCss = css({ paddingTop: titleBarHeight + 30, paddingBottom: 360 });
-
-const completeButtonCss = css({
-  width: '100%',
-  marginTop: 64,
-});

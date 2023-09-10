@@ -20,6 +20,7 @@ import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
 import {
   reconfirmRecruitFormUnload,
   RecruitCategoryName,
+  useCompleteRecruit,
   useRecruitDetail,
   useUpdateRecruit,
 } from '~/services/recruit';
@@ -127,6 +128,7 @@ const RecruitFormLayer = (props: RecruitFormLayerProps) => {
 
   const { recruitId } = recruitDetail;
   const { mutateAsync: updateRecruit } = useUpdateRecruit(recruitId);
+  const { mutateAsync: completeRecruit } = useCompleteRecruit(recruitId);
 
   const onClickTitleBarClose = () => {
     if (reconfirmRecruitFormUnload()) {
@@ -159,6 +161,15 @@ const RecruitFormLayer = (props: RecruitFormLayerProps) => {
 
   const onInvalidSubmit = () => customToast.clientError(invalidSubmitMessage);
 
+  const onClickRecruitComplete = async () => {
+    try {
+      await completeRecruit();
+      router.replace(routes.recruit.detail(recruitId));
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
   return (
     <RecruitForm
       onValidSubmit={onValidSubmit}
@@ -170,6 +181,7 @@ const RecruitFormLayer = (props: RecruitFormLayerProps) => {
         barTitle: '리쿠르팅 수정하기',
         submitButtonText: '완료',
         marginForExpand,
+        onClickRecruitComplete,
       }}
     />
   );

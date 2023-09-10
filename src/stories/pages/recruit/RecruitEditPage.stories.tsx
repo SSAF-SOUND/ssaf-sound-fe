@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { RecruitDetail } from '~/services/recruit';
 
-import { updateRecruit, updateRecruitError } from '~/mocks/handlers';
+import {
+  completeRecruitError,
+  updateRecruit,
+  updateRecruitError,
+} from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
 import { createMockRecruitDetail } from '~/mocks/handlers/recruit/data';
 import RecruitEditPage from '~/pages/recruits/[recruitId]/edit';
@@ -11,7 +15,7 @@ import { PageLayout } from '~/stories/Layout';
 
 // `query string`에서 id를 읽어오는데, 스토리북에선 `undefined`이므로, 숫자로 변환시 NaN이 됨.
 const myRecruitId = NaN;
-const myRecruitDetail = createMockRecruitDetail(myRecruitId, false, {
+const myRecruitDetail = createMockRecruitDetail(myRecruitId, true, {
   completed: false,
   mine: true,
 });
@@ -60,7 +64,7 @@ export const Error: RecruitEditPageStory = {
     msw: {
       handlers: {
         member: [],
-        recruit: [updateRecruitError],
+        recruit: [updateRecruitError, completeRecruitError],
       },
     },
   },
