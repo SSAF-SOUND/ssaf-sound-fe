@@ -19,6 +19,7 @@ import {
 import { mockHtmlString } from '../common';
 import { createMockUser, userInfo } from '../member/data';
 
+// 리쿠르팅 모집 현황 간략정보 (파트당 모집인원, 모집된 인원)
 export const createMockRecruitParticipantsProgress = (
   isStudy: boolean
 ): RecruitParticipantsProgress[] => {
@@ -43,10 +44,16 @@ export const createMockRecruitParticipantsProgress = (
 
 export const createMockRecruitDetail = (
   recruitId: number,
-  isStudy = false
+  isStudy = false,
+  options: {
+    completed?: boolean;
+    matchStatus?: string;
+  } = {}
 ): RecruitDetail => {
-  const finishedRecruit = Boolean(recruitId % 2);
-  const mine = Boolean(recruitId % 2);
+  const { completed = false, matchStatus } = options;
+
+  const finishedRecruit = completed;
+  const mine = Boolean(recruitId % 2); // 1, 3
   const scraped = finishedRecruit;
 
   const limits = createMockRecruitParticipantsProgress(isStudy);
@@ -80,6 +87,7 @@ export const recruitDetails = Array(5)
   .fill(undefined)
   .map((_, index) => createMockRecruitDetail(index, Boolean(index % 2)));
 
+// 리쿠르팅 모집 현황중, 참가자의 상세정보 (파트마다 유저의 상세정보)
 export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
   const { limits } = recruitDetail;
 
