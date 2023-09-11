@@ -1,5 +1,11 @@
 import type { LunchDateSpecifier } from '~/services/lunch';
-import type { RecruitParams } from '~/services/recruit';
+import type {
+  RecruitCategoryName,
+  RecruitParts,
+  SkillName,
+  UseRecruitsOptions,
+ UseRecruitsParams } from '~/services/recruit';
+
 
 export const queryKeys = {
   auth: () => ['auth'],
@@ -36,35 +42,50 @@ export const queryKeys = {
     list: (recruitId: number) => ['recruit-comments', recruitId],
   },
   recruit: {
-    detail: (recruitId: number) => ['recruit', recruitId],
+    self: () => ['recruits'],
+    detail: (recruitId: number) => [...queryKeys.recruit.self(), recruitId],
     participants: (recruitId: number) => [
       ...queryKeys.recruit.detail(recruitId),
       'participants',
     ],
-    list: (params: RecruitParams) => {
+    list: (params: UseRecruitsParams & Partial<UseRecruitsOptions>) => {
+      const { category, keyword, recruitParts, skills, completed } = params;
+
       return [
-        'recruits',
-        'list',
+        ...queryKeys.recruit.self(),
         {
-          isFinished: params.isFinished ?? false,
-          skills: params.skills ? params.skills : 'All',
-          recruitTypes: params.recruitTypes ? params.recruitTypes : 'All',
+          category,
+          keyword,
+          recruitParts,
+          skills,
+          completed,
         },
-        params.keyword ?? null,
       ];
     },
-    members: (recruitId: number) => ['recruits', 'members', recruitId],
-    scrap: (recruitId: number) => ['recruits', 'scrap', recruitId],
-    apply: (recruitId: number) => ['recruits', 'apply', recruitId],
+    members: (recruitId: number) => [
+      ...queryKeys.recruit.self(),
+      'members',
+      recruitId,
+    ],
+    scrap: (recruitId: number) => [
+      ...queryKeys.recruit.self(),
+      'scrap',
+      recruitId,
+    ],
+    apply: (recruitId: number) => [
+      ...queryKeys.recruit.self(),
+      'apply',
+      recruitId,
+    ],
     applicants: (recruitId: number) => [
       ...queryKeys.auth(),
-      'recruits',
+      ...queryKeys.recruit.self(),
       recruitId,
       'applicants',
     ],
     applicationDetail: (recruitId: number) => [
       ...queryKeys.auth(),
-      'recruits',
+      ...queryKeys.recruit.self(),
       recruitId,
       'applicationDetail',
     ],
@@ -197,6 +218,34 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
     complete: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/expired` as const,
+    list: (params: RecruitListParams) => {
+      const {
+        size,
+        cursor,
+        category,
+        completed,
+        recruitParts,
+        skills,
+        keyword,
+      } = params;
+
+      const queryStringObject = new URLSearchParams({
+        size,
+        category,
+        isFinished: completed,
+      } as never);
+
+      if (cursor) queryStringObject.append('cursor', String(cursor));
+      if (keyword) queryStringObject.append('keyword', keyword);
+      recruitParts.forEach((part) => {
+        queryStringObject.append('recruitTypes', part);
+      });
+      skills.forEach((skill) => queryStringObject.append('skills', skill));
+      const queryString = queryStringObject.toString();
+
+      return `${endpoints.recruit.self()}?${queryString}`;
+    },
+    //size, category, keyword, isFinished, recruitTypes[], skills[]
     apply: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/application` as const,
     application: {
@@ -211,39 +260,6 @@ export const endpoints = {
         `${endpoints.recruit.application.self()}/${recruitApplicationId}/reject` as const,
       cancel: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.self()}/${recruitApplicationId}/cancel` as const,
-    },
-
-    list: (params: Partial<RecruitParams> & { cursor: number | null }) => {
-      const {
-        recruitTypes = [],
-        skills = [],
-        keyword = '',
-        // -------------
-        category = 'project',
-        isFinished = false,
-        cursor,
-      } = params || {};
-
-      const defaultQueries = {
-        size: (10).toString(),
-        category: 'project',
-        isFinished: 'false',
-      };
-
-      const searchParams = new URLSearchParams(defaultQueries);
-
-      if (keyword?.length) searchParams.set('keyword', keyword);
-      if (skills?.length)
-        skills.forEach((skill) => searchParams.append('skills', skill));
-
-      if (recruitTypes?.length)
-        recruitTypes.forEach((recruitType) =>
-          searchParams.append('recruitType', recruitType)
-        );
-      if (category) searchParams.set('category', category);
-      if (isFinished) searchParams.set('isFinished', isFinished.toString());
-      if (cursor) searchParams.set('cursor', cursor.toString());
-      return `${endpoints.recruit.self()}?${searchParams.toString()}`;
     },
   },
   recruitComments: {
@@ -277,3 +293,13 @@ export const endpoints = {
   },
   report: () => '/report' as const,
 };
+
+interface RecruitListParams {
+  size: number;
+  cursor?: number;
+  category: RecruitCategoryName;
+  completed: boolean;
+  recruitParts: RecruitParts[];
+  skills: SkillName[];
+  keyword?: string;
+}

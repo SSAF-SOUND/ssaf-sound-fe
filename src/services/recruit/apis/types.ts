@@ -42,3 +42,20 @@ export interface RecruitParticipantsDetail {
   limit: number;
   members: UserInfo[];
 }
+
+export interface RecruitParticipantsDetailWithPart
+  extends RecruitParticipantsDetail {
+  recruitType: RecruitParts;
+}
+
+export interface RecruitSummary {
+  recruitId: number;
+  title: string;
+  content: string;
+
+  finishedRecruit: boolean;
+  recruitEnd: string;
+
+  skills: SkillInfo[];
+  participants: RecruitParticipantsDetailWithPart[];
+}
