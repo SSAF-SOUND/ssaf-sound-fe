@@ -215,9 +215,19 @@ const RecruitApplicationDetail = {
 
 export const createMockRecruitSummary = (
   recruitId: number,
-  options: Partial<{ finishedRecruit: boolean; skillCount: number }> = {}
+  options: Partial<{
+    finishedRecruit: boolean;
+    skillCount: number;
+    mine: boolean;
+    category: RecruitCategoryName;
+  }> = {}
 ): RecruitSummary => {
-  const { finishedRecruit = false, skillCount = 10 } = options;
+  const {
+    finishedRecruit = false,
+    skillCount = 10,
+    mine = false,
+    category = RecruitCategoryName.PROJECT,
+  } = options;
 
   const maxParticipantsCount = 10;
   const userIdOffset = 50000;
@@ -225,7 +235,26 @@ export const createMockRecruitSummary = (
     .fill(undefined)
     .map((_, index) => index + userIdOffset);
 
+  const participants = Object.values(RecruitParts)
+    .filter((part) => {
+      if (category === RecruitCategoryName.PROJECT)
+        return part !== RecruitParts.STUDY;
+
+      if (category === RecruitCategoryName.STUDY)
+        return part === RecruitParts.STUDY;
+    })
+    .map((part) => {
+      return {
+        recruitType: part,
+        limit: maxParticipantsCount,
+        members: userIds.map((userId) => createMockUser(userId, true)),
+      };
+    });
+
   return {
+    category,
+    mine,
+
     recruitId,
     finishedRecruit,
     content: mockHtmlString,
@@ -233,14 +262,8 @@ export const createMockRecruitSummary = (
     skills: Object.values(SkillName)
       .slice(0, skillCount)
       .map((skillName, index) => ({ skillId: index, name: skillName })),
-    title: faker.string.alpha(10),
-    participants: [
-      {
-        recruitType: RecruitParts.FRONTEND,
-        limit: maxParticipantsCount,
-        members: userIds.map((userId) => createMockUser(userId, true)),
-      },
-    ],
+    title: faker.string.alpha(30),
+    participants: participants,
   };
 };
 
