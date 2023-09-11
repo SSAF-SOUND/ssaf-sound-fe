@@ -1,88 +1,106 @@
 import type { GetServerSideProps } from 'next';
 
-import { QueryClient } from '@tanstack/react-query';
+import { css } from '@emotion/react';
+import * as ScrollArea from '@radix-ui/react-scroll-area';
 
-import { RecruitSearchForm } from '~/components/Forms/RecruitSearchForm';
-import { RecruitLayout } from '~/components/Layout';
-import { RecruitCards } from '~/components/RecruitCard';
-import { RecruitCreateButton } from '~/components/RecruitCreateLink';
-import {
-  IsRecruitingToggle,
-  RecruitFilterModal,
-  RecruitFilterTabs,
-} from '~/components/RecruitFilter';
+import { PageHead, PageHeadingText } from '~/components/Common';
+import NavigationGroup from '~/components/NavigationGroup';
 import TopBar from '~/components/TopBar';
-import { useGetQueryString } from '~/hooks';
-import { queryKeys } from '~/react-query/common';
-import { dehydrate } from '~/react-query/server';
-import { getRecruits, RecruitCategoryName } from '~/services/recruit';
-import { recruitTypeConvertor } from '~/services/recruit/utils/recruitTypeConvertor';
-import { flex } from '~/styles/utils';
+import {
+  colorMix,
+  flex,
+  globalVars,
+  pageMinHeight,
+  titleBarHeight,
+  topBarHeight,
+} from '~/styles/utils';
+import { routes } from '~/utils';
 
-const Recruit = () => {
-  const categoryQuery = useGetQueryString('category');
-  const category = (categoryQuery ??
-    RecruitCategoryName) as RecruitCategoryName;
-
+// /recruits
+// ? category=PROJECT | STUDY
+// & skills=React
+// & skills=Vue
+// & part=프론트엔드
+// & part=백엔드
+// & keyword=ABC
+const RecruitsPage = () => {
   return (
-    <RecruitLayout>
-      <TopBar />
-      <div
-        css={[
-          {
-            marginBottom: 20,
-          },
-        ]}
-      >
-        <div css={{ height: 20 }} />
-        <RecruitSearchForm />
-        <div css={{ height: 20 }} />
-        <div>
-          <RecruitFilterTabs />
+    <>
+      <div css={selfCss}>
+        <NavigationGroup />
+        <div css={{ height: 50, background: 'tomato' }}>검색창</div>
+
+        <div css={{ height: 50, background: 'blue' }}>파트 탭</div>
+
+        <div
+          css={[
+            { marginBottom: 20 },
+            flex('center', 'space-between', 'row', 24),
+            { height: 50, background: 'green' },
+          ]}
+        >
+          <div css={flex('center', 'flex-start', 'row', 24)}>
+            <div>필터 도구</div>
+            <div>필터 도구</div>
+          </div>
+          <div>글 작성 버튼</div>
         </div>
 
-        <div css={{ height: 10 }} />
-        <div css={[flex('center', 'space-between', 'row')]}>
-          <div css={flex('', '', 'row', 6)}>
-            <IsRecruitingToggle />
-            <RecruitFilterModal category={category} />
-          </div>
-          <RecruitCreateButton category={category} />
+        <div css={[flex('', '', 'column', 12)]}>
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
         </div>
       </div>
-      <RecruitCards category={category} />
-    </RecruitLayout>
+    </>
+  );
+};
+const Card = () => {
+  return (
+    <div
+      css={{ border: '1px solid white', height: 140, background: 'darkorange' }}
+    >
+      카드
+    </div>
   );
 };
 
-export default Recruit;
+const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
+const selfCss = css({
+  padding: `${titleBarHeight}px 0`,
+  minHeight: selfMinHeight,
+});
+
+export default RecruitsPage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const queryClient = new QueryClient();
-  const recruitsQueryKey = queryKeys.recruit.list({ ...context.query });
-
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: recruitsQueryKey,
-    queryFn: (d) => {
-      return getRecruits({
-        recruits: recruitTypeConvertor(context.query),
-        cursor: d.pageParam,
-      });
-    },
-  });
-
-  const { dehydratedState } = dehydrate(queryClient);
-  dehydratedState.queries.forEach((query) => {
-    // https://github.com/TanStack/query/issues/1458#issuecomment-1022396964
-    // eslint-disable-next-line
-    // @ts-ignore
-    if ('pageParams' in query.state.data) {
-      query.state.data.pageParams = [null];
-    }
-  });
+  // const queryClient = new QueryClient();
+  // const recruitsQueryKey = queryKeys.recruit.list({ ...context.query });
+  //
+  // await queryClient.prefetchInfiniteQuery({
+  //   queryKey: recruitsQueryKey,
+  //   queryFn: (d) => {
+  //     return getRecruits({});
+  //   },
+  // });
+  //
+  // const { dehydratedState } = dehydrate(queryClient);
+  // dehydratedState.queries.forEach((query) => {
+  //   // https://github.com/TanStack/query/issues/1458#issuecomment-1022396964
+  //   // eslint-disable-next-line
+  //   // @ts-ignore
+  //   if ('pageParams' in query.state.data) {
+  //     query.state.data.pageParams = [null];
+  //   }
+  // });
   return {
     props: {
-      dehydratedState,
+      // dehydratedState,
     },
   };
 };
