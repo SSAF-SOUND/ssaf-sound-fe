@@ -51,8 +51,6 @@ export const getRecruits = (params: GetRecruitsParams) => {
     keyword,
   });
 
-  console.log(endpoint);
-
   return publicAxios
     .get<GetRecruitsApiData>(endpoint)
     .then((res) => res.data.data);
