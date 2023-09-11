@@ -9,7 +9,7 @@ import { getDateDiff } from '~/utils';
 export interface RecruitDeadlineProps {
   endDate: string;
   className?: string;
-  theme?: Extract<Theme, Theme.PRIMARY | Theme.SECONDARY>;
+  theme?: Theme.PRIMARY | Theme.SECONDARY;
   size?: 'sm' | 'md';
   completed?: boolean;
 }
