@@ -49,6 +49,11 @@ export interface RecruitParticipantsDetailWithPart
 }
 
 export interface RecruitSummary {
+  category: RecruitCategoryName;
+  mine: boolean;
+
+  //
+
   recruitId: number;
   title: string;
   content: string;
