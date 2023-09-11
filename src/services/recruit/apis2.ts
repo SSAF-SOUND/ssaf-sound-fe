@@ -1,6 +1,5 @@
 import type {
   RecruitType,
-  SkillsType,
   MatchStatus,
   RecruitParts,
   SkillName,
@@ -10,7 +9,6 @@ import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
-import { getRecruitDetail } from '~/services/recruit/apis';
 import { privateAxios, publicAxios } from '~/utils';
 
 export type RecruitParams = {
@@ -20,12 +18,6 @@ export type RecruitParams = {
   recruitTypes?: RecruitParts[];
   skills?: SkillName[];
 };
-
-export type GetRecruitsApiData = ApiSuccessResponse<{
-  recruits: Recruit[];
-  cursor: number | null;
-  isLast: boolean;
-}>;
 
 export interface Recruit {
   recruitId: number;

@@ -11,26 +11,30 @@ import { rest } from 'msw';
 
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
+import { RecruitCategoryName } from '~/services/recruit';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import {
   RecruitData,
-  recruitParticipantsList,
   recruitDetails,
+  recruitParticipantsList,
   scrapStatus,
 } from './data';
 import { restInfiniteRecruitsSuccess } from './utils';
 
-export const getRecruits = rest.get(
-  removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.recruit.list({
-        cursor: null,
-      })
-    )
-  ),
-  restInfiniteRecruitsSuccess
+const getRecruitsEndpoint = removeQueryParams(
+  composeUrls(
+    API_URL,
+    endpoints.recruit.list({
+      cursor: 1,
+      recruitParts: [],
+      skills: [],
+      completed: false,
+      keyword: '',
+      size: 10,
+      category: RecruitCategoryName.PROJECT,
+    })
+  )
 );
 
 export const postRecruitApply = restSuccess(
@@ -265,8 +269,13 @@ export const completeRecruitError = restError(
   }
 );
 
+export const getRecruits = rest.get(
+  getRecruitsEndpoint,
+  restInfiniteRecruitsSuccess
+);
+
 export const recruitHandlers = [
-  getRecruits,
+  //
   postRecruitApply,
   getRecruitApplicants,
   getRecruitApplicationDetail,
@@ -281,4 +290,5 @@ export const recruitHandlers = [
   removeRecruit,
   updateRecruit,
   completeRecruit,
+  getRecruits,
 ];

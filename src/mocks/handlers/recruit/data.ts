@@ -5,6 +5,7 @@ import type {
   RecruitDetail,
   RecruitParticipantsDetail,
   RecruitParticipantsProgress,
+  RecruitSummary,
 } from '~/services/recruit';
 
 import { faker } from '@faker-js/faker';
@@ -64,7 +65,6 @@ export const createMockRecruitDetail = (
 
   const finishedRecruit = completed;
   const mine = mineOption === undefined ? Boolean(recruitId % 2) : mineOption; // 1, 3
-  const scraped = finishedRecruit;
   const matchStatusArray = Object.values(MatchStatus);
   const matchStatusIndex = faker.number.int({
     min: 0,
@@ -212,6 +212,49 @@ const RecruitApplicationDetail = {
   question: '프로젝트에 참여하고자 하는 동기가 무엇인가요?',
   liked: false,
 };
+
+export const createMockRecruitSummary = (
+  recruitId: number,
+  options: Partial<{ finishedRecruit: boolean; skillCount: number }> = {}
+): RecruitSummary => {
+  const { finishedRecruit = false, skillCount = 10 } = options;
+
+  const maxParticipantsCount = 10;
+  const userIdOffset = 50000;
+  const userIds = Array(4)
+    .fill(undefined)
+    .map((_, index) => index + userIdOffset);
+
+  return {
+    recruitId,
+    finishedRecruit,
+    content: mockHtmlString,
+    recruitEnd: faker.date.future().toISOString(),
+    skills: Object.values(SkillName)
+      .slice(0, skillCount)
+      .map((skillName, index) => ({ skillId: index, name: skillName })),
+    title: faker.string.alpha(10),
+    participants: [
+      {
+        recruitType: RecruitParts.FRONTEND,
+        limit: maxParticipantsCount,
+        members: userIds.map((userId) => createMockUser(userId, true)),
+      },
+    ],
+  };
+};
+
+export const recruitSummaries = Array(100)
+  .fill(undefined)
+  .map((_, index) => {
+    const recruitId = index + 1;
+    const finishedRecruit = !(recruitId % 10);
+
+    return createMockRecruitSummary(recruitId, {
+      finishedRecruit,
+      skillCount: 10,
+    });
+  });
 
 export const RecruitData = {
   //
