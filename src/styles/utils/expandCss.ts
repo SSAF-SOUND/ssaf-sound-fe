@@ -5,9 +5,7 @@ import { globalVars } from '~/styles/utils/globalVars';
 
 const mainLayoutPaddingX = globalVars.mainLayoutPaddingX.var;
 
-export const expandCss = (
-  marginForExpand: number | string = mainLayoutPaddingX
-) => {
+export const expandCss = (marginForExpand: string = mainLayoutPaddingX) => {
   const negativeMarginForExpand = cssArithmetic.multiply(-1, marginForExpand);
 
   return css({
@@ -17,9 +15,7 @@ export const expandCss = (
   });
 };
 
-export const expandStyle = (
-  marginForExpand: number | string = mainLayoutPaddingX
-) => {
+export const expandStyle = (marginForExpand: string = mainLayoutPaddingX) => {
   const negativeMarginForExpand = cssArithmetic.multiply(-1, marginForExpand);
 
   return {
