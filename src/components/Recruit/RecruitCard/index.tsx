@@ -50,7 +50,7 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
       <Link href={routes.recruit.detail(recruitId)}>
         <header css={[headerCss, { marginBottom: 12 }]}>
           <div css={headerLeftCss}>
-            {!showMyRecruitBadge && <RecruitBadge.MyRecruit />}
+            {showMyRecruitBadge && <RecruitBadge.MyRecruit />}
             <h3 css={titleCss}>{title}</h3>
           </div>
 
@@ -74,7 +74,10 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
         </div>
       </Link>
 
-      <RecruitCardParticipants recruitSummary={recruitSummary} />
+      <RecruitCardParticipants
+        css={{ marginTop: 12 }}
+        recruitSummary={recruitSummary}
+      />
     </div>
   );
 });
@@ -82,7 +85,7 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
 RecruitCard.displayName = 'RecruitCard';
 
 const selfCss = css({
-  minWidth: 320,
+  minWidth: 300,
   width: '100%',
   overflow: 'hidden',
   padding: `20px ${recruitCardPaddingX}px`,
