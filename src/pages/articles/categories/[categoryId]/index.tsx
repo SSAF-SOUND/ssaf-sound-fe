@@ -22,6 +22,7 @@ import {
   useArticleCategories,
   useArticles,
 } from '~/services/article';
+import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   flex,
   fontCss,
@@ -38,10 +39,6 @@ import { globalMetaData } from '~/utils/metadata';
 
 const createMetaDescription = (categoryName = '게시판') =>
   `${globalMetaData.description} 다양한 주제로 소통할 수 있는 ${categoryName}을 이용해보세요.`;
-
-const minKeywordLength = 3;
-const validateKeyword = (keyword?: string) =>
-  keyword && keyword.trim().length >= minKeywordLength;
 
 const ArticleCategoryPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -109,7 +106,7 @@ interface ArticleLayerProps {
 
 const ArticleLayer = (props: ArticleLayerProps) => {
   const { categoryId, keyword } = props;
-  const isValidKeyword = validateKeyword(keyword);
+  const isValidKeyword = validateSearchKeyword(keyword);
   const articlesInfiniteQuery = useArticles(categoryId, { keyword });
 
   return (
@@ -129,7 +126,7 @@ const SearchBar = (props: SearchBarProps) => {
   const { categoryId } = props;
   const router = useRouter();
   const { keyword: queryKeyword } = router.query as QueryString;
-  const isValidKeyword = validateKeyword(queryKeyword);
+  const isValidKeyword = validateSearchKeyword(queryKeyword);
   const defaultKeyword = isValidKeyword ? queryKeyword : '';
 
   const onValidSubmit: SearchBarFormProps['onValidSubmit'] = async (
@@ -160,7 +157,7 @@ const SearchBar = (props: SearchBarProps) => {
       defaultValues={{
         keyword: defaultKeyword,
       }}
-      options={{ minKeywordLength }}
+      options={{ allowEmptyString: true }}
     />
   );
 };
@@ -235,7 +232,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const isValidCategoryId = !Number.isNaN(categoryId);
 
   const { keyword: queryKeyword } = context.query as QueryString;
-  const isValidKeyword = validateKeyword(queryKeyword);
+  const isValidKeyword = validateSearchKeyword(queryKeyword);
   const keyword = isValidKeyword ? queryKeyword?.trim() : undefined;
 
   if (!isValidCategoryId) {
@@ -254,10 +251,9 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
     await Promise.all([
       queryClient.fetchInfiniteQuery({
         queryKey: articleListQueryKey,
-        queryFn: ({ pageParam }) =>
+        queryFn: () =>
           getArticles({
             categoryId,
-            cursor: pageParam,
             keyword: keyword,
           }),
       }),

@@ -4,8 +4,8 @@ import type {
   RecruitParts,
   SkillName,
   UseRecruitsOptions,
- UseRecruitsParams } from '~/services/recruit';
-
+  UseRecruitsParams,
+} from '~/services/recruit';
 
 export const queryKeys = {
   auth: () => ['auth'],
