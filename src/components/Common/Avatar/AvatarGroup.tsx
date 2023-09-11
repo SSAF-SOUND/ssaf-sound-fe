@@ -1,5 +1,5 @@
 import type { SingleAvatarProps } from './SingleAvatar';
-import type { ReactNode, ComponentPropsWithoutRef } from 'react';
+import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 import { Children, isValidElement } from 'react';
@@ -9,7 +9,9 @@ import { fontCss, inlineFlex } from '~/styles/utils';
 
 import SingleAvatar from './SingleAvatar';
 
-export interface AvatarGroupProps extends ComponentPropsWithoutRef<'div'> {
+const maxVisibleCount = 4;
+
+export interface AvatarGroupProps {
   children: ReactNode;
   visibleCount?: number;
   maxCount: number;
@@ -19,7 +21,7 @@ const AvatarGroup = (props: AvatarGroupProps) => {
   const {
     children,
     maxCount,
-    visibleCount = 4,
+    visibleCount = maxCount > maxVisibleCount ? maxVisibleCount : maxCount,
     overridableSize,
     ...rest
   } = props;
@@ -60,7 +62,7 @@ const textCss = css({ marginLeft: 4 });
 const textSizeCss = {
   sm: css(fontCss.style.B12),
   md: css(fontCss.style.B14),
-  md2: css(fontCss.style.R14),
+  md2: css(fontCss.style.B14),
   lg: css(fontCss.style.B28),
 };
 

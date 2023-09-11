@@ -1,5 +1,4 @@
 import type { SerializedStyles } from '@emotion/react';
-import type { ComponentPropsWithoutRef } from 'react';
 import type { UserBasicInfo } from '~/services/member';
 
 import { css } from '@emotion/react';
@@ -9,7 +8,8 @@ import { flex, fontCss, palettes } from '~/styles/utils';
 
 import { classnames as cn } from './classnames';
 
-export interface SingleAvatarProps extends ComponentPropsWithoutRef<'div'> {
+export interface SingleAvatarProps {
+  className?: string;
   size?: AvatarSize;
   userInfo?: AvatarUserInfo;
   anonymous?: boolean;
