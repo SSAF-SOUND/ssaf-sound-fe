@@ -4,7 +4,6 @@ import type { TabsTriggerProps } from '@radix-ui/react-tabs';
 import { css } from '@emotion/react';
 import * as Tabs from '@radix-ui/react-tabs';
 
-import { Button } from '~/components/Common';
 import {
   colorMix,
   flex,
