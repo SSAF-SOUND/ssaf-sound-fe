@@ -1,3 +1,7 @@
+import type { RecruitParts, SkillName } from '~/services/recruit';
+
+import { RecruitCategoryName } from '~/services/recruit';
+
 export const routes = {
   root: () => '/',
   main: () => '/main',
@@ -35,7 +39,6 @@ export const routes = {
   profile: {
     self: () => '/profile',
     detail: (id: number) => `${routes.profile.self()}/${id}`,
-
     myInfoSettings: () => `${routes.profile.self()}/myinfo-settings`,
     myArticles: () => `${routes.profile.self()}/my-articles`,
     myScraps: (
@@ -60,6 +63,28 @@ export const routes = {
   //
   recruit: {
     self: () => '/recruits',
+    list: (
+      options: Partial<RecruitsPageQueryStringObject>
+    ): { pathname: string; query: Partial<RecruitsPageQueryStringObject> } => {
+      const {
+        category = RecruitCategoryName.PROJECT,
+        keyword = '',
+        completed = false,
+        recruitParts = [],
+        skills = [],
+      } = options;
+
+      return {
+        pathname: routes.recruit.self(),
+        query: {
+          category,
+          keyword,
+          completed: String(completed),
+          recruitParts,
+          skills,
+        },
+      };
+    },
     detail: (recruitId: number) => `${routes.recruit.self()}/${recruitId}`,
     myApplication: (recruitId: number) =>
       `${routes.recruit.detail(recruitId)}/my-application`,
@@ -101,3 +126,11 @@ export enum PossibleMyScrapsCategories {
   ARTICLES = 'articles',
   RECRUITS = 'recruits',
 }
+
+export type RecruitsPageQueryStringObject = {
+  category: RecruitCategoryName;
+  completed: string;
+  keyword: string;
+  skills: SkillName | SkillName[];
+  recruitParts: RecruitParts | RecruitParts[];
+};
