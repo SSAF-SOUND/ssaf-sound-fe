@@ -92,7 +92,7 @@ export const routes = {
       `${routes.recruit.detail(recruitId)}/applicants`,
     apply: (recruitId: number) => `${routes.recruit.detail(recruitId)}/apply`,
     applyRedirect: () => `${routes.recruit.self()}/apply/redirect`,
-    new: () => `${routes.recruit.self()}/new`,
+    create: () => `${routes.recruit.self()}/new`,
     edit: (recruitId: number) => `${routes.recruit.detail(recruitId)}/edit`,
   },
 
