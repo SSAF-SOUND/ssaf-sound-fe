@@ -8,13 +8,7 @@ import NavigationGroup from '~/components/NavigationGroup';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleCategories, useArticleCategories } from '~/services/article';
-import {
-  flex,
-  fontCss,
-  inlineFlex,
-  palettes,
-  topBarHeight,
-} from '~/styles/utils';
+import { flex, fontCss, palettes, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 

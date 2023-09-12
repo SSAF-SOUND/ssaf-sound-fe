@@ -64,7 +64,7 @@ export const routes = {
   recruit: {
     self: () => '/recruits',
     list: (
-      options: Partial<RecruitsPageQueryStringObject>
+      options: Partial<RecruitsPageQueryStringObject> = {}
     ): { pathname: string; query: Partial<RecruitsPageQueryStringObject> } => {
       const {
         category = RecruitCategoryName.PROJECT,

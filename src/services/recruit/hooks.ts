@@ -187,23 +187,16 @@ export const useCompleteRecruit = (recruitId: number) => {
   });
 };
 
-export interface UseRecruitsParams {
-  category: RecruitCategoryName;
-}
-
 export interface UseRecruitsOptions {
+  category: RecruitCategoryName;
   keyword: string;
   skills: SkillName[];
   recruitParts: RecruitParts[];
   completed: boolean;
 }
 
-export const useRecruits = (
-  params: UseRecruitsParams,
-  options: Partial<UseRecruitsOptions> = {}
-) => {
-  const { category } = params;
-  const { keyword, completed, recruitParts, skills } = options;
+export const useRecruits = (options: Partial<UseRecruitsOptions> = {}) => {
+  const { category, keyword, completed, recruitParts, skills } = options;
 
   const queryKey = queryKeys.recruit.list({
     completed,

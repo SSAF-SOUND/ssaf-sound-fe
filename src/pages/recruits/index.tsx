@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 
 import {
   CircleButton,
@@ -18,14 +17,12 @@ import {
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import { InfiniteList } from '~/components/InfiniteList';
 import NavigationGroup from '~/components/NavigationGroup';
+import NoSearchResults from '~/components/NoSearchResults';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
-import {
-  minSearchKeywordLength,
-  validateSearchKeyword,
-} from '~/services/common/utils/searchBar';
+import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   getDisplayCategoryName,
   getRecruits,
@@ -40,7 +37,6 @@ import {
   fixTopCenter,
   flex,
   gnbHeight,
-  navigationGroupPaddingCss,
   pageMinHeight,
   palettes,
   Theme,
@@ -72,7 +68,6 @@ const createMetaDescription = (category: RecruitCategoryName) => {
 const RecruitsPage = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
-  const [hideNavigation, setHideNavigation] = useState(false);
   const { category: unsafeCategory } = query;
   const safeCategory =
     unsafeCategory && RecruitCategoryNameSet.has(unsafeCategory)
@@ -91,14 +86,12 @@ const RecruitsPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: `${routes.recruit.list({}).pathname}?category=${safeCategory}`,
+          url: `${routes.recruit.list().pathname}?category=${safeCategory}`,
         }}
       />
 
-      <div
-        css={[selfCss, hideNavigation && navigationGroupPaddingCss.inactive]}
-      >
-        <NavigationGroup hide={hideNavigation} />
+      <div css={selfCss}>
+        <NavigationGroup />
 
         <div
           css={[
@@ -129,15 +122,7 @@ const RecruitsPage = () => {
           </div>
         </div>
 
-        <div
-          css={{
-            position: 'relative',
-            top: recruitLayerTop,
-            paddingBottom: recruitLayerTop,
-          }}
-        >
-          <RecruitLayer />
-        </div>
+        <RecruitLayer />
       </div>
     </>
   );
@@ -146,27 +131,20 @@ const RecruitsPage = () => {
 export default RecruitsPage;
 
 const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
+const searchBarContainerHeight = 60;
+const recruitTabsHeight = 32;
+const filterRowHeight = 70;
+const selfPaddingTop =
+  topBarHeight + searchBarContainerHeight + recruitTabsHeight + filterRowHeight;
+const selfPaddingBottom = gnbHeight + 24;
 const selfCss = css(
   {
     transition: 'padding 200ms',
     minHeight: selfMinHeight,
+    padding: `${selfPaddingTop}px 0 ${selfPaddingBottom}px`,
   },
-  navigationGroupPaddingCss.active,
-  { paddingBottom: gnbHeight + 24 }
+  flex('', '', 'column')
 );
-const searchBarContainerHeight = 60;
-const recruitTabsHeight = 32;
-const filterRowHeight = 70;
-const recruitLayerTop =
-  searchBarContainerHeight + recruitTabsHeight + filterRowHeight;
-
-const listLayerHeight = `calc(${selfMinHeight} - ${
-  topBarHeight +
-  gnbHeight +
-  searchBarContainerHeight +
-  recruitTabsHeight +
-  filterRowHeight
-}px)`;
 
 const SearchBar = () => {
   const router = useRouter();
@@ -270,15 +248,15 @@ const RecruitLayer = () => {
   const { category, completed, skills, recruitParts, keyword } =
     toGetRecruitsParams(query);
 
-  const infiniteRecruitsQuery = useRecruits(
-    { category },
-    {
-      keyword,
-      completed,
-      skills,
-      recruitParts,
-    }
-  );
+  const isValidKeyword = validateSearchKeyword(keyword);
+
+  const infiniteRecruitsQuery = useRecruits({
+    category,
+    keyword,
+    completed,
+    skills,
+    recruitParts,
+  });
 
   const infiniteData = infiniteRecruitsQuery.data
     ? infiniteRecruitsQuery.data.pages
@@ -287,7 +265,7 @@ const RecruitLayer = () => {
     : ([] as RecruitSummary[]);
 
   return (
-    <>
+    <div css={recruitLayerCss}>
       <InfiniteList
         data={infiniteData}
         infiniteQuery={infiniteRecruitsQuery}
@@ -303,11 +281,29 @@ const RecruitLayer = () => {
             size="md"
           />
         )}
-        emptyElement={<div>하이</div>}
+        emptyElement={
+          <NoSearchResults
+            withKeyword={isValidKeyword}
+            keyword={keyword}
+            description={`${
+              isValidKeyword
+                ? '검색어 및 조건에 맞는 리크루팅 결과가 없습니다.'
+                : '조건에 맞는 리쿠르팅 결과가 없습니다.'
+            }`}
+          />
+        }
       />
-    </>
+    </div>
   );
 };
+
+const recruitLayerCss = css({
+  position: 'relative',
+  width: '100%',
+  height: '100%',
+  flexGrow: 1,
+  marginTop: 4,
+});
 
 interface Props {}
 type Params = RecruitsPageQueryStringObject;
@@ -356,7 +352,9 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 const toGetRecruitsParams = (
   params: Partial<Params>
 ): Omit<GetRecruitsParams, 'size' | 'cursor'> => {
-  const { category, completed, skills, recruitParts, keyword } = params;
+  const { category, completed, skills, recruitParts, keyword = '' } = params;
+
+  const trimmedKeyword = keyword.trim();
 
   const safeCategory =
     !category || !RecruitCategoryNameSet.has(category)
@@ -374,8 +372,9 @@ const toGetRecruitsParams = (
 
   const safeCompleted = stringToBoolean(completed ?? '');
 
-  const safeKeyword =
-    keyword && keyword.length > minSearchKeywordLength ? keyword : '';
+  const safeKeyword = validateSearchKeyword(trimmedKeyword)
+    ? trimmedKeyword
+    : '';
 
   return {
     category: safeCategory,

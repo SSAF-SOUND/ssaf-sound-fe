@@ -1,8 +1,7 @@
 import type {
-  RecruitCategoryName,
-  RecruitParts,
   RecruitSummary,
-  SkillName,
+  RecruitSummariesQueryStringObject,
+  RecruitCursorData,
 } from '~/services/recruit';
 import type { ApiSuccessResponse } from '~/types';
 
@@ -13,22 +12,11 @@ import {
 } from '~/services/recruit/apis/constants';
 import { publicAxios } from '~/utils';
 
-export interface GetRecruitsParams {
-  cursor?: number;
-  size?: number;
-  keyword?: string;
+export type GetRecruitsParams = Partial<RecruitSummariesQueryStringObject>;
 
-  category: RecruitCategoryName;
-  completed?: boolean;
-  recruitParts?: RecruitParts[];
-  skills?: SkillName[];
-}
-
-export type GetRecruitsApiData = ApiSuccessResponse<{
-  nextCursor: number | null;
-  isLast: boolean;
-  recruits: RecruitSummary[];
-}>;
+export type GetRecruitsApiData = ApiSuccessResponse<
+  { recruits: RecruitSummary[] } & RecruitCursorData
+>;
 
 export const getRecruits = (params: GetRecruitsParams) => {
   const {

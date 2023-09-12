@@ -36,7 +36,7 @@ const Gnb = (props: GnbProps) => {
       {
         text: '리쿠르팅',
         icon: <MdGroupAdd />,
-        href: routes.recruit.list({}).pathname,
+        href: routes.recruit.list().pathname,
       },
       {
         text: '프로필',
