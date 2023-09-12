@@ -36,12 +36,12 @@ const Gnb = (props: GnbProps) => {
       {
         text: '리쿠르팅',
         icon: <MdGroupAdd />,
-        href: '/recruit',
+        href: routes.recruit.list({}).pathname,
       },
       {
         text: '프로필',
         icon: <MdAccountCircle />,
-        href: '/profile',
+        href: routes.profile.self(),
       },
     ],
     []
@@ -94,7 +94,7 @@ const itemCss = css(
     width: '25%',
     height: gnbHeight,
     ':hover': {
-      color: palettes.primary.default,
+      color: palettes.primary.dark,
     },
     transition: 'color 200ms',
   },
@@ -111,9 +111,9 @@ const iconCss = css(
 const textCss = css(fontCss.style.B12);
 
 const iconHighlightCss = {
-  color: palettes.primary.dark,
+  color: palettes.primary.darken,
   ':hover': {
-    color: palettes.primary.dark,
+    color: palettes.primary.darken,
   },
 };
 
