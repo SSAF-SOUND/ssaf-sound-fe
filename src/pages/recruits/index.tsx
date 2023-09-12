@@ -9,7 +9,12 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { CircleButton, Tabs } from '~/components/Common';
+import {
+  CircleButton,
+  PageHead,
+  PageHeadingText,
+  Tabs,
+} from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NavigationGroup from '~/components/NavigationGroup';
 import { RecruitCardList } from '~/components/Recruit/RecruitCardList';
@@ -20,6 +25,7 @@ import {
   validateSearchKeyword,
 } from '~/services/common/utils/searchBar';
 import {
+  getDisplayCategoryName,
   getRecruits,
   getRecruitThemeByCategory,
   RecruitCategoryName,
@@ -38,13 +44,23 @@ import {
   Theme,
   topBarHeight,
 } from '~/styles/utils';
-import { customToast, routes, stringToBoolean } from '~/utils';
+import { customToast, globalMetaData, routes, stringToBoolean } from '~/utils';
 
 // /recruits
 // ? category = project | study
 // & skills = React & skills = Vu e & skills = ...
 // & recruitParts = 프론트엔드 & recruitParts = 백엔드
 // & keyword = ABC
+
+const createMetaTitle = (category: RecruitCategoryName) => {
+  const displayCategoryName = getDisplayCategoryName(category);
+  return `${displayCategoryName} 모집`;
+};
+const createMetaDescription = (category: RecruitCategoryName) => {
+  const displayCategoryName = getDisplayCategoryName(category);
+  return `${globalMetaData.description} ${globalMetaData.title}는 삼성 청년 SW 아카데미(SSAFY) 학생들의 원활한 ${displayCategoryName} 진행을 위한 리쿠르팅 기능을 제공합니다.`;
+};
+
 const RecruitsPage = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
@@ -55,8 +71,22 @@ const RecruitsPage = () => {
       ? unsafeCategory
       : RecruitCategoryName.PROJECT;
 
+  const metaTitle = createMetaTitle(safeCategory);
+  const metaDescription = createMetaDescription(safeCategory);
+
   return (
     <>
+      <PageHeadingText text={metaTitle} />
+      <PageHead
+        title={metaTitle}
+        description={metaDescription}
+        openGraph={{
+          title: metaTitle,
+          description: metaDescription,
+          url: `${routes.recruit.list({}).pathname}?category=${safeCategory}`,
+        }}
+      />
+
       <div
         css={[selfCss, hideNavigation && navigationGroupPaddingCss.inactive]}
       >

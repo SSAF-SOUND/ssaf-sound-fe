@@ -41,7 +41,7 @@ const ArticleCardList = (props: ArticleCardListProps) => {
     refetch,
   } = infiniteQuery;
   const [showErrorCard, setShowErrorCard] = useState(false);
-  const showFetchNextPageSkeletons = hasNextPage && !showErrorCard;
+  const showFetchNextPageSkeletons = isFetchingNextPage && !showErrorCard;
 
   useEffect(() => {
     setShowErrorCard(!!error);
@@ -49,7 +49,7 @@ const ArticleCardList = (props: ArticleCardListProps) => {
 
   if (isLoading) {
     const loadingSkeletonCount = 6;
-    return <Skeletons count={loadingSkeletonCount} />;
+    return <Skeletons hot={hot} count={loadingSkeletonCount} />;
   }
 
   if (isError && !data) {
@@ -99,7 +99,9 @@ const ArticleCardList = (props: ArticleCardListProps) => {
           return <Card key={article.postId} article={article} />;
         }}
       />
-      {showFetchNextPageSkeletons && <Skeletons count={skeletonCount} />}
+      {showFetchNextPageSkeletons && (
+        <Skeletons count={skeletonCount} hot={hot} />
+      )}
       {showErrorCard && (
         <InfiniteQueryErrorCard onClickRetry={retryFetchNextArticles} />
       )}
