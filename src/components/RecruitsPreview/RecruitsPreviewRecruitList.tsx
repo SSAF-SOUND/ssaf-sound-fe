@@ -5,16 +5,16 @@ import { css } from '@emotion/react';
 import { useRef } from 'react';
 
 import { Icon, IconButton } from '~/components/Common';
+import { Scroll } from '~/components/Common/Scroll';
 import { RecruitsPreviewRecruitItem } from '~/components/RecruitsPreview/RecruitsPreviewRecruitItem';
 import { recruitPreviewMarginForExpandCssVar } from '~/components/RecruitsPreview/utils';
 import { expandCss, flex } from '~/styles/utils';
-import { hideScrollBar } from '~/styles/utils/hideScrollBar';
 
 export interface RecruitsPreviewRecruitListProps {
   recruits: RecruitSummary[];
 }
 
-const scrollAmount = 300;
+const scrollAmount = 400;
 const enum ScrollDirection {
   RIGHT = 1,
   LEFT = -1,
@@ -24,16 +24,18 @@ export const RecruitsPreviewRecruitList = (
   props: RecruitsPreviewRecruitListProps
 ) => {
   const { recruits } = props;
-  const recruitsItemContainerRef = useRef<HTMLDivElement>(null);
+  const scrollViewportRef = useRef<HTMLDivElement>(null);
 
   const handleClickScrollButton = (direction: ScrollDirection) => () => {
-    const $recruitsItemContainer = recruitsItemContainerRef.current;
+    const $recruitsItemContainer = scrollViewportRef.current;
     if (!$recruitsItemContainer) return;
 
     const adjustedScrollAmount = scrollAmount * direction;
 
-    $recruitsItemContainer.scrollLeft =
-      $recruitsItemContainer.scrollLeft + adjustedScrollAmount;
+    $recruitsItemContainer.scrollBy({
+      behavior: 'smooth',
+      left: adjustedScrollAmount,
+    });
   };
 
   return (
@@ -52,14 +54,21 @@ export const RecruitsPreviewRecruitList = (
         />
       </div>
 
-      <div css={recruitItemContainerCss} ref={recruitsItemContainerRef}>
-        {recruits.map((recruit) => (
-          <RecruitsPreviewRecruitItem
-            recruit={recruit}
-            key={recruit.recruitId}
-          />
-        ))}
-      </div>
+      <Scroll.Root css={scrollRootCss}>
+        <Scroll.Viewport css={scrollViewportCss} ref={scrollViewportRef}>
+          <div css={recruitItemContainerCss}>
+            {recruits.map((recruit) => (
+              <RecruitsPreviewRecruitItem
+                recruit={recruit}
+                key={recruit.recruitId}
+              />
+            ))}
+          </div>
+        </Scroll.Viewport>
+        <Scroll.Bar orientation="horizontal">
+          <Scroll.Thumb />
+        </Scroll.Bar>
+      </Scroll.Root>
     </div>
   );
 };
@@ -67,16 +76,23 @@ export const RecruitsPreviewRecruitList = (
 const iconSize = 24;
 const iconButtonSize = iconSize + 10;
 
-const recruitItemContainerCss = css(
+const scrollRootCss = css(
   {
-    padding: `4px ${recruitPreviewMarginForExpandCssVar.var} 10px`,
-    overflowX: 'scroll',
-    scrollBehavior: 'smooth',
+    height: 180,
   },
-  expandCss(recruitPreviewMarginForExpandCssVar.var),
-  flex('center', 'flex-start', 'row', 16),
-  hideScrollBar()
+  expandCss(recruitPreviewMarginForExpandCssVar.var)
 );
+
+const scrollViewportCss = css(
+  {
+    padding: `0 ${recruitPreviewMarginForExpandCssVar.var} 10px`,
+    // scrollBehavior: 'smooth',
+    width: '100%',
+  },
+  flex('center', 'flex-start', 'row', 16)
+);
+
+const recruitItemContainerCss = css(flex('center', 'flex-start', 'row', 16));
 
 const scrollButtonsLayerCss = css(
   { marginBottom: 12, marginRight: -8 },
