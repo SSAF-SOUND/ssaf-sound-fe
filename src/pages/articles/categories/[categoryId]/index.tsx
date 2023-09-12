@@ -55,10 +55,6 @@ const ArticleCategoryPage = (
     (category) => category.boardId === categoryId
   )?.title;
 
-  const navigateToCreateArticlePage = () => {
-    router.push(routes.articles.create(categoryId));
-  };
-
   const metaDescription = createMetaDescription(categoryName);
 
   return (
@@ -94,7 +90,8 @@ const ArticleCategoryPage = (
             css={fabCss}
             name="pencil.plus"
             label="게시글 작성 버튼"
-            onClick={navigateToCreateArticlePage}
+            asLink
+            href={routes.articles.create(categoryId)}
           />
         </div>
       </div>
@@ -264,25 +261,20 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const articleListQueryKey = queryKeys.articles.list(categoryId, keyword);
   const articleCategoriesQueryKey = queryKeys.articles.categories();
 
-  try {
-    // https://github.com/TanStack/query/discussions/3306
-    await Promise.all([
-      queryClient.fetchInfiniteQuery({
-        queryKey: articleListQueryKey,
-        queryFn: () =>
-          getArticles({
-            categoryId,
-            keyword: keyword,
-          }),
-      }),
-      queryClient.fetchQuery({
-        queryKey: articleCategoriesQueryKey,
-        queryFn: getArticleCategories,
-      }),
-    ]);
-  } catch (err) {
-    // err handling
-  }
+  await Promise.allSettled([
+    queryClient.prefetchInfiniteQuery({
+      queryKey: articleListQueryKey,
+      queryFn: () =>
+        getArticles({
+          categoryId,
+          keyword: keyword,
+        }),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: articleCategoriesQueryKey,
+      queryFn: getArticleCategories,
+    }),
+  ]);
 
   const { dehydratedState } = dehydrate(queryClient);
   dehydratedState.queries.forEach((query) => {

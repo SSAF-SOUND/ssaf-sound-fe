@@ -69,7 +69,7 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
         <header css={[headerCss, { marginBottom: 6 }]}>
           {!isSmallCard && (
             <div css={headerLeftCss}>
-              {!showMyRecruitBadge && <RecruitBadge.MyRecruit />}
+              {showMyRecruitBadge && <RecruitBadge.MyRecruit />}
               <RecruitCardTitle>{title}</RecruitCardTitle>
             </div>
           )}

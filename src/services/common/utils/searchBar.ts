@@ -2,7 +2,7 @@ export const minSearchKeywordLength = 2;
 
 /* `router`에서 검증하기 위함 */
 export const validateSearchKeyword = (keyword?: string) =>
-  keyword && keyword.trim().length >= minSearchKeywordLength;
+  !!keyword && keyword.trim().length >= minSearchKeywordLength;
 
 /* `SearchBarForm`에서 검증하기 위함 */
 export interface ValidateSearchBarFormKeywordOptions {

@@ -17,6 +17,7 @@ import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import { getHotArticles, useHotArticles } from '~/services/article';
+import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   flex,
   fontCss,
@@ -34,10 +35,6 @@ import { globalMetaData } from '~/utils/metadata';
 const titleBarTitle = 'HOT 게시판';
 const metaTitle = titleBarTitle;
 const metaDescription = `${globalMetaData.description} 삼성 청년 SW 아카데미(SSAFY) 학생들의 최대 관심사를 모아볼 수 있는 Hot 게시판 기능을 이용해보세요.`;
-
-const minKeywordLength = 3;
-const validateKeyword = (keyword?: string) =>
-  keyword && keyword.trim().length >= minKeywordLength;
 
 const HotArticlesPage = () => {
   const router = useRouter();
@@ -81,7 +78,7 @@ interface HotArticleLayerProps {
 
 const HotArticleLayer = (props: HotArticleLayerProps) => {
   const { keyword } = props;
-  const isValidKeyword = validateKeyword(keyword);
+  const isValidKeyword = validateSearchKeyword(keyword);
   const infiniteQuery = useHotArticles({ keyword });
 
   const infiniteData = infiniteQuery.data
@@ -98,7 +95,7 @@ const HotArticleLayer = (props: HotArticleLayerProps) => {
       skeletonGap={16}
       itemContent={(index, article) => <HotArticleCard article={article} />}
       emptyElement={
-        isValidKeyword ? (
+        !isValidKeyword ? (
           <NoSearchResults keyword={keyword} />
         ) : (
           <EmptyInfiniteList text="아직 핫 게시글이 없습니다." />
@@ -111,7 +108,7 @@ const HotArticleLayer = (props: HotArticleLayerProps) => {
 const SearchBar = () => {
   const router = useRouter();
   const { keyword: queryKeyword } = router.query as QueryString;
-  const isValidKeyword = validateKeyword(queryKeyword);
+  const isValidKeyword = validateSearchKeyword(queryKeyword);
   const defaultKeyword = isValidKeyword ? queryKeyword : '';
 
   const onValidSubmit: SearchBarFormProps['onValidSubmit'] = async (
@@ -192,27 +189,25 @@ type QueryString = Partial<{
 }>;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { keyword: queryKeyword } = context.query as QueryString;
-  const isValidKeyword = validateKeyword(queryKeyword);
-  const keyword = isValidKeyword ? queryKeyword?.trim() : undefined;
+  const { keyword = '' } = context.query as QueryString;
+
+  const trimmedKeyword = keyword.trim();
+  const safeKeyword = validateSearchKeyword(trimmedKeyword)
+    ? trimmedKeyword
+    : undefined;
 
   /* prefetch start */
   const queryClient = new QueryClient();
-  const hotArticleListQueryKey = queryKeys.articles.hot(keyword);
+  const hotArticleListQueryKey = queryKeys.articles.hot(safeKeyword);
 
-  try {
-    // https://github.com/TanStack/query/discussions/3306
-    await queryClient.fetchInfiniteQuery({
-      queryKey: hotArticleListQueryKey,
-      queryFn: ({ pageParam }) =>
-        getHotArticles({
-          cursor: pageParam,
-          keyword: keyword,
-        }),
-    });
-  } catch (err) {
-    // err handling
-  }
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: hotArticleListQueryKey,
+    queryFn: ({ pageParam }) =>
+      getHotArticles({
+        cursor: pageParam,
+        keyword: safeKeyword,
+      }),
+  });
 
   const { dehydratedState } = dehydrate(queryClient);
   dehydratedState.queries.forEach((query) => {
