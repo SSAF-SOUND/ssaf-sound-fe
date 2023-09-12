@@ -226,7 +226,7 @@ export const useRecruits = (
       }),
     getNextPageParam: (lastPage) => {
       if (lastPage.isLast) return undefined;
-      return lastPage.nextCursor;
+      return lastPage.nextCursor ?? undefined;
     },
   });
 };

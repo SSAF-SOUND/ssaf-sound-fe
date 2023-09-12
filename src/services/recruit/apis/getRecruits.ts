@@ -25,7 +25,7 @@ export interface GetRecruitsParams {
 }
 
 export type GetRecruitsApiData = ApiSuccessResponse<{
-  nextCursor: number;
+  nextCursor: number | null;
   isLast: boolean;
   recruits: RecruitSummary[];
 }>;

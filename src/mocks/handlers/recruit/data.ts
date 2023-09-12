@@ -267,13 +267,26 @@ export const createMockRecruitSummary = (
   };
 };
 
-export const recruitSummaries = Array(100)
+export const projectRecruitSummaries = Array(100)
   .fill(undefined)
   .map((_, index) => {
     const recruitId = index + 1;
     const finishedRecruit = !(recruitId % 10);
 
     return createMockRecruitSummary(recruitId, {
+      finishedRecruit,
+      skillCount: 10,
+    });
+  });
+
+export const studyRecruitSummaries = Array(100)
+  .fill(undefined)
+  .map((_, index) => {
+    const recruitId = index + 10000;
+    const finishedRecruit = !(recruitId % 10);
+
+    return createMockRecruitSummary(recruitId, {
+      category: RecruitCategoryName.STUDY,
       finishedRecruit,
       skillCount: 10,
     });

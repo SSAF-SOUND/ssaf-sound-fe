@@ -1,14 +1,24 @@
 import type { ResponseComposition, RestContext, RestRequest } from 'msw';
 import type { GetRecruitsApiData, RecruitSummary } from '~/services/recruit';
 
-import { recruitSummaries } from '~/mocks/handlers/recruit/data';
+import {
+  projectRecruitSummaries,
+  studyRecruitSummaries,
+} from '~/mocks/handlers/recruit/data';
 import { mockSuccess } from '~/mocks/utils';
+import { RecruitCategoryName } from '~/services/recruit';
 
 // import { recruitMocks } from './data';
 
 const infiniteRecruitsHandler = () => {
   return (req: RestRequest, res: ResponseComposition, ctx: RestContext) => {
     const searchParams = req.url.searchParams;
+
+    const recruitSummaries =
+      searchParams.get('category') === RecruitCategoryName.STUDY
+        ? studyRecruitSummaries
+        : projectRecruitSummaries;
+
     const size = 10;
     const cursor = Number(searchParams.get('cursor'));
 
@@ -20,8 +30,12 @@ const infiniteRecruitsHandler = () => {
 
     if (!isReachingEnd) data.pop();
 
-    const lastRecruitSummary = data.at(-1) as RecruitSummary;
-    const nextCursor = lastRecruitSummary.recruitId;
+    const lastRecruitSummary = data.at(-1);
+    const lastRecruitSummaryIndex = recruitSummaries.findIndex(
+      (recruitSummary) => lastRecruitSummary === recruitSummary
+    );
+    const nextCursor =
+      lastRecruitSummaryIndex === -1 ? null : lastRecruitSummaryIndex;
 
     return res(
       ctx.delay(500),
