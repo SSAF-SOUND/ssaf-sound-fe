@@ -5,12 +5,18 @@ import type {
 
 import { css } from '@emotion/react';
 import * as RadixScrollArea from '@radix-ui/react-scroll-area';
+import { forwardRef } from 'react';
 
 import { colorMix, palettes } from '~/styles/utils';
 
-const ScrollViewport = (props: ScrollAreaViewportProps) => {
-  return <RadixScrollArea.Viewport css={scrollViewportCss} {...props} />;
-};
+const ScrollViewport = forwardRef<HTMLDivElement, ScrollAreaViewportProps>(
+  (props, ref) => {
+    return (
+      <RadixScrollArea.Viewport ref={ref} css={scrollViewportCss} {...props} />
+    );
+  }
+);
+ScrollViewport.displayName = 'ScrollViewport';
 const scrollViewportCss = css({
   width: '100%',
   height: '100%',
