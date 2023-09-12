@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { css } from '@emotion/react';
 
 import { Icon } from '~/components/Common';
-import { flex, fontCss, lineClamp, palettes } from '~/styles/utils';
+import { expandCss, flex, fontCss, lineClamp, palettes } from '~/styles/utils';
 import { routes } from '~/utils';
 
 export interface HotArticlesPreviewArticleItemProps {
@@ -31,15 +31,14 @@ export const HotArticlesPreviewArticleItem = (
   );
 };
 
-const selfPadding = 6;
 const selfCss = css(
   {
-    margin: `0 -${selfPadding}px`,
-    padding: selfPadding,
+    padding: '14px 25px',
     '&:hover': {
       backgroundColor: palettes.background.grey,
     },
   },
+  expandCss(),
   flex('center', '', 'row', 12)
 );
 

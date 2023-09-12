@@ -1,5 +1,3 @@
-import type { RecruitSummary } from '~/services/recruit';
-
 import { css } from '@emotion/react';
 
 import { RecruitsPreviewRecruitList } from '~/components/RecruitsPreview/RecruitsPreviewRecruitList';

@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import { Icon, IconButton } from '~/components/Common';
 import { RecruitsPreviewRecruitItem } from '~/components/RecruitsPreview/RecruitsPreviewRecruitItem';
 import { recruitPreviewMarginForExpandCssVar } from '~/components/RecruitsPreview/utils';
-import { flex } from '~/styles/utils';
+import { expandCss, flex } from '~/styles/utils';
 import { hideScrollBar } from '~/styles/utils/hideScrollBar';
 
 export interface RecruitsPreviewRecruitListProps {
@@ -69,11 +69,11 @@ const iconButtonSize = iconSize + 10;
 
 const recruitItemContainerCss = css(
   {
-    margin: `0 calc(-1 * ${recruitPreviewMarginForExpandCssVar.var})`,
     padding: `4px ${recruitPreviewMarginForExpandCssVar.var} 10px`,
     overflowX: 'scroll',
     scrollBehavior: 'smooth',
   },
+  expandCss(recruitPreviewMarginForExpandCssVar.var),
   flex('center', 'flex-start', 'row', 16),
   hideScrollBar()
 );
