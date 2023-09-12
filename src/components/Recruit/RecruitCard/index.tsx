@@ -36,7 +36,6 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
     recruitId,
     recruitEnd,
     finishedRecruit,
-    participants,
   } = recruitSummary;
 
   const showMyRecruitBadge = withBadge && mine;
@@ -48,7 +47,7 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
       data-theme={recruitTheme}
     >
       <Link href={routes.recruit.detail(recruitId)}>
-        <header css={[headerCss, { marginBottom: 12 }]}>
+        <header css={[headerCss, { marginBottom: 6 }]}>
           <div css={headerLeftCss}>
             {showMyRecruitBadge && <RecruitBadge.MyRecruit />}
             <h3 css={titleCss}>{title}</h3>
@@ -58,12 +57,11 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
             css={deadlineCss}
             endDate={recruitEnd}
             theme={recruitTheme}
-            completed={finishedRecruit}
-            size="md"
+            size="sm"
           />
         </header>
         <div css={skillsCss}>
-          {skills.map(({ name: skillName }) => (
+          {skills.slice(0, 10).map(({ name: skillName }) => (
             <SkillIcon
               key={skillName}
               name={skillName}
@@ -102,24 +100,22 @@ const completedRecruitCss = css({
   ),
 });
 
-const headerCss = css(flex('flex-start', 'space-between', 'row', 12));
+const headerCss = css(flex('flex-start', 'space-between', 'row', 6));
 
-const headerLeftCss = css(flex('flex-start', 'flex-start', 'column', 4));
+const headerLeftCss = css(flex('flex-start', 'flex-start', 'row', 6));
 
 const titleCss = css(
   { color: palettes.font.grey, wordBreak: 'break-all' },
   lineClamp(1),
-  fontCss.style.B20
+  fontCss.style.B14
 );
 
-const deadlineCss = css({ minWidth: 80 });
+const deadlineCss = css({ minWidth: 60 });
 
 const skillIconSize = 16;
-const skillIconContainerHeight = skillIconSize * 2 + 10;
 const skillsCss = css(
   {
-    height: skillIconContainerHeight,
-    wordBreak: 'break-all',
+    height: skillIconSize,
   },
   lineClamp(1),
   flex('flex-start', 'flex-start', 'row', 4, 'wrap')
