@@ -16,6 +16,6 @@ export const RecruitCardSkeleton = () => {
 
 const selfCss = css({
   width: '100%',
-  height: 130,
+  height: 114,
   borderRadius: 30,
 });

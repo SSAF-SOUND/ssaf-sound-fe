@@ -12,7 +12,7 @@ import { css } from '@emotion/react';
 import { forwardRef, isValidElement, memo, useEffect, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
-import ErrorCard from '~/components/ErrorCard';
+import { InfiniteQueryErrorCard } from '~/components/InfiniteQueryErrorCard';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
 import { DefaultEmptyElement } from '~/components/Recruit/RecruitCardList/DefaultEmptyElement';
@@ -71,7 +71,7 @@ export const RecruitCardList = memo((props: RecruitCardListProps) => {
   }
 
   if (isError && !data) {
-    return <ErrorCard onClickRetry={refetch} />;
+    return <InfiniteQueryErrorCard css={errorCss} onClickRetry={refetch} />;
   }
 
   const recruits = data.pages.map((page) => page.recruits).reduce(concat);
@@ -119,8 +119,8 @@ export const RecruitCardList = memo((props: RecruitCardListProps) => {
       />
       {showFetchNextPageSkeletons && <Skeletons count={skeletonCount} />}
       {showErrorCard && (
-        <ErrorCard
-          css={{ marginBottom: itemGap }}
+        <InfiniteQueryErrorCard
+          css={errorCss}
           onClickRetry={retryFetchNextRecruits}
         />
       )}
@@ -174,3 +174,7 @@ const skeletonsCss = css(
   { marginBottom: itemGap },
   flex('', '', 'column', itemGap)
 );
+const errorCss = css({
+  borderRadius: 30,
+  marginBottom: itemGap,
+});
