@@ -7,11 +7,13 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
-import { Tabs } from '~/components/Common';
-import { Scroll, scrollbarSize } from '~/components/Common/Scroll';
+import { CircleButton, Tabs } from '~/components/Common';
+import { Scroll } from '~/components/Common/Scroll';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NavigationGroup from '~/components/NavigationGroup';
+import { RecruitCardList } from '~/components/Recruit/RecruitCardList';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import {
@@ -20,30 +22,40 @@ import {
 } from '~/services/common/utils/searchBar';
 import {
   getRecruits,
+  getRecruitThemeByCategory,
   RecruitCategoryName,
   RecruitCategoryNameSet,
   RecruitPartsSet,
   SkillNameSet,
+  useRecruits,
 } from '~/services/recruit';
 import {
   flex,
+  gnbHeight,
   pageMaxWidth,
   pageMinHeight,
   pageMinWidth,
   palettes,
   Theme,
   titleBarHeight,
+  topBarHeight,
 } from '~/styles/utils';
 import { customToast, routes, stringToBoolean } from '~/utils';
 
 // /recruits
 // ? category = project | study
-// & skills = React
-// & skills = Vue
-// & recruitParts = 프론트엔드
-// & recruitParts = 백엔드
+// & skills = React & skills = Vue & skills = ...
+// & recruitParts = 프론트엔드 & recruitParts = 백엔드
 // & keyword = ABC
 const RecruitsPage = () => {
+  const router = useRouter();
+  const query = router.query as Partial<Params>;
+  const { category: unsafeCategory } = query;
+  const safeCategory =
+    unsafeCategory && RecruitCategoryNameSet.has(unsafeCategory)
+      ? unsafeCategory
+      : RecruitCategoryName.PROJECT;
+
   return (
     <>
       <div css={selfCss}>
@@ -51,34 +63,25 @@ const RecruitsPage = () => {
 
         <SearchBar />
 
-        <RecruitCategoryTabs />
+        <RecruitCategoryTabs value={safeCategory} />
 
         <div
           css={[
-            { marginBottom: 20 },
             flex('center', 'space-between', 'row', 24),
-            { height: 50, background: 'green' },
+            { height: filterRowHeight + 20 },
           ]}
         >
           <div css={flex('center', 'flex-start', 'row', 24)}>
             <div>필터 도구</div>
             <div>필터 도구</div>
           </div>
-          <div>글 작성 버튼</div>
+
+          <RecruitCreateLink category={safeCategory} />
         </div>
 
         <RecruitLayer />
       </div>
     </>
-  );
-};
-const Card = () => {
-  return (
-    <div
-      css={{ border: '1px solid white', height: 140, background: 'darkorange' }}
-    >
-      카드
-    </div>
   );
 };
 
@@ -90,6 +93,16 @@ const selfCss = css({
   minHeight: selfMinHeight,
 });
 const searchBarContainerHeight = 72;
+const recruitTabsHeight = 32;
+const filterRowHeight = 60;
+
+const listLayerHeight = `calc(${selfMinHeight} - ${
+  topBarHeight +
+  searchBarContainerHeight +
+  recruitTabsHeight +
+  filterRowHeight +
+  gnbHeight
+}px)`;
 
 const SearchBar = () => {
   const router = useRouter();
@@ -139,23 +152,20 @@ const searchBarContainerCss = css(
   flex('', 'center')
 );
 
-const RecruitCategoryTabs = () => {
+const RecruitCategoryTabs = (props: { value: RecruitCategoryName }) => {
+  const { value } = props;
   const router = useRouter();
   const query = router.query as Partial<Params>;
 
-  const { category: unsafeCategory } = query;
-  const safeCategory = RecruitCategoryNameSet.has(unsafeCategory as string)
-    ? unsafeCategory
-    : RecruitCategoryName.PROJECT;
-
   return (
-    <Tabs.Root value={safeCategory}>
+    <Tabs.Root value={value} css={{ height: recruitTabsHeight }}>
       <Tabs.List>
+        <Tabs.Border css={{ width: '150%', left: '-25%' }} />
         <Tabs.TriggerWithLink
           value={RecruitCategoryName.PROJECT}
           theme={Theme.PRIMARY}
           href={routes.recruit.list({
-            ...router.query,
+            ...query,
             category: RecruitCategoryName.PROJECT,
           })}
         >
@@ -165,7 +175,7 @@ const RecruitCategoryTabs = () => {
           value={RecruitCategoryName.STUDY}
           theme={Theme.SECONDARY}
           href={routes.recruit.list({
-            ...router.query,
+            ...query,
             category: RecruitCategoryName.STUDY,
           })}
         >
@@ -176,34 +186,53 @@ const RecruitCategoryTabs = () => {
   );
 };
 
+const RecruitCreateLink = (props: { category: RecruitCategoryName }) => {
+  const { category } = props;
+  const recruitTheme = getRecruitThemeByCategory(category);
+
+  return (
+    <CircleButton
+      asLink
+      href={routes.recruit.create()}
+      css={{ width: 44, height: 44 }}
+      name="pencil.plus"
+      label="리쿠르트 작성 버튼"
+      theme={recruitTheme}
+    />
+  );
+};
+
 const RecruitLayer = (props: { className?: string }) => {
   const { className } = props;
+  const [customScrollParent, setCustomScrollParent] =
+    useState<HTMLElement | null>();
+  const router = useRouter();
+  const query = router.query as Partial<Params>;
+  const { category, completed, skills, recruitParts, keyword } =
+    toGetRecruitsParams(query);
+
+  const infiniteRecruitsQuery = useRecruits(
+    { category },
+    {
+      keyword,
+      completed,
+      skills,
+      recruitParts,
+    }
+  );
+
   return (
-    <Scroll.Root
-      css={{ height: 400, margin: `0 -${scrollbarSize}px` }}
-      className={className}
-    >
-      <Scroll.Viewport>
-        <div
-          css={[
-            flex('', '', 'column', 12),
-            {
-              padding: `0 ${scrollbarSize}px`,
-            },
-          ]}
-        >
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-        </div>
+    <Scroll.Root css={{ height: listLayerHeight }}>
+      <Scroll.Viewport ref={setCustomScrollParent}>
+        <RecruitCardList
+          customScrollParent={customScrollParent}
+          infiniteQuery={infiniteRecruitsQuery}
+          useWindowScroll={false}
+          skeletonCount={4}
+        />
       </Scroll.Viewport>
 
-      <Scroll.Bar orientation="vertical">
+      <Scroll.Bar>
         <Scroll.Thumb />
       </Scroll.Bar>
     </Scroll.Root>
@@ -254,7 +283,9 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
  *   - 값이 1개일 때는 string -> [string] 으로
  * @param params
  */
-const toGetRecruitsParams = (params: Partial<Params>): GetRecruitsParams => {
+const toGetRecruitsParams = (
+  params: Partial<Params>
+): Omit<GetRecruitsParams, 'size' | 'cursor'> => {
   const { category, completed, skills, recruitParts, keyword } = params;
 
   const safeCategory =
