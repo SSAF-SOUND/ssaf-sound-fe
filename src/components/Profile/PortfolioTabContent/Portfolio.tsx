@@ -25,7 +25,7 @@ import { sanitizeHtml } from '~/utils';
 interface PortfolioProps {
   portfolio: UserPortfolio;
   className?: string;
-  marginForExpand?: string | number;
+  marginForExpand?: string;
 }
 
 const Portfolio = (props: PortfolioProps) => {
@@ -99,7 +99,7 @@ const emptyPortfolioMessageCss = css(
 
 interface PortfolioSkillsProps {
   skills: string[];
-  marginForExpand?: number | string;
+  marginForExpand?: string;
 }
 const PortfolioSkills = (props: PortfolioSkillsProps) => {
   const { skills, marginForExpand } = props;

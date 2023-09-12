@@ -13,7 +13,7 @@ interface ErrorCardProps {
   buttonText?: string;
 }
 
-const ErrorCard = (props: ErrorCardProps) => {
+export const InfiniteQueryErrorCard = (props: ErrorCardProps) => {
   const {
     onClickRetry,
     isLoading = false,
@@ -40,8 +40,6 @@ const ErrorCard = (props: ErrorCardProps) => {
     </div>
   );
 };
-
-export default ErrorCard;
 
 const selfCss = css(
   {

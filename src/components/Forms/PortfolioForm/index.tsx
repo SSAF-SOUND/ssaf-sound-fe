@@ -11,7 +11,7 @@ import { fontCss, palettes, titleBarHeight } from '~/styles/utils';
 import { Links, SelfIntroduction, Skills } from './Fields';
 
 interface PortfolioFormOptions {
-  marginForExpand: number | string;
+  marginForExpand: string;
   titleBarCloseRoute: string;
 }
 

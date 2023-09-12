@@ -11,6 +11,7 @@ import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import { getHotArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
+import { getRecruits, RecruitCategoryName } from '~/services/recruit';
 import { globalVars, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
@@ -67,10 +68,16 @@ export const getServerSideProps = async () => {
       queryFn: () => getHotArticles({}),
     }),
     /* 리쿠르팅 리스트 */
-    // queryClient.prefetchInfiniteQuery({
-    //   queryKey: queryKeys.recruit.list(),
-    //   queryFn: () => getHotArticles({}),
-    // }),
+    queryClient.prefetchInfiniteQuery({
+      queryKey: JSON.parse(
+        JSON.stringify(
+          queryKeys.recruit.list({
+            category: RecruitCategoryName.PROJECT,
+          })
+        )
+      ),
+      queryFn: () => getRecruits({ category: RecruitCategoryName.PROJECT }),
+    }),
   ]);
 
   const { dehydratedState } = dehydrate(queryClient);

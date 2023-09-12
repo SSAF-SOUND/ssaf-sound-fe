@@ -1,9 +1,11 @@
+import type { RecruitSummary } from '~/services/recruit';
+
 import { css } from '@emotion/react';
 
 import { RecruitsPreviewRecruitList } from '~/components/RecruitsPreview/RecruitsPreviewRecruitList';
 import { recruitPreviewMarginForExpandCssVar } from '~/components/RecruitsPreview/utils';
 import TitleBar from '~/components/TitleBar';
-import { SkillName } from '~/services/recruit';
+import { RecruitCategoryName, useRecruits } from '~/services/recruit';
 import { flex } from '~/styles/utils';
 import { routes } from '~/utils';
 
@@ -12,40 +14,20 @@ interface RecruitsPreviewProps {
   marginForExpand?: string;
 }
 
-const createMockRecruitSummary = (id: number) => ({
-  title: '리쿠르팅'.repeat(10),
-  recruitEnd: '2023-09-11',
-  finishedRecruit: false,
-  participants: [],
-  recruitId: id,
-  skills: [
-    {
-      skillId: 1,
-      name: SkillName.ANDROID,
-    },
-    {
-      skillId: 2,
-      name: SkillName.DJANGO,
-    },
-    {
-      skillId: 3,
-      name: SkillName.JAVA,
-    },
-    {
-      skillId: 4,
-      name: SkillName.FLUTTER,
-    },
-  ],
-});
-
-const mockRecruitSummaries = Array(20)
-  .fill(undefined)
-  .map((_, index) => createMockRecruitSummary(index));
-
+const maxViewCount = 10;
 export const RecruitsPreview = (props: RecruitsPreviewProps) => {
   const { className, marginForExpand = '0px' } = props;
-  const maxViewCount = 10;
-  const latestRecruits = mockRecruitSummaries.slice(0, maxViewCount);
+  const {
+    data: recruits,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useRecruits({
+    category: RecruitCategoryName.PROJECT,
+  });
+
+  const latestRecruits =
+    recruits?.pages[0].recruits.slice(0, maxViewCount) ?? [];
   const notExistRecruits = latestRecruits.length === 0;
 
   const style = {
@@ -60,6 +42,8 @@ export const RecruitsPreview = (props: RecruitsPreviewProps) => {
         css={{ marginBottom: 16 }}
       />
 
+      {isLoading && <div>로딩중</div>}
+      {isError && <div>에러</div>}
       {notExistRecruits ? (
         <NotExistRecruits />
       ) : (

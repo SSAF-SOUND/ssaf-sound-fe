@@ -8,7 +8,7 @@ import { Virtuoso } from 'react-virtuoso';
 
 import { ArticleCard, HotArticleCard } from '~/components/ArticleCard';
 import DefaultEmptyElement from '~/components/ArticleCardList/DefaultEmptyElement';
-import ErrorCard from '~/components/ErrorCard';
+import { InfiniteQueryErrorCard } from '~/components/InfiniteQueryErrorCard';
 import { flex } from '~/styles/utils';
 import { concat, scrollUpBy } from '~/utils';
 
@@ -53,7 +53,7 @@ const ArticleCardList = (props: ArticleCardListProps) => {
   }
 
   if (isError && !data) {
-    return <ErrorCard onClickRetry={refetch} />;
+    return <InfiniteQueryErrorCard onClickRetry={refetch} />;
   }
 
   const articles = data.pages.map((pages) => pages.posts).reduce(concat);
@@ -100,7 +100,9 @@ const ArticleCardList = (props: ArticleCardListProps) => {
         }}
       />
       {showFetchNextPageSkeletons && <Skeletons count={skeletonCount} />}
-      {showErrorCard && <ErrorCard onClickRetry={retryFetchNextArticles} />}
+      {showErrorCard && (
+        <InfiniteQueryErrorCard onClickRetry={retryFetchNextArticles} />
+      )}
     </>
   );
 };

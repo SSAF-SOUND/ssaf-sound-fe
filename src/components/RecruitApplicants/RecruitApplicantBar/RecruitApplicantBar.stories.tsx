@@ -26,7 +26,7 @@ interface RecruitApplicantArgs {
 
 export const Default: RecruitApplicantStory = {
   args: {
-    matchStatus: MatchStatus.WAITING_APPLICANT,
+    matchStatus: MatchStatus.PENDING,
     liked: false,
   },
   argTypes: {

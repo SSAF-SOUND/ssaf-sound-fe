@@ -15,7 +15,7 @@ const fieldName = 'skills';
 
 interface SkillsProps {
   className?: string;
-  marginForExpand?: number | string;
+  marginForExpand?: string;
 }
 
 export const Skills = (props: SkillsProps) => {

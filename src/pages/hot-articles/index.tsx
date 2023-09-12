@@ -123,7 +123,6 @@ const SearchBar = () => {
       onValidSubmit={onValidSubmit}
       onInvalidSubmit={onInvalidSubmit}
       defaultValues={{ keyword: defaultKeyword }}
-      options={{ minKeywordLength }}
     />
   );
 };

@@ -4,16 +4,13 @@ import type {
   SubmitHandlerWithReset,
   SubmitErrorHandlerWithErrorMessage,
 } from '~/components/Forms/utils/types';
-import type {
-  ValidateSearchBarFormKeywordOptions} from '~/services/common/utils/searchBar';
+import type { ValidateSearchBarFormKeywordOptions } from '~/services/common/utils/searchBar';
 
 import { css } from '@emotion/react';
 import { useForm } from 'react-hook-form';
 
 import { Icon, IconButton, TextInput } from '~/components/Common';
-import {
-  validateSearchBarFormKeyword
-} from '~/services/common/utils/searchBar';
+import { validateSearchBarFormKeyword } from '~/services/common/utils/searchBar';
 import { position, Theme } from '~/styles/utils';
 
 const fieldName = 'keyword';
@@ -80,7 +77,7 @@ const SearchBarForm = (props: SearchBarFormProps) => {
           {...register(fieldName, {
             validate: validateSearchBarFormKeyword({
               allowEmptyString,
-              minSearchBarKeywordLength: minSearchBarKeywordLength,
+              minSearchBarKeywordLength,
             }),
             setValueAs: (value) => value.trim(),
           })}
