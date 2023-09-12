@@ -2,6 +2,7 @@ import type { SerializedStyles } from '@emotion/react';
 
 import { css } from '@emotion/react';
 import dayjs from 'dayjs';
+import { memo } from 'react';
 
 import { Theme, fontCss, inlineFlex, themeColorVars } from '~/styles/utils';
 import { getDateDiff } from '~/utils';
@@ -16,7 +17,7 @@ export interface RecruitDeadlineProps {
 
 export type RecruitDeadlineSize = 'sm' | 'md';
 
-export const RecruitDeadline = (props: RecruitDeadlineProps) => {
+export const RecruitDeadline = memo((props: RecruitDeadlineProps) => {
   const {
     endDate,
     theme = Theme.PRIMARY,
@@ -37,7 +38,8 @@ export const RecruitDeadline = (props: RecruitDeadlineProps) => {
       {displayText}
     </span>
   );
-};
+});
+RecruitDeadline.displayName = 'RecruitDeadline';
 
 const selfCss = css(inlineFlex('center', 'center'));
 
