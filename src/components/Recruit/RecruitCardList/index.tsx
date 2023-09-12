@@ -135,6 +135,7 @@ const DefaultItemContent: RecruitCardListProps['itemContent'] = (
       key={recruit.recruitId}
       recruitSummary={recruit}
       withBadge={false}
+      size="md"
     />
   );
 };
@@ -156,7 +157,7 @@ const Skeletons = memo((props: SkeletonsProps) => {
       {Array(count)
         .fill(undefined)
         .map((_, index) => (
-          <RecruitCardSkeleton key={index} />
+          <RecruitCardSkeleton key={index} size="md" />
         ))}
     </div>
   );
