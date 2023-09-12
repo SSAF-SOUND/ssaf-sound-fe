@@ -4,13 +4,12 @@ import type {
 } from '~/services/recruit';
 
 import { css } from '@emotion/react';
-import * as ScrollArea from '@radix-ui/react-scroll-area';
 
 import { Avatar } from '~/components/Common';
 import { Scroll } from '~/components/Common/Scroll';
 import { middleRecruitCardPaddingX } from '~/components/Recruit/RecruitCard/constants';
 import { RecruitParts } from '~/services/recruit';
-import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
+import { expandCss, flex, fontCss } from '~/styles/utils';
 
 interface RecruitCardParticipantsProps {
   recruitSummary: RecruitSummary;
@@ -29,7 +28,7 @@ export const RecruitCardParticipants = (
       css={[expandCss(`${middleRecruitCardPaddingX}px`)]}
     >
       <Scroll.Viewport>
-        <div css={[selfCss, { padding: '0 24px' }]}>
+        <div css={[selfCss, { padding: '4px 24px 8px' }]}>
           {participants.map((participantsDetail) => (
             <RecruitCardParticipantsRow
               key={participantsDetail.recruitType}
@@ -48,7 +47,7 @@ export const RecruitCardParticipants = (
 const selfCss = css(flex('center', 'flex-start', 'row', 16));
 
 const scrollbarCss = css({
-  transform: 'translate3d(0, 10px,0)',
+  transform: 'translate3d(0, 12px,0)',
 });
 
 interface RecruitCardParticipantsRowProps {

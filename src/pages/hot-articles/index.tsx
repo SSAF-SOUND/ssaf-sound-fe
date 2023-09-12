@@ -1,14 +1,17 @@
 import type { GetServerSideProps } from 'next/types';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
+import type { ArticleSummary } from '~/services/article';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
-import ArticleCardList from '~/components/ArticleCardList';
+import { HotArticleCard } from '~/components/ArticleCard';
 import { PageHead, PageHeadingText } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
+import { InfiniteList } from '~/components/InfiniteList';
+import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
@@ -25,7 +28,7 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { customToast, routes } from '~/utils';
+import { concat, customToast, routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
 const titleBarTitle = 'HOT 게시판';
@@ -81,12 +84,26 @@ const HotArticleLayer = (props: HotArticleLayerProps) => {
   const isValidKeyword = validateKeyword(keyword);
   const infiniteQuery = useHotArticles({ keyword });
 
+  const infiniteData = infiniteQuery.data
+    ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
+    : ([] as ArticleSummary[]);
+
   return (
-    <ArticleCardList
-      hot
+    <InfiniteList
+      data={infiniteData}
       infiniteQuery={infiniteQuery}
-      emptyElement={isValidKeyword && <NoSearchResults keyword={keyword} />}
-      skeletonCount={4}
+      skeleton={<HotArticleCard.Skeleton />}
+      skeletonCount={6}
+      useWindowScroll={true}
+      skeletonGap={16}
+      itemContent={(index, article) => <HotArticleCard article={article} />}
+      emptyElement={
+        isValidKeyword ? (
+          <NoSearchResults keyword={keyword} />
+        ) : (
+          <EmptyInfiniteList text="아직 핫 게시글이 없습니다." />
+        )
+      }
     />
   );
 };

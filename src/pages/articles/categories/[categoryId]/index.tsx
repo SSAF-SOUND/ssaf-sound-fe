@@ -3,15 +3,18 @@ import type {
   InferGetServerSidePropsType,
 } from 'next/types';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
+import type { ArticleSummary } from '~/services/article';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
-import ArticleCardList from '~/components/ArticleCardList';
+import { ArticleCard } from '~/components/ArticleCard';
 import { CircleButton, PageHead, PageHeadingText } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
+import { InfiniteList } from '~/components/InfiniteList';
+import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
@@ -34,7 +37,7 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { customToast, routes } from '~/utils';
+import { concat, customToast, routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
 const createMetaDescription = (categoryName = '게시판') =>
@@ -109,11 +112,26 @@ const ArticleLayer = (props: ArticleLayerProps) => {
   const isValidKeyword = validateSearchKeyword(keyword);
   const articlesInfiniteQuery = useArticles(categoryId, { keyword });
 
+  const infiniteData = articlesInfiniteQuery.data
+    ? articlesInfiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
+    : ([] as ArticleSummary[]);
+
   return (
-    <ArticleCardList
+    <InfiniteList
+      data={infiniteData}
       infiniteQuery={articlesInfiniteQuery}
-      emptyElement={isValidKeyword && <NoSearchResults keyword={keyword} />}
-      skeletonCount={5}
+      skeleton={<ArticleCard.Skeleton />}
+      skeletonCount={6}
+      useWindowScroll={true}
+      skeletonGap={16}
+      itemContent={(index, article) => <ArticleCard article={article} />}
+      emptyElement={
+        isValidKeyword ? (
+          <NoSearchResults keyword={keyword} />
+        ) : (
+          <EmptyInfiniteList text="아직 게시글이 없습니다." />
+        )
+      }
     />
   );
 };

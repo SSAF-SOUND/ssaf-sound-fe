@@ -26,7 +26,7 @@ const sizeCss = {
   },
   md: {
     width: '100%',
-    height: 114,
+    height: 126,
     borderRadius: 30,
   },
 };

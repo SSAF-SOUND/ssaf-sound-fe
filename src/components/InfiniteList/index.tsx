@@ -6,49 +6,64 @@ import type {
   ReactNode,
   RefAttributes,
 } from 'react';
-import type { GetRecruitsApiData, RecruitSummary } from '~/services/recruit';
 
 import { css } from '@emotion/react';
-import { forwardRef, isValidElement, memo, useEffect, useState } from 'react';
+import {
+  forwardRef,
+  Fragment,
+  isValidElement,
+  memo,
+  useEffect,
+  useState,
+} from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
 import { InfiniteQueryErrorCard } from '~/components/InfiniteQueryErrorCard';
-import { RecruitCard } from '~/components/Recruit/RecruitCard';
-import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
-import { DefaultEmptyElement } from '~/components/Recruit/RecruitCardList/DefaultEmptyElement';
 import { flex } from '~/styles/utils';
-import { concat, scrollUpBy } from '~/utils';
+import { scrollUpBy } from '~/utils';
 
-interface RecruitCardListProps {
-  infiniteQuery: UseInfiniteQueryResult<GetRecruitsApiData['data']>;
+interface InfiniteListProps<T> {
+  data: T[];
+  infiniteQuery: UseInfiniteQueryResult;
 
   className?: string;
 
   emptyElement?: ReactNode;
-  skeletonCount?: number;
+
   useWindowScroll?: boolean;
 
+  skeleton: ReactElement;
+  skeletonCount: number;
+  skeletonGap?: number;
+
+  itemContent: (index: number, data: T) => ReactElement;
+
   // virtuoso options
-  itemContent?: (index: number, recruit: RecruitSummary) => ReactElement;
   List?: ForwardRefExoticComponent<RefAttributes<HTMLDivElement>>;
   customScrollParent?: HTMLElement | null;
 }
 
-export const RecruitCardList = (props: RecruitCardListProps) => {
+export const InfiniteList = <T,>(props: InfiniteListProps<T>) => {
   const {
+    data,
+
     infiniteQuery,
     className,
     emptyElement,
-    skeletonCount = 4,
+
+    skeleton,
+    skeletonCount,
+    skeletonGap = itemGap,
     useWindowScroll = false,
 
     itemContent,
+
+    // virtuoso options
     List,
     customScrollParent,
   } = props;
 
   const {
-    data,
     isLoading,
     hasNextPage,
     fetchNextPage,
@@ -66,26 +81,22 @@ export const RecruitCardList = (props: RecruitCardListProps) => {
   }, [error]);
 
   if (isLoading) {
-    const loadingSkeletonCount = 6;
-    return <Skeletons count={loadingSkeletonCount} />;
+    return (
+      <Skeletons count={skeletonCount} skeleton={skeleton} gap={skeletonGap} />
+    );
   }
 
   if (isError && !data) {
     return <InfiniteQueryErrorCard css={errorCss} onClickRetry={refetch} />;
   }
 
-  const recruits = data.pages.map((page) => page.recruits).reduce(concat);
-  const isEmpty = recruits.length === 0;
+  const isEmpty = data.length === 0;
 
   if (isEmpty) {
-    return isValidElement(emptyElement) ? (
-      emptyElement
-    ) : (
-      <DefaultEmptyElement />
-    );
+    return isValidElement(emptyElement) ? emptyElement : <div>None</div>;
   }
 
-  const fetchNextRecruits = async (forceFetch = false) => {
+  const loadMore = async (forceFetch = false) => {
     const disableFetchNextPage =
       !hasNextPage || isFetchingNextPage || showErrorCard;
     if (disableFetchNextPage && !forceFetch) return;
@@ -95,12 +106,11 @@ export const RecruitCardList = (props: RecruitCardListProps) => {
     scrollUpBy(1);
   };
 
-  const retryFetchNextRecruits = () => {
+  const retryLoadMore = () => {
     setShowErrorCard(false);
-    fetchNextRecruits(true);
+    loadMore(true);
   };
 
-  const ItemComponent = itemContent ?? DefaultItemContent;
   const ItemList = List ?? DefaultList;
 
   return (
@@ -109,34 +119,23 @@ export const RecruitCardList = (props: RecruitCardListProps) => {
         css={virtuosoCss}
         className={className}
         useWindowScroll={useWindowScroll}
-        data={recruits}
-        endReached={() => fetchNextRecruits()}
+        data={data}
+        endReached={() => loadMore()}
         components={{ List: ItemList }}
-        itemContent={ItemComponent}
+        itemContent={itemContent}
         customScrollParent={customScrollParent ?? undefined}
       />
-      {showFetchNextPageSkeletons && <Skeletons count={skeletonCount} />}
-      {showErrorCard && (
-        <InfiniteQueryErrorCard
-          css={errorCss}
-          onClickRetry={retryFetchNextRecruits}
+      {showFetchNextPageSkeletons && (
+        <Skeletons
+          count={skeletonCount}
+          skeleton={skeleton}
+          gap={skeletonGap}
         />
       )}
+      {showErrorCard && (
+        <InfiniteQueryErrorCard css={errorCss} onClickRetry={retryLoadMore} />
+      )}
     </>
-  );
-};
-
-const DefaultItemContent: RecruitCardListProps['itemContent'] = (
-  index,
-  recruit
-) => {
-  return (
-    <RecruitCard
-      key={recruit.recruitId}
-      recruitSummary={recruit}
-      withBadge={false}
-      size="md"
-    />
   );
 };
 
@@ -145,32 +144,32 @@ const DefaultList = memo(
     return <div css={listCss} {...props} ref={ref} />;
   })
 );
-DefaultList.displayName = 'RecruitCardList';
+DefaultList.displayName = 'InfiniteListContainer';
 
 interface SkeletonsProps {
   count: number;
+  skeleton: ReactElement;
+  gap: number;
 }
 const Skeletons = memo((props: SkeletonsProps) => {
-  const { count } = props;
+  const { count, skeleton, gap = itemGap } = props;
   return (
-    <div css={skeletonsCss}>
+    <div css={skeletonsCss(gap)}>
       {Array(count)
         .fill(undefined)
         .map((_, index) => (
-          <RecruitCardSkeleton key={index} size="md" />
+          <Fragment key={index}>{skeleton}</Fragment>
         ))}
     </div>
   );
 });
-Skeletons.displayName = 'RecruitCardSkeleton';
+Skeletons.displayName = 'Skeleton';
 
 const itemGap = 16;
 const virtuosoCss = css({ marginBottom: itemGap });
 const listCss = css(flex('', '', 'column', itemGap));
-const skeletonsCss = css(
-  { marginBottom: itemGap },
-  flex('', '', 'column', itemGap)
-);
+const skeletonsCss = (gap: number) =>
+  css({ marginBottom: gap }, flex('', '', 'column', itemGap));
 const errorCss = css({
   borderRadius: 30,
   marginBottom: itemGap,

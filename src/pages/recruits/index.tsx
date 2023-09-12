@@ -1,6 +1,6 @@
 import type { GetServerSideProps } from 'next';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
-import type { GetRecruitsParams } from '~/services/recruit';
+import type { GetRecruitsParams, RecruitSummary } from '~/services/recruit';
 import type { RecruitsPageQueryStringObject } from '~/utils';
 
 import { useRouter } from 'next/router';
@@ -16,8 +16,10 @@ import {
   Tabs,
 } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
+import { InfiniteList } from '~/components/InfiniteList';
 import NavigationGroup from '~/components/NavigationGroup';
-import { RecruitCardList } from '~/components/Recruit/RecruitCardList';
+import { RecruitCard } from '~/components/Recruit/RecruitCard';
+import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import {
@@ -44,7 +46,13 @@ import {
   Theme,
   topBarHeight,
 } from '~/styles/utils';
-import { customToast, globalMetaData, routes, stringToBoolean } from '~/utils';
+import {
+  concat,
+  customToast,
+  globalMetaData,
+  routes,
+  stringToBoolean,
+} from '~/utils';
 
 // /recruits
 // ? category = project | study
@@ -128,7 +136,7 @@ const RecruitsPage = () => {
             paddingBottom: recruitLayerTop,
           }}
         >
-          <RecruitLayer hideNavigation={hideNavigation} />
+          <RecruitLayer />
         </div>
       </div>
     </>
@@ -158,9 +166,6 @@ const listLayerHeight = `calc(${selfMinHeight} - ${
   searchBarContainerHeight +
   recruitTabsHeight +
   filterRowHeight
-}px)`;
-const hideNavigationListLayerHeight = `calc(${listLayerHeight} + ${
-  topBarHeight + gnbHeight
 }px)`;
 
 const SearchBar = () => {
@@ -259,9 +264,7 @@ const RecruitCreateLink = (props: { category: RecruitCategoryName }) => {
   );
 };
 
-const RecruitLayer = (props: { hideNavigation: boolean }) => {
-  // const { hideNavigation } = props;
-
+const RecruitLayer = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
   const { category, completed, skills, recruitParts, keyword } =
@@ -277,16 +280,32 @@ const RecruitLayer = (props: { hideNavigation: boolean }) => {
     }
   );
 
-  // const height = hideNavigation
-  //   ? hideNavigationListLayerHeight
-  //   : listLayerHeight;
+  const infiniteData = infiniteRecruitsQuery.data
+    ? infiniteRecruitsQuery.data.pages
+        .map(({ recruits }) => recruits)
+        .reduce(concat)
+    : ([] as RecruitSummary[]);
 
   return (
-    <RecruitCardList
-      infiniteQuery={infiniteRecruitsQuery}
-      useWindowScroll={true}
-      skeletonCount={6}
-    />
+    <>
+      <InfiniteList
+        data={infiniteData}
+        infiniteQuery={infiniteRecruitsQuery}
+        skeleton={<RecruitCardSkeleton size="md" />}
+        skeletonCount={6}
+        skeletonGap={16}
+        useWindowScroll={true}
+        itemContent={(index, recruit) => (
+          <RecruitCard
+            key={recruit.recruitId}
+            recruitSummary={recruit}
+            withBadge={false}
+            size="md"
+          />
+        )}
+        emptyElement={<div>하이</div>}
+      />
+    </>
   );
 };
 
