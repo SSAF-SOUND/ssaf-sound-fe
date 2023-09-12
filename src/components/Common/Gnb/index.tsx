@@ -73,6 +73,7 @@ const Gnb = (props: GnbProps) => {
 };
 
 const selfCss = css(fixBottomCenter, {
+  transition: 'opacity 200ms',
   borderTopLeftRadius: 15,
   borderTopRightRadius: 15,
   overflow: 'hidden',

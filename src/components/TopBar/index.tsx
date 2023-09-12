@@ -29,6 +29,7 @@ export default TopBar;
 
 const selfCss = css(
   {
+    transition: 'opacity 200ms',
     padding: '0 25px',
     zIndex: zIndex.fixed.normal,
     height: topBarHeight,
