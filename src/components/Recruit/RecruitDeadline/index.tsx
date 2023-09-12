@@ -72,6 +72,11 @@ const getDeadlineText = (
 
   const isDDay = diff === 0;
   const expired = diff < 0;
+  const tooLong = diff > 999;
+
+  if (tooLong) {
+    return 'D - 999+'
+  }
 
   if (expired) {
     return completedText;

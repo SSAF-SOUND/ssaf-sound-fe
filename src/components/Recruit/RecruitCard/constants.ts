@@ -1,1 +1,2 @@
-export const recruitCardPaddingX = 24;
+export const middleRecruitCardPaddingX = 24;
+export const smallRecruitCardPadding = 10;

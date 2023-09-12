@@ -1,11 +1,8 @@
 import type { RecruitSummary } from '~/services/recruit';
 
-import Link from 'next/link';
-
 import { css } from '@emotion/react';
 
-import { SmallRecruitCard } from '~/components/RecruitCard';
-import { routes } from '~/utils';
+import { RecruitCard } from '~/components/Recruit/RecruitCard';
 
 export interface RecruitsPreviewRecruitItemProps {
   recruit: RecruitSummary;
@@ -16,16 +13,17 @@ export const RecruitsPreviewRecruitItem = (
 ) => {
   const { recruit } = props;
   return (
-    <Link href={routes.recruit.detail(recruit.recruitId)} css={selfCss}>
-      <SmallRecruitCard
-        css={{ wordBreak: 'break-all' }}
-        recruitSummary={recruit}
-      />
-    </Link>
+    <RecruitCard
+      size="sm"
+      withBadge={true}
+      css={selfCss}
+      recruitSummary={recruit}
+    />
   );
 };
 
 const selfCss = css({
+  flexShrink: 0,
   transition: 'transform 200ms',
   '&:hover, &:focus-visible': {
     transform: 'translate3d(0, 3px, 0)',

@@ -8,7 +8,7 @@ import * as ScrollArea from '@radix-ui/react-scroll-area';
 
 import { Avatar } from '~/components/Common';
 import { Scroll } from '~/components/Common/Scroll';
-import { recruitCardPaddingX } from '~/components/Recruit/RecruitCard/constants';
+import { middleRecruitCardPaddingX } from '~/components/Recruit/RecruitCard/constants';
 import { RecruitParts } from '~/services/recruit';
 import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
 
@@ -26,7 +26,7 @@ export const RecruitCardParticipants = (
   return (
     <Scroll.Root
       className={className}
-      css={[expandCss(`${recruitCardPaddingX}px`)]}
+      css={[expandCss(`${middleRecruitCardPaddingX}px`)]}
     >
       <Scroll.Viewport>
         <div css={[selfCss, { padding: '0 24px' }]}>

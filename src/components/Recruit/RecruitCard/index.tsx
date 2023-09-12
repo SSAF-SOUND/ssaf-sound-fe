@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import type { RecruitSummary } from '~/services/recruit';
 
 import Link from 'next/link';
@@ -7,14 +8,17 @@ import { memo } from 'react';
 
 import { SkillIcon } from '~/components/Common';
 import { RecruitBadge } from '~/components/Recruit/RecruitBadge';
-import { recruitCardPaddingX } from '~/components/Recruit/RecruitCard/constants';
+import {
+  middleRecruitCardPaddingX,
+  smallRecruitCardPadding,
+} from '~/components/Recruit/RecruitCard/constants';
 import { RecruitCardParticipants } from '~/components/Recruit/RecruitCard/RecruitCardParticipants';
+import { RecruitCardTitle } from '~/components/Recruit/RecruitCard/RecruitCardTitle';
 import { RecruitDeadline } from '~/components/Recruit/RecruitDeadline';
 import { getRecruitThemeByCategory } from '~/services/recruit';
 import {
   colorMix,
   flex,
-  fontCss,
   lineClamp,
   palettes,
   themeColorVars,
@@ -22,12 +26,23 @@ import {
 import { routes } from '~/utils';
 
 interface RecruitCardProps {
+  className?: string;
   recruitSummary: RecruitSummary;
   withBadge?: boolean;
+  size?: 'sm' | 'md';
 }
 
+type RecruitCardSize = 'sm' | 'md';
+
+const isSmallSize = (size: RecruitCardSize) => {
+  return size === 'sm';
+};
+
 export const RecruitCard = memo((props: RecruitCardProps) => {
-  const { withBadge = false, recruitSummary } = props;
+  const { className, withBadge = false, size = 'sm', recruitSummary } = props;
+
+  const isSmallCard = isSmallSize(size);
+
   const {
     title,
     skills,
@@ -39,29 +54,46 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
   } = recruitSummary;
 
   const showMyRecruitBadge = withBadge && mine;
+
   const recruitTheme = getRecruitThemeByCategory(category);
+  const showSkillCount = isSmallCard ? 5 : 10;
 
   return (
     <div
-      css={[selfCss, finishedRecruit && completedRecruitCss]}
+      css={[selfCss, sizeCss[size], finishedRecruit && completedRecruitCss]}
       data-theme={recruitTheme}
+      className={className}
     >
       <Link href={routes.recruit.detail(recruitId)}>
         <header css={[headerCss, { marginBottom: 6 }]}>
-          <div css={headerLeftCss}>
-            {!showMyRecruitBadge && <RecruitBadge.MyRecruit />}
-            <h3 css={titleCss}>{title}</h3>
-          </div>
+          {!isSmallCard && (
+            <div css={headerLeftCss}>
+              {!showMyRecruitBadge && <RecruitBadge.MyRecruit />}
+              <RecruitCardTitle>{title}</RecruitCardTitle>
+            </div>
+          )}
+
+          {withBadge && isSmallCard && (
+            <RecruitBadge.RecruitCategory category={category} />
+          )}
 
           <RecruitDeadline
             css={deadlineCss}
             endDate={recruitEnd}
             theme={recruitTheme}
+            completed={finishedRecruit}
             size="sm"
           />
         </header>
+
+        {isSmallCard && (
+          <div css={{ margin: '14px 0 10px' }}>
+            <RecruitCardTitle showLineCount={2}>{title}</RecruitCardTitle>
+          </div>
+        )}
+
         <div css={skillsCss}>
-          {skills.slice(0, 10).map(({ name: skillName }) => (
+          {skills.slice(0, showSkillCount).map(({ name: skillName }) => (
             <SkillIcon
               key={skillName}
               name={skillName}
@@ -72,10 +104,12 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
         </div>
       </Link>
 
-      <RecruitCardParticipants
-        css={{ marginTop: 12 }}
-        recruitSummary={recruitSummary}
-      />
+      {!isSmallCard && (
+        <RecruitCardParticipants
+          css={{ marginTop: 12 }}
+          recruitSummary={recruitSummary}
+        />
+      )}
     </div>
   );
 });
@@ -83,14 +117,25 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
 RecruitCard.displayName = 'RecruitCard';
 
 const selfCss = css({
-  minWidth: 300,
-  width: '100%',
   overflow: 'hidden',
-  padding: `12px ${recruitCardPaddingX}px`,
   backgroundColor: palettes.white,
   color: palettes.font.grey,
-  borderRadius: 30,
 });
+
+const sizeCss: Record<RecruitCardSize, SerializedStyles> = {
+  sm: css({
+    width: 140,
+    height: 140,
+    padding: smallRecruitCardPadding,
+    borderRadius: 20,
+  }),
+  md: css({
+    minWidth: 300,
+    width: '100%',
+    padding: `12px ${middleRecruitCardPaddingX}px`,
+    borderRadius: 30,
+  }),
+};
 
 const completedRecruitCss = css({
   backgroundColor: colorMix(
@@ -104,13 +149,7 @@ const headerCss = css(flex('center', 'space-between', 'row', 6));
 
 const headerLeftCss = css(flex('flex-start', 'flex-start', 'row', 6));
 
-const titleCss = css(
-  { color: palettes.font.grey, wordBreak: 'break-all' },
-  lineClamp(1),
-  fontCss.style.B14
-);
-
-const deadlineCss = css({ minWidth: 60 });
+const deadlineCss = css({ minWidth: 64 });
 
 const skillIconSize = 16;
 const skillsCss = css(
