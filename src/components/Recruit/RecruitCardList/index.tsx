@@ -34,7 +34,7 @@ interface RecruitCardListProps {
   customScrollParent?: HTMLElement | null;
 }
 
-export const RecruitCardList = memo((props: RecruitCardListProps) => {
+export const RecruitCardList = (props: RecruitCardListProps) => {
   const {
     infiniteQuery,
     className,
@@ -111,9 +111,7 @@ export const RecruitCardList = memo((props: RecruitCardListProps) => {
         useWindowScroll={useWindowScroll}
         data={recruits}
         endReached={() => fetchNextRecruits()}
-        components={{
-          List: ItemList,
-        }}
+        components={{ List: ItemList }}
         itemContent={ItemComponent}
         customScrollParent={customScrollParent ?? undefined}
       />
@@ -126,9 +124,7 @@ export const RecruitCardList = memo((props: RecruitCardListProps) => {
       )}
     </>
   );
-});
-
-RecruitCardList.displayName = 'RecruitCardList';
+};
 
 const DefaultItemContent: RecruitCardListProps['itemContent'] = (
   index,

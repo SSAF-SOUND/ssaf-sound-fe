@@ -10,7 +10,6 @@ import { QueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { CircleButton, Tabs } from '~/components/Common';
-import { Scroll } from '~/components/Common/Scroll';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NavigationGroup from '~/components/NavigationGroup';
 import { RecruitCardList } from '~/components/Recruit/RecruitCardList';
@@ -30,26 +29,26 @@ import {
   useRecruits,
 } from '~/services/recruit';
 import {
+  fixTopCenter,
   flex,
   gnbHeight,
-  pageMaxWidth,
+  navigationGroupPaddingCss,
   pageMinHeight,
-  pageMinWidth,
   palettes,
   Theme,
-  titleBarHeight,
   topBarHeight,
 } from '~/styles/utils';
 import { customToast, routes, stringToBoolean } from '~/utils';
 
 // /recruits
 // ? category = project | study
-// & skills = React & skills = Vue & skills = ...
+// & skills = React & skills = Vu e & skills = ...
 // & recruitParts = 프론트엔드 & recruitParts = 백엔드
 // & keyword = ABC
 const RecruitsPage = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
+  const [hideNavigation, setHideNavigation] = useState(false);
   const { category: unsafeCategory } = query;
   const safeCategory =
     unsafeCategory && RecruitCategoryNameSet.has(unsafeCategory)
@@ -58,28 +57,49 @@ const RecruitsPage = () => {
 
   return (
     <>
-      <div css={selfCss}>
-        <NavigationGroup />
-
-        <SearchBar />
-
-        <RecruitCategoryTabs value={safeCategory} />
+      <div
+        css={[selfCss, hideNavigation && navigationGroupPaddingCss.inactive]}
+      >
+        <NavigationGroup hide={hideNavigation} />
 
         <div
           css={[
-            flex('center', 'space-between', 'row', 24),
-            { height: filterRowHeight + 20 },
+            fixTopCenter,
+            {
+              top: topBarHeight,
+              padding: '0 25px',
+              zIndex: 3,
+              backgroundColor: palettes.background.default,
+            },
           ]}
         >
-          <div css={flex('center', 'flex-start', 'row', 24)}>
-            <div>필터 도구</div>
-            <div>필터 도구</div>
+          <SearchBar />
+          <RecruitCategoryTabs value={safeCategory} />
+          <div
+            css={[
+              flex('center', 'space-between', 'row', 24),
+              { height: filterRowHeight },
+            ]}
+          >
+            <div css={flex('center', 'flex-start', 'row', 24)}>
+              <div>필터 도구</div>
+              <div>필터 도구</div>
+            </div>
+            <div css={flex('center', 'flex-start', 'row', 12)}>
+              <RecruitCreateLink category={safeCategory} />
+            </div>
           </div>
-
-          <RecruitCreateLink category={safeCategory} />
         </div>
 
-        <RecruitLayer />
+        <div
+          css={{
+            position: 'relative',
+            top: recruitLayerTop,
+            paddingBottom: recruitLayerTop,
+          }}
+        >
+          <RecruitLayer hideNavigation={hideNavigation} />
+        </div>
       </div>
     </>
   );
@@ -88,20 +108,29 @@ const RecruitsPage = () => {
 export default RecruitsPage;
 
 const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
-const selfCss = css({
-  padding: `${titleBarHeight}px 0`,
-  minHeight: selfMinHeight,
-});
-const searchBarContainerHeight = 72;
+const selfCss = css(
+  {
+    transition: 'padding 200ms',
+    minHeight: selfMinHeight,
+  },
+  navigationGroupPaddingCss.active,
+  { paddingBottom: gnbHeight + 24 }
+);
+const searchBarContainerHeight = 60;
 const recruitTabsHeight = 32;
-const filterRowHeight = 60;
+const filterRowHeight = 70;
+const recruitLayerTop =
+  searchBarContainerHeight + recruitTabsHeight + filterRowHeight;
 
 const listLayerHeight = `calc(${selfMinHeight} - ${
   topBarHeight +
+  gnbHeight +
   searchBarContainerHeight +
   recruitTabsHeight +
-  filterRowHeight +
-  gnbHeight
+  filterRowHeight
+}px)`;
+const hideNavigationListLayerHeight = `calc(${listLayerHeight} + ${
+  topBarHeight + gnbHeight
 }px)`;
 
 const SearchBar = () => {
@@ -144,8 +173,6 @@ const SearchBar = () => {
 const searchBarContainerCss = css(
   {
     width: '100%',
-    minWidth: pageMinWidth,
-    maxWidth: pageMaxWidth,
     height: searchBarContainerHeight,
     backgroundColor: palettes.background.default,
   },
@@ -160,7 +187,7 @@ const RecruitCategoryTabs = (props: { value: RecruitCategoryName }) => {
   return (
     <Tabs.Root value={value} css={{ height: recruitTabsHeight }}>
       <Tabs.List>
-        <Tabs.Border css={{ width: '150%', left: '-25%' }} />
+        <Tabs.Border css={{ width: 'calc(100% + 50px)', left: '-25px' }} />
         <Tabs.TriggerWithLink
           value={RecruitCategoryName.PROJECT}
           theme={Theme.PRIMARY}
@@ -202,10 +229,9 @@ const RecruitCreateLink = (props: { category: RecruitCategoryName }) => {
   );
 };
 
-const RecruitLayer = (props: { className?: string }) => {
-  const { className } = props;
-  const [customScrollParent, setCustomScrollParent] =
-    useState<HTMLElement | null>();
+const RecruitLayer = (props: { hideNavigation: boolean }) => {
+  // const { hideNavigation } = props;
+
   const router = useRouter();
   const query = router.query as Partial<Params>;
   const { category, completed, skills, recruitParts, keyword } =
@@ -221,21 +247,16 @@ const RecruitLayer = (props: { className?: string }) => {
     }
   );
 
-  return (
-    <Scroll.Root css={{ height: listLayerHeight }}>
-      <Scroll.Viewport ref={setCustomScrollParent}>
-        <RecruitCardList
-          customScrollParent={customScrollParent}
-          infiniteQuery={infiniteRecruitsQuery}
-          useWindowScroll={false}
-          skeletonCount={4}
-        />
-      </Scroll.Viewport>
+  // const height = hideNavigation
+  //   ? hideNavigationListLayerHeight
+  //   : listLayerHeight;
 
-      <Scroll.Bar>
-        <Scroll.Thumb />
-      </Scroll.Bar>
-    </Scroll.Root>
+  return (
+    <RecruitCardList
+      infiniteQuery={infiniteRecruitsQuery}
+      useWindowScroll={true}
+      skeletonCount={6}
+    />
   );
 };
 

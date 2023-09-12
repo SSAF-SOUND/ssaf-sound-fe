@@ -269,7 +269,7 @@ export const createMockRecruitSummary = (
   };
 };
 
-export const projectRecruitSummaries = Array(100)
+export const projectRecruitSummaries = Array(30)
   .fill(undefined)
   .map((_, index) => {
     const recruitId = index + 1;
@@ -281,7 +281,7 @@ export const projectRecruitSummaries = Array(100)
     });
   });
 
-export const studyRecruitSummaries = Array(100)
+export const studyRecruitSummaries = Array(30)
   .fill(undefined)
   .map((_, index) => {
     const recruitId = index + 10000;

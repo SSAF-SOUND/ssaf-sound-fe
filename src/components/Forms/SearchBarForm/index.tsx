@@ -110,5 +110,6 @@ const searchButtonCss = css(
 
 const searchBarInputCss = css({
   width: '100%',
+  height: 40,
   padding: '0 44px 0 20px',
 });
