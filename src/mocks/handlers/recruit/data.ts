@@ -262,7 +262,9 @@ export const createMockRecruitSummary = (
     skills: Object.values(SkillName)
       .slice(0, skillCount)
       .map((skillName, index) => ({ skillId: index, name: skillName })),
-    title: faker.string.alpha(30),
+    title: `${
+      (recruitId % 10) + 1
+    }주동안 열심히 프로젝트 하실 분 모집합니다. `.repeat(2),
     participants: participants,
   };
 };
