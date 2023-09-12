@@ -2,10 +2,8 @@ import type { CSSProperties } from 'react';
 
 import { css } from '@emotion/react';
 
-import { Button } from '~/components/Common';
+import { Button, SsafyIcon, TrackSize } from '~/components/Common';
 import { flex, fontCss, palettes } from '~/styles/utils';
-
-import ButtonLoader from '../Common/Button/ButtonLoader';
 
 interface ErrorCardProps {
   className?: string;
@@ -24,18 +22,20 @@ const ErrorCard = (props: ErrorCardProps) => {
   } = props;
   return (
     <div css={selfCss} {...restProps}>
-      <p>데이터 로딩중 문제가 발생했습니다</p>
-      <p css={{ marginBottom: 20 }}>잠시 후 다시 시도해주세요</p>
+      <div css={flex('center', 'center', 'column')}>
+        <p>데이터 로딩중 문제가 발생했습니다</p>
+        <p>잠시 후 다시 시도해주세요</p>
+      </div>
+      <SsafyIcon.Track size={TrackSize.LG1} />
       <Button
         onClick={onClickRetry}
+        variant="filled"
         theme="error"
-        style={{ color: 'white' }}
-        disabled={isLoading}
+        style={{ color: 'white', width: 180 }}
+        loading={isLoading}
+        size="sm"
       >
         {buttonText}
-        {isLoading && (
-          <ButtonLoader css={{ 'margin-left': 20 }} color={palettes.white} />
-        )}
       </Button>
     </div>
   );
@@ -46,10 +46,11 @@ export default ErrorCard;
 const selfCss = css(
   {
     width: '100%',
-    minHeight: 160,
+    padding: '60px 0',
+    minHeight: 130,
     backgroundColor: palettes.background.grey,
     borderRadius: 16,
   },
-  flex('center', 'center'),
-  fontCss.style.R18
+  flex('center', 'center', 'column', 48),
+  fontCss.style.R14
 );
