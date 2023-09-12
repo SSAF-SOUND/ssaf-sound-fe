@@ -1,6 +1,9 @@
+import type { LinkProps } from 'next/link';
 import type { ComponentPropsWithoutRef } from 'react';
 import type { IconNames } from '~/components/Common';
 import type { ButtonProps } from '~/components/Common/Button';
+
+import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
@@ -17,10 +20,26 @@ export interface CircleButtonProps extends ComponentPropsWithoutRef<'button'> {
   name: IconNames;
   /* `Icon`의 `label`과 동일 */
   label?: string;
+
+  asLink?: boolean;
+  href?: LinkProps['href'];
 }
 
 export const CircleButton = (props: CircleButtonProps) => {
-  const { label, name, ...restProps } = props;
+  const { asLink, label, href, name, ...restProps } = props;
+
+  if (asLink) {
+    return (
+      <Button css={selfCss} {...restProps} asChild>
+        {href && (
+          <Link href={href}>
+            <Icon name={name} label={label} size={28} />
+          </Link>
+        )}
+      </Button>
+    );
+  }
+
   return (
     <Button css={selfCss} {...restProps}>
       <Icon name={name} label={label} size={28} />
