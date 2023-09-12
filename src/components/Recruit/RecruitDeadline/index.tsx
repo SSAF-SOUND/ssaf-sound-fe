@@ -41,7 +41,7 @@ export const RecruitDeadline = memo((props: RecruitDeadlineProps) => {
 });
 RecruitDeadline.displayName = 'RecruitDeadline';
 
-const selfCss = css(inlineFlex('center', 'center'));
+const selfCss = css(inlineFlex('center', 'center', 'row'));
 
 const textCss = css(fontCss.family.auto, {
   color: themeColorVars.mainDarkColor.var,
@@ -75,7 +75,7 @@ const getDeadlineText = (
   const tooLong = diff > 999;
 
   if (tooLong) {
-    return 'D - 999+'
+    return 'D - 999+';
   }
 
   if (expired) {

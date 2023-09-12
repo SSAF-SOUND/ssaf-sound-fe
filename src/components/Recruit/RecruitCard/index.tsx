@@ -19,6 +19,7 @@ import { getRecruitThemeByCategory } from '~/services/recruit';
 import {
   colorMix,
   flex,
+  inlineFlex,
   lineClamp,
   palettes,
   themeColorVars,
@@ -64,7 +65,7 @@ export const RecruitCard = memo((props: RecruitCardProps) => {
       data-theme={recruitTheme}
       className={className}
     >
-      <Link href={routes.recruit.detail(recruitId)}>
+      <Link css={linkCss} href={routes.recruit.detail(recruitId)}>
         <header css={[headerCss, { marginBottom: 6 }]}>
           {!isSmallCard && (
             <div css={headerLeftCss}>
@@ -122,6 +123,17 @@ const selfCss = css({
   color: palettes.font.grey,
 });
 
+const linkCss = css({
+  display: 'block',
+  transition: 'transform 200ms',
+  '&:hover, &:focus-visible': {
+    transform: 'translate3d(2px, 0, 0)',
+  },
+  '&:active': {
+    transform: 'translate3d(0, 0, 0)',
+  },
+});
+
 const sizeCss: Record<RecruitCardSize, SerializedStyles> = {
   sm: css({
     width: 140,
@@ -149,7 +161,7 @@ const headerCss = css(flex('center', 'space-between', 'row', 6));
 
 const headerLeftCss = css(flex('flex-start', 'flex-start', 'row', 6));
 
-const deadlineCss = css({ minWidth: 64 });
+const deadlineCss = css({ minWidth: 64 }, inlineFlex('', 'flex-end', 'row'));
 
 const skillIconSize = 16;
 const skillsCss = css(

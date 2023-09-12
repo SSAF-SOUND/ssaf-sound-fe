@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
 import { palettes } from '~/styles/utils';
