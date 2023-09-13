@@ -14,7 +14,7 @@ import {
 import RollingAllTracks from '~/components/RollingAllTracks';
 import { CertificationState, useMyInfo } from '~/services/member';
 import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
-import { routes } from '~/utils';
+import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 
 const metaTitle = '학생 인증 가이드';
 
@@ -94,16 +94,8 @@ const StudentCertificationIntroPage = () => {
 
 export default StudentCertificationIntroPage;
 
-StudentCertificationIntroPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-StudentCertificationIntroPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+StudentCertificationIntroPage.auth = createAuthGuard();
+StudentCertificationIntroPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css({ padding: '120px 0' }, flex('stretch', 'center'));
 

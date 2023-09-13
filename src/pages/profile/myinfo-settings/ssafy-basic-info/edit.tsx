@@ -16,7 +16,13 @@ import {
   useUpdateSsafyBasicInfo,
 } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
-import { customToast, handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  customToast,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const metaTitle = 'SSAFY 기본 정보 수정';
 
@@ -105,16 +111,9 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
   );
 };
 export default MyInfoSettingsSsafyBasicInfoEditPage;
-MyInfoSettingsSsafyBasicInfoEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader />,
-  unauthorized: routes.unauthorized(),
-};
-MyInfoSettingsSsafyBasicInfoEditPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+MyInfoSettingsSsafyBasicInfoEditPage.auth = createAuthGuard();
+MyInfoSettingsSsafyBasicInfoEditPage.meta =
+  createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css(
   { padding: `${titleBarHeight}px 0`, height: '100vh' },

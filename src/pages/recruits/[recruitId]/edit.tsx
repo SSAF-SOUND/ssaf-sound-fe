@@ -26,6 +26,8 @@ import {
 } from '~/services/recruit';
 import { globalVars } from '~/styles/utils';
 import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
   customToast,
   ErrorMessage,
   getErrorResponse,
@@ -101,16 +103,8 @@ const RecruitEditPage: CustomNextPage = () => {
 };
 
 export default RecruitEditPage;
-RecruitEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-RecruitEditPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+RecruitEditPage.auth = createAuthGuard();
+RecruitEditPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const marginForExpand = globalVars.mainLayoutPaddingX.var;
 

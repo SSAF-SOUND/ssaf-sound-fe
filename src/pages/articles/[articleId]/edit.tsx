@@ -7,7 +7,12 @@ import { ArticleError } from '~/components/Article/ArticleError';
 import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import { useArticleDetail, useUpdateArticle } from '~/services/article';
-import { handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const metaTitle = '게시글 수정';
 
@@ -73,13 +78,5 @@ const ArticleEditPage: CustomNextPage = () => {
 };
 
 export default ArticleEditPage;
-ArticleEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader />,
-  unauthorized: routes.unauthorized(),
-};
-ArticleEditPage.meta = {
-  title: metaTitle,
-  robots: { index: false, follow: false },
-  openGraph: { title: metaTitle },
-};
+ArticleEditPage.auth = createAuthGuard();
+ArticleEditPage.meta = createNoIndexPageMetaData(metaTitle);

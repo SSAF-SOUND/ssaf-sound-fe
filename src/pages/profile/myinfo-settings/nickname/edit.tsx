@@ -10,7 +10,13 @@ import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateNickname } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
-import { customToast, handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  customToast,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const metaTitle = '닉네임 수정';
 
@@ -73,16 +79,8 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
 };
 
 export default MyInfoSettingsNicknameEditPage;
-MyInfoSettingsNicknameEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader />,
-  unauthorized: routes.unauthorized(),
-};
-MyInfoSettingsNicknameEditPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+MyInfoSettingsNicknameEditPage.auth = createAuthGuard();
+MyInfoSettingsNicknameEditPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css(
   { padding: `${titleBarHeight}px 0`, height: '100vh' },

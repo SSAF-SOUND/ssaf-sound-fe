@@ -14,7 +14,13 @@ import {
 import TitleBar from '~/components/TitleBar';
 import { useDeleteAccount } from '~/services/auth';
 import { flex, fontCss, pageMinHeight, titleBarHeight } from '~/styles/utils';
-import { customToast, handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  customToast,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const titleBarTitle = '회원 탈퇴';
 const metaTitle = titleBarTitle;
@@ -67,16 +73,8 @@ const DeleteAccountPage: CustomNextPage = () => {
 };
 
 export default DeleteAccountPage;
-DeleteAccountPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-DeleteAccountPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+DeleteAccountPage.auth = createAuthGuard();
+DeleteAccountPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css(
   {

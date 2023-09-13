@@ -29,6 +29,8 @@ import {
 } from '~/styles/utils';
 import {
   concat,
+  createAuthGuard,
+  createNoIndexPageMetaData,
   isStorybookMode,
   PossibleMyScrapsCategories,
   routes,
@@ -105,16 +107,8 @@ const MyScrapsPage: CustomNextPage = () => {
 };
 
 export default MyScrapsPage;
-MyScrapsPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-MyScrapsPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+MyScrapsPage.auth = createAuthGuard();
+MyScrapsPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const tabListContainerTop = titleBarHeight;
 const tabListContainerPaddingY = 16;

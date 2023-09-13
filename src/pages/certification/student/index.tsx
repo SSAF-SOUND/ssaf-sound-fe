@@ -23,6 +23,8 @@ import {
 } from '~/services/member';
 import { flex, pageMinHeight, titleBarHeight } from '~/styles/utils';
 import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
   customToast,
   handleAxiosError,
   noop,
@@ -160,16 +162,8 @@ const StudentCertificationPage: CustomNextPage = () => {
 };
 export default StudentCertificationPage;
 
-StudentCertificationPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-StudentCertificationPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+StudentCertificationPage.auth = createAuthGuard();
+StudentCertificationPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css(
   {

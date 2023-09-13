@@ -24,7 +24,13 @@ import {
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
-import { EditableMyInfoFields, handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  EditableMyInfoFields,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const metaTitle = '프로필 설정';
 
@@ -152,16 +158,8 @@ const bottomNavLayerCss = css({ flexGrow: 1 }, flex('', 'flex-end'));
 const cursorCss = css({ cursor: 'pointer' });
 
 export default MyInfoSettingsPage;
-MyInfoSettingsPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader />,
-  unauthorized: routes.unauthorized(),
-};
-MyInfoSettingsPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+MyInfoSettingsPage.auth = createAuthGuard();
+MyInfoSettingsPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const ProfileVisibilityToggleLayer = () => {
   const { openModal, closeModal } = useModal();

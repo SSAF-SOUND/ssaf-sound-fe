@@ -18,6 +18,8 @@ import {
 } from '~/services/member';
 import { globalVars } from '~/styles/utils';
 import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
   customToast,
   getErrorResponse,
   handleAxiosError,
@@ -146,13 +148,5 @@ const portfolioSkillsToFormSkillsField = (
 };
 
 export default PortfolioEditPage;
-PortfolioEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-PortfolioEditPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+PortfolioEditPage.auth = createAuthGuard();
+PortfolioEditPage.meta = createNoIndexPageMetaData(metaTitle);
