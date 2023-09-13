@@ -8,25 +8,20 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
-import {
-  CircleButton,
-  PageHead,
-  PageHeadingText,
-  Tabs,
-} from '~/components/Common';
+import { PageHead, PageHeadingText, Tabs, Toggle } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import { InfiniteList } from '~/components/InfiniteList';
 import NavigationGroup from '~/components/NavigationGroup';
 import NoSearchResults from '~/components/NoSearchResults';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
+import { RecruitCreateLink } from '~/components/Recruit/RecruitCreateLink';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   getDisplayCategoryName,
   getRecruits,
-  getRecruitThemeByCategory,
   RecruitCategoryName,
   RecruitCategoryNameSet,
   RecruitPartsSet,
@@ -36,6 +31,7 @@ import {
 import {
   fixTopCenter,
   flex,
+  fontCss,
   gnbHeight,
   pageMinHeight,
   palettes,
@@ -113,7 +109,7 @@ const RecruitsPage = () => {
             ]}
           >
             <div css={flex('center', 'flex-start', 'row', 24)}>
-              <div>필터 도구</div>
+              <CompletedRecruitsSwitch />
               <div>필터 도구</div>
             </div>
             <div css={flex('center', 'flex-start', 'row', 12)}>
@@ -192,6 +188,32 @@ const searchBarContainerCss = css(
   flex('', 'center')
 );
 
+const CompletedRecruitsSwitch = () => {
+  const router = useRouter();
+  const { completed = 'false' } = router.query as Partial<Params>;
+  const pressed = stringToBoolean(completed);
+  const onPressedChange = (pressed: boolean) => {
+    router.push({
+      query: {
+        ...router.query,
+        completed: pressed,
+      },
+    });
+  };
+
+  return (
+    <Toggle
+      pressed={pressed}
+      onPressedChange={onPressedChange}
+      thumbSize={20}
+      textWidth={40}
+      padding={'4px 5px'}
+      text={'모집 중'}
+      css={[fontCss.style.B12]}
+    />
+  );
+};
+
 const RecruitCategoryTabs = (props: { category: RecruitCategoryName }) => {
   const { category } = props;
   const router = useRouter();
@@ -223,22 +245,6 @@ const RecruitCategoryTabs = (props: { category: RecruitCategoryName }) => {
         </Tabs.TriggerWithLink>
       </Tabs.List>
     </Tabs.Root>
-  );
-};
-
-const RecruitCreateLink = (props: { category: RecruitCategoryName }) => {
-  const { category } = props;
-  const recruitTheme = getRecruitThemeByCategory(category);
-
-  return (
-    <CircleButton
-      asLink
-      href={routes.recruit.create(category)}
-      css={{ width: 44, height: 44 }}
-      name="pencil.plus"
-      label="리쿠르팅 작성 버튼"
-      theme={recruitTheme}
-    />
   );
 };
 
