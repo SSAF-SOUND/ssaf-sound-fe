@@ -2,11 +2,10 @@ import type { RecruitFilterFormProps } from '~/components/Forms/RecruitFilterFor
 
 import { css } from '@emotion/react';
 
-import { Icon, IconButton, Modal, VisuallyHidden } from '~/components/Common';
+import { Icon, IconButton, Modal } from '~/components/Common';
 import { Scroll } from '~/components/Common/Scroll';
 import { RecruitFilterForm } from '~/components/Forms/RecruitFilterForm';
 import {
-  colorMix,
   fixBottomCenter,
   flex,
   fontCss,
@@ -44,6 +43,7 @@ export const RecruitFilterModalForm = (props: RecruitFilterModalFormProps) => {
   );
 };
 
+const scrollRootHeight = 'max(500px, 50vh)';
 const headerHeight = 52;
 const borderRadius = 40;
 const selfCss = css(
@@ -60,11 +60,6 @@ const selfCss = css(
   },
   fontCss.family.auto
 );
-const formCss = css({
-  backgroundColor: palettes.background.default,
-  borderRadius: 'inherit',
-  padding: '12px 18px 36px',
-});
 
 const headerCss = css(
   position.xy('center', 'start'),
@@ -77,5 +72,24 @@ const headerCss = css(
 );
 const closeButtonCss = css({ position: 'absolute', left: 24 });
 const titleCss = css(fontCss.style.R12, { color: palettes.font.lightGrey });
-const scrollRootCss = css({ height: 'max(500px, 50vh)' });
-const scrollViewportCss = css({ borderRadius: 16 });
+const scrollRootCss = css({ height: scrollRootHeight });
+const scrollViewportCss = css({
+  borderRadius: 16,
+  height: '100%',
+  display: 'grid',
+
+  // RadixScrollArea.Viewport > div 가 `display: table`로 고정되어 있어서 `height`가 고정되는 문제
+  // 내부 구현에서 `display: table`을 사용하는 이유?
+  // https://github.com/radix-ui/primitives/issues/926#issuecomment-1111961689
+  '& > div': {
+    display: 'flex !important',
+  },
+});
+const formCss = css(
+  {
+    backgroundColor: palettes.background.default,
+    borderRadius: 'inherit',
+    padding: '12px 18px 36px',
+  },
+  flex('', 'space-between')
+);

@@ -36,15 +36,17 @@ const Trigger = (props: TriggerProps) => {
 const triggerCss = css(flex('center', 'center', 'row'), fontCss.style.B20, {
   background: 'inherit',
   borderBottom: '2px solid transparent',
+  color: palettes.font.blueGrey,
+  transition: 'background-color 200ms, color 200ms, border 200ms',
+  cursor: 'pointer',
+  '&:active, &:focus-visible': {
+    backgroundColor: colorMix('10%', palettes.white),
+    color: colorMix('80%', themeColorVars.mainColor.var),
+  },
   '&[data-state="active"]': {
     borderBottomColor: themeColorVars.mainColor.var,
     color: themeColorVars.mainColor.var,
     zIndex: 2,
-  },
-  color: palettes.font.blueGrey,
-  cursor: 'pointer',
-  '&:focus-visible': {
-    backgroundColor: colorMix('10%', palettes.white),
   },
 });
 

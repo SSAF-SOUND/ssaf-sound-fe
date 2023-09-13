@@ -8,7 +8,10 @@ import {
   RecruitPartsField,
   RecruitSkillsField,
 } from '~/components/Forms/RecruitFilterForm/Fields';
-import { RecruitCategoryName } from '~/services/recruit';
+import {
+  getRecruitThemeByCategory,
+  RecruitCategoryName,
+} from '~/services/recruit';
 
 export interface RecruitFilterFormProps {
   className?: string;
@@ -33,6 +36,7 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
 
   const { category } = defaultValues;
   const isCategoryProject = category === RecruitCategoryName.PROJECT;
+  const recruitTheme = getRecruitThemeByCategory(category);
 
   return (
     <FormProvider {...methods}>
@@ -43,7 +47,12 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
         {isCategoryProject && <RecruitPartsField css={{ marginBottom: 40 }} />}
         <RecruitSkillsField css={{ marginBottom: 48 }} />
 
-        <Button type="submit" size="lg" css={{ width: '100%' }}>
+        <Button
+          theme={recruitTheme}
+          type="submit"
+          size="lg"
+          css={{ width: '100%' }}
+        >
           선택 완료
         </Button>
       </form>
