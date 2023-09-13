@@ -10,19 +10,18 @@ import {
   PageHead,
   PageHeadingText,
 } from '~/components/Common';
+import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import Name from '~/components/Name';
 import { Recruit } from '~/components/Recruit/Recruit';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
-import { getDisplayCategoryName, useRecruitDetail } from '~/services/recruit';
+import { useMyInfo } from '~/services/member';
 import {
-  cssArithmetic,
-  expandCss,
-  fontCss,
-  globalVars,
-  palettes,
-  titleBarHeight,
-} from '~/styles/utils';
+  getDisplayCategoryName,
+  MatchStatus,
+  useRecruitDetail,
+} from '~/services/recruit';
+import { expandCss, fontCss, palettes, titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -46,6 +45,8 @@ const RecruitApplyPage: CustomNextPage = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
   const recruitId = Number(query.recruitId);
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
 
   const {
     data: recruitDetail,
@@ -63,6 +64,7 @@ const RecruitApplyPage: CustomNextPage = () => {
     const errorMessage =
       errorResponse?.message ??
       '리쿠르팅 정보를 불러오는 중 오류가 발생했습니다.';
+
     return (
       <RedirectionGuide
         title="Error"
@@ -73,7 +75,40 @@ const RecruitApplyPage: CustomNextPage = () => {
     );
   }
 
-  const { title, category, author } = recruitDetail;
+  const { title, category, author, mine, finishedRecruit, matchStatus } =
+    recruitDetail;
+
+  if (finishedRecruit) {
+    return (
+      <RedirectionGuide
+        title="종료된 리쿠르팅입니다"
+        description="모집 기간이 아니거나 이미 모집이 완료되었습니다."
+        redirectionText="리쿠르팅 상세 페이지로"
+        redirectionTo={routes.recruit.detail(recruitDetail.recruitId)}
+      />
+    );
+  }
+
+  const isUnauthorized =
+    !isSignedIn || mine || (matchStatus && matchStatus !== MatchStatus.INITIAL);
+
+  if (isUnauthorized) {
+    const message = !isSignedIn
+      ? '로그인이 필요합니다.'
+      : mine
+      ? '내 리쿠르팅에는 지원할 수 없습니다.'
+      : '이미 지원한 리쿠르팅입니다.';
+
+    return (
+      <RedirectionGuide
+        title="지원할 수 없습니다"
+        description={message}
+        redirectionText="리쿠르팅 상세 페이지로"
+        redirectionTo={routes.recruit.detail(recruitDetail.recruitId)}
+      />
+    );
+  }
+
   const displayCategoryName = getDisplayCategoryName(category);
 
   return (
@@ -95,17 +130,23 @@ const RecruitApplyPage: CustomNextPage = () => {
           <Recruit.BasicInfo css={basicInfoCss} recruitDetail={recruitDetail} />
         </div>
 
-        <div>Form Layer</div>
+        <div>
+          <RecruitApplyForm
+            recruitDetail={recruitDetail}
+            onValidSubmit={() => console.log(1)}
+          />
+        </div>
       </div>
     </>
   );
 };
+
 type Params = {
   recruitId: string;
 };
 
 const selfCss = css({
-  paddingTop: titleBarHeight + 30,
+  padding: `${titleBarHeight + 30}px 0`,
 });
 
 const categoryCss = css({ marginBottom: 10 }, fontCss.style.R14);
