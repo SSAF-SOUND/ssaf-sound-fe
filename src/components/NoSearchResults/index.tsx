@@ -1,23 +1,36 @@
 import { css } from '@emotion/react';
 
 import { AlertText, SsafyIcon, TrackSize } from '~/components/Common';
-import { flex, fontCss } from '~/styles/utils';
+import { flex, fontCss, position } from '~/styles/utils';
 
 interface NoSearchResultsProps {
+  withKeyword?: boolean;
   keyword?: string;
+  className?: string;
+  description?: string;
 }
 
 const NoSearchResults = (props: NoSearchResultsProps) => {
-  const { keyword = '' } = props;
+  const {
+    withKeyword = true,
+    keyword = '',
+    description = '검색된 결과가 없습니다.',
+    className,
+  } = props;
+
   return (
-    <div css={selfCss}>
-      <p css={[fontCss.style.R18, { marginBottom: 'max(20vh, 120px)' }]}>
-        {keyword} 검색 결과
-      </p>
+    <div css={selfCss} className={className}>
+      {withKeyword && (
+        <p css={[fontCss.style.R18, { marginBottom: 60 }]}>
+          {"'"}
+          {keyword}
+          {"'"} 검색 결과
+        </p>
+      )}
       <div css={indicatorCss}>
-        <SsafyIcon.Track size={TrackSize.LG2} />
-        <AlertText size="lg" bold>
-          검색된 결과가 없습니다.
+        <SsafyIcon.Track size={TrackSize.LG1} />
+        <AlertText size="sm" bold>
+          {description}
         </AlertText>
       </div>
     </div>
@@ -26,5 +39,9 @@ const NoSearchResults = (props: NoSearchResultsProps) => {
 
 export default NoSearchResults;
 
-const selfCss = css(flex('center', 'center', 'column'));
-const indicatorCss = css(flex('', '', 'column', 20));
+const selfCss = css(
+  { padding: '80px 0' },
+  flex('center', 'center', 'column'),
+  position.xy('center', 'center', 'absolute')
+);
+const indicatorCss = css(flex('', '', 'column', 40));

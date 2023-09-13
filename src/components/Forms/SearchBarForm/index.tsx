@@ -4,21 +4,16 @@ import type {
   SubmitHandlerWithReset,
   SubmitErrorHandlerWithErrorMessage,
 } from '~/components/Forms/utils/types';
+import type { ValidateSearchBarFormKeywordOptions } from '~/services/common/utils/searchBar';
 
 import { css } from '@emotion/react';
 import { useForm } from 'react-hook-form';
 
 import { Icon, IconButton, TextInput } from '~/components/Common';
+import { validateSearchBarFormKeyword } from '~/services/common/utils/searchBar';
 import { position, Theme } from '~/styles/utils';
 
 const fieldName = 'keyword';
-const defaultMinKeywordLength = 3;
-const validateKeyword = (minKeywordLength: number) => (value: string) => {
-  return (
-    value.trim().length >= minKeywordLength ||
-    `검색어는 최소 ${minKeywordLength}자 이상이어야 합니다.`
-  );
-};
 
 const defaultSearchBarFormValues = {
   keyword: '',
@@ -28,9 +23,7 @@ interface SearchBarFormValues {
   keyword: string;
 }
 
-interface SearchBarFormOptions {
-  minKeywordLength: number;
-}
+interface SearchBarFormOptions extends ValidateSearchBarFormKeywordOptions {}
 
 export interface SearchBarFormProps {
   className?: string;
@@ -50,7 +43,7 @@ const SearchBarForm = (props: SearchBarFormProps) => {
     ...restProps
   } = props;
 
-  const { minKeywordLength = defaultMinKeywordLength } = options;
+  const { minSearchBarKeywordLength, allowEmptyString = false } = options;
 
   const { register, handleSubmit, reset } = useForm<SearchBarFormValues>({
     defaultValues,
@@ -82,7 +75,11 @@ const SearchBarForm = (props: SearchBarFormProps) => {
           size="md"
           css={searchBarInputCss}
           {...register(fieldName, {
-            validate: validateKeyword(minKeywordLength),
+            validate: validateSearchBarFormKeyword({
+              allowEmptyString,
+              minSearchBarKeywordLength,
+            }),
+            setValueAs: (value) => value.trim(),
           })}
         />
         <IconButton
@@ -113,5 +110,6 @@ const searchButtonCss = css(
 
 const searchBarInputCss = css({
   width: '100%',
+  height: 40,
   padding: '0 44px 0 20px',
 });

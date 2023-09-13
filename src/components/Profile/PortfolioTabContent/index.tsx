@@ -13,7 +13,7 @@ interface ProfilePortfolioTabContentProps {
   className?: string;
   mine?: boolean;
   userId: number;
-  marginForExpand?: number | string;
+  marginForExpand?: string;
 }
 
 const ProfilePortfolioTabContent = (props: ProfilePortfolioTabContentProps) => {

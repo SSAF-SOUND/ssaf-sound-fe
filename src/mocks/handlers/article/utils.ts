@@ -37,8 +37,8 @@ const infiniteArticlesHandler = (
 
     if (!isReachingEnd) data.pop();
 
-    const lastArticleSummaries = data.at(-1) as ArticleSummary;
-    const nextCursor = isReachingEnd ? null : lastArticleSummaries.postId;
+    const lastArticleSummary = data.at(-1) as ArticleSummary;
+    const nextCursor = isReachingEnd ? null : lastArticleSummary.postId;
 
     return res(
       ctx.delay(500),

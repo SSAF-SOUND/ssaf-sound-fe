@@ -40,13 +40,13 @@ export const RecruitApplicantsDetail = (
 
   const unTouchedApplicants = applicants.filter(
     (applicant) =>
-      applicant.matchStatus === MatchStatus.WAITING_REGISTER_APPROVE
+      applicant.matchStatus === MatchStatus.PENDING
   );
   const unTouchedApplicantsCount = unTouchedApplicants.length;
 
   const touchedApplicants = applicants.filter(
     (applicant) =>
-      applicant.matchStatus !== MatchStatus.WAITING_REGISTER_APPROVE
+      applicant.matchStatus !== MatchStatus.PENDING
   );
 
   return (

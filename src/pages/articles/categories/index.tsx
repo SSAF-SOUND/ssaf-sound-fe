@@ -33,12 +33,14 @@ const ArticleCategoriesPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
-        <Link
-          href={routes.articles.hot()}
-          css={[hotLinkCss, { marginBottom: 56 }]}
-        >
-          Hot 게시글
-        </Link>
+        <div css={hotArticlesPageLinkLayerCss}>
+          <Link
+            href={routes.articles.hot()}
+            css={[hotArticlesPageLinkCss, { marginBottom: 56 }]}
+          >
+            Hot 게시글
+          </Link>
+        </div>
 
         <div css={categoriesCss}>
           {articleCategories ? (
@@ -68,14 +70,14 @@ export default ArticleCategoriesPage;
 
 const selfCss = css({ padding: `${topBarHeight + 40}px 0` });
 
-const hotLinkCss = css(
+const hotArticlesPageLinkLayerCss = css(flex('center', 'flex-end', 'row'));
+const hotArticlesPageLinkCss = css(
   {
     color: palettes.secondary.dark,
     '&:hover, &:focus-visible': { color: palettes.secondary.default },
     '&:active': { color: palettes.secondary.dark },
   },
-  fontCss.style.B16,
-  flex('center', 'flex-end', 'row')
+  fontCss.style.B16
 );
 
 const categoriesCss = css(flex('', '', 'column', 12));

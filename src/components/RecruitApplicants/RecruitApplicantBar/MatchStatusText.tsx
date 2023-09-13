@@ -4,7 +4,7 @@ import { MatchStatus } from '~/services/recruit';
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 interface MatchStatusTextProps {
-  matchStatus: Exclude<MatchStatus, MatchStatus.WAITING_REGISTER_APPROVE>;
+  matchStatus: Exclude<MatchStatus, MatchStatus.PENDING>;
 }
 export const MatchStatusText = (props: MatchStatusTextProps) => {
   const { matchStatus } = props;
@@ -17,10 +17,10 @@ export const MatchStatusText = (props: MatchStatusTextProps) => {
 };
 
 const statusText = {
-  [MatchStatus.WAITING_APPLICANT]: '대기중',
-  [MatchStatus.CANCEL]: '참여안함',
-  [MatchStatus.DONE]: '확정',
-  [MatchStatus.REJECT]: undefined,
+  [MatchStatus.PENDING]: '대기중',
+  [MatchStatus.REJECTED]: '참여안함',
+  [MatchStatus.SUCCESS]: '확정',
+  [MatchStatus.INITIAL]: undefined,
 };
 
 const statusTextSelfCss = css(
@@ -35,13 +35,13 @@ const statusTextSelfCss = css(
 );
 
 const statusCss = {
-  [MatchStatus.WAITING_APPLICANT]: undefined,
-  [MatchStatus.CANCEL]: css({
+  [MatchStatus.PENDING]: undefined,
+  [MatchStatus.REJECTED]: css({
     color: palettes.font.blueGrey,
   }),
-  [MatchStatus.DONE]: css({
+  [MatchStatus.SUCCESS]: css({
     backgroundColor: palettes.recruit.default,
     color: palettes.font.grey,
   }),
-  [MatchStatus.REJECT]: undefined,
+  [MatchStatus.INITIAL]: undefined,
 };

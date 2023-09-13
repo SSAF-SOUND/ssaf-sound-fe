@@ -1,6 +1,5 @@
 import type {
   RecruitType,
-  SkillsType,
   MatchStatus,
   RecruitParts,
   SkillName,
@@ -10,7 +9,6 @@ import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
-import { getRecruitDetail } from '~/services/recruit/apis';
 import { privateAxios, publicAxios } from '~/utils';
 
 export type RecruitParams = {
@@ -20,12 +18,6 @@ export type RecruitParams = {
   recruitTypes?: RecruitParts[];
   skills?: SkillName[];
 };
-
-export type GetRecruitsApiData = ApiSuccessResponse<{
-  recruits: Recruit[];
-  cursor: number | null;
-  isLast: boolean;
-}>;
 
 export interface Recruit {
   recruitId: number;
@@ -65,22 +57,6 @@ export type RecruitMembersApiData = ApiSuccessResponse<{
   recruitTypes: RecruitMembersByParts;
 }>;
 
-export const getRecruits = (params: {
-  recruits: RecruitParams;
-  cursor: number | null;
-  isLast?: boolean;
-}) => {
-  const endpoint = endpoints.recruit.list({ ...params, cursor: params.cursor });
-
-  try {
-    return publicAxios
-      .get<GetRecruitsApiData>(endpoint)
-      .then((res) => res.data.data);
-  } catch {
-    throw new Error('error');
-  }
-};
-
 export type RecruitMember = UserInfo;
 
 export type PartialRecruitType = Partial<RecruitType>;
@@ -96,15 +72,6 @@ export const getRecruitMembers = (recruitId: number) => {
     .get<GetRecruitMembersApiData>(endpoint)
     .then((res) => res.data.data);
 };
-
-export interface RecruitSummary {
-  recruitId: number;
-  title: string;
-  finishedRecruit: boolean;
-  recruitEnd: string;
-  skills: SkillsType[];
-  participants: RecruitParticipant[];
-}
 
 // -----------------------------------------
 
@@ -238,8 +205,6 @@ export const postRecruitApplicationCancel = (recruitApplicationId: number) => {
 };
 
 export const recruitAPI = {
-  getRecruits,
-  getRecruitDetail,
   getRecruitMembers,
   getRecruitApplicants,
   postRecruitApply,

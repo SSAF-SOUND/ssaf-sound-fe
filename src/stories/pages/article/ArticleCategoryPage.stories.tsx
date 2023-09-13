@@ -6,19 +6,28 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 import { getArticleCategories, getArticlesError } from '~/mocks/handlers';
+import { userInfo } from '~/mocks/handlers/member/data';
 import ArticleCategoryPage from '~/pages/articles/categories/[categoryId]';
 import { queryKeys } from '~/react-query/common';
+import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof ArticleCategoryPage> = {
   title: 'Page/Article/Category',
   component: ArticleCategoryPage,
   decorators: [
-    (Story) => (
-      <PageLayout>
-        <Story />
-      </PageLayout>
-    ),
+    (Story) => {
+      const queryClient = useQueryClient();
+      queryClient.removeQueries(queryKeys.articles.list(successCaseCategoryId));
+      const setMyInfo = useSetMyInfo();
+      setMyInfo(userInfo.certifiedSsafyUserInfo);
+
+      return (
+        <PageLayout>
+          <Story />
+        </PageLayout>
+      );
+    },
   ],
   parameters: {
     layout: 'fullscreen',
@@ -31,19 +40,23 @@ type ArticleCategoryPageStory = StoryObj<typeof ArticleCategoryPage>;
 
 const successCaseCategoryId = 1;
 
-export const Success: ArticleCategoryPageStory = {
+export const SignedIn: ArticleCategoryPageStory = {
+  args: {
+    categoryId: successCaseCategoryId,
+  },
+};
+
+export const NotSignedIn: ArticleCategoryPageStory = {
   args: {
     categoryId: successCaseCategoryId,
   },
   decorators: [
     (Story) => {
-      const queryClient = useQueryClient();
-      useEffect(() => {
-        queryClient.resetQueries(
-          queryKeys.articles.list(successCaseCategoryId)
-        );
-      }, [queryClient]);
+      const setMyInfo = useSetMyInfo();
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      setMyInfo(null);
       return <Story />;
     },
   ],

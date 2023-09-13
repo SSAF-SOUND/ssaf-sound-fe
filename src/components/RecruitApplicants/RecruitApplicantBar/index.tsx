@@ -25,7 +25,7 @@ export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
   const date = formatFullDate(appliedAt);
 
   // 지원자에게 어떤 방식으로든 응답이 된 상태
-  const touched = matchStatus !== MatchStatus.WAITING_REGISTER_APPROVE;
+  const touched = matchStatus !== MatchStatus.PENDING;
 
   return (
     <li css={selfCss}>

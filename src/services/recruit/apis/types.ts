@@ -1,11 +1,13 @@
-import type { ScrapStatus } from '~/services/common';
+import type { ScrapStatus , InfiniteParams } from '~/services/common';
 import type { UserInfo } from '~/services/member';
 import type { SkillInfo } from '~/services/meta/utils';
 import type {
   RecruitParts,
   RecruitCategoryName,
   MatchStatus,
+  SkillName,
 } from '~/services/recruit';
+
 
 export interface RecruitParticipantsCountForServer {
   recruitType: RecruitParts;
@@ -41,4 +43,44 @@ export type RecruitDetail = {
 export interface RecruitParticipantsDetail {
   limit: number;
   members: UserInfo[];
+}
+
+export interface RecruitParticipantsDetailWithPart
+  extends RecruitParticipantsDetail {
+  recruitType: RecruitParts;
+}
+
+export interface RecruitSummary {
+  category: RecruitCategoryName;
+  mine: boolean;
+
+  //
+
+  recruitId: number;
+  title: string;
+  content: string;
+
+  finishedRecruit: boolean;
+  recruitEnd: string;
+
+  skills: SkillInfo[];
+  participants: RecruitParticipantsDetailWithPart[];
+}
+
+export interface RecruitSummariesQueryStringObject extends InfiniteParams {
+  keyword: string;
+  category: RecruitCategoryName;
+  completed: boolean;
+  recruitParts: RecruitParts[];
+  skills: SkillName[];
+}
+
+export type RecruitSummariesQueryStringObjectWithoutInfiniteParams = Omit<
+  RecruitSummariesQueryStringObject,
+  keyof InfiniteParams
+>;
+
+export interface RecruitCursorData {
+  nextCursor: number | null;
+  isLast: boolean;
 }

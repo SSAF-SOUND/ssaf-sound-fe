@@ -1,18 +1,21 @@
 import type { CustomNextPage } from 'next/types';
+import type { ArticleSummary } from '~/services/article';
 
 import { css } from '@emotion/react';
 
-import ArticleCardList from '~/components/ArticleCardList';
+import { HotArticleCard } from '~/components/ArticleCard';
 import {
   DefaultFullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
+import { InfiniteList } from '~/components/InfiniteList';
+import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import TitleBar from '~/components/TitleBar';
 import { useMyArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
-import { titleBarHeight } from '~/styles/utils';
-import { routes } from '~/utils';
+import { flex, pageCss, titleBarHeight } from '~/styles/utils';
+import { concat, routes } from '~/utils';
 
 const titleBarTitle = '내가 작성한 게시글';
 const metaTitle = titleBarTitle;
@@ -40,18 +43,12 @@ const MyArticlesPage: CustomNextPage = () => {
     </>
   );
 };
-
-const ArticleLayer = () => {
-  const myArticlesInfiniteQuery = useMyArticles();
-
-  return (
-    <ArticleCardList
-      hot
-      infiniteQuery={myArticlesInfiniteQuery}
-      skeletonCount={5}
-    />
-  );
-};
+const selfPaddingTop = titleBarHeight + 24;
+const selfCss = css(
+  { padding: `${selfPaddingTop}px 0 0` },
+  pageCss.minHeight,
+  flex('', '')
+);
 
 export default MyArticlesPage;
 MyArticlesPage.auth = {
@@ -65,7 +62,32 @@ MyArticlesPage.meta = {
   robots: { index: false, follow: false },
 };
 
-const selfPaddingTop = titleBarHeight + 24;
-const selfCss = css({
-  padding: `${selfPaddingTop}px 0 0`,
+const ArticleLayer = () => {
+  const infiniteQuery = useMyArticles();
+  const infiniteData = infiniteQuery.data
+    ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
+    : ([] as ArticleSummary[]);
+
+  return (
+    <div css={articleContainerCss}>
+      <InfiniteList
+        data={infiniteData}
+        infiniteQuery={infiniteQuery}
+        skeleton={<HotArticleCard.Skeleton />}
+        skeletonCount={6}
+        useWindowScroll={true}
+        skeletonGap={16}
+        itemContent={(index, article) => <HotArticleCard article={article} />}
+        emptyElement={
+          <EmptyInfiniteList text="아직 작성한 게시글이 없습니다." />
+        }
+      />
+    </div>
+  );
+};
+
+const articleContainerCss = css({
+  position: 'relative',
+  height: '100%',
+  flexGrow: 1,
 });

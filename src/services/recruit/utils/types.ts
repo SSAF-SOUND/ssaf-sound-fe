@@ -56,12 +56,18 @@ export enum RecruitParts {
   STUDY = '스터디',
 }
 
+export const RecruitPartsSet = new Set<string>(Object.values(RecruitParts));
+
 // ---- Category ----
 
 export enum RecruitCategoryName {
   PROJECT = 'project',
   STUDY = 'study',
 }
+
+export const RecruitCategoryNameSet = new Set<string>(
+  Object.values(RecruitCategoryName)
+);
 
 // ---- Applicants ----
 

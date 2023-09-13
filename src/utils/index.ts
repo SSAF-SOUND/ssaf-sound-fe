@@ -22,6 +22,7 @@ export * from './sanitizeHtml';
 export * from './scroll';
 export * from './string';
 export * from './stringBooleanToBool';
+export * from './stringToBoolean';
 export * from './timeAgo';
 export * from './toWebp';
 export * from './webStorage';

@@ -1,12 +1,16 @@
-import type { RecruitParams } from './apis2';
 import type { SetStateAction } from 'react';
 import type { RecruitDetail } from '~/services/recruit/apis';
 import type { UpdateRecruitParams } from '~/services/recruit/apis/updateRecruit';
+import type {
+  RecruitCategoryName,
+  RecruitParts,
+  SkillName,
+} from '~/services/recruit/utils';
 
 import {
+  useInfiniteQuery,
   useMutation,
   useQuery,
-  useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -16,18 +20,18 @@ import {
   createRecruit,
   getRecruitDetail,
   getRecruitParticipants,
+  getRecruits,
   removeRecruit,
   scrapRecruit,
   updateRecruit,
 } from '~/services/recruit/apis';
 import {
+  getRecruitApplicants,
+  getRecruitApplicationDetail,
+  getRecruitMembers,
+  postRecruitApplicationApprove,
   postRecruitApplicationCancel,
   postRecruitApplicationReject,
-  postRecruitApplicationApprove,
-  getRecruitApplicationDetail,
-  getRecruitApplicants,
-  getRecruitMembers,
-  getRecruits,
   recruitAPI,
 } from '~/services/recruit/apis2';
 
@@ -41,25 +45,6 @@ export const useRecruitMembers = (recruitId: number) => {
   return useQuery({
     queryKey: queryKeys.recruit.members(recruitId),
     queryFn: () => getRecruitMembers(recruitId),
-  });
-};
-
-export const useInfiniteRecruits = (options: Partial<RecruitParams> = {}) => {
-  const queryKey = queryKeys.recruit.list(options);
-
-  return useInfiniteQuery({
-    queryKey,
-    queryFn: (d) => {
-      return getRecruits({
-        cursor: d.pageParam,
-        recruits: options,
-      });
-    },
-    getNextPageParam: (lastPage) => {
-      if (lastPage.isLast) return;
-      return lastPage.cursor ?? null;
-    },
-    staleTime: Infinity,
   });
 };
 
@@ -199,5 +184,42 @@ export const useSetRecruitDetail = (recruitId: number) => {
 export const useCompleteRecruit = (recruitId: number) => {
   return useMutation({
     mutationFn: () => completeRecruit(recruitId),
+  });
+};
+
+export interface UseRecruitsOptions {
+  category: RecruitCategoryName;
+  keyword: string;
+  skills: SkillName[];
+  recruitParts: RecruitParts[];
+  completed: boolean;
+}
+
+export const useRecruits = (options: Partial<UseRecruitsOptions> = {}) => {
+  const { category, keyword, completed, recruitParts, skills } = options;
+
+  const queryKey = queryKeys.recruit.list({
+    completed,
+    keyword,
+    recruitParts,
+    skills,
+    category,
+  });
+
+  return useInfiniteQuery({
+    queryKey,
+    queryFn: ({ pageParam }) =>
+      getRecruits({
+        cursor: pageParam,
+        keyword,
+        completed,
+        recruitParts,
+        skills,
+        category,
+      }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.isLast) return undefined;
+      return lastPage.nextCursor ?? undefined;
+    },
   });
 };

@@ -1,11 +1,12 @@
 import type { CustomNextPage } from 'next/types';
+import type { ArticleSummary } from '~/services/article';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import ArticleCardList from '~/components/ArticleCardList';
+import { HotArticleCard } from '~/components/ArticleCard';
 import {
   DefaultFullPageLoader,
   loaderText,
@@ -13,17 +14,25 @@ import {
   Separator,
   Tabs,
 } from '~/components/Common';
+import { InfiniteList } from '~/components/InfiniteList';
+import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import TitleBar from '~/components/TitleBar';
 import { useMyScrapedArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import {
+  pageCss,
   pageMaxWidth,
   pageMinWidth,
   palettes,
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { isStorybookMode, PossibleMyScrapsCategories, routes } from '~/utils';
+import {
+  concat,
+  isStorybookMode,
+  PossibleMyScrapsCategories,
+  routes,
+} from '~/utils';
 
 const possibleCategories = Object.values(PossibleMyScrapsCategories);
 const defaultCategory = PossibleMyScrapsCategories.ARTICLES;
@@ -71,59 +80,27 @@ const MyScrapsPage: CustomNextPage = () => {
           title={titleBarTitle}
           onClickBackward={routes.profile.detail(myInfo.memberId)}
         />
-        <Tabs.Root defaultValue={defaultTabValue} value={category}>
+        <Tabs.Root
+          defaultValue={defaultTabValue}
+          value={category}
+          css={{ flexGrow: 1, position: 'relative' }}
+        >
           <TabList />
-          <Tabs.Content value={PossibleMyScrapsCategories.ARTICLES}>
+          <Tabs.Content
+            css={contentCss}
+            value={PossibleMyScrapsCategories.ARTICLES}
+          >
             <ArticleLayer />
           </Tabs.Content>
-          <Tabs.Content value={PossibleMyScrapsCategories.RECRUITS}>
+          <Tabs.Content
+            css={contentCss}
+            value={PossibleMyScrapsCategories.RECRUITS}
+          >
             Recruits
           </Tabs.Content>
         </Tabs.Root>
       </div>
     </>
-  );
-};
-
-const tabTexts = {
-  [PossibleMyScrapsCategories.ARTICLES]: '게시글',
-  [PossibleMyScrapsCategories.RECRUITS]: '리쿠르팅',
-};
-const TabList = () => {
-  return (
-    <div css={tabListContainerCss}>
-      <Tabs.List css={tabListCss}>
-        <TabTrigger category={PossibleMyScrapsCategories.ARTICLES} />
-        <Separator
-          orientation="vertical"
-          width={2}
-          backgroundColor={palettes.primary.default}
-          css={separatorCss}
-        />
-        <TabTrigger category={PossibleMyScrapsCategories.RECRUITS} />
-      </Tabs.List>
-    </div>
-  );
-};
-
-const TabTrigger = (props: { category: PossibleMyScrapsCategories }) => {
-  const { category } = props;
-  return (
-    <Tabs.Trigger key={category} css={tabTriggerCss} value={category} asChild>
-      <Link href={routes.profile.myScraps(category)}>{tabTexts[category]}</Link>
-    </Tabs.Trigger>
-  );
-};
-
-const ArticleLayer = () => {
-  const myArticlesInfiniteQuery = useMyScrapedArticles();
-
-  return (
-    <ArticleCardList
-      hot
-      infiniteQuery={myArticlesInfiniteQuery}
-      skeletonCount={5}
-    />
   );
 };
 
@@ -147,9 +124,51 @@ const tabListContainerZIndex = 2;
 const selfPaddingTop =
   tabListContainerTop + tabListHeight + tabListContainerPaddingY * 2 + 30;
 
-const selfCss = css({
+const selfCss = css(pageCss.minHeight, {
   padding: `${selfPaddingTop}px 0 0`,
 });
+
+const tabTexts = {
+  [PossibleMyScrapsCategories.ARTICLES]: '게시글',
+  [PossibleMyScrapsCategories.RECRUITS]: '리쿠르팅',
+};
+
+const contentCss = css({});
+
+const TabList = () => {
+  return (
+    <div css={tabListContainerCss}>
+      <Tabs.List css={tabListCss}>
+        <TabTrigger category={PossibleMyScrapsCategories.ARTICLES} />
+        <Separator
+          orientation="vertical"
+          width={2}
+          backgroundColor={palettes.primary.default}
+          css={separatorCss}
+        />
+        <TabTrigger category={PossibleMyScrapsCategories.RECRUITS} />
+      </Tabs.List>
+    </div>
+  );
+};
+
+const tabListCss = css({
+  height: tabListHeight,
+  width: 250,
+  margin: '0 auto',
+});
+
+const separatorCss = css({ flexShrink: 0, margin: '0 24px' });
+
+const TabTrigger = (props: { category: PossibleMyScrapsCategories }) => {
+  const { category } = props;
+  return (
+    <Tabs.Trigger key={category} css={tabTriggerCss} value={category} asChild>
+      <Link href={routes.profile.myScraps(category)}>{tabTexts[category]}</Link>
+    </Tabs.Trigger>
+  );
+};
+
 const tabListContainerCss = css(
   {
     backgroundColor: palettes.background.default,
@@ -162,12 +181,29 @@ const tabListContainerCss = css(
   },
   position.x('center', 'fixed')
 );
-const separatorCss = css({ flexShrink: 0, margin: '0 24px' });
-const tabListCss = css({
-  height: tabListHeight,
-  width: 250,
-  margin: '0 auto',
-});
+
 const tabTriggerCss = css({
   border: 0,
 });
+
+const ArticleLayer = () => {
+  const infiniteQuery = useMyScrapedArticles();
+  const infiniteData = infiniteQuery.data
+    ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
+    : ([] as ArticleSummary[]);
+
+  return (
+    <InfiniteList
+      data={infiniteData}
+      infiniteQuery={infiniteQuery}
+      skeleton={<HotArticleCard.Skeleton />}
+      skeletonCount={6}
+      useWindowScroll={true}
+      skeletonGap={16}
+      itemContent={(index, article) => <HotArticleCard article={article} />}
+      emptyElement={
+        <EmptyInfiniteList text="아직 스크랩한 게시글이 없습니다." />
+      }
+    />
+  );
+};

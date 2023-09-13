@@ -4,19 +4,24 @@ import type { ReactNode } from 'react';
 
 import Link from 'next/link';
 
+import { css } from '@emotion/react';
+
 import Trigger from './Trigger';
 
-type TriggerWithLink = {
-  triggerProps: Omit<TriggerProps, 'children'>;
-  linkProps: Omit<LinkProps, 'children'>;
+interface TriggerWithLinkProps extends TriggerProps {
+  href: LinkProps['href'];
   children: ReactNode;
-};
+}
 
-export const TriggerWithLink = (props: TriggerWithLink) => {
-  const { triggerProps, linkProps, children } = props;
+export const TriggerWithLink = (props: TriggerWithLinkProps) => {
+  const { href, children, ...restProps } = props;
   return (
-    <Trigger {...triggerProps} asChild>
-      <Link {...linkProps}>{children}</Link>
+    <Trigger {...restProps} css={selfCss} asChild>
+      <Link href={href}>{children}</Link>
     </Trigger>
   );
 };
+
+const selfCss = css({
+  outline: 0,
+});

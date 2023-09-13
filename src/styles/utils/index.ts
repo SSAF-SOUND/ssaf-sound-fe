@@ -14,6 +14,7 @@ export * from './themeColorVars';
 export * from './toCssVar';
 export * from './visuallyHidden';
 export * from './lineClamp';
+export * from './page';
 export * from './resetStyle';
 export * from './fixedFullWidth';
 export * from './theme';

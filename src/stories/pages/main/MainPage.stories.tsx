@@ -14,6 +14,7 @@ import { userInfo } from '~/mocks/handlers/member/data';
 import MainPage from '~/pages/main';
 import { queryKeys } from '~/react-query/common';
 import { useSetMyInfo } from '~/services/member';
+import { RecruitCategoryName } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof MainPage> = {
@@ -27,7 +28,9 @@ const meta: Meta<typeof MainPage> = {
       if (!queryRemoved) {
         queryClient.removeQueries(queryKeys.lunch.self());
         queryClient.removeQueries(queryKeys.articles.hot());
-        queryClient.removeQueries(queryKeys.recruit.list({}));
+        queryClient.removeQueries(
+          queryKeys.recruit.list({ category: RecruitCategoryName.PROJECT })
+        );
         setQueryRemoved(true);
       }
 

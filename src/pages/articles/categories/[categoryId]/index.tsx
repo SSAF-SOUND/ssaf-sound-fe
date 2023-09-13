@@ -3,15 +3,18 @@ import type {
   InferGetServerSidePropsType,
 } from 'next/types';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
+import type { ArticleSummary } from '~/services/article';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
-import ArticleCardList from '~/components/ArticleCardList';
+import { ArticleCard } from '~/components/ArticleCard';
 import { CircleButton, PageHead, PageHeadingText } from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
+import { InfiniteList } from '~/components/InfiniteList';
+import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
@@ -22,6 +25,8 @@ import {
   useArticleCategories,
   useArticles,
 } from '~/services/article';
+import { validateSearchKeyword } from '~/services/common/utils/searchBar';
+import { useMyInfo } from '~/services/member';
 import {
   flex,
   fontCss,
@@ -33,15 +38,11 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { customToast, routes } from '~/utils';
+import { concat, customToast, routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
 const createMetaDescription = (categoryName = '게시판') =>
   `${globalMetaData.description} 다양한 주제로 소통할 수 있는 ${categoryName}을 이용해보세요.`;
-
-const minKeywordLength = 3;
-const validateKeyword = (keyword?: string) =>
-  keyword && keyword.trim().length >= minKeywordLength;
 
 const ArticleCategoryPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
@@ -49,15 +50,13 @@ const ArticleCategoryPage = (
   const { categoryId } = props;
   const router = useRouter();
   const { keyword } = router.query as QueryString;
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
 
   const { data: articleCategories } = useArticleCategories();
   const categoryName = articleCategories?.find(
     (category) => category.boardId === categoryId
   )?.title;
-
-  const navigateToCreateArticlePage = () => {
-    router.push(routes.articles.create(categoryId));
-  };
 
   const metaDescription = createMetaDescription(categoryName);
 
@@ -89,14 +88,17 @@ const ArticleCategoryPage = (
           <ArticleLayer categoryId={categoryId} keyword={keyword} />
         </div>
 
-        <div css={fabContainerCss}>
-          <CircleButton
-            css={fabCss}
-            name="pencil.plus"
-            label="게시글 작성 버튼"
-            onClick={navigateToCreateArticlePage}
-          />
-        </div>
+        {isSignedIn && (
+          <div css={fabContainerCss}>
+            <CircleButton
+              css={fabCss}
+              name="pencil.plus"
+              label="게시글 작성 버튼"
+              asLink
+              href={routes.articles.create(categoryId)}
+            />
+          </div>
+        )}
       </div>
     </>
   );
@@ -109,14 +111,29 @@ interface ArticleLayerProps {
 
 const ArticleLayer = (props: ArticleLayerProps) => {
   const { categoryId, keyword } = props;
-  const isValidKeyword = validateKeyword(keyword);
+  const isValidKeyword = validateSearchKeyword(keyword);
   const articlesInfiniteQuery = useArticles(categoryId, { keyword });
 
+  const infiniteData = articlesInfiniteQuery.data
+    ? articlesInfiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
+    : ([] as ArticleSummary[]);
+
   return (
-    <ArticleCardList
+    <InfiniteList
+      data={infiniteData}
       infiniteQuery={articlesInfiniteQuery}
-      emptyElement={isValidKeyword && <NoSearchResults keyword={keyword} />}
-      skeletonCount={5}
+      skeleton={<ArticleCard.Skeleton />}
+      skeletonCount={6}
+      useWindowScroll={true}
+      skeletonGap={16}
+      itemContent={(index, article) => <ArticleCard article={article} />}
+      emptyElement={
+        isValidKeyword ? (
+          <NoSearchResults keyword={keyword} />
+        ) : (
+          <EmptyInfiniteList text="아직 게시글이 없습니다." />
+        )
+      }
     />
   );
 };
@@ -129,7 +146,7 @@ const SearchBar = (props: SearchBarProps) => {
   const { categoryId } = props;
   const router = useRouter();
   const { keyword: queryKeyword } = router.query as QueryString;
-  const isValidKeyword = validateKeyword(queryKeyword);
+  const isValidKeyword = validateSearchKeyword(queryKeyword);
   const defaultKeyword = isValidKeyword ? queryKeyword : '';
 
   const onValidSubmit: SearchBarFormProps['onValidSubmit'] = async (
@@ -160,7 +177,7 @@ const SearchBar = (props: SearchBarProps) => {
       defaultValues={{
         keyword: defaultKeyword,
       }}
-      options={{ minKeywordLength }}
+      options={{ allowEmptyString: true }}
     />
   );
 };
@@ -235,7 +252,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const isValidCategoryId = !Number.isNaN(categoryId);
 
   const { keyword: queryKeyword } = context.query as QueryString;
-  const isValidKeyword = validateKeyword(queryKeyword);
+  const isValidKeyword = validateSearchKeyword(queryKeyword);
   const keyword = isValidKeyword ? queryKeyword?.trim() : undefined;
 
   if (!isValidCategoryId) {
@@ -249,26 +266,20 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const articleListQueryKey = queryKeys.articles.list(categoryId, keyword);
   const articleCategoriesQueryKey = queryKeys.articles.categories();
 
-  try {
-    // https://github.com/TanStack/query/discussions/3306
-    await Promise.all([
-      queryClient.fetchInfiniteQuery({
-        queryKey: articleListQueryKey,
-        queryFn: ({ pageParam }) =>
-          getArticles({
-            categoryId,
-            cursor: pageParam,
-            keyword: keyword,
-          }),
-      }),
-      queryClient.fetchQuery({
-        queryKey: articleCategoriesQueryKey,
-        queryFn: getArticleCategories,
-      }),
-    ]);
-  } catch (err) {
-    // err handling
-  }
+  await Promise.allSettled([
+    queryClient.prefetchInfiniteQuery({
+      queryKey: articleListQueryKey,
+      queryFn: () =>
+        getArticles({
+          categoryId,
+          keyword: keyword,
+        }),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: articleCategoriesQueryKey,
+      queryFn: getArticleCategories,
+    }),
+  ]);
 
   const { dehydratedState } = dehydrate(queryClient);
   dehydratedState.queries.forEach((query) => {

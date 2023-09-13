@@ -7,3 +7,8 @@ export type LikeStatus = {
   liked: boolean;
   likeCount: number;
 };
+
+export type InfiniteParams = {
+  cursor: number | null;
+  size: number;
+};

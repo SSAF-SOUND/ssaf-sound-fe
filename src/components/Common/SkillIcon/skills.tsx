@@ -1,5 +1,6 @@
 import Android from '~/assets/stacks/android.svg';
 import Django from '~/assets/stacks/django.svg';
+import Etc from '~/assets/stacks/etc.svg';
 import Figma from '~/assets/stacks/figma.svg';
 import Flutter from '~/assets/stacks/flutter.svg';
 import Ios from '~/assets/stacks/ios.svg';
@@ -7,6 +8,7 @@ import Java from '~/assets/stacks/java.svg';
 import JavaScript from '~/assets/stacks/javaScript.svg';
 import Next from '~/assets/stacks/next.svg';
 import NodeJs from '~/assets/stacks/nodeJs.svg';
+import Nuxt from '~/assets/stacks/nuxt.svg';
 import React from '~/assets/stacks/react.svg';
 import Spring from '~/assets/stacks/spring.svg';
 import Svelte from '~/assets/stacks/svelte.svg';
@@ -26,7 +28,7 @@ export const Skills = {
   [SkillName.TYPESCRIPT]: TypeScript,
   [SkillName.NODEJS]: NodeJs,
   [SkillName.NEXTJS]: Next,
-  [SkillName.NUXTJS]: Next, // NOTE: NuxtJS 추가
+  [SkillName.NUXTJS]: Nuxt, // NOTE: NuxtJS 추가
   [SkillName.XD]: XD,
   [SkillName.SWIFT]: Swift,
   [SkillName.FIGMA]: Figma,
@@ -34,5 +36,5 @@ export const Skills = {
   [SkillName.ANDROID]: Android,
   [SkillName.FLUTTER]: Flutter,
   [SkillName.DJANGO]: Django,
-  [SkillName.ETC]: Next, // NOTE: ETC 추가
+  [SkillName.ETC]: Etc, // NOTE: ETC 추가
 };
