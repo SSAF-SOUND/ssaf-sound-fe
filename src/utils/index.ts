@@ -2,6 +2,8 @@ export * from './array';
 export * from './axios';
 export * from './clearPrivateData';
 export * from './constants';
+export * from './createAuthGuard';
+export * from './createNoIndexPageMetaData';
 export * from './createRequestInfiniteLoopDetector';
 export * from './customToast';
 export * from './date';
