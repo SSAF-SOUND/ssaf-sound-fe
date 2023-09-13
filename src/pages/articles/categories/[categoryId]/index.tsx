@@ -26,6 +26,7 @@ import {
   useArticles,
 } from '~/services/article';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
+import { useMyInfo } from '~/services/member';
 import {
   flex,
   fontCss,
@@ -49,6 +50,8 @@ const ArticleCategoryPage = (
   const { categoryId } = props;
   const router = useRouter();
   const { keyword } = router.query as QueryString;
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
 
   const { data: articleCategories } = useArticleCategories();
   const categoryName = articleCategories?.find(
@@ -85,15 +88,17 @@ const ArticleCategoryPage = (
           <ArticleLayer categoryId={categoryId} keyword={keyword} />
         </div>
 
-        <div css={fabContainerCss}>
-          <CircleButton
-            css={fabCss}
-            name="pencil.plus"
-            label="게시글 작성 버튼"
-            asLink
-            href={routes.articles.create(categoryId)}
-          />
-        </div>
+        {isSignedIn && (
+          <div css={fabContainerCss}>
+            <CircleButton
+              css={fabCss}
+              name="pencil.plus"
+              label="게시글 작성 버튼"
+              asLink
+              href={routes.articles.create(categoryId)}
+            />
+          </div>
+        )}
       </div>
     </>
   );

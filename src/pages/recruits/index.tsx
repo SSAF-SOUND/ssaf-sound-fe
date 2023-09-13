@@ -30,6 +30,7 @@ import { RecruitCreateLink } from '~/components/Recruit/RecruitCreateLink';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
+import { useMyInfo } from '~/services/member';
 import {
   getDisplayCategoryName,
   getRecruits,
@@ -77,6 +78,8 @@ const RecruitsPage = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
   const params = toSafeParams(query);
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
 
   const { category, completed } = params;
   const metaTitle = createMetaTitle(category);
@@ -111,12 +114,7 @@ const RecruitsPage = () => {
         >
           <SearchBar />
           <RecruitCategoryTabs category={category} />
-          <div
-            css={[
-              flex('center', 'space-between', 'row', 24),
-              { height: filterRowHeight },
-            ]}
-          >
+          <div css={filterRowCss}>
             <div css={flex('center', 'flex-start', 'row', 6)}>
               <CompletedRecruitsSwitch
                 category={category}
@@ -125,9 +123,7 @@ const RecruitsPage = () => {
               <RecruitFilterModal params={params} />
             </div>
 
-            <div css={flex('center', 'flex-start', 'row', 12)}>
-              <RecruitCreateLink category={category} />
-            </div>
+            {isSignedIn && <RecruitCreateLink category={category} />}
           </div>
         </div>
 
@@ -152,6 +148,11 @@ const selfCss = css(
   },
   pageCss.minHeight,
   flex('', '', 'column')
+);
+
+const filterRowCss = css(
+  { height: filterRowHeight },
+  flex('center', 'space-between', 'row', 24)
 );
 
 const SearchBar = () => {
