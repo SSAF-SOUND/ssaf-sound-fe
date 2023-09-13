@@ -9,8 +9,8 @@ interface RecruitCardTitleProps {
   showLineCount?: number;
 }
 export const RecruitCardTitle = (props: RecruitCardTitleProps) => {
-  const { showLineCount = 1 } = props;
-  return <h3 css={[selfCss, lineClamp(showLineCount)]} {...props} />;
+  const { showLineCount = 1, ...restProps } = props;
+  return <h3 css={[selfCss, lineClamp(showLineCount)]} {...restProps} />;
 };
 
 const selfCss = css(

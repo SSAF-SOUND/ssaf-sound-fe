@@ -1,73 +1,58 @@
-import type { SubmitHandler } from 'react-hook-form';
-import type {
-  RecruitType,
-  SkillsType
-} from '~/services/recruit';
+import type { RecruitFilterFormValues } from './utils';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button } from '~/components/Common';
-import { getRecruitThemeByCategory ,
-  RecruitCategoryName} from '~/services/recruit';
+import {
+  RecruitPartsField,
+  RecruitSkillsField,
+} from '~/components/Forms/RecruitFilterForm/Fields';
+import { RecruitCategoryName } from '~/services/recruit';
 
-import { RecruitTypeFilter, SkillsFilter } from './Fields';
-import { RecruitFormLabel } from './RecruitFormLabel';
+interface RecruitFilterFormOptions {}
 
-export type RecruitFilterFormDefaultValues = {
-  recruitTypes?: RecruitType[];
-  skills?: SkillsType[];
-};
-
-interface RecruitFilterFormProps {
-  submitHandler?: SubmitHandler<RecruitFilterFormDefaultValues>;
-  category?: RecruitCategoryName;
-  defaultValues?: RecruitFilterFormDefaultValues;
+export interface RecruitFilterFormProps {
+  className?: string;
+  defaultValues?: RecruitFilterFormValues;
+  onValidSubmit: SubmitHandler<RecruitFilterFormValues>;
+  onInvalidSubmit?: SubmitErrorHandler<RecruitFilterFormValues>;
+  options?: Partial<RecruitFilterFormOptions>;
 }
 
 export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
-  //   const { data } = useRecruitTypes();
   const {
-    category = RecruitCategoryName.PROJECT,
-    defaultValues = { skills: [], recruitTypes: [] },
-    submitHandler = console.log,
+    className,
+    defaultValues = defaultRecruitFilterFormValues,
+    onValidSubmit,
+    onInvalidSubmit,
   } = props;
-  const { skills: defaultSkills, recruitTypes: defaultRecruitType } =
-    defaultValues;
 
-  const categoryIsProject = category === 'project';
-  const { control, handleSubmit, reset, getValues } =
-    useForm<RecruitFilterFormDefaultValues>({
-      defaultValues,
-    });
+  const methods = useForm<RecruitFilterFormValues>({
+    defaultValues,
+  });
+
+  const { handleSubmit } = methods;
 
   return (
-    <form
-      css={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 40,
-      }}
-      onSubmit={handleSubmit(submitHandler)}
-    >
-      <RecruitFormLabel />
-      {categoryIsProject && (
-        <RecruitTypeFilter
-          reset={() => reset({ ...getValues(), recruitTypes: [] })}
-          control={control}
-          defaultValue={defaultRecruitType}
-        />
-      )}
+    <FormProvider {...methods}>
+      <form
+        className={className}
+        onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+      >
+        <RecruitPartsField css={{ marginBottom: 40 }} />
+        <RecruitSkillsField css={{ marginBottom: 48 }} />
 
-      <SkillsFilter
-        reset={() => reset({ ...getValues(), skills: [] })}
-        control={control}
-        defaultValue={defaultSkills as unknown as string[]}
-        category={category}
-      />
-
-      <Button type="submit" theme={getRecruitThemeByCategory(category)}>
-        선택완료
-      </Button>
-    </form>
+        <Button size="lg" css={{ width: '100%' }}>
+          선택 완료
+        </Button>
+      </form>
+    </FormProvider>
   );
+};
+
+const defaultRecruitFilterFormValues: RecruitFilterFormValues = {
+  category: RecruitCategoryName.PROJECT,
+  recruitParts: [],
+  skills: [],
 };

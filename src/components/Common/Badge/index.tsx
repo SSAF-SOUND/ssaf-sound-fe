@@ -2,25 +2,32 @@ import type { ToggleProps } from '@radix-ui/react-toggle';
 
 import { css } from '@emotion/react';
 import * as Toggle from '@radix-ui/react-toggle';
+import { forwardRef } from 'react';
 
 import { fontCss, inlineFlex, palettes, themeColorVars } from '~/styles/utils';
 
 export interface BadgeProps extends ToggleProps {
   theme?: 'primary' | 'secondary';
 }
-export const Badge = (props: BadgeProps) => {
+export const Badge = forwardRef<HTMLButtonElement, BadgeProps>((props, ref) => {
   const { children, theme = 'primary', ...restProps } = props;
 
   return (
-    <Toggle.Root css={[selfCss, textCss]} data-theme={theme} {...restProps}>
+    <Toggle.Root
+      ref={ref}
+      css={[selfCss, textCss]}
+      data-theme={theme}
+      {...restProps}
+    >
       {children}
     </Toggle.Root>
   );
-};
+});
+Badge.displayName = 'Badge';
 
 const selfCss = css(inlineFlex('center', 'center', 'row', 8), {
   minWidth: 40,
-  padding: '4px 8px',
+  padding: '4px 16px',
   borderRadius: 16,
   cursor: 'pointer',
   border: `1px solid ${palettes.white}`,
