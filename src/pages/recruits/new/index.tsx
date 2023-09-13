@@ -8,7 +8,9 @@ import {
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
-import RecruitForm from '~/components/Forms/RecruitForm';
+import RecruitForm, {
+  defaultRecruitFormValues,
+} from '~/components/Forms/RecruitForm';
 import {
   convertSkillsObjectToArray,
   invalidSubmitMessage,
@@ -17,6 +19,7 @@ import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
 import {
   reconfirmRecruitFormUnload,
   RecruitCategoryName,
+  RecruitCategoryNameSet,
   useCreateRecruit,
 } from '~/services/recruit';
 import { globalVars } from '~/styles/utils';
@@ -24,8 +27,19 @@ import { customToast, handleAxiosError, routes } from '~/utils';
 
 const metaTitle = '리쿠르팅 등록';
 
+type Params = { category: RecruitCategoryName };
+
+// /recruits/new?category=project|study
 const RecruitCreatePage: CustomNextPage = () => {
   const router = useRouter();
+  const query = router.query as Partial<Params>;
+  const unsafeCategory = query?.category;
+  const safeCategory =
+    unsafeCategory &&
+    RecruitCategoryNameSet.has(unsafeCategory as RecruitCategoryName)
+      ? unsafeCategory
+      : RecruitCategoryName.PROJECT;
+
   const { mutateAsync: createRecruit } = useCreateRecruit();
 
   useUnloadReconfirmEffect();
@@ -70,6 +84,10 @@ const RecruitCreatePage: CustomNextPage = () => {
         <RecruitForm
           onValidSubmit={onValidSubmit}
           onInvalidSubmit={onInvalidSubmit}
+          defaultValues={{
+            ...defaultRecruitFormValues,
+            category: safeCategory,
+          }}
           options={{
             onClickTitleBarClose: onClickTitleBarClose,
             barTitle: '리쿠르팅 등록하기',

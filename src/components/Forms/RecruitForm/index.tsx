@@ -94,7 +94,7 @@ const RecruitForm = (props: RecruitFormProps) => {
   );
 };
 
-const defaultRecruitFormValues: RecruitFormValues = {
+export const defaultRecruitFormValues: RecruitFormValues = {
   category: RecruitCategoryName.PROJECT,
   participants: {
     project: [

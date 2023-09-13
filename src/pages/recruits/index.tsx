@@ -105,7 +105,7 @@ const RecruitsPage = () => {
           ]}
         >
           <SearchBar />
-          <RecruitCategoryTabs value={safeCategory} />
+          <RecruitCategoryTabs category={safeCategory} />
           <div
             css={[
               flex('center', 'space-between', 'row', 24),
@@ -192,13 +192,13 @@ const searchBarContainerCss = css(
   flex('', 'center')
 );
 
-const RecruitCategoryTabs = (props: { value: RecruitCategoryName }) => {
-  const { value } = props;
+const RecruitCategoryTabs = (props: { category: RecruitCategoryName }) => {
+  const { category } = props;
   const router = useRouter();
   const query = router.query as Partial<Params>;
 
   return (
-    <Tabs.Root value={value} css={{ height: recruitTabsHeight }}>
+    <Tabs.Root value={category} css={{ height: recruitTabsHeight }}>
       <Tabs.List>
         <Tabs.Border css={{ width: 'calc(100% + 50px)', left: '-25px' }} />
         <Tabs.TriggerWithLink
@@ -233,10 +233,10 @@ const RecruitCreateLink = (props: { category: RecruitCategoryName }) => {
   return (
     <CircleButton
       asLink
-      href={routes.recruit.create()}
+      href={routes.recruit.create(category)}
       css={{ width: 44, height: 44 }}
       name="pencil.plus"
-      label="리쿠르트 작성 버튼"
+      label="리쿠르팅 작성 버튼"
       theme={recruitTheme}
     />
   );
