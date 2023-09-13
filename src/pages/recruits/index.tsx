@@ -101,22 +101,12 @@ const RecruitsPage = () => {
       <div css={selfCss}>
         <NavigationGroup />
 
-        <div
-          css={[
-            fixTopCenter,
-            {
-              top: topBarHeight,
-              padding: '0 25px',
-              zIndex: 3,
-              backgroundColor: palettes.background.default,
-            },
-          ]}
-        >
+        <div css={filterLayerCss}>
           <SearchBar />
           <RecruitCategoryTabs category={category} />
-          <div css={filterRowCss}>
-            <div css={flex('center', 'flex-start', 'row', 6)}>
-              <CompletedRecruitsSwitch
+          <div css={filterToolsContainerCss}>
+            <div css={filterToolsCss}>
+              <OnlyPendingRecruitsSwitch
                 category={category}
                 completed={completed}
               />
@@ -150,10 +140,18 @@ const selfCss = css(
   flex('', '', 'column')
 );
 
-const filterRowCss = css(
+const filterLayerCss = css(fixTopCenter, {
+  top: topBarHeight,
+  padding: '0 25px',
+  zIndex: 3,
+  backgroundColor: palettes.background.default,
+});
+
+const filterToolsContainerCss = css(
   { height: filterRowHeight },
   flex('center', 'space-between', 'row', 24)
 );
+const filterToolsCss = css(flex('center', 'flex-start', 'row', 6));
 
 const SearchBar = () => {
   const router = useRouter();
@@ -201,26 +199,30 @@ const searchBarContainerCss = css(
   flex('', 'center')
 );
 
-interface CompletedRecruitsSwitchProps {
+interface OnlyPendingRecruitsSwitchProps {
   category: RecruitCategoryName;
   completed: boolean;
 }
-const CompletedRecruitsSwitch = (props: CompletedRecruitsSwitchProps) => {
+const OnlyPendingRecruitsSwitch = (props: OnlyPendingRecruitsSwitchProps) => {
   const { category, completed } = props;
   const recruitTheme = getRecruitThemeByCategory(category);
   const router = useRouter();
-  const onPressedChange = (pressed: boolean) => {
+  const showOnlyPendingRecruits = !completed;
+
+  const onPressedChange = (nextShowOnlyPendingRecruits: boolean) => {
     router.push({
       query: {
         ...router.query,
-        completed: pressed,
+        completed: !nextShowOnlyPendingRecruits,
       },
     });
   };
 
+  // completed: true -> 모집 중 + 모집 완료
+  // completed: false -> 모집 중
   return (
     <Toggle
-      pressed={completed}
+      pressed={showOnlyPendingRecruits}
       onPressedChange={onPressedChange}
       thumbSize={20}
       textWidth={40}
