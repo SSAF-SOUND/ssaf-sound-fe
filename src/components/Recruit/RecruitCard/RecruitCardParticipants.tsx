@@ -70,7 +70,11 @@ const RecruitCardParticipantsRow = (props: RecruitCardParticipantsRowProps) => {
         <strong css={fontCss.style.B14}>{recruitPartText}</strong>
       )}
 
-      <Avatar.Group overridableSize="md2" maxCount={maxParticipantsCount}>
+      <Avatar.Group
+        overridableSize="md2"
+        visibleCount={maxParticipantsCount}
+        maxCount={maxParticipantsCount}
+      >
         {members.map((member) => (
           <Avatar key={member.memberId} size="md2" userInfo={member} />
         ))}
