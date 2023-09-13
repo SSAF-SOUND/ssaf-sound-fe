@@ -1,160 +1,128 @@
-import type { RecruitApplyParams, RecruitType } from '~/services/recruit';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
+import type { RecruitApplyFormValues } from '~/components/Forms/RecruitApplyForm/utils';
+import type { RecruitDetail } from '~/services/recruit';
 
-import { useRouter } from 'next/router';
-
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormState, useWatch } from 'react-hook-form';
 
 import { Button } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
-import { useRecruitTypes } from '~/services/meta';
 import {
   getRecruitThemeByCategory,
   RecruitCategoryName,
-  useApplyRecruit,
 } from '~/services/recruit';
-import { flex } from '~/styles/utils';
-import { handleAxiosError, routes } from '~/utils';
+import { isEqualString } from '~/utils';
 
-import {
-  ApplyTextArea,
-  ProfileVisibilityCheckbox,
-  ApplySelectBox,
-} from './Fields';
+import { AgreeToProvideProfile } from './Fields/AgreeToProvideProfile';
+import { AnswerToRecruitAuthor } from './Fields/AnswerToRecruitAuthor';
+import { RecruitPartToApply } from './Fields/RecruitPartToApply';
 
-interface DefaultValues {
-  customQuestionAnswer: string;
-  profileVisibility: boolean;
-  recruitType: RecruitType;
-}
-
-interface RecruitApplyFormProps {
-  recruitId: number;
-  defaultValues?: DefaultValues;
-  category?: RecruitCategoryName;
+export interface RecruitApplyFormProps {
+  recruitDetail: RecruitDetail;
+  onValidSubmit: SubmitHandler<RecruitApplyFormValues>;
+  onInvalidSubmit?: SubmitErrorHandler<RecruitApplyFormValues>;
+  defaultValues?: RecruitApplyFormValues;
 }
 
 export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
-  const { recruitId = 1, category = RecruitCategoryName.STUDY } = props;
-
   const {
-    defaultValues = {
-      customQuestionAnswer: '',
-      profileVisibility: true,
-      recruitType: category === 'project' ? '앱' : '스터디',
-    },
+    onValidSubmit,
+    onInvalidSubmit,
+    defaultValues = defaultRecruitApplyFormValues,
+    recruitDetail,
   } = props;
-
-  const router = useRouter();
-
-  const { register, handleSubmit, setValue, watch } = useForm<DefaultValues>({
+  const methods = useForm<RecruitApplyFormValues>({
     defaultValues,
   });
-
-  const { mutateAsync: applyRecruit, isLoading } = useApplyRecruit();
-  const { openModal, closeModal } = useModal();
-
-  const { data: RecruitMetaData } = useRecruitTypes();
-
-  const startOrder = category === 'project' ? 0 : -1;
-
-  const postApply = async (content: RecruitApplyParams) => {
-    try {
-      await applyRecruit({
-        recruitId,
-        body: content,
-      });
-
-      closeModal();
-
-      router.replace({
-        pathname: routes.recruit.applyRedirect(),
-        query: { category, recruitId },
-      });
-    } catch (err) {
-      handleAxiosError(err);
-    }
-  };
-
-  const isButtonActive =
-    watch('profileVisibility') && !!watch('customQuestionAnswer')?.length;
-
-  const isCategoryProject = category === 'project';
+  const { handleSubmit } = methods;
+  const {
+    category,
+    questions: [question],
+  } = recruitDetail;
+  const hasQuestion = question.length > 0;
+  const isCategoryProject = isEqualString(
+    category,
+    RecruitCategoryName.PROJECT,
+    { caseSensitive: false }
+  );
 
   return (
-    <form
-      onSubmit={handleSubmit(({ recruitType, customQuestionAnswer }) => {
-        openModal('alert', {
-          title: '알림',
-          description: (
-            <span css={{ wordBreak: 'keep-all' }}>
-              리쿠르팅 신청 내용은 신청 후에 수정이 불가합니다.
-              신청하시겠습니까?
-            </span>
-          ),
-          actionText: '신청',
-          cancelText: '취소',
-          onClickCancel: closeModal,
-          onClickAction: () =>
-            postApply({
-              recruitType,
-              contents: [customQuestionAnswer],
-            }),
-        });
-      })}
-      css={flex('', '', 'column', 20)}
-    >
-      {isCategoryProject && (
-        <ApplySelectBox
-          items={RecruitMetaData.filter((data: string) => data !== '스터디')}
-          defaultValue={defaultValues.recruitType}
-          onValueChange={(value) =>
-            setValue('recruitType', value as RecruitType)
-          }
-          order={startOrder + 1}
+    <FormProvider {...methods}>
+      <form>
+        {isCategoryProject && (
+          <RecruitPartToApply recruitDetail={recruitDetail} />
+        )}
+        <AgreeToProvideProfile
+          category={category}
+          css={{ marginBottom: 120 }}
         />
-      )}
+        {hasQuestion && (
+          <AnswerToRecruitAuthor category={category} question={question} />
+        )}
 
-      <ProfileVisibilityCheckbox
-        defaultChecked={defaultValues.profileVisibility}
-        onCheckedChange={(value: boolean) =>
-          setValue('profileVisibility', value)
-        }
-        category={category}
-        disabled={isLoading}
-        order={startOrder + 2}
-      />
-
-      <ApplyTextArea
-        {...register('customQuestionAnswer', {
-          setValueAs: (value) => value.trim(),
-          validate: validator.customQuestionAnswer,
-        })}
-        order={startOrder + 3}
-      />
-
-      <Button
-        type="submit"
-        disabled={!isButtonActive}
-        theme={getRecruitThemeByCategory(category)}
-      >
-        리쿠르팅 신청하기
-      </Button>
-    </form>
+        <SubmitButton
+          onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+          css={{ marginTop: 72 }}
+          category={category}
+        />
+      </form>
+    </FormProvider>
   );
 };
 
-const minCustomQuestionAnswerLength = 1;
-const maxCustomQuestionAnswerLength = 500;
+const defaultRecruitApplyFormValues: Partial<RecruitApplyFormValues> = {
+  recruitPartToApply: undefined,
+  agreeToProvideProfile: false,
+  answerToRecruitAuthor: '',
+};
 
-const validator = {
-  customQuestionAnswer: (value: string) => {
-    const { length } = value;
-    if (
-      length < minCustomQuestionAnswerLength ||
-      length > maxCustomQuestionAnswerLength
-    )
-      return `답변은 ${minCustomQuestionAnswerLength}이상 ${maxCustomQuestionAnswerLength}이하여야 합니다.`;
+interface SubmitButtonProps {
+  category: RecruitCategoryName;
+  className?: string;
+  onSubmit?: () => void;
+}
 
-    return true;
-  },
+const agreeToProvideProfileFieldName = 'agreeToProvideProfile';
+const SubmitButton = (props: SubmitButtonProps) => {
+  const { openModal, closeModal } = useModal();
+  const { category, className, onSubmit } = props;
+  const agreeToProvideProfile =
+    (useWatch<RecruitApplyFormValues>({
+      name: agreeToProvideProfileFieldName,
+    }) as boolean) ?? false;
+  const recruitTheme = getRecruitThemeByCategory(category);
+  const { isSubmitting } = useFormState();
+  const onClickAction = () => {
+    onSubmit?.();
+    closeModal();
+  };
+
+  const handleOpenModal = () =>
+    openModal('alert', {
+      title: '알림',
+      description: (
+        <>
+          <p>리쿠르팅 신청 내용은 신청 후에 수정이 불가능합니다.</p>
+          <p>신청하시겠습니까?</p>
+        </>
+      ),
+      actionText: '신청',
+      cancelText: '취소',
+      onClickAction,
+      onClickCancel: closeModal,
+    });
+
+  return (
+    <Button
+      onClick={handleOpenModal}
+      css={{ width: '100%' }}
+      loading={isSubmitting}
+      className={className}
+      type="button"
+      size="lg"
+      theme={recruitTheme}
+      disabled={!agreeToProvideProfile}
+    >
+      리쿠르팅 신청하기
+    </Button>
+  );
 };

@@ -13,11 +13,6 @@ export interface LimitType {
   currentNumber?: number;
 }
 
-export interface SkillsType {
-  name: SkillName;
-  skillId: number;
-}
-
 export type RecruitCategoryType = 'study' | 'project';
 
 /* enums */
