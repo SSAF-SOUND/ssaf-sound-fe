@@ -101,6 +101,7 @@ export const useRecruitDetail = (
     queryKey: queryKeys.recruit.detail(recruitId),
     queryFn: () => getRecruitDetail(recruitId),
     enabled,
+    staleTime: 60 * 1000,
   });
 };
 
