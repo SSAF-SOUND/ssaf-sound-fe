@@ -1,4 +1,5 @@
 import type { GetServerSideProps } from 'next';
+import type { RecruitFilterFormProps } from '~/components/Forms/RecruitFilterForm';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
 import type { GetRecruitsParams, RecruitSummary } from '~/services/recruit';
 import type { RecruitsPageQueryStringObject } from '~/utils';
@@ -7,10 +8,20 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
-import { PageHead, PageHeadingText, Tabs, Toggle } from '~/components/Common';
+import {
+  Badge,
+  Icon,
+  Modal,
+  PageHead,
+  PageHeadingText,
+  Tabs,
+  Toggle,
+} from '~/components/Common';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import { InfiniteList } from '~/components/InfiniteList';
+import { RecruitFilterModalForm } from '~/components/ModalContent';
 import NavigationGroup from '~/components/NavigationGroup';
 import NoSearchResults from '~/components/NoSearchResults';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
@@ -22,6 +33,7 @@ import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   getDisplayCategoryName,
   getRecruits,
+  getRecruitThemeByCategory,
   RecruitCategoryName,
   RecruitCategoryNameSet,
   RecruitPartsSet,
@@ -33,7 +45,7 @@ import {
   flex,
   fontCss,
   gnbHeight,
-  pageMinHeight,
+  pageCss,
   palettes,
   Theme,
   topBarHeight,
@@ -64,14 +76,11 @@ const createMetaDescription = (category: RecruitCategoryName) => {
 const RecruitsPage = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
-  const { category: unsafeCategory } = query;
-  const safeCategory =
-    unsafeCategory && RecruitCategoryNameSet.has(unsafeCategory)
-      ? unsafeCategory
-      : RecruitCategoryName.PROJECT;
+  const params = toSafeParams(query);
 
-  const metaTitle = createMetaTitle(safeCategory);
-  const metaDescription = createMetaDescription(safeCategory);
+  const { category, completed } = params;
+  const metaTitle = createMetaTitle(category);
+  const metaDescription = createMetaDescription(category);
 
   return (
     <>
@@ -82,7 +91,7 @@ const RecruitsPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: `${routes.recruit.list().pathname}?category=${safeCategory}`,
+          url: `${routes.recruit.list().pathname}?category=${category}`,
         }}
       />
 
@@ -101,24 +110,28 @@ const RecruitsPage = () => {
           ]}
         >
           <SearchBar />
-          <RecruitCategoryTabs category={safeCategory} />
+          <RecruitCategoryTabs category={category} />
           <div
             css={[
               flex('center', 'space-between', 'row', 24),
               { height: filterRowHeight },
             ]}
           >
-            <div css={flex('center', 'flex-start', 'row', 24)}>
-              <CompletedRecruitsSwitch />
-              <div>필터 도구</div>
+            <div css={flex('center', 'flex-start', 'row', 6)}>
+              <CompletedRecruitsSwitch
+                category={category}
+                completed={completed}
+              />
+              <RecruitFilterModal params={params} />
             </div>
+
             <div css={flex('center', 'flex-start', 'row', 12)}>
-              <RecruitCreateLink category={safeCategory} />
+              <RecruitCreateLink category={category} />
             </div>
           </div>
         </div>
 
-        <RecruitLayer />
+        <RecruitsLayer />
       </div>
     </>
   );
@@ -126,7 +139,6 @@ const RecruitsPage = () => {
 
 export default RecruitsPage;
 
-const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
 const searchBarContainerHeight = 60;
 const recruitTabsHeight = 32;
 const filterRowHeight = 70;
@@ -136,9 +148,9 @@ const selfPaddingBottom = gnbHeight + 24;
 const selfCss = css(
   {
     transition: 'padding 200ms',
-    minHeight: selfMinHeight,
     padding: `${selfPaddingTop}px 0 ${selfPaddingBottom}px`,
   },
+  pageCss.minHeight,
   flex('', '', 'column')
 );
 
@@ -188,10 +200,14 @@ const searchBarContainerCss = css(
   flex('', 'center')
 );
 
-const CompletedRecruitsSwitch = () => {
+interface CompletedRecruitsSwitchProps {
+  category: RecruitCategoryName;
+  completed: boolean;
+}
+const CompletedRecruitsSwitch = (props: CompletedRecruitsSwitchProps) => {
+  const { category, completed } = props;
+  const recruitTheme = getRecruitThemeByCategory(category);
   const router = useRouter();
-  const { completed = 'false' } = router.query as Partial<Params>;
-  const pressed = stringToBoolean(completed);
   const onPressedChange = (pressed: boolean) => {
     router.push({
       query: {
@@ -203,11 +219,12 @@ const CompletedRecruitsSwitch = () => {
 
   return (
     <Toggle
-      pressed={pressed}
+      pressed={completed}
       onPressedChange={onPressedChange}
       thumbSize={20}
       textWidth={40}
       padding={'4px 5px'}
+      theme={recruitTheme}
       text={'모집 중'}
       css={[fontCss.style.B12]}
     />
@@ -248,11 +265,11 @@ const RecruitCategoryTabs = (props: { category: RecruitCategoryName }) => {
   );
 };
 
-const RecruitLayer = () => {
+const RecruitsLayer = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
   const { category, completed, skills, recruitParts, keyword } =
-    toGetRecruitsParams(query);
+    toSafeParams(query);
 
   const isValidKeyword = validateSearchKeyword(keyword);
 
@@ -311,13 +328,71 @@ const recruitLayerCss = css({
   marginTop: 4,
 });
 
+interface RecruitFilterModalProps {
+  params: SafeParams;
+}
+const RecruitFilterModal = (props: RecruitFilterModalProps) => {
+  const router = useRouter();
+  const { params } = props;
+  const { recruitParts, skills, category } = params;
+  const recruitTheme = getRecruitThemeByCategory(category);
+  const [open, setOpen] = useState(false);
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
+
+  const onValidSubmit: RecruitFilterFormProps['onValidSubmit'] = (
+    formValues
+  ) => {
+    const { recruitParts, skills } = formValues;
+    closeModal();
+    router.push({
+      query: {
+        ...router.query,
+        recruitParts,
+        skills,
+      },
+    });
+  };
+
+  return (
+    <Modal
+      onEscapeKeyDown={closeModal}
+      onPointerDownOutside={closeModal}
+      open={open}
+      trigger={
+        <div>
+          <Badge
+            onClick={openModal}
+            pressed={open}
+            css={[fontCss.style.B12, { height: 30 }]}
+            theme={recruitTheme}
+          >
+            상세 옵션 <Icon name="chevron.down" size={16} />
+          </Badge>
+        </div>
+      }
+      content={
+        <RecruitFilterModalForm
+          onClickClose={closeModal}
+          onValidSubmit={onValidSubmit}
+          defaultValues={{
+            category,
+            recruitParts,
+            skills,
+          }}
+        />
+      }
+    />
+  );
+};
+
 interface Props {}
 type Params = RecruitsPageQueryStringObject;
 
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   context
 ) => {
-  const apiParams = toGetRecruitsParams(context.query);
+  const apiParams = toSafeParams(context.query);
   const queryClient = new QueryClient();
   const recruitListQueryKey = JSON.parse(
     JSON.stringify(queryKeys.recruit.list(apiParams))
@@ -345,6 +420,8 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   };
 };
 
+type SafeParams = Required<Omit<GetRecruitsParams, 'size' | 'cursor'>>;
+
 /**
  * - category -> 유효하지 않으면 project
  * - completed -> 유효하지 않으면 false
@@ -353,11 +430,8 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
  *   - 값이 1개일 때는 string -> [string] 으로
  * - skills -> 유효한 필드로만 필터링
  *   - 값이 1개일 때는 string -> [string] 으로
- * @param params
  */
-const toGetRecruitsParams = (
-  params: Partial<Params>
-): Omit<GetRecruitsParams, 'size' | 'cursor'> => {
+const toSafeParams = (params: Partial<Params>): SafeParams => {
   const { category, completed, skills, recruitParts, keyword = '' } = params;
 
   const trimmedKeyword = keyword.trim();
@@ -367,12 +441,12 @@ const toGetRecruitsParams = (
       ? RecruitCategoryName.PROJECT
       : category;
 
-  const unsafeSkills = typeof skills === 'string' ? [skills] : skills;
-  const safeSkills = unsafeSkills?.filter((skill) => SkillNameSet.has(skill));
+  const unsafeSkills = typeof skills === 'string' ? [skills] : skills ?? [];
+  const safeSkills = unsafeSkills.filter((skill) => SkillNameSet.has(skill));
 
   const unsafeRecruitParts =
-    typeof recruitParts === 'string' ? [recruitParts] : recruitParts;
-  const safeRecruitParts = unsafeRecruitParts?.filter((recruitPart) =>
+    typeof recruitParts === 'string' ? [recruitParts] : recruitParts ?? [];
+  const safeRecruitParts = unsafeRecruitParts.filter((recruitPart) =>
     RecruitPartsSet.has(recruitPart)
   );
 

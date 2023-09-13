@@ -10,14 +10,11 @@ import {
 } from '~/components/Forms/RecruitFilterForm/Fields';
 import { RecruitCategoryName } from '~/services/recruit';
 
-interface RecruitFilterFormOptions {}
-
 export interface RecruitFilterFormProps {
   className?: string;
   defaultValues?: RecruitFilterFormValues;
   onValidSubmit: SubmitHandler<RecruitFilterFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<RecruitFilterFormValues>;
-  options?: Partial<RecruitFilterFormOptions>;
 }
 
 export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
@@ -34,16 +31,19 @@ export const RecruitFilterForm = (props: RecruitFilterFormProps) => {
 
   const { handleSubmit } = methods;
 
+  const { category } = defaultValues;
+  const isCategoryProject = category === RecruitCategoryName.PROJECT;
+
   return (
     <FormProvider {...methods}>
       <form
         className={className}
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
-        <RecruitPartsField css={{ marginBottom: 40 }} />
+        {isCategoryProject && <RecruitPartsField css={{ marginBottom: 40 }} />}
         <RecruitSkillsField css={{ marginBottom: 48 }} />
 
-        <Button size="lg" css={{ width: '100%' }}>
+        <Button type="submit" size="lg" css={{ width: '100%' }}>
           선택 완료
         </Button>
       </form>

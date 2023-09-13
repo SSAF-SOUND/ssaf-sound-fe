@@ -65,7 +65,6 @@ const groupCss = css(flex('center', '', 'row', 0, 'wrap'), {
 
 const ToggleItem = memo((props: { value: SkillName }) => {
   const { value } = props;
-  console.log(value);
   return (
     <ToggleGroup.Item asChild value={value}>
       <SkillBadge name={value} />

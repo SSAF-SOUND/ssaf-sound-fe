@@ -19,10 +19,11 @@ export interface RecruitFilterModalFormProps extends RecruitFilterFormProps {
 }
 
 export const RecruitFilterModalForm = (props: RecruitFilterModalFormProps) => {
+  const { onClickClose } = props;
   return (
     <div css={selfCss}>
       <header css={headerCss}>
-        <Modal.Close asChild css={closeButtonCss}>
+        <Modal.Close asChild css={closeButtonCss} onClick={onClickClose}>
           <IconButton size={28}>
             <Icon name="close" size={24} />
           </IconButton>
@@ -31,8 +32,8 @@ export const RecruitFilterModalForm = (props: RecruitFilterModalFormProps) => {
         <Modal.Title css={titleCss}>상세 옵션 선택</Modal.Title>
       </header>
 
-      <Scroll.Root css={{ height: 'max(500px, 50vh)' }}>
-        <Scroll.Viewport css={{ borderRadius: 16 }}>
+      <Scroll.Root css={scrollRootCss}>
+        <Scroll.Viewport css={scrollViewportCss}>
           <RecruitFilterForm css={formCss} {...props} />
         </Scroll.Viewport>
         <Scroll.Bar forceMount>
@@ -76,3 +77,5 @@ const headerCss = css(
 );
 const closeButtonCss = css({ position: 'absolute', left: 24 });
 const titleCss = css(fontCss.style.R12, { color: palettes.font.lightGrey });
+const scrollRootCss = css({ height: 'max(500px, 50vh)' });
+const scrollViewportCss = css({ borderRadius: 16 });
