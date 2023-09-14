@@ -17,7 +17,6 @@ import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import {
   createMockMyRecruitApplication,
-  createMockRecruitApplicant,
   createMockRecruitApplication,
   RecruitData,
   recruitDetails,
@@ -34,16 +33,6 @@ export const getRecruitApplicants = restSuccess(
   getRecruitApplicantsEndpoint,
   {
     data: RecruitData.recruitApplicants,
-  }
-);
-
-const getRecruitApplicationDetail = restSuccess(
-  'get',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.detail(':recruitId')),
-  {
-    data: RecruitData.RecruitApplicationDetail,
   }
 );
 
@@ -292,9 +281,10 @@ export const applyRecruitError = restError(
   }
 );
 
-const getMyRecruitApplicationEndpoint =
+const getMyRecruitApplicationEndpoint = removeQueryParams(
   // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.mine(':recruitId'));
+  composeUrls(API_URL, endpoints.recruit.application.mine(':recruitId'))
+);
 
 export const getMyRecruitApplication = rest.get(
   getMyRecruitApplicationEndpoint,
@@ -349,7 +339,6 @@ export const getRecruitApplicationError = restError(
 export const recruitHandlers = [
   //
   getRecruitApplicants,
-  getRecruitApplicationDetail,
   postRecruitApplicationReject,
   postRecruitApplicationApprove,
   postRecruitApplicationCancel,
@@ -363,6 +352,6 @@ export const recruitHandlers = [
   completeRecruit,
   getRecruits,
   applyRecruit,
-  getMyRecruitApplication,
-  getRecruitApplication,
+  getMyRecruitApplication, // /recruit-applications/mine
+  getRecruitApplication, // /recruit-applications/:recruitApplicationId
 ];

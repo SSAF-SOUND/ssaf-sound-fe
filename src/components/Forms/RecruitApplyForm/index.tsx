@@ -21,6 +21,7 @@ interface RecruitApplyFormOptions {
 }
 
 export interface RecruitApplyFormProps {
+  className?: string;
   recruitDetail: RecruitDetail;
   onValidSubmit: SubmitHandler<RecruitApplyFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<RecruitApplyFormValues>;
@@ -30,6 +31,7 @@ export interface RecruitApplyFormProps {
 
 export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
   const {
+    className,
     onValidSubmit,
     onInvalidSubmit,
     defaultValues = defaultRecruitApplyFormValues,
@@ -54,7 +56,7 @@ export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
 
   return (
     <FormProvider {...methods}>
-      <form>
+      <form className={className}>
         {isCategoryProject && (
           <RecruitPartToApply
             recruitDetail={recruitDetail}

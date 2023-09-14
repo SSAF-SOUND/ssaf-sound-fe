@@ -271,7 +271,7 @@ export const endpoints = {
     application: {
       self: () => `/recruit-applications`,
       mine: (recruitId: number) =>
-        `${endpoints.recruit.self()}/mine?recruitId=${recruitId}`,
+        `${endpoints.recruit.application.self()}/mine?recruitId=${recruitId}`,
       detail: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
       applicants: (recruitId: number) =>
