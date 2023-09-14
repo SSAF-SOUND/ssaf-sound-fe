@@ -37,7 +37,6 @@ import {
 } from '~/services/recruit/apis';
 import {
   getRecruitApplicants,
-  getRecruitApplicationDetail,
   getRecruitMembers,
 } from '~/services/recruit/apis2';
 
@@ -146,13 +145,13 @@ export const useUpdateRecruit = (recruitId: number) => {
 export const useSetRecruitDetail = (recruitId: number) => {
   const queryClient = useQueryClient();
   const queryKey = queryKeys.recruit.detail(recruitId);
-  const setArticleDetail = (
+  const setRecruitDetail = (
     updater: SetStateAction<RecruitDetail | undefined>
   ) => {
     queryClient.setQueryData<RecruitDetail>(queryKey, updater);
   };
 
-  return setArticleDetail;
+  return setRecruitDetail;
 };
 
 export const useCompleteRecruit = (recruitId: number) => {
@@ -297,6 +296,7 @@ export const useApproveRecruitApplication = (
   return useMutation({
     mutationFn: () => approveRecruitApplication(recruitApplicationId),
     onSuccess: ({ matchStatus }) => {
+      queryClient.invalidateQueries(queryKeys.recruit.detail(recruitId));
       queryClient.setQueryData<MyRecruitApplicationDetail>(
         queryKeys.recruit.application.detail({
           recruitId,
