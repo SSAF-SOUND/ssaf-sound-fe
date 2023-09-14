@@ -276,7 +276,10 @@ export const endpoints = {
         `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
       applicants: (recruitId: number) =>
         `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
-
+      cancel: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/cancel` as const,
       approve: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.detail(
           recruitApplicationId
@@ -285,10 +288,6 @@ export const endpoints = {
         `${endpoints.recruit.application.detail(
           recruitApplicationId
         )}/reject` as const,
-      cancel: (recruitApplicationId: number) =>
-        `${endpoints.recruit.application.detail(
-          recruitApplicationId
-        )}/cancel` as const,
     },
   },
   recruitComments: {

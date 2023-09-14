@@ -91,7 +91,6 @@ export const routes = {
     applicants: (recruitId: number) =>
       `${routes.recruit.detail(recruitId)}/applicants`,
     apply: (recruitId: number) => `${routes.recruit.detail(recruitId)}/apply`,
-    applyRedirect: () => `${routes.recruit.self()}/apply/redirect`,
     create: (category?: RecruitCategoryName) => {
       const queryString = category
         ? `?${new URLSearchParams({

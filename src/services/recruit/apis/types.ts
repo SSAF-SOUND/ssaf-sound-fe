@@ -102,3 +102,8 @@ export type MyRecruitApplicationDetail = Omit<
   RecruitApplicationDetail,
   'liked' | 'author'
 >;
+
+export interface UpdatedRecruitApplicationInfo {
+  recruitApplicationId: number;
+  matchStatus: MatchStatus;
+}

@@ -1,6 +1,7 @@
 import type { SetStateAction } from 'react';
 import type {
   ApplyRecruitParams,
+  MyRecruitApplicationDetail,
   RecruitDetail,
 } from '~/services/recruit/apis';
 import type { UpdateRecruitParams } from '~/services/recruit/apis/updateRecruit';
@@ -30,6 +31,9 @@ import {
   applyRecruit,
   getMyRecruitApplication,
   getRecruitApplication,
+  cancelRecruitApplication,
+  rejectRecruitApplication,
+  approveRecruitApplication,
 } from '~/services/recruit/apis';
 import {
   getRecruitApplicants,
@@ -208,6 +212,7 @@ export const useMyRecruitApplication = (recruitId: number) => {
   return useQuery({
     queryKey: queryKeys.recruit.application.mine(recruitId),
     queryFn: () => getMyRecruitApplication(recruitId),
+    staleTime: 30 * 1000,
   });
 };
 
@@ -224,5 +229,84 @@ export const useRecruitApplication = (params: UseRecruitApplicationParams) => {
       recruitApplicationId,
     }),
     queryFn: () => getRecruitApplication(recruitApplicationId),
+    staleTime: 30 * 1000,
+  });
+};
+
+interface UseCancelRecruitApplicationParams {
+  recruitId: number;
+  recruitApplicationId: number;
+}
+
+// 성공시 내 신청서의 매칭 상태를 바꿈
+export const useCancelRecruitApplication = (
+  params: UseCancelRecruitApplicationParams
+) => {
+  const { recruitId, recruitApplicationId } = params;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => cancelRecruitApplication(recruitApplicationId),
+    onSuccess: ({ matchStatus }) => {
+      queryClient.setQueryData<MyRecruitApplicationDetail>(
+        queryKeys.recruit.application.mine(recruitId),
+        (prev) => {
+          if (!prev) return;
+          return { ...prev, matchStatus };
+        }
+      );
+    },
+  });
+};
+
+type UseRejectRecruitApplicationParams = UseCancelRecruitApplicationParams;
+
+// 신청서의 상태가 바뀜
+export const useRejectRecruitApplication = (
+  params: UseRejectRecruitApplicationParams
+) => {
+  const { recruitId, recruitApplicationId } = params;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => rejectRecruitApplication(recruitApplicationId),
+    onSuccess: ({ matchStatus }) => {
+      queryClient.setQueryData<MyRecruitApplicationDetail>(
+        queryKeys.recruit.application.detail({
+          recruitId,
+          recruitApplicationId,
+        }),
+        (prev) => {
+          if (!prev) return;
+          return { ...prev, matchStatus };
+        }
+      );
+    },
+  });
+};
+
+type UseApproveRecruitApplicationParams = UseCancelRecruitApplicationParams;
+
+// 신청서의 상태가 바뀜
+export const useApproveRecruitApplication = (
+  params: UseApproveRecruitApplicationParams
+) => {
+  const { recruitId, recruitApplicationId } = params;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => approveRecruitApplication(recruitApplicationId),
+    onSuccess: ({ matchStatus }) => {
+      queryClient.setQueryData<MyRecruitApplicationDetail>(
+        queryKeys.recruit.application.detail({
+          recruitId,
+          recruitApplicationId,
+        }),
+        (prev) => {
+          if (!prev) return;
+          return { ...prev, matchStatus };
+        }
+      );
+    },
   });
 };
