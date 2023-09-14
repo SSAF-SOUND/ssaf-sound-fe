@@ -6,13 +6,9 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import {
-  DefaultFullPageLoader,
-  loaderText,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
+import { RecruitApplyFormHeader } from '~/components/Forms/RecruitApplyForm/RecruitApplyFormHeader';
 import Name from '~/components/Name';
 import { Recruit } from '~/components/Recruit/Recruit';
 import RedirectionGuide from '~/components/RedirectionGuide';
@@ -132,7 +128,7 @@ const RecruitApplyPage: CustomNextPage = () => {
   const isUnauthorized =
     !isSignedIn || mine || (matchStatus && matchStatus !== MatchStatus.INITIAL);
 
-  if (isUnauthorized) {
+  if (!isUnauthorized) {
     const message = !isSignedIn
       ? '로그인이 필요합니다.'
       : mine
@@ -171,13 +167,10 @@ const RecruitApplyPage: CustomNextPage = () => {
           title={titleBarTitle}
         />
 
-        <div css={categoryCss}>{displayCategoryName}</div>
-
-        <div css={[expandLayerCss, { marginBottom: 60 }]}>
-          <Recruit.Title>{title}</Recruit.Title>
-          <Name userInfo={author} size="md" />
-          <Recruit.BasicInfo css={basicInfoCss} recruitDetail={recruitDetail} />
-        </div>
+        <RecruitApplyFormHeader
+          css={{ marginBottom: 60 }}
+          recruitDetail={recruitDetail}
+        />
 
         <RecruitApplyForm
           recruitDetail={recruitDetail}
@@ -195,18 +188,6 @@ type Params = {
 const selfCss = css({
   padding: `${titleBarHeight + 30}px 0`,
 });
-
-const categoryCss = css({ marginBottom: 10 }, fontCss.style.R14);
-
-const expandLayerCss = css(
-  {
-    backgroundColor: palettes.background.grey,
-    padding: '16px 20px',
-  },
-  expandCss()
-);
-
-const basicInfoCss = css({ padding: '16px 0 0' });
 
 export default RecruitApplyPage;
 RecruitApplyPage.auth = createAuthGuard();
