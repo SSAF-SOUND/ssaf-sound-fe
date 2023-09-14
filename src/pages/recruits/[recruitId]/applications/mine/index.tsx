@@ -12,10 +12,13 @@ import { css } from '@emotion/react';
 import { Button, FullPageLoader, PageHeadingText } from '~/components/Common';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import { RecruitApplyFormHeader } from '~/components/Forms/RecruitApplyForm/RecruitApplyFormHeader';
+import { useModal } from '~/components/GlobalModal';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import {
   getRecruitThemeByCategory,
+  MatchStatus,
+  useCancelRecruitApplication,
   useMyRecruitApplication,
   useRecruitDetail,
 } from '~/services/recruit';
@@ -23,7 +26,9 @@ import { titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
+  customToast,
   getErrorResponse,
+  handleAxiosError,
   noop,
   routes,
 } from '~/utils';
@@ -86,8 +91,21 @@ const MyRecruitApplicationPage: CustomNextPage = () => {
     );
   }
 
+  const { mine } = recruitDetail;
   const { recruitType: appliedRecruitPart, reply: answerToRecruitAuthor } =
     myRecruitApplication;
+
+  // 내 리쿠르팅인 경우엔 지원이 불가능하므로, 페이지 조회도 불가능
+  if (mine) {
+    return (
+      <RedirectionGuide
+        title="Error"
+        description="내 리쿠르팅에는 지원할 수 없습니다."
+        redirectionText="리쿠르팅 상세 페이지로"
+        redirectionTo={routes.recruit.detail(recruitId)}
+      />
+    );
+  }
 
   return (
     <>
@@ -118,6 +136,7 @@ const MyRecruitApplicationPage: CustomNextPage = () => {
         />
 
         <ActionButtonLayer
+          css={{ width: '100%' }}
           recruitDetail={recruitDetail}
           myRecruitApplication={myRecruitApplication}
         />
@@ -139,8 +158,8 @@ MyRecruitApplicationPage.auth = createAuthGuard();
 MyRecruitApplicationPage.meta = createNoIndexPageMetaData(metaTitle);
 
 // 액션 버튼
-// PENDING -> 신청 취소 버튼
-// REJECTED -> 재신청 버튼
+// PENDING -> 신청 취소 버튼         (모집 완료가 아닐 때만 보여줌)
+// REJECTED | INITIAL -> 재신청 버튼 (모집 완료가 아닐 때만 보여줌)
 // SUCCESS -> 버튼 없음
 interface ActionButtonLayerProps {
   className?: string;
@@ -149,19 +168,90 @@ interface ActionButtonLayerProps {
 }
 
 const ActionButtonLayer = (props: ActionButtonLayerProps) => {
-  const { className, recruitDetail, myRecruitApplication } = props;
-  const { category } = recruitDetail;
+  const { myRecruitApplication, recruitDetail } = props;
   const { matchStatus } = myRecruitApplication;
+  const { finishedRecruit } = recruitDetail;
+
+  return (
+    <>
+      {!finishedRecruit && (
+        <>
+          {matchStatus === MatchStatus.PENDING && (
+            <ApplicationCancelButton {...props} />
+          )}
+          {matchStatus === MatchStatus.REJECTED && (
+            <ReApplicationButton {...props} />
+          )}
+          {matchStatus === MatchStatus.INITIAL && (
+            <ReApplicationButton {...props} />
+          )}
+        </>
+      )}
+    </>
+  );
+};
+
+const ApplicationCancelButton = (props: ActionButtonLayerProps) => {
+  const { className, recruitDetail, myRecruitApplication } = props;
+  const { openModal, closeModal } = useModal();
+  const { category } = recruitDetail;
+  const { recruitId, recruitApplicationId } = myRecruitApplication;
   const recruitTheme = getRecruitThemeByCategory(category);
+  const {
+    mutateAsync: cancelRecruitApplication,
+    isLoading: isCancelingRecruitApplication,
+  } = useCancelRecruitApplication({
+    recruitApplicationId,
+    recruitId,
+  });
+
+  const handleCancelRecruitApplication = async () => {
+    closeModal();
+    try {
+      await cancelRecruitApplication();
+      customToast.success('리쿠르팅 신청이 취소되었습니다.');
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
+  const handleOpenModal = () => {
+    openModal('alert', {
+      title: '알림',
+      description: (
+        <>
+          <p>리쿠르팅 신청을 취소하시겠습니까?</p>
+          <p>리쿠르팅 취소는 등록자에게 별도의 알림없이 취소됩니다</p>
+        </>
+      ),
+      actionText: '네',
+      cancelText: '아니오',
+      onClickCancel: closeModal,
+      onClickAction: handleCancelRecruitApplication,
+    });
+  };
 
   return (
     <Button
       size="lg"
-      css={{ width: '100%' }}
       className={className}
       theme={recruitTheme}
+      loading={isCancelingRecruitApplication}
+      onClick={handleOpenModal}
     >
-      버튼
+      리쿠르팅 신청 취소
+    </Button>
+  );
+};
+
+const ReApplicationButton = (props: ActionButtonLayerProps) => {
+  const { className, recruitDetail } = props;
+  const { recruitId, category } = recruitDetail;
+  const recruitTheme = getRecruitThemeByCategory(category);
+
+  return (
+    <Button asChild size="lg" className={className} theme={recruitTheme}>
+      <Link href={routes.recruit.apply(recruitId)}>다시 신청하기</Link>
     </Button>
   );
 };
