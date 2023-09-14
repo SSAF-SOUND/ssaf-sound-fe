@@ -71,16 +71,6 @@ export const queryKeys = {
       'members',
       recruitId,
     ],
-    scrap: (recruitId: number) => [
-      ...queryKeys.recruit.self(),
-      'scrap',
-      recruitId,
-    ],
-    apply: (recruitId: number) => [
-      ...queryKeys.recruit.self(),
-      'apply',
-      recruitId,
-    ],
     applicants: (recruitId: number) => [
       ...queryKeys.auth(),
       ...queryKeys.recruit.self(),
@@ -90,8 +80,7 @@ export const queryKeys = {
     application: {
       self: (recruitId: number) => [
         ...queryKeys.auth(),
-        ...queryKeys.recruit.self(),
-        recruitId,
+        ...queryKeys.recruit.detail(recruitId),
         'application',
       ],
       mine: (recruitId: number) => [
