@@ -15,11 +15,11 @@ import {
 } from '~/styles/utils';
 import { routes } from '~/utils';
 
-interface GnbProps {
+export interface GnbProps {
   className?: string;
 }
 
-const Gnb = (props: GnbProps) => {
+export const Gnb = (props: GnbProps) => {
   const { className } = props;
   const navItems = useMemo(
     () => [
@@ -116,5 +116,3 @@ const iconHighlightCss = {
     color: palettes.primary.darken,
   },
 };
-
-export default Gnb;

@@ -3,7 +3,7 @@ import type { Meta } from '@storybook/react';
 
 import { SkillName } from '~/services/recruit';
 
-import SkillIcon from './index';
+import { SkillIcon } from './index';
 
 const skillNames = Object.values(SkillName);
 

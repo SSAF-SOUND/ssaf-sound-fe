@@ -27,7 +27,7 @@ export interface ToggleCoreProps {
 
 export interface ToggleProps extends ToggleStyleProps, ToggleCoreProps {}
 
-const Toggle = (props: ToggleProps) => {
+export const Toggle = (props: ToggleProps) => {
   const {
     thumbSize,
     textWidth,
@@ -56,8 +56,6 @@ const Toggle = (props: ToggleProps) => {
     </RadixToggle.Root>
   );
 };
-
-export default Toggle;
 
 const toggleOn = `[aria-pressed="true"][data-state="on"]`;
 

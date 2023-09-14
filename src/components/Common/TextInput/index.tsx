@@ -7,32 +7,32 @@ import { colorMix, fontCss, palettes } from '~/styles/utils';
 
 type TextInputSize = 'sm' | 'md' | 'lg';
 
-interface TextInputOwnProps {
+export interface TextInputOwnProps {
   size?: TextInputSize;
   rounded?: boolean;
 }
 
-type TextInputProps = Omit<
+export type TextInputProps = Omit<
   ComponentPropsWithoutRef<'input'>,
   keyof TextInputOwnProps
 > &
   TextInputOwnProps;
 
-const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
-  const { size = 'sm', rounded = false, ...restProps } = props;
-  return (
-    <input
-      type="text"
-      ref={ref}
-      css={[selfCss, sizeCss[size], rounded && roundedCss]}
-      {...restProps}
-    />
-  );
-});
+export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
+  (props, ref) => {
+    const { size = 'sm', rounded = false, ...restProps } = props;
+    return (
+      <input
+        type="text"
+        ref={ref}
+        css={[selfCss, sizeCss[size], rounded && roundedCss]}
+        {...restProps}
+      />
+    );
+  }
+);
 
 TextInput.displayName = 'Input';
-
-export default TextInput;
 
 const selfCss = css(
   {

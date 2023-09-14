@@ -42,57 +42,57 @@ export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   customColor?: CustomColor;
 }
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-  const {
-    variant = 'filled',
-    size = 'md',
-    theme = 'primary',
-    asChild = false,
-    loading = false,
-    disabled,
-    children,
-    style,
-    customColor,
-    ...restProps
-  } = props;
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
+    const {
+      variant = 'filled',
+      size = 'md',
+      theme = 'primary',
+      asChild = false,
+      loading = false,
+      disabled,
+      children,
+      style,
+      customColor,
+      ...restProps
+    } = props;
 
-  const Component = asChild ? Slot : 'button';
-  if (Component === 'button') restProps.type = restProps.type || 'button';
+    const Component = asChild ? Slot : 'button';
+    if (Component === 'button') restProps.type = restProps.type || 'button';
 
-  const isDisabled = disabled || loading;
+    const isDisabled = disabled || loading;
 
-  const styleWithCustomColor = customColor
-    ? {
-        ...style,
-        [themeColorVars.mainColor.varName]: customColor.mainColor,
-        [themeColorVars.mainLightColor.varName]: customColor.mainLightColor,
-        [themeColorVars.mainDarkColor.varName]: customColor.mainDarkColor,
-      }
-    : style;
+    const styleWithCustomColor = customColor
+      ? {
+          ...style,
+          [themeColorVars.mainColor.varName]: customColor.mainColor,
+          [themeColorVars.mainLightColor.varName]: customColor.mainLightColor,
+          [themeColorVars.mainDarkColor.varName]: customColor.mainDarkColor,
+        }
+      : style;
 
-  return (
-    <Component
-      style={styleWithCustomColor}
-      data-theme={theme}
-      ref={ref}
-      disabled={isDisabled}
-      css={[baseCss, heightsCss[size], variantsCss[variant]]}
-      {...restProps}
-    >
-      {loading ? (
-        <div css={inlineFlex('center', 'center')}>
-          <ButtonLoader color={loaderColor[variant]} />
-        </div>
-      ) : (
-        children
-      )}
-    </Component>
-  );
-});
+    return (
+      <Component
+        style={styleWithCustomColor}
+        data-theme={theme}
+        ref={ref}
+        disabled={isDisabled}
+        css={[baseCss, heightsCss[size], variantsCss[variant]]}
+        {...restProps}
+      >
+        {loading ? (
+          <div css={inlineFlex('center', 'center')}>
+            <ButtonLoader color={loaderColor[variant]} />
+          </div>
+        ) : (
+          children
+        )}
+      </Component>
+    );
+  }
+);
 
 Button.displayName = 'Button';
-
-export default Button;
 
 const baseCss = css(
   {

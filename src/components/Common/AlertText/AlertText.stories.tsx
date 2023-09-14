@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import AlertText from './index';
+import { AlertText } from './index';
 
 const meta: Meta<typeof AlertText> = {
   title: 'System/AlertText',

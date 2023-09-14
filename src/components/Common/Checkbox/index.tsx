@@ -13,7 +13,7 @@ export interface CheckboxProps extends Omit<RadixCheckboxProps, 'asChild'> {
 
 const defaultCheckboxSize = 24;
 
-const Checkbox = (props: CheckboxProps) => {
+export const Checkbox = (props: CheckboxProps) => {
   const { theme = 'primary', size = defaultCheckboxSize, ...restProps } = props;
 
   return (
@@ -24,8 +24,6 @@ const Checkbox = (props: CheckboxProps) => {
     </RadixCheckbox.Root>
   );
 };
-
-export default Checkbox;
 
 const selfCss = css(
   {

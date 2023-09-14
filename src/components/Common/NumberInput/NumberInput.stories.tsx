@@ -1,6 +1,6 @@
 import type { Meta } from '@storybook/react';
 
-import NumberInput from './index';
+import { NumberInput } from './index';
 
 const meta: Meta<typeof NumberInput> = {
   title: 'Input/NumberInput',

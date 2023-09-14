@@ -1,7 +1,7 @@
 import type { ButtonProps } from './index';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Button from './index';
+import { Button } from './index';
 
 interface ButtonGroupProps {
   variant: ButtonProps['variant'];

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Dot from './index';
+import { Dot } from './index';
 
 const meta: Meta<typeof Dot> = {
   title: 'Notification/Dot',

@@ -12,13 +12,13 @@ type ChangeInputAmountHandler = (
   inputNode: HTMLInputElement
 ) => void;
 
-interface NumberInputProps extends ComponentPropsWithoutRef<'input'> {
+export interface NumberInputProps extends ComponentPropsWithoutRef<'input'> {
   onClickMinus?: ChangeInputAmountHandler;
   onClickPlus?: ChangeInputAmountHandler;
 }
 
-const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
-  (props, ref) => {
+export const NumberInput = memo(
+  forwardRef<HTMLInputElement, NumberInputProps>((props, ref) => {
     const {
       onClickMinus,
       onClickPlus,
@@ -80,12 +80,10 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         </IconButton>
       </div>
     );
-  }
+  })
 );
 
 NumberInput.displayName = 'NumberInput';
-
-export default memo(NumberInput);
 
 const selfCss = css(
   {
