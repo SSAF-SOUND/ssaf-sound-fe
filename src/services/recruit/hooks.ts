@@ -28,6 +28,8 @@ import {
   scrapRecruit,
   updateRecruit,
   applyRecruit,
+  getMyRecruitApplication,
+  getRecruitApplication,
 } from '~/services/recruit/apis';
 import {
   getRecruitApplicants,
@@ -46,13 +48,6 @@ export const useRecruitApplicants = (recruitId: number) => {
   return useQuery({
     queryKey: queryKeys.recruit.applicants(recruitId),
     queryFn: () => getRecruitApplicants(recruitId),
-  });
-};
-
-export const useRecruitApplicationDetail = (recruitApplicationId: number) => {
-  return useQuery({
-    queryKey: queryKeys.recruit.applicationDetail(recruitApplicationId),
-    queryFn: () => getRecruitApplicationDetail(recruitApplicationId),
   });
 };
 
@@ -206,5 +201,28 @@ export const useApplyRecruit = (recruitId: number) => {
     mutationFn: (params: ApplyRecruitParams) => applyRecruit(recruitId, params),
     onSuccess: () =>
       queryClient.invalidateQueries(queryKeys.recruit.detail(recruitId)),
+  });
+};
+
+export const useMyRecruitApplication = (recruitId: number) => {
+  return useQuery({
+    queryKey: queryKeys.recruit.application.mine(recruitId),
+    queryFn: () => getMyRecruitApplication(recruitId),
+  });
+};
+
+export interface UseRecruitApplicationParams {
+  recruitId: number;
+  recruitApplicationId: number;
+}
+
+export const useRecruitApplication = (params: UseRecruitApplicationParams) => {
+  const { recruitId, recruitApplicationId } = params;
+  return useQuery({
+    queryKey: queryKeys.recruit.application.detail({
+      recruitId,
+      recruitApplicationId,
+    }),
+    queryFn: () => getRecruitApplication(recruitApplicationId),
   });
 };

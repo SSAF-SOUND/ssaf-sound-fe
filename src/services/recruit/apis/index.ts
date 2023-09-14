@@ -2,6 +2,8 @@ export * from './applyRecruit';
 export * from './completeRecruit';
 export * from './constants';
 export * from './createRecruit';
+export * from './getMyRecruitApplication';
+export * from './getRecruitApplication';
 export * from './getRecruitDetail';
 export * from './getRecruitParticipants';
 export * from './getRecruits';

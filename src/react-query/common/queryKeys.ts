@@ -87,12 +87,28 @@ export const queryKeys = {
       recruitId,
       'applicants',
     ],
-    applicationDetail: (recruitId: number) => [
-      ...queryKeys.auth(),
-      ...queryKeys.recruit.self(),
-      recruitId,
-      'applicationDetail',
-    ],
+    application: {
+      self: (recruitId: number) => [
+        ...queryKeys.auth(),
+        ...queryKeys.recruit.self(),
+        recruitId,
+        'application',
+      ],
+      mine: (recruitId: number) => [
+        ...queryKeys.recruit.application.self(recruitId),
+        'mine',
+      ],
+      detail: ({
+        recruitId,
+        recruitApplicationId,
+      }: {
+        recruitId: number;
+        recruitApplicationId: number;
+      }) => [
+        ...queryKeys.recruit.application.self(recruitId),
+        recruitApplicationId,
+      ],
+    },
   },
   lunch: {
     self: () => [...queryKeys.auth(), 'lunch'],
@@ -254,16 +270,25 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/application` as const,
     application: {
       self: () => `/recruit-applications`,
-      applicants: (recruitId: number) =>
-        `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+      mine: (recruitId: number) =>
+        `${endpoints.recruit.self()}/mine?recruitId=${recruitId}`,
       detail: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
+      applicants: (recruitId: number) =>
+        `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+
       approve: (recruitApplicationId: number) =>
-        `${endpoints.recruit.application.self()}/${recruitApplicationId}/approve` as const,
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/approve` as const,
       reject: (recruitApplicationId: number) =>
-        `${endpoints.recruit.application.self()}/${recruitApplicationId}/reject` as const,
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/reject` as const,
       cancel: (recruitApplicationId: number) =>
-        `${endpoints.recruit.application.self()}/${recruitApplicationId}/cancel` as const,
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/cancel` as const,
     },
   },
   recruitComments: {

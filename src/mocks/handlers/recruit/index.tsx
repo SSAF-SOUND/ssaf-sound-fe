@@ -16,6 +16,9 @@ import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import {
+  createMockMyRecruitApplication,
+  createMockRecruitApplicant,
+  createMockRecruitApplication,
   RecruitData,
   recruitDetails,
   recruitParticipantsList,
@@ -289,6 +292,60 @@ export const applyRecruitError = restError(
   }
 );
 
+const getMyRecruitApplicationEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.application.mine(':recruitId'));
+
+export const getMyRecruitApplication = rest.get(
+  getMyRecruitApplicationEndpoint,
+  (req, res, ctx) => {
+    const recruitId = req.params.recruitId ?? 1;
+    return res(
+      ctx.delay(500),
+      ...mockSuccess(
+        ctx,
+        createMockMyRecruitApplication(Number(recruitId), {
+          recruitApplicationId: 1,
+        })
+      )
+    );
+  }
+);
+
+export const getMyRecruitApplicationError = restError(
+  'get',
+  getMyRecruitApplicationEndpoint,
+  { message: '내 신청서 불러오기 오류' }
+);
+
+const getRecruitApplicationEndpoint = composeUrls(
+  API_URL,
+  // @ts-ignore
+  endpoints.recruit.application.detail(':recruitApplicationId')
+);
+export const getRecruitApplication = rest.get(
+  getRecruitApplicationEndpoint,
+  (req, res, ctx) => {
+    const recruitApplicationId = req.params.recruitApplicationId ?? 1;
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess(
+        ctx,
+        createMockRecruitApplication(1, {
+          recruitApplicationId: Number(recruitApplicationId),
+        })
+      )
+    );
+  }
+);
+
+export const getRecruitApplicationError = restError(
+  'get',
+  getRecruitApplicationEndpoint,
+  { message: '다른 사람의 신청서 불러오기 오류' }
+);
+
 export const recruitHandlers = [
   //
   getRecruitApplicants,
@@ -306,4 +363,6 @@ export const recruitHandlers = [
   completeRecruit,
   getRecruits,
   applyRecruit,
+  getMyRecruitApplication,
+  getRecruitApplication,
 ];

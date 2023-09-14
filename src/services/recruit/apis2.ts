@@ -51,14 +51,6 @@ export interface RecruitMembers {
   members: UserInfo[];
 }
 
-export type RecruitMembersByParts = { [key in RecruitParts]?: RecruitMembers };
-
-export type RecruitMembersApiData = ApiSuccessResponse<{
-  recruitTypes: RecruitMembersByParts;
-}>;
-
-export type RecruitMember = UserInfo;
-
 export type PartialRecruitType = Partial<RecruitType>;
 export type recruitMembersType = {
   recruitTypes: Partial<Record<PartialRecruitType, RecruitMembers>>;
@@ -71,26 +63,6 @@ export const getRecruitMembers = (recruitId: number) => {
   return publicAxios
     .get<GetRecruitMembersApiData>(endpoint)
     .then((res) => res.data.data);
-};
-
-export interface RecruitApplyParams {
-  recruitType: RecruitType;
-  contents: Array<string>;
-}
-
-export type RecruitApplyParamsApiData = ApiSuccessResponse<RecruitApplyParams>;
-
-export const postRecruitApply = ({
-  recruitId,
-  body,
-}: {
-  recruitId: number;
-  body: RecruitApplyParams;
-}) => {
-  const endpoint = endpoints.recruit.apply(recruitId);
-  return privateAxios
-    .post<GetRecruitMembersApiData>(endpoint, body)
-    .then((res) => res.data);
 };
 
 // ---------------------------------------
@@ -142,42 +114,3 @@ interface RecruitApplicationDetail {
 }
 export type GetRecruitApplicationDetailApiData =
   ApiSuccessResponse<RecruitApplicationDetail>;
-
-// ------------------------------
-
-export const postRecruitApplicationApprove = (recruitApplicationId: number) => {
-  const endpoint = endpoints.recruit.application.approve(recruitApplicationId);
-  const body = {
-    recruitApplicationId,
-    matchStatus: 'DONE',
-  };
-  return privateAxios.post(endpoint, body).then((res) => res.data.data);
-};
-
-export const postRecruitApplicationReject = (recruitApplicationId: number) => {
-  const endpoint = endpoints.recruit.application.reject(recruitApplicationId);
-  const body = {
-    recruitApplicationId,
-    matchStatus: 'DONE',
-  };
-  return privateAxios.post(endpoint, body).then((res) => res.data.data);
-};
-
-export const postRecruitApplicationCancel = (recruitApplicationId: number) => {
-  const endpoint = endpoints.recruit.application.cancel(recruitApplicationId);
-  const body = {
-    recruitApplicationId,
-    matchStatus: 'CANCEL',
-  };
-  return privateAxios.post(endpoint, body).then((res) => res.data.data);
-};
-
-export const recruitAPI = {
-  getRecruitMembers,
-  getRecruitApplicants,
-  postRecruitApply,
-  getRecruitApplicationDetail,
-  postRecruitApplicationApprove,
-  postRecruitApplicationReject,
-  postRecruitApplicationCancel,
-};

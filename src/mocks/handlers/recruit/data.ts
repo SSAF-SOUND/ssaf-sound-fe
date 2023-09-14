@@ -1,6 +1,8 @@
 import type { UserInfo } from '~/services/member';
 import type {
+  GetMyRecruitApplicationApiData,
   GetRecruitApplicantsApiData,
+  GetRecruitApplicationApiData,
   RecruitApplicant,
   RecruitDetail,
   RecruitParticipantsDetail,
@@ -293,6 +295,53 @@ export const studyRecruitSummaries = Array(30)
       skillCount: 10,
     });
   });
+
+export const createMockMyRecruitApplication = (
+  recruitId: number,
+  options: Partial<{
+    category: RecruitCategoryName;
+    matchStatus: MatchStatus;
+    recruitApplicationId: number;
+  }> = {}
+): GetMyRecruitApplicationApiData['data'] => {
+  const {
+    category = RecruitCategoryName.PROJECT,
+    matchStatus = MatchStatus.PENDING,
+    recruitApplicationId = 1,
+  } = options;
+
+  const recruitType =
+    category === RecruitCategoryName.STUDY
+      ? RecruitParts.STUDY
+      : RecruitParts.FRONTEND;
+
+  return {
+    recruitApplicationId,
+    category,
+    recruitId,
+    matchStatus,
+    question: 'Question',
+    reply: 'Answer',
+    recruitType,
+  };
+};
+
+export const createMockRecruitApplication = (
+  recruitId: number,
+  options: Partial<{
+    category: RecruitCategoryName;
+    matchStatus: MatchStatus;
+    recruitApplicationId: number;
+    liked: boolean;
+  }> = {}
+): GetRecruitApplicationApiData['data'] => {
+  const { liked = false } = options;
+  return {
+    ...createMockMyRecruitApplication(recruitId, options),
+    author: userInfo.certifiedSsafyUserInfo,
+    liked,
+  };
+};
 
 export const RecruitData = {
   //

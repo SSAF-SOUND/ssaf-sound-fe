@@ -1,4 +1,4 @@
-import type { ScrapStatus , InfiniteParams } from '~/services/common';
+import type { ScrapStatus, InfiniteParams } from '~/services/common';
 import type { UserInfo } from '~/services/member';
 import type { SkillInfo } from '~/services/meta/utils';
 import type {
@@ -7,7 +7,6 @@ import type {
   MatchStatus,
   SkillName,
 } from '~/services/recruit';
-
 
 export interface RecruitParticipantsCountForServer {
   recruitType: RecruitParts;
@@ -84,3 +83,22 @@ export interface RecruitCursorData {
   nextCursor: number | null;
   isLast: boolean;
 }
+
+export interface RecruitApplicationDetail {
+  recruitId: number;
+  recruitApplicationId: number;
+  category: RecruitCategoryName;
+
+  recruitType: RecruitParts;
+  reply: string;
+  question: string;
+  liked: boolean;
+
+  author: UserInfo;
+  matchStatus: MatchStatus;
+}
+
+export type MyRecruitApplicationDetail = Omit<
+  RecruitApplicationDetail,
+  'liked' | 'author'
+>;
