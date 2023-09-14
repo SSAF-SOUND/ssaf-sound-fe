@@ -11,11 +11,6 @@ import {
 } from '~/components/Forms/RecruitApplyForm/utils';
 import { fontCss, palettes } from '~/styles/utils';
 
-interface AnswerToRecruitAuthorProps {
-  question: string;
-  category: RecruitCategoryName;
-}
-
 const maxLength = 500;
 const fieldName = 'answerToRecruitAuthor';
 const validateAnswerToRecruitAuthor = (value: string) => {
@@ -24,37 +19,57 @@ const validateAnswerToRecruitAuthor = (value: string) => {
   return length <= maxLength || '답변은 500자 이하로 작성해야 합니다.';
 };
 
+interface AnswerToRecruitAuthorProps {
+  question: string;
+  category: RecruitCategoryName;
+  readonly?: boolean;
+}
+
 export const AnswerToRecruitAuthor = (props: AnswerToRecruitAuthorProps) => {
-  const { question, category } = props;
+  const { question, category, readonly = false } = props;
   const fieldOrder = recruitApplyFormFieldOrder.answerToRecruitAuthor[category];
-  const { register } = useRecruitApplyFormContext();
+  const {
+    register,
+    formState: {
+      defaultValues: {
+        answerToRecruitAuthor: defaultAnswerToRecruitAuthor = '',
+      } = {},
+    },
+  } = useRecruitApplyFormContext();
 
   return (
     <div>
-      <RecruitApplyFormFieldTitle>
-        {fieldOrder}. [등록자 질문] {question}
-      </RecruitApplyFormFieldTitle>
-      <div css={constrainCss}>(글자 수 {maxLength}자 내)</div>
+      <div css={marginCss}>
+        <RecruitApplyFormFieldTitle>
+          {fieldOrder}. [등록자 질문] {question}
+        </RecruitApplyFormFieldTitle>
+        {!readonly && <div css={constrainCss}>(글자 수 {maxLength}자 내)</div>}
+      </div>
 
       <ErrorMessage
         name={fieldName}
         render={({ message }) => (
-          <AlertText css={constrainMarginCss}>{message}</AlertText>
+          <AlertText css={[marginCss, constrainCss]}>{message}</AlertText>
         )}
       />
 
-      <textarea
-        css={textareaCss}
-        placeholder="답변을 작성해주세요"
-        {...register(fieldName, {
-          validate: validateAnswerToRecruitAuthor,
-        })}
-      />
+      {readonly ? (
+        <div css={readonlyTextareaCss}>{defaultAnswerToRecruitAuthor}</div>
+      ) : (
+        <textarea
+          defaultValue={defaultAnswerToRecruitAuthor}
+          css={textareaCss}
+          placeholder="답변을 작성해주세요"
+          {...register(fieldName, {
+            validate: validateAnswerToRecruitAuthor,
+          })}
+        />
+      )}
     </div>
   );
 };
-const constrainMarginCss = css({ marginBottom: 10 });
-const constrainCss = css(constrainMarginCss, fontCss.style.R12);
+const marginCss = css({ marginBottom: 10 });
+const constrainCss = css(fontCss.style.R12);
 const textareaCss = css(
   {
     resize: 'none',
@@ -67,3 +82,11 @@ const textareaCss = css(
   },
   fontCss.style.R14
 );
+
+const readonlyTextareaCss = css(textareaCss, {
+  backgroundColor: palettes.background.grey,
+  color: palettes.white,
+  minHeight: 180,
+  height: 'auto',
+  wordBreak: 'break-word',
+});

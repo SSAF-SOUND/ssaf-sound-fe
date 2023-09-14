@@ -16,11 +16,16 @@ import { AgreeToProvideProfile } from './Fields/AgreeToProvideProfile';
 import { AnswerToRecruitAuthor } from './Fields/AnswerToRecruitAuthor';
 import { RecruitPartToApply } from './Fields/RecruitPartToApply';
 
+interface RecruitApplyFormOptions {
+  readonly?: boolean;
+}
+
 export interface RecruitApplyFormProps {
   recruitDetail: RecruitDetail;
   onValidSubmit: SubmitHandler<RecruitApplyFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<RecruitApplyFormValues>;
   defaultValues?: RecruitApplyFormValues;
+  options?: Partial<RecruitApplyFormOptions>;
 }
 
 export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
@@ -29,7 +34,9 @@ export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
     onInvalidSubmit,
     defaultValues = defaultRecruitApplyFormValues,
     recruitDetail,
+    options = {},
   } = props;
+  const { readonly = false } = options;
   const methods = useForm<RecruitApplyFormValues>({
     defaultValues,
   });
@@ -49,21 +56,31 @@ export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
     <FormProvider {...methods}>
       <form>
         {isCategoryProject && (
-          <RecruitPartToApply recruitDetail={recruitDetail} />
+          <RecruitPartToApply
+            recruitDetail={recruitDetail}
+            readonly={readonly}
+          />
         )}
         <AgreeToProvideProfile
           category={category}
           css={{ marginBottom: 120 }}
+          readonly={readonly}
         />
         {hasQuestion && (
-          <AnswerToRecruitAuthor category={category} question={question} />
+          <AnswerToRecruitAuthor
+            category={category}
+            question={question}
+            readonly={readonly}
+          />
         )}
 
-        <SubmitButton
-          onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
-          css={{ marginTop: 72 }}
-          category={category}
-        />
+        {!readonly && (
+          <SubmitButton
+            onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
+            css={{ marginTop: 72 }}
+            category={category}
+          />
+        )}
       </form>
     </FormProvider>
   );

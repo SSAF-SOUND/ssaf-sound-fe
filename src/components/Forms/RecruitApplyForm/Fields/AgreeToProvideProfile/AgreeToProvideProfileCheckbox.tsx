@@ -6,7 +6,8 @@ import { Checkbox } from '~/components/Common';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 interface AgreeToProvideProfileCheckboxProps {
-  checked?: boolean;
+  readonly?: boolean;
+  defaultChecked?: boolean;
   onCheckedChange?: (value: boolean) => void;
   className?: string;
   theme: Theme.PRIMARY | Theme.SECONDARY;
@@ -15,15 +16,16 @@ interface AgreeToProvideProfileCheckboxProps {
 export const AgreeToProvideProfileCheckbox = (
   props: AgreeToProvideProfileCheckboxProps
 ) => {
-  const { onCheckedChange, checked, className, theme } = props;
+  const { onCheckedChange, defaultChecked, className, readonly, theme } = props;
   return (
-    <label css={selfCss} className={className}>
+    <label css={[selfCss, readonly && readonlyCss]} className={className}>
       <span>동의합니다.</span>
       <Checkbox
         size={28}
-        checked={checked}
+        defaultChecked={defaultChecked}
         onCheckedChange={onCheckedChange}
         theme={theme}
+        disabled={readonly}
       />
     </label>
   );
@@ -41,3 +43,9 @@ const selfCss = css(
   fontCss.style.R14,
   flex('center', 'space-between', 'row', 24)
 );
+const readonlyCss = css({
+  backgroundColor: palettes.background.grey,
+  color: palettes.white,
+  pointerEvents: 'none',
+  userSelect: 'none',
+});

@@ -12,16 +12,25 @@ import {
 } from '~/components/Forms/RecruitApplyForm/utils';
 import { getRecruitThemeByCategory } from '~/services/recruit';
 
+const fieldName = 'agreeToProvideProfile';
+
 interface AgreeToProvideProfileProps {
   className?: string;
   category: RecruitCategoryName;
+  readonly?: boolean;
 }
 
-const fieldName = 'agreeToProvideProfile';
-
 export const AgreeToProvideProfile = (props: AgreeToProvideProfileProps) => {
-  const { category, className } = props;
-  const { register, setValue } = useRecruitApplyFormContext();
+  const { category, className, readonly = false } = props;
+  const {
+    register,
+    setValue,
+    formState: {
+      defaultValues: {
+        agreeToProvideProfile: defaultAgreeToProvideProfile,
+      } = {},
+    },
+  } = useRecruitApplyFormContext();
 
   const fieldOrder = recruitApplyFormFieldOrder.agreeToProvideProfile[category];
   const recruitTheme = getRecruitThemeByCategory(category);
@@ -34,7 +43,7 @@ export const AgreeToProvideProfile = (props: AgreeToProvideProfileProps) => {
     setValue(fieldName, checked, { shouldDirty: true });
 
   return (
-    <div css={selfCss} className={className}>
+    <div className={className}>
       <RecruitApplyFormFieldTitle css={titleMarginCss}>
         {fieldOrder}. 리쿠르팅 등록자에게 프로필이 공개됩니다. 이에
         동의하십니까?
@@ -46,6 +55,8 @@ export const AgreeToProvideProfile = (props: AgreeToProvideProfileProps) => {
         )}
       />
       <AgreeToProvideProfileCheckbox
+        readonly={readonly}
+        defaultChecked={defaultAgreeToProvideProfile}
         theme={recruitTheme}
         onCheckedChange={onCheckedChange}
       />
@@ -53,5 +64,4 @@ export const AgreeToProvideProfile = (props: AgreeToProvideProfileProps) => {
   );
 };
 
-const selfCss = css({});
 const titleMarginCss = css({ marginBottom: 10 });
