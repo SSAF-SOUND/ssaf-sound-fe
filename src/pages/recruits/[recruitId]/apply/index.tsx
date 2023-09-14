@@ -1,8 +1,10 @@
 import type { CustomNextPage } from 'next/types';
+import type { RecruitApplyFormProps } from '~/components/Forms/RecruitApplyForm';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { useState } from 'react';
 
 import {
   DefaultFullPageLoader,
@@ -18,7 +20,9 @@ import TitleBar from '~/components/TitleBar';
 import { useMyInfo } from '~/services/member';
 import {
   getDisplayCategoryName,
+  getRecruitThemeByCategory,
   MatchStatus,
+  useApplyRecruit,
   useRecruitDetail,
 } from '~/services/recruit';
 import { expandCss, fontCss, palettes, titleBarHeight } from '~/styles/utils';
@@ -26,6 +30,7 @@ import {
   createAuthGuard,
   createNoIndexPageMetaData,
   getErrorResponse,
+  handleAxiosError,
   routes,
 } from '~/utils';
 
@@ -47,6 +52,8 @@ const RecruitApplyPage: CustomNextPage = () => {
   const recruitId = Number(query.recruitId);
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
+  const { mutateAsync: applyRecruit } = useApplyRecruit(recruitId);
+  const [applied, setApplied] = useState(false);
 
   const {
     data: recruitDetail,
@@ -77,6 +84,39 @@ const RecruitApplyPage: CustomNextPage = () => {
 
   const { title, category, author, mine, finishedRecruit, matchStatus } =
     recruitDetail;
+
+  const recruitTheme = getRecruitThemeByCategory(category);
+  const displayCategoryName = getDisplayCategoryName(category);
+
+  if (applied) {
+    return (
+      <>
+        <TitleBar.Default
+          withoutBackward
+          title="리쿠르팅 신청 완료"
+          onClickClose={routes.recruit.detail(recruitId)}
+        />
+        <RedirectionGuide
+          css={{ paddingTop: titleBarHeight }}
+          theme={recruitTheme}
+          title={
+            <>
+              <p>리쿠르팅 신청이</p>
+              <p>완료되었습니다</p>
+            </>
+          }
+          description={
+            <>
+              <p>마이페이지에서 리쿠르팅 신청을</p>
+              <p>확인하실 수 있습니다</p>
+            </>
+          }
+          redirectionText="마이페이지로 이동"
+          redirectionTo={routes.profile.self()}
+        />
+      </>
+    );
+  }
 
   if (finishedRecruit) {
     return (
@@ -109,7 +149,16 @@ const RecruitApplyPage: CustomNextPage = () => {
     );
   }
 
-  const displayCategoryName = getDisplayCategoryName(category);
+  const onValidSubmit: RecruitApplyFormProps['onValidSubmit'] = async (
+    formValues
+  ) => {
+    try {
+      await applyRecruit(formValues);
+      setApplied(true);
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
 
   return (
     <>
@@ -130,12 +179,10 @@ const RecruitApplyPage: CustomNextPage = () => {
           <Recruit.BasicInfo css={basicInfoCss} recruitDetail={recruitDetail} />
         </div>
 
-        <div>
-          <RecruitApplyForm
-            recruitDetail={recruitDetail}
-            onValidSubmit={() => console.log(1)}
-          />
-        </div>
+        <RecruitApplyForm
+          recruitDetail={recruitDetail}
+          onValidSubmit={onValidSubmit}
+        />
       </div>
     </>
   );

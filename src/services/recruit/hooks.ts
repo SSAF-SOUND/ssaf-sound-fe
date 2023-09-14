@@ -1,5 +1,8 @@
 import type { SetStateAction } from 'react';
-import type { RecruitDetail } from '~/services/recruit/apis';
+import type {
+  ApplyRecruitParams,
+  RecruitDetail,
+} from '~/services/recruit/apis';
 import type { UpdateRecruitParams } from '~/services/recruit/apis/updateRecruit';
 import type {
   RecruitCategoryName,
@@ -24,22 +27,13 @@ import {
   removeRecruit,
   scrapRecruit,
   updateRecruit,
+  applyRecruit,
 } from '~/services/recruit/apis';
 import {
   getRecruitApplicants,
   getRecruitApplicationDetail,
   getRecruitMembers,
-  postRecruitApplicationApprove,
-  postRecruitApplicationCancel,
-  postRecruitApplicationReject,
-  recruitAPI,
 } from '~/services/recruit/apis2';
-
-export const useApplyRecruit = () => {
-  return useMutation({
-    mutationFn: recruitAPI.postRecruitApply,
-  });
-};
 
 export const useRecruitMembers = (recruitId: number) => {
   return useQuery({
@@ -61,26 +55,6 @@ export const useRecruitApplicationDetail = (recruitApplicationId: number) => {
     queryFn: () => getRecruitApplicationDetail(recruitApplicationId),
   });
 };
-
-export const useRecruitApplicationApprove = () => {
-  return useMutation({
-    mutationFn: postRecruitApplicationApprove,
-  });
-};
-
-export const useRecruitApplicationReject = () => {
-  return useMutation({
-    mutationFn: postRecruitApplicationReject,
-  });
-};
-
-export const useRecruitApplicationCancel = () => {
-  return useMutation({
-    mutationFn: postRecruitApplicationCancel,
-  });
-};
-
-//
 
 export const useCreateRecruit = () => {
   return useMutation({
@@ -222,5 +196,15 @@ export const useRecruits = (options: Partial<UseRecruitsOptions> = {}) => {
       if (lastPage.isLast) return undefined;
       return lastPage.nextCursor ?? undefined;
     },
+  });
+};
+
+export const useApplyRecruit = (recruitId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (params: ApplyRecruitParams) => applyRecruit(recruitId, params),
+    onSuccess: () =>
+      queryClient.invalidateQueries(queryKeys.recruit.detail(recruitId)),
   });
 };

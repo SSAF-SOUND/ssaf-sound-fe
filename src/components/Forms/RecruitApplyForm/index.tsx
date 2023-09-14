@@ -83,14 +83,16 @@ interface SubmitButtonProps {
 
 const agreeToProvideProfileFieldName = 'agreeToProvideProfile';
 const SubmitButton = (props: SubmitButtonProps) => {
-  const { openModal, closeModal } = useModal();
   const { category, className, onSubmit } = props;
+
+  const { openModal, closeModal } = useModal();
+  const { isSubmitting } = useFormState();
   const agreeToProvideProfile =
     (useWatch<RecruitApplyFormValues>({
       name: agreeToProvideProfileFieldName,
     }) as boolean) ?? false;
+
   const recruitTheme = getRecruitThemeByCategory(category);
-  const { isSubmitting } = useFormState();
   const onClickAction = () => {
     onSubmit?.();
     closeModal();

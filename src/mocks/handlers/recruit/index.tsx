@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import type {
+  ApplyRecruitApiData,
   CreateRecruitApiData,
   GetRecruitDetailApiData,
   GetRecruitParticipantsApiData,
@@ -11,7 +12,7 @@ import { rest } from 'msw';
 
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { RecruitCategoryName } from '~/services/recruit';
+import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import {
@@ -21,31 +22,6 @@ import {
   scrapStatus,
 } from './data';
 import { restInfiniteRecruitsSuccess } from './utils';
-
-const getRecruitsEndpoint = removeQueryParams(
-  composeUrls(
-    API_URL,
-    endpoints.recruit.list({
-      cursor: 1,
-      recruitParts: [],
-      skills: [],
-      completed: false,
-      keyword: '',
-      size: 10,
-      category: RecruitCategoryName.PROJECT,
-    })
-  )
-);
-
-export const postRecruitApply = restSuccess(
-  'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.apply(':recruitId')),
-  {
-    data: null,
-  }
-);
 
 const getRecruitApplicantsEndpoint = removeQueryParams(
   composeUrls(API_URL, endpoints.recruit.application.applicants(1))
@@ -269,14 +245,52 @@ export const completeRecruitError = restError(
   }
 );
 
+const getRecruitsEndpoint = removeQueryParams(
+  composeUrls(
+    API_URL,
+    endpoints.recruit.list({
+      cursor: 1,
+      recruitParts: [],
+      skills: [],
+      completed: false,
+      keyword: '',
+      size: 10,
+      category: RecruitCategoryName.PROJECT,
+    })
+  )
+);
+
 export const getRecruits = rest.get(
   getRecruitsEndpoint,
   restInfiniteRecruitsSuccess
 );
 
+const applyRecruitEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.apply(':recruitId'));
+const applyRecruitMethod = 'post';
+
+export const applyRecruit = restSuccess<ApplyRecruitApiData['data']>(
+  applyRecruitMethod,
+  applyRecruitEndpoint,
+  {
+    data: {
+      matchStatus: MatchStatus.PENDING,
+      recruitApplicationId: 301,
+    },
+  }
+);
+
+export const applyRecruitError = restError(
+  applyRecruitMethod,
+  applyRecruitEndpoint,
+  {
+    message: '리쿠르팅 지원 실패',
+  }
+);
+
 export const recruitHandlers = [
   //
-  postRecruitApply,
   getRecruitApplicants,
   getRecruitApplicationDetail,
   postRecruitApplicationReject,
@@ -291,4 +305,5 @@ export const recruitHandlers = [
   updateRecruit,
   completeRecruit,
   getRecruits,
+  applyRecruit,
 ];
