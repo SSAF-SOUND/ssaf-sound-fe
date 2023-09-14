@@ -3,11 +3,7 @@ import type { RecruitFormProps } from '~/components/Forms/RecruitForm';
 
 import { useRouter } from 'next/router';
 
-import {
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { PageHeadingText } from '~/components/Common';
 import RecruitForm, {
   defaultRecruitFormValues,
 } from '~/components/Forms/RecruitForm';

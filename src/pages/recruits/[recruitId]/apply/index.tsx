@@ -9,19 +9,16 @@ import { useState } from 'react';
 import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import { RecruitApplyFormHeader } from '~/components/Forms/RecruitApplyForm/RecruitApplyFormHeader';
-import Name from '~/components/Name';
-import { Recruit } from '~/components/Recruit/Recruit';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { useMyInfo } from '~/services/member';
 import {
-  getDisplayCategoryName,
   getRecruitThemeByCategory,
   MatchStatus,
   useApplyRecruit,
   useRecruitDetail,
 } from '~/services/recruit';
-import { expandCss, fontCss, palettes, titleBarHeight } from '~/styles/utils';
+import { titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -78,11 +75,9 @@ const RecruitApplyPage: CustomNextPage = () => {
     );
   }
 
-  const { title, category, author, mine, finishedRecruit, matchStatus } =
-    recruitDetail;
+  const { category, mine, finishedRecruit, matchStatus } = recruitDetail;
 
   const recruitTheme = getRecruitThemeByCategory(category);
-  const displayCategoryName = getDisplayCategoryName(category);
 
   if (applied) {
     return (
@@ -128,7 +123,7 @@ const RecruitApplyPage: CustomNextPage = () => {
   const isUnauthorized =
     !isSignedIn || mine || (matchStatus && matchStatus !== MatchStatus.INITIAL);
 
-  if (!isUnauthorized) {
+  if (isUnauthorized) {
     const message = !isSignedIn
       ? '로그인이 필요합니다.'
       : mine

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { FullPageLoader, PageHeadingText } from '~/components/Common';
+import { PageHeadingText } from '~/components/Common';
 import { useModal } from '~/components/GlobalModal';
 import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';

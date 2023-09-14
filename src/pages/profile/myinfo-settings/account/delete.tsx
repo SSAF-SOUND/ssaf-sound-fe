@@ -5,12 +5,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  Button,
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { Button, PageHeadingText } from '~/components/Common';
 import TitleBar from '~/components/TitleBar';
 import { useDeleteAccount } from '~/services/auth';
 import { flex, fontCss, pageMinHeight, titleBarHeight } from '~/styles/utils';
