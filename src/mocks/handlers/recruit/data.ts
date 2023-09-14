@@ -323,6 +323,7 @@ export const createMockMyRecruitApplication = (
     question: 'Question',
     reply: 'Answer',
     recruitType,
+    appliedAt: faker.date.past().toISOString(),
   };
 };
 

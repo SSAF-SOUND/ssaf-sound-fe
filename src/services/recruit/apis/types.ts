@@ -96,6 +96,8 @@ export interface RecruitApplicationDetail {
 
   author: UserInfo;
   matchStatus: MatchStatus;
+
+  appliedAt: string;
 }
 
 export type MyRecruitApplicationDetail = Omit<
