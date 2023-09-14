@@ -5,7 +5,7 @@ import type { RecruitDetail } from '~/services/recruit';
 import { useRouter } from 'next/router';
 
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
@@ -54,7 +54,7 @@ const RecruitEditPage: CustomNextPage = () => {
   } = useRecruitDetail(recruitId);
 
   if (isRecruitDetailLoading) {
-    return <DefaultFullPageLoader text={loaderText.loadingData} />;
+    return <FullPageLoader text={loaderText.loadingData} />;
   }
 
   if (isRecruitDetailError) {
@@ -77,7 +77,7 @@ const RecruitEditPage: CustomNextPage = () => {
   // 내 리쿠르팅이 아니라면 리다이렉션
   if (!mine) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   if (finishedRecruit) {

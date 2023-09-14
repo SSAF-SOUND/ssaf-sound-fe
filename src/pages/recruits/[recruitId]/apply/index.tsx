@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import { RecruitApplyFormHeader } from '~/components/Forms/RecruitApplyForm/RecruitApplyFormHeader';
 import Name from '~/components/Name';
@@ -59,7 +59,7 @@ const RecruitApplyPage: CustomNextPage = () => {
   } = useRecruitDetail(recruitId);
 
   if (isRecruitDetailLoading) {
-    return <DefaultFullPageLoader text="리쿠르팅 정보를 불러오는 중입니다." />;
+    return <FullPageLoader text="리쿠르팅 정보를 불러오는 중입니다." />;
   }
 
   if (isRecruitDetailError) {

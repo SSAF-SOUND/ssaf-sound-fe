@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { DefaultFullPageLoader, loaderText } from '~/components/Common';
+import { FullPageLoader, loaderText } from '~/components/Common';
 import { useMyAccountStatus, useMyInfo } from '~/services/member';
 import { routes } from '~/utils';
 import { webStorage } from '~/utils/webStorage';
@@ -27,7 +27,7 @@ const HomePage: CustomNextPage = () => {
     }
   }, [isRegisterRequired, router, isFetching]);
 
-  return <DefaultFullPageLoader text={loaderText.checkUser} />;
+  return <FullPageLoader text={loaderText.checkUser} />;
 };
 
 export default HomePage;

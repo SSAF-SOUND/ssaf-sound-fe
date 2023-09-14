@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { DefaultFullPageLoader } from './index';
+import { FullPageLoader } from './index';
 
-const meta: Meta<typeof DefaultFullPageLoader> = {
+const meta: Meta<typeof FullPageLoader> = {
   title: 'Indicator/DefaultFullPageLoader',
-  component: DefaultFullPageLoader,
+  component: FullPageLoader,
 };
 
 export default meta;
 
-type DefaultFullPageLoaderStory = StoryObj<typeof DefaultFullPageLoader>;
+type DefaultFullPageLoaderStory = StoryObj<typeof FullPageLoader>;
 export const Default: DefaultFullPageLoaderStory = {
   args: {
     text: '데이터를 가져오는 중입니다.',

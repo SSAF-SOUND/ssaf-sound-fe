@@ -7,7 +7,7 @@ import { css } from '@emotion/react';
 
 import {
   Button,
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';

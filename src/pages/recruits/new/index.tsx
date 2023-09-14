@@ -4,7 +4,7 @@ import type { RecruitFormProps } from '~/components/Forms/RecruitForm';
 import { useRouter } from 'next/router';
 
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { DefaultFullPageLoader, loaderText } from '~/components/Common';
+import { FullPageLoader, loaderText } from '~/components/Common';
 import { useMyInfo } from '~/services/member';
 import { customToast, routes } from '~/utils';
 
@@ -9,7 +9,7 @@ const ProfileRootPage = () => {
   const { data: myInfo, isLoading } = useMyInfo();
 
   if (isLoading) {
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   if (!myInfo) {
@@ -23,7 +23,7 @@ const ProfileRootPage = () => {
     router.replace(routes.profile.detail(myInfo.memberId));
   }
 
-  return <DefaultFullPageLoader text={loaderText.checkUser} />;
+  return <FullPageLoader text={loaderText.checkUser} />;
 };
 
 export default ProfileRootPage;

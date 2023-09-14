@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
   Separator,
@@ -63,11 +63,11 @@ const MyScrapsPage: CustomNextPage = () => {
 
   if (!isValidCategory) {
     router.replace(routes.profile.myScraps(defaultCategory));
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   if (!myInfo) {
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   const defaultTabValue = category || defaultCategory;

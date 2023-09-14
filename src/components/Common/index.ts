@@ -5,7 +5,7 @@ export * from './BoldText';
 export * from './Button';
 export * from './Checkbox';
 export * from './CircleButton';
-export * from './DefaultFullPageLoader';
+export * from './FullPageLoader';
 export * from './Dot';
 export * from './Gnb';
 export * from './Icon';

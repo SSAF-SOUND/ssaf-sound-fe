@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
@@ -48,7 +48,7 @@ const RecruitApplicantsPage: CustomNextPage = () => {
   } = useRecruitDetail(recruitId);
 
   if (isRecruitApplicantsLoading || isRecruitDetailLoading) {
-    return <DefaultFullPageLoader text={loaderText.loadingData} />;
+    return <FullPageLoader text={loaderText.loadingData} />;
   }
 
   if (isRecruitApplicantsError || isRecruitDetailError) {
@@ -57,7 +57,7 @@ const RecruitApplicantsPage: CustomNextPage = () => {
 
     if (isUnauthorized) {
       router.replace(routes.unauthorized());
-      return <DefaultFullPageLoader />;
+      return <FullPageLoader />;
     }
 
     return <div>Fail to load</div>;

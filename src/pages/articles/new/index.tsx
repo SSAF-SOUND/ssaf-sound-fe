@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import { useArticleCategories, useCreateArticle } from '~/services/article';
 import {
@@ -39,7 +39,7 @@ const ArticleCreatePage: CustomNextPage = () => {
   }, [articleCategories, router, categoryId]);
 
   if (!articleCategories) {
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   const onValidSubmit: ArticleFormProps['onValidSubmit'] = async (

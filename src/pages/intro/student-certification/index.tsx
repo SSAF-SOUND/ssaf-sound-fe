@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 
 import {
   Button,
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
   SsafyIcon,
@@ -24,7 +24,7 @@ const StudentCertificationIntroPage = () => {
 
   if (!myInfo) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   const uncertified =

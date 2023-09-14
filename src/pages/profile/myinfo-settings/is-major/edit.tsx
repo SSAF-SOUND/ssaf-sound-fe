@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { produce } from 'immer';
 
-import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateIsMajor } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
@@ -27,7 +27,7 @@ const MyInfoSettingsIsMajorEditPage = () => {
 
   if (!myInfo) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   const setIsMajor = (isMajor: boolean) => {

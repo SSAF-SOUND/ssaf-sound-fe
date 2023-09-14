@@ -12,7 +12,7 @@ import { Article } from '~/components/Article';
 import { ArticleError } from '~/components/Article/ArticleError';
 import ArticleComment from '~/components/ArticleComment';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   PageHead,
   PageHeadingText,
 } from '~/components/Common';
@@ -55,7 +55,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
   }, [refetch]);
 
   if (isArticleDetailLoading) {
-    return <DefaultFullPageLoader text="게시글을 불러오는 중입니다." />;
+    return <FullPageLoader text="게시글을 불러오는 중입니다." />;
   }
 
   if (isArticleDetailError) {

@@ -3,11 +3,11 @@ import { BounceLoader } from 'react-spinners';
 
 import { flex, fontCss, pageCss, palettes } from '~/styles/utils';
 
-interface DefaultFullPageLoaderProps {
+interface FullPageLoaderProps {
   text?: string;
 }
 
-export const DefaultFullPageLoader = (props: DefaultFullPageLoaderProps) => {
+export const FullPageLoader = (props: FullPageLoaderProps) => {
   const { text = '' } = props;
   return (
     <div css={selfCss}>

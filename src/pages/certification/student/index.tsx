@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 import StudentCertificationForm from 'src/components/Forms/StudentCertificationForm';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
@@ -55,7 +55,7 @@ const StudentCertificationPage: CustomNextPage = () => {
     myInfo.ssafyInfo.certificationState === CertificationState.CERTIFIED
   ) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   const handleIncorrectAnswer = (remainChances: number) => {

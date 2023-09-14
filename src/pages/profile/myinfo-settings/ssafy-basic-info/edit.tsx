@@ -7,7 +7,7 @@ import { css } from '@emotion/react';
 import { produce } from 'immer';
 import { isBoolean } from 'is-what';
 
-import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import {
   CertificationState,
@@ -36,7 +36,7 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
 
   if (!myInfo || !isBoolean(myInfo.ssafyMember)) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (

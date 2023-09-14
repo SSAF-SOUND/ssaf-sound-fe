@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
@@ -24,7 +24,7 @@ const MyArticlesPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
 
   if (!myInfo) {
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   return (

@@ -10,7 +10,7 @@ import Skeleton from 'react-loading-skeleton';
 
 import ArticleComment from '~/components/ArticleComment';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHead,
 } from '~/components/Common';
@@ -62,7 +62,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
   }, [refetch]);
 
   if (isRecruitDetailLoading) {
-    return <DefaultFullPageLoader text={loaderText.loadingData} />;
+    return <FullPageLoader text={loaderText.loadingData} />;
   }
 
   if (isRecruitDetailError) {
@@ -102,6 +102,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
 
       <RecruitDetailLayout>
         <TitleBar.Default
+          onClickBackward={routes.recruit.list({ category })}
           css={{ marginBottom: 12 }}
           title={titleBarTitle}
           withoutClose

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
@@ -41,12 +41,12 @@ const PortfolioEditPage: CustomNextPage = () => {
 
   if (!myInfo) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   if (isLoadingMyPortfolio) {
     return (
-      <DefaultFullPageLoader text="내 포트폴리오 데이터를 가져오는 중입니다." />
+      <FullPageLoader text="내 포트폴리오 데이터를 가져오는 중입니다." />
     );
   }
 

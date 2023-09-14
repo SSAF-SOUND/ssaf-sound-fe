@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 import UserRegisterForm from 'src/components/Forms/UserRegisterForm';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   Logo,
   PageHead,
@@ -49,7 +49,7 @@ const RegisterPage: CustomNextPage = () => {
 
   if (shouldCheckUserInfo && !isRegisterRequired) {
     router.replace(routes.main());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   const onSubmit = async (formValues: UserRegisterFormValues) => {

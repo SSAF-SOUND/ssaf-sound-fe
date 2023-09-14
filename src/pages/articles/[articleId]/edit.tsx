@@ -4,7 +4,7 @@ import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 import { useRouter } from 'next/router';
 
 import { ArticleError } from '~/components/Article/ArticleError';
-import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import { useArticleDetail, useUpdateArticle } from '~/services/article';
 import {
@@ -29,7 +29,7 @@ const ArticleEditPage: CustomNextPage = () => {
   const { mutateAsync: updateArticle } = useUpdateArticle(articleId);
 
   if (isArticleDetailLoading) {
-    return <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />;
+    return <FullPageLoader text="데이터를 불러오는 중입니다." />;
   }
 
   if (isArticleDetailError) {
@@ -40,7 +40,7 @@ const ArticleEditPage: CustomNextPage = () => {
 
   if (!mine) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   const onValidSubmit: ArticleFormProps['onValidSubmit'] = async (
