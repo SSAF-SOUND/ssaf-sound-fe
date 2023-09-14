@@ -8,7 +8,7 @@ export interface SkillIconProps {
   invert?: boolean;
 }
 
-const SkillIcon = (props: SkillIconProps) => {
+export const SkillIcon = (props: SkillIconProps) => {
   const { name, size = 24, invert = false } = props;
   const SkillSVG = Skills[name];
   const style = {
@@ -27,5 +27,3 @@ const invertable = {
   [SkillName.NEXTJS]: true,
   [SkillName.ETC]: true,
 };
-
-export default SkillIcon;

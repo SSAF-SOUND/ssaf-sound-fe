@@ -6,14 +6,14 @@ import { fontCss, palettes } from '~/styles/utils';
 
 type AlertTextSize = 'sm' | 'md' | 'lg';
 
-interface AlertTextProps {
+export interface AlertTextProps {
   children: ReactNode;
   className?: string;
   size?: AlertTextSize;
   bold?: boolean;
 }
 
-const AlertText = (props: AlertTextProps) => {
+export const AlertText = (props: AlertTextProps) => {
   const { children, className, size = 'sm', bold = false } = props;
 
   return (
@@ -26,8 +26,6 @@ const AlertText = (props: AlertTextProps) => {
     </p>
   );
 };
-
-export default AlertText;
 
 const selfCss = css(
   {

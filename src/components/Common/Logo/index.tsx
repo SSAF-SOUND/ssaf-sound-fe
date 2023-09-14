@@ -14,7 +14,7 @@ export interface LogoProps {
   navigateToMainPage?: boolean;
 }
 
-const Logo = (props: LogoProps) => {
+export const Logo = (props: LogoProps) => {
   const { size = 'sm', navigateToMainPage = false } = props;
   const router = useRouter();
   const handleClick = () => {
@@ -49,4 +49,3 @@ const cursorCss = css({
   cursor: 'pointer',
 });
 
-export default Logo;

@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Button } from '~/components/Common';
 import { flex, fontCss, palettes, position } from '~/styles/utils';
 
-import Modal from './index';
+import { Modal } from './index';
 
 const meta: Meta<typeof Modal> = {
   title: 'Modal/Modal',

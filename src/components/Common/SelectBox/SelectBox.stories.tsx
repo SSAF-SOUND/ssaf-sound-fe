@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import SelectBox from './index';
+import { SelectBox } from './index';
 
 const meta: Meta<typeof SelectBox> = {
   title: 'Input/SelectBox',

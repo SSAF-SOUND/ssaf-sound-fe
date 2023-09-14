@@ -5,10 +5,15 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import { useArticleCategories, useCreateArticle } from '~/services/article';
-import { handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const metaTitle = '게시글 작성';
 
@@ -34,7 +39,7 @@ const ArticleCreatePage: CustomNextPage = () => {
   }, [articleCategories, router, categoryId]);
 
   if (!articleCategories) {
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   const onValidSubmit: ArticleFormProps['onValidSubmit'] = async (
@@ -69,13 +74,5 @@ const ArticleCreatePage: CustomNextPage = () => {
 };
 
 export default ArticleCreatePage;
-ArticleCreatePage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader />,
-  unauthorized: routes.unauthorized(),
-};
-ArticleCreatePage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+ArticleCreatePage.auth = createAuthGuard();
+ArticleCreatePage.meta = createNoIndexPageMetaData(metaTitle);

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import { isValidElement } from 'react';
 
-import { DefaultFullPageLoader } from '~/components/Common';
+import { FullPageLoader } from '~/components/Common';
 import { role, useMyInfo } from '~/services/member';
 
 export interface AuthCheckerProps {
@@ -24,7 +24,7 @@ const AuthChecker = (props: AuthCheckerProps) => {
   } = useMyInfo({ enabled: true });
 
   if (isInitialLoading) {
-    return auth.loading || <DefaultFullPageLoader />;
+    return auth.loading || <FullPageLoader />;
   }
 
   const isUnauthorized =
@@ -41,7 +41,7 @@ const AuthChecker = (props: AuthCheckerProps) => {
       return auth.unauthorized;
     }
 
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   return <>{children}</>;

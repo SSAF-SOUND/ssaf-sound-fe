@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 import UserRegisterForm from 'src/components/Forms/UserRegisterForm';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   Logo,
   PageHead,
@@ -30,7 +30,12 @@ import {
   position,
   zIndex,
 } from '~/styles/utils';
-import { customToast, handleAxiosError } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  customToast,
+  handleAxiosError,
+} from '~/utils';
 import { routes } from '~/utils/routes';
 
 const metaTitle = '회원 가입';
@@ -44,7 +49,7 @@ const RegisterPage: CustomNextPage = () => {
 
   if (shouldCheckUserInfo && !isRegisterRequired) {
     router.replace(routes.main());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   const onSubmit = async (formValues: UserRegisterFormValues) => {
@@ -78,13 +83,9 @@ const RegisterPage: CustomNextPage = () => {
   );
 };
 
-RegisterPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.main(),
-};
-
 export default RegisterPage;
+RegisterPage.auth = createAuthGuard({ unauthorized: routes.main() });
+RegisterPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css({ minHeight: '100vh', padding: '10px 0' }, flex());
 const formCss = css({ flexGrow: 1 });

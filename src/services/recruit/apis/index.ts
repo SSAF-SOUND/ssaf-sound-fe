@@ -1,3 +1,4 @@
+export * from './applyRecruit';
 export * from './completeRecruit';
 export * from './constants';
 export * from './createRecruit';

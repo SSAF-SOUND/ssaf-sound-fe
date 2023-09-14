@@ -15,7 +15,11 @@ export interface ProgressBarProps {
   size?: ProgressBarSize;
 }
 
-const calculateForegroundWidth = (min: number, now: number, max: number) => {
+const calculateForegroundWidth = (
+  min: number,
+  now: number,
+  max: number
+) => {
   const width = ((now - min) / (max - min)) * 100;
   if (width <= 0) return '0%';
   return `${width}%`;
@@ -24,7 +28,7 @@ const calculateForegroundWidth = (min: number, now: number, max: number) => {
 const defaultForeground = palettes.primary.default;
 const defaultBackground = palettes.white;
 
-const ProgressBar = (props: ProgressBarProps) => {
+export const ProgressBar = (props: ProgressBarProps) => {
   const {
     label,
     min = 0,
@@ -45,8 +49,6 @@ const ProgressBar = (props: ProgressBarProps) => {
     </div>
   );
 };
-
-export default ProgressBar;
 
 const sizeCss = {
   sm: css({

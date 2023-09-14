@@ -4,10 +4,15 @@ import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 import { useRouter } from 'next/router';
 
 import { ArticleError } from '~/components/Article/ArticleError';
-import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import { useArticleDetail, useUpdateArticle } from '~/services/article';
-import { handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const metaTitle = '게시글 수정';
 
@@ -24,7 +29,7 @@ const ArticleEditPage: CustomNextPage = () => {
   const { mutateAsync: updateArticle } = useUpdateArticle(articleId);
 
   if (isArticleDetailLoading) {
-    return <DefaultFullPageLoader text="데이터를 불러오는 중입니다." />;
+    return <FullPageLoader text="데이터를 불러오는 중입니다." />;
   }
 
   if (isArticleDetailError) {
@@ -35,7 +40,7 @@ const ArticleEditPage: CustomNextPage = () => {
 
   if (!mine) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   const onValidSubmit: ArticleFormProps['onValidSubmit'] = async (
@@ -73,13 +78,5 @@ const ArticleEditPage: CustomNextPage = () => {
 };
 
 export default ArticleEditPage;
-ArticleEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader />,
-  unauthorized: routes.unauthorized(),
-};
-ArticleEditPage.meta = {
-  title: metaTitle,
-  robots: { index: false, follow: false },
-  openGraph: { title: metaTitle },
-};
+ArticleEditPage.auth = createAuthGuard();
+ArticleEditPage.meta = createNoIndexPageMetaData(metaTitle);

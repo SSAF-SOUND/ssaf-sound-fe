@@ -3,7 +3,7 @@ import type { SingleAvatarProps } from '~/components/Common/Avatar/SingleAvatar'
 
 import { userInfo } from '~/mocks/handlers/member/data';
 
-import Avatar from './index';
+import { Avatar } from './index';
 
 const disableArgs = ['userInfo'];
 const disableArgsTypes = disableArgs.reduce((acc, cur) => {

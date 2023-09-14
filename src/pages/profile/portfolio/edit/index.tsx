@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
@@ -18,6 +18,8 @@ import {
 } from '~/services/member';
 import { globalVars } from '~/styles/utils';
 import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
   customToast,
   getErrorResponse,
   handleAxiosError,
@@ -39,12 +41,12 @@ const PortfolioEditPage: CustomNextPage = () => {
 
   if (!myInfo) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   if (isLoadingMyPortfolio) {
     return (
-      <DefaultFullPageLoader text="내 포트폴리오 데이터를 가져오는 중입니다." />
+      <FullPageLoader text="내 포트폴리오 데이터를 가져오는 중입니다." />
     );
   }
 
@@ -146,13 +148,5 @@ const portfolioSkillsToFormSkillsField = (
 };
 
 export default PortfolioEditPage;
-PortfolioEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-PortfolioEditPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+PortfolioEditPage.auth = createAuthGuard();
+PortfolioEditPage.meta = createNoIndexPageMetaData(metaTitle);

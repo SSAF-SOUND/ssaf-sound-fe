@@ -14,7 +14,7 @@ interface BarProps {
 /**
  * - `left`, `center`, `right` 세가지 section을 가지고 있는 Box
  */
-const Bar = (props: BarProps) => {
+export const Bar = (props: BarProps) => {
   const { className = '', left, center, right } = props;
   return (
     <div css={selfCss} className={className}>
@@ -26,8 +26,6 @@ const Bar = (props: BarProps) => {
 };
 
 const Division = <div />;
-
-export default Bar;
 
 const selfCss = css(
   {

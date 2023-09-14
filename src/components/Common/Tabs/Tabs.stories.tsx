@@ -1,7 +1,7 @@
 import type { TriggerColorProps, TriggerVariantProps } from './Trigger';
 import type { Meta } from '@storybook/react';
 
-import Tabs from './index';
+import { Tabs } from './index';
 
 type Props = {
   theme: TriggerColorProps;

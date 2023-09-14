@@ -92,7 +92,7 @@ const anonymousCss = css({
 });
 
 const emptyCss = css({
-  backgroundColor: palettes.white,
+  backgroundColor: palettes.grey4,
   border: `1px dotted ${palettes.grey0}`,
 });
 

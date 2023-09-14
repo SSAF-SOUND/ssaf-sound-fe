@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHead,
   PageHeadingText,
@@ -75,7 +75,7 @@ const ProfilePage: CustomNextPage = () => {
   }
 
   if (isUserInfoLoading || isUserProfileVisibilityLoading || isMyInfoLoading) {
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   const isProfilePublic = userProfileVisibility.isPublic;

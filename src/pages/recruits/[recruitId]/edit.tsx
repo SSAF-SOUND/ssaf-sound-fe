@@ -5,7 +5,7 @@ import type { RecruitDetail } from '~/services/recruit';
 import { useRouter } from 'next/router';
 
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
@@ -26,6 +26,8 @@ import {
 } from '~/services/recruit';
 import { globalVars } from '~/styles/utils';
 import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
   customToast,
   ErrorMessage,
   getErrorResponse,
@@ -52,7 +54,7 @@ const RecruitEditPage: CustomNextPage = () => {
   } = useRecruitDetail(recruitId);
 
   if (isRecruitDetailLoading) {
-    return <DefaultFullPageLoader text={loaderText.loadingData} />;
+    return <FullPageLoader text={loaderText.loadingData} />;
   }
 
   if (isRecruitDetailError) {
@@ -75,7 +77,7 @@ const RecruitEditPage: CustomNextPage = () => {
   // 내 리쿠르팅이 아니라면 리다이렉션
   if (!mine) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   if (finishedRecruit) {
@@ -101,16 +103,8 @@ const RecruitEditPage: CustomNextPage = () => {
 };
 
 export default RecruitEditPage;
-RecruitEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-RecruitEditPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+RecruitEditPage.auth = createAuthGuard();
+RecruitEditPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const marginForExpand = globalVars.mainLayoutPaddingX.var;
 

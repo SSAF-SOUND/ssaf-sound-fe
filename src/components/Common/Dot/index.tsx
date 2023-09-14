@@ -5,17 +5,15 @@ import { inlineFlex, themeColorVars } from '~/styles/utils';
 type DotTheme = 'primary' | 'secondary' | 'recruit';
 type DotSize = 'sm' | 'md' | 'lg';
 
-interface DotProps {
+export interface DotProps {
   theme?: DotTheme;
   size?: DotSize;
 }
 
-const Dot = (props: DotProps) => {
+export const Dot = (props: DotProps) => {
   const { theme = 'primary', size = 'sm' } = props;
   return <div data-theme={theme} css={[selfCss, themeCss, sizeCss[size]]} />;
 };
-
-export default Dot;
 
 const selfCss = css({ borderRadius: '50%' }, inlineFlex());
 

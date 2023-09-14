@@ -3,11 +3,7 @@ import type { RecruitFormProps } from '~/components/Forms/RecruitForm';
 
 import { useRouter } from 'next/router';
 
-import {
-  DefaultFullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { PageHeadingText } from '~/components/Common';
 import RecruitForm, {
   defaultRecruitFormValues,
 } from '~/components/Forms/RecruitForm';
@@ -23,7 +19,13 @@ import {
   useCreateRecruit,
 } from '~/services/recruit';
 import { globalVars } from '~/styles/utils';
-import { customToast, handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  customToast,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const metaTitle = '리쿠르팅 등록';
 
@@ -101,15 +103,7 @@ const RecruitCreatePage: CustomNextPage = () => {
 };
 
 export default RecruitCreatePage;
-RecruitCreatePage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-RecruitCreatePage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+RecruitCreatePage.auth = createAuthGuard();
+RecruitCreatePage.meta = createNoIndexPageMetaData(metaTitle);
 
 const marginForExpand = globalVars.mainLayoutPaddingX.var;

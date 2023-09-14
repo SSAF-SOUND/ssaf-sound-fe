@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
 import {
-  DefaultFullPageLoader,
+  FullPageLoader,
   loaderText,
   PageHeadingText,
 } from '~/components/Common';
@@ -15,7 +15,7 @@ import TitleBar from '~/components/TitleBar';
 import { useMyArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import { flex, pageCss, titleBarHeight } from '~/styles/utils';
-import { concat, routes } from '~/utils';
+import { concat, createAuthGuard, createNoIndexPageMetaData, routes } from "~/utils";
 
 const titleBarTitle = '내가 작성한 게시글';
 const metaTitle = titleBarTitle;
@@ -24,7 +24,7 @@ const MyArticlesPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
 
   if (!myInfo) {
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   return (
@@ -51,16 +51,8 @@ const selfCss = css(
 );
 
 export default MyArticlesPage;
-MyArticlesPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader text={loaderText.checkUser} />,
-  unauthorized: routes.unauthorized(),
-};
-MyArticlesPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+MyArticlesPage.auth = createAuthGuard();
+MyArticlesPage.meta = createNoIndexPageMetaData(metaTitle)
 
 const ArticleLayer = () => {
   const infiniteQuery = useMyArticles();

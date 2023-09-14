@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import {
   Logo,
   SsafyIcon,
-  DefaultFullPageLoader,
+  FullPageLoader,
   PageHead,
   PageHeadingText,
   loaderText,
@@ -25,11 +25,11 @@ const SignInPage = () => {
 
   if (isAuthenticated) {
     router.replace(routes.main());
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   if (isChecking) {
-    return <DefaultFullPageLoader text={loaderText.checkUser} />;
+    return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   return (

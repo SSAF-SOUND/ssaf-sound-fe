@@ -73,38 +73,6 @@ export const getRecruitMembers = (recruitId: number) => {
     .then((res) => res.data.data);
 };
 
-// -----------------------------------------
-
-export interface RecruitComment {
-  recruitCommentId: number;
-  content: string;
-  commentGroup: number;
-  children: [
-    {
-      recruitCommentId: number;
-      content: string;
-      commentGroup: number;
-      children: [];
-      deletedComment: boolean;
-      memberId: number;
-      nickname: 'khs';
-      ssafyMember: true;
-      isMajor: true;
-      majorTrack: '자바백엔드';
-    }
-  ];
-  deletedComment: false;
-  memberId: 1;
-  nickname: 'khs';
-  ssafyMember: true;
-  isMajor: true;
-  majorTrack: '자바백엔드';
-}
-
-// --------------------------------------
-
-// ---------------------------------------
-
 export interface RecruitApplyParams {
   recruitType: RecruitType;
   contents: Array<string>;

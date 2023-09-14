@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import { BounceLoader } from 'react-spinners';
 
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss, pageCss, palettes } from '~/styles/utils';
 
-interface DefaultFullPageLoaderProps {
+interface FullPageLoaderProps {
   text?: string;
 }
 
-export const DefaultFullPageLoader = (props: DefaultFullPageLoaderProps) => {
+export const FullPageLoader = (props: FullPageLoaderProps) => {
   const { text = '' } = props;
   return (
     <div css={selfCss}>
@@ -22,6 +22,7 @@ const selfCss = css(
     width: '100%',
     height: '100vh',
   },
+  pageCss.minHeight,
   flex('center', 'center', 'column', 20)
 );
 

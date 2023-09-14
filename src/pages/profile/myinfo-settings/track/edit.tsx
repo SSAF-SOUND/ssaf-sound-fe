@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { produce } from 'immer';
 
-import { DefaultFullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader, PageHeadingText } from '~/components/Common';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import {
   CertificationState,
@@ -16,7 +16,13 @@ import {
   useUpdateTrack,
 } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';
-import { customToast, handleAxiosError, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  customToast,
+  handleAxiosError,
+  routes,
+} from '~/utils';
 
 const metaTitle = '트랙 수정';
 
@@ -33,7 +39,7 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
 
   if (isUncertified) {
     router.replace(routes.unauthorized());
-    return <DefaultFullPageLoader />;
+    return <FullPageLoader />;
   }
 
   const onValidSubmit: MyInfoEditFormProps['onValidSubmit'] = async (
@@ -78,16 +84,8 @@ const MyInfoSettingsTrackEditPage: CustomNextPage = () => {
   );
 };
 export default MyInfoSettingsTrackEditPage;
-MyInfoSettingsTrackEditPage.auth = {
-  role: 'user',
-  loading: <DefaultFullPageLoader />,
-  unauthorized: routes.unauthorized(),
-};
-MyInfoSettingsTrackEditPage.meta = {
-  title: metaTitle,
-  openGraph: { title: metaTitle },
-  robots: { index: false, follow: false },
-};
+MyInfoSettingsTrackEditPage.auth = createAuthGuard();
+MyInfoSettingsTrackEditPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css(
   { padding: `${titleBarHeight}px 0`, height: '100vh' },

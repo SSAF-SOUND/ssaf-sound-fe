@@ -159,8 +159,6 @@ export const SelectBox = <D,>(props: SelectBoxProps<D>) => {
   );
 };
 
-export default SelectBox;
-
 const baseTriggerCss = css(
   {
     width: '100%',
