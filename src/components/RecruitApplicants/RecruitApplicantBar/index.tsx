@@ -6,38 +6,32 @@ import { css } from '@emotion/react';
 import { memo } from 'react';
 
 import { Avatar, Icon, IconButton } from '~/components/Common';
-import { MatchStatusText } from '~/components/RecruitApplicants/RecruitApplicantBar/MatchStatusText';
+import { FullDateTime } from '~/components/FullDateTime';
 import { RecruitApplicantLikeButton } from '~/components/RecruitApplicants/RecruitApplicantBar/RecruitApplicantLikeButton';
-import { MatchStatus } from '~/services/recruit';
-import { flex, fontCss, inlineFlex, lineClamp, palettes } from '~/styles/utils';
-import { formatFullDate } from '~/utils';
+import { flex, fontCss, inlineFlex, lineClamp } from '~/styles/utils';
+import { routes } from '~/utils';
 
 export interface RecruitApplicantBar {
+  recruitId: number;
   applicant: RecruitApplicant;
 }
 
 export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
-  const { applicant } = props;
+  const { applicant, recruitId } = props;
 
-  const { author, liked, appliedAt, matchStatus, reply } = applicant;
+  const { author, liked, appliedAt, reply, recruitApplicationId } = applicant;
 
   const { nickname } = author;
-  const date = formatFullDate(appliedAt);
 
   // 지원자에게 어떤 방식으로든 응답이 된 상태
-  const touched = matchStatus !== MatchStatus.PENDING;
 
   return (
     <li css={selfCss}>
       <div css={applicantHeaderCss}>
-        {touched ? (
-          <MatchStatusText matchStatus={matchStatus} />
-        ) : (
-          <RecruitApplicantLikeButton
-            liked={liked}
-            onLikedChange={(v) => console.log(v)}
-          />
-        )}
+        <RecruitApplicantLikeButton
+          liked={liked}
+          onLikedChange={(v) => console.log(v)}
+        />
       </div>
 
       <div css={applicantInfoContainerCss}>
@@ -56,16 +50,19 @@ export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
               {/* <Dot theme="recruit" /> */}
               <IconButton size={32} asChild>
                 {/* NOTE: 현 유저의 신청 내역으로 이동 */}
-                <Link href={'#'}>
+                <Link
+                  href={routes.recruit.applications.detail({
+                    recruitId,
+                    recruitApplicationId,
+                  })}
+                >
                   <Icon name="chevron.right" size={24} />
                 </Link>
               </IconButton>
             </div>
           </div>
 
-          <time dateTime={date} css={dateCss}>
-            {date}
-          </time>
+          <FullDateTime dateTimeString={appliedAt} />
         </div>
       </div>
     </li>
@@ -90,6 +87,7 @@ const applicantInfoDetailContainerCss = css({
   gridTemplateRows: 'auto',
   gridAutoRows: 'auto',
   width: '100%',
+  rowGap: 6,
 });
 const applicantInfoDetailCss = css(flex('center', 'space-between', 'row', 12));
 
@@ -113,7 +111,3 @@ const applicantInfoDescriptionReplyCss = css(
 );
 
 const applicantInfoLinkCss = css({}, flex('center', '', 'row', 6));
-
-const dateCss = css(fontCss.family.auto, fontCss.style.R12, {
-  color: palettes.font.blueGrey,
-});

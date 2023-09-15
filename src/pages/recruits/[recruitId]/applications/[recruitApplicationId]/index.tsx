@@ -9,15 +9,11 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  Button,
-  FullPageLoader,
-  PageHeadingText,
-  Separator,
-} from '~/components/Common';
+import { Button, FullPageLoader, PageHeadingText } from '~/components/Common';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
+import { FullDateTime } from '~/components/FullDateTime';
 import NameCard from '~/components/NameCard';
-import { RecruitLikeButton } from '~/components/Recruit/RecruitLikeButton';
+import { RecruitApplicantLikeButton } from '~/components/RecruitApplicants/RecruitApplicantBar/RecruitApplicantLikeButton';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import {
@@ -25,11 +21,10 @@ import {
   useRecruitApplication,
   useRecruitDetail,
 } from '~/services/recruit';
-import { flex, fontCss, palettes, titleBarHeight } from '~/styles/utils';
+import { flex, palettes, titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
-  formatFullDateTime,
   getErrorResponse,
   noop,
   routes,
@@ -109,8 +104,6 @@ const RecruitApplicationPage: CustomNextPage = () => {
     );
   }
 
-  const { date: formattedAppliedDate, time: formattedAppliedTime } =
-    formatFullDateTime(appliedAt);
   return (
     <>
       <PageHeadingText text={metaTitle} />
@@ -124,18 +117,11 @@ const RecruitApplicationPage: CustomNextPage = () => {
         />
 
         <header css={[headerCss, { marginBottom: 60 }]}>
-          <time css={appliedAtCss} dateTime={appliedAt}>
-            {formattedAppliedDate}
-            <Separator
-              orientation="vertical"
-              height={12}
-              style={{ backgroundColor: palettes.font.blueGrey }}
-            />
-            {formattedAppliedTime}
-          </time>
+          <FullDateTime dateTimeString={appliedAt} />
+
           <div css={[applicantCss, { marginBottom: 30 }]}>
             <NameCard userInfo={applicantInfo} />
-            <RecruitLikeButton liked={liked} />
+            <RecruitApplicantLikeButton liked={liked} />
           </div>
 
           <Button
@@ -182,13 +168,6 @@ const selfCss = css({
   padding: `${titleBarHeight + 30}px 0`,
 });
 const headerCss = css(flex('', '', 'column', 8));
-const appliedAtCss = css(
-  {
-    color: palettes.font.blueGrey,
-  },
-  fontCss.style.R12,
-  flex('center', '', 'row', 6)
-);
 const applicantCss = css(flex('center', 'space-between', 'row', 12));
 
 export default RecruitApplicationPage;

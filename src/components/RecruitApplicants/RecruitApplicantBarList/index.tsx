@@ -13,11 +13,12 @@ interface RecruitApplicantBarListProps {
   applicants: RecruitApplicant[];
   // 더보기를 누르기 전에 보여줄 지원자 수
   initialVisibleCount?: number;
+  recruitId: number;
 }
 
 export const RecruitApplicantBarList = memo(
   (props: RecruitApplicantBarListProps) => {
-    const { applicants, initialVisibleCount = 3 } = props;
+    const { applicants, initialVisibleCount = 3, recruitId } = props;
     const [sortLikedApplicantsFirst, setSortLikedApplicantsFirst] =
       useState(false);
     const [loadMore, setLoadMore] = useState(false);
@@ -64,6 +65,7 @@ export const RecruitApplicantBarList = memo(
           {visibleApplicants.map((applicant) => (
             <RecruitApplicantBar
               key={applicant.author.memberId}
+              recruitId={recruitId}
               applicant={applicant}
             />
           ))}

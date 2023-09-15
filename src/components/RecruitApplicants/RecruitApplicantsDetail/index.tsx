@@ -30,7 +30,7 @@ export const RecruitApplicantsDetail = (
   const { data: recruitParticipants, isLoading: isRecruitMembersLoading } =
     useRecruitParticipants(recruitDetail.recruitId);
 
-  const { limits } = recruitDetail;
+  const { limits, recruitId } = recruitDetail;
 
   const limitInfo = limits.find(
     ({ recruitType }) => recruitType === part
@@ -78,7 +78,10 @@ export const RecruitApplicantsDetail = (
             count={pendingApplicantsCount}
           />
 
-          <RecruitApplicantBarList applicants={pendingApplicants} />
+          <RecruitApplicantBarList
+            recruitId={recruitId}
+            applicants={pendingApplicants}
+          />
         </div>
       </RecruitApplicantsAccordion.Content>
     </RecruitApplicantsAccordion.Item>
