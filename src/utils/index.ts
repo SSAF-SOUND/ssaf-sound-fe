@@ -1,6 +1,7 @@
 export * from './array';
 export * from './axios';
 export * from './clearPrivateData';
+export * from './compareDates';
 export * from './constants';
 export * from './createAuthGuard';
 export * from './createNoIndexPageMetaData';
