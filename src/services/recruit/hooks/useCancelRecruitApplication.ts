@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '~/react-query/common';
 import { cancelRecruitApplication } from '~/services/recruit/apis';
 
+// 신청한 리쿠르팅 목록
 export const useCancelRecruitApplication = (
   params: RecruitApplicationParams
 ) => {
@@ -15,6 +16,10 @@ export const useCancelRecruitApplication = (
   return useMutation({
     mutationFn: () => cancelRecruitApplication(recruitApplicationId),
     onSuccess: ({ matchStatus }) => {
+      // invalidate: 디테일, 내 신청서, TODO: 신청한 리쿠르팅 목록
+      queryClient.invalidateQueries(queryKeys.recruit.detail(recruitId), {
+        exact: true,
+      });
       queryClient.setQueryData<MyRecruitApplicationDetail>(
         queryKeys.recruit.application.mine(recruitId),
         (prev) => {

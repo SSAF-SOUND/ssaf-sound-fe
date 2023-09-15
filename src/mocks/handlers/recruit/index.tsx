@@ -295,7 +295,7 @@ export const getRecruitApplication = rest.get(
       ctx.delay(500),
       ...mockSuccess(
         ctx,
-        createMockRecruitApplication(1, {
+          createMockRecruitApplication(1, {
           recruitApplicationId: Number(recruitApplicationId),
         })
       )

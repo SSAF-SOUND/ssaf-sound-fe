@@ -194,8 +194,8 @@ const ActionButtonLayer = (props: ActionButtonLayerProps) => {
 const ApplicationCancelButton = (props: ActionButtonLayerProps) => {
   const { className, recruitDetail, myRecruitApplication } = props;
   const { openModal, closeModal } = useModal();
-  const { category } = recruitDetail;
-  const { recruitId, recruitApplicationId } = myRecruitApplication;
+  const { category, recruitId } = recruitDetail;
+  const { recruitApplicationId } = myRecruitApplication;
   const recruitTheme = getRecruitThemeByCategory(category);
   const {
     mutateAsync: cancelRecruitApplication,
