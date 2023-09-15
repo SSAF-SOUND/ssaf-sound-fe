@@ -1,8 +1,8 @@
 import type {
-  LimitType,
   RecruitApplicant,
   RecruitDetail,
   RecruitParticipantsDetail,
+  RecruitParticipantsProgress,
   RecruitParts,
 } from '~/services/recruit';
 
@@ -32,9 +32,10 @@ export const RecruitApplicantsDetail = (
 
   const { limits } = recruitDetail;
 
+
   const limitInfo = limits.find(
     ({ recruitType }) => recruitType === part
-  ) as LimitType;
+  ) as RecruitParticipantsProgress;
 
   const { limit, currentNumber } = limitInfo;
 
