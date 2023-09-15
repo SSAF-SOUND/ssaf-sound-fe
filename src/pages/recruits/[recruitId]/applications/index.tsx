@@ -11,6 +11,10 @@ import {
   PageHeadingText,
 } from '~/components/Common';
 import {
+  RecruitCompletedBar,
+  recruitCompletedBarHeight,
+} from '~/components/Recruit/RecruitCompletedBar';
+import {
   RecruitApplicantsDetail,
   RecruitApplicantsAccordion,
 } from '~/components/RecruitApplicants';
@@ -20,7 +24,15 @@ import {
   useRecruitApplicants,
   useRecruitDetail,
 } from '~/services/recruit';
-import { flex, fontCss, palettes, titleBarHeight } from '~/styles/utils';
+import {
+  expandCss,
+  fixTopCenter,
+  flex,
+  fontCss,
+  palettes,
+  position,
+  titleBarHeight,
+} from '~/styles/utils';
 import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 
 const metaTitle = '리쿠르팅 신청 목록';
@@ -68,7 +80,7 @@ const RecruitApplicantsPage: CustomNextPage = () => {
     return <div>Fail to load</div>;
   }
 
-  const { category } = recruitDetail;
+  const { category, finishedRecruit } = recruitDetail;
   const isCategoryStudy = category === RecruitCategoryName.STUDY;
 
   const partAndApplicantsEntries = Object.entries(
@@ -79,12 +91,15 @@ const RecruitApplicantsPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <div css={[selfCss, finishedRecruit && extendPaddingTopCss]}>
         <TitleBar.Default
           title={titleBarTitle}
           withoutClose
           onClickBackward={routes.recruit.detail(recruitId)}
         />
+
+        {finishedRecruit && <RecruitCompletedBar css={completedBarCss} />}
+
         <div css={headerCss}>
           <p css={categoryNameCss}>{recruitDetail.category}</p>
           <p css={titleCss}>{recruitDetail.title}</p>
@@ -108,6 +123,13 @@ const RecruitApplicantsPage: CustomNextPage = () => {
 const selfPaddingY = titleBarHeight + 10;
 const selfCss = css({
   padding: `${selfPaddingY}px 0`,
+});
+
+const extendPaddingTopCss = css({
+  paddingTop: `${selfPaddingY + recruitCompletedBarHeight}px`,
+});
+const completedBarCss = css(fixTopCenter, {
+  top: titleBarHeight,
 });
 
 const headerCss = css(
