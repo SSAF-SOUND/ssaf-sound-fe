@@ -33,3 +33,14 @@ export const formatFullDate = (dateString: string) => {
 
   return formattedDate;
 };
+
+export const formatFullDateTime = (dateString: string) => {
+  const dayjsInstance = dayjs(dateString);
+  const formattedDate = dayjsInstance.format(`YYYY-MM-DD`);
+  const formattedTime = dayjsInstance.format(`hh:mm`);
+
+  return {
+    date: formattedDate,
+    time: formattedTime,
+  };
+};

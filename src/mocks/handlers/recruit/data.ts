@@ -1,6 +1,8 @@
 import type { UserInfo } from '~/services/member';
 import type {
+  GetMyRecruitApplicationApiData,
   GetRecruitApplicantsApiData,
+  GetRecruitApplicationApiData,
   RecruitApplicant,
   RecruitDetail,
   RecruitParticipantsDetail,
@@ -16,6 +18,7 @@ import {
   RecruitParts,
   SkillName,
 } from '~/services/recruit';
+
 
 import { mockHtmlString } from '../common';
 import { createMockUser, userInfo } from '../member/data';
@@ -171,46 +174,40 @@ export const createMockRecruitApplicant = (
   };
 };
 
-const recruitApplicants: GetRecruitApplicantsApiData['data'] = {
-  recruitId: 1,
-  recruitApplications: {
-    ...Object.fromEntries(
-      Object.values(RecruitParts).map((part, partIndex) => {
-        const userIds = Array(16)
-          .fill(1_000_000)
-          .map((v, index) => v + index)
-          .map((v) => v * (partIndex + 1));
+export const createMockRecruitApplicants = (
+  recruitId: number
+): GetRecruitApplicantsApiData['data'] => {
+  const recruitDetail = recruitDetails[recruitId];
+  if (!recruitDetail) {
+    throw new Error(
+      `recruitId: ${recruitId}에 해당하는 리쿠르팅 디테일 데이터가 없습니다.`
+    );
+  }
 
-        return [
-          [part],
-          userIds.map((userId) => createMockRecruitApplicant(userId)),
-        ];
-      })
-    ),
-  },
-};
+  const recruitParts = Object.values(RecruitParts);
+  const activeRecruitParts =
+    recruitDetail.category === RecruitCategoryName.PROJECT
+      ? recruitParts.filter((part) => part !== RecruitParts.STUDY)
+      : recruitParts.filter((part) => part === RecruitParts.STUDY);
 
-const RecruitApplicationDetail = {
-  recruitId: 1,
-  recruitApplicationId: 1,
-  recruitType: '프론트엔드',
-  matchStatus: 'WAITING_REGISTER_APPROVE',
-  author: {
-    memberId: 100,
-    nickname: 'TIM',
-    memberRole: 'user',
-    ssafyMember: true,
-    isMajor: true,
-    ssafyInfo: {
-      semester: 9,
-      campus: '서울',
-      certificationState: 'CERTIFIED',
-      majorTrack: 'Java',
+  return {
+    recruitId,
+    recruitApplications: {
+      ...(Object.fromEntries(
+        activeRecruitParts.map((part, partIndex) => {
+          const userIds = Array(16)
+            .fill(1_000_000)
+            .map((v, index) => v + index)
+            .map((v) => v * (partIndex + 1));
+
+          return [
+            part,
+            userIds.map((userId) => createMockRecruitApplicant(userId)),
+          ];
+        })
+      ) as Partial<Record<RecruitParts, RecruitApplicant[]>>),
     },
-  },
-  reply: '취업 준비를 위해서 신청하게되었습니다.',
-  question: '프로젝트에 참여하고자 하는 동기가 무엇인가요?',
-  liked: false,
+  };
 };
 
 export const createMockRecruitSummary = (
@@ -294,8 +291,50 @@ export const studyRecruitSummaries = Array(30)
     });
   });
 
-export const RecruitData = {
-  //
-  recruitApplicants,
-  RecruitApplicationDetail,
+export const createMockMyRecruitApplication = (
+  recruitId: number,
+  options: Partial<{
+    category: RecruitCategoryName;
+    matchStatus: MatchStatus;
+    recruitApplicationId: number;
+  }> = {}
+): GetMyRecruitApplicationApiData['data'] => {
+  const {
+    category = RecruitCategoryName.PROJECT,
+    matchStatus = MatchStatus.PENDING,
+    recruitApplicationId = 1,
+  } = options;
+
+  const recruitType =
+    category === RecruitCategoryName.STUDY
+      ? RecruitParts.STUDY
+      : RecruitParts.FRONTEND;
+
+  return {
+    recruitApplicationId,
+    category,
+    recruitId,
+    matchStatus,
+    question: 'Question',
+    reply: 'Answer',
+    recruitType,
+    appliedAt: faker.date.past().toISOString(),
+  };
+};
+
+export const createMockRecruitApplication = (
+  recruitId: number,
+  options: Partial<{
+    category: RecruitCategoryName;
+    matchStatus: MatchStatus;
+    recruitApplicationId: number;
+    liked: boolean;
+  }> = {}
+): GetRecruitApplicationApiData['data'] => {
+  const { liked = false } = options;
+  return {
+    ...createMockMyRecruitApplication(recruitId, options),
+    author: userInfo.certifiedSsafyUserInfo,
+    liked,
+  };
 };

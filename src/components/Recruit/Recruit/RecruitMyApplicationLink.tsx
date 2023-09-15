@@ -19,7 +19,7 @@ export const RecruitMyApplicationLink = (
 
   return (
     <Button theme={Theme.GREY} asChild css={selfCss} {...restProps}>
-      <Link href={routes.recruit.myApplication(recruitId)}>
+      <Link href={routes.recruit.applications.mine(recruitId)}>
         리쿠르팅 신청내용 보기
       </Link>
     </Button>

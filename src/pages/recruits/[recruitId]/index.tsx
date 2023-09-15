@@ -9,11 +9,7 @@ import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import ArticleComment from '~/components/ArticleComment';
-import {
-  FullPageLoader,
-  loaderText,
-  PageHead,
-} from '~/components/Common';
+import { FullPageLoader, loaderText, PageHead } from '~/components/Common';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import { RecruitDetailLayout } from '~/components/Layout';
 import { Recruit } from '~/components/Recruit/Recruit';
@@ -265,7 +261,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   const dehydrate = prefetch({
     queryKey: queryKeys.recruit.detail(recruitId),
-    queryFn: () => getRecruitDetail(recruitId),
+    queryFn: () => getRecruitDetail(recruitId, true),
   });
 
   const { dehydratedState } = await dehydrate();

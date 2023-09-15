@@ -45,7 +45,11 @@ export const queryKeys = {
   },
   recruit: {
     self: () => ['recruits'],
-    detail: (recruitId: number) => [...queryKeys.recruit.self(), recruitId],
+    detail: (recruitId: number) => [
+      ...queryKeys.auth(),
+      ...queryKeys.recruit.self(),
+      recruitId,
+    ],
     participants: (recruitId: number) => [
       ...queryKeys.recruit.detail(recruitId),
       'participants',
@@ -66,33 +70,34 @@ export const queryKeys = {
         },
       ];
     },
-    members: (recruitId: number) => [
-      ...queryKeys.recruit.self(),
-      'members',
-      recruitId,
-    ],
-    scrap: (recruitId: number) => [
-      ...queryKeys.recruit.self(),
-      'scrap',
-      recruitId,
-    ],
-    apply: (recruitId: number) => [
-      ...queryKeys.recruit.self(),
-      'apply',
-      recruitId,
-    ],
-    applicants: (recruitId: number) => [
-      ...queryKeys.auth(),
-      ...queryKeys.recruit.self(),
-      recruitId,
-      'applicants',
-    ],
-    applicationDetail: (recruitId: number) => [
-      ...queryKeys.auth(),
-      ...queryKeys.recruit.self(),
-      recruitId,
-      'applicationDetail',
-    ],
+    application: {
+      self: (recruitId: number) => [
+        ...queryKeys.recruit.detail(recruitId),
+        'application',
+      ],
+      applicants: (recruitId: number) => [
+        ...queryKeys.recruit.application.self(recruitId),
+        'applicants',
+      ],
+      rejectedApplicants: (recruitId: number) => [
+        ...queryKeys.recruit.application.applicants(recruitId),
+        'rejected',
+      ],
+      mine: (recruitId: number) => [
+        ...queryKeys.recruit.application.self(recruitId),
+        'mine',
+      ],
+      detail: ({
+        recruitId,
+        recruitApplicationId,
+      }: {
+        recruitId: number;
+        recruitApplicationId: number;
+      }) => [
+        ...queryKeys.recruit.application.self(recruitId),
+        recruitApplicationId,
+      ],
+    },
   },
   lunch: {
     self: () => [...queryKeys.auth(), 'lunch'],
@@ -214,8 +219,6 @@ export const endpoints = {
     self: () => `/recruits` as const,
     detail: (recruitId: number) =>
       `${endpoints.recruit.self()}/${recruitId}` as const,
-    members: (recruitId: number) =>
-      `${endpoints.recruit.detail(recruitId)}/members` as const,
     participants: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/members` as const,
     scrap: (recruitId: number) =>
@@ -254,16 +257,28 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/application` as const,
     application: {
       self: () => `/recruit-applications`,
-      applicants: (recruitId: number) =>
-        `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+      mine: (recruitId: number) =>
+        `${endpoints.recruit.application.self()}/mine?recruitId=${recruitId}` as const,
       detail: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
-      approve: (recruitApplicationId: number) =>
-        `${endpoints.recruit.application.self()}/${recruitApplicationId}/approve` as const,
-      reject: (recruitApplicationId: number) =>
-        `${endpoints.recruit.application.self()}/${recruitApplicationId}/reject` as const,
+      applicants: (recruitId: number) =>
+        `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+      like: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/like` as const,
       cancel: (recruitApplicationId: number) =>
-        `${endpoints.recruit.application.self()}/${recruitApplicationId}/cancel` as const,
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/cancel` as const,
+      approve: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/approve` as const,
+      reject: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/reject` as const,
     },
   },
   recruitComments: {

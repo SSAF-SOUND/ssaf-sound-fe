@@ -1,20 +1,37 @@
 import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
+import { createContext, useContext, useState } from 'react';
 
 import { Accordion } from '~/components/Common/Accordion';
+import { RecruitParts } from '~/services/recruit';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 interface AccordionRootProps {
   children: ReactNode;
+  isStudy?: boolean;
 }
 
+const IsStudyContext = createContext<boolean>(false);
+const useIsStudy = () => {
+  return useContext(IsStudyContext);
+};
+
 const AccordionRoot = (props: AccordionRootProps) => {
-  const { children } = props;
+  const { children, isStudy = false } = props;
+  const [partIsStudy] = useState<boolean>(isStudy);
+  const accordionValue = partIsStudy ? [RecruitParts.STUDY] : undefined;
+
   return (
-    <Accordion.Root type="multiple" css={accordionRootCss}>
-      {children}
-    </Accordion.Root>
+    <IsStudyContext.Provider value={partIsStudy}>
+      <Accordion.Root
+        type="multiple"
+        value={accordionValue}
+        css={[accordionRootCss]}
+      >
+        {children}
+      </Accordion.Root>
+    </IsStudyContext.Provider>
   );
 };
 
@@ -25,6 +42,10 @@ const accordionThemeCss = css({
   color: palettes.white,
 });
 
+const studyAccordionThemeCss = css({
+  backgroundColor: palettes.background.default,
+});
+
 interface AccordionItemProps {
   value: string;
   children: ReactNode;
@@ -32,8 +53,19 @@ interface AccordionItemProps {
 
 const AccordionItem = (props: AccordionItemProps) => {
   const { value, children } = props;
+  const isStudy = useIsStudy();
+  const outlineColor = isStudy ? 'transparent' : undefined;
+
   return (
-    <Accordion.Item css={[accordionThemeCss, accordionItemCss]} value={value}>
+    <Accordion.Item
+      css={[
+        accordionThemeCss,
+        isStudy && studyAccordionThemeCss,
+        accordionItemCss,
+      ]}
+      outlineColor={outlineColor}
+      value={value}
+    >
       {children}
     </Accordion.Item>
   );
@@ -51,9 +83,17 @@ interface AccordionTriggerProps {
 
 const AccordionTrigger = (props: AccordionTriggerProps) => {
   const { children, applicantsCount } = props;
+  const isStudy = useIsStudy();
 
   return (
-    <Accordion.Trigger css={[accordionTriggerSelfCss, accordionThemeCss]}>
+    <Accordion.Trigger
+      css={[
+        accordionThemeCss,
+        isStudy && studyAccordionThemeCss,
+        accordionTriggerSelfCss,
+        isStudy && studyAccordionTriggerSelfCss,
+      ]}
+    >
       <span css={accordionTriggerTitleCss}>{children}</span>
       <div css={applicantsCountContainerCss}>
         <span>리쿠르팅 신청</span>
@@ -67,6 +107,11 @@ const accordionTriggerSelfCss = css(
   { width: '100%', padding: '10px 16px' },
   flex('center', 'space-between', 'row', 20)
 );
+const studyAccordionTriggerSelfCss = css({
+  paddingLeft: 0,
+  paddingRight: 0,
+  cursor: 'initial',
+});
 
 const accordionTriggerTitleCss = css(
   {
@@ -96,16 +141,23 @@ interface AccordionContentProps {
 }
 const AccordionContent = (props: AccordionContentProps) => {
   const { children } = props;
+  const isStudy = useIsStudy();
 
   return (
     <Accordion.Content>
-      <div css={accordionContentCss}>{children}</div>
+      <div css={[accordionContentCss, isStudy && studyAccordionContentCss]}>
+        {children}
+      </div>
     </Accordion.Content>
   );
 };
 
 const accordionContentCss = css({
   padding: '8px 16px 20px',
+});
+const studyAccordionContentCss = css({
+  paddingLeft: 0,
+  paddingRight: 0,
 });
 
 export const RecruitApplicantsAccordion = {

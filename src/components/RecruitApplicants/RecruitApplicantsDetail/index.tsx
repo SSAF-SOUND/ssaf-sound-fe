@@ -1,10 +1,12 @@
 import type {
-  LimitType,
   RecruitApplicant,
   RecruitDetail,
-  RecruitMembers,
+  RecruitParticipantsDetail,
+  RecruitParticipantsProgress,
   RecruitParts,
 } from '~/services/recruit';
+
+import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
@@ -12,10 +14,9 @@ import { RecruitApplicantsAccordion } from '~/components/RecruitApplicants';
 import { RecruitApplicantBarList } from '~/components/RecruitApplicants/RecruitApplicantBarList';
 import { RecruitApplicantsCount } from '~/components/RecruitApplicants/RecruitApplicantsCount';
 import { RecruitMembersAvatars } from '~/components/RecruitApplicants/RecruitMembersAvatars';
-import { MatchStatus, useRecruitMembers } from '~/services/recruit';
-import { flex, fontCss, palettes } from '~/styles/utils';
-
-import { RecruitApplicantsSortToggle } from '../RecruitApplicantsSortToggle';
+import { MatchStatus, useRecruitParticipants } from '~/services/recruit';
+import { fontCss, palettes } from '~/styles/utils';
+import { routes } from '~/utils';
 
 interface RecruitApplicantsDetailProps {
   part: RecruitParts;
@@ -27,32 +28,27 @@ export const RecruitApplicantsDetail = (
   props: RecruitApplicantsDetailProps
 ) => {
   const { part, applicants, recruitDetail } = props;
-  const { data: recruitMembers, isLoading: isRecruitMembersLoading } =
-    useRecruitMembers(recruitDetail.recruitId);
+  const { data: recruitParticipants, isLoading: isRecruitMembersLoading } =
+    useRecruitParticipants(recruitDetail.recruitId);
 
-  const { limits } = recruitDetail;
+  const { limits, recruitId } = recruitDetail;
 
   const limitInfo = limits.find(
     ({ recruitType }) => recruitType === part
-  ) as LimitType;
+  ) as RecruitParticipantsProgress;
 
   const { limit, currentNumber } = limitInfo;
 
-  const unTouchedApplicants = applicants.filter(
-    (applicant) =>
-      applicant.matchStatus === MatchStatus.PENDING
+  const pendingApplicants = applicants.filter(
+    (applicant) => applicant.matchStatus === MatchStatus.PENDING
   );
-  const unTouchedApplicantsCount = unTouchedApplicants.length;
 
-  const touchedApplicants = applicants.filter(
-    (applicant) =>
-      applicant.matchStatus !== MatchStatus.PENDING
-  );
+  const pendingApplicantsCount = pendingApplicants.length;
 
   return (
     <RecruitApplicantsAccordion.Item value={part} key={part}>
       <RecruitApplicantsAccordion.Trigger
-        applicantsCount={unTouchedApplicantsCount}
+        applicantsCount={pendingApplicantsCount}
       >
         {part}
       </RecruitApplicantsAccordion.Trigger>
@@ -66,41 +62,36 @@ export const RecruitApplicantsDetail = (
           {isRecruitMembersLoading ? (
             <RecruitMembersAvatars.Skeleton skeletonCount={limit} />
           ) : (
-            recruitMembers && (
+            recruitParticipants && (
               <RecruitMembersAvatars
                 limit={limit}
                 recruitMembers={
-                  recruitMembers.recruitTypes[part] ??
-                  ([] as unknown as RecruitMembers)
+                  (recruitParticipants[part] as RecruitParticipantsDetail) ?? []
                 }
               />
             )
           )}
         </div>
-
         <div css={{ marginBottom: 52 }}>
           <RecruitApplicantsCount
             title="리쿠르팅 신청"
-            count={unTouchedApplicantsCount}
+            count={pendingApplicantsCount}
           />
 
-          {unTouchedApplicantsCount > 0 && (
-            <div css={likeContainerCss}>
-              <RecruitApplicantsSortToggle />
-            </div>
-          )}
-
-          <RecruitApplicantBarList applicants={unTouchedApplicants} />
+          <RecruitApplicantBarList
+            recruitPart={part}
+            recruitId={recruitId}
+            applicants={pendingApplicants}
+          />
         </div>
 
-        <div css={{ marginBottom: 40 }}>
-          <RecruitApplicantsCount
-            title="리쿠르팅 응답"
-            count={touchedApplicants.length}
-            css={{ marginBottom: 12 }}
-          />
-
-          <RecruitApplicantBarList applicants={touchedApplicants} />
+        <div css={{ textAlign: 'right', marginBottom: 52 }}>
+          <Link
+            css={[{ textDecoration: 'underline' }, fontCss.style.R14]}
+            href={routes.recruit.applications.reject(recruitId)}
+          >
+            거절한 리쿠르팅 보기
+          </Link>
         </div>
       </RecruitApplicantsAccordion.Content>
     </RecruitApplicantsAccordion.Item>
@@ -110,9 +101,4 @@ export const RecruitApplicantsDetail = (
 const joinMemberCountCss = css(
   { color: palettes.recruit.default, marginBottom: 16 },
   fontCss.style.R12
-);
-
-const likeContainerCss = css(
-  { marginBottom: 12 },
-  flex('center', 'flex-end', 'row')
 );

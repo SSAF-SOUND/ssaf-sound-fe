@@ -1,4 +1,4 @@
-import type { RecruitApplicant } from '~/services/recruit';
+import type { RecruitApplicant, RecruitParts } from '~/services/recruit';
 
 import Link from 'next/link';
 
@@ -6,38 +6,57 @@ import { css } from '@emotion/react';
 import { memo } from 'react';
 
 import { Avatar, Icon, IconButton } from '~/components/Common';
-import { MatchStatusText } from '~/components/RecruitApplicants/RecruitApplicantBar/MatchStatusText';
+import { FullDateTime } from '~/components/FullDateTime';
 import { RecruitApplicantLikeButton } from '~/components/RecruitApplicants/RecruitApplicantBar/RecruitApplicantLikeButton';
-import { MatchStatus } from '~/services/recruit';
-import { flex, fontCss, inlineFlex, lineClamp, palettes } from '~/styles/utils';
-import { formatFullDate } from '~/utils';
+import { useLikeRecruitApplication } from '~/services/recruit';
+import {
+  colorMix,
+  flex,
+  fontCss,
+  inlineFlex,
+  lineClamp,
+  palettes,
+} from '~/styles/utils';
+import { handleAxiosError, routes } from '~/utils';
 
 export interface RecruitApplicantBar {
+  recruitPart: RecruitParts;
+  recruitId: number;
   applicant: RecruitApplicant;
 }
 
 export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
-  const { applicant } = props;
+  const { applicant, recruitId, recruitPart } = props;
 
-  const { author, liked, appliedAt, matchStatus, reply } = applicant;
+  const { author, liked, appliedAt, reply, recruitApplicationId } = applicant;
+
+  const {
+    mutateAsync: likeRecruitApplication,
+    isLoading: isLikingRecruitApplication,
+  } = useLikeRecruitApplication({
+    recruitId,
+    recruitApplicationId,
+    recruitPart,
+  });
 
   const { nickname } = author;
-  const date = formatFullDate(appliedAt);
 
-  // 지원자에게 어떤 방식으로든 응답이 된 상태
-  const touched = matchStatus !== MatchStatus.PENDING;
+  const onLikedChange = async () => {
+    try {
+      await likeRecruitApplication();
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
 
   return (
-    <li css={selfCss}>
+    <li css={[selfCss, isLikingRecruitApplication && likingSelfCss]}>
       <div css={applicantHeaderCss}>
-        {touched ? (
-          <MatchStatusText matchStatus={matchStatus} />
-        ) : (
-          <RecruitApplicantLikeButton
-            liked={liked}
-            onLikedChange={(v) => console.log(v)}
-          />
-        )}
+        <RecruitApplicantLikeButton
+          liked={liked}
+          loading={isLikingRecruitApplication}
+          onLikedChange={onLikedChange}
+        />
       </div>
 
       <div css={applicantInfoContainerCss}>
@@ -56,16 +75,19 @@ export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
               {/* <Dot theme="recruit" /> */}
               <IconButton size={32} asChild>
                 {/* NOTE: 현 유저의 신청 내역으로 이동 */}
-                <Link href={'#'}>
+                <Link
+                  href={routes.recruit.applications.detail({
+                    recruitId,
+                    recruitApplicationId,
+                  })}
+                >
                   <Icon name="chevron.right" size={24} />
                 </Link>
               </IconButton>
             </div>
           </div>
 
-          <time dateTime={date} css={dateCss}>
-            {date}
-          </time>
+          <FullDateTime dateTimeString={appliedAt} />
         </div>
       </div>
     </li>
@@ -74,11 +96,20 @@ export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
 
 RecruitApplicantBar.displayName = 'RecruitApplicantBar';
 
-const selfCss = css(flex('center', '', 'row', 10));
+const selfCss = css(
+  {
+    borderRadius: 8,
+    transition: 'background-color 400ms',
+  },
+  flex('center', '', 'row', 10)
+);
 const applicantHeaderCss = css(
   { width: 46, flexShrink: 0 },
   inlineFlex('center', 'center')
 );
+const likingSelfCss = css({
+  backgroundColor: colorMix('20%', palettes.recruit.default),
+});
 
 const applicantInfoContainerCss = css(
   { width: '100%' },
@@ -90,6 +121,7 @@ const applicantInfoDetailContainerCss = css({
   gridTemplateRows: 'auto',
   gridAutoRows: 'auto',
   width: '100%',
+  rowGap: 6,
 });
 const applicantInfoDetailCss = css(flex('center', 'space-between', 'row', 12));
 
@@ -113,7 +145,3 @@ const applicantInfoDescriptionReplyCss = css(
 );
 
 const applicantInfoLinkCss = css({}, flex('center', '', 'row', 6));
-
-const dateCss = css(fontCss.family.auto, fontCss.style.R12, {
-  color: palettes.font.blueGrey,
-});

@@ -2,10 +2,14 @@
 
 import type {
   ApplyRecruitApiData,
+  CancelRecruitApplicationApiData,
   CreateRecruitApiData,
   GetRecruitDetailApiData,
   GetRecruitParticipantsApiData,
+  RejectRecruitApplicationApiData,
   ScrapRecruitApiData,
+  GetRecruitApplicantsApiData,
+  LikeRecruitApplicationApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -16,7 +20,9 @@ import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
 import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 import {
-  RecruitData,
+  createMockMyRecruitApplication,
+  createMockRecruitApplication,
+  createMockRecruitApplicants,
   recruitDetails,
   recruitParticipantsList,
   scrapStatus,
@@ -26,60 +32,19 @@ import { restInfiniteRecruitsSuccess } from './utils';
 const getRecruitApplicantsEndpoint = removeQueryParams(
   composeUrls(API_URL, endpoints.recruit.application.applicants(1))
 );
-export const getRecruitApplicants = restSuccess(
-  'get',
+export const getRecruitApplicants = rest.get(
   getRecruitApplicantsEndpoint,
-  {
-    data: RecruitData.recruitApplicants,
-  }
-);
+  (req, res, ctx) => {
+    const searchParams = req.url.searchParams;
+    const recruitId = Number(searchParams.get('recruitId'));
 
-const getRecruitApplicationDetail = restSuccess(
-  'get',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.detail(':recruitId')),
-  {
-    data: RecruitData.RecruitApplicationDetail,
-  }
-);
-
-export const postRecruitApplicationApprove = restSuccess(
-  'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.approve(':recruitId')),
-  {
-    data: {
-      recruitApplicationId: 1,
-      matchStatus: 'DONE',
-    },
-  }
-);
-
-export const postRecruitApplicationReject = restSuccess(
-  'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.reject(':recruitId')),
-  {
-    data: {
-      recruitApplicationId: 1,
-      matchStatus: 'REJECT',
-    },
-  }
-);
-
-export const postRecruitApplicationCancel = restSuccess(
-  'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.cancel(':recruitId')),
-  {
-    data: {
-      recruitApplicationId: 1,
-      matchStatus: 'CANCEL',
-    },
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<GetRecruitApplicantsApiData['data']>(
+        ctx,
+        createMockRecruitApplicants(recruitId)
+      )
+    );
   }
 );
 
@@ -138,7 +103,7 @@ export const getRecruitDetailError = restError(
 // 리쿠르팅 참가자 조회
 const getRecruitParticipantsEndpoint =
   // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.members(':recruitId'));
+  composeUrls(API_URL, endpoints.recruit.participants(':recruitId'));
 
 export const getRecruitParticipants = rest.get(
   getRecruitParticipantsEndpoint,
@@ -289,13 +254,159 @@ export const applyRecruitError = restError(
   }
 );
 
+const getMyRecruitApplicationEndpoint = removeQueryParams(
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.application.mine(':recruitId'))
+);
+
+export const getMyRecruitApplication = rest.get(
+  getMyRecruitApplicationEndpoint,
+  (req, res, ctx) => {
+    const recruitId = req.params.recruitId ?? 1;
+    return res(
+      ctx.delay(500),
+      ...mockSuccess(
+        ctx,
+        createMockMyRecruitApplication(Number(recruitId), {
+          recruitApplicationId: 1,
+        })
+      )
+    );
+  }
+);
+
+export const getMyRecruitApplicationError = restError(
+  'get',
+  getMyRecruitApplicationEndpoint,
+  { message: '내 신청서 불러오기 오류' }
+);
+
+const getRecruitApplicationEndpoint = composeUrls(
+  API_URL,
+  // @ts-ignore
+  endpoints.recruit.application.detail(':recruitApplicationId')
+);
+export const getRecruitApplication = rest.get(
+  getRecruitApplicationEndpoint,
+  (req, res, ctx) => {
+    const recruitApplicationId = req.params.recruitApplicationId ?? 1;
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess(
+        ctx,
+        createMockRecruitApplication(1, {
+          recruitApplicationId: Number(recruitApplicationId),
+        })
+      )
+    );
+  }
+);
+
+export const getRecruitApplicationError = restError(
+  'get',
+  getRecruitApplicationEndpoint,
+  { message: '다른 사람의 신청서 불러오기 오류' }
+);
+
+const cancelRecruitApplicationEndpoint = composeUrls(
+  API_URL,
+  // @ts-ignore
+  endpoints.recruit.application.cancel(':recruitApplicationId')
+);
+const cancelRecruitApplicationMethod = 'post';
+
+export const cancelRecruitApplication = restSuccess<
+  CancelRecruitApplicationApiData['data']
+>(cancelRecruitApplicationMethod, cancelRecruitApplicationEndpoint, {
+  data: {
+    recruitApplicationId: 1,
+    matchStatus: MatchStatus.INITIAL,
+  },
+});
+
+export const cancelRecruitApplicationError = restError(
+  cancelRecruitApplicationMethod,
+  cancelRecruitApplicationEndpoint,
+  {
+    message: '리쿠르팅 신청 취소 실패',
+  }
+);
+
+const rejectRecruitApplicationEndpoint = composeUrls(
+  API_URL,
+  // @ts-ignore
+  endpoints.recruit.application.reject(':recruitApplicationId')
+);
+const rejectRecruitApplicationMethod = 'post';
+
+export const rejectRecruitApplication = restSuccess<
+  RejectRecruitApplicationApiData['data']
+>(rejectRecruitApplicationMethod, rejectRecruitApplicationEndpoint, {
+  data: {
+    recruitApplicationId: 1,
+    matchStatus: MatchStatus.REJECTED,
+  },
+});
+
+export const rejectRecruitApplicationError = restError(
+  rejectRecruitApplicationMethod,
+  rejectRecruitApplicationEndpoint,
+  {
+    message: '리쿠르팅 신청 거절 실패',
+  }
+);
+
+const approveRecruitApplicationEndpoint = composeUrls(
+  API_URL,
+  // @ts-ignore
+  endpoints.recruit.application.approve(':recruitApplicationId')
+);
+const approveRecruitApplicationMethod = 'post';
+
+export const approveRecruitApplication = restSuccess<
+  RejectRecruitApplicationApiData['data']
+>(approveRecruitApplicationMethod, approveRecruitApplicationEndpoint, {
+  data: {
+    recruitApplicationId: 1,
+    matchStatus: MatchStatus.SUCCESS,
+  },
+});
+
+export const approveRecruitApplicationError = restError(
+  approveRecruitApplicationMethod,
+  approveRecruitApplicationEndpoint,
+  {
+    message: '리쿠르팅 신청 수락 실패',
+  }
+);
+
+const likeRecruitApplicationEndpoint = composeUrls(
+  API_URL,
+  // @ts-ignore
+  endpoints.recruit.application.like(':recruitApplicationId')
+);
+
+let liked = false;
+const toggleLike = () => {
+  liked = !liked;
+  return liked;
+};
+export const likeRecruitApplication = rest.post(
+  likeRecruitApplicationEndpoint,
+  (req, res, ctx) => {
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<LikeRecruitApplicationApiData['data']>(ctx, {
+        liked: toggleLike(),
+      })
+    );
+  }
+);
+
 export const recruitHandlers = [
   //
   getRecruitApplicants,
-  getRecruitApplicationDetail,
-  postRecruitApplicationReject,
-  postRecruitApplicationApprove,
-  postRecruitApplicationCancel,
   //
   createRecruit,
   getRecruitDetail,
@@ -306,4 +417,11 @@ export const recruitHandlers = [
   completeRecruit,
   getRecruits,
   applyRecruit,
+  getMyRecruitApplication, // /recruit-applications/mine
+  getRecruitApplication, // /recruit-applications/:recruitApplicationId
+
+  cancelRecruitApplication,
+  rejectRecruitApplication,
+  approveRecruitApplication,
+  likeRecruitApplication,
 ];
