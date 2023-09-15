@@ -5,7 +5,9 @@ import { memo, useState } from 'react';
 
 import { Button } from '~/components/Common';
 import { RecruitApplicantBar } from '~/components/RecruitApplicants';
+import { RecruitApplicantsSortToggle } from '~/components/RecruitApplicants/RecruitApplicantsSortToggle';
 import { flex, fontCss, palettes } from '~/styles/utils';
+import { compareDates } from '~/utils';
 
 interface RecruitApplicantBarListProps {
   applicants: RecruitApplicant[];
@@ -16,25 +18,48 @@ interface RecruitApplicantBarListProps {
 export const RecruitApplicantBarList = memo(
   (props: RecruitApplicantBarListProps) => {
     const { applicants, initialVisibleCount = 3 } = props;
+    const [sortLikedApplicantsFirst, setSortLikedApplicantsFirst] =
+      useState(false);
     const [loadMore, setLoadMore] = useState(false);
 
-    const applicantsCount = applicants.length;
+    // 최신순 - 좋아요+최신순
+    const sortedLikedApplicants = sortLikedApplicantsFirst
+      ? [...applicants].sort((a, b) => {
+          if (a.liked === b.liked) {
+            return compareDates(b.appliedAt, a.appliedAt);
+          }
+          return a.liked ? -1 : 1;
+        })
+      : [...applicants].sort((a, b) => compareDates(b.appliedAt, a.appliedAt));
+
+    const applicantsCount = sortedLikedApplicants.length;
     const hasApplicants = applicantsCount > 0;
-    const visibleCount = loadMore ? applicants.length : initialVisibleCount;
-    const visibleApplicants = applicants.slice(0, visibleCount);
+    const visibleCount = loadMore
+      ? sortedLikedApplicants.length
+      : initialVisibleCount;
+    const visibleApplicants = sortedLikedApplicants.slice(0, visibleCount);
     const onClickLoadMore = () => setLoadMore(true);
     const showLoadMoreButton = !loadMore && applicantsCount > visibleCount;
 
     if (!hasApplicants) {
       return (
         <div css={{ padding: '80px 0' }}>
-          <p css={{ textAlign: 'center' }}>아직 신청자가 없습니다.</p>
+          <p css={[{ textAlign: 'center' }, fontCss.style.B14]}>
+            아직 신청자가 없습니다.
+          </p>
         </div>
       );
     }
 
     return (
       <div css={selfCss}>
+        <div css={likeContainerCss}>
+          <RecruitApplicantsSortToggle
+            pressed={sortLikedApplicantsFirst}
+            onPressedChange={(pressed) => setSortLikedApplicantsFirst(pressed)}
+          />
+        </div>
+
         <ol css={recruitApplicantBarListCss}>
           {visibleApplicants.map((applicant) => (
             <RecruitApplicantBar
@@ -72,3 +97,8 @@ const loadMoreButtonCss = css(
 const selfCss = flex('', '', 'column', 28);
 
 const recruitApplicantBarListCss = css(flex('', '', 'column', 12));
+
+const likeContainerCss = css(
+  { marginBottom: 12 },
+  flex('center', 'flex-end', 'row')
+);
