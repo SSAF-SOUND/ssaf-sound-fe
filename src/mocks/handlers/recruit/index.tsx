@@ -38,32 +38,6 @@ export const getRecruitApplicants = restSuccess(
   }
 );
 
-export const postRecruitApplicationApprove = restSuccess(
-  'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.approve(':recruitId')),
-  {
-    data: {
-      recruitApplicationId: 1,
-      matchStatus: 'DONE',
-    },
-  }
-);
-
-export const postRecruitApplicationReject = restSuccess(
-  'post',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.reject(':recruitId')),
-  {
-    data: {
-      recruitApplicationId: 1,
-      matchStatus: 'REJECT',
-    },
-  }
-);
-
 // 리쿠르팅 생성
 
 const createRecruitEndpoint = endpoints.recruit.self();
@@ -119,7 +93,7 @@ export const getRecruitDetailError = restError(
 // 리쿠르팅 참가자 조회
 const getRecruitParticipantsEndpoint =
   // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.members(':recruitId'));
+  composeUrls(API_URL, endpoints.recruit.application.applicants(':recruitId'));
 
 export const getRecruitParticipants = rest.get(
   getRecruitParticipantsEndpoint,

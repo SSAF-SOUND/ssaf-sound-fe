@@ -12,7 +12,7 @@ import { RecruitApplicantsAccordion } from '~/components/RecruitApplicants';
 import { RecruitApplicantBarList } from '~/components/RecruitApplicants/RecruitApplicantBarList';
 import { RecruitApplicantsCount } from '~/components/RecruitApplicants/RecruitApplicantsCount';
 import { RecruitMembersAvatars } from '~/components/RecruitApplicants/RecruitMembersAvatars';
-import { MatchStatus, useRecruitMembers } from '~/services/recruit';
+import { MatchStatus, useRecruitParticipants } from '~/services/recruit';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 import { RecruitApplicantsSortToggle } from '../RecruitApplicantsSortToggle';
@@ -27,8 +27,8 @@ export const RecruitApplicantsDetail = (
   props: RecruitApplicantsDetailProps
 ) => {
   const { part, applicants, recruitDetail } = props;
-  const { data: recruitMembers, isLoading: isRecruitMembersLoading } =
-    useRecruitMembers(recruitDetail.recruitId);
+  const { data: recruitParticipants, isLoading: isRecruitMembersLoading } =
+    useRecruitParticipants(recruitDetail.recruitId);
 
   const { limits } = recruitDetail;
 
@@ -39,14 +39,12 @@ export const RecruitApplicantsDetail = (
   const { limit, currentNumber } = limitInfo;
 
   const unTouchedApplicants = applicants.filter(
-    (applicant) =>
-      applicant.matchStatus === MatchStatus.PENDING
+    (applicant) => applicant.matchStatus === MatchStatus.PENDING
   );
   const unTouchedApplicantsCount = unTouchedApplicants.length;
 
   const touchedApplicants = applicants.filter(
-    (applicant) =>
-      applicant.matchStatus !== MatchStatus.PENDING
+    (applicant) => applicant.matchStatus !== MatchStatus.PENDING
   );
 
   return (
@@ -66,12 +64,11 @@ export const RecruitApplicantsDetail = (
           {isRecruitMembersLoading ? (
             <RecruitMembersAvatars.Skeleton skeletonCount={limit} />
           ) : (
-            recruitMembers && (
+            recruitParticipants && (
               <RecruitMembersAvatars
                 limit={limit}
                 recruitMembers={
-                  recruitMembers.recruitTypes[part] ??
-                  ([] as unknown as RecruitMembers)
+                  recruitParticipants[part] ?? ([] as unknown as RecruitMembers)
                 }
               />
             )

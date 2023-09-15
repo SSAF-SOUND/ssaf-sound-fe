@@ -1,4 +1,5 @@
-import type { RecruitDetail, RecruitCategoryName } from '~/services/recruit';
+import type { RecruitDetail } from '~/services/recruit/apis';
+import type { RecruitCategoryName } from '~/services/recruit/utils';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
