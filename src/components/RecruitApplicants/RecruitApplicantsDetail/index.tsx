@@ -32,26 +32,22 @@ export const RecruitApplicantsDetail = (
 
   const { limits } = recruitDetail;
 
-
   const limitInfo = limits.find(
     ({ recruitType }) => recruitType === part
   ) as RecruitParticipantsProgress;
 
   const { limit, currentNumber } = limitInfo;
 
-  const unTouchedApplicants = applicants.filter(
+  const pendingApplicants = applicants.filter(
     (applicant) => applicant.matchStatus === MatchStatus.PENDING
   );
-  const unTouchedApplicantsCount = unTouchedApplicants.length;
 
-  const touchedApplicants = applicants.filter(
-    (applicant) => applicant.matchStatus !== MatchStatus.PENDING
-  );
+  const pendingApplicantsCount = pendingApplicants.length;
 
   return (
     <RecruitApplicantsAccordion.Item value={part} key={part}>
       <RecruitApplicantsAccordion.Trigger
-        applicantsCount={unTouchedApplicantsCount}
+        applicantsCount={pendingApplicantsCount}
       >
         {part}
       </RecruitApplicantsAccordion.Trigger>
@@ -79,26 +75,10 @@ export const RecruitApplicantsDetail = (
         <div css={{ marginBottom: 52 }}>
           <RecruitApplicantsCount
             title="리쿠르팅 신청"
-            count={unTouchedApplicantsCount}
+            count={pendingApplicantsCount}
           />
 
-          {unTouchedApplicantsCount > 0 && (
-            <div css={likeContainerCss}>
-              <RecruitApplicantsSortToggle />
-            </div>
-          )}
-
-          <RecruitApplicantBarList applicants={unTouchedApplicants} />
-        </div>
-
-        <div css={{ marginBottom: 40 }}>
-          <RecruitApplicantsCount
-            title="리쿠르팅 응답"
-            count={touchedApplicants.length}
-            css={{ marginBottom: 12 }}
-          />
-
-          <RecruitApplicantBarList applicants={touchedApplicants} />
+          <RecruitApplicantBarList applicants={pendingApplicants} />
         </div>
       </RecruitApplicantsAccordion.Content>
     </RecruitApplicantsAccordion.Item>
@@ -108,9 +88,4 @@ export const RecruitApplicantsDetail = (
 const joinMemberCountCss = css(
   { color: palettes.recruit.default, marginBottom: 16 },
   fontCss.style.R12
-);
-
-const likeContainerCss = css(
-  { marginBottom: 12 },
-  flex('center', 'flex-end', 'row')
 );
