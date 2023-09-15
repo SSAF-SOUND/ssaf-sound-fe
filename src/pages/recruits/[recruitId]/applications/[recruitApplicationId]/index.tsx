@@ -35,7 +35,8 @@ import {
   routes,
 } from '~/utils';
 
-const metaTitle = '리쿠르팅 신청 내역';
+const metaTitle = '리쿠르팅 신청 멤버';
+const titleBarTitle = metaTitle;
 const RecruitApplicationPage: CustomNextPage = () => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
@@ -117,7 +118,7 @@ const RecruitApplicationPage: CustomNextPage = () => {
       <div css={selfCss}>
         {/*NOTE: 신청목록 페이지*/}
         <TitleBar.Default
-          title={metaTitle}
+          title={titleBarTitle}
           withoutClose
           onClickBackward={'신청목록 페이지'}
         />
