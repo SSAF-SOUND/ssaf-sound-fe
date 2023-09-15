@@ -1,11 +1,13 @@
 import type { CustomNextPage } from 'next/types';
 import type { RecruitApplicant, RecruitParts } from '~/services/recruit';
 
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
 import {
+  Button,
   FullPageLoader,
   loaderText,
   PageHeadingText,
@@ -18,22 +20,27 @@ import {
   RecruitApplicantsDetail,
   RecruitApplicantsAccordion,
 } from '~/components/RecruitApplicants';
+import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import {
+  getDisplayCategoryName,
   RecruitCategoryName,
   useRecruitApplicants,
   useRecruitDetail,
 } from '~/services/recruit';
 import {
-  expandCss,
   fixTopCenter,
   flex,
   fontCss,
   palettes,
-  position,
   titleBarHeight,
 } from '~/styles/utils';
-import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  getErrorResponse,
+  routes,
+} from '~/utils';
 
 const metaTitle = '리쿠르팅 신청 목록';
 const titleBarTitle = metaTitle;
@@ -69,15 +76,38 @@ const RecruitApplicantsPage: CustomNextPage = () => {
   }
 
   if (isRecruitApplicantsError || isRecruitDetailError) {
-    // NOTE: unauthorized error인 경우 redirect, 그 외에는 데이터 로딩 실패 페이지
-    const isUnauthorized = false as boolean;
+    const errorResponse =
+      getErrorResponse(recruitApplicantsError) ??
+      getErrorResponse(recruitDetailError);
+    const errorMessage =
+      errorResponse?.message ??
+      '리쿠르팅 데이터를 불러오는 중 오류가 발생했습니다.';
 
-    if (isUnauthorized) {
-      router.replace(routes.unauthorized());
-      return <FullPageLoader />;
-    }
+    return (
+      <RedirectionGuide
+        title="Error"
+        description={errorMessage}
+        customLinkElements={
+          <div>
+            <Button asChild size="lg" css={{ marginBottom: 12 }}>
+              <Link href={routes.recruit.detail(recruitId)}>
+                리쿠르팅 상세 페이지로
+              </Link>
+            </Button>
+            <Button asChild size="lg">
+              <Link href={routes.recruit.list()}>리쿠르팅 목록 페이지로</Link>
+            </Button>
+          </div>
+        }
+      />
+    );
+  }
 
-    return <div>Fail to load</div>;
+  const isUnauthorized = !recruitDetail.mine;
+
+  if (isUnauthorized) {
+    router.replace(routes.unauthorized());
+    return <FullPageLoader />;
   }
 
   const { category, finishedRecruit } = recruitDetail;
@@ -101,7 +131,9 @@ const RecruitApplicantsPage: CustomNextPage = () => {
         {finishedRecruit && <RecruitCompletedBar css={completedBarCss} />}
 
         <div css={headerCss}>
-          <p css={categoryNameCss}>{recruitDetail.category}</p>
+          <p css={categoryNameCss}>
+            {getDisplayCategoryName(recruitDetail.category)}
+          </p>
           <p css={titleCss}>{recruitDetail.title}</p>
         </div>
 
