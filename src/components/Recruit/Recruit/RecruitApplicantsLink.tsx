@@ -15,7 +15,7 @@ export const RecruitApplicantsLink = (props: RecruitApplicantsLinkProps) => {
 
   return (
     <Button asChild theme={Theme.RECRUIT} {...restProps}>
-      <Link href={routes.recruit.applicants(recruitId)}>
+      <Link href={routes.recruit.applications.self(recruitId)}>
         리쿠르팅 신청목록 보기
       </Link>
     </Button>
