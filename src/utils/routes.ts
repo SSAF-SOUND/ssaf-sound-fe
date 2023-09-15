@@ -95,6 +95,16 @@ export const routes = {
         `${routes.recruit.detail(recruitId)}/applications`,
       mine: (recruitId: number) =>
         `${routes.recruit.applications.self(recruitId)}/mine` as const,
+      detail: ({
+        recruitId,
+        recruitApplicationId,
+      }: {
+        recruitId: number;
+        recruitApplicationId: number;
+      }) =>
+        `${routes.recruit.applications.self(
+          recruitId
+        )}/${recruitApplicationId}` as const,
     },
     apply: (recruitId: number) =>
       `${routes.recruit.detail(recruitId)}/apply` as const,
