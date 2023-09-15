@@ -3,66 +3,69 @@ import type { RecruitParts, SkillName } from '~/services/recruit';
 import { RecruitCategoryName } from '~/services/recruit';
 
 export const routes = {
-  root: () => '/',
-  main: () => '/main',
+  root: () => '/' as const,
+  main: () => '/main' as const,
   articles: {
-    self: () => '/articles',
-    categories: () => `${routes.articles.self()}/categories`,
+    self: () => '/articles' as const,
+    categories: () => `${routes.articles.self()}/categories` as const,
     category: (categoryId: number, searchKeyword?: string) => {
       const queryString = searchKeyword ? `?keyword=${searchKeyword}` : '';
-      return `${routes.articles.categories()}/${categoryId}${queryString}`;
+      return `${routes.articles.categories()}/${categoryId}${queryString}` as const;
     },
     hot: (searchKeyword?: string) => {
       const queryString = searchKeyword ? `?keyword=${searchKeyword}` : '';
-      return `/hot-articles${queryString}`;
+      return `/hot-articles${queryString}` as const;
     },
-    detail: (articleId: number) => `${routes.articles.self()}/${articleId}`,
-    edit: (articleId: number) => `${routes.articles.detail(articleId)}/edit`,
+    detail: (articleId: number) =>
+      `${routes.articles.self()}/${articleId}` as const,
+    edit: (articleId: number) =>
+      `${routes.articles.detail(articleId)}/edit` as const,
     create: (categoryId: number) =>
-      `${routes.articles.self()}/new?categoryId=${categoryId}`,
+      `${routes.articles.self()}/new?categoryId=${categoryId}` as const,
   },
 
   //
-  signIn: () => '/auth/sign-in',
-  userRegister: () => '/auth/register',
+  signIn: () => '/auth/sign-in' as const,
+  userRegister: () => '/auth/register' as const,
 
   //
   certification: {
-    student: () => '/certification/student',
+    student: () => '/certification/student' as const,
   },
 
   //
   intro: {
-    studentCertification: () => '/intro/student-certification',
+    studentCertification: () => '/intro/student-certification' as const,
   },
 
   profile: {
-    self: () => '/profile',
-    detail: (id: number) => `${routes.profile.self()}/${id}`,
-    myInfoSettings: () => `${routes.profile.self()}/myinfo-settings`,
-    myArticles: () => `${routes.profile.self()}/my-articles`,
+    self: () => '/profile' as const,
+    detail: (id: number) => `${routes.profile.self()}/${id}` as const,
+    myInfoSettings: () => `${routes.profile.self()}/myinfo-settings` as const,
+    myArticles: () => `${routes.profile.self()}/my-articles` as const,
     myScraps: (
       category: PossibleMyScrapsCategories = PossibleMyScrapsCategories.ARTICLES
-    ) => `${routes.profile.self()}/my-scraps?category=${category}`,
+    ) => `${routes.profile.self()}/my-scraps?category=${category}` as const,
 
     edit: {
       myInfo: (field: EditableMyInfoFields) =>
-        `${routes.profile.myInfoSettings()}/${field}/edit`,
+        `${routes.profile.myInfoSettings()}/${field}/edit` as const,
 
-      portfolio: () => `${routes.profile.self()}/portfolio/edit`,
+      portfolio: () => `${routes.profile.self()}/portfolio/edit` as const,
     },
 
     delete: {
-      account: () => `${routes.profile.myInfoSettings()}/account/delete`,
+      account: () =>
+        `${routes.profile.myInfoSettings()}/account/delete` as const,
     },
   },
 
   //
-  unauthorized: () => '/unauthorized',
+  unauthorized: () => '/unauthorized' as const,
 
   //
   recruit: {
-    self: () => '/recruits',
+    self: () => '/recruits' as const,
     list: (
       options: Partial<RecruitsPageQueryStringObject> = {}
     ): { pathname: string; query: Partial<RecruitsPageQueryStringObject> } => {
@@ -85,12 +88,16 @@ export const routes = {
         },
       };
     },
-    detail: (recruitId: number) => `${routes.recruit.self()}/${recruitId}`,
-    myApplication: (recruitId: number) =>
-      `${routes.recruit.detail(recruitId)}/my-application`,
-    applicants: (recruitId: number) =>
-      `${routes.recruit.detail(recruitId)}/applicants`,
-    apply: (recruitId: number) => `${routes.recruit.detail(recruitId)}/apply`,
+    detail: (recruitId: number) =>
+      `${routes.recruit.self()}/${recruitId}` as const,
+    applications: {
+      self: (recruitId: number) =>
+        `${routes.recruit.detail(recruitId)}/applications`,
+      mine: (recruitId: number) =>
+        `${routes.recruit.applications.self(recruitId)}/mine` as const,
+    },
+    apply: (recruitId: number) =>
+      `${routes.recruit.detail(recruitId)}/apply` as const,
     create: (category?: RecruitCategoryName) => {
       const queryString = category
         ? `?${new URLSearchParams({
@@ -98,13 +105,14 @@ export const routes = {
           }).toString()}`
         : '';
 
-      return `${routes.recruit.self()}/new${queryString}`;
+      return `${routes.recruit.self()}/new${queryString}` as const;
     },
-    edit: (recruitId: number) => `${routes.recruit.detail(recruitId)}/edit`,
+    edit: (recruitId: number) =>
+      `${routes.recruit.detail(recruitId)}/edit` as const,
   },
 
   lunch: {
-    self: () => '/lunch',
+    self: () => '/lunch' as const,
     detail: ({
       campus,
       dateSpecifier,
@@ -117,7 +125,7 @@ export const routes = {
         date: dateSpecifier,
       }).toString();
 
-      return `${routes.lunch.self()}?${queryString}`;
+      return `${routes.lunch.self()}?${queryString}` as const;
     },
   },
 };

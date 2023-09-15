@@ -1,5 +1,5 @@
 import type { CustomNextPage } from 'next/types';
-import type { RecruitParts } from '~/services/recruit';
+import type { RecruitApplicant, RecruitParts } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
 
@@ -15,14 +15,19 @@ import {
   RecruitApplicantsAccordion,
 } from '~/components/RecruitApplicants';
 import TitleBar from '~/components/TitleBar';
-import { useRecruitApplicants, useRecruitDetail } from '~/services/recruit';
+import {
+  RecruitCategoryName,
+  useRecruitApplicants,
+  useRecruitDetail,
+} from '~/services/recruit';
 import { flex, fontCss, palettes, titleBarHeight } from '~/styles/utils';
 import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 
 const metaTitle = '리쿠르팅 신청 목록';
+const titleBarTitle = metaTitle;
 
-type QueryString = {
-  id: string;
+type Params = {
+  recruitId: string;
 };
 
 /**
@@ -30,8 +35,8 @@ type QueryString = {
  */
 const RecruitApplicantsPage: CustomNextPage = () => {
   const router = useRouter();
-  const query = router.query as QueryString;
-  const recruitId = Number(query.id);
+  const query = router.query as Partial<Params>;
+  const recruitId = Number(query.recruitId);
 
   const {
     data: recruitApplicants,
@@ -53,7 +58,7 @@ const RecruitApplicantsPage: CustomNextPage = () => {
 
   if (isRecruitApplicantsError || isRecruitDetailError) {
     // NOTE: unauthorized error인 경우 redirect, 그 외에는 데이터 로딩 실패 페이지
-    const isUnauthorized = true as boolean;
+    const isUnauthorized = false as boolean;
 
     if (isUnauthorized) {
       router.replace(routes.unauthorized());
@@ -63,9 +68,12 @@ const RecruitApplicantsPage: CustomNextPage = () => {
     return <div>Fail to load</div>;
   }
 
+  const { category } = recruitDetail;
+  const isCategoryStudy = category === RecruitCategoryName.STUDY;
+
   const partAndApplicantsEntries = Object.entries(
     recruitApplicants.recruitApplications
-  );
+  ) as Array<[RecruitParts, RecruitApplicant[]]>;
 
   return (
     <>
@@ -73,7 +81,7 @@ const RecruitApplicantsPage: CustomNextPage = () => {
 
       <div css={selfCss}>
         <TitleBar.Default
-          title="리쿠르팅 신청 목록"
+          title={titleBarTitle}
           withoutClose
           onClickBackward={routes.recruit.detail(recruitId)}
         />
@@ -81,11 +89,12 @@ const RecruitApplicantsPage: CustomNextPage = () => {
           <p css={categoryNameCss}>{recruitDetail.category}</p>
           <p css={titleCss}>{recruitDetail.title}</p>
         </div>
-        <RecruitApplicantsAccordion.Root>
+
+        <RecruitApplicantsAccordion.Root isStudy={isCategoryStudy}>
           {partAndApplicantsEntries.map(([part, applicants]) => (
             <RecruitApplicantsDetail
               key={part}
-              part={part as RecruitParts}
+              part={part}
               applicants={applicants}
               recruitDetail={recruitDetail}
             />
@@ -98,7 +107,7 @@ const RecruitApplicantsPage: CustomNextPage = () => {
 
 const selfPaddingY = titleBarHeight + 10;
 const selfCss = css({
-  padding: `${selfPaddingY}px 15px`,
+  padding: `${selfPaddingY}px 0`,
 });
 
 const headerCss = css(
