@@ -26,5 +26,6 @@ export * from './string';
 export * from './stringBooleanToBool';
 export * from './stringToBoolean';
 export * from './timeAgo';
+export * from './toMs';
 export * from './toWebp';
 export * from './webStorage';
