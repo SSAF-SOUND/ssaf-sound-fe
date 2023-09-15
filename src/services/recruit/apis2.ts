@@ -1,5 +1,4 @@
 import type {
-  RecruitType,
   MatchStatus,
   RecruitParts,
   SkillName,
@@ -9,7 +8,7 @@ import type { UserInfo } from '../member';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
-import { privateAxios, publicAxios } from '~/utils';
+import { privateAxios } from '~/utils';
 
 export type RecruitParams = {
   category?: RecruitCategoryType;
@@ -19,51 +18,10 @@ export type RecruitParams = {
   skills?: SkillName[];
 };
 
-export interface Recruit {
-  recruitId: number;
-  title: string;
-  finishedRecruit: boolean;
-  recruitEnd: string;
-
-  content: string;
-
-  skills: RecruitSkills[];
-
-  participants: RecruitParticipant[];
-}
-
-export interface RecruitSkills {
-  id: number;
-  name: SkillName;
-}
-
-export interface RecruitParticipant {
-  recruitType: RecruitParts;
-  limit: number;
-  members: {
-    nickname: string;
-    major: boolean;
-  }[];
-}
-
 export interface RecruitMembers {
   limit: number;
   members: UserInfo[];
 }
-
-export type PartialRecruitType = Partial<RecruitType>;
-export type recruitMembersType = {
-  recruitTypes: Partial<Record<PartialRecruitType, RecruitMembers>>;
-};
-
-export type GetRecruitMembersApiData = ApiSuccessResponse<recruitMembersType>;
-
-export const getRecruitMembers = (recruitId: number) => {
-  const endpoint = endpoints.recruit.members(recruitId);
-  return publicAxios
-    .get<GetRecruitMembersApiData>(endpoint)
-    .then((res) => res.data.data);
-};
 
 // ---------------------------------------
 
@@ -93,24 +51,3 @@ export const getRecruitApplicants = (recruitId: number) => {
 };
 
 // ---------------------------------
-
-export const getRecruitApplicationDetail = (recruitApplicationId: number) => {
-  const endpoint = endpoints.recruit.application.detail(recruitApplicationId);
-
-  return privateAxios
-    .get<GetRecruitApplicationDetailApiData>(endpoint)
-    .then((res) => res.data.data);
-};
-
-interface RecruitApplicationDetail {
-  recruitId: number;
-  recruitApplicationId: number;
-  recruitType: RecruitParts;
-  matchStatus: MatchStatus;
-  author: UserInfo;
-  reply: string;
-  question: string;
-  liked: boolean;
-}
-export type GetRecruitApplicationDetailApiData =
-  ApiSuccessResponse<RecruitApplicationDetail>;
