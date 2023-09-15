@@ -98,13 +98,13 @@ export const routes = {
       detail: ({
         recruitId,
         recruitApplicationId,
-      }: {
-        recruitId: number;
-        recruitApplicationId: number;
-      }) =>
+      }: RecruitApplicationRouteParams) =>
         `${routes.recruit.applications.self(
           recruitId
         )}/${recruitApplicationId}` as const,
+      reject: (recruitId: number) => {
+        return `${routes.recruit.applications.self(recruitId)}/reject`;
+      },
     },
     apply: (recruitId: number) =>
       `${routes.recruit.detail(recruitId)}/apply` as const,
@@ -159,3 +159,8 @@ export type RecruitsPageQueryStringObject = {
   skills: SkillName | SkillName[];
   recruitParts: RecruitParts | RecruitParts[];
 };
+
+interface RecruitApplicationRouteParams {
+  recruitId: number;
+  recruitApplicationId: number;
+}

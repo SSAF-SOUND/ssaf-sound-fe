@@ -87,7 +87,7 @@ export const RecruitApplicantsDetail = (
         <div css={{ textAlign: 'right', marginBottom: 52 }}>
           <Link
             css={[{ textDecoration: 'underline' }, fontCss.style.R14]}
-            href={routes.recruit.applications.rejected(recruitId)}
+            href={routes.recruit.applications.reject(recruitId)}
           >
             거절한 리쿠르팅 보기
           </Link>
