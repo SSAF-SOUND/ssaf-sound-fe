@@ -18,6 +18,8 @@ import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import {
   MatchStatus,
+  RecruitParts,
+  useLikeRecruitApplication,
   useRecruitApplication,
   useRecruitDetail,
 } from '~/services/recruit';
@@ -26,11 +28,12 @@ import {
   createAuthGuard,
   createNoIndexPageMetaData,
   getErrorResponse,
+  handleAxiosError,
   noop,
   routes,
 } from '~/utils';
 
-const metaTitle = '리쿠르팅 신청 멤버';
+const metaTitle = '리쿠르팅 신청서';
 const titleBarTitle = metaTitle;
 const RecruitApplicationPage: CustomNextPage = () => {
   const router = useRouter();
@@ -50,6 +53,16 @@ const RecruitApplicationPage: CustomNextPage = () => {
     isError: isRecruitDetailError,
     error: recruitDetailError,
   } = useRecruitDetail(recruitId);
+
+  const {
+    mutateAsync: likeRecruitApplication,
+    isLoading: isLikingRecruitApplication,
+  } = useLikeRecruitApplication({
+    recruitApplicationId,
+    recruitId,
+    // 페이지가 로딩되었을 때는 `recruitPart`가 항상 존재하기 때문에, 로딩중일 때는 의미 없는 `FRONTEND` 값을 임시로 채워 넣음
+    recruitPart: recruitApplication?.recruitType || RecruitParts.FRONTEND,
+  });
 
   if (isRecruitDetailLoading || isRecruitApplicationLoading) {
     return <FullPageLoader text="데이터를 불러오는 중입니다." />;
@@ -104,16 +117,23 @@ const RecruitApplicationPage: CustomNextPage = () => {
     );
   }
 
+  const onLikedChange = async () => {
+    try {
+      await likeRecruitApplication();
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
-        {/*NOTE: 신청목록 페이지*/}
         <TitleBar.Default
           title={titleBarTitle}
           withoutClose
-          onClickBackward={'신청목록 페이지'}
+          onClickBackward={routes.recruit.applications.self(recruitId)}
         />
 
         <header css={[headerCss, { marginBottom: 60 }]}>
@@ -121,7 +141,12 @@ const RecruitApplicationPage: CustomNextPage = () => {
 
           <div css={[applicantCss, { marginBottom: 30 }]}>
             <NameCard userInfo={applicantInfo} />
-            <RecruitApplicantLikeButton liked={liked} />
+            <RecruitApplicantLikeButton
+              liked={liked}
+              onLikedChange={onLikedChange}
+              loading={isLikingRecruitApplication}
+              showLoadingSpinner={false}
+            />
           </div>
 
           <Button

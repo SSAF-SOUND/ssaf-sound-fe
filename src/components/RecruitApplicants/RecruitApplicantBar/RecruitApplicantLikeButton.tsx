@@ -8,21 +8,30 @@ interface RecruitApplicantLikeButtonProps {
   liked?: boolean;
   onLikedChange?: (liked: boolean) => void;
   loading?: boolean;
+  showLoadingSpinner?: boolean;
 }
 
 export const RecruitApplicantLikeButton = (
   props: RecruitApplicantLikeButtonProps
 ) => {
-  const { liked, onLikedChange, loading } = props;
+  const { liked, onLikedChange, loading, showLoadingSpinner = true } = props;
 
   return (
     <IconButton asChild theme={Theme.RECRUIT} size={32} disabled={loading}>
       <RadixToggle.Root pressed={liked} onPressedChange={onLikedChange}>
         {loading ? (
-          <ClipLoader
-            size={24}
-            color={colorMix('30%', palettes.recruit.light)}
-          />
+          showLoadingSpinner ? (
+            <ClipLoader
+              size={24}
+              color={colorMix('30%', palettes.recruit.default)}
+            />
+          ) : (
+            <Icon
+              name={liked ? 'heart' : 'heart.outlined'}
+              size={24}
+              color={colorMix('40%', palettes.recruit.default)}
+            />
+          )
         ) : (
           <Icon
             name={liked ? 'heart' : 'heart.outlined'}
