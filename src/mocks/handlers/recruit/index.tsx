@@ -8,6 +8,7 @@ import type {
   GetRecruitParticipantsApiData,
   RejectRecruitApplicationApiData,
   ScrapRecruitApiData,
+  GetRecruitApplicantsApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -20,7 +21,7 @@ import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 import {
   createMockMyRecruitApplication,
   createMockRecruitApplication,
-  RecruitData,
+  createMockRecruitApplicants,
   recruitDetails,
   recruitParticipantsList,
   scrapStatus,
@@ -30,11 +31,19 @@ import { restInfiniteRecruitsSuccess } from './utils';
 const getRecruitApplicantsEndpoint = removeQueryParams(
   composeUrls(API_URL, endpoints.recruit.application.applicants(1))
 );
-export const getRecruitApplicants = restSuccess(
-  'get',
+export const getRecruitApplicants = rest.get(
   getRecruitApplicantsEndpoint,
-  {
-    data: RecruitData.recruitApplicants,
+  (req, res, ctx) => {
+    const searchParams = req.url.searchParams;
+    const recruitId = Number(searchParams.get('recruitId'));
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<GetRecruitApplicantsApiData['data']>(
+        ctx,
+        createMockRecruitApplicants(recruitId)
+      )
+    );
   }
 );
 
@@ -93,7 +102,7 @@ export const getRecruitDetailError = restError(
 // 리쿠르팅 참가자 조회
 const getRecruitParticipantsEndpoint =
   // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.applicants(':recruitId'));
+  composeUrls(API_URL, endpoints.recruit.participants(':recruitId'));
 
 export const getRecruitParticipants = rest.get(
   getRecruitParticipantsEndpoint,
