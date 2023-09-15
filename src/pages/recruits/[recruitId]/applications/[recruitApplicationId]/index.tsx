@@ -19,11 +19,13 @@ import TitleBar from '~/components/TitleBar';
 import {
   MatchStatus,
   RecruitParts,
+  useApproveRecruitApplication,
   useLikeRecruitApplication,
   useRecruitApplication,
   useRecruitDetail,
+  useRejectRecruitApplication,
 } from '~/services/recruit';
-import { flex, palettes, titleBarHeight } from '~/styles/utils';
+import { flex, palettes, Theme, titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -162,6 +164,7 @@ const RecruitApplicationPage: CustomNextPage = () => {
         </header>
 
         <RecruitApplyForm
+          css={{ marginBottom: 80 }}
           recruitDetail={recruitDetail}
           onValidSubmit={noop}
           options={{
@@ -210,7 +213,85 @@ interface ActionButtonLayerProps {
 }
 const ActionButtonLayer = (props: ActionButtonLayerProps) => {
   const { recruitDetail, recruitApplication, className } = props;
-  const { matchStatus } = recruitApplication;
+  const { matchStatus, recruitApplicationId } = recruitApplication;
+  const { finishedRecruit, recruitId } = recruitDetail;
+  const {
+    mutateAsync: approveRecruitApplication,
+    isLoading: isApprovingRecruitApplication,
+  } = useApproveRecruitApplication({ recruitApplicationId, recruitId });
+  const {
+    mutateAsync: rejectRecruitApplication,
+    isLoading: isRejectingRecruitApplication,
+  } = useRejectRecruitApplication({ recruitApplicationId, recruitId });
 
-  return <div className={className}>{matchStatus === MatchStatus.PENDING}</div>;
+  const handleApprove = async () => {
+    try {
+      await approveRecruitApplication();
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+  const handleReject = async () => {
+    try {
+      await rejectRecruitApplication();
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
+  return (
+    <div css={actionButtonLayerCss} className={className}>
+      {matchStatus === MatchStatus.PENDING && finishedRecruit && (
+        <div css={inactiveButtonCss}>응답 안함</div>
+      )}
+
+      {matchStatus === MatchStatus.PENDING && !finishedRecruit && (
+        <>
+          <Button
+            onClick={handleReject}
+            loading={isRejectingRecruitApplication}
+            theme={Theme.RECRUIT}
+            variant="inverse"
+            size="lg"
+          >
+            거절
+          </Button>
+          <Button
+            onClick={handleApprove}
+            loading={isApprovingRecruitApplication}
+            theme={Theme.RECRUIT}
+            size="lg"
+          >
+            수락
+          </Button>
+        </>
+      )}
+      {matchStatus === MatchStatus.REJECTED && (
+        <div css={inactiveButtonCss}>거절함</div>
+      )}
+      {matchStatus === MatchStatus.SUCCESS && (
+        <div css={inactiveButtonCss}>수락함</div>
+      )}
+    </div>
+  );
 };
+
+const actionButtonLayerCss = css(
+  {
+    '& > button': { width: '50%' },
+  },
+  flex('center', '', 'row', 16)
+);
+
+const inactiveButtonCss = css(
+  {
+    width: '100%',
+    pointerEvents: 'none',
+    cursor: 'initial',
+    border: `1px solid ${palettes.recruit.default}`,
+    color: palettes.recruit.default,
+    borderRadius: 10,
+    height: 56,
+  },
+  flex('center', 'center')
+);

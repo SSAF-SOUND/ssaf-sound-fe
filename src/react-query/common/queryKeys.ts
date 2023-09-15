@@ -79,6 +79,10 @@ export const queryKeys = {
         ...queryKeys.recruit.application.self(recruitId),
         'applicants',
       ],
+      rejectedApplicants: (recruitId: number) => [
+        ...queryKeys.recruit.application.applicants(recruitId),
+        'rejected',
+      ],
       mine: (recruitId: number) => [
         ...queryKeys.recruit.application.self(recruitId),
         'mine',
