@@ -45,7 +45,11 @@ export const queryKeys = {
   },
   recruit: {
     self: () => ['recruits'],
-    detail: (recruitId: number) => [...queryKeys.recruit.self(), recruitId],
+    detail: (recruitId: number) => [
+      ...queryKeys.auth(),
+      ...queryKeys.recruit.self(),
+      recruitId,
+    ],
     participants: (recruitId: number) => [
       ...queryKeys.recruit.detail(recruitId),
       'participants',
@@ -66,22 +70,14 @@ export const queryKeys = {
         },
       ];
     },
-    members: (recruitId: number) => [
-      ...queryKeys.recruit.self(),
-      'members',
-      recruitId,
-    ],
-    applicants: (recruitId: number) => [
-      ...queryKeys.auth(),
-      ...queryKeys.recruit.self(),
-      recruitId,
-      'applicants',
-    ],
     application: {
       self: (recruitId: number) => [
-        ...queryKeys.auth(),
         ...queryKeys.recruit.detail(recruitId),
         'application',
+      ],
+      applicants: (recruitId: number) => [
+        ...queryKeys.recruit.application.self(recruitId),
+        'applicants',
       ],
       mine: (recruitId: number) => [
         ...queryKeys.recruit.application.self(recruitId),
@@ -219,8 +215,6 @@ export const endpoints = {
     self: () => `/recruits` as const,
     detail: (recruitId: number) =>
       `${endpoints.recruit.self()}/${recruitId}` as const,
-    members: (recruitId: number) =>
-      `${endpoints.recruit.detail(recruitId)}/members` as const,
     participants: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/members` as const,
     scrap: (recruitId: number) =>
@@ -265,6 +259,8 @@ export const endpoints = {
         `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
       applicants: (recruitId: number) =>
         `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+      like: (recruitApplicationId: number) =>
+        `${endpoints.recruit.application.detail(recruitApplicationId)}/like`,
       cancel: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.detail(
           recruitApplicationId
