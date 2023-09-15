@@ -254,13 +254,15 @@ export const endpoints = {
     application: {
       self: () => `/recruit-applications`,
       mine: (recruitId: number) =>
-        `${endpoints.recruit.application.self()}/mine?recruitId=${recruitId}`,
+        `${endpoints.recruit.application.self()}/mine?recruitId=${recruitId}` as const,
       detail: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
       applicants: (recruitId: number) =>
         `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
       like: (recruitApplicationId: number) =>
-        `${endpoints.recruit.application.detail(recruitApplicationId)}/like`,
+        `${endpoints.recruit.application.detail(
+          recruitApplicationId
+        )}/like` as const,
       cancel: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.detail(
           recruitApplicationId
