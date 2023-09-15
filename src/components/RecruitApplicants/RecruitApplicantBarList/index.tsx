@@ -1,4 +1,4 @@
-import type { RecruitApplicant } from '~/services/recruit';
+import type { RecruitApplicant, RecruitParts } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { memo, useState } from 'react';
@@ -14,11 +14,17 @@ interface RecruitApplicantBarListProps {
   // 더보기를 누르기 전에 보여줄 지원자 수
   initialVisibleCount?: number;
   recruitId: number;
+  recruitPart: RecruitParts;
 }
 
 export const RecruitApplicantBarList = memo(
   (props: RecruitApplicantBarListProps) => {
-    const { applicants, initialVisibleCount = 3, recruitId } = props;
+    const {
+      applicants,
+      initialVisibleCount = 3,
+      recruitId,
+      recruitPart,
+    } = props;
     const [sortLikedApplicantsFirst, setSortLikedApplicantsFirst] =
       useState(false);
     const [loadMore, setLoadMore] = useState(false);
@@ -64,6 +70,7 @@ export const RecruitApplicantBarList = memo(
         <ol css={recruitApplicantBarListCss}>
           {visibleApplicants.map((applicant) => (
             <RecruitApplicantBar
+              recruitPart={recruitPart}
               key={applicant.author.memberId}
               recruitId={recruitId}
               applicant={applicant}

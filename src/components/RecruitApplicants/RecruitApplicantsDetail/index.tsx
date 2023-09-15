@@ -79,6 +79,7 @@ export const RecruitApplicantsDetail = (
           />
 
           <RecruitApplicantBarList
+            recruitPart={part}
             recruitId={recruitId}
             applicants={pendingApplicants}
           />

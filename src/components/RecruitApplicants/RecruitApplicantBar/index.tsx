@@ -1,4 +1,4 @@
-import type { RecruitApplicant } from '~/services/recruit';
+import type { RecruitApplicant, RecruitParts } from '~/services/recruit';
 
 import Link from 'next/link';
 
@@ -8,29 +8,54 @@ import { memo } from 'react';
 import { Avatar, Icon, IconButton } from '~/components/Common';
 import { FullDateTime } from '~/components/FullDateTime';
 import { RecruitApplicantLikeButton } from '~/components/RecruitApplicants/RecruitApplicantBar/RecruitApplicantLikeButton';
-import { flex, fontCss, inlineFlex, lineClamp } from '~/styles/utils';
-import { routes } from '~/utils';
+import { useLikeRecruitApplication } from '~/services/recruit';
+import {
+  colorMix,
+  flex,
+  fontCss,
+  inlineFlex,
+  lineClamp,
+  palettes,
+} from '~/styles/utils';
+import { handleAxiosError, routes } from '~/utils';
 
 export interface RecruitApplicantBar {
+  recruitPart: RecruitParts;
   recruitId: number;
   applicant: RecruitApplicant;
 }
 
 export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
-  const { applicant, recruitId } = props;
+  const { applicant, recruitId, recruitPart } = props;
 
   const { author, liked, appliedAt, reply, recruitApplicationId } = applicant;
 
+  const {
+    mutateAsync: likeRecruitApplication,
+    isLoading: isLikingRecruitApplication,
+  } = useLikeRecruitApplication({
+    recruitId,
+    recruitApplicationId,
+    recruitPart,
+  });
+
   const { nickname } = author;
 
-  // 지원자에게 어떤 방식으로든 응답이 된 상태
+  const onLikedChange = async () => {
+    try {
+      await likeRecruitApplication();
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
 
   return (
-    <li css={selfCss}>
+    <li css={[selfCss, isLikingRecruitApplication && likingSelfCss]}>
       <div css={applicantHeaderCss}>
         <RecruitApplicantLikeButton
           liked={liked}
-          onLikedChange={(v) => console.log(v)}
+          loading={isLikingRecruitApplication}
+          onLikedChange={onLikedChange}
         />
       </div>
 
@@ -71,11 +96,20 @@ export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
 
 RecruitApplicantBar.displayName = 'RecruitApplicantBar';
 
-const selfCss = css(flex('center', '', 'row', 10));
+const selfCss = css(
+  {
+    borderRadius: 8,
+    transition: 'background-color 400ms',
+  },
+  flex('center', '', 'row', 10)
+);
 const applicantHeaderCss = css(
   { width: 46, flexShrink: 0 },
   inlineFlex('center', 'center')
 );
+const likingSelfCss = css({
+  backgroundColor: colorMix('20%', palettes.recruit.default),
+});
 
 const applicantInfoContainerCss = css(
   { width: '100%' },

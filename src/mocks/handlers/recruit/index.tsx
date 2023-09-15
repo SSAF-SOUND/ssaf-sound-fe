@@ -9,6 +9,7 @@ import type {
   RejectRecruitApplicationApiData,
   ScrapRecruitApiData,
   GetRecruitApplicantsApiData,
+  LikeRecruitApplicationApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -380,6 +381,29 @@ export const approveRecruitApplicationError = restError(
   }
 );
 
+const likeRecruitApplicationEndpoint = composeUrls(
+  API_URL,
+  // @ts-ignore
+  endpoints.recruit.application.like(':recruitApplicationId')
+);
+
+let liked = false;
+const toggleLike = () => {
+  liked = !liked;
+  return liked;
+};
+export const likeRecruitApplication = rest.post(
+  likeRecruitApplicationEndpoint,
+  (req, res, ctx) => {
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<LikeRecruitApplicationApiData['data']>(ctx, {
+        liked: toggleLike(),
+      })
+    );
+  }
+);
+
 export const recruitHandlers = [
   //
   getRecruitApplicants,
@@ -399,4 +423,5 @@ export const recruitHandlers = [
   cancelRecruitApplication,
   rejectRecruitApplication,
   approveRecruitApplication,
+  likeRecruitApplication,
 ];
