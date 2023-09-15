@@ -1,7 +1,8 @@
 import type { CustomNextPage } from 'next/types';
 import type {
   RecruitApplicationDetail,
-  RecruitDetail} from '~/services/recruit';
+  RecruitDetail,
+} from '~/services/recruit';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,11 +12,12 @@ import { css } from '@emotion/react';
 import {
   Button,
   FullPageLoader,
-  Icon,
   PageHeadingText,
+  Separator,
 } from '~/components/Common';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import NameCard from '~/components/NameCard';
+import { RecruitLikeButton } from '~/components/Recruit/RecruitLikeButton';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import {
@@ -27,6 +29,7 @@ import { flex, fontCss, palettes, titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
+  formatFullDateTime,
   getErrorResponse,
   noop,
   routes,
@@ -105,6 +108,8 @@ const RecruitApplicationPage: CustomNextPage = () => {
     );
   }
 
+  const { date: formattedAppliedDate, time: formattedAppliedTime } =
+    formatFullDateTime(appliedAt);
   return (
     <>
       <PageHeadingText text={metaTitle} />
@@ -119,17 +124,28 @@ const RecruitApplicationPage: CustomNextPage = () => {
 
         <header css={[headerCss, { marginBottom: 60 }]}>
           <time css={appliedAtCss} dateTime={appliedAt}>
-            {appliedAt}
+            {formattedAppliedDate}
+            <Separator
+              orientation="vertical"
+              height={12}
+              style={{ backgroundColor: palettes.font.blueGrey }}
+            />
+            {formattedAppliedTime}
           </time>
           <div css={[applicantCss, { marginBottom: 30 }]}>
             <NameCard userInfo={applicantInfo} />
-            <Icon
-              name={`${liked ? 'heart' : 'heart.outlined'}`}
-              color={palettes.recruit.default}
-            />
+            <RecruitLikeButton liked={liked} />
           </div>
-          <Button theme="grey" size="md" css={{ color: palettes.white }}>
-            포트폴리오 보러 가기
+
+          <Button
+            theme="grey"
+            size="md"
+            css={{ color: palettes.white }}
+            asChild
+          >
+            <Link href={routes.profile.detail(applicantInfo.memberId)}>
+              포트폴리오 보러 가기
+            </Link>
           </Button>
         </header>
 
@@ -169,7 +185,8 @@ const appliedAtCss = css(
   {
     color: palettes.font.blueGrey,
   },
-  fontCss.style.R12
+  fontCss.style.R12,
+  flex('center', '', 'row', 6)
 );
 const applicantCss = css(flex('center', 'space-between', 'row', 12));
 
