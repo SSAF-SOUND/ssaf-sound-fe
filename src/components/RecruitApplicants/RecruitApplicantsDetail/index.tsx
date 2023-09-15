@@ -6,6 +6,8 @@ import type {
   RecruitParts,
 } from '~/services/recruit';
 
+import Link from 'next/link';
+
 import { css } from '@emotion/react';
 
 import { RecruitApplicantsAccordion } from '~/components/RecruitApplicants';
@@ -13,9 +15,8 @@ import { RecruitApplicantBarList } from '~/components/RecruitApplicants/RecruitA
 import { RecruitApplicantsCount } from '~/components/RecruitApplicants/RecruitApplicantsCount';
 import { RecruitMembersAvatars } from '~/components/RecruitApplicants/RecruitMembersAvatars';
 import { MatchStatus, useRecruitParticipants } from '~/services/recruit';
-import { flex, fontCss, palettes } from '~/styles/utils';
-
-import { RecruitApplicantsSortToggle } from '../RecruitApplicantsSortToggle';
+import { fontCss, palettes } from '~/styles/utils';
+import { routes } from '~/utils';
 
 interface RecruitApplicantsDetailProps {
   part: RecruitParts;
@@ -71,7 +72,6 @@ export const RecruitApplicantsDetail = (
             )
           )}
         </div>
-
         <div css={{ marginBottom: 52 }}>
           <RecruitApplicantsCount
             title="리쿠르팅 신청"
@@ -82,6 +82,15 @@ export const RecruitApplicantsDetail = (
             recruitId={recruitId}
             applicants={pendingApplicants}
           />
+        </div>
+
+        <div css={{ textAlign: 'right', marginBottom: 52 }}>
+          <Link
+            css={[{ textDecoration: 'underline' }, fontCss.style.R14]}
+            href={routes.recruit.applications.rejected(recruitId)}
+          >
+            거절한 리쿠르팅 보기
+          </Link>
         </div>
       </RecruitApplicantsAccordion.Content>
     </RecruitApplicantsAccordion.Item>
