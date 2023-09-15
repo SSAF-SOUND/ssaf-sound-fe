@@ -2,7 +2,7 @@ import type {
   LimitType,
   RecruitApplicant,
   RecruitDetail,
-  RecruitMembers,
+  RecruitParticipantsDetail,
   RecruitParts,
 } from '~/services/recruit';
 
@@ -68,7 +68,7 @@ export const RecruitApplicantsDetail = (
               <RecruitMembersAvatars
                 limit={limit}
                 recruitMembers={
-                  recruitParticipants[part] ?? ([] as unknown as RecruitMembers)
+                  (recruitParticipants[part] as RecruitParticipantsDetail) ?? []
                 }
               />
             )

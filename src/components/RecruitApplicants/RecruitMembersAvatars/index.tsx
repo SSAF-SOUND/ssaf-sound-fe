@@ -1,4 +1,4 @@
-import type { RecruitMembers } from '~/services/recruit';
+import type { RecruitParticipantsDetail } from '~/services/recruit';
 
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ import { classnames as avatarClassnames } from '~/components/Common/Avatar/class
 import { routes } from '~/utils';
 
 interface RecruitMembersAvatarsProps {
-  recruitMembers: RecruitMembers;
+  recruitMembers: RecruitParticipantsDetail;
   limit: number;
 }
 

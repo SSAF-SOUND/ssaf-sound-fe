@@ -109,3 +109,13 @@ export interface UpdatedRecruitApplicationInfo {
   recruitApplicationId: number;
   matchStatus: MatchStatus;
 }
+
+export interface RecruitApplicant {
+  recruitApplicationId: number;
+  matchStatus: MatchStatus;
+  author: UserInfo;
+  reply: string;
+  question: string;
+  liked: boolean;
+  appliedAt: string;
+}
