@@ -271,6 +271,8 @@ export const endpoints = {
         `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
       applicants: (recruitId: number) =>
         `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+      rejectedApplicants: (recruitId: number) =>
+        `${endpoints.recruit.application.self()}/rejected?recruitId=${recruitId}` as const,
       like: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.detail(
           recruitApplicationId

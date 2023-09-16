@@ -11,6 +11,7 @@ export * from './useRecruitApplication';
 export * from './useRecruitDetail';
 export * from './useRecruitParticipants';
 export * from './useRecruits';
+export * from './useRejectedRecruitApplicants';
 export * from './useRejectRecruitApplication';
 export * from './useRemoveRecruit';
 export * from './useScrapRecruit';

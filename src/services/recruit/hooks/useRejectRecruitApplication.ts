@@ -1,5 +1,4 @@
 import type { RecruitApplicationParams } from './types';
-import type { MyRecruitApplicationDetail } from '~/services/recruit/apis';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 

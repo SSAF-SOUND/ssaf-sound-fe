@@ -10,6 +10,7 @@ import type {
   ScrapRecruitApiData,
   GetRecruitApplicantsApiData,
   LikeRecruitApplicationApiData,
+  GetRejectedRecruitApplicantsApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -421,6 +422,29 @@ export const excludeRecruitParticipant = restSuccess(
   }
 );
 
+const getRejectedApplicantsMethod = 'get';
+const getRejectedApplicantsEndpoint = composeUrls(
+  API_URL,
+  //@ts-ignore
+  endpoints.recruit.application.rejectedApplicants(':recruitId')
+);
+
+export const getRejectedApplicants = rest.get(
+  getRejectedApplicantsEndpoint,
+  (req, res, ctx) => {
+    const params = req.params as { recruitId: string };
+    const recruitId = Number(params.recruitId);
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<GetRejectedRecruitApplicantsApiData['data']>(
+        ctx,
+        createMockRecruitApplicants(recruitId)
+      )
+    );
+  }
+);
+
 export const recruitHandlers = [
   //
   getRecruitApplicants,
@@ -442,4 +466,5 @@ export const recruitHandlers = [
   approveRecruitApplication,
   likeRecruitApplication,
   excludeRecruitParticipant,
+  getRejectedApplicants,
 ];
