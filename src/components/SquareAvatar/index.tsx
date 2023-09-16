@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { UserInfo } from '~/services/member';
 
 import { css } from '@emotion/react';
@@ -9,16 +10,21 @@ import { SsafyIcon, TrackSize } from '../Common';
 
 export interface SquareAvatarProps {
   userInfo?: UserInfo;
+  className?: string;
+  style?: CSSProperties;
 }
 const SquareAvatar = (props: SquareAvatarProps) => {
-  const { userInfo } = props;
-  if (!userInfo) return <VacantSquareAvatar />;
+  const { userInfo, ...restProps } = props;
+  if (!userInfo) return <VacantSquareAvatar {...restProps} />;
 
   const { isMajor, nickname, ssafyMember, ssafyInfo } = userInfo;
   const trackName = ssafyInfo?.majorTrack ?? 'uncertified';
 
   return (
-    <div css={[selfCss, backgroundCss[isMajor ? 'major' : 'nonMajor']]}>
+    <div
+      css={[selfCss, backgroundCss[isMajor ? 'major' : 'nonMajor']]}
+      {...restProps}
+    >
       <SsafyIcon.Track name={trackName} size={TrackSize.SM4} />
       <div css={textBoxCss}>
         <span css={nickNameCss}>{nickname}</span>
