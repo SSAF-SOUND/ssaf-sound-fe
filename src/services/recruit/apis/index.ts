@@ -4,6 +4,7 @@ export * from './cancelRecruitApplication';
 export * from './completeRecruit';
 export * from './constants';
 export * from './createRecruit';
+export * from './excludeRecruitParticipant';
 export * from './getMyRecruitApplication';
 export * from './getRecruitApplicants';
 export * from './getRecruitApplication';

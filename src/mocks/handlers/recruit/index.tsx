@@ -295,7 +295,7 @@ export const getRecruitApplication = rest.get(
       ctx.delay(500),
       ...mockSuccess(
         ctx,
-          createMockRecruitApplication(1, {
+        createMockRecruitApplication(1, {
           recruitApplicationId: Number(recruitApplicationId),
         })
       )
@@ -404,6 +404,23 @@ export const likeRecruitApplication = rest.post(
   }
 );
 
+const excludeRecruitParticipantMethod = 'delete';
+const excludeRecruitParticipantEndpoint = composeUrls(
+  API_URL,
+  endpoints.recruit.participant(
+    // @ts-ignore
+    { recruitId: ':recruitId', userId: ':userId' }
+  )
+);
+
+export const excludeRecruitParticipant = restSuccess(
+  excludeRecruitParticipantMethod,
+  excludeRecruitParticipantEndpoint,
+  {
+    data: null,
+  }
+);
+
 export const recruitHandlers = [
   //
   getRecruitApplicants,
@@ -424,4 +441,5 @@ export const recruitHandlers = [
   rejectRecruitApplication,
   approveRecruitApplication,
   likeRecruitApplication,
+  excludeRecruitParticipant,
 ];
