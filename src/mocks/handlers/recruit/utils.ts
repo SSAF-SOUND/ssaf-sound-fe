@@ -1,5 +1,5 @@
 import type { ResponseComposition, RestContext, RestRequest } from 'msw';
-import type { GetRecruitsApiData, RecruitSummary } from '~/services/recruit';
+import type { GetRecruitsApiData } from '~/services/recruit';
 
 import {
   projectRecruitSummaries,
@@ -7,8 +7,6 @@ import {
 } from '~/mocks/handlers/recruit/data';
 import { mockSuccess } from '~/mocks/utils';
 import { RecruitCategoryName } from '~/services/recruit';
-
-// import { recruitMocks } from './data';
 
 const infiniteRecruitsHandler = () => {
   return (req: RestRequest, res: ResponseComposition, ctx: RestContext) => {

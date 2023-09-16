@@ -9,7 +9,7 @@ import {
 import { useSignInGuideModal } from '~/hooks';
 import { countAllComments } from '~/services/comment/utils';
 import { useMyInfo } from '~/services/member';
-import { getRecruitThemeByCategory, useScrapRecruit } from '~/services/recruit';
+import { useScrapRecruit } from '~/services/recruit';
 import { useRecruitComments } from '~/services/recruitComment';
 import { flex, fontCss, inlineFlex, palettes, Theme } from '~/styles/utils';
 import { customToast, handleAxiosError } from '~/utils';
@@ -21,13 +21,12 @@ interface RecruitStatsProps {
 
 export const RecruitStats = (props: RecruitStatsProps) => {
   const { recruitDetail, className } = props;
-  const { recruitId, scraped, scrapCount, category } = recruitDetail;
+  const { recruitId, scraped, scrapCount } = recruitDetail;
 
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
   const { openSignInGuideModal } = useSignInGuideModal();
 
-  const recruitTheme = getRecruitThemeByCategory(category);
   const { data: comments } = useRecruitComments(recruitId);
   const commentCount = comments && countAllComments(comments);
   const { mutateAsync: scrapRecruit, isLoading: isScrapingRecruit } =

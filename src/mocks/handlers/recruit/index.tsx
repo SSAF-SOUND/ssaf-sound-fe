@@ -422,7 +422,6 @@ export const excludeRecruitParticipant = restSuccess(
   }
 );
 
-const getRejectedApplicantsMethod = 'get';
 const getRejectedApplicantsEndpoint = removeQueryParams(
   composeUrls(
     API_URL,

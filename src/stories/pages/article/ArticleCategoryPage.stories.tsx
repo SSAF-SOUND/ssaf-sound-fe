@@ -3,7 +3,6 @@ import type { InfiniteData } from '@tanstack/query-core';
 import type { GetArticlesApiData } from '~/services/article';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
 
 import { getArticleCategories, getArticlesError } from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';

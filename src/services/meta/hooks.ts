@@ -1,10 +1,8 @@
-import type { RecruitType } from '../recruit';
-
 import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import { SsafyTrack } from '~/services/member';
-import { getCampuses, getRecruitTypes } from '~/services/meta/apis';
+import { getCampuses } from '~/services/meta/apis';
 
 export const initialCampuses = [
   { id: 1, name: '서울' },
@@ -65,15 +63,4 @@ export const initialRecruitType = {
       name: '스터디',
     },
   ],
-};
-
-export const useRecruitTypes = () => {
-  return useQuery({
-    queryKey: queryKeys.meta.recruitTypes(),
-    queryFn: getRecruitTypes,
-    initialData: initialRecruitType,
-    select: (data: any) => {
-      return data.recruitTypes.map(({ name }: { name: RecruitType }) => name);
-    },
-  });
 };

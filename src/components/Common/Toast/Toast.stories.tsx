@@ -84,7 +84,7 @@ export const OnPromise: PromiseToastStory = {
       success: successMessage,
     };
     const successPromise = (): Promise<void> =>
-      new Promise((resolve, reject) => {
+      new Promise((resolve) => {
         setTimeout(() => resolve(), 1500);
       });
 
