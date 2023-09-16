@@ -23,10 +23,11 @@ export interface RecruitApplicantBar {
   recruitPart: RecruitParts;
   recruitId: number;
   applicant: RecruitApplicant;
+  withLikeButton?: boolean;
 }
 
 export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
-  const { applicant, recruitId, recruitPart } = props;
+  const { applicant, recruitId, recruitPart, withLikeButton = true } = props;
 
   const { author, liked, appliedAt, reply, recruitApplicationId } = applicant;
 
@@ -51,13 +52,15 @@ export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
 
   return (
     <li css={[selfCss, isLikingRecruitApplication && likingSelfCss]}>
-      <div css={applicantHeaderCss}>
-        <RecruitApplicantLikeButton
-          liked={liked}
-          loading={isLikingRecruitApplication}
-          onLikedChange={onLikedChange}
-        />
-      </div>
+      {withLikeButton && (
+        <div css={applicantHeaderCss}>
+          <RecruitApplicantLikeButton
+            liked={liked}
+            loading={isLikingRecruitApplication}
+            onLikedChange={onLikedChange}
+          />
+        </div>
+      )}
 
       <div css={applicantInfoContainerCss}>
         <Avatar size="lg" css={{ flexShrink: 0 }} userInfo={author} />
