@@ -221,6 +221,14 @@ export const endpoints = {
       `${endpoints.recruit.self()}/${recruitId}` as const,
     participants: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/members` as const,
+    participant: ({
+      recruitId,
+      userId,
+    }: {
+      recruitId: number;
+      userId: number;
+    }) => `${endpoints.recruit.detail(recruitId)}/members/${userId}` as const,
+
     scrap: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
     complete: (recruitId: number) =>

@@ -1,20 +1,25 @@
+import type { UserInfo } from '~/services/member';
 import type { RecruitParticipantsDetail } from '~/services/recruit';
-
-import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
 import { Avatar } from '~/components/Common';
 import { classnames as avatarClassnames } from '~/components/Common/Avatar/classnames';
-import { routes } from '~/utils';
+import { palettes } from '~/styles/utils';
+
+type OnClickAvatar = (params: {
+  recruitApplicationId: number;
+  userInfo: UserInfo;
+}) => void;
 
 interface RecruitMembersAvatarsProps {
   recruitMembers: RecruitParticipantsDetail;
   limit: number;
+  onClickAvatar: OnClickAvatar;
 }
 
 const RecruitMembersAvatarsComponent = (props: RecruitMembersAvatarsProps) => {
-  const { recruitMembers, limit } = props;
+  const { recruitMembers, limit, onClickAvatar } = props;
 
   return (
     <Avatar.Group
@@ -24,16 +29,29 @@ const RecruitMembersAvatarsComponent = (props: RecruitMembersAvatarsProps) => {
       overridableSize="lg"
     >
       {recruitMembers?.members.map((userInfo) => (
-        <Link
+        // TODO: recruitApplicationId Type  추가
+        <button
+          onClick={() => onClickAvatar({ userInfo, recruitApplicationId: 1 })}
+          css={avatarButtonCss}
+          type="button"
           key={userInfo.memberId}
-          href={routes.profile.detail(userInfo.memberId)}
         >
           <Avatar size="lg" userInfo={userInfo} />
-        </Link>
+        </button>
       ))}
     </Avatar.Group>
   );
 };
+
+const avatarButtonCss = css({
+  background: 'inherit',
+  padding: 0,
+  cursor: 'pointer',
+  borderRadius: '50%',
+  ':focus-visible': {
+    outline: `3px solid ${palettes.primary.default}`,
+  },
+});
 
 interface RecruitMembersAvatarsSkeletonsProps {
   skeletonCount: number;

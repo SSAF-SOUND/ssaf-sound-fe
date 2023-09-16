@@ -1,3 +1,4 @@
+import type { UserInfo } from '~/services/member';
 import type {
   RecruitApplicant,
   RecruitDetail,
@@ -7,16 +8,19 @@ import type {
 } from '~/services/recruit';
 
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
+import { useModal } from '~/components/GlobalModal';
 import { RecruitApplicantsAccordion } from '~/components/RecruitApplicants';
 import { RecruitApplicantBarList } from '~/components/RecruitApplicants/RecruitApplicantBarList';
 import { RecruitApplicantsCount } from '~/components/RecruitApplicants/RecruitApplicantsCount';
 import { RecruitMembersAvatars } from '~/components/RecruitApplicants/RecruitMembersAvatars';
 import { MatchStatus, useRecruitParticipants } from '~/services/recruit';
+import { useExcludeRecruitParticipant } from '~/services/recruit/hooks/useExcludeRecruitParticipant';
 import { fontCss, palettes } from '~/styles/utils';
-import { routes } from '~/utils';
+import { handleAxiosError, routes } from '~/utils';
 
 interface RecruitApplicantsDetailProps {
   part: RecruitParts;
@@ -27,11 +31,15 @@ interface RecruitApplicantsDetailProps {
 export const RecruitApplicantsDetail = (
   props: RecruitApplicantsDetailProps
 ) => {
+  const router = useRouter();
   const { part, applicants, recruitDetail } = props;
   const { data: recruitParticipants, isLoading: isRecruitMembersLoading } =
     useRecruitParticipants(recruitDetail.recruitId);
+  const { openModal, closeModal } = useModal();
 
-  const { limits, recruitId } = recruitDetail;
+  const { limits, recruitId, mine } = recruitDetail;
+  const { mutateAsync: excludeRecruitParticipant } =
+    useExcludeRecruitParticipant(recruitId);
 
   const limitInfo = limits.find(
     ({ recruitType }) => recruitType === part
@@ -44,6 +52,40 @@ export const RecruitApplicantsDetail = (
   );
 
   const pendingApplicantsCount = pendingApplicants.length;
+
+  const handleOpenRecruitParticipantModal = (params: {
+    userInfo: UserInfo;
+    recruitApplicationId: number;
+  }) => {
+    const { userInfo, recruitApplicationId } = params;
+
+    openModal('recruitParticipantDetail', {
+      userInfo,
+      showPrivateButtons: mine,
+      onClickUserProfileLink: () => {
+        router.push(routes.profile.detail(userInfo.memberId));
+        closeModal();
+      },
+      onClickRecruitApplicationLink: () => {
+        router.push(
+          routes.recruit.applications.detail({
+            recruitId,
+            recruitApplicationId,
+          })
+        );
+        closeModal();
+      },
+      onClickClose: closeModal,
+      onClickExcludeRecruitParticipant: async () => {
+        try {
+          await excludeRecruitParticipant(userInfo.memberId);
+          closeModal();
+        } catch (err) {
+          handleAxiosError(err);
+        }
+      },
+    });
+  };
 
   return (
     <RecruitApplicantsAccordion.Item value={part} key={part}>
@@ -64,6 +106,7 @@ export const RecruitApplicantsDetail = (
           ) : (
             recruitParticipants && (
               <RecruitMembersAvatars
+                onClickAvatar={handleOpenRecruitParticipantModal}
                 limit={limit}
                 recruitMembers={
                   (recruitParticipants[part] as RecruitParticipantsDetail) ?? []

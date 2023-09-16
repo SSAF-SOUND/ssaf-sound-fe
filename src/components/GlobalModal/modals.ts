@@ -31,9 +31,20 @@ const Report = dynamic(
   }
 );
 
+const RecruitParticipantDetail = dynamic(
+  () =>
+    import('~/components/ModalContent').then(
+      (mod) => mod.RecruitParticipantDetail
+    ),
+  {
+    ssr: false,
+  }
+);
+
 export const modals = {
   alert: Alert,
   bottomMenu: BottomMenu,
   articleCommentForm: ArticleCommentModalForm,
   report: Report,
+  recruitParticipantDetail: RecruitParticipantDetail,
 } as const;

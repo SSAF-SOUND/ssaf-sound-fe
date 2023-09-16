@@ -1,11 +1,18 @@
+import type { CSSProperties} from 'react';
+
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
 import { flex, fontCss, palettes, themeColorVars } from '~/styles/utils';
 
-const VacantSquareAvatar = memo(() => {
+interface VacantSquareAvatarProps {
+  className?: string;
+  style?: CSSProperties;
+}
+
+const VacantSquareAvatar = memo((props: VacantSquareAvatarProps) => {
   return (
-    <div css={selfCss}>
+    <div css={selfCss} {...props}>
       <span css={titleCss}>vacant</span>
       <span css={textCss} data-theme="recruit">
         리쿠르팅 모집중
