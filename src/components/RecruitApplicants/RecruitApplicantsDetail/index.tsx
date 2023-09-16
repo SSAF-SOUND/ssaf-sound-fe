@@ -78,7 +78,7 @@ export const RecruitApplicantsDetail = (
       onClickClose: closeModal,
       onClickExcludeRecruitParticipant: async () => {
         try {
-          await excludeRecruitParticipant(userInfo.memberId);
+          await excludeRecruitParticipant(recruitApplicationId);
           closeModal();
         } catch (err) {
           handleAxiosError(err);

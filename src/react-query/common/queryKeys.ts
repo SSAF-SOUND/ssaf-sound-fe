@@ -223,11 +223,12 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/members` as const,
     participant: ({
       recruitId,
-      userId,
+      recruitApplicationId,
     }: {
       recruitId: number;
-      userId: number;
-    }) => `${endpoints.recruit.detail(recruitId)}/members/${userId}` as const,
+      recruitApplicationId: number;
+    }) =>
+      `${endpoints.recruit.detail(recruitId)}/${recruitApplicationId}` as const,
 
     scrap: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,

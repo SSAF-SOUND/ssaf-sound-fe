@@ -410,7 +410,7 @@ const excludeRecruitParticipantEndpoint = composeUrls(
   API_URL,
   endpoints.recruit.participant(
     // @ts-ignore
-    { recruitId: ':recruitId', userId: ':userId' }
+    { recruitId: ':recruitId', recruitApplicationId: ':recruitApplicationId' }
   )
 );
 
