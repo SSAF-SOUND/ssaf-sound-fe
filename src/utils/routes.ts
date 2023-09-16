@@ -102,8 +102,8 @@ export const routes = {
         `${routes.recruit.applications.self(
           recruitId
         )}/${recruitApplicationId}` as const,
-      reject: (recruitId: number) => {
-        return `${routes.recruit.applications.self(recruitId)}/reject`;
+      rejected: (recruitId: number) => {
+        return `${routes.recruit.applications.self(recruitId)}/rejected`;
       },
     },
     apply: (recruitId: number) =>

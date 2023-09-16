@@ -6,8 +6,8 @@ import { excludeRecruitParticipant } from '~/services/recruit';
 export const useExcludeRecruitParticipant = (recruitId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (userId: number) =>
-      excludeRecruitParticipant({ recruitId, userId }),
+    mutationFn: (recruitApplicationId: number) =>
+      excludeRecruitParticipant({ recruitId, recruitApplicationId }),
     onSuccess: () => {
       queryClient.invalidateQueries(queryKeys.recruit.detail(recruitId), {
         exact: true,

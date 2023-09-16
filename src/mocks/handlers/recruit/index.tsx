@@ -10,6 +10,7 @@ import type {
   ScrapRecruitApiData,
   GetRecruitApplicantsApiData,
   LikeRecruitApplicationApiData,
+  GetRejectedRecruitApplicantsApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -409,7 +410,7 @@ const excludeRecruitParticipantEndpoint = composeUrls(
   API_URL,
   endpoints.recruit.participant(
     // @ts-ignore
-    { recruitId: ':recruitId', userId: ':userId' }
+    { recruitId: ':recruitId', recruitApplicationId: ':recruitApplicationId' }
   )
 );
 
@@ -421,10 +422,34 @@ export const excludeRecruitParticipant = restSuccess(
   }
 );
 
+const getRejectedApplicantsMethod = 'get';
+const getRejectedApplicantsEndpoint = removeQueryParams(
+  composeUrls(
+    API_URL,
+    //@ts-ignore
+    endpoints.recruit.application.rejectedApplicants(1)
+  )
+);
+
+export const getRejectedApplicants = rest.get(
+  getRejectedApplicantsEndpoint,
+  (req, res, ctx) => {
+    const recruitId = Number(req.url.searchParams.get('recruitId'));
+
+    return res(
+      ctx.delay(500),
+      ...mockSuccess<GetRejectedRecruitApplicantsApiData['data']>(ctx, {
+        ...createMockRecruitApplicants(recruitId),
+      })
+    );
+  }
+);
+
 export const recruitHandlers = [
   //
-  getRecruitApplicants,
+  getRejectedApplicants,
   //
+  getRecruitApplicants,
   createRecruit,
   getRecruitDetail,
   getRecruitParticipants,
@@ -435,8 +460,8 @@ export const recruitHandlers = [
   getRecruits,
   applyRecruit,
   getMyRecruitApplication, // /recruit-applications/mine
-  getRecruitApplication, // /recruit-applications/:recruitApplicationId
 
+  getRecruitApplication, // /recruit-applications/:recruitApplicationId
   cancelRecruitApplication,
   rejectRecruitApplication,
   approveRecruitApplication,

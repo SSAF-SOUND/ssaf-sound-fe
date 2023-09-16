@@ -223,11 +223,12 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/members` as const,
     participant: ({
       recruitId,
-      userId,
+      recruitApplicationId,
     }: {
       recruitId: number;
-      userId: number;
-    }) => `${endpoints.recruit.detail(recruitId)}/members/${userId}` as const,
+      recruitApplicationId: number;
+    }) =>
+      `${endpoints.recruit.detail(recruitId)}/${recruitApplicationId}` as const,
 
     scrap: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
@@ -271,6 +272,8 @@ export const endpoints = {
         `${endpoints.recruit.application.self()}/${recruitApplicationId}` as const,
       applicants: (recruitId: number) =>
         `${endpoints.recruit.application.self()}?recruitId=${recruitId}` as const,
+      rejectedApplicants: (recruitId: number) =>
+        `${endpoints.recruit.application.self()}/rejected?recruitId=${recruitId}` as const,
       like: (recruitApplicationId: number) =>
         `${endpoints.recruit.application.detail(
           recruitApplicationId

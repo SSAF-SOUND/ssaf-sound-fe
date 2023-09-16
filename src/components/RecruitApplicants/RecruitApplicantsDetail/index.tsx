@@ -78,7 +78,7 @@ export const RecruitApplicantsDetail = (
       onClickClose: closeModal,
       onClickExcludeRecruitParticipant: async () => {
         try {
-          await excludeRecruitParticipant(userInfo.memberId);
+          await excludeRecruitParticipant(recruitApplicationId);
           closeModal();
         } catch (err) {
           handleAxiosError(err);
@@ -131,7 +131,7 @@ export const RecruitApplicantsDetail = (
         <div css={{ textAlign: 'right', marginBottom: 52 }}>
           <Link
             css={[{ textDecoration: 'underline' }, fontCss.style.R14]}
-            href={routes.recruit.applications.reject(recruitId)}
+            href={routes.recruit.applications.rejected(recruitId)}
           >
             거절한 리쿠르팅 보기
           </Link>

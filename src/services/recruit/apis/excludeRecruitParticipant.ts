@@ -3,7 +3,7 @@ import { privateAxios } from '~/utils';
 
 export interface ExcludeRecruitParticipantParams {
   recruitId: number;
-  userId: number;
+  recruitApplicationId: number;
 }
 
 export const excludeRecruitParticipant = (

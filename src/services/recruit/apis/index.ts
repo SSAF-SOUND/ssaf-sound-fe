@@ -11,6 +11,7 @@ export * from './getRecruitApplication';
 export * from './getRecruitDetail';
 export * from './getRecruitParticipants';
 export * from './getRecruits';
+export * from './getRejectedRecruitApplicants';
 export * from './likeRecruitApplication';
 export * from './removeRecruit';
 export * from './rejectRecruitApplication';
