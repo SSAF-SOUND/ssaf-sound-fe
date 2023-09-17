@@ -1,11 +1,12 @@
 import type { SerializedStyles } from '@emotion/react';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { CustomNextPage } from 'next/types';
-import type { RecruitSummary } from '~/services/recruit';
+import type { ForwardedRef } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { forwardRef } from 'react';
 
 import { PageHead, PageHeadingText, Tabs } from '~/components/Common';
 import { InfiniteList } from '~/components/InfiniteList';
@@ -29,23 +30,18 @@ import {
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
-import {
-  concat,
-  createAuthGuard,
-  createNoIndexPageMetaData,
-  routes,
-} from '~/utils';
+import { concat, createAuthGuard, createNoIndexPageMetaData } from '~/utils';
 
 const createMetaTitle = (str: string) => `신청한 ${str}`;
 
+const matchStatusAll = 'ALL';
 const tabTriggersTextMap = {
-  all: '전체',
+  [matchStatusAll]: '전체',
   [MatchStatus.PENDING]: '대기 중',
   [MatchStatus.SUCCESS]: '수락 됨',
   [MatchStatus.REJECTED]: '거절 됨',
 } as const;
 
-const defaultTabValue = 'all';
 const tabValues = Object.keys(tabTriggersTextMap) as Array<
   keyof typeof tabTriggersTextMap
 >;
@@ -60,7 +56,7 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
   const metaData = createNoIndexPageMetaData(metaTitle);
   const titleBarTitle = metaTitle;
 
-  const tabValue = query.matchStatus || defaultTabValue;
+  const tabValue = query.matchStatus || matchStatusAll;
   const onTabValueChange = (matchStatus: string) => {
     router.push({
       query: {
@@ -139,7 +135,7 @@ const createTabsColorCss = (color: string) =>
   });
 const tabsColorCss: Record<keyof typeof tabTriggersTextMap, SerializedStyles> =
   {
-    all: createTabsColorCss(palettes.white),
+    [matchStatusAll]: createTabsColorCss(palettes.white),
     [MatchStatus.PENDING]: createTabsColorCss(palettes.primary.default),
     [MatchStatus.SUCCESS]: createTabsColorCss(palettes.recruit.default),
     [MatchStatus.REJECTED]: createTabsColorCss(palettes.secondary.default),
@@ -161,7 +157,9 @@ const TabContent = (props: TabContentProps) => {
   });
   const { data: appliedRecruits } = infiniteQuery;
   const infiniteData =
-    appliedRecruits?.pages.map(({ recruits }) => recruits).reduce(concat) ?? [];
+    appliedRecruits?.pages
+      .map(({ appliedRecruits }) => appliedRecruits)
+      .reduce(concat) ?? [];
 
   return (
     <Tabs.Content value={tabValue}>
@@ -172,16 +170,21 @@ const TabContent = (props: TabContentProps) => {
           infiniteQuery={infiniteQuery}
           skeleton={<AppliedRecruitCardSkeleton />}
           skeletonCount={6}
-          itemContent={infiniteItemContent}
+          itemContent={(_, appliedRecruit) => {
+            return <AppliedRecruitCard appliedRecruit={appliedRecruit} />;
+          }}
+          List={ItemList}
+          skeletonGap={0}
         />
       </div>
     </Tabs.Content>
   );
 };
 
-const infiniteItemContent = (index: number, recruit: RecruitSummary) => {
-  return <AppliedRecruitCard appliedRecruit={recruit} />;
-};
+const ItemList = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
+  return <div css={listCss} {...props} ref={ref} />;
+});
+const listCss = css(flex('', '', 'column', 4));
 
 type Props = {
   recruitCategoryName: RecruitCategoryName;
