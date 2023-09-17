@@ -1,10 +1,10 @@
-import type { UserInfo } from '~/services/member';
 import type {
   RecruitApplicant,
   RecruitDetail,
   RecruitParticipantsDetail,
   RecruitParticipantsProgress,
   RecruitParts,
+  RecruitParticipantUserInfo,
 } from '~/services/recruit';
 
 import Link from 'next/link';
@@ -56,7 +56,7 @@ export const RecruitApplicantsDetail = (
   const pendingApplicantsCount = pendingApplicants.length;
 
   const handleOpenRecruitParticipantModal = (params: {
-    userInfo: UserInfo;
+    userInfo: RecruitParticipantUserInfo;
     recruitApplicationId: number;
   }) => {
     const { userInfo, recruitApplicationId } = params;

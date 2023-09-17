@@ -1,6 +1,6 @@
 import type {
   RecruitSummary,
-  RecruitParticipantsDetailWithPart,
+  RecruitParticipantsSummaryWithPart,
 } from '~/services/recruit';
 
 import { css } from '@emotion/react';
@@ -51,7 +51,7 @@ const scrollbarCss = css({
 });
 
 interface RecruitCardParticipantsRowProps {
-  participantsDetail: RecruitParticipantsDetailWithPart;
+  participantsDetail: RecruitParticipantsSummaryWithPart;
 }
 
 const RecruitCardParticipantsRow = (props: RecruitCardParticipantsRowProps) => {

@@ -47,9 +47,18 @@ export interface RecruitParticipantsDetail {
   limit: number;
   members: RecruitParticipantUserInfo[];
 }
+export interface RecruitParticipantsSummary {
+  limit: number;
+  members: UserInfo[];
+}
 
 export interface RecruitParticipantsDetailWithPart
   extends RecruitParticipantsDetail {
+  recruitType: RecruitParts;
+}
+
+export interface RecruitParticipantsSummaryWithPart
+  extends RecruitParticipantsSummary {
   recruitType: RecruitParts;
 }
 
@@ -67,7 +76,7 @@ export interface RecruitSummary {
   recruitEnd: string;
 
   skills: SkillInfo[];
-  participants: RecruitParticipantsDetailWithPart[];
+  participants: RecruitParticipantsSummaryWithPart[];
 }
 
 export interface RecruitSummariesQueryStringObject extends InfiniteParams {
