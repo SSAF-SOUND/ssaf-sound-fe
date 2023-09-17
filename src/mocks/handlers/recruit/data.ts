@@ -50,6 +50,21 @@ export const createMockRecruitParticipantsProgress = (
   });
 };
 
+export const createMockParticipantDetail = ({
+  recruitApplicationId,
+  userId,
+}: {
+  recruitApplicationId: number;
+  userId: number;
+}): RecruitParticipantsDetail['members'][number] => {
+  return {
+    ...createMockUser(userId, true),
+    recruitApplicationId,
+    // 참여 날짜
+    joinedAt: faker.date.past().toISOString(),
+  };
+};
+
 export const createMockRecruitDetail = (
   recruitId: number,
   isStudy = false,
@@ -170,7 +185,6 @@ export const createMockRecruitApplicant = (
     author,
     recruitApplicationId: userId,
     appliedAt: faker.date.past().toISOString(),
-    joinedAt: faker.date.past().toISOString(),
   };
 };
 
@@ -244,7 +258,9 @@ export const createMockRecruitSummary = (
       return {
         recruitType: part,
         limit: maxParticipantsCount,
-        members: userIds.map((userId) => createMockUser(userId, true)),
+        members: userIds.map((userId) =>
+          createMockParticipantDetail({ userId, recruitApplicationId: 1 })
+        ),
       };
     });
 
