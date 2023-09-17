@@ -9,6 +9,7 @@ import type {
   RecruitParticipantsProgress,
   RecruitSummary,
   RecruitParticipantUserInfo,
+  AppliedRecruitSummary,
 } from '~/services/recruit';
 
 import { faker } from '@faker-js/faker';
@@ -307,6 +308,27 @@ export const studyRecruitSummaries = Array(30)
       finishedRecruit,
       skillCount: 10,
     });
+  });
+
+const matchStatuses = Object.values(MatchStatus);
+export const appliedProjectRecruitSummaries: AppliedRecruitSummary[] =
+  projectRecruitSummaries.map((recruit, index) => {
+    const matchStatus = matchStatuses[index % matchStatuses.length];
+    return {
+      ...recruit,
+      appliedAt: faker.date.past().toISOString(),
+      matchStatus,
+    };
+  });
+
+export const appliedStudyRecruitSummaries: AppliedRecruitSummary[] =
+  projectRecruitSummaries.map((recruit, index) => {
+    const matchStatus = matchStatuses[index % matchStatuses.length];
+    return {
+      ...recruit,
+      appliedAt: faker.date.past().toISOString(),
+      matchStatus,
+    };
   });
 
 export const createMockMyRecruitApplication = (

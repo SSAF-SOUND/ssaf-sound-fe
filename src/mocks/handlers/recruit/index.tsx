@@ -13,7 +13,6 @@ import type {
   ScrapRecruitApiData,
 } from '~/services/recruit';
 
-
 import { rest } from 'msw';
 
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
@@ -29,7 +28,10 @@ import {
   recruitParticipantsList,
   scrapStatus,
 } from './data';
-import { restInfiniteRecruitsSuccess } from './utils';
+import {
+  restInfiniteAppliedRecruitsSuccess,
+  restInfiniteRecruitsSuccess,
+} from './utils';
 
 const getRecruitApplicantsEndpoint = removeQueryParams(
   composeUrls(API_URL, endpoints.recruit.application.applicants(1))
@@ -472,7 +474,7 @@ const getAppliedRecruitsEndpoint = removeQueryParams(
 
 export const getAppliedRecruits = rest.get(
   getAppliedRecruitsEndpoint,
-  restInfiniteRecruitsSuccess
+  restInfiniteAppliedRecruitsSuccess
 );
 
 export const recruitHandlers = [
