@@ -218,22 +218,22 @@ const ActionButtonLayer = (props: ActionButtonLayerProps) => {
   const {
     mutateAsync: approveRecruitApplication,
     isLoading: isApprovingRecruitApplication,
-  } = useApproveRecruitApplication({ recruitApplicationId, recruitId });
+  } = useApproveRecruitApplication(recruitId);
   const {
     mutateAsync: rejectRecruitApplication,
     isLoading: isRejectingRecruitApplication,
-  } = useRejectRecruitApplication({ recruitApplicationId, recruitId });
+  } = useRejectRecruitApplication(recruitId);
 
   const handleApprove = async () => {
     try {
-      await approveRecruitApplication();
+      await approveRecruitApplication(recruitApplicationId);
     } catch (err) {
       handleAxiosError(err);
     }
   };
   const handleReject = async () => {
     try {
-      await rejectRecruitApplication();
+      await rejectRecruitApplication(recruitApplicationId);
     } catch (err) {
       handleAxiosError(err);
     }
