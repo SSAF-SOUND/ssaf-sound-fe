@@ -11,10 +11,10 @@ import {
   useSetRecruitApplicantsWithImmer,
   useSetRecruitApplication,
 } from '~/services/recruit/hooks';
-import { getErrorResponse, ResponseCode } from '~/utils';
+import { concat, getErrorResponse, ResponseCode } from '~/utils';
 
 interface UseLikeRecruitApplicationParams extends RecruitApplicationParams {
-  recruitPart: RecruitParts;
+  recruitPart?: RecruitParts;
 }
 
 export const useLikeRecruitApplication = (
@@ -32,14 +32,23 @@ export const useLikeRecruitApplication = (
     recipe: (recruitApplicant: RecruitApplicant) => void
   ) => {
     setRecruitApplicantsWithImmer((recruitApplications) => {
-      const target = recruitApplications[recruitPart]?.find(
-        (application) =>
-          application.recruitApplicationId === recruitApplicationId
-      );
+      const target = recruitPart
+        ? recruitApplications[recruitPart]?.find(
+            (application) =>
+              application.recruitApplicationId === recruitApplicationId
+          )
+        : Object.entries(recruitApplications)
+            .map(([, applications]) => {
+              return applications;
+            })
+            .reduce(concat)
+            .find((application) => {
+              return application.recruitApplicationId === recruitApplicationId;
+            });
 
       if (!target) {
         const errorMessage =
-          recruitApplications[recruitPart] === undefined
+          recruitApplications[recruitPart as RecruitParts] === undefined
             ? '잘못된 recruit part가 전달되었습니다.'
             : '잘못된 recruitApplicationId가 전달되었습니다.';
         Sentry.captureException(
