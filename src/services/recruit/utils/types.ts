@@ -74,10 +74,10 @@ export enum MatchStatus {
   PENDING = 'PENDING',
 
   /** 등록자가 수락 */
-  SUCCESS = 'SUCCESS',
+  SUCCESS = 'DONE',
 
   /** 등록자가 거절 */
-  REJECTED = 'REJECTED',
+  REJECTED = 'REJECT',
 }
 
 export interface RecruitParticipantsCount {
