@@ -4,15 +4,15 @@ import type {
   ApplyRecruitApiData,
   CancelRecruitApplicationApiData,
   CreateRecruitApiData,
+  GetRecruitApplicantsApiData,
   GetRecruitDetailApiData,
   GetRecruitParticipantsApiData,
+  GetRejectedRecruitApplicantsApiData,
+  LikeRecruitApplicationApiData,
   RejectRecruitApplicationApiData,
   ScrapRecruitApiData,
-  GetRecruitApplicantsApiData,
-  LikeRecruitApplicationApiData,
-  GetRejectedRecruitApplicantsApiData,
-  GetJoinedRecruitsApiData,
 } from '~/services/recruit';
+
 
 import { rest } from 'msw';
 
@@ -23,8 +23,8 @@ import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
 
 import {
   createMockMyRecruitApplication,
-  createMockRecruitApplication,
   createMockRecruitApplicants,
+  createMockRecruitApplication,
   recruitDetails,
   recruitParticipantsList,
   scrapStatus,
@@ -461,7 +461,13 @@ export const getJoinedRecruits = rest.get(
 );
 
 const getAppliedRecruitsEndpoint = removeQueryParams(
-  composeUrls(API_URL, endpoints.recruit.joinedList({ memberId: 1 }))
+  composeUrls(
+    API_URL,
+    endpoints.recruit.appliedList({
+      category: RecruitCategoryName.PROJECT,
+      matchStatus: MatchStatus.SUCCESS,
+    })
+  )
 );
 
 export const getAppliedRecruits = rest.get(
