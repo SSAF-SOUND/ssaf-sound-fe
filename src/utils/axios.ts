@@ -22,12 +22,16 @@ export const privateAxios = axios.create({
 });
 
 const devPlugin = (config: InternalAxiosRequestConfig) => {
-  const accessToken = webStorage.DEV__getAccessToken();
-  if (isDevMode && accessToken) {
-    // `devMode`에서 reissue 요청을 보낼 때는, 이미 `refreshToken`이 채워져 있으므로 생략
-    if (!config.headers.Authorization) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
+  if (isDevMode) {
+    const accessToken = webStorage.DEV__getAccessToken();
+    if (
+      !accessToken ||
+      // `devMode`에서 reissue 요청을 보낼 때는, 이미 `refreshToken`이 채워져 있으므로 생략
+      config.headers.Authorization
+    )
+      return;
+
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
 };
 
@@ -43,10 +47,12 @@ const detectRequestInfiniteLoop = createRequestInfiniteLoopDetector(5, {
 });
 
 const configurePublicAxiosInterceptors = () => {
-  publicAxios.interceptors.request.use((config) => {
-    devPlugin(config);
-    return config;
-  });
+  if (isDevMode) {
+    publicAxios.interceptors.request.use((config) => {
+      devPlugin(config);
+      return config;
+    });
+  }
 };
 
 const configurePrivateAxiosInterceptors = (
