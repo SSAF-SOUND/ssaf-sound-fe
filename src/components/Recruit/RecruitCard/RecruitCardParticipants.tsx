@@ -72,7 +72,7 @@ const RecruitCardParticipantsRow = (props: RecruitCardParticipantsRowProps) => {
 
       <Avatar.Group
         overridableSize="md2"
-        visibleCount={maxParticipantsCount}
+        // visibleCount={maxParticipantsCount}
         maxCount={maxParticipantsCount}
       >
         {members.map((member) => (
