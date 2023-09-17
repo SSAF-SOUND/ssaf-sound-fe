@@ -1,30 +1,53 @@
-import type { RecruitSummary } from '~/services/recruit';
+import type { AppliedRecruitSummary } from '~/services/recruit';
 
 import { css } from '@emotion/react';
+import dayjs from 'dayjs';
 import { memo } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
+import { MatchStatus } from '~/services/recruit';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 interface AppliedRecruitCardProps {
-  appliedRecruit: RecruitSummary;
+  appliedRecruit: AppliedRecruitSummary;
 }
 
 export const AppliedRecruitCard = memo((props: AppliedRecruitCardProps) => {
   const { appliedRecruit } = props;
+  const { appliedAt, matchStatus } = appliedRecruit;
+
+  const formattedAppliedAt = dayjs(appliedAt).format('YYYY년 MM월 DD일 신청');
 
   return (
     <div css={selfCss}>
       <div css={headerCss}>
-        <div css={appliedAtCss}>YYYY년 MM월 DD일 신청</div>
-        <div>대기 중</div>
+        <div css={appliedAtCss}>{formattedAppliedAt}</div>
+        <MatchStatusText matchStatus={matchStatus} />
       </div>
       <RecruitCard recruitSummary={appliedRecruit} size="md" />
     </div>
   );
 });
+
+const MatchStatusText = (props: { matchStatus: MatchStatus }) => {
+  const { matchStatus } = props;
+
+  return (
+    <div>
+      {matchStatus === MatchStatus.PENDING && (
+        <span css={{ color: palettes.primary.default }}>대기 중</span>
+      )}
+      {matchStatus === MatchStatus.SUCCESS && (
+        <span css={{ color: palettes.recruit.default }}>수락 됨</span>
+      )}
+      {matchStatus === MatchStatus.REJECTED && (
+        <span css={{ color: palettes.secondary.default }}>거절 됨</span>
+      )}
+    </div>
+  );
+};
 
 const selfCss = css({
   padding: '10px 25px',
