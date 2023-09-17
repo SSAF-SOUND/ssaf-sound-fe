@@ -1,29 +1,111 @@
+import type { CustomNextPage } from 'next/types';
+import type {
+  ProfileTabs} from '~/components/Profile';
+
 import { useRouter } from 'next/router';
 
-import { FullPageLoader, loaderText } from '~/components/Common';
+import { css } from '@emotion/react';
+
+import {
+  FullPageLoader,
+  loaderText,
+  PageHeadingText,
+} from '~/components/Common';
+import NameCard from '~/components/NameCard';
+import NavigationGroup from '~/components/NavigationGroup';
+import {
+  Profile,
+  getSafeProfileTabValue,
+} from '~/components/Profile';
 import { useMyInfo } from '~/services/member';
-import { customToast, routes } from '~/utils';
+import {
+  expandCss,
+  flex,
+  globalVars,
+  gnbHeight,
+  titleBarHeight,
+} from '~/styles/utils';
+import {
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  customToast,
+  routes,
+} from '~/utils';
 
-const ProfileRootPage = () => {
+const enum ParamsKey {
+  TAB = 'tab',
+}
+type Params = {
+  [ParamsKey.TAB]: ProfileTabs;
+};
+
+const metaTitle = '내 프로필';
+
+const MyProfilePage: CustomNextPage = () => {
   const router = useRouter();
-  const { data: myInfo, isLoading } = useMyInfo();
+  const query = router.query as Partial<Params>;
+  const { data: myInfo } = useMyInfo();
 
-  if (isLoading) {
+  if (!myInfo) {
+    customToast.clientError('로그인이 필요합니다.');
+    router.replace(routes.signIn());
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 
-  if (!myInfo) {
-    customToast.clientError(
-      '유저 정보를 찾을 수 없습니다. 로그인 여부를 확인해주세요.'
-    );
-    router.replace(routes.main());
-  }
+  const tabValue = getSafeProfileTabValue(query.tab);
+  const onTabValueChange = (value: string) => {
+    router.push({
+      query: { ...router.query, [ParamsKey.TAB]: value },
+    });
+  };
 
-  if (myInfo) {
-    router.replace(routes.profile.detail(myInfo.memberId));
-  }
+  return (
+    <>
+      <PageHeadingText text={metaTitle} />
+      <div css={selfCss}>
+        <NavigationGroup />
 
-  return <FullPageLoader text={loaderText.checkUser} />;
+        <div css={[userInfoLayerCss, { marginBottom: 44 }]}>
+          <NameCard userInfo={myInfo} css={{ padding: 0 }} />
+          <Profile.MyInfoSettingsLink />
+        </div>
+
+        <div css={[myArticlesLayerCss, pageExpandCss, { marginBottom: 50 }]}>
+          <Profile.NavItem
+            iconName="bookmark.outline"
+            href={routes.profile.myScraps()}
+            text="나의 스크랩"
+          />
+          <Profile.NavItem
+            iconName="document"
+            href={routes.profile.myScraps()}
+            text="내가 작성한 게시글"
+          />
+        </div>
+
+        <Profile.Tabs.Root value={tabValue} onValueChange={onTabValueChange}>
+          <Profile.Tabs.Triggers css={pageExpandCss} />
+
+          <Profile.Tabs.PortfolioTabContent
+            mine={true}
+            userId={myInfo.memberId}
+            marginForExpand={globalVars.mainLayoutPaddingX.var}
+          />
+        </Profile.Tabs.Root>
+      </div>
+    </>
+  );
 };
 
-export default ProfileRootPage;
+const selfPaddingTop = titleBarHeight + 30;
+const selfPaddingBottom = gnbHeight + 30;
+const selfCss = css({
+  padding: `${selfPaddingTop}px 0 ${selfPaddingBottom}px`,
+});
+const userInfoLayerCss = css(flex('center', 'space-between', 'row', 12));
+const pageExpandCss = expandCss();
+const myArticlesLayerCss = css(flex('', 'center', 'column', 8));
+
+export default MyProfilePage;
+MyProfilePage.auth = createAuthGuard();
+MyProfilePage.meta = createNoIndexPageMetaData(metaTitle);

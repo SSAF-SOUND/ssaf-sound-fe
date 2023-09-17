@@ -12,8 +12,7 @@ import {
   Tabs,
 } from '~/components/Common';
 import NameCard from '~/components/NameCard';
-import NavigationGroup from '~/components/NavigationGroup';
-import { Profile, ProfileTabs } from '~/components/Profile';
+import { getSafeProfileTabValue, Profile } from '~/components/Profile';
 import TitleBar from '~/components/TitleBar';
 import NotFoundPage from '~/pages/404';
 import {
@@ -26,12 +25,14 @@ import {
   flex,
   globalVars,
   gnbHeight,
-  pageMinHeight,
+  pageCss,
   topBarHeight,
 } from '~/styles/utils';
 import { isStorybookMode, routes } from '~/utils';
 
-const metaTitle = '프로필';
+const createMetaTitle = (username: string) => {
+  return `${username} - 프로필`;
+};
 
 const isIdNaN = (id: number) => {
   if (isStorybookMode()) return false;
@@ -39,14 +40,16 @@ const isIdNaN = (id: number) => {
   return Number.isNaN(id);
 };
 
-type QueryString = {
-  id: string;
-};
+const enum ParamsKey {
+  USER_ID = 'userId',
+  TAB = 'tab',
+}
+type Params = Record<ParamsKey, string>;
 
-const ProfilePage: CustomNextPage = () => {
+const UserProfilePage: CustomNextPage = () => {
   const router = useRouter();
-  const query = router.query as QueryString;
-  const id = Number(query.id);
+  const query = router.query as Params;
+  const userId = Number(query.userId);
 
   const { data: myInfo, isLoading: isMyInfoLoading } = useMyInfo();
   const {
@@ -54,19 +57,24 @@ const ProfilePage: CustomNextPage = () => {
     error: userInfoError,
     isLoading: isUserInfoLoading,
     isError: isUserInfoError,
-  } = useUserInfo(id);
+  } = useUserInfo(userId);
 
   const {
     data: userProfileVisibility,
     isLoading: isUserProfileVisibilityLoading,
     isError: isUserProfileVisibilityError,
     error: userProfileVisibilityError,
-  } = useUserProfileVisibility(id);
+  } = useUserProfileVisibility(userId);
 
   const mine = userInfo && myInfo && userInfo.memberId === myInfo.memberId;
 
-  if (isIdNaN(id)) {
+  if (isIdNaN(userId)) {
     return <NotFoundPage />;
+  }
+
+  if (mine) {
+    router.replace(routes.profile.self());
+    return <FullPageLoader />;
   }
 
   if (isUserInfoError || isUserProfileVisibilityError) {
@@ -79,6 +87,13 @@ const ProfilePage: CustomNextPage = () => {
   }
 
   const isProfilePublic = userProfileVisibility.isPublic;
+  const metaTitle = createMetaTitle(userInfo.nickname);
+  const tabValue = getSafeProfileTabValue(query.tab);
+  const onTabValueChange = (value: string) => {
+    router.push({
+      query: { ...router.query, [ParamsKey.TAB]: value },
+    });
+  };
 
   return (
     <>
@@ -87,47 +102,24 @@ const ProfilePage: CustomNextPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
-        {mine ? (
-          <NavigationGroup />
-        ) : (
-          <TitleBar.Default
-            title="프로필"
-            withoutClose
-            // TODO: Return Page
-            onClickBackward={routes.main()}
-          />
-        )}
+        <TitleBar.Default
+          title="프로필"
+          withoutClose
+          // TODO: Return Page
+          onClickBackward={routes.main()}
+        />
 
         <div css={userInfoLayerCss}>
           <NameCard userInfo={userInfo} css={nameCardCss} />
-          {mine && <Profile.MyInfoSettingsLink />}
         </div>
 
-        {mine && (
-          <div css={navLayerCss}>
-            <Profile.NavItem
-              css={pageExpandCss}
-              iconName="bookmark.outline"
-              href={routes.profile.myScraps()}
-              text="나의 스크랩"
-            />
-
-            <Profile.NavItem
-              css={pageExpandCss}
-              iconName="document"
-              href={routes.profile.myArticles()}
-              text="내가 작성한 게시글"
-            />
-          </div>
-        )}
-
         {isProfilePublic ? (
-          <Tabs.Root defaultValue={ProfileTabs.PORTFOLIO}>
-            <Profile.TabsTriggers css={pageExpandCss} />
+          <Profile.Tabs.Root value={tabValue} onValueChange={onTabValueChange}>
+            <Profile.Tabs.Triggers css={pageExpandCss} />
 
-            <Profile.PortfolioTabContent
+            <Profile.Tabs.PortfolioTabContent
               mine={mine}
-              userId={id}
+              userId={userId}
               marginForExpand={globalVars.mainLayoutPaddingX.var}
             />
 
@@ -138,7 +130,7 @@ const ProfilePage: CustomNextPage = () => {
             <Tabs.Content value="3">
               <div>3</div>
             </Tabs.Content>
-          </Tabs.Root>
+          </Profile.Tabs.Root>
         ) : (
           <Profile.PrivateIndicator css={privateProfileCss} />
         )}
@@ -147,15 +139,15 @@ const ProfilePage: CustomNextPage = () => {
   );
 };
 
-export default ProfilePage;
+export default UserProfilePage;
 
 const privateProfileCss = css({ flexGrow: 1 });
 
 const selfCss = css(
   {
     padding: `${topBarHeight + 30}px 0 ${gnbHeight + 30}px`,
-    minHeight: `max(${pageMinHeight}, 100vh)`,
   },
+  pageCss.minHeight,
   flex('', '', 'column')
 );
 
@@ -167,5 +159,3 @@ const userInfoLayerCss = css(
 );
 
 const nameCardCss = css({ padding: 0 });
-
-const navLayerCss = css({ marginBottom: 50 }, flex('', 'center', 'column', 8));
