@@ -19,14 +19,14 @@ import {
 } from '~/styles/utils';
 import { handleAxiosError, routes } from '~/utils';
 
-export interface RecruitApplicantBar {
-  recruitPart: RecruitParts;
+export interface RecruitApplicantBarProps {
+  recruitPart?: RecruitParts;
   recruitId: number;
   applicant: RecruitApplicant;
   withLikeButton?: boolean;
 }
 
-export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
+export const RecruitApplicantBar = memo((props: RecruitApplicantBarProps) => {
   const { applicant, recruitId, recruitPart, withLikeButton = true } = props;
 
   const { author, liked, appliedAt, reply, recruitApplicationId } = applicant;
@@ -77,7 +77,6 @@ export const RecruitApplicantBar = memo((props: RecruitApplicantBar) => {
             <div css={applicantInfoLinkCss}>
               {/* <Dot theme="recruit" /> */}
               <IconButton size={32} asChild>
-                {/* NOTE: 현 유저의 신청 내역으로 이동 */}
                 <Link
                   href={routes.recruit.applications.detail({
                     recruitId,
