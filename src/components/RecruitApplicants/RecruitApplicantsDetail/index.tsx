@@ -33,11 +33,13 @@ export const RecruitApplicantsDetail = (
 ) => {
   const router = useRouter();
   const { part, applicants, recruitDetail } = props;
-  const { data: recruitParticipants, isLoading: isRecruitMembersLoading } =
-    useRecruitParticipants(recruitDetail.recruitId);
   const { openModal, closeModal } = useModal();
 
   const { limits, recruitId, mine } = recruitDetail;
+
+  const { data: recruitParticipants, isLoading: isRecruitMembersLoading } =
+    useRecruitParticipants(recruitId);
+
   const { mutateAsync: excludeRecruitParticipant } =
     useExcludeRecruitParticipant(recruitId);
 
@@ -58,32 +60,35 @@ export const RecruitApplicantsDetail = (
     recruitApplicationId: number;
   }) => {
     const { userInfo, recruitApplicationId } = params;
+    const onClickUserProfileLink = () => {
+      router.push(routes.profile.detail(userInfo.memberId));
+      closeModal();
+    };
+    const onClickRecruitApplicationLink = () => {
+      router.push(
+        routes.recruit.applications.detail({
+          recruitId,
+          recruitApplicationId,
+        })
+      );
+      closeModal();
+    };
+    const onClickExcludeRecruitParticipant = async () => {
+      try {
+        await excludeRecruitParticipant(recruitApplicationId);
+        closeModal();
+      } catch (err) {
+        handleAxiosError(err);
+      }
+    };
 
     openModal('recruitParticipantDetail', {
       userInfo,
       showPrivateButtons: mine,
-      onClickUserProfileLink: () => {
-        router.push(routes.profile.detail(userInfo.memberId));
-        closeModal();
-      },
-      onClickRecruitApplicationLink: () => {
-        router.push(
-          routes.recruit.applications.detail({
-            recruitId,
-            recruitApplicationId,
-          })
-        );
-        closeModal();
-      },
+      onClickUserProfileLink,
+      onClickRecruitApplicationLink,
       onClickClose: closeModal,
-      onClickExcludeRecruitParticipant: async () => {
-        try {
-          await excludeRecruitParticipant(recruitApplicationId);
-          closeModal();
-        } catch (err) {
-          handleAxiosError(err);
-        }
-      },
+      onClickExcludeRecruitParticipant,
     });
   };
 
