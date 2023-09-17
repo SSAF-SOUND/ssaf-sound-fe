@@ -11,24 +11,30 @@ import {
   loaderText,
 } from '~/components/Common';
 import SignInButton from '~/components/SignInButton';
-import { useMyAccountStatus } from '~/services/member';
-import { flex, pageMinHeight } from '~/styles/utils';
+import TitleBar from '~/components/TitleBar';
+import { useMyInfo } from '~/services/member';
+import { flex, pageCss, titleBarHeight } from '~/styles/utils';
 import { globalMetaData } from '~/utils/metadata';
 import { routes } from '~/utils/routes';
 
 const metaTitle = '로그인';
+const titleBarTitle = metaTitle;
 const metaDescription = `${globalMetaData.description} 로그인을 통해 다양한 기능을 이용해보세요.`;
 
 const SignInPage = () => {
-  const { isAuthenticated, isChecking } = useMyAccountStatus();
   const router = useRouter();
+  const { data: myInfo, isLoading: isMyInfoLoading } = useMyInfo({
+    enabled: true,
+  });
 
-  if (isAuthenticated) {
-    router.replace(routes.main());
+  const isSignedIn = !!myInfo;
+
+  if (isMyInfoLoading) {
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 
-  if (isChecking) {
+  if (isSignedIn) {
+    router.replace(routes.main());
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 
@@ -47,6 +53,7 @@ const SignInPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
+        <TitleBar.Default withoutClose title={titleBarTitle} />
         <div css={logoContainerCss}>
           <SsafyIcon.LogoCharacter />
           <Logo size="lg" />
@@ -65,12 +72,10 @@ const SignInPage = () => {
 
 export default SignInPage;
 
+const selfPaddingY = titleBarHeight + 30;
 const selfCss = css(
-  {
-    height: '100vh',
-    minHeight: pageMinHeight,
-    padding: '60px 0',
-  },
+  { padding: `${selfPaddingY}px 0` },
+  pageCss.minHeight,
   flex('', 'center', 'column', '15vh')
 );
 
