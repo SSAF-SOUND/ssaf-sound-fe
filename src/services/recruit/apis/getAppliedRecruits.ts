@@ -1,8 +1,12 @@
-import type { GetRecruitsApiData } from '~/services/recruit/apis';
+import type {
+  AppliedRecruitSummary,
+  RecruitCursorData,
+} from '~/services/recruit/apis';
 import type {
   RecruitCategoryName,
   MatchStatus,
 } from '~/services/recruit/utils';
+import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
 import {
@@ -18,7 +22,9 @@ export interface GetAppliedRecruitsParams {
   size?: number;
 }
 
-export type GetAppliedRecruitsApiData = GetRecruitsApiData;
+export type GetAppliedRecruitsApiData = ApiSuccessResponse<
+  { appliedRecruits: AppliedRecruitSummary[] } & RecruitCursorData
+>;
 
 export const getAppliedRecruits = (params: GetAppliedRecruitsParams) => {
   const {

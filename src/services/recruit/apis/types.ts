@@ -79,6 +79,11 @@ export interface RecruitSummary {
   participants: RecruitParticipantsSummaryWithPart[];
 }
 
+export interface AppliedRecruitSummary extends RecruitSummary {
+  appliedAt: string;
+  matchStatus: MatchStatus;
+}
+
 export interface RecruitSummariesQueryStringObject extends InfiniteParams {
   keyword: string;
   category: RecruitCategoryName;
