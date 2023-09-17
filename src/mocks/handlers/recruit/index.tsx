@@ -18,7 +18,7 @@ import { rest } from 'msw';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
-import { API_URL, composeUrls, removeQueryParams } from '~/utils';
+import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
 
 import {
   createMockMyRecruitApplication,
@@ -434,12 +434,18 @@ export const getRejectedApplicants = rest.get(
   getRejectedApplicantsEndpoint,
   (req, res, ctx) => {
     const recruitId = Number(req.url.searchParams.get('recruitId'));
+    const mockRejectedApplicants = Object.entries(
+      createMockRecruitApplicants(recruitId).recruitApplications
+    )
+      .map(([, applications]) => applications)
+      .reduce(concat, []);
 
     return res(
       ctx.delay(500),
-      ...mockSuccess<GetRejectedRecruitApplicantsApiData['data']>(ctx, {
-        ...createMockRecruitApplicants(recruitId),
-      })
+      ...mockSuccess<GetRejectedRecruitApplicantsApiData['data']>(
+        ctx,
+        mockRejectedApplicants
+      )
     );
   }
 );

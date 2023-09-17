@@ -19,7 +19,6 @@ import {
   SkillName,
 } from '~/services/recruit';
 
-
 import { mockHtmlString } from '../common';
 import { createMockUser, userInfo } from '../member/data';
 
@@ -171,6 +170,7 @@ export const createMockRecruitApplicant = (
     author,
     recruitApplicationId: userId,
     appliedAt: faker.date.past().toISOString(),
+    joinedAt: faker.date.past().toISOString(),
   };
 };
 
