@@ -11,6 +11,7 @@ import type {
   GetRecruitApplicantsApiData,
   LikeRecruitApplicationApiData,
   GetRejectedRecruitApplicantsApiData,
+  GetJoinedRecruitsApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -450,9 +451,29 @@ export const getRejectedApplicants = rest.get(
   }
 );
 
+const getJoinedRecruitsEndpoint = removeQueryParams(
+  composeUrls(API_URL, endpoints.recruit.joinedList({ memberId: 1 }))
+);
+
+export const getJoinedRecruits = rest.get(
+  getJoinedRecruitsEndpoint,
+  restInfiniteRecruitsSuccess
+);
+
+const getAppliedRecruitsEndpoint = removeQueryParams(
+  composeUrls(API_URL, endpoints.recruit.joinedList({ memberId: 1 }))
+);
+
+export const getAppliedRecruits = rest.get(
+  getAppliedRecruitsEndpoint,
+  restInfiniteRecruitsSuccess
+);
+
 export const recruitHandlers = [
   //
   getRejectedApplicants,
+  getJoinedRecruits,
+  getAppliedRecruits,
   //
   getRecruitApplicants,
   createRecruit,
