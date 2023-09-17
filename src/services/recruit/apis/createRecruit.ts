@@ -27,7 +27,7 @@ export interface CreateRecruitBody {
   content: string;
   skills: SkillName[];
   contactURI: string;
-  question: string[];
+  questions: string[];
 }
 
 export type CreateRecruitApiData = ApiSuccessResponse<{ recruitId: number }>;
@@ -69,7 +69,7 @@ export const convertCreateRecruitParamsToBody = (
     registerRecruitType,
     recruitEnd: endDate,
     contactURI: contact,
-    question: [questionToApplicants],
+    questions: [questionToApplicants],
   };
 
   return body;
