@@ -24,7 +24,7 @@ export const useLikeRecruitApplication = (
 
   const queryClient = useQueryClient();
 
-  const setRecruitApplication = useSetRecruitApplication(params);
+  const setRecruitApplication = useSetRecruitApplication(recruitId);
   const setRecruitApplicantsWithImmer =
     useSetRecruitApplicantsWithImmer(params);
 
@@ -69,7 +69,7 @@ export const useLikeRecruitApplication = (
       setRecruitApplicant((recruitApplicant) => {
         recruitApplicant.liked = latestLiked;
       });
-      setRecruitApplication((recruitApplication) => {
+      setRecruitApplication(recruitApplicationId, (recruitApplication) => {
         if (!recruitApplication) return;
         return {
           ...recruitApplication,
@@ -88,7 +88,7 @@ export const useLikeRecruitApplication = (
         setRecruitApplicant((recruitApplicant) => {
           recruitApplicant.liked = !recruitApplicant.liked;
         });
-        setRecruitApplication((recruitApplication) => {
+        setRecruitApplication(recruitApplicationId, (recruitApplication) => {
           if (!recruitApplication) return;
           return { ...recruitApplication, liked: !recruitApplication.liked };
         });
