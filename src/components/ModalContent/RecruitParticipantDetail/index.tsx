@@ -1,15 +1,16 @@
-import type { UserInfo } from '~/services/member';
+import type { RecruitParticipantUserInfo } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
 import { Button, Icon, IconButton, Modal } from '~/components/Common';
+import { FullDateTime } from '~/components/FullDateTime';
 import SquareAvatar from '~/components/SquareAvatar';
 import { useAsyncState } from '~/hooks';
 import { flex, fontCss, palettes, position, Theme } from '~/styles/utils';
 import { noop } from '~/utils';
 
 interface RecruitParticipantDetailProps {
-  userInfo: UserInfo;
+  userInfo: RecruitParticipantUserInfo;
   showPrivateButtons?: boolean;
   onClickClose?: () => void;
   onClickUserProfileLink?: () => void;
@@ -28,6 +29,7 @@ export const RecruitParticipantDetail = (
     onClickRecruitApplicationLink,
     onClickExcludeRecruitParticipant = noop,
   } = props;
+  const { joinedAt } = userInfo;
 
   const {
     loading: isExcludingRecruitParticipant,
@@ -45,7 +47,12 @@ export const RecruitParticipantDetail = (
       </div>
 
       <div>
-        <time css={joinDateCss}>[날짜]에 멤버가 되었습니다.</time>
+        <div>
+          <FullDateTime
+            dateTimeString={joinedAt}
+            suffix={'에 멤버가 되었습니다.'}
+          />
+        </div>
 
         <div css={{ marginBottom: 16 }}>
           <SquareAvatar style={{ width: '100%' }} userInfo={userInfo} />
@@ -92,18 +99,11 @@ export const RecruitParticipantDetail = (
 const selfCss = css(
   {
     backgroundColor: palettes.background.grey,
-    width: 230,
+    minWidth: 280,
     padding: 20,
     borderRadius: 20,
   },
   position.xy('center', 'center', 'fixed')
-);
-
-const joinDateCss = css(
-  {
-    color: palettes.font.blueGrey,
-  },
-  fontCss.style.R12
 );
 
 const buttonGroupCss = css(flex('', '', 'column', 6));
