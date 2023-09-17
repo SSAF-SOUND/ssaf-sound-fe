@@ -1,11 +1,9 @@
 import type { CustomNextPage } from 'next/types';
-import type { RecruitApplicant, RecruitParts } from '~/services/recruit';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
-import { Fragment } from 'react';
 
 import { Button, FullPageLoader, PageHeadingText } from '~/components/Common';
 import { RecruitApplicantBar } from '~/components/RecruitApplicants';
@@ -21,7 +19,6 @@ import {
   titleBarHeight,
 } from '~/styles/utils';
 import {
-  add,
   createAuthGuard,
   createNoIndexPageMetaData,
   getErrorResponse,
@@ -74,16 +71,7 @@ const RejectedApplicantsPage: CustomNextPage = () => {
     );
   }
 
-  const rejectedApplicantsEntries = Object.entries(
-    rejectedRecruitApplicants.recruitApplications
-  ).map(([part, applications]) => [part, applications]) as [
-    RecruitParts,
-    RecruitApplicant[]
-  ][];
-
-  const rejectedApplicantsCount = rejectedApplicantsEntries
-    .map(([, applications]) => applications.length)
-    .reduce(add);
+  const rejectedApplicantsCount = rejectedRecruitApplicants.length;
 
   const isEmpty = rejectedApplicantsCount === 0;
 
@@ -94,6 +82,7 @@ const RejectedApplicantsPage: CustomNextPage = () => {
         <TitleBar.Default
           title={titleBarTitle}
           onClickBackward={routes.recruit.applications.rejected(recruitId)}
+          withoutClose
         />
 
         <RecruitApplicantsCount
@@ -105,21 +94,14 @@ const RejectedApplicantsPage: CustomNextPage = () => {
         {isEmpty && <div css={emptyCss}>거절한 리쿠르팅 목록이 없습니다.</div>}
 
         {!isEmpty &&
-          rejectedApplicantsEntries.map(([part, applications]) => {
+          rejectedRecruitApplicants.map((applicant) => {
             return (
-              <Fragment key={part}>
-                {applications.map((applicant) => {
-                  return (
-                    <RecruitApplicantBar
-                      key={applicant.author.memberId}
-                      recruitPart={part}
-                      recruitId={recruitId}
-                      applicant={applicant}
-                      withLikeButton={false}
-                    />
-                  );
-                })}
-              </Fragment>
+              <RecruitApplicantBar
+                key={applicant.author.memberId}
+                recruitId={recruitId}
+                applicant={applicant}
+                withLikeButton={false}
+              />
             );
           })}
       </div>

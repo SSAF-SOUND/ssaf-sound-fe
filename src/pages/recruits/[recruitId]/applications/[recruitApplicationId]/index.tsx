@@ -241,7 +241,8 @@ const ActionButtonLayer = (props: ActionButtonLayerProps) => {
 
   return (
     <div css={actionButtonLayerCss} className={className}>
-      {matchStatus === MatchStatus.PENDING && finishedRecruit && (
+      {/* NOTE: PENDING 말고 INITIAL */}
+      {matchStatus === MatchStatus.INITIAL && finishedRecruit && (
         <div css={inactiveButtonCss}>응답 안함</div>
       )}
 
