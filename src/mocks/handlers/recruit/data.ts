@@ -8,6 +8,7 @@ import type {
   RecruitParticipantsDetail,
   RecruitParticipantsProgress,
   RecruitSummary,
+  RecruitParticipantUserInfo,
 } from '~/services/recruit';
 
 import { faker } from '@faker-js/faker';
@@ -50,13 +51,13 @@ export const createMockRecruitParticipantsProgress = (
   });
 };
 
-export const createMockParticipantDetail = ({
+export const createMockParticipant = ({
   recruitApplicationId,
   userId,
 }: {
   recruitApplicationId: number;
   userId: number;
-}): RecruitParticipantsDetail['members'][number] => {
+}): RecruitParticipantUserInfo => {
   return {
     ...createMockUser(userId, true),
     recruitApplicationId,
@@ -150,13 +151,16 @@ export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
           {
             limit: maxParticipantsCount,
             members: memberIds.map((memberId) =>
-              createMockUser(memberId, true)
+              createMockParticipant({
+                userId: memberId,
+                recruitApplicationId: 1,
+              })
             ),
-          },
+          } as RecruitParticipantsDetail,
         ];
       }
     )
-  ) as Record<RecruitParts, RecruitParticipantsDetail>;
+  );
 };
 export const recruitParticipantsList = recruitDetails.map((recruitDetail) =>
   createMockRecruitParticipants(recruitDetail)
@@ -258,9 +262,7 @@ export const createMockRecruitSummary = (
       return {
         recruitType: part,
         limit: maxParticipantsCount,
-        members: userIds.map((userId) =>
-          createMockParticipantDetail({ userId, recruitApplicationId: 1 })
-        ),
+        members: userIds.map((userId) => createMockUser(userId)),
       };
     });
 
