@@ -6,6 +6,10 @@ export interface ExcludeRecruitParticipantParams {
   recruitApplicationId: number;
 }
 
+/**
+ * @deprecated
+ * - `rejectRecruitApplication`을 대신 사용
+ */
 export const excludeRecruitParticipant = (
   params: ExcludeRecruitParticipantParams
 ) => {
