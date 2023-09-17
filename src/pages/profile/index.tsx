@@ -1,6 +1,6 @@
 import type { CustomNextPage } from 'next/types';
-import type {
-  ProfileTabs} from '~/components/Profile';
+import type { ProfileTabs } from '~/components/Profile';
+
 
 import { useRouter } from 'next/router';
 
@@ -13,11 +13,9 @@ import {
 } from '~/components/Common';
 import NameCard from '~/components/NameCard';
 import NavigationGroup from '~/components/NavigationGroup';
-import {
-  Profile,
-  getSafeProfileTabValue,
-} from '~/components/Profile';
+import { getSafeProfileTabValue, Profile } from '~/components/Profile';
 import { useMyInfo } from '~/services/member';
+import { RecruitCategoryName } from '~/services/recruit';
 import {
   expandCss,
   flex,
@@ -58,6 +56,7 @@ const MyProfilePage: CustomNextPage = () => {
       query: { ...router.query, [ParamsKey.TAB]: value },
     });
   };
+  const { memberId } = myInfo;
 
   return (
     <>
@@ -90,6 +89,18 @@ const MyProfilePage: CustomNextPage = () => {
             mine={true}
             userId={myInfo.memberId}
             marginForExpand={globalVars.mainLayoutPaddingX.var}
+          />
+
+          <Profile.Tabs.JoinedRecruitsTabContent
+            category={RecruitCategoryName.PROJECT}
+            userId={memberId}
+            mine={true}
+          />
+
+          <Profile.Tabs.JoinedRecruitsTabContent
+            category={RecruitCategoryName.STUDY}
+            userId={memberId}
+            mine={true}
           />
         </Profile.Tabs.Root>
       </div>

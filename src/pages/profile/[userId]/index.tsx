@@ -9,7 +9,6 @@ import {
   loaderText,
   PageHead,
   PageHeadingText,
-  Tabs,
 } from '~/components/Common';
 import NameCard from '~/components/NameCard';
 import { getSafeProfileTabValue, Profile } from '~/components/Profile';
@@ -20,6 +19,7 @@ import {
   useUserInfo,
   useUserProfileVisibility,
 } from '~/services/member';
+import { RecruitCategoryName } from '~/services/recruit';
 import {
   expandCss,
   flex,
@@ -28,7 +28,7 @@ import {
   pageCss,
   topBarHeight,
 } from '~/styles/utils';
-import { isStorybookMode, routes } from '~/utils';
+import { createNoIndexPageMetaData, isStorybookMode, routes } from '~/utils';
 
 const createMetaTitle = (username: string) => {
   return `${username} - 프로필`;
@@ -95,9 +95,11 @@ const UserProfilePage: CustomNextPage = () => {
     });
   };
 
+  const metaData = createNoIndexPageMetaData(metaTitle);
+
   return (
     <>
-      <PageHead title={metaTitle} robots={{ follow: false, index: false }} />
+      <PageHead {...metaData} />
 
       <PageHeadingText text={metaTitle} />
 
@@ -118,18 +120,22 @@ const UserProfilePage: CustomNextPage = () => {
             <Profile.Tabs.Triggers css={pageExpandCss} />
 
             <Profile.Tabs.PortfolioTabContent
-              mine={mine}
+              mine={false}
               userId={userId}
               marginForExpand={globalVars.mainLayoutPaddingX.var}
             />
 
-            <Tabs.Content value="2">
-              <div>2</div>
-            </Tabs.Content>
+            <Profile.Tabs.JoinedRecruitsTabContent
+              category={RecruitCategoryName.PROJECT}
+              userId={userId}
+              mine={false}
+            />
 
-            <Tabs.Content value="3">
-              <div>3</div>
-            </Tabs.Content>
+            <Profile.Tabs.JoinedRecruitsTabContent
+              category={RecruitCategoryName.STUDY}
+              userId={userId}
+              mine={false}
+            />
           </Profile.Tabs.Root>
         ) : (
           <Profile.PrivateIndicator css={privateProfileCss} />

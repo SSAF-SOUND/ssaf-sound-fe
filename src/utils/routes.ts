@@ -1,4 +1,4 @@
-import type { RecruitParts, SkillName } from '~/services/recruit';
+import type { RecruitParts, SkillName , MatchStatus} from '~/services/recruit';
 
 import { RecruitCategoryName } from '~/services/recruit';
 
@@ -88,6 +88,14 @@ export const routes = {
         },
       };
     },
+    appliedList: (options: Partial<AppliedRecruitsPageQueryStringObject>) => {
+      const { category, matchStatus = '' } = options;
+      const queryString = new URLSearchParams({
+        matchStatus,
+      }).toString();
+
+      return `${routes.profile.self()}/applied-recruits/${category}?${queryString}`;
+    },
     detail: (recruitId: number) =>
       `${routes.recruit.self()}/${recruitId}` as const,
     applications: {
@@ -158,6 +166,11 @@ export type RecruitsPageQueryStringObject = {
   keyword: string;
   skills: SkillName | SkillName[];
   recruitParts: RecruitParts | RecruitParts[];
+};
+
+export type AppliedRecruitsPageQueryStringObject = {
+  category: RecruitCategoryName;
+  matchStatus: MatchStatus;
 };
 
 interface RecruitApplicationRouteParams {
