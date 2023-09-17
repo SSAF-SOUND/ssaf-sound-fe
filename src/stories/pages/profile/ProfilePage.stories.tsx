@@ -3,13 +3,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { userInfo } from '~/mocks/handlers/member/data';
-import ProfilePage from '~/pages/profile/[id]';
+import ProfilePage from '~/pages/profile/[userId]';
 import { queryKeys } from '~/react-query/common';
 import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof ProfilePage> = {
-  title: 'Page/Profile/Root',
+  title: 'Page/Profile/MyProfile',
   component: ProfilePage,
   decorators: [
     (Story) => (
