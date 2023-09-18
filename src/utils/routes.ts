@@ -41,12 +41,7 @@ export const routes = {
   profile: {
     self: (tab?: string) => {
       if (tab) {
-        return {
-          pathname: '/profile',
-          query: {
-            tab,
-          },
-        } as const;
+        return `/profile?tab=${tab}`;
       }
 
       return `/profile` as const;
