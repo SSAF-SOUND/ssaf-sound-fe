@@ -73,5 +73,5 @@ export const JoinedRecruitsTabContent = (
   );
 };
 
-const tabContentCss = css({ padding: '30px 0' });
+const tabContentCss = css({ padding: '20px 0' });
 const appliedRecruitsLinkCss = css({ borderRadius: 20, color: palettes.white });
