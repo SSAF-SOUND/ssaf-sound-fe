@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 
 import { Accordion } from '~/components/Common/Accordion';
 import { RecruitParts } from '~/services/recruit';
