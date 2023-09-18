@@ -1,7 +1,6 @@
 import type { CustomNextPage } from 'next/types';
 import type { ProfileTabs } from '~/components/Profile';
 
-
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
@@ -77,7 +76,7 @@ const MyProfilePage: CustomNextPage = () => {
           />
           <Profile.NavItem
             iconName="document"
-            href={routes.profile.myScraps()}
+            href={routes.profile.myArticles()}
             text="내가 작성한 게시글"
           />
         </div>
