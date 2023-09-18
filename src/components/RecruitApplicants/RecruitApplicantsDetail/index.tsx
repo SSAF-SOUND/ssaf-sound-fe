@@ -37,8 +37,12 @@ export const RecruitApplicantsDetail = (
 
   const { limits, recruitId, mine } = recruitDetail;
 
-  const { data: recruitParticipants, isLoading: isRecruitMembersLoading } =
-    useRecruitParticipants(recruitId);
+  const {
+    data: recruitParticipants,
+    isLoading: isRecruitParticipantsLoading,
+    isError: isRecruitParticipantsError,
+    isSuccess: isRecruitParticipantsSuccess,
+  } = useRecruitParticipants(recruitId);
 
   const { mutateAsync: excludeRecruitParticipant } =
     useExcludeRecruitParticipant(recruitId);
@@ -106,18 +110,24 @@ export const RecruitApplicantsDetail = (
             {limit}명 중 {currentNumber}명 모집완료
           </p>
 
-          {isRecruitMembersLoading ? (
+          {isRecruitParticipantsLoading && (
             <RecruitMembersAvatars.Skeleton skeletonCount={limit} />
-          ) : (
-            recruitParticipants && (
-              <RecruitMembersAvatars
-                onClickAvatar={handleOpenRecruitParticipantModal}
-                limit={limit}
-                recruitMembers={
-                  (recruitParticipants[part] as RecruitParticipantsDetail) ?? []
-                }
-              />
-            )
+          )}
+
+          {isRecruitParticipantsError && (
+            <div css={[fontCss.style.R14, { textAlign: 'center' }]}>
+              참여자 목록을 불러오는데 실패했습니다.
+            </div>
+          )}
+
+          {isRecruitParticipantsSuccess && (
+            <RecruitMembersAvatars
+              onClickAvatar={handleOpenRecruitParticipantModal}
+              limit={limit}
+              recruitMembers={
+                (recruitParticipants[part] as RecruitParticipantsDetail) ?? []
+              }
+            />
           )}
         </div>
         <div css={{ marginBottom: 52 }}>
