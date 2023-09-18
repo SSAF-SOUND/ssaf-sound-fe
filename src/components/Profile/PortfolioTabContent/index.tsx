@@ -16,8 +16,26 @@ interface ProfilePortfolioTabContentProps {
   marginForExpand?: string;
 }
 
-const ProfilePortfolioTabContent = (props: ProfilePortfolioTabContentProps) => {
-  const { mine = false, userId, className, marginForExpand } = props;
+export const ProfilePortfolioTabContent = (
+  props: ProfilePortfolioTabContentProps
+) => {
+  const { className } = props;
+
+  return (
+    <Tabs.Content
+      css={selfCss}
+      value={ProfileTabs.PORTFOLIO}
+      className={className}
+    >
+      <ProfilePortfolioTabContentInner {...props} />
+    </Tabs.Content>
+  );
+};
+
+const ProfilePortfolioTabContentInner = (
+  props: ProfilePortfolioTabContentProps
+) => {
+  const { mine = false, userId, marginForExpand } = props;
   const myPortfolioQuery = useMyPortfolio({
     enabled: mine,
   });
@@ -29,11 +47,7 @@ const ProfilePortfolioTabContent = (props: ProfilePortfolioTabContentProps) => {
   const { data: portfolio, isLoading, isError, error } = portfolioQuery;
 
   return (
-    <Tabs.Content
-      css={selfCss}
-      value={ProfileTabs.PORTFOLIO}
-      className={className}
-    >
+    <>
       {isLoading ? (
         <PortfolioSkeleton />
       ) : isError ? (
@@ -45,11 +59,9 @@ const ProfilePortfolioTabContent = (props: ProfilePortfolioTabContentProps) => {
           <Portfolio portfolio={portfolio} marginForExpand={marginForExpand} />
         </>
       )}
-    </Tabs.Content>
+    </>
   );
 };
-
-export default ProfilePortfolioTabContent;
 
 const selfCss = css({
   paddingTop: 20,

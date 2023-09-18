@@ -1,6 +1,6 @@
 import { JoinedRecruitsTabContent } from './JoinedRecruitsTabContent';
 import MyInfoSettingsLink from './MyInfoSettingsLink';
-import PortfolioTabContent from './PortfolioTabContent';
+import { ProfilePortfolioTabContent } from './PortfolioTabContent';
 import NavItem from './ProfileNavItem';
 import PrivateIndicator from './ProfilePrivateIndicator';
 import ProfileTabsRoot from './ProfileTabsRoot';
@@ -15,7 +15,7 @@ export const Profile = {
   Tabs: {
     Root: ProfileTabsRoot,
     Triggers: ProfileTabsTriggers,
-    PortfolioTabContent,
+    PortfolioTabContent: ProfilePortfolioTabContent,
     JoinedRecruitsTabContent,
   },
 };

@@ -31,11 +31,22 @@ const getEmptyRecruitsText = (category: RecruitCategoryName) => {
 export const JoinedRecruitsTabContent = (
   props: JoinedRecruitsTabContentProps
 ) => {
-  const { category, userId, mine } = props;
+  const { category } = props;
   const tabValue =
     category === RecruitCategoryName.STUDY
       ? ProfileTabs.STUDY
       : ProfileTabs.PROJECT;
+  return (
+    <Tabs.Content value={tabValue}>
+      <JoinedRecruitsTabContentInner {...props} />
+    </Tabs.Content>
+  );
+};
+
+const JoinedRecruitsTabContentInner = (
+  props: JoinedRecruitsTabContentProps
+) => {
+  const { category, userId, mine } = props;
 
   const infiniteQuery = useJoinedRecruits({ category, userId });
   const { data: joinedRecruits } = infiniteQuery;
@@ -47,41 +58,39 @@ export const JoinedRecruitsTabContent = (
   const appliedRecruitRoute = routes.recruit.appliedList({ category });
 
   return (
-    <Tabs.Content value={tabValue}>
-      <div css={tabContentCss}>
-        {mine && (
-          <Button
-            asChild
-            css={[appliedRecruitsLinkCss, { marginBottom: 30 }]}
-            theme={Theme.GREY}
-          >
-            <Link href={appliedRecruitRoute}>신청한 {displayCategoryName}</Link>
-          </Button>
-        )}
+    <div css={tabContentCss}>
+      {mine && (
+        <Button
+          asChild
+          css={[appliedRecruitsLinkCss, { marginBottom: 30 }]}
+          theme={Theme.GREY}
+        >
+          <Link href={appliedRecruitRoute}>신청한 {displayCategoryName}</Link>
+        </Button>
+      )}
 
-        <InfiniteList
-          useWindowScroll={true}
-          data={infiniteData}
-          infiniteQuery={infiniteQuery}
-          skeleton={<RecruitCardSkeleton size="md" />}
-          skeletonCount={6}
-          itemContent={(index, recruitSummary) => {
-            return (
-              <RecruitCard
-                recruitSummary={recruitSummary}
-                withBadge={true}
-                size="md"
-              />
-            );
-          }}
-          emptyElement={
-            <div css={{ height: 250, position: 'relative' }}>
-              <EmptyInfiniteList text={getEmptyRecruitsText(category)} />
-            </div>
-          }
-        />
-      </div>
-    </Tabs.Content>
+      <InfiniteList
+        useWindowScroll={true}
+        data={infiniteData}
+        infiniteQuery={infiniteQuery}
+        skeleton={<RecruitCardSkeleton size="md" />}
+        skeletonCount={6}
+        itemContent={(index, recruitSummary) => {
+          return (
+            <RecruitCard
+              recruitSummary={recruitSummary}
+              withBadge={true}
+              size="md"
+            />
+          );
+        }}
+        emptyElement={
+          <div css={{ height: 250, position: 'relative' }}>
+            <EmptyInfiniteList text={getEmptyRecruitsText(category)} />
+          </div>
+        }
+      />
+    </div>
   );
 };
 
