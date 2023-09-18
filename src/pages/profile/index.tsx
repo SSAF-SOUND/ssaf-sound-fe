@@ -81,7 +81,10 @@ const MyProfilePage: CustomNextPage = () => {
           />
         </div>
 
-        <Profile.Tabs.Root value={tabValue} onValueChange={onTabValueChange}>
+        <Profile.Tabs.Root
+          defaultValue={tabValue}
+          onValueChange={onTabValueChange}
+        >
           <Profile.Tabs.Triggers css={pageExpandCss} />
 
           <Profile.Tabs.PortfolioTabContent

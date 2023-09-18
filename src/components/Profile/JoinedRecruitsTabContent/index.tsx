@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 
 import { Button, Tabs } from '~/components/Common';
 import { InfiniteList } from '~/components/InfiniteList';
+import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import { ProfileTabs } from '~/components/Profile';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
@@ -20,6 +21,12 @@ interface JoinedRecruitsTabContentProps {
   userId: number;
   mine?: boolean;
 }
+
+const getEmptyRecruitsText = (category: RecruitCategoryName) => {
+  const displayCategoryName = getDisplayCategoryName(category);
+
+  return `아직 참여중인 ${displayCategoryName}가 없습니다.`;
+};
 
 export const JoinedRecruitsTabContent = (
   props: JoinedRecruitsTabContentProps
@@ -67,11 +74,18 @@ export const JoinedRecruitsTabContent = (
               />
             );
           }}
+          emptyElement={
+            <div css={{ height: 250, position: 'relative' }}>
+              <EmptyInfiniteList text={getEmptyRecruitsText(category)} />
+            </div>
+          }
         />
       </div>
     </Tabs.Content>
   );
 };
 
-const tabContentCss = css({ padding: '20px 0' });
+const tabContentCss = css({
+  padding: '20px 0',
+});
 const appliedRecruitsLinkCss = css({ borderRadius: 20, color: palettes.white });
