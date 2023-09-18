@@ -92,7 +92,7 @@ const MyScrapsPage: CustomNextPage = () => {
         <Tabs.Root
           defaultValue={safeTab}
           onValueChange={onTabValueChange}
-          css={{ flexGrow: 1, position: 'relative' }}
+          css={{ flexGrow: 1 }}
         >
           <TabList />
           <Tabs.Content
@@ -127,6 +127,7 @@ const selfPaddingTop =
 
 const selfCss = css(pageCss.minHeight, {
   padding: `${selfPaddingTop}px 0 0`,
+  position: 'relative',
 });
 
 const tabTriggersTextMap = {
@@ -201,7 +202,7 @@ const MyScrapedArticlesLayer = () => {
       skeletonCount={6}
       useWindowScroll={true}
       skeletonGap={16}
-      itemContent={(index, article) => <HotArticleCard article={article} />}
+      itemContent={(_, article) => <HotArticleCard article={article} />}
       emptyElement={
         <EmptyInfiniteList text="아직 스크랩한 게시글이 없습니다." />
       }
