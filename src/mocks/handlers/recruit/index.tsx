@@ -486,12 +486,21 @@ export const getMyScrapedRecruits = rest.get(
   restInfiniteRecruitsSuccess
 );
 
+export const getMyScrapedRecruitsError = restError(
+  'get',
+  getMyScrapedRecruitsEndpoint,
+  {
+    message: 'gg',
+  }
+);
+
 export const recruitHandlers = [
   //
   getRejectedApplicants,
   getJoinedRecruits,
   getAppliedRecruits,
   getMyScrapedRecruits,
+  // getMyScrapedRecruitsError,
   //
   getRecruitApplicants,
   createRecruit,
