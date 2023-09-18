@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 
 import { Accordion } from '~/components/Common/Accordion';
 import { RecruitParts } from '~/services/recruit';
@@ -19,11 +19,10 @@ const useIsStudy = () => {
 
 const AccordionRoot = (props: AccordionRootProps) => {
   const { children, isStudy = false } = props;
-  const [partIsStudy] = useState<boolean>(isStudy);
-  const accordionValue = partIsStudy ? [RecruitParts.STUDY] : undefined;
+  const accordionValue = isStudy ? [RecruitParts.STUDY] : undefined;
 
   return (
-    <IsStudyContext.Provider value={partIsStudy}>
+    <IsStudyContext.Provider value={isStudy}>
       <Accordion.Root
         type="multiple"
         value={accordionValue}

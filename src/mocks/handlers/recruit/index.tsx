@@ -437,8 +437,11 @@ export const getRejectedApplicants = rest.get(
   getRejectedApplicantsEndpoint,
   (req, res, ctx) => {
     const recruitId = Number(req.url.searchParams.get('recruitId'));
+
+    const safeRecruitId = Number.isNaN(recruitId) ? 1 : recruitId;
+
     const mockRejectedApplicants = Object.entries(
-      createMockRecruitApplicants(recruitId).recruitApplications
+      createMockRecruitApplicants(safeRecruitId).recruitApplications
     )
       .map(([, applications]) => applications)
       .reduce(concat, []);
