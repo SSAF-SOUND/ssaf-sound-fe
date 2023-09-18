@@ -88,7 +88,10 @@ const EmptyPortfolio = () => {
   );
 };
 
-const emptyPortfolioSelfCss = css(flex('center', '', 'column'));
+const emptyPortfolioSelfCss = css(
+  { marginTop: 100 },
+  flex('center', 'center', 'column')
+);
 const emptyPortfolioMessageCss = css(
   {
     marginBottom: 28,
