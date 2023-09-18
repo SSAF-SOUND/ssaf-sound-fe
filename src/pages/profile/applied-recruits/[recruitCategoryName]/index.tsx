@@ -3,7 +3,6 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { CustomNextPage } from 'next/types';
 import type { ForwardedRef } from 'react';
 
-
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
@@ -31,6 +30,7 @@ import {
   fixTopCenter,
   flex,
   fontCss,
+  pageCss,
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
@@ -134,9 +134,13 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
 const tabsListHeight = 48;
 const selfPaddingY = titleBarHeight + tabsListHeight;
 
-const selfCss = css({
-  padding: `${selfPaddingY}px 0`,
-});
+const selfCss = css(
+  {
+    padding: `${selfPaddingY}px 0`,
+    position: 'relative',
+  },
+  pageCss.minHeight
+);
 
 const tabsListCss = css(
   fixTopCenter,
