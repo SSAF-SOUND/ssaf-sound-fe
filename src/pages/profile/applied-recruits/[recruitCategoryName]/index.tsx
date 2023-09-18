@@ -115,7 +115,7 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
               : undefined;
 
             return (
-              <Tabs.Content value={tabValue}>
+              <Tabs.Content value={tabValue} key={tabValue}>
                 <TabContentInner
                   key={tabValue}
                   tabValue={tabValue}
@@ -219,16 +219,19 @@ const TabContentInner = (props: TabContentProps) => {
           <AppliedRecruitCard appliedRecruit={appliedRecruit} />
         )}
         emptyElement={<EmptyInfiniteList text={emptyRecruitsText} />}
-        List={ItemList}
+        List={AppliedRecruitCardList}
         skeletonGap={4}
       />
     </div>
   );
 };
 
-const ItemList = forwardRef((props, ref: ForwardedRef<HTMLDivElement>) => {
-  return <div css={listCss} {...props} ref={ref} />;
-});
+const AppliedRecruitCardList = forwardRef(
+  (props, ref: ForwardedRef<HTMLDivElement>) => {
+    return <div css={listCss} {...props} ref={ref} />;
+  }
+);
+AppliedRecruitCardList.displayName = 'AppliedRecruitCardList';
 const listCss = css(flex('', '', 'column', 4));
 
 type Props = {
