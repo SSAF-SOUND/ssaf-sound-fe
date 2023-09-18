@@ -70,7 +70,6 @@ const MyRecruitApplicationPage: CustomNextPage = () => {
       errorResponse?.message ??
       '리쿠르팅 데이터를 불러오는 중 오류가 발생했습니다.';
 
-    // NOTE: 없는 리쿠르팅의 경우 리다이렉션 라우트를 다르게 가져가야함
     return (
       <RedirectionGuide
         title="Error"
