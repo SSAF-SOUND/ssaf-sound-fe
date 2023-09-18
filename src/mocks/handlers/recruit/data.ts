@@ -161,7 +161,7 @@ export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
         ];
       }
     )
-  );
+  ) as Record<RecruitParts, RecruitParticipantsDetail>;
 };
 export const recruitParticipantsList = recruitDetails.map((recruitDetail) =>
   createMockRecruitParticipants(recruitDetail)
@@ -194,9 +194,11 @@ export const createMockRecruitApplicant = (
 };
 
 export const createMockRecruitApplicants = (
-  recruitId: number
+  recruitId: number,
+  options: Partial<{ recruitDetail: RecruitDetail }> = {}
 ): GetRecruitApplicantsApiData['data'] => {
-  const recruitDetail = recruitDetails[recruitId];
+  const { recruitDetail: optionRecruitDetail } = options;
+  const recruitDetail = optionRecruitDetail ?? recruitDetails[recruitId];
   if (!recruitDetail) {
     throw new Error(
       `recruitId: ${recruitId}에 해당하는 리쿠르팅 디테일 데이터가 없습니다.`
