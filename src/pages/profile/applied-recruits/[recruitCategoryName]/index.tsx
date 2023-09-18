@@ -3,6 +3,7 @@ import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { CustomNextPage } from 'next/types';
 import type { ForwardedRef } from 'react';
 
+
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
@@ -11,6 +12,7 @@ import { forwardRef } from 'react';
 import { PageHead, PageHeadingText, Tabs } from '~/components/Common';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
+import { ProfileTabs } from '~/components/Profile';
 import {
   AppliedRecruitCard,
   AppliedRecruitCardSkeleton,
@@ -32,7 +34,12 @@ import {
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
-import { concat, createAuthGuard, createNoIndexPageMetaData } from '~/utils';
+import {
+  concat,
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  routes,
+} from '~/utils';
 
 const createMetaTitle = (str: string) => `신청한 ${str}`;
 
@@ -71,12 +78,21 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
     });
   };
 
+  const backwardRouteTab =
+    recruitCategoryName === RecruitCategoryName.PROJECT
+      ? ProfileTabs.PROJECT
+      : ProfileTabs.STUDY;
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
       <PageHead {...metaData} />
       <div css={selfCss}>
-        <TitleBar.Default title={titleBarTitle} withoutClose />
+        <TitleBar.Default
+          title={titleBarTitle}
+          withoutClose
+          onClickBackward={routes.profile.self(backwardRouteTab)}
+        />
 
         <Tabs.Root defaultValue={tabValue} onValueChange={onTabValueChange}>
           <Tabs.List css={tabsListCss}>
