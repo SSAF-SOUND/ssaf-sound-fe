@@ -78,7 +78,7 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
       <div css={selfCss}>
         <TitleBar.Default title={titleBarTitle} withoutClose />
 
-        <Tabs.Root value={tabValue} onValueChange={onTabValueChange}>
+        <Tabs.Root defaultValue={tabValue} onValueChange={onTabValueChange}>
           <Tabs.List css={tabsListCss}>
             {tabValues.map((tabValue) => (
               <Tabs.Trigger

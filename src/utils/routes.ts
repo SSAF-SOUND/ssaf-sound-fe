@@ -1,4 +1,4 @@
-import type { RecruitParts, SkillName , MatchStatus} from '~/services/recruit';
+import type { RecruitParts, SkillName, MatchStatus } from '~/services/recruit';
 
 import { RecruitCategoryName } from '~/services/recruit';
 
@@ -39,7 +39,18 @@ export const routes = {
   },
 
   profile: {
-    self: () => '/profile' as const,
+    self: (tab?: string) => {
+      if (tab) {
+        return {
+          pathname: '/profile',
+          query: {
+            tab,
+          },
+        } as const;
+      }
+
+      return `/profile` as const;
+    },
     detail: (id: number) => `${routes.profile.self()}/${id}` as const,
     myInfoSettings: () => `${routes.profile.self()}/myinfo-settings` as const,
     myArticles: () => `${routes.profile.self()}/my-articles` as const,
