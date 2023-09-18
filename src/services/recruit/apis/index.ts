@@ -8,6 +8,7 @@ export * from './excludeRecruitParticipant';
 export * from './getAppliedRecruits';
 export * from './getJoinedRecruits';
 export * from './getMyRecruitApplication';
+export * from './getMyScrapedRecruits';
 export * from './getRecruitApplicants';
 export * from './getRecruitApplication';
 export * from './getRecruitDetail';

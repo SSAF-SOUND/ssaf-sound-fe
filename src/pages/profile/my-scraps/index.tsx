@@ -1,7 +1,6 @@
 import type { CustomNextPage } from 'next/types';
 import type { ArticleSummary } from '~/services/article';
 
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
@@ -16,9 +15,12 @@ import {
 } from '~/components/Common';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
+import { RecruitCard } from '~/components/Recruit/RecruitCard';
+import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
 import TitleBar from '~/components/TitleBar';
 import { useMyScrapedArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
+import { useMyScrapedRecruits } from '~/services/recruit/hooks/useMyScrapedRecruits';
 import {
   pageCss,
   pageMaxWidth,
@@ -31,46 +33,50 @@ import {
   concat,
   createAuthGuard,
   createNoIndexPageMetaData,
-  isStorybookMode,
   PossibleMyScrapsCategories,
   routes,
 } from '~/utils';
 
 const possibleCategories = Object.values(PossibleMyScrapsCategories);
-const defaultCategory = PossibleMyScrapsCategories.ARTICLES;
+const defaultTab = PossibleMyScrapsCategories.ARTICLES;
 
 const titleBarTitle = '나의 스크랩';
 const metaTitle = titleBarTitle;
 
-const validateCategory = (category?: string) => {
-  if (isStorybookMode()) return true;
+const getSafeTab = (category?: string) => {
+  if (possibleCategories.includes(category as PossibleMyScrapsCategories)) {
+    return category;
+  }
 
-  return (
-    category &&
-    possibleCategories.includes(category as PossibleMyScrapsCategories)
-  );
+  return defaultTab;
 };
 
-type QueryString = {
-  category: string;
+const enum ParamsKey {
+  TAB = 'tab',
+}
+
+type Params = {
+  [ParamsKey.TAB]: string;
 };
 
 const MyScrapsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
   const router = useRouter();
-  const { category } = router.query as Partial<QueryString>;
-  const isValidCategory = validateCategory(category);
-
-  if (!isValidCategory) {
-    router.replace(routes.profile.myScraps(defaultCategory));
-    return <FullPageLoader />;
-  }
+  const { tab } = router.query as Partial<Params>;
+  const safeTab = getSafeTab(tab);
 
   if (!myInfo) {
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 
-  const defaultTabValue = category || defaultCategory;
+  const onTabValueChange = (value: string) => {
+    router.push({
+      query: {
+        ...router.query,
+        [ParamsKey.TAB]: value,
+      },
+    });
+  };
 
   return (
     <>
@@ -80,11 +86,12 @@ const MyScrapsPage: CustomNextPage = () => {
         <TitleBar.Default
           withoutClose
           title={titleBarTitle}
-          onClickBackward={routes.profile.detail(myInfo.memberId)}
+          onClickBackward={routes.profile.self()}
         />
+
         <Tabs.Root
-          defaultValue={defaultTabValue}
-          value={category}
+          defaultValue={safeTab}
+          onValueChange={onTabValueChange}
           css={{ flexGrow: 1, position: 'relative' }}
         >
           <TabList />
@@ -92,13 +99,13 @@ const MyScrapsPage: CustomNextPage = () => {
             css={contentCss}
             value={PossibleMyScrapsCategories.ARTICLES}
           >
-            <ArticleLayer />
+            <MyScrapedArticlesLayer />
           </Tabs.Content>
           <Tabs.Content
             css={contentCss}
             value={PossibleMyScrapsCategories.RECRUITS}
           >
-            Recruits
+            <MyScrapedRecruitsLayer />
           </Tabs.Content>
         </Tabs.Root>
       </div>
@@ -122,7 +129,7 @@ const selfCss = css(pageCss.minHeight, {
   padding: `${selfPaddingTop}px 0 0`,
 });
 
-const tabTexts = {
+const tabTriggersTextMap = {
   [PossibleMyScrapsCategories.ARTICLES]: '게시글',
   [PossibleMyScrapsCategories.RECRUITS]: '리쿠르팅',
 };
@@ -133,14 +140,14 @@ const TabList = () => {
   return (
     <div css={tabListContainerCss}>
       <Tabs.List css={tabListCss}>
-        <TabTrigger category={PossibleMyScrapsCategories.ARTICLES} />
+        <TabTrigger value={PossibleMyScrapsCategories.ARTICLES} />
         <Separator
           orientation="vertical"
           width={2}
           backgroundColor={palettes.primary.default}
           css={separatorCss}
         />
-        <TabTrigger category={PossibleMyScrapsCategories.RECRUITS} />
+        <TabTrigger value={PossibleMyScrapsCategories.RECRUITS} />
       </Tabs.List>
     </div>
   );
@@ -154,11 +161,11 @@ const tabListCss = css({
 
 const separatorCss = css({ flexShrink: 0, margin: '0 24px' });
 
-const TabTrigger = (props: { category: PossibleMyScrapsCategories }) => {
-  const { category } = props;
+const TabTrigger = (props: { value: PossibleMyScrapsCategories }) => {
+  const { value } = props;
   return (
-    <Tabs.Trigger key={category} css={tabTriggerCss} value={category} asChild>
-      <Link href={routes.profile.myScraps(category)}>{tabTexts[category]}</Link>
+    <Tabs.Trigger css={tabTriggerCss} value={value}>
+      {tabTriggersTextMap[value]}
     </Tabs.Trigger>
   );
 };
@@ -180,7 +187,7 @@ const tabTriggerCss = css({
   border: 0,
 });
 
-const ArticleLayer = () => {
+const MyScrapedArticlesLayer = () => {
   const infiniteQuery = useMyScrapedArticles();
   const infiniteData = infiniteQuery.data
     ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
@@ -197,6 +204,34 @@ const ArticleLayer = () => {
       itemContent={(index, article) => <HotArticleCard article={article} />}
       emptyElement={
         <EmptyInfiniteList text="아직 스크랩한 게시글이 없습니다." />
+      }
+    />
+  );
+};
+
+const MyScrapedRecruitsLayer = () => {
+  const infiniteQuery = useMyScrapedRecruits();
+  const infiniteData =
+    infiniteQuery?.data?.pages.map(({ recruits }) => recruits).reduce(concat) ??
+    [];
+
+  return (
+    <InfiniteList
+      data={infiniteData}
+      infiniteQuery={infiniteQuery}
+      skeleton={<RecruitCardSkeleton size="md" />}
+      skeletonCount={6}
+      useWindowScroll={true}
+      skeletonGap={16}
+      itemContent={(_, recruitSummary) => (
+        <RecruitCard
+          size="md"
+          withBadge={true}
+          recruitSummary={recruitSummary}
+        />
+      )}
+      emptyElement={
+        <EmptyInfiniteList text="아직 스크랩한 리쿠르팅이 없습니다." />
       }
     />
   );

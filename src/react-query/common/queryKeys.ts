@@ -3,6 +3,7 @@ import type {
   RecruitSummariesQueryStringObject,
   RecruitSummariesQueryStringObjectWithoutInfiniteParams,
   MatchStatus,
+  RecruitCategoryName,
 } from '~/services/recruit';
 
 import {
@@ -20,6 +21,12 @@ type AppliedRecruitsParams = Partial<
     'category' | 'cursor' | 'size'
   >
 >;
+
+type MyScrapedRecruitsParams = Partial<{
+  category: RecruitCategoryName;
+  cursor: number | null;
+  size: number;
+}>;
 
 export const queryKeys = {
   auth: () => ['auth'],
@@ -65,6 +72,11 @@ export const queryKeys = {
     participants: (recruitId: number) => [
       ...queryKeys.recruit.detail(recruitId),
       'participants',
+    ],
+    myScraped: (params: Pick<MyScrapedRecruitsParams, 'category'> = {}) => [
+      ...queryKeys.auth(),
+      'my-scraped-recruits',
+      params,
     ],
     list: (
       params: Partial<RecruitSummariesQueryStringObjectWithoutInfiniteParams>
@@ -247,7 +259,19 @@ export const endpoints = {
       recruitApplicationId: number;
     }) =>
       `${endpoints.recruit.detail(recruitId)}/${recruitApplicationId}` as const,
-
+    myScraped: (params: MyScrapedRecruitsParams = {}) => {
+      const {
+        size = defaultRecruitsPageSize,
+        cursor = defaultRecruitsPageCursor,
+      } = params;
+      const searchParams = new URLSearchParams();
+      const queryStringObject = { size, cursor };
+      Object.entries(queryStringObject).forEach(([key, value]) => {
+        if (value) searchParams.append(key, String(value));
+      });
+      const queryString = searchParams.toString();
+      return `/recruits/my-scrap?${queryString}` as const;
+    },
     scrap: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
     complete: (recruitId: number) =>
