@@ -80,6 +80,8 @@ export enum MatchStatus {
   REJECTED = 'REJECT',
 }
 
+export const MatchStatusSet = new Set<string>(Object.values(MatchStatus));
+
 export interface RecruitParticipantsCount {
   part: RecruitParts;
   count: number;
