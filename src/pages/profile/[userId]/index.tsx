@@ -104,19 +104,17 @@ const UserProfilePage: CustomNextPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
-        <TitleBar.Default
-          title="프로필"
-          withoutClose
-          // TODO: Return Page
-          onClickBackward={routes.main()}
-        />
+        <TitleBar.Default title="프로필" withoutClose />
 
         <div css={userInfoLayerCss}>
           <NameCard userInfo={userInfo} css={nameCardCss} />
         </div>
 
         {isProfilePublic ? (
-          <Profile.Tabs.Root value={tabValue} onValueChange={onTabValueChange}>
+          <Profile.Tabs.Root
+            defaultValue={tabValue}
+            onValueChange={onTabValueChange}
+          >
             <Profile.Tabs.Triggers css={pageExpandCss} />
 
             <Profile.Tabs.PortfolioTabContent
