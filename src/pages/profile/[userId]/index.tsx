@@ -13,7 +13,6 @@ import {
 import NameCard from '~/components/NameCard';
 import { getSafeProfileTabValue, Profile } from '~/components/Profile';
 import TitleBar from '~/components/TitleBar';
-import NotFoundPage from '~/pages/404';
 import {
   useMyInfo,
   useUserInfo,
@@ -28,16 +27,10 @@ import {
   pageCss,
   topBarHeight,
 } from '~/styles/utils';
-import { createNoIndexPageMetaData, isStorybookMode, routes } from '~/utils';
+import { createNoIndexPageMetaData, routes } from '~/utils';
 
 const createMetaTitle = (username: string) => {
   return `${username} - 프로필`;
-};
-
-const isIdNaN = (id: number) => {
-  if (isStorybookMode()) return false;
-
-  return Number.isNaN(id);
 };
 
 const enum ParamsKey {
@@ -67,10 +60,6 @@ const UserProfilePage: CustomNextPage = () => {
   } = useUserProfileVisibility(userId);
 
   const mine = userInfo && myInfo && userInfo.memberId === myInfo.memberId;
-
-  if (isIdNaN(userId)) {
-    return <NotFoundPage />;
-  }
 
   if (mine) {
     router.replace(routes.profile.self());
