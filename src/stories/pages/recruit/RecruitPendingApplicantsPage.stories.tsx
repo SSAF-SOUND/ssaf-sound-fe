@@ -8,14 +8,14 @@ import {
   createMockRecruitDetail,
   createMockRecruitParticipants,
 } from '~/mocks/handlers/recruit/data';
-import RecruitApplicantsPage from '~/pages/recruits/[recruitId]/applications';
+import RecruitPendingApplicantsPage from '~/pages/recruits/[recruitId]/applications';
 import { queryKeys } from '~/react-query/common';
 import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
-const meta: Meta<typeof RecruitApplicantsPage> = {
-  title: 'Page/Recruit/Applicants',
-  component: RecruitApplicantsPage,
+const meta: Meta<typeof RecruitPendingApplicantsPage> = {
+  title: 'Page/Recruit/Applicants/Pending',
+  component: RecruitPendingApplicantsPage,
   decorators: [
     (Story) => {
       return (
@@ -60,9 +60,9 @@ type RecruitApplicantsStoryArgs = {
   isStudy: boolean;
 };
 
-type RecruitApplicantsPageStory = StoryObj<RecruitApplicantsStoryArgs>;
+type RecruitPendingApplicantsPageStory = StoryObj<RecruitApplicantsStoryArgs>;
 
-export const Default: RecruitApplicantsPageStory = {
+export const Default: RecruitPendingApplicantsPageStory = {
   args: {
     isStudy: false,
   },
@@ -84,6 +84,6 @@ export const Default: RecruitApplicantsPageStory = {
       isStudy ? mockStudyParticipants : mockProjectParticipants
     );
 
-    return <RecruitApplicantsPage />;
+    return <RecruitPendingApplicantsPage />;
   },
 };
