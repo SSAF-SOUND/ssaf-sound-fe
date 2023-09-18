@@ -477,11 +477,30 @@ export const getAppliedRecruits = rest.get(
   restInfiniteAppliedRecruitsSuccess
 );
 
+const getMyScrapedRecruitsEndpoint = removeQueryParams(
+  composeUrls(API_URL, endpoints.recruit.myScraped())
+);
+
+export const getMyScrapedRecruits = rest.get(
+  getMyScrapedRecruitsEndpoint,
+  restInfiniteRecruitsSuccess
+);
+
+export const getMyScrapedRecruitsError = restError(
+  'get',
+  getMyScrapedRecruitsEndpoint,
+  {
+    message: 'gg',
+  }
+);
+
 export const recruitHandlers = [
   //
   getRejectedApplicants,
   getJoinedRecruits,
   getAppliedRecruits,
+  getMyScrapedRecruits,
+  // getMyScrapedRecruitsError,
   //
   getRecruitApplicants,
   createRecruit,

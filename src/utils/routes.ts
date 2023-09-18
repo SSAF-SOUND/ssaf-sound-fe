@@ -49,9 +49,13 @@ export const routes = {
     detail: (id: number) => `${routes.profile.self()}/${id}` as const,
     myInfoSettings: () => `${routes.profile.self()}/myinfo-settings` as const,
     myArticles: () => `${routes.profile.self()}/my-articles` as const,
-    myScraps: (
-      category: PossibleMyScrapsCategories = PossibleMyScrapsCategories.ARTICLES
-    ) => `${routes.profile.self()}/my-scraps?category=${category}` as const,
+    myScraps: (category?: PossibleMyScrapsCategories) => {
+      const route = `${routes.profile.self()}/my-scraps` as const;
+      if (category) {
+        return `${route}?tab=${category}` as const;
+      }
+      return route;
+    },
 
     edit: {
       myInfo: (field: EditableMyInfoFields) =>

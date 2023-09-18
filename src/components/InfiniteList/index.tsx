@@ -86,11 +86,11 @@ export const InfiniteList = <T,>(props: InfiniteListProps<T>) => {
     );
   }
 
-  if (isError && !data) {
+  const isEmpty = data.length === 0;
+
+  if (isError && isEmpty) {
     return <InfiniteQueryErrorCard css={errorCss} onClickRetry={refetch} />;
   }
-
-  const isEmpty = data.length === 0;
 
   if (isEmpty) {
     return isValidElement(emptyElement) ? emptyElement : <div>None</div>;
