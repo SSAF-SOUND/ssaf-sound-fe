@@ -169,7 +169,7 @@ const itemGap = 16;
 const virtuosoCss = css({ marginBottom: itemGap });
 const listCss = css(flex('', '', 'column', itemGap));
 const skeletonsCss = (gap: number) =>
-  css({ marginBottom: gap }, flex('', '', 'column', itemGap));
+  css({ marginBottom: gap }, flex('', '', 'column', gap));
 const errorCss = css({
   borderRadius: 30,
   marginBottom: itemGap,

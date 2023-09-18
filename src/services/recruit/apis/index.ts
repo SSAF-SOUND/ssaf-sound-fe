@@ -5,6 +5,8 @@ export * from './completeRecruit';
 export * from './constants';
 export * from './createRecruit';
 export * from './excludeRecruitParticipant';
+export * from './getAppliedRecruits';
+export * from './getJoinedRecruits';
 export * from './getMyRecruitApplication';
 export * from './getRecruitApplicants';
 export * from './getRecruitApplication';

@@ -19,7 +19,6 @@ export const RecruitsPreview = (props: RecruitsPreviewProps) => {
     data: recruits,
     isLoading,
     isError,
-    isSuccess,
   } = useRecruits({
     category: RecruitCategoryName.PROJECT,
   });

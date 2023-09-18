@@ -2,12 +2,24 @@ import type { LunchDateSpecifier } from '~/services/lunch';
 import type {
   RecruitSummariesQueryStringObject,
   RecruitSummariesQueryStringObjectWithoutInfiniteParams,
+  MatchStatus,
 } from '~/services/recruit';
 
 import {
   defaultRecruitsPageCursor,
   defaultRecruitsPageSize,
-} from '~/services/recruit';
+} from '~/services/recruit/apis/constants';
+
+type JoinedRecruitsParams = { memberId: number } & Partial<
+  Pick<RecruitSummariesQueryStringObject, 'category' | 'cursor' | 'size'>
+>;
+
+type AppliedRecruitsParams = Partial<
+  { matchStatus: MatchStatus } & Pick<
+    RecruitSummariesQueryStringObject,
+    'category' | 'cursor' | 'size'
+  >
+>;
 
 export const queryKeys = {
   auth: () => ['auth'],
@@ -69,6 +81,12 @@ export const queryKeys = {
           completed,
         },
       ];
+    },
+    joinedList: (params: Omit<JoinedRecruitsParams, 'cursor' | 'size'>) => {
+      return [...queryKeys.recruit.self(), 'joined', params];
+    },
+    appliedList: (params: Omit<AppliedRecruitsParams, 'cursor' | 'size'>) => {
+      return [...queryKeys.recruit.self(), 'applied', params];
     },
     application: {
       self: (recruitId: number) => [
@@ -261,6 +279,52 @@ export const endpoints = {
       const queryString = queryStringObject.toString();
 
       return `${endpoints.recruit.self()}?${queryString}`;
+    },
+    joinedList: (params: JoinedRecruitsParams) => {
+      const {
+        category,
+        memberId,
+        cursor = defaultRecruitsPageCursor,
+        size = defaultRecruitsPageSize,
+      } = params;
+      const searchParams = new URLSearchParams();
+
+      const joinedRecruitsQueryStringObject = {
+        category,
+        memberId,
+        cursor,
+        size,
+      };
+      Object.entries(joinedRecruitsQueryStringObject).map(([key, value]) => {
+        if (value) searchParams.append(key, String(value));
+      });
+      const queryString = searchParams.toString();
+
+      return `${endpoints.recruit.self()}/joined?${queryString}` as const;
+    },
+    appliedList: (params: AppliedRecruitsParams) => {
+      const searchParams = new URLSearchParams();
+      const {
+        category,
+        cursor = defaultRecruitsPageCursor,
+        size = defaultRecruitsPageSize,
+        matchStatus,
+      } = params;
+
+      const appliedRecruitsQueryStringObject = {
+        category,
+        cursor,
+        size,
+        matchStatus,
+      };
+
+      Object.entries(appliedRecruitsQueryStringObject).forEach(
+        ([key, value]) => {
+          if (value) searchParams.append(key, String(value));
+        }
+      );
+      const queryString = searchParams.toString();
+      return `${endpoints.recruit.self()}/applied?${queryString}` as const;
     },
     apply: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/application` as const,

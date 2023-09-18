@@ -8,17 +8,21 @@ export interface FullDateTimeProps {
   dateTimeString: string;
   separatorHeight?: number;
   separatorBackground?: string;
+  suffix?: string;
+  className?: string;
 }
 
 export const FullDateTime = (props: FullDateTimeProps) => {
   const {
+    className,
     dateTimeString,
     separatorHeight = 12,
     separatorBackground = palettes.font.blueGrey,
+    suffix,
   } = props;
   const { date, time } = formatFullDateTime(dateTimeString);
   return (
-    <time dateTime={dateTimeString} css={selfCss}>
+    <time dateTime={dateTimeString} css={selfCss} className={className}>
       <span>{date}</span>
       <Separator
         orientation="vertical"
@@ -26,6 +30,7 @@ export const FullDateTime = (props: FullDateTimeProps) => {
         backgroundColor={separatorBackground}
       />
       <span>{time}</span>
+      {suffix && <span>{suffix}</span>}
     </time>
   );
 };

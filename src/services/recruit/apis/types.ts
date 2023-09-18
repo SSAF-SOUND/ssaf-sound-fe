@@ -39,13 +39,26 @@ export type RecruitDetail = {
   matchStatus?: MatchStatus;
 } & ScrapStatus;
 
+export type RecruitParticipantUserInfo = UserInfo & {
+  recruitApplicationId: number;
+  joinedAt: string;
+};
 export interface RecruitParticipantsDetail {
+  limit: number;
+  members: RecruitParticipantUserInfo[];
+}
+export interface RecruitParticipantsSummary {
   limit: number;
   members: UserInfo[];
 }
 
 export interface RecruitParticipantsDetailWithPart
   extends RecruitParticipantsDetail {
+  recruitType: RecruitParts;
+}
+
+export interface RecruitParticipantsSummaryWithPart
+  extends RecruitParticipantsSummary {
   recruitType: RecruitParts;
 }
 
@@ -63,7 +76,12 @@ export interface RecruitSummary {
   recruitEnd: string;
 
   skills: SkillInfo[];
-  participants: RecruitParticipantsDetailWithPart[];
+  participants: RecruitParticipantsSummaryWithPart[];
+}
+
+export interface AppliedRecruitSummary extends RecruitSummary {
+  appliedAt: string;
+  matchStatus: MatchStatus;
 }
 
 export interface RecruitSummariesQueryStringObject extends InfiniteParams {
@@ -85,9 +103,12 @@ export interface RecruitCursorData {
 }
 
 export interface RecruitApplicationDetail {
+  category: RecruitCategoryName;
+
+  //
+
   recruitId: number;
   recruitApplicationId: number;
-  category: RecruitCategoryName;
 
   recruitType: RecruitParts;
   reply: string;
@@ -117,5 +138,6 @@ export interface RecruitApplicant {
   reply: string;
   question: string;
   liked: boolean;
+
   appliedAt: string;
 }

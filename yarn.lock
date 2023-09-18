@@ -3908,7 +3908,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-use-controllable-state@npm:1.0.1, @radix-ui/react-use-controllable-state@npm:^1.0.1":
+"@radix-ui/react-use-controllable-state@npm:1.0.1":
   version: 1.0.1
   resolution: "@radix-ui/react-use-controllable-state@npm:1.0.1"
   dependencies:
@@ -8113,13 +8113,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"blurhash@npm:1.1.5":
-  version: 1.1.5
-  resolution: "blurhash@npm:1.1.5"
-  checksum: 8a647024948552e7250d4f123a0dc2a56941be476811c1c999b182cde01e6e15cc6938a8c523f1a2fea8c0dc12c1fffc1cf2001b86683e196bed03e88e176af2
-  languageName: node
-  linkType: hard
-
 "bn.js@npm:^4.0.0, bn.js@npm:^4.1.0, bn.js@npm:^4.11.9":
   version: 4.12.0
   resolution: "bn.js@npm:4.12.0"
@@ -8838,17 +8831,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clone@npm:2.x, clone@npm:^2.1.1":
-  version: 2.1.2
-  resolution: "clone@npm:2.1.2"
-  checksum: aaf106e9bc025b21333e2f4c12da539b568db4925c0501a1bf4070836c9e848c892fa22c35548ce0d1132b08bbbfa17a00144fe58fccdab6fa900fec4250f67d
-  languageName: node
-  linkType: hard
-
 "clone@npm:^1.0.2":
   version: 1.0.4
   resolution: "clone@npm:1.0.4"
   checksum: d06418b7335897209e77bdd430d04f882189582e67bd1f75a04565f3f07f5b3f119a9d670c943b6697d0afb100f03b866b3b8a1f91d4d02d72c4ecf2bb64b5dd
+  languageName: node
+  linkType: hard
+
+"clone@npm:^2.1.1":
+  version: 2.1.2
+  resolution: "clone@npm:2.1.2"
+  checksum: aaf106e9bc025b21333e2f4c12da539b568db4925c0501a1bf4070836c9e848c892fa22c35548ce0d1132b08bbbfa17a00144fe58fccdab6fa900fec4250f67d
   languageName: node
   linkType: hard
 
@@ -10101,7 +10094,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"encoding@npm:0.1.13, encoding@npm:^0.1.13":
+"encoding@npm:^0.1.13":
   version: 0.1.13
   resolution: "encoding@npm:0.1.13"
   dependencies:
@@ -12303,7 +12296,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"image-size@npm:1.0.2, image-size@npm:^1.0.0":
+"image-size@npm:^1.0.0":
   version: 1.0.2
   resolution: "image-size@npm:1.0.2"
   dependencies:
@@ -15423,15 +15416,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-cache@npm:5.1.2":
-  version: 5.1.2
-  resolution: "node-cache@npm:5.1.2"
-  dependencies:
-    clone: 2.x
-  checksum: b0bdd81a6fee4754fb984a05246b510bb35dc54721116d465899bf4229ee3287fdafb47da526900ee9924fb402ed5c7d8050049d37d8bf2d26dbafc23a2c3205
-  languageName: node
-  linkType: hard
-
 "node-dir@npm:^0.1.10, node-dir@npm:^0.1.17":
   version: 0.1.17
   resolution: "node-dir@npm:0.1.17"
@@ -15445,20 +15429,6 @@ __metadata:
   version: 1.1.0
   resolution: "node-fetch-native@npm:1.1.0"
   checksum: 65b85ba8d671f7d4b8a4c8eb70dfd3864b4d04ab771e15aeadc613011cd4e4568c4a0a3f1aebdd37410cd2d75c65ab3e538eedb1732fc6b33ee093167e22bbe0
-  languageName: node
-  linkType: hard
-
-"node-fetch@npm:2.6.7":
-  version: 2.6.7
-  resolution: "node-fetch@npm:2.6.7"
-  dependencies:
-    whatwg-url: ^5.0.0
-  peerDependencies:
-    encoding: ^0.1.0
-  peerDependenciesMeta:
-    encoding:
-      optional: true
-  checksum: 8d816ffd1ee22cab8301c7756ef04f3437f18dace86a1dae22cf81db8ef29c0bf6655f3215cb0cdb22b420b6fe141e64b26905e7f33f9377a7fa59135ea3e10b
   languageName: node
   linkType: hard
 
@@ -16355,21 +16325,6 @@ __metadata:
   dependencies:
     find-up: ^5.0.0
   checksum: b167bb8dac7bbf22b1d5e30ec223e6b064b84b63010c9d49384619a36734caf95ed23ad23d4f9bd975e8e8082b60a83395f43a89bb192df53a7c25a38ecb57d9
-  languageName: node
-  linkType: hard
-
-"plaiceholder@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "plaiceholder@npm:2.5.0"
-  dependencies:
-    blurhash: 1.1.5
-    encoding: 0.1.13
-    image-size: 1.0.2
-    node-cache: 5.1.2
-    node-fetch: 2.6.7
-  peerDependencies:
-    sharp: ">= 0.30.6"
-  checksum: 8fde0744094abdf1db33fba647669836a0a7069f150524a75b104f1c76e7c61766a85e1eb693430c0bf291709f9becf596a8ab483d240ce22a668e6ab5c5e64e
   languageName: node
   linkType: hard
 
@@ -18499,7 +18454,6 @@ __metadata:
     "@radix-ui/react-tabs": ^1.0.4
     "@radix-ui/react-toggle": ^1.0.3
     "@radix-ui/react-toggle-group": ^1.0.4
-    "@radix-ui/react-use-controllable-state": ^1.0.1
     "@sentry/nextjs": latest
     "@storybook/addon-a11y": ^7.0.27
     "@storybook/addon-coverage": ^0.0.8
@@ -18543,7 +18497,6 @@ __metadata:
     msw: ^1.2.1
     msw-storybook-addon: ^1.8.0
     next: 13.3.4
-    plaiceholder: ^2.5.0
     prettier: ^2.8.8
     react: 18.2.0
     react-calendar: ^4.3.0

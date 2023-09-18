@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 
 import { ArticleIconButton } from '~/components/Article/ArticleIconButton';
 import { useArticleMenuModal } from '~/components/Article/utils';
-import { Icon, IconButton, Separator } from '~/components/Common';
+import { Separator } from '~/components/Common';
 import Name from '~/components/Name';
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';

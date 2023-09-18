@@ -4,13 +4,13 @@ import type {
   ApplyRecruitApiData,
   CancelRecruitApplicationApiData,
   CreateRecruitApiData,
+  GetRecruitApplicantsApiData,
   GetRecruitDetailApiData,
   GetRecruitParticipantsApiData,
+  GetRejectedRecruitApplicantsApiData,
+  LikeRecruitApplicationApiData,
   RejectRecruitApplicationApiData,
   ScrapRecruitApiData,
-  GetRecruitApplicantsApiData,
-  LikeRecruitApplicationApiData,
-  GetRejectedRecruitApplicantsApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
@@ -18,17 +18,20 @@ import { rest } from 'msw';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
-import { API_URL, composeUrls, removeQueryParams } from '~/utils';
+import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
 
 import {
   createMockMyRecruitApplication,
-  createMockRecruitApplication,
   createMockRecruitApplicants,
+  createMockRecruitApplication,
   recruitDetails,
   recruitParticipantsList,
   scrapStatus,
 } from './data';
-import { restInfiniteRecruitsSuccess } from './utils';
+import {
+  restInfiniteAppliedRecruitsSuccess,
+  restInfiniteRecruitsSuccess,
+} from './utils';
 
 const getRecruitApplicantsEndpoint = removeQueryParams(
   composeUrls(API_URL, endpoints.recruit.application.applicants(1))
@@ -422,7 +425,6 @@ export const excludeRecruitParticipant = restSuccess(
   }
 );
 
-const getRejectedApplicantsMethod = 'get';
 const getRejectedApplicantsEndpoint = removeQueryParams(
   composeUrls(
     API_URL,
@@ -435,19 +437,51 @@ export const getRejectedApplicants = rest.get(
   getRejectedApplicantsEndpoint,
   (req, res, ctx) => {
     const recruitId = Number(req.url.searchParams.get('recruitId'));
+    const mockRejectedApplicants = Object.entries(
+      createMockRecruitApplicants(recruitId).recruitApplications
+    )
+      .map(([, applications]) => applications)
+      .reduce(concat, []);
 
     return res(
       ctx.delay(500),
-      ...mockSuccess<GetRejectedRecruitApplicantsApiData['data']>(ctx, {
-        ...createMockRecruitApplicants(recruitId),
-      })
+      ...mockSuccess<GetRejectedRecruitApplicantsApiData['data']>(
+        ctx,
+        mockRejectedApplicants
+      )
     );
   }
+);
+
+const getJoinedRecruitsEndpoint = removeQueryParams(
+  composeUrls(API_URL, endpoints.recruit.joinedList({ memberId: 1 }))
+);
+
+export const getJoinedRecruits = rest.get(
+  getJoinedRecruitsEndpoint,
+  restInfiniteRecruitsSuccess
+);
+
+const getAppliedRecruitsEndpoint = removeQueryParams(
+  composeUrls(
+    API_URL,
+    endpoints.recruit.appliedList({
+      category: RecruitCategoryName.PROJECT,
+      matchStatus: MatchStatus.SUCCESS,
+    })
+  )
+);
+
+export const getAppliedRecruits = rest.get(
+  getAppliedRecruitsEndpoint,
+  restInfiniteAppliedRecruitsSuccess
 );
 
 export const recruitHandlers = [
   //
   getRejectedApplicants,
+  getJoinedRecruits,
+  getAppliedRecruits,
   //
   getRecruitApplicants,
   createRecruit,

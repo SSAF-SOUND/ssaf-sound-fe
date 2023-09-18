@@ -4,12 +4,11 @@ import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Button } from '~/components/Common';
 import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
 import { RecruitCompleteButton } from '~/components/Forms/RecruitForm/RecruitCompleteButton';
 import { RecruitCategoryName, RecruitParts } from '~/services/recruit';
-import { Theme, titleBarHeight } from '~/styles/utils';
+import { titleBarHeight } from '~/styles/utils';
 
 import {
   Category,
@@ -88,7 +87,11 @@ const RecruitForm = (props: RecruitFormProps) => {
         <QuestionToApplicants css={{ marginBottom: 48 }} editMode={editMode} />
         <Contact />
 
-        {editMode && <RecruitCompleteButton onClickRecruitComplete={onClickRecruitComplete} />}
+        {editMode && (
+          <RecruitCompleteButton
+            onClickRecruitComplete={onClickRecruitComplete}
+          />
+        )}
       </form>
     </FormProvider>
   );

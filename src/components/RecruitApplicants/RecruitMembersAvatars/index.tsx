@@ -1,5 +1,4 @@
-import type { UserInfo } from '~/services/member';
-import type { RecruitParticipantsDetail } from '~/services/recruit';
+import type { RecruitParticipantsDetail , RecruitParticipantUserInfo } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
@@ -9,7 +8,7 @@ import { palettes } from '~/styles/utils';
 
 type OnClickAvatar = (params: {
   recruitApplicationId: number;
-  userInfo: UserInfo;
+  userInfo: RecruitParticipantUserInfo;
 }) => void;
 
 interface RecruitMembersAvatarsProps {

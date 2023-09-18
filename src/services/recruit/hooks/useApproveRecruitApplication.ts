@@ -1,21 +1,16 @@
-import type { RecruitApplicationParams } from './types';
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { useSetRecruitApplication } from '~/services/recruit';
 import { approveRecruitApplication } from '~/services/recruit/apis';
+import { useSetRecruitApplication } from '~/services/recruit/hooks';
 
-export const useApproveRecruitApplication = (
-  params: RecruitApplicationParams
-) => {
-  const { recruitId, recruitApplicationId } = params;
+export const useApproveRecruitApplication = (recruitId: number) => {
   const queryClient = useQueryClient();
-  const setRecruitApplication = useSetRecruitApplication(params);
+  const setRecruitApplication = useSetRecruitApplication(recruitId);
 
   return useMutation({
-    mutationFn: () => approveRecruitApplication(recruitApplicationId),
-    onSuccess: ({ matchStatus }) => {
+    mutationFn: approveRecruitApplication,
+    onSuccess: ({ matchStatus }, recruitApplicationId) => {
       // invalidate: 디테일, 참여자 목록, 신청자 목록
       queryClient.invalidateQueries(queryKeys.recruit.detail(recruitId), {
         exact: true,
@@ -25,7 +20,7 @@ export const useApproveRecruitApplication = (
       );
       queryClient.invalidateQueries(queryKeys.recruit.participants(recruitId));
 
-      setRecruitApplication((prevRecruitApplication) => {
+      setRecruitApplication(recruitApplicationId, (prevRecruitApplication) => {
         if (!prevRecruitApplication) return;
         return { ...prevRecruitApplication, matchStatus };
       });

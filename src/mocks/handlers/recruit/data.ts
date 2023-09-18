@@ -8,6 +8,8 @@ import type {
   RecruitParticipantsDetail,
   RecruitParticipantsProgress,
   RecruitSummary,
+  RecruitParticipantUserInfo,
+  AppliedRecruitSummary,
 } from '~/services/recruit';
 
 import { faker } from '@faker-js/faker';
@@ -18,7 +20,6 @@ import {
   RecruitParts,
   SkillName,
 } from '~/services/recruit';
-
 
 import { mockHtmlString } from '../common';
 import { createMockUser, userInfo } from '../member/data';
@@ -49,6 +50,21 @@ export const createMockRecruitParticipantsProgress = (
       currentNumber: currentParticipantsCount,
     };
   });
+};
+
+export const createMockParticipant = ({
+  recruitApplicationId,
+  userId,
+}: {
+  recruitApplicationId: number;
+  userId: number;
+}): RecruitParticipantUserInfo => {
+  return {
+    ...createMockUser(userId, true),
+    recruitApplicationId,
+    // 참여 날짜
+    joinedAt: faker.date.past().toISOString(),
+  };
 };
 
 export const createMockRecruitDetail = (
@@ -136,13 +152,16 @@ export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
           {
             limit: maxParticipantsCount,
             members: memberIds.map((memberId) =>
-              createMockUser(memberId, true)
+              createMockParticipant({
+                userId: memberId,
+                recruitApplicationId: 1,
+              })
             ),
-          },
+          } as RecruitParticipantsDetail,
         ];
       }
     )
-  ) as Record<RecruitParts, RecruitParticipantsDetail>;
+  );
 };
 export const recruitParticipantsList = recruitDetails.map((recruitDetail) =>
   createMockRecruitParticipants(recruitDetail)
@@ -244,7 +263,7 @@ export const createMockRecruitSummary = (
       return {
         recruitType: part,
         limit: maxParticipantsCount,
-        members: userIds.map((userId) => createMockUser(userId, true)),
+        members: userIds.map((userId) => createMockUser(userId)),
       };
     });
 
@@ -289,6 +308,27 @@ export const studyRecruitSummaries = Array(30)
       finishedRecruit,
       skillCount: 10,
     });
+  });
+
+const matchStatuses = Object.values(MatchStatus);
+export const appliedProjectRecruitSummaries: AppliedRecruitSummary[] =
+  projectRecruitSummaries.map((recruit, index) => {
+    const matchStatus = matchStatuses[index % matchStatuses.length];
+    return {
+      ...recruit,
+      appliedAt: faker.date.past().toISOString(),
+      matchStatus,
+    };
+  });
+
+export const appliedStudyRecruitSummaries: AppliedRecruitSummary[] =
+  projectRecruitSummaries.map((recruit, index) => {
+    const matchStatus = matchStatuses[index % matchStatuses.length];
+    return {
+      ...recruit,
+      appliedAt: faker.date.past().toISOString(),
+      matchStatus,
+    };
   });
 
 export const createMockMyRecruitApplication = (

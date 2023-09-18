@@ -5,7 +5,6 @@ import type {
   RecruitParts,
 } from '~/services/recruit';
 
-import * as Sentry from '@sentry/nextjs';
 import { useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
 
