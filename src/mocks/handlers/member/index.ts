@@ -19,9 +19,12 @@ import { endpoints } from '~/react-query/common';
 import { CertificationState } from '~/services/member';
 import { API_URL, composeUrls, ResponseCode } from '~/utils';
 
+const getMyInfoMethod = 'get';
+const getMyInfoEndpoint = composeUrls(API_URL, endpoints.user.myInfo());
+
 export const getMyInfo = restSuccess<GetMyInfoApiData['data']>(
-  'get',
-  composeUrls(API_URL, endpoints.user.myInfo()),
+  getMyInfoMethod,
+  getMyInfoEndpoint,
   {
     // data: userInfo.initialUserInfo,
     data: userInfo.certifiedSsafyUserInfo,
@@ -29,6 +32,10 @@ export const getMyInfo = restSuccess<GetMyInfoApiData['data']>(
     // data: userInfo.nonSsafyUserInfo,
   }
 );
+
+export const getMyInfoError = restError(getMyInfoMethod, getMyInfoEndpoint, {
+  message: 'getMyInfo Error',
+});
 
 export const getUserInfo = restSuccess<GetUserInfoApiData['data']>(
   'get',
@@ -261,7 +268,8 @@ export const updateMyPortfolioError = restError(
 );
 
 export const memberHandlers = [
-  getMyInfo,
+  // getMyInfo,
+  getMyInfoError,
   updateMyInfo,
   validateNickname,
   certifyStudent,
