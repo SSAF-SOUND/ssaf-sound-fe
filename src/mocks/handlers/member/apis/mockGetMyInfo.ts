@@ -1,7 +1,7 @@
 import type { GetMyInfoApiData } from '~/services/member';
 
 import { mockUserInfo } from '~/mocks/handlers/member/data';
-import { restSuccess } from '~/mocks/utils';
+import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
@@ -12,7 +12,7 @@ const createMockGetMyInfo = (data: GetMyInfoApiData['data'] | null) => {
   return restSuccess<GetMyInfoApiData['data'] | null>(
     getMyInfoMethod,
     getMyInfoEndpoint,
-    { delay: 0, data }
+    { data }
   );
 };
 
@@ -32,4 +32,8 @@ export const mockGetCertifiedSsafyMyInfo = createMockGetMyInfo(
   mockUserInfo.certifiedSsafyUserInfo
 );
 
-export const mockGetMyInfoError = createMockGetMyInfo(null);
+export const mockGetMyInfoError = restError(
+  getMyInfoMethod,
+  getMyInfoEndpoint,
+  { message: 'GetMyInfo Error' }
+);
