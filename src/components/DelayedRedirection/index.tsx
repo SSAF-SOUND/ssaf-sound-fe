@@ -1,34 +1,34 @@
+import type { LinkProps } from 'next/link';
 import type { ReactNode } from 'react';
-import type { UrlObject } from 'url';
 
 import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
+import { toMs } from '~/utils';
+
 interface DelayedRedirectionProps {
   children: ReactNode;
-  to: UrlObject | string;
+  to: LinkProps['href'];
   seconds?: number;
-  replace?: boolean;
+  shouldReplace?: boolean;
 }
 
 const DelayedRedirection = (props: DelayedRedirectionProps) => {
-  const { children, to, seconds = 3, replace = false } = props;
+  const { children, to, seconds = 3, shouldReplace = false } = props;
   const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (replace) {
+      if (shouldReplace) {
         router.replace(to);
       } else {
         router.push(to);
       }
-    }, seconds * 1000);
+    }, toMs(seconds));
 
     return () => clearTimeout(timer);
-
-    // eslint-disable-next-line
-  }, []);
+  }, [router, to, seconds, shouldReplace]);
 
   return <>{children}</>;
 };
