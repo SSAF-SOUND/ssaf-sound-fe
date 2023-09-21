@@ -91,8 +91,8 @@ const buttonGroupCss = css({ padding: '30px 0' }, flex('', '', 'column', 10));
 const mainPageLinkCss = css(
   {
     marginTop: 20,
-    textAlign: 'center',
     textDecoration: 'underline',
+    alignSelf: 'center',
   },
   fontCss.style.R14
 );
