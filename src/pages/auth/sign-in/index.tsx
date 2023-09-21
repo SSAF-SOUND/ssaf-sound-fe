@@ -26,6 +26,7 @@ const SignInPage = () => {
   const router = useRouter();
   const { data: myInfo, isLoading: isMyInfoLoading } = useMyInfo({
     enabled: true,
+    retry: 0,
   });
 
   const isSignedIn = !!myInfo;
