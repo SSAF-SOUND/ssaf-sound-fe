@@ -1,9 +1,9 @@
 import { svgr } from './svgr';
 import { tsconfigPaths } from './tsconfigPaths';
+import { nextRouterMock } from './nextRouterMock';
 
-const storybookWebpackConfig = {
+export const storybookWebpackConfig = {
   svgr,
   tsconfigPaths,
+  nextRouterMock,
 };
-
-export default storybookWebpackConfig;
