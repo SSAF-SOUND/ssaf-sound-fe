@@ -268,8 +268,8 @@ export const updateMyPortfolioError = restError(
 );
 
 export const memberHandlers = [
-  // getMyInfo,
-  getMyInfoError,
+  getMyInfo,
+  // getMyInfoError,
   updateMyInfo,
   validateNickname,
   certifyStudent,
