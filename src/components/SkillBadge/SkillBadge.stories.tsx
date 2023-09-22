@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { SkillName } from '~/services/recruit';
+
 import SkillBadge from './index';
 
 const meta: Meta<typeof SkillBadge> = {
@@ -13,6 +15,8 @@ export default meta;
 
 type NameStory = StoryObj<typeof SkillBadge>;
 
-export const NameStory: NameStory = {
-  name: 'SkillBadge',
+export const Default: NameStory = {
+  args: {
+    name: SkillName.REACT,
+  },
 };
