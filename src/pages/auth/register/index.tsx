@@ -14,11 +14,7 @@ import {
   PageHeadingText,
   SsafyIcon,
 } from '~/components/Common';
-import {
-  useMyAccountStatus,
-  useSetMyInfo,
-  useUpdateMyInfo,
-} from '~/services/member';
+import { useMyAccountStatus, useUpdateMyInfo } from '~/services/member';
 import {
   flex,
   fontCss,
@@ -43,7 +39,6 @@ const RegisterPage: CustomNextPage = () => {
   const { isRegisterRequired } = useMyAccountStatus();
   const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
   const [shouldCheckUserInfo, setShouldCheckUserInfo] = useState(true);
-  const setMyInfo = useSetMyInfo();
 
   if (shouldCheckUserInfo && !isRegisterRequired) {
     router.replace(routes.main());
@@ -54,8 +49,7 @@ const RegisterPage: CustomNextPage = () => {
     setShouldCheckUserInfo(false);
 
     try {
-      const response = await updateMyInfo(formValues);
-      setMyInfo(response);
+      await updateMyInfo(formValues);
       await router.replace(routes.intro.studentCertification());
     } catch (err) {
       handleAxiosError(err);

@@ -111,8 +111,11 @@ export const useCheckRegisterRequired = () => {
 };
 
 export const useUpdateMyInfo = () => {
+  const setMyInfo = useSetMyInfo();
+
   return useMutation({
     mutationFn: updateMyInfo,
+    onSuccess: (data) => setMyInfo(data),
   });
 };
 
