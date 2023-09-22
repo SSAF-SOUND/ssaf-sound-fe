@@ -15,17 +15,22 @@ import {
 } from '~/components/Forms/UserRegisterForm/Fields';
 import TitleBar from '~/components/TitleBar';
 import { useStack } from '~/hooks';
-import { flex, pageMinHeight } from '~/styles/utils';
-import { noop } from '~/utils';
+import { flex, pageCss, palettes, titleBarHeight } from '~/styles/utils';
 
-interface UserRegisterFormProps {
-  onSubmit?: SubmitHandler<UserRegisterFormValues>;
-  defaultValues?: Partial<UserRegisterFormValues>;
+export type UserRegisterFormOptions = Partial<{
+  titleBarTitle: string;
+}>;
+
+export interface UserRegisterFormProps {
+  onValidSubmit: SubmitHandler<UserRegisterFormValues>;
+  defaultValues?: UserRegisterFormValues;
   className?: string;
+  options?: UserRegisterFormOptions;
 }
 
 const UserRegisterForm = (props: UserRegisterFormProps) => {
-  const { onSubmit = noop, defaultValues, className } = props;
+  const { onValidSubmit, defaultValues, className, options = {} } = props;
+  const { titleBarTitle } = options;
   const methods = useForm({
     defaultValues,
   });
@@ -58,19 +63,23 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
 
   return (
     <div css={selfCss} className={className}>
+      <TitleBar.Default
+        title={titleBarTitle}
+        withoutClose
+        withoutBackward={currentPhase === 0}
+        onClickBackward={popPhase}
+      />
+
+      <ProgressBar
+        min={0}
+        now={currentPhase + 1}
+        max={FieldComponents.length}
+        backgroundColor={palettes.white}
+        foregroundColor={palettes.primary.dark}
+      />
+
       <FormProvider {...methods}>
-        <TitleBar.Default
-          withoutTitle
-          withoutClose
-          withoutBackward={currentPhase === 0}
-          onClickBackward={popPhase}
-        />
-        <ProgressBar
-          min={0}
-          now={currentPhase + 1}
-          max={FieldComponents.length}
-        />
-        <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
+        <form css={formCss} onSubmit={handleSubmit(onValidSubmit)}>
           <FieldComponent />
         </form>
       </FormProvider>
@@ -80,11 +89,15 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
 
 export default UserRegisterForm;
 
-const selfCss = css({
-  display: 'flex',
-  flexDirection: 'column',
-  minHeight: pageMinHeight,
-});
+const selfPaddingTop = titleBarHeight + 12;
+const selfCss = css(
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingTop: selfPaddingTop,
+  },
+  pageCss.minHeight
+);
 
 const formCss = css(
   {
