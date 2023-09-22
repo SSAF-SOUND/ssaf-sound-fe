@@ -1,4 +1,4 @@
-import type { SubmitHandler } from 'react-hook-form';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { UserRegisterFormValues } from '~/components/Forms/UserRegisterForm/utils';
 
 import { css } from '@emotion/react';
@@ -16,13 +16,20 @@ export type UserRegisterFormOptions = Partial<{
 
 export interface UserRegisterFormProps {
   onValidSubmit: SubmitHandler<UserRegisterFormValues>;
+  onInvalidSubmit?: SubmitErrorHandler<UserRegisterFormValues>;
   defaultValues?: UserRegisterFormValues;
   className?: string;
   options?: UserRegisterFormOptions;
 }
 
 const UserRegisterForm = (props: UserRegisterFormProps) => {
-  const { onValidSubmit, defaultValues, className, options = {} } = props;
+  const {
+    onValidSubmit,
+    onInvalidSubmit,
+    defaultValues,
+    className,
+    options = {},
+  } = props;
   const { titleBarTitle } = options;
   const methods = useForm({
     defaultValues,
@@ -36,7 +43,7 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
 
   const { handleSubmit } = methods;
 
-  const onSubmit = handleSubmit(onValidSubmit);
+  const onSubmit = handleSubmit(onValidSubmit, onInvalidSubmit);
   const majorPhase = 3;
   const pushNextPhase = () => pushPhase(currentPhase + 1);
   const fieldsLength = Object.keys(UserRegisterFormFields).length;
