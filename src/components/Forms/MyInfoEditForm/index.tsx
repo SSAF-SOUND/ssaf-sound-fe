@@ -10,7 +10,7 @@ import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button } from '~/components/Common';
-import { Nickname } from '~/components/Forms/UserRegisterForm/Fields';
+import { Nickname } from '~/components/Forms/UserRegisterForm/Fields/Nickname';
 import TitleBar from '~/components/TitleBar';
 import { flex, pageMinHeight } from '~/styles/utils';
 
@@ -69,13 +69,11 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
     await onValidSubmit(reset, value, event);
   };
 
+  const onSubmit = handleSubmit(handleValidSubmit, onInvalidSubmit);
+
   return (
     <FormProvider {...methods}>
-      <form
-        css={selfCss}
-        className={className}
-        onSubmit={handleSubmit(handleValidSubmit, onInvalidSubmit)}
-      >
+      <form css={selfCss} className={className} onSubmit={onSubmit}>
         <TitleBar.Default
           title={titleMap[field]}
           onClickBackward={titleBarBackwardRoute}
@@ -86,6 +84,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
             buttonText="수정 완료"
             initialNickname={defaultValues.nickname}
             withLabelText={false}
+            onSubmit={onSubmit}
           />
         )}
         {field === 'ssafyBasicInfo' && (
