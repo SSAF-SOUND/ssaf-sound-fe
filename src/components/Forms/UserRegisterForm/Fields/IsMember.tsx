@@ -2,17 +2,21 @@ import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
 import { Button, SsafyIcon, TrackSize } from '~/components/Common';
-import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
-import { flex, fontCss } from '~/styles/utils';
+import {
+  useUserRegisterFormContext,
+  UserRegisterFormFieldQuestion,
+} from '~/components/Forms/UserRegisterForm/utils';
+import { flex } from '~/styles/utils';
 
 const fieldName = 'ssafyMember';
+const fieldQuestion = '안녕하세요\nSSAFY인 이신가요?';
 
-interface IsMemberProps {
+export interface IsMemberProps {
   onTrue: () => void;
   onFalse: () => void;
 }
 
-const IsMember = (props: IsMemberProps) => {
+export const IsMember = (props: IsMemberProps) => {
   const { onTrue, onFalse } = props;
   const { register, setValue } = useUserRegisterFormContext();
   const handleTrue = () => {
@@ -30,10 +34,9 @@ const IsMember = (props: IsMemberProps) => {
 
   return (
     <>
-      <div css={fontCss.style.B28}>
-        <p>안녕하세요</p>
-        <p>SSAFY인 이신가요?</p>
-      </div>
+      <UserRegisterFormFieldQuestion>
+        {fieldQuestion}
+      </UserRegisterFormFieldQuestion>
 
       <SsafyIcon.Track size={TrackSize.LG2} />
 
@@ -53,8 +56,6 @@ const IsMember = (props: IsMemberProps) => {
     </>
   );
 };
-
-export default IsMember;
 
 const buttonGroupCss = css(
   {

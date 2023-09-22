@@ -2,17 +2,21 @@ import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
 import { Button } from '~/components/Common';
-import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
-import { flex, fontCss } from '~/styles/utils';
+import {
+  UserRegisterFormFieldQuestion,
+  useUserRegisterFormContext,
+} from '~/components/Forms/UserRegisterForm/utils';
+import { flex } from '~/styles/utils';
 
 const fieldName = 'isMajor';
+const fieldQuestion = '전공자이신가요?';
 
 interface IsMajorProps {
   onTrue: () => void;
   onFalse: () => void;
 }
 
-const IsMajor = (props: IsMajorProps) => {
+export const IsMajor = (props: IsMajorProps) => {
   const { onTrue, onFalse } = props;
   const { register, setValue } = useUserRegisterFormContext();
 
@@ -32,7 +36,9 @@ const IsMajor = (props: IsMajorProps) => {
 
   return (
     <>
-      <p css={fontCss.style.B28}>전공자이신가요?</p>
+      <UserRegisterFormFieldQuestion>
+        {fieldQuestion}
+      </UserRegisterFormFieldQuestion>
 
       <div css={buttonGroupCss}>
         <Button size="lg" variant="filled" css={buttonCss} onClick={handleTrue}>
@@ -51,15 +57,6 @@ const IsMajor = (props: IsMajorProps) => {
   );
 };
 
-export default IsMajor;
+const buttonGroupCss = css({ width: '100%' }, flex('', '', 'row', 20));
 
-const buttonGroupCss = css(
-  {
-    width: '100%',
-  },
-  flex('', '', 'row', 20)
-);
-
-const buttonCss = css({
-  width: '100%',
-});
+const buttonCss = css({ width: '100%' });

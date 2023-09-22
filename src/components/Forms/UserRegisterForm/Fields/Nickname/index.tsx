@@ -1,51 +1,58 @@
-import { css } from '@emotion/react';
-import { useEffect, useId, useRef, useState } from 'react';
-import { useWatch } from 'react-hook-form';
+import type { UserRegisterFormValues } from '~/components/Forms/UserRegisterForm/utils';
 
-import { Button, VisuallyHidden } from '~/components/Common';
-import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
+import { css } from '@emotion/react';
+import { useEffect, useId, useState } from 'react';
+import { useFormState, useWatch } from 'react-hook-form';
+
+import { Button } from '~/components/Common';
+import {
+  UserRegisterFormFieldQuestion,
+  useUserRegisterFormContext,
+} from '~/components/Forms/UserRegisterForm/utils';
 import { useModal } from '~/components/GlobalModal';
 import {
   duplicateNicknameMessage,
   useValidateNickname,
 } from '~/services/member';
-import { flex, fontCss } from '~/styles/utils';
+import { flex } from '~/styles/utils';
 import { handleAxiosError } from '~/utils';
 
 import NicknameInput from './NicknameInput';
 import { useNicknameReconfirmModal } from './useNicknameReconfirmModal';
 
 const fieldName = 'nickname';
+const fieldQuestion = '닉네임을\n입력해주세요';
 
-interface NicknameProps {
+export interface NicknameProps {
   initialNickname?: string;
   className?: string;
   withLabelText?: boolean;
   buttonText?: string;
+  onSubmit?: () => void;
 }
 
-const Nickname = (props: NicknameProps) => {
+export const Nickname = (props: NicknameProps) => {
   const {
     initialNickname = '',
     className,
     withLabelText = true,
     buttonText = '확인',
+    onSubmit,
   } = props;
   const [isValidNickname, setIsValidNickname] = useState(false);
   const { mutateAsync: validateNickname, isLoading: isValidatingNickname } =
     useValidateNickname();
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
 
-  const {
-    setFocus,
-    resetField,
-    trigger,
-    setError,
-    formState: { dirtyFields, isSubmitting },
-  } = useUserRegisterFormContext();
+  const { setFocus, resetField, trigger, setError } =
+    useUserRegisterFormContext();
+  const { dirtyFields, isSubmitting } = useFormState<UserRegisterFormValues>({
+    name: fieldName,
+  });
+
   const nickname = useWatch({ name: fieldName });
-  const { closeModal } = useModal();
   const nicknameFieldId = useId();
+
+  const { closeModal } = useModal();
   const { openNicknameReconfirmModal } = useNicknameReconfirmModal();
   const submittable =
     isValidNickname && !dirtyFields.nickname && nickname !== initialNickname;
@@ -54,7 +61,7 @@ const Nickname = (props: NicknameProps) => {
   const isButtonLoading = isValidatingNickname || isSubmitting;
 
   const submitForm = () => {
-    submitButtonRef.current?.click();
+    onSubmit?.();
     closeModal();
   };
 
@@ -111,10 +118,9 @@ const Nickname = (props: NicknameProps) => {
     <div css={selfCss} className={className}>
       {withLabelText && (
         <label htmlFor={nicknameFieldId} css={[labelCss, { marginBottom: 40 }]}>
-          <div css={fontCss.style.B28}>
-            <p>닉네임을</p>
-            <p>입력해주세요</p>
-          </div>
+          <UserRegisterFormFieldQuestion>
+            {fieldQuestion}
+          </UserRegisterFormFieldQuestion>
         </label>
       )}
 
@@ -135,17 +141,9 @@ const Nickname = (props: NicknameProps) => {
       >
         {buttonText}
       </Button>
-
-      {submittable && (
-        <VisuallyHidden>
-          <button type="submit" ref={submitButtonRef} aria-hidden />
-        </VisuallyHidden>
-      )}
     </div>
   );
 };
-
-export default Nickname;
 
 const buttonCss = css({ width: '100%' });
 
