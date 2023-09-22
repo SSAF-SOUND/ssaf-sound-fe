@@ -13,29 +13,12 @@ import type { ApiErrorResponse } from '~/types';
 
 import { rest } from 'msw';
 
+import {mockGetInitialMyInfo} from "~/mocks/handlers/member/apis/mockGetMyInfo";
 import { userInfo, portfolio } from '~/mocks/handlers/member/data';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { CertificationState } from '~/services/member';
 import { API_URL, composeUrls, ResponseCode } from '~/utils';
-
-const getMyInfoMethod = 'get';
-const getMyInfoEndpoint = composeUrls(API_URL, endpoints.user.myInfo());
-
-export const getMyInfo = restSuccess<GetMyInfoApiData['data']>(
-  getMyInfoMethod,
-  getMyInfoEndpoint,
-  {
-    // data: userInfo.initialUserInfo,
-    data: userInfo.certifiedSsafyUserInfo,
-    // data: userInfo.uncertifiedSsafyUserInfo,
-    // data: userInfo.nonSsafyUserInfo,
-  }
-);
-
-export const getMyInfoError = restError(getMyInfoMethod, getMyInfoEndpoint, {
-  message: 'getMyInfo Error',
-});
 
 export const getUserInfo = restSuccess<GetUserInfoApiData['data']>(
   'get',
@@ -268,7 +251,7 @@ export const updateMyPortfolioError = restError(
 );
 
 export const memberHandlers = [
-  getMyInfo,
+  mockGetInitialMyInfo,
   // getMyInfoError,
   updateMyInfo,
   validateNickname,
