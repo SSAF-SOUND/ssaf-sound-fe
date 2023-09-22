@@ -39,6 +39,7 @@
     "isomorphic-dompurify": "^1.8.0",
     "jotai": "^2.2.2",
     "next": "13.3.4",
+    "next-router-mock": "^0.9.9",
     "react": "18.2.0",
     "react-calendar": "^4.3.0",
     "react-dom": "18.2.0",

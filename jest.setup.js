@@ -19,4 +19,4 @@ jest.mock('./src/components/Common/SsafyIcon', () => {
   };
 });
 
-jest.mock('next/router', () => require('next-router-mock'));
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));
