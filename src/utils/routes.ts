@@ -1,3 +1,4 @@
+import type { OAuthProviders } from '~/services/auth/utils';
 import type { RecruitParts, SkillName, MatchStatus } from '~/services/recruit';
 
 import { RecruitCategoryName } from '~/services/recruit';
@@ -27,6 +28,7 @@ export const routes = {
   //
   signIn: () => '/auth/sign-in' as const,
   userRegister: () => '/auth/register' as const,
+  callback: (provider: OAuthProviders) => `/auth/callback/${provider}` as const,
 
   //
   certification: {
