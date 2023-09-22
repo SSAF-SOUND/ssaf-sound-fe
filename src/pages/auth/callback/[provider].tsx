@@ -68,12 +68,12 @@ const CallbackPage: CustomNextPage<
 export default CallbackPage;
 CallbackPage.meta = createNoIndexPageMetaData(metaTitle);
 
-const enum ParamsKey {
+export const enum ParamsKey {
   PROVIDER = 'provider',
   CODE = 'code',
 }
-type Props = Pick<Params, ParamsKey.PROVIDER>;
-type Params = { [ParamsKey.PROVIDER]: string; [ParamsKey.CODE]?: string };
+export type Props = Pick<Params, ParamsKey.PROVIDER>;
+export type Params = { [ParamsKey.PROVIDER]: string; [ParamsKey.CODE]?: string };
 export const getStaticProps: GetStaticProps<Props, Params> = (context) => {
   const provider = context.params?.provider || '';
 
