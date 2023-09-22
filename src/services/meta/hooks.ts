@@ -1,8 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
-import { queryKeys } from '~/react-query/common';
 import { SsafyTrack } from '~/services/member';
-import { getCampuses } from '~/services/meta/apis';
 
 export const initialCampuses = [
   { id: 1, name: '서울' },
@@ -13,54 +11,29 @@ export const initialCampuses = [
 ];
 
 export const useCampuses = () => {
-  return useQuery({
-    queryKey: queryKeys.meta.campuses(),
-    queryFn: getCampuses,
-    initialData: initialCampuses,
-    select: (data) => {
-      return [...data]
-        .sort(({ id: id1 }, { id: id2 }) => id1 - id2)
-        .map(({ name }) => name);
-    },
-  });
+  const campuses = useMemo(() => {
+    return [...initialCampuses]
+      .sort((a, b) => a.id - b.id)
+      .map(({ name }) => name);
+  }, []);
+
+  return { data: campuses };
 };
 
 export const useTracks = () => {
-  return {
-    data: Object.values(SsafyTrack),
-  };
+  const tracks = useMemo(() => Object.values(SsafyTrack), []);
+  return { data: tracks };
 };
 
 export const useYears = () => {
   const maxYear = 10;
-  return {
-    data: Array(maxYear)
-      .fill(undefined)
-      .map((_, i) => i + 1),
-  };
-};
+  const years = useMemo(
+    () =>
+      Array(maxYear)
+        .fill(undefined)
+        .map((_, i) => i + 1),
+    []
+  );
 
-export const initialRecruitType = {
-  recruitTypes: [
-    {
-      id: 4,
-      name: '앱',
-    },
-    {
-      id: 2,
-      name: '프론트엔드',
-    },
-    {
-      id: 3,
-      name: '백엔드',
-    },
-    {
-      id: 1,
-      name: '기획/디자인',
-    },
-    {
-      id: 0,
-      name: '스터디',
-    },
-  ],
+  return { data: years };
 };

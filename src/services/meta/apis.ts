@@ -12,19 +12,3 @@ export const getCampuses = () => {
     .get<GetCampusesApiData>(endpoint)
     .then((res) => res.data.data);
 };
-
-interface RecruitTypesMeta {
-  name: string;
-  id: number;
-}
-
-export type GetRecruitTypesApiData = ApiSuccessResponse<{
-  recruitTypes: RecruitTypesMeta[];
-}>;
-
-export const getRecruitTypes = () => {
-  const endpoint = endpoints.meta.recruitTypes();
-  return publicAxios
-    .get<GetRecruitTypesApiData>(endpoint)
-    .then((res) => res.data.data);
-};
