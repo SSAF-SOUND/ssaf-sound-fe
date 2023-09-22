@@ -11,15 +11,10 @@ import {
   FullPageLoader,
   loaderText,
   Logo,
-  PageHead,
   PageHeadingText,
   SsafyIcon,
 } from '~/components/Common';
-import {
-  useMyAccountStatus,
-  useSetMyInfo,
-  useUpdateMyInfo,
-} from '~/services/member';
+import { useMyAccountStatus, useUpdateMyInfo } from '~/services/member';
 import {
   flex,
   fontCss,
@@ -33,7 +28,6 @@ import {
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
-  customToast,
   handleAxiosError,
 } from '~/utils';
 import { routes } from '~/utils/routes';
@@ -45,7 +39,6 @@ const RegisterPage: CustomNextPage = () => {
   const { isRegisterRequired } = useMyAccountStatus();
   const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
   const [shouldCheckUserInfo, setShouldCheckUserInfo] = useState(true);
-  const setMyInfo = useSetMyInfo();
 
   if (shouldCheckUserInfo && !isRegisterRequired) {
     router.replace(routes.main());
@@ -56,22 +49,15 @@ const RegisterPage: CustomNextPage = () => {
     setShouldCheckUserInfo(false);
 
     try {
-      const response = await updateMyInfo(formValues);
-      setMyInfo(response);
+      await updateMyInfo(formValues);
       await router.replace(routes.intro.studentCertification());
-    } catch (error) {
-      handleAxiosError(error, {
-        onClientError: (response) => {
-          customToast.clientError(response.message);
-        },
-      });
+    } catch (err) {
+      handleAxiosError(err);
     }
   };
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>

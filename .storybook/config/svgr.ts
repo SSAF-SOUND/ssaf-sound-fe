@@ -1,4 +1,5 @@
 import { StorybookWebpackConfiguration } from './types';
+import { WebpackConfiguration } from '@storybook/core-webpack';
 
 export const svgr: StorybookWebpackConfiguration = (config) => {
   const imageRule = config.module?.rules?.find((rule) => {

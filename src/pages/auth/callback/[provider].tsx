@@ -3,71 +3,77 @@ import type {
   GetStaticProps,
   InferGetStaticPropsType,
 } from 'next';
-import type { NextPage } from 'next/types';
+import type { CustomNextPage } from 'next/types';
 
 import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { FullPageLoader, PageHead } from '~/components/Common';
+import {
+  FullPageLoader,
+  loaderText,
+  PageHeadingText,
+} from '~/components/Common';
+import DelayedRedirection from '~/components/DelayedRedirection';
 import { useSignIn } from '~/services/auth';
-import { customToast, handleAxiosError } from '~/utils';
+import { oauthProviders } from '~/services/auth/utils';
+import { createNoIndexPageMetaData, handleAxiosError } from '~/utils';
 import { routes } from '~/utils/routes';
 
-interface QueryParams {
-  code: string;
-  provider: string;
-}
+const metaTitle = '유저정보 확인';
 
-const CallbackPage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (
-  props
-) => {
+const CallbackPage: CustomNextPage<
+  InferGetStaticPropsType<typeof getStaticProps>
+> = (props) => {
   const { provider } = props;
 
   const router = useRouter();
-  const queryParams = router.query as unknown as QueryParams;
+  const queryParams = router.query as Params;
 
   const { code } = queryParams;
-  const { mutate: signIn } = useSignIn();
+  const { mutateAsync: signIn } = useSignIn();
 
   useEffect(() => {
     if (!code) return;
 
-    signIn(
-      { code, oauthName: provider },
-      {
-        onSuccess: () => {
-          router.replace(routes.root());
-        },
-        onError: (error) => {
-          handleAxiosError(error, {
-            onClientError: (response) => {
-              customToast.clientError(response.message);
-            },
-          });
-          router.replace(routes.signIn());
-        },
+    const handleSignIn = async () => {
+      try {
+        await signIn({ code, oauthName: provider });
+        router.replace(routes.root());
+      } catch (err) {
+        handleAxiosError(err);
+        router.replace(routes.signIn());
       }
-    );
+    };
+
+    handleSignIn();
   }, [code, provider, router, signIn]);
+
+  if (!code) {
+    return (
+      <DelayedRedirection to={routes.signIn()} shouldReplace={true} seconds={3}>
+        <FullPageLoader text={loaderText.checkUser} />
+      </DelayedRedirection>
+    );
+  }
 
   return (
     <>
-      <PageHead
-        robots={{
-          index: false,
-          follow: false,
-        }}
-      />
-      <FullPageLoader text="로그인 중입니다." />
+      <PageHeadingText text={metaTitle} />
+      <FullPageLoader text={loaderText.checkUser} />
     </>
   );
 };
 
 export default CallbackPage;
+CallbackPage.meta = createNoIndexPageMetaData(metaTitle);
 
-type Props = { provider: string };
-type Params = Props;
+export const enum ParamsKey {
+  PROVIDER = 'provider',
+  CODE = 'code',
+}
+export type Props = Pick<Params, ParamsKey.PROVIDER>;
+export type Params = { [ParamsKey.PROVIDER]: string; [ParamsKey.CODE]?: string };
 export const getStaticProps: GetStaticProps<Props, Params> = (context) => {
   const provider = context.params?.provider || '';
 
@@ -79,8 +85,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = (context) => {
 };
 
 export const getStaticPaths: GetStaticPaths<Params> = () => {
-  const providers = ['google', 'github', 'kakao', 'apple'];
-  const paths = providers.map((provider) => {
+  const paths = oauthProviders.map((provider) => {
     return {
       params: {
         provider,

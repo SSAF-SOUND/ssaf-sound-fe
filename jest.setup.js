@@ -1,7 +1,22 @@
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 import { server } from '~/mocks/server';
 
-beforeAll(() => server.listen());
+beforeAll(() => {
+  server.listen({
+    onUnhandledRequest: 'bypass',
+  });
+});
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
+
+jest.mock('./src/components/Common/SsafyIcon', () => {
+  return {
+    SsafyIcon: {
+      Track: () => <div>TrackIcon</div>,
+      LogoCharacter: () => <div>LogoCharacter</div>,
+    },
+  };
+});
+
+jest.mock('next/router', () => jest.requireActual('next-router-mock'));

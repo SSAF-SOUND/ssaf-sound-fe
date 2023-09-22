@@ -13,6 +13,7 @@ const initialUserInfo: UserInfo = {
   ssafyMember: null,
   isMajor: false,
 };
+
 const certifiedSsafyUserInfo: UserInfo = {
   ...initialUserInfo,
   memberId: 586,
@@ -92,4 +93,11 @@ export const createMockUser = (id: number, certified?: boolean): UserInfo => {
       ...ssafyInfo,
     },
   };
+};
+
+export const mockUserInfo = {
+  initialUserInfo,
+  nonSsafyUserInfo,
+  uncertifiedSsafyUserInfo,
+  certifiedSsafyUserInfo,
 };

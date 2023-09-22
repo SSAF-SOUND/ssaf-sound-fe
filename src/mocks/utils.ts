@@ -24,6 +24,7 @@ export const mockSuccess = <D>(
       code,
       message,
     }),
+    ctx.delay(1),
   ] as const;
 };
 
@@ -54,7 +55,7 @@ export const mockError = (
 export const restSuccess = <D extends DefaultBodyType>(
   method: 'get' | 'post' | 'patch' | 'put' | 'delete',
   url: string,
-  { delay = 500, data }: { delay?: number; data?: D } = {}
+  { delay = 0, data }: { delay?: number; data?: D } = {}
 ) => {
   return rest[method](url, (req, res, ctx) => {
     return res(ctx.delay(delay), ctx.json({ data }));

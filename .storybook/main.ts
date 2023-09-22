@@ -1,6 +1,6 @@
 import type { StorybookConfig } from '@storybook/nextjs';
 
-import storybookWebpackConfig from './config';
+import { storybookWebpackConfig } from './config';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -19,12 +19,13 @@ const config: StorybookConfig = {
     autodocs: 'tag',
   },
   webpackFinal: async (config, options) => {
-    storybookWebpackConfig.tsconfigPaths(config, options);
-    storybookWebpackConfig.svgr(config, options);
+    storybookWebpackConfig.tsconfigPaths?.(config, options);
+    storybookWebpackConfig.svgr?.(config, options);
+    // storybookWebpackConfig.nextRouterMock?.(config, options);
     return config;
   },
   babel: async (options) => {
-    options.presets.push('@emotion/babel-preset-css-prop');
+    options.presets?.push('@emotion/babel-preset-css-prop');
     return options;
   },
   staticDirs: ['../public'],

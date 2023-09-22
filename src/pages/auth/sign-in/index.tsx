@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
@@ -13,7 +14,7 @@ import {
 import SignInButton from '~/components/SignInButton';
 import TitleBar from '~/components/TitleBar';
 import { useMyInfo } from '~/services/member';
-import { flex, pageCss, titleBarHeight } from '~/styles/utils';
+import { flex, fontCss, pageCss, titleBarHeight } from '~/styles/utils';
 import { globalMetaData } from '~/utils/metadata';
 import { routes } from '~/utils/routes';
 
@@ -25,6 +26,7 @@ const SignInPage = () => {
   const router = useRouter();
   const { data: myInfo, isLoading: isMyInfoLoading } = useMyInfo({
     enabled: true,
+    retry: 0,
   });
 
   const isSignedIn = !!myInfo;
@@ -64,6 +66,10 @@ const SignInPage = () => {
           <SignInButton.GitHub />
           <SignInButton.Kakao />
           <SignInButton.Apple />
+
+          <Link href={routes.main()} css={mainPageLinkCss}>
+            메인페이지로 바로가기
+          </Link>
         </div>
       </div>
     </>
@@ -76,9 +82,18 @@ const selfPaddingY = titleBarHeight + 30;
 const selfCss = css(
   { padding: `${selfPaddingY}px 0` },
   pageCss.minHeight,
-  flex('', 'center', 'column', '15vh')
+  flex('', 'center', 'column', '10vh')
 );
 
 const logoContainerCss = css(flex('center', 'center', 'column', 18));
 
 const buttonGroupCss = css({ padding: '30px 0' }, flex('', '', 'column', 10));
+
+const mainPageLinkCss = css(
+  {
+    marginTop: 20,
+    textDecoration: 'underline',
+    alignSelf: 'center',
+  },
+  fontCss.style.R14
+);

@@ -10,6 +10,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { queryKeys } from '~/react-query/common';
+import { toMs } from '~/utils';
 import { routes } from '~/utils/routes';
 
 import {
@@ -36,7 +37,7 @@ interface UseMyInfoOptions {
 }
 
 export const useMyInfo = (options: UseMyInfoOptions = {}) => {
-  const { enabled = false, retry } = options;
+  const { enabled = false, retry = 1 } = options;
 
   return useQuery({
     queryKey: queryKeys.user.myInfo(),
@@ -44,6 +45,7 @@ export const useMyInfo = (options: UseMyInfoOptions = {}) => {
     staleTime: Infinity,
     enabled,
     retry,
+    retryDelay: toMs(1),
   });
 };
 
@@ -109,8 +111,11 @@ export const useCheckRegisterRequired = () => {
 };
 
 export const useUpdateMyInfo = () => {
+  const setMyInfo = useSetMyInfo();
+
   return useMutation({
     mutationFn: updateMyInfo,
+    onSuccess: (data) => setMyInfo(data),
   });
 };
 
