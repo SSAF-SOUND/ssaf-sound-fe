@@ -1,7 +1,6 @@
-import type { SignInApiData, SignInParams } from '~/services/auth';
-
 import { rest } from 'msw';
 
+import { mockSignIn } from '~/mocks/handlers/auth/apis/mockSignIn';
 import {
   issueTokens,
   removeTokens,
@@ -10,25 +9,6 @@ import {
 import { mockError, mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
-
-const signIn = rest.post<never, never, SignInApiData>(
-  composeUrls(API_URL, endpoints.auth.signIn()),
-  async (req, res, ctx) => {
-    const { oauthName, code } = (await req.json()) as SignInParams;
-    console.log('[oauthName]: ', oauthName);
-    console.log('[code]: ', code);
-
-    issueTokens();
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess(ctx, {
-        accessToken: '5aa41b81-7551-4fa5-842f-0d7063b5340d',
-        refreshToken: 'f58c0fee-1799-4635-8ad9-193f9c5ef08c',
-      })
-    );
-  }
-);
 
 const signOut = rest.delete(
   composeUrls(API_URL, endpoints.auth.signOut()),
@@ -70,4 +50,4 @@ export const deleteAccountError = restError(
   }
 );
 
-export const authHandlers = [signIn, signOut, reissueToken, deleteAccount];
+export const authHandlers = [mockSignIn, signOut, reissueToken, deleteAccount];
