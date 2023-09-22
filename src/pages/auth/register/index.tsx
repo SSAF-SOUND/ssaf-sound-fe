@@ -32,7 +32,8 @@ import {
 } from '~/utils';
 import { routes } from '~/utils/routes';
 
-const metaTitle = '회원 가입';
+const metaTitle = '회원가입';
+const titleBarTitle = metaTitle;
 
 const RegisterPage: CustomNextPage = () => {
   const router = useRouter();
@@ -45,7 +46,7 @@ const RegisterPage: CustomNextPage = () => {
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 
-  const onSubmit = async (formValues: UserRegisterFormValues) => {
+  const onValidSubmit = async (formValues: UserRegisterFormValues) => {
     setShouldCheckUserInfo(false);
 
     try {
@@ -61,7 +62,11 @@ const RegisterPage: CustomNextPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
-        <UserRegisterForm onSubmit={onSubmit} css={formCss} />
+        <UserRegisterForm
+          options={{ titleBarTitle }}
+          onValidSubmit={onValidSubmit}
+          css={formCss}
+        />
       </div>
 
       <Welcome />
@@ -116,11 +121,12 @@ const welcomeSelfCss = css({
   animationDuration: '1.5s',
   animationFillMode: 'forwards',
   animationTimingFunction: 'ease-out',
+  position: 'relative',
+  zIndex: zIndex.fixed.max,
 });
 
 const overlayBackgroundCss = css({
   position: 'fixed',
-  zIndex: zIndex.fixed.max,
   inset: 0,
   backgroundColor: palettes.background.default,
 });
@@ -136,7 +142,6 @@ const overlayCss = css(
     maxWidth: pageMaxWidth,
     width: '100vw',
     height: `max(100vh, ${pageMinHeight}px)`,
-    zIndex: zIndex.fixed.max,
   },
   position.xy('center', 'start', 'fixed'),
   flex('flex-start', 'center', 'column')
