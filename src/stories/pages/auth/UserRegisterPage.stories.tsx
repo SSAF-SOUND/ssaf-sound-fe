@@ -2,17 +2,18 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { useEffect } from 'react';
 
+import { updateMyInfo } from '~/mocks/handlers';
 import {
-  validateNicknameRespondWithDuplicatedNickname,
-  validateNicknameError, validateNickname
-} from "~/mocks/handlers";
+  createMockValidateNickname,
+  mockValidateNickname,
+} from '~/mocks/handlers/member/apis/mockValidateNickname';
 import { userInfo } from '~/mocks/handlers/member/data';
 import UserRegisterPage from '~/pages/auth/register';
 import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof UserRegisterPage> = {
-  title: 'Page/UserRegister',
+  title: 'Page/Auth/User Register',
   component: UserRegisterPage,
   decorators: [
     (Story) => {
@@ -42,17 +43,7 @@ export const Success: UserRegisterPageStory = {
   parameters: {
     msw: {
       handlers: {
-        member: [validateNickname],
-      },
-    },
-  },
-};
-
-export const NicknameValidationError: UserRegisterPageStory = {
-  parameters: {
-    msw: {
-      handlers: {
-        member: [validateNicknameError],
+        member: [createMockValidateNickname(true), updateMyInfo],
       },
     },
   },
@@ -62,7 +53,17 @@ export const DuplicatedNickname: UserRegisterPageStory = {
   parameters: {
     msw: {
       handlers: {
-        member: [validateNicknameRespondWithDuplicatedNickname],
+        member: [createMockValidateNickname(false)],
+      },
+    },
+  },
+};
+
+export const NicknameValidationError: UserRegisterPageStory = {
+  parameters: {
+    msw: {
+      handlers: {
+        member: [mockValidateNickname],
       },
     },
   },

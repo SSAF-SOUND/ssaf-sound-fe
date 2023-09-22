@@ -15,22 +15,17 @@ import {
   getMockRouter,
 } from '~/stories/utils/mockRouter';
 import { useAutoSignOut } from '~/stories/utils/useAutoSignOut';
-import { useResetQueriesEffect } from '~/stories/utils/useResetQueriesEffect';
 import { routes, sleep, toMs } from '~/utils';
 
 const meta: Meta<typeof SignInPage> = {
   title: 'Page/Auth/Sign In',
   component: SignInPage,
   decorators: [
-    (Story) => {
-      useResetQueriesEffect();
-
-      return (
-        <PageLayout>
-          <Story />
-        </PageLayout>
-      );
-    },
+    (Story) => (
+      <PageLayout>
+        <Story />
+      </PageLayout>
+    ),
   ],
 };
 
