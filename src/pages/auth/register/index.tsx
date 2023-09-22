@@ -11,7 +11,6 @@ import {
   FullPageLoader,
   loaderText,
   Logo,
-  PageHead,
   PageHeadingText,
   SsafyIcon,
 } from '~/components/Common';
@@ -33,7 +32,6 @@ import {
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
-  customToast,
   handleAxiosError,
 } from '~/utils';
 import { routes } from '~/utils/routes';
@@ -59,19 +57,13 @@ const RegisterPage: CustomNextPage = () => {
       const response = await updateMyInfo(formValues);
       setMyInfo(response);
       await router.replace(routes.intro.studentCertification());
-    } catch (error) {
-      handleAxiosError(error, {
-        onClientError: (response) => {
-          customToast.clientError(response.message);
-        },
-      });
+    } catch (err) {
+      handleAxiosError(err);
     }
   };
 
   return (
     <>
-      <PageHead title={metaTitle} robots={{ index: false, follow: false }} />
-
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
