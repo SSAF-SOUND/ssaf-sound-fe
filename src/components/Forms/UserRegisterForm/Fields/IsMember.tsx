@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
-import { Button, SsafyIcon, TrackSize } from '~/components/Common';
+import { Button, SsafyIcon } from '~/components/Common';
+import { TrackSize } from '~/components/Common/SsafyIcon/Track';
 import {
   useUserRegisterFormContext,
   UserRegisterFormFieldQuestion,
