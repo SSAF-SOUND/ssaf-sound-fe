@@ -13,7 +13,9 @@ import type { ApiErrorResponse } from '~/types';
 
 import { rest } from 'msw';
 
-import {mockGetInitialMyInfo} from "~/mocks/handlers/member/apis/mockGetMyInfo";
+import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUpdateMyInfo } from '~/mocks/handlers/member/apis/mockUpdateMyInfo';
+import { mockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
 import { userInfo, portfolio } from '~/mocks/handlers/member/data';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
@@ -76,14 +78,6 @@ export const updateMyInfo = rest.put<
     // ...mockError(ctx, '400', '오류가 발생했습니다.')
   );
 });
-
-export const validateNickname = restSuccess<ValidateNicknameApiData['data']>(
-  'post',
-  composeUrls(API_URL, endpoints.user.nickname()),
-  {
-    data: { possible: true },
-  }
-);
 
 export const validateNicknameRespondWithDuplicatedNickname = restSuccess<
   ValidateNicknameApiData['data']
@@ -251,10 +245,10 @@ export const updateMyPortfolioError = restError(
 );
 
 export const memberHandlers = [
-  mockGetInitialMyInfo,
-  // getMyInfoError,
-  updateMyInfo,
-  validateNickname,
+  mockGetCertifiedSsafyMyInfo,
+  mockValidateNickname,
+  mockUpdateMyInfo,
+
   certifyStudent,
   updateNickname,
   updateIsMajor,

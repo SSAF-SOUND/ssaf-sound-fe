@@ -8,7 +8,7 @@ import { API_URL, composeUrls } from '~/utils';
 const getMyInfoMethod = 'get';
 const getMyInfoEndpoint = composeUrls(API_URL, endpoints.user.myInfo());
 
-const createMockGetMyInfo = (data: GetMyInfoApiData['data'] | null) => {
+export const createMockGetMyInfo = (data: GetMyInfoApiData['data'] | null) => {
   return restSuccess<GetMyInfoApiData['data'] | null>(
     getMyInfoMethod,
     getMyInfoEndpoint,
