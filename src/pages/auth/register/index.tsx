@@ -18,6 +18,7 @@ import { useMyAccountStatus, useUpdateMyInfo } from '~/services/member';
 import {
   flex,
   fontCss,
+  pageCss,
   pageMaxWidth,
   pageMinHeight,
   pageMinWidth,
@@ -78,7 +79,7 @@ export default RegisterPage;
 RegisterPage.auth = createAuthGuard({ unauthorized: routes.main() });
 RegisterPage.meta = createNoIndexPageMetaData(metaTitle);
 
-const selfCss = css({ minHeight: '100vh', padding: '10px 0' }, flex());
+const selfCss = css(pageCss.minHeight, flex());
 const formCss = css({ flexGrow: 1 });
 
 const Welcome = () => {
