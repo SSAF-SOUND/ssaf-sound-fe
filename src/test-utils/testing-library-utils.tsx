@@ -34,7 +34,7 @@ const mockStoryHandlers = (story: MockStoryHandlersParam) => {
 
 const renderWithContext = (
   ui: ReactElement,
-  options: Omit<RenderOptions, 'wrapperq'> = {},
+  options: Omit<RenderOptions, 'wrapper'> = {},
   customOptions: RenderCustomOptions = {}
 ) => {
   mockStoryHandlers(ui as MockStoryHandlersParam);
