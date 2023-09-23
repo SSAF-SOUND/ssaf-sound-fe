@@ -27,6 +27,9 @@ const meta: Meta<typeof SignInPage> = {
       </PageLayout>
     ),
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
