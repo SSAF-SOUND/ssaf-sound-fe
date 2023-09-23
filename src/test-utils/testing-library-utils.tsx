@@ -7,6 +7,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Toaster } from 'react-hot-toast';
 
 import AuthChecker from '~/components/AuthChecker';
@@ -42,18 +43,25 @@ const renderWithContext = (
   const { queryClient, dehydratedState, auth } = customOptions;
   const ourQueryClient = queryClient ?? getQueryClient();
 
-  return render(ui, {
-    wrapper: ({ children }: { children: ReactNode }) => (
-      <QueryClientProvider client={ourQueryClient}>
-        <Hydrate state={dehydratedState}>
-          <Toaster />
-          {auth ? <AuthChecker auth={auth}>{children}</AuthChecker> : children}
-          <GlobalModal />
-        </Hydrate>
-      </QueryClientProvider>
-    ),
-    ...options,
-  });
+  return {
+    ...render(ui, {
+      wrapper: ({ children }: { children: ReactNode }) => (
+        <QueryClientProvider client={ourQueryClient}>
+          <Hydrate state={dehydratedState}>
+            <Toaster />
+            {auth ? (
+              <AuthChecker auth={auth}>{children}</AuthChecker>
+            ) : (
+              children
+            )}
+            <GlobalModal />
+          </Hydrate>
+        </QueryClientProvider>
+      ),
+      ...options,
+    }),
+    user: userEvent.setup(),
+  };
 };
 
 export * from '@testing-library/react';
