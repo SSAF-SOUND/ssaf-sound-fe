@@ -8,7 +8,7 @@ import { API_URL, composeUrls } from '~/utils';
 const updateMyInfoMethod = 'put';
 const updateMyInfoEndpoint = composeUrls(API_URL, endpoints.user.myInfo());
 
-export const createMockUserInfo = (data: UpdateMyInfoApiData['data']) => {
+export const createMockUpdateMyInfo = (data: UpdateMyInfoApiData['data']) => {
   return restSuccess<UpdateMyInfoApiData['data']>(
     updateMyInfoMethod,
     updateMyInfoEndpoint,
@@ -18,6 +18,6 @@ export const createMockUserInfo = (data: UpdateMyInfoApiData['data']) => {
   );
 };
 
-export const mockUpdateMyInfo = createMockUserInfo(
+export const mockUpdateMyInfo = createMockUpdateMyInfo(
   mockUserInfo.certifiedSsafyUserInfo
 );

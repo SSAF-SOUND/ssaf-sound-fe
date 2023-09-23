@@ -1,17 +1,12 @@
 import type {
   CertifyStudentApiData,
-  GetMyInfoApiData,
   GetMyPortfolioApiData,
   GetProfileVisibilityApiData,
   GetUserInfoApiData,
   GetUserPortfolioApiData,
-  UpdateMyInfoParams,
   UserInfo,
   ValidateNicknameApiData,
 } from '~/services/member';
-import type { ApiErrorResponse } from '~/types';
-
-import { rest } from 'msw';
 
 import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUpdateMyInfo } from '~/mocks/handlers/member/apis/mockUpdateMyInfo';
@@ -44,40 +39,6 @@ export const getUserInfoError = restError(
     data: null,
   }
 );
-
-export const updateMyInfo = rest.put<
-  never,
-  never,
-  GetMyInfoApiData | ApiErrorResponse
->(composeUrls(API_URL, endpoints.user.myInfo()), async (req, res, ctx) => {
-  const body = (await req.json()) as UpdateMyInfoParams;
-
-  const restInfo = body.ssafyMember
-    ? ({
-        ssafyMember: true,
-        ssafyInfo: {
-          campus: body.campus as string,
-          semester: body.year as number,
-          certificationState: CertificationState.UNCERTIFIED,
-          majorTrack: null,
-        },
-      } as const)
-    : ({ ssafyMember: false } as const);
-
-  const response: UserInfo = {
-    memberId: 973,
-    memberRole: 'user',
-    nickname: body.nickname,
-    isMajor: body.isMajor,
-    ...restInfo,
-  };
-
-  return res(
-    ctx.delay(500),
-    ...mockSuccess(ctx, response)
-    // ...mockError(ctx, '400', '오류가 발생했습니다.')
-  );
-});
 
 export const validateNicknameRespondWithDuplicatedNickname = restSuccess<
   ValidateNicknameApiData['data']
