@@ -1,5 +1,3 @@
-import { userEvent } from '@storybook/testing-library';
-
 import UserRegisterForm from '~/components/Forms/UserRegisterForm/index';
 import { DefaultTitleBarIconLabel } from '~/components/TitleBar/DefaultTitleBar';
 import { createMockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
@@ -77,6 +75,7 @@ const renderUserRegisterForm = () => {
     getNicknameReconfirmModal,
     getFormSubmitButton,
     getErrorMessage,
+    user: screen.user,
   };
 };
 
@@ -87,31 +86,31 @@ const skipToPhase = async (
   phase: number,
   context: RenderedUserRegisterForm
 ) => {
-  const { getAnswerButtons, getSelectBox, getSelectBoxOption } = context;
+  const { getAnswerButtons, getSelectBox, getSelectBoxOption, user } = context;
 
   if (phase <= 0) return;
 
   // 0단계 skip
-  await userEvent.click(getAnswerButtons().yes);
+  await user.click(getAnswerButtons().yes);
 
   if (phase <= 1) return;
 
   // 1단계
   const question1OptionText = '1기';
-  await userEvent.click(getSelectBox());
-  await userEvent.click(getSelectBoxOption(question1OptionText));
+  await user.click(getSelectBox());
+  await user.click(getSelectBoxOption(question1OptionText));
 
   if (phase <= 2) return;
 
   // 2단계
   const question2OptionText = /서울/;
-  await userEvent.click(getSelectBox());
-  await userEvent.click(getSelectBoxOption(question2OptionText));
+  await user.click(getSelectBox());
+  await user.click(getSelectBoxOption(question2OptionText));
 
   if (phase <= 3) return;
 
   // 3단계
-  await userEvent.click(getAnswerButtons().yes);
+  await user.click(getAnswerButtons().yes);
 };
 
 describe('0단계 질문 - SSAFY 멤버 여부 체크', () => {
@@ -128,31 +127,41 @@ describe('0단계 질문 - SSAFY 멤버 여부 체크', () => {
   });
 
   it('YES 버튼을 누르면 1단계 질문이 보이고, 1단계에서 뒤로가기를 누르면 0단계 질문으로 돌아간다.', async () => {
-    const utils = renderUserRegisterForm();
+    const rendered = renderUserRegisterForm();
 
-    const { getAnswerButtons, getQuestion0, getQuestion1, getBackwardButton } =
-      utils;
+    const {
+      getAnswerButtons,
+      getQuestion0,
+      getQuestion1,
+      getBackwardButton,
+      user,
+    } = rendered;
     const { yes } = getAnswerButtons();
 
-    await userEvent.click(yes);
+    await user.click(yes);
     expect(getQuestion1()).toBeInTheDocument();
 
-    await userEvent.click(getBackwardButton() as HTMLElement);
+    await user.click(getBackwardButton() as HTMLElement);
     expect(getQuestion0()).toBeInTheDocument();
   });
 
   it('NO 버튼을 누르면 3단계 질문이 보이고, 0단계에서 NO버튼을 눌러서 3단계로 넘어왔을 때, 3단계에서 뒤로가기를 누르면 0단계 질문으로 돌아간다.', async () => {
     const rendered = renderUserRegisterForm();
 
-    const { getAnswerButtons, getBackwardButton, getQuestion0, getQuestion3 } =
-      rendered;
+    const {
+      getAnswerButtons,
+      getBackwardButton,
+      getQuestion0,
+      getQuestion3,
+      user,
+    } = rendered;
 
     const { no } = getAnswerButtons();
 
-    await userEvent.click(no);
+    await user.click(no);
     expect(getQuestion3()).toBeInTheDocument();
 
-    await userEvent.click(getBackwardButton() as HTMLElement);
+    await user.click(getBackwardButton() as HTMLElement);
     expect(getQuestion0()).toBeInTheDocument();
   });
 });
@@ -172,18 +181,19 @@ describe('1단계 질문 - SSAFY 기수 선택', () => {
       getQuestion1,
       getQuestion2,
       getBackwardButton,
+      user,
     } = rendered;
 
     const selectBox = getSelectBox();
     const optionText = '1기';
     expect(selectBox).toBeInTheDocument();
 
-    await userEvent.click(selectBox);
-    await userEvent.click(getSelectBoxOption(optionText));
+    await user.click(selectBox);
+    await user.click(getSelectBoxOption(optionText));
 
     expect(getQuestion2()).toBeInTheDocument();
 
-    await userEvent.click(getBackwardButton() as HTMLElement);
+    await user.click(getBackwardButton() as HTMLElement);
     expect(getQuestion1()).toBeInTheDocument();
   });
 });
@@ -203,14 +213,15 @@ describe('2단계 질문 - SSAFY 캠퍼스 선택', () => {
       getQuestion2,
       getQuestion3,
       getBackwardButton,
+      user,
     } = rendered;
 
     const optionText = /서울/;
-    await userEvent.click(getSelectBox());
-    await userEvent.click(getSelectBoxOption(optionText));
+    await user.click(getSelectBox());
+    await user.click(getSelectBoxOption(optionText));
     expect(getQuestion3()).toBeInTheDocument();
 
-    await userEvent.click(getBackwardButton() as HTMLElement);
+    await user.click(getBackwardButton() as HTMLElement);
     expect(getQuestion2()).toBeInTheDocument();
   });
 });
@@ -224,24 +235,34 @@ describe('3단계 질문 - 전공자 여부 선택', () => {
   });
 
   it('YES를 선택하면 4단계 질문으로 넘어가고, 뒤로가기를 누르면 3단계 질문으로 돌아온다.', async () => {
-    const { getAnswerButtons, getQuestion3, getQuestion4, getBackwardButton } =
-      rendered;
+    const {
+      getAnswerButtons,
+      getQuestion3,
+      getQuestion4,
+      getBackwardButton,
+      user,
+    } = rendered;
 
-    await userEvent.click(getAnswerButtons().yes);
+    await user.click(getAnswerButtons().yes);
     expect(getQuestion4()).toBeInTheDocument();
 
-    await userEvent.click(getBackwardButton() as HTMLElement);
+    await user.click(getBackwardButton() as HTMLElement);
     expect(getQuestion3()).toBeInTheDocument();
   });
 
   it('NO를 선택하면 4단계 질문으로 넘어간다.', async () => {
-    const { getAnswerButtons, getQuestion3, getQuestion4, getBackwardButton } =
-      rendered;
+    const {
+      getAnswerButtons,
+      getQuestion3,
+      getQuestion4,
+      getBackwardButton,
+      user,
+    } = rendered;
 
-    await userEvent.click(getAnswerButtons().no);
+    await user.click(getAnswerButtons().no);
     expect(getQuestion4()).toBeInTheDocument();
 
-    await userEvent.click(getBackwardButton() as HTMLElement);
+    await user.click(getBackwardButton() as HTMLElement);
     expect(getQuestion3()).toBeInTheDocument();
   });
 });
@@ -277,11 +298,11 @@ describe('4단계 질문 - 닉네임 설정', () => {
   const typeNicknameAndClickNicknameValidationButton = async (
     value: string
   ) => {
-    const { getNicknameValidationButton, getNicknameInput } = rendered;
+    const { getNicknameValidationButton, getNicknameInput, user } = rendered;
     const nicknameInput = getNicknameInput();
-    await userEvent.clear(nicknameInput);
-    await userEvent.type(nicknameInput, value);
-    await userEvent.click(getNicknameValidationButton());
+    await user.clear(nicknameInput);
+    await user.type(nicknameInput, value);
+    await user.click(getNicknameValidationButton());
   };
 
   beforeEach(async () => {
@@ -291,8 +312,12 @@ describe('4단계 질문 - 닉네임 설정', () => {
 
   describe('유효한 닉네임을 입력하고, 닉네임 검증 버튼을 눌렀을 때', () => {
     it('닉네임을 사용할 수 있다면 닉네임 재확인 모달이 팝업되고, 모달의 확인 버튼을 누르면 폼을 제출할 수 있다.', async () => {
-      const { getNicknameReconfirmModal, getFormSubmitButton, onValidSubmit } =
-        rendered;
+      const {
+        getNicknameReconfirmModal,
+        getFormSubmitButton,
+        onValidSubmit,
+        user,
+      } = rendered;
 
       server.use(createMockValidateNickname(true));
 
@@ -300,7 +325,7 @@ describe('4단계 질문 - 닉네임 설정', () => {
 
       expect(getNicknameReconfirmModal()).toBeInTheDocument();
 
-      await userEvent.click(getFormSubmitButton());
+      await user.click(getFormSubmitButton());
       expect(onValidSubmit).toBeCalledTimes(1);
     });
 
@@ -310,6 +335,7 @@ describe('4단계 질문 - 닉네임 설정', () => {
         getFormSubmitButton,
         getNicknameInput,
         getErrorMessage,
+        user,
       } = rendered;
 
       server.use(createMockValidateNickname(false));
@@ -321,7 +347,7 @@ describe('4단계 질문 - 닉네임 설정', () => {
       expect(getErrorMessage()).toBeInTheDocument();
       expect(formSubmitButton).not.toBeEnabled();
 
-      await userEvent.type(getNicknameInput(), '{backspace}');
+      await user.type(getNicknameInput(), '{backspace}');
       expect(formSubmitButton).toBeEnabled();
     });
   });
