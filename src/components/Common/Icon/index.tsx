@@ -138,14 +138,7 @@ export interface IconProps {
 }
 
 export const Icon = (props: IconProps) => {
-  const {
-    name,
-    label = name,
-    size = 24,
-    color = '',
-    style = {},
-    className,
-  } = props;
+  const { name, label = name, size = 24, color, style = {}, className } = props;
   return (
     <div
       css={selfCss}

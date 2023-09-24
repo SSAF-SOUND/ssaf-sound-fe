@@ -17,7 +17,7 @@ export interface RecruitBasicInfoProps {
 }
 
 export const RecruitBasicInfo = (props: RecruitBasicInfoProps) => {
-  const { recruitDetail } = props;
+  const { recruitDetail, ...restProps } = props;
   const {
     limits: participantsInfoList,
     recruitStart,
@@ -26,7 +26,7 @@ export const RecruitBasicInfo = (props: RecruitBasicInfoProps) => {
   } = recruitDetail;
 
   return (
-    <div css={selfCss} {...props}>
+    <div css={selfCss} {...restProps}>
       <RecruitBasicInfoRow iconName="group" rowTitle="모집 인원">
         {participantsInfoList.map((participantsInfo, index, array) => (
           <RecruitParticipantsInfo
@@ -67,7 +67,7 @@ const RecruitBasicInfoRow = (props: RecruitBasicInfoRowProps) => {
       <Icon name={iconName} size={16} label={rowTitle} />
       <div css={recruitBasicInfoRowTextCss}>
         <h3 css={recruitBasicInfoRowTitleCss}>{rowTitle}</h3>
-        <p>{children}</p>
+        <div>{children}</div>
       </div>
     </div>
   );
