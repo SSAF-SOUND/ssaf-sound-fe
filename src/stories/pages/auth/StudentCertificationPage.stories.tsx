@@ -1,22 +1,23 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
-import { useEffect } from 'react';
+import type { Meta } from '@storybook/react';
 
 import {
-  certifyStudent,
-  certifyStudentAttemptsCountError,
-  certifyStudentIncorrectError,
-} from '~/mocks/handlers';
-import { userInfo } from '~/mocks/handlers/member/data';
+  createMockCertifyStudent,
+  mockCertifyStudent,
+  mockCertifyStudentExceedAttemptCountError,
+} from '~/mocks/handlers/member/apis/mockCertifyStudent';
+import { mockGetUncertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import StudentCertificationPage from '~/pages/certification/student';
-import { useSetMyInfo } from '~/services/member';
+import { useMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof StudentCertificationPage> = {
-  title: 'Page/StudentCertification',
+  title: 'Page/Certification/Student Certification',
   component: StudentCertificationPage,
   decorators: [
     (Story) => {
+      useMyInfo({ enabled: true });
+
       return (
         <PageLayout>
           <Story />
@@ -31,48 +32,23 @@ const meta: Meta<typeof StudentCertificationPage> = {
 
 export default meta;
 
-type StudentCertificationPageStory = StoryObj<{ certified: boolean }>;
-
-export const CorrectAnswer: StudentCertificationPageStory = {
-  render: function Render() {
-    const setMyInfo = useSetMyInfo();
-
-    useEffect(() => {
-      setMyInfo(userInfo.uncertifiedSsafyUserInfo);
-    }, [setMyInfo]);
-
-    return <StudentCertificationPage />;
-  },
-  parameters: {
-    msw: {
-      handlers: {
-        // 기본적으로 정의한 유저 정보 핸들러가 데이터를 `userInfo.initialUser`로 채우기 때문에
-        // Effect 에서 세팅하는 `userInfo.uncertifiedSsafyUserInfo`와 충돌합니다. (500ms 딜레이를 가지고 API를 응답하기 때문에)
-        // 해당 핸들러를 제거할 목적으로 override 합니다.
-        member: [certifyStudent],
-      },
-    },
-  },
+export const CorrectAnswer = {
+  parameters: createMswParameters({
+    member: [mockGetUncertifiedSsafyMyInfo, mockCertifyStudent],
+  }),
 };
 
-export const IncorrectAnswer: StudentCertificationPageStory = {
-  ...CorrectAnswer,
-  parameters: {
-    msw: {
-      handlers: {
-        member: [certifyStudentIncorrectError],
-      },
-    },
-  },
+export const IncorrectAnswer = {
+  parameters: createMswParameters({
+    member: [mockGetUncertifiedSsafyMyInfo, createMockCertifyStudent(false)],
+  }),
 };
 
-export const NoMoreAttempts: StudentCertificationPageStory = {
-  ...CorrectAnswer,
-  parameters: {
-    msw: {
-      handlers: {
-        member: [certifyStudentAttemptsCountError],
-      },
-    },
-  },
+export const NoMoreAttempts = {
+  parameters: createMswParameters({
+    member: [
+      mockGetUncertifiedSsafyMyInfo,
+      mockCertifyStudentExceedAttemptCountError,
+    ],
+  }),
 };
