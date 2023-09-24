@@ -67,6 +67,7 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
   return (
     <div css={fieldRowCss}>
       <SelectBox
+        placeholder="선택"
         triggerTextAlign="center"
         css={fieldCss}
         items={possibleProjectParts}

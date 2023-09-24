@@ -49,7 +49,7 @@ export interface RecruitParticipantsDetail {
 }
 export interface RecruitParticipantsSummary {
   limit: number;
-  members: UserInfo[];
+  members: Pick<UserInfo, 'nickname' | 'isMajor'>[];
 }
 
 export interface RecruitParticipantsDetailWithPart

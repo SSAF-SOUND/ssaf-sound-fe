@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 import { Bar, Icon, IconButton } from '~/components/Common';
 import { fixTopCenter, zIndex } from '~/styles/utils';
 
-interface DefaultTitleBarProps {
+export interface DefaultTitleBarProps {
   title?: string;
   className?: string;
   withoutBackward?: boolean;
@@ -18,7 +18,12 @@ interface DefaultTitleBarProps {
   onClickClose?: Route | MouseEventHandler<HTMLButtonElement>;
 }
 
-const DefaultTitleBar = (props: DefaultTitleBarProps) => {
+export enum DefaultTitleBarIconLabel {
+  BACKWARD = '뒤로가기',
+  CLOSE = '닫기',
+}
+
+export const DefaultTitleBar = (props: DefaultTitleBarProps) => {
   const {
     title = '',
     withoutBackward = false,
@@ -75,7 +80,11 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
           aria-hidden={withoutBackward && 'true'}
           disabled={withoutBackward}
         >
-          <Icon name="backward" size={iconSize} />
+          <Icon
+            name="backward"
+            label={DefaultTitleBarIconLabel.BACKWARD}
+            size={iconSize}
+          />
         </IconButton>
       }
       center={
@@ -94,14 +103,16 @@ const DefaultTitleBar = (props: DefaultTitleBarProps) => {
           aria-hidden={withoutClose && 'true'}
           disabled={withoutClose}
         >
-          <Icon name="close" size={iconSize} />
+          <Icon
+            name="close"
+            label={DefaultTitleBarIconLabel.CLOSE}
+            size={iconSize}
+          />
         </IconButton>
       }
     />
   );
 };
-
-export default DefaultTitleBar;
 
 const iconSize = 28;
 const iconButtonSize = iconSize + 8;

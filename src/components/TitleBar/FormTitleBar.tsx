@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 import { Bar, Button, Icon, IconButton } from '~/components/Common';
 import { fixTopCenter, fontCss, zIndex } from '~/styles/utils';
 
-interface FormTitleBarProps {
+export interface FormTitleBarProps {
   title: string;
   submitButtonText: string;
   isSubmitting?: boolean;
@@ -18,7 +18,7 @@ interface FormTitleBarProps {
   className?: string;
 }
 
-const FormTitleBar = (props: FormTitleBarProps) => {
+export const FormTitleBar = (props: FormTitleBarProps) => {
   const {
     title,
     submitButtonText,
@@ -76,8 +76,6 @@ const FormTitleBar = (props: FormTitleBarProps) => {
     />
   );
 };
-
-export default FormTitleBar;
 
 const iconSize = 28;
 const iconButtonSize = iconSize + 8;

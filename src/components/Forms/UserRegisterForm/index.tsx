@@ -1,31 +1,36 @@
-import type { SubmitHandler } from 'react-hook-form';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { UserRegisterFormValues } from '~/components/Forms/UserRegisterForm/utils';
 
 import { css } from '@emotion/react';
-import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ProgressBar } from '~/components/Common';
-import {
-  Campus,
-  IsMajor,
-  IsMember,
-  Nickname,
-  Year,
-} from '~/components/Forms/UserRegisterForm/Fields';
+import { UserRegisterFormFields } from '~/components/Forms/UserRegisterForm/Fields';
 import TitleBar from '~/components/TitleBar';
 import { useStack } from '~/hooks';
-import { flex, pageMinHeight } from '~/styles/utils';
-import { noop } from '~/utils';
+import { flex, palettes, titleBarHeight } from '~/styles/utils';
 
-interface UserRegisterFormProps {
-  onSubmit?: SubmitHandler<UserRegisterFormValues>;
-  defaultValues?: Partial<UserRegisterFormValues>;
+export type UserRegisterFormOptions = Partial<{
+  titleBarTitle: string;
+}>;
+
+export interface UserRegisterFormProps {
+  onValidSubmit: SubmitHandler<UserRegisterFormValues>;
+  onInvalidSubmit?: SubmitErrorHandler<UserRegisterFormValues>;
+  defaultValues?: UserRegisterFormValues;
   className?: string;
+  options?: UserRegisterFormOptions;
 }
 
 const UserRegisterForm = (props: UserRegisterFormProps) => {
-  const { onSubmit = noop, defaultValues, className } = props;
+  const {
+    onValidSubmit,
+    onInvalidSubmit,
+    defaultValues,
+    className,
+    options = {},
+  } = props;
+  const { titleBarTitle } = options;
   const methods = useForm({
     defaultValues,
   });
@@ -37,41 +42,52 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
   } = useStack([0], { defaultTop: 0 });
 
   const { handleSubmit } = methods;
-  const FieldComponents = useMemo(() => {
-    const majorPhase = 3;
-    const pushNextPhase = () => pushPhase(currentPhase + 1);
-    return [
-      () => (
-        <IsMember
-          onTrue={pushNextPhase}
-          onFalse={() => pushPhase(majorPhase)}
-        />
-      ),
-      () => <Year onSelect={pushNextPhase} />,
-      () => <Campus onSelect={pushNextPhase} />,
-      () => <IsMajor onFalse={pushNextPhase} onTrue={pushNextPhase} />,
-      () => <Nickname />,
-    ];
-  }, [pushPhase, currentPhase]);
 
-  const FieldComponent = FieldComponents[currentPhase];
+  const onSubmit = handleSubmit(onValidSubmit, onInvalidSubmit);
+  const majorPhase = 3;
+  const pushNextPhase = () => pushPhase(currentPhase + 1);
+  const fieldsLength = Object.keys(UserRegisterFormFields).length;
 
   return (
     <div css={selfCss} className={className}>
+      <TitleBar.Default
+        title={titleBarTitle}
+        withoutClose
+        withoutBackward={currentPhase === 0}
+        onClickBackward={popPhase}
+      />
+
+      <ProgressBar
+        min={0}
+        now={currentPhase + 1}
+        max={fieldsLength}
+        backgroundColor={palettes.white}
+        foregroundColor={palettes.primary.dark}
+      />
+
       <FormProvider {...methods}>
-        <TitleBar.Default
-          withoutTitle
-          withoutClose
-          withoutBackward={currentPhase === 0}
-          onClickBackward={popPhase}
-        />
-        <ProgressBar
-          min={0}
-          now={currentPhase + 1}
-          max={FieldComponents.length}
-        />
-        <form css={formCss} onSubmit={handleSubmit(onSubmit)}>
-          <FieldComponent />
+        <form css={formCss} onSubmit={handleSubmit(onValidSubmit)}>
+          {currentPhase === 0 && (
+            <UserRegisterFormFields.IsMember
+              onTrue={pushNextPhase}
+              onFalse={() => pushPhase(majorPhase)}
+            />
+          )}
+          {currentPhase === 1 && (
+            <UserRegisterFormFields.Year onSelect={pushNextPhase} />
+          )}
+          {currentPhase === 2 && (
+            <UserRegisterFormFields.Campus onSelect={pushNextPhase} />
+          )}
+          {currentPhase === 3 && (
+            <UserRegisterFormFields.IsMajor
+              onFalse={pushNextPhase}
+              onTrue={pushNextPhase}
+            />
+          )}
+          {currentPhase === 4 && (
+            <UserRegisterFormFields.Nickname onSubmit={onSubmit} />
+          )}
         </form>
       </FormProvider>
     </div>
@@ -80,16 +96,10 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
 
 export default UserRegisterForm;
 
-const selfCss = css({
-  display: 'flex',
-  flexDirection: 'column',
-  minHeight: pageMinHeight,
-});
+const selfPaddingTop = titleBarHeight + 10;
+const selfCss = css({ paddingTop: selfPaddingTop }, flex('', '', 'column'));
 
 const formCss = css(
-  {
-    flexGrow: 1,
-    padding: '60px 0 30px',
-  },
+  { flexGrow: 1, padding: '30px 0' },
   flex('', 'space-between', 'column')
 );

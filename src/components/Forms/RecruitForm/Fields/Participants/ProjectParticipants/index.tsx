@@ -20,7 +20,7 @@ import ProjectParticipantsFieldRow from './ProjectParticipantsFieldRow';
 
 const fieldArrayName = 'participants.project';
 const initialParticipantsFieldValue = {
-  part: '' as RecruitParts,
+  part: undefined as unknown as RecruitParts,
   count: 1,
 };
 const projectParticipantsMaxLength = Object.values(RecruitParts).filter(
@@ -161,6 +161,7 @@ const MyPart = () => {
 
   return (
     <SelectBox
+      placeholder="선택"
       value={myPart}
       onValueChange={onPartChange}
       items={possibleProjectParts}

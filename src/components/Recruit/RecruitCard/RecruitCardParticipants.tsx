@@ -76,7 +76,7 @@ const RecruitCardParticipantsRow = (props: RecruitCardParticipantsRowProps) => {
         maxCount={maxParticipantsCount}
       >
         {members.map((member) => (
-          <Avatar key={member.memberId} size="md2" userInfo={member} />
+          <Avatar key={member.nickname} size="md2" userInfo={member} />
         ))}
       </Avatar.Group>
     </div>

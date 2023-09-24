@@ -15,9 +15,9 @@ interface RecruitApplyLinkProps {
 }
 
 export const RecruitApplyLink = (props: RecruitApplyLinkProps) => {
-  const { recruitId } = props;
+  const { recruitId, ...restProps } = props;
   return (
-    <Button {...props} asChild>
+    <Button {...restProps} asChild>
       <Link href={routes.recruit.apply(recruitId)}> 리쿠르팅 신청</Link>
     </Button>
   );

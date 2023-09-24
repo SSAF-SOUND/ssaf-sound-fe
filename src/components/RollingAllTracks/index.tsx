@@ -37,12 +37,12 @@ const RollingAllTracks = (props: RollingAllTracksProps) => {
       >
         {Array(repeat)
           .fill(undefined)
-          .map((num) => {
+          .map((_, index) => {
             return (
-              <div key={num} css={[cycleCss]} style={{ gap }}>
+              <div key={index} css={[cycleCss]} style={{ gap }}>
                 {tracks.map((track) => (
                   <SsafyIcon.Track
-                    key={track}
+                    key={`${track}${index}`}
                     size={TrackSize.LG2}
                     name={track}
                   />

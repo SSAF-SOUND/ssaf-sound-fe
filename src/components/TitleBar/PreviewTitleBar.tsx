@@ -7,13 +7,13 @@ import { css } from '@emotion/react';
 import { Button } from '~/components/Common';
 import { flex, fontCss } from '~/styles/utils';
 
-interface PreviewTitleBarProps {
+export interface PreviewTitleBarProps {
   className?: string;
   title: string;
   moreLinkRoute: LinkProps['href'];
 }
 
-const PreviewTitleBar = (props: PreviewTitleBarProps) => {
+export const PreviewTitleBar = (props: PreviewTitleBarProps) => {
   const { className, title, moreLinkRoute } = props;
 
   return (
@@ -26,8 +26,6 @@ const PreviewTitleBar = (props: PreviewTitleBarProps) => {
     </header>
   );
 };
-
-export default PreviewTitleBar;
 
 const selfCss = css(flex('center', 'space-between', 'row'));
 const titleCss = css(fontCss.style.B24);

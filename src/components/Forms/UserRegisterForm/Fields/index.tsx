@@ -1,5 +1,13 @@
-export { default as IsMember } from './IsMember';
-export { default as Year } from './Year';
-export { default as Campus } from './Campus';
-export { default as IsMajor } from './IsMajor';
-export { default as Nickname } from './Nickname';
+import { Campus } from './Campus';
+import { IsMajor } from './IsMajor';
+import { IsMember } from './IsMember';
+import { Nickname } from './Nickname';
+import { Year } from './Year';
+
+export const UserRegisterFormFields = {
+  IsMember,
+  Year,
+  IsMajor,
+  Campus,
+  Nickname,
+};

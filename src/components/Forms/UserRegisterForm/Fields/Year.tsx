@@ -1,52 +1,49 @@
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
 
 import { SelectBox } from '~/components/Common/SelectBox';
-import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
+import {
+  useUserRegisterFormContext,
+  UserRegisterFormFieldQuestion,
+} from '~/components/Forms/UserRegisterForm/utils';
 import { extractNumericText } from '~/services/member';
-import { flex, fontCss } from '~/styles/utils';
-
-const years = Array(10)
-  .fill(undefined)
-  .map((_, i) => `${i + 1}기`);
+import { useYears } from '~/services/meta';
+import { flex } from '~/styles/utils';
 
 const fieldName = 'year';
+const fieldQuestion = 'SSAFY\n기수를 선택해주세요';
 
-interface YearProps {
+export interface YearProps {
   onSelect: () => void;
 }
 
-const Year = (props: YearProps) => {
+export const Year = (props: YearProps) => {
   const { onSelect } = props;
-  const { register, setValue, setFocus } = useUserRegisterFormContext();
-  const handleValueChange = (value: string) => {
+  const { data: years } = useYears();
+  const yearsItem = years.map((year) => `${year}기`);
+
+  const { register, setValue } = useUserRegisterFormContext();
+  const handleYearChange = (value: string) => {
     setValue(fieldName, Number(value));
     onSelect();
   };
-  register(fieldName);
 
-  useEffect(() => {
-    setFocus(fieldName);
-  }, [setFocus]);
+  register(fieldName);
 
   return (
     <label css={selfCss}>
-      <div css={fontCss.style.B28}>
-        <p>SSAFY</p>
-        <p>기수를 선택해주세요</p>
-      </div>
+      <UserRegisterFormFieldQuestion>
+        {fieldQuestion}
+      </UserRegisterFormFieldQuestion>
 
       <SelectBox
-        items={years}
-        onValueChange={handleValueChange}
-        valueAs={extractNumericText}
         size="lg"
+        items={yearsItem}
+        valueAs={extractNumericText}
+        onValueChange={handleYearChange}
         focusOnMount
       />
     </label>
   );
 };
-
-export default Year;
 
 const selfCss = css(flex('', '', 'column', 40));

@@ -29,6 +29,8 @@ const nextConfig = {
   webpack(config, context) {
     svgrConfig(config);
     sentryConfig(config, context);
+    config.optimization.minimize = false;
+    config.optimization.minimizer = [];
     return config;
   },
   compiler: {
@@ -74,6 +76,7 @@ const nextConfig = {
   //     },
   //   ];
   // },
+  productionBrowserSourceMaps: true,
 };
 
 // eslint-disable-next-line import/order

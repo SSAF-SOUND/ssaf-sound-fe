@@ -1,26 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { useEffect } from 'react';
-
-import {
-  validateNicknameRespondWithDuplicatedNickname,
-  validateNicknameError, validateNickname
-} from "~/mocks/handlers";
-import { userInfo } from '~/mocks/handlers/member/data';
+import { mockGetInitialMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUpdateMyInfo } from '~/mocks/handlers/member/apis/mockUpdateMyInfo';
+import { createMockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
 import UserRegisterPage from '~/pages/auth/register';
-import { useSetMyInfo } from '~/services/member';
+import { useMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof UserRegisterPage> = {
-  title: 'Page/UserRegister',
+  title: 'Page/Auth/User Register',
   component: UserRegisterPage,
   decorators: [
     (Story) => {
-      const setMyInfo = useSetMyInfo();
-
-      useEffect(() => {
-        setMyInfo(userInfo.initialUserInfo);
-      }, [setMyInfo]);
+      useMyInfo({ enabled: true });
 
       return (
         <PageLayout>
@@ -38,31 +30,15 @@ export default meta;
 
 type UserRegisterPageStory = StoryObj<typeof UserRegisterPage>;
 
-export const Success: UserRegisterPageStory = {
+export const Default: UserRegisterPageStory = {
   parameters: {
     msw: {
       handlers: {
-        member: [validateNickname],
-      },
-    },
-  },
-};
-
-export const NicknameValidationError: UserRegisterPageStory = {
-  parameters: {
-    msw: {
-      handlers: {
-        member: [validateNicknameError],
-      },
-    },
-  },
-};
-
-export const DuplicatedNickname: UserRegisterPageStory = {
-  parameters: {
-    msw: {
-      handlers: {
-        member: [validateNicknameRespondWithDuplicatedNickname],
+        member: [
+          mockGetInitialMyInfo,
+          createMockValidateNickname(true),
+          mockUpdateMyInfo,
+        ],
       },
     },
   },

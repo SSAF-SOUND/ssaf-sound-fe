@@ -33,6 +33,7 @@ const Answer = (props: AnswerProps) => {
           id={fieldId}
           size="lg"
           placeholder="단어를 입력해주세요"
+          autoComplete="off"
           {...register(fieldName, {
             required: true,
             maxLength: {

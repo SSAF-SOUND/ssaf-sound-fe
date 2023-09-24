@@ -387,12 +387,8 @@ export const endpoints = {
     like: (commentId: number) =>
       `${endpoints.recruitComments.detail(commentId)}/like` as const,
     reply: (params: { recruitId: number; commentId: number }) => {
-      const { recruitId, commentId } = params;
-      const queryString = new URLSearchParams({
-        recruitId,
-        commentId,
-      } as never).toString();
-      return `/recruit-comments/reply?${queryString}` as const;
+      const { recruitId } = params;
+      return `/recruits/${recruitId}/comments` as const;
     },
   },
   meta: {

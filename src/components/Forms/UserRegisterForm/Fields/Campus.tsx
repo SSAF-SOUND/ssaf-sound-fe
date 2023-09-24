@@ -1,21 +1,26 @@
 import { css } from '@emotion/react';
 
 import { SelectBox } from '~/components/Common/SelectBox';
-import { useUserRegisterFormContext } from '~/components/Forms/UserRegisterForm/utils';
-import { flex, fontCss } from '~/styles/utils';
-
-const campuses = ['서울', '대전', '광주', '구미', '부울경'];
+import {
+  useUserRegisterFormContext,
+  UserRegisterFormFieldQuestion,
+} from '~/components/Forms/UserRegisterForm/utils';
+import { useCampuses } from '~/services/meta';
+import { flex } from '~/styles/utils';
 
 const fieldName = 'campus';
+const fieldQuestion = 'SSAFY\n캠퍼스를 선택해주세요';
 
-interface CampusProps {
+export interface CampusProps {
   onSelect: () => void;
 }
 
-const Campus = (props: CampusProps) => {
+export const Campus = (props: CampusProps) => {
   const { onSelect } = props;
+  const { data: campuses } = useCampuses();
+
   const { setValue, register } = useUserRegisterFormContext();
-  const handleValueChange = (value: string) => {
+  const handleCampusChange = (value: string) => {
     setValue(fieldName, value);
     onSelect();
   };
@@ -24,15 +29,14 @@ const Campus = (props: CampusProps) => {
 
   return (
     <label css={selfCss}>
-      <div css={fontCss.style.B28}>
-        <p>SSAFY</p>
-        <p>캠퍼스를 선택해주세요</p>
-      </div>
+      <UserRegisterFormFieldQuestion>
+        {fieldQuestion}
+      </UserRegisterFormFieldQuestion>
 
       <SelectBox
         items={campuses}
         textAs={(value) => `${value} 캠퍼스`}
-        onValueChange={handleValueChange}
+        onValueChange={handleCampusChange}
         size="lg"
         focusOnMount
       />
@@ -41,5 +45,3 @@ const Campus = (props: CampusProps) => {
 };
 
 const selfCss = css(flex('', '', 'column', 40));
-
-export default Campus;

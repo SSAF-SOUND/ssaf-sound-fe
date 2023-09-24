@@ -1,13 +1,13 @@
 import type { CustomNextPage } from 'next/types';
 import type { StudentCertificationFormValues } from '~/components/Forms/StudentCertificationForm/utils';
-import type { UserInfo } from '~/services/member';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
-import { useState } from 'react';
 
-import StudentCertificationForm from 'src/components/Forms/StudentCertificationForm';
+import StudentCertificationForm, {
+  defaultStudentCertificationFormValues,
+} from 'src/components/Forms/StudentCertificationForm';
 import {
   FullPageLoader,
   loaderText,
@@ -21,7 +21,7 @@ import {
   useMyInfo,
   useSetMyInfo,
 } from '~/services/member';
-import { flex, pageMinHeight, titleBarHeight } from '~/styles/utils';
+import { flex, pageCss, titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -42,18 +42,12 @@ const StudentCertificationPage: CustomNextPage = () => {
   const setMyInfo = useSetMyInfo();
   const { openModal, closeModal } = useModal();
   const { mutateAsync: certifyStudent } = useCertifyStudent();
-  const [certificationSuccess, setCertificationSuccess] = useState(false);
 
-  if (certificationSuccess) {
-    return (
-      <PreviewCertifiedMyInfo userInfo={myInfo as NonNullable<UserInfo>} />
-    );
+  if (myInfo?.ssafyInfo?.certificationState === CertificationState.CERTIFIED) {
+    return <PreviewCertifiedMyInfo userInfo={myInfo} />;
   }
 
-  if (
-    !myInfo?.ssafyMember ||
-    myInfo.ssafyInfo.certificationState === CertificationState.CERTIFIED
-  ) {
+  if (!myInfo || !myInfo.ssafyMember) {
     router.replace(routes.unauthorized());
     return <FullPageLoader text={loaderText.checkUser} />;
   }
@@ -97,7 +91,6 @@ const StudentCertificationPage: CustomNextPage = () => {
         onClickAction: () => {
           closeModal();
           onClickAction?.();
-          setCertificationSuccess(true);
         },
       },
       {
@@ -107,7 +100,7 @@ const StudentCertificationPage: CustomNextPage = () => {
     );
   };
 
-  const onSubmit = async (formValues: StudentCertificationFormValues) => {
+  const onValidSubmit = async (formValues: StudentCertificationFormValues) => {
     const { track, year } = formValues;
     try {
       const { certificationInquiryCount, possible } = await certifyStudent(
@@ -151,8 +144,9 @@ const StudentCertificationPage: CustomNextPage = () => {
       <div css={selfCss}>
         <StudentCertificationForm
           css={formCss}
-          onSubmit={onSubmit}
+          onValidSubmit={onValidSubmit}
           defaultValues={{
+            ...defaultStudentCertificationFormValues,
             year: myInfo.ssafyInfo.semester,
           }}
         />
@@ -166,13 +160,9 @@ StudentCertificationPage.auth = createAuthGuard();
 StudentCertificationPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css(
-  {
-    minHeight: `max(${pageMinHeight}px, 100vh)`,
-    padding: `${titleBarHeight}px 0`,
-  },
+  { padding: `${titleBarHeight}px 0` },
+  pageCss.minHeight,
   flex()
 );
 
-const formCss = css({
-  flexGrow: 1,
-});
+const formCss = css({ flexGrow: 1 });

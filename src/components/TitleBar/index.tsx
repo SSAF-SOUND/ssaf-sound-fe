@@ -1,6 +1,6 @@
-import DefaultTitleBar from './DefaultTitleBar';
-import FormTitleBar from './FormTitleBar';
-import PreviewTitleBar from './PreviewTitleBar';
+import { DefaultTitleBar } from './DefaultTitleBar';
+import { FormTitleBar } from './FormTitleBar';
+import { PreviewTitleBar } from './PreviewTitleBar';
 
 const TitleBar = {
   Default: DefaultTitleBar,

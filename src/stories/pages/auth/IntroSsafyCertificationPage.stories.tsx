@@ -1,17 +1,22 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
-import { useEffect } from 'react';
-
-import { userInfo } from '~/mocks/handlers/member/data';
+import {
+  mockGetCertifiedSsafyMyInfo,
+  mockGetNonSsafyMyInfo,
+  mockGetUncertifiedSsafyMyInfo,
+} from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import IntroStudentCertificationPage from '~/pages/intro/student-certification';
-import { useSetMyInfo } from '~/services/member';
+import { useMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof IntroStudentCertificationPage> = {
-  title: 'Page/IntroStudentCertification',
+  title: 'Page/Certification/Intro Student Certification',
   component: IntroStudentCertificationPage,
   decorators: [
     (Story) => {
+      useMyInfo({ enabled: true });
+
       return (
         <PageLayout>
           <Story />
@@ -19,38 +24,27 @@ const meta: Meta<typeof IntroStudentCertificationPage> = {
       );
     },
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 
-type IntroStudentCertificationPageStory = StoryObj<{
-  certified: boolean;
-  ssafyMember: boolean;
-}>;
+export const NonSsafyUser = {
+  parameters: createMswParameters({
+    member: [mockGetNonSsafyMyInfo],
+  }),
+};
 
-export const Default: IntroStudentCertificationPageStory = {
-  args: { certified: false, ssafyMember: true },
-  render: function Render(args) {
-    const { certified, ssafyMember } = args;
-    const setMyInfo = useSetMyInfo();
+export const UncertifiedUser = {
+  parameters: createMswParameters({
+    member: [mockGetUncertifiedSsafyMyInfo],
+  }),
+};
 
-    useEffect(() => {
-      const myInfo = !ssafyMember
-        ? userInfo.nonSsafyUserInfo
-        : certified
-        ? userInfo.certifiedSsafyUserInfo
-        : userInfo.uncertifiedSsafyUserInfo;
-
-      setMyInfo(myInfo);
-    }, [certified, setMyInfo, ssafyMember]);
-
-    return <IntroStudentCertificationPage />;
-  },
-  parameters: {
-    msw: {
-      handlers: {
-        member: [],
-      },
-    },
-  },
+export const CertifiedUser = {
+  parameters: createMswParameters({
+    member: [mockGetCertifiedSsafyMyInfo],
+  }),
 };
