@@ -4,17 +4,16 @@ import type {
   GetProfileVisibilityApiData,
   GetUserInfoApiData,
   GetUserPortfolioApiData,
-  UserInfo,
   ValidateNicknameApiData,
 } from '~/services/member';
 
+import { mockCertifyStudent } from '~/mocks/handlers/member/apis/mockCertifyStudent';
 import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUpdateMyInfo } from '~/mocks/handlers/member/apis/mockUpdateMyInfo';
 import { mockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
 import { userInfo, portfolio } from '~/mocks/handlers/member/data';
-import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
+import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { CertificationState } from '~/services/member';
 import { API_URL, composeUrls, ResponseCode } from '~/utils';
 
 export const getUserInfo = restSuccess<GetUserInfoApiData['data']>(
@@ -103,36 +102,6 @@ export const updateTrackError = restError(
   composeUrls(API_URL, endpoints.user.track())
 );
 
-export const certifyStudent = restSuccess<CertifyStudentApiData['data']>(
-  'post',
-  composeUrls(API_URL, endpoints.user.studentCertification()),
-  {
-    data: {
-      certificationInquiryCount: 2,
-      possible: true,
-    },
-  }
-);
-
-export const certifyStudentIncorrectError = restSuccess<
-  CertifyStudentApiData['data']
->('post', composeUrls(API_URL, endpoints.user.studentCertification()), {
-  data: {
-    certificationInquiryCount: 2,
-    possible: false,
-  },
-});
-
-export const certifyStudentAttemptsCountError = restError(
-  'post',
-  composeUrls(API_URL, endpoints.user.studentCertification()),
-  {
-    code: ResponseCode.EXCEEDED_ATTEMPTS_OF_STUDENT_CERTIFICATION,
-    message:
-      '인증 시도 가능 횟수를 초과하여 일정 시간이 자나야 재시도 할 수 있습니다.',
-  }
-);
-
 export const getProfileVisibility = restSuccess<
   GetProfileVisibilityApiData['data']
 >('get', composeUrls(API_URL, endpoints.user.profileVisibility()), {
@@ -209,8 +178,8 @@ export const memberHandlers = [
   mockGetCertifiedSsafyMyInfo,
   mockValidateNickname,
   mockUpdateMyInfo,
+  mockCertifyStudent,
 
-  certifyStudent,
   updateNickname,
   updateIsMajor,
   updateSsafyBasicInfo,
