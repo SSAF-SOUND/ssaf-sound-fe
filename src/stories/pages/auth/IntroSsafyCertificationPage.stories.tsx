@@ -24,6 +24,9 @@ const meta: Meta<typeof IntroStudentCertificationPage> = {
       );
     },
   ],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
