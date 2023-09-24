@@ -74,6 +74,7 @@ const nextConfig = {
   //     },
   //   ];
   // },
+  productionBrowserSourceMaps: true,
 };
 
 // eslint-disable-next-line import/order
