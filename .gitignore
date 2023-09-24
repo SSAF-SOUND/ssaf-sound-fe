@@ -53,3 +53,8 @@ build-storybook.log*
 
 # Sentry Auth Token
 .sentryclirc
+
+# cypress
+cypress/downloads
+cypress/screenshots
+cypress/videos
