@@ -11136,6 +11136,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cypress-real-events@npm:^1.10.3":
+  version: 1.10.3
+  resolution: "cypress-real-events@npm:1.10.3"
+  peerDependencies:
+    cypress: ^4.x || ^5.x || ^6.x || ^7.x || ^8.x || ^9.x || ^10.x || ^11.x || ^12.x || ^13.x
+  checksum: 9a6d4addb33b16fcf4e4eb55c21589b626203303f8e60b441b5ed50d55c55424b5587efd91a7b79fbca7d4fbc544829d2793e9c29fdf94dfa7ecaf5f661b105e
+  languageName: node
+  linkType: hard
+
 "cypress@npm:^13.2.0":
   version: 13.2.0
   resolution: "cypress@npm:13.2.0"
@@ -20757,6 +20766,7 @@ __metadata:
     axios: ^1.4.0
     chromatic: ^6.17.4
     cypress: ^13.2.0
+    cypress-real-events: ^1.10.3
     dayjs: ^1.11.8
     eslint: 8.39.0
     eslint-config-next: 13.3.4
