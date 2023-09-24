@@ -2,12 +2,16 @@ import { css } from '@emotion/react';
 import { useId, useMemo } from 'react';
 
 import { SelectBox } from '~/components/Common/SelectBox';
-import { useStudentCertificationFormContext } from '~/components/Forms/StudentCertificationForm/utils';
+import {
+  StudentCertificationFormFieldQuestion,
+  useStudentCertificationFormContext,
+} from '~/components/Forms/StudentCertificationForm/utils';
 import { SsafyTrack } from '~/services/member/utils';
 import { flex, fontCss } from '~/styles/utils';
 import { capitalize } from '~/utils';
 
 const fieldName = 'track';
+const fieldQuestion = 'SSAFY\n어떤 트랙이신가요?';
 
 interface TrackProps {
   onSelect: () => void;
@@ -24,15 +28,14 @@ export const Track = (props: TrackProps) => {
     onSelect();
   };
 
-  register(fieldName, {
-    required: true,
-  });
+  register(fieldName, { required: true });
 
   return (
     <div css={selfCss}>
       <label htmlFor={selectBoxId} css={labelCss}>
-        <p>SSAFY</p>
-        <p>어떤 트랙이신가요?</p>
+        <StudentCertificationFormFieldQuestion>
+          {fieldQuestion}
+        </StudentCertificationFormFieldQuestion>
       </label>
 
       <SelectBox
