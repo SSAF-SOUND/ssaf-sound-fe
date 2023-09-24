@@ -150,7 +150,7 @@ export const replyRecruitCommentError = restError(
   { message: '대댓글 작성 실패' }
 );
 
-export const updateRecruitComment = rest.put(
+export const updateRecruitComment = rest.patch(
   // @ts-ignore
   composeUrls(API_URL, endpoints.recruitComments.detail(':commentId')),
   async (req, res, ctx) => {
