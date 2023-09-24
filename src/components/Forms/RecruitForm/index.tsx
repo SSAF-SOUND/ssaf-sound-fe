@@ -102,7 +102,7 @@ export const defaultRecruitFormValues: RecruitFormValues = {
   participants: {
     project: [
       {
-        part: '' as RecruitParts,
+        part: undefined as unknown as RecruitParts,
         count: 1,
       },
     ],
@@ -113,7 +113,7 @@ export const defaultRecruitFormValues: RecruitFormValues = {
       },
     ],
   },
-  myPart: '' as RecruitParts,
+  myPart: undefined as unknown as RecruitParts,
   endDate: '',
   skills: {},
   title: '',
