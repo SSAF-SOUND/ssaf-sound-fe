@@ -15,7 +15,7 @@ export const countAllComments = (comments: CommentDetail[]) => {
   const repliesCount = comments
     .map(({ replies }) => replies)
     .map((replies) => replies.filter(isActiveComment).length)
-    .reduce(add);
+    .reduce<number>(add, 0);
 
   return commentsCount + repliesCount;
 };
