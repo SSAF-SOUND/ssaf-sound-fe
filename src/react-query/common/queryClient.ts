@@ -11,6 +11,7 @@ const getQueryClient = () => {
         staleTime: Infinity,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
+        retry: 2,
       },
     },
   });
