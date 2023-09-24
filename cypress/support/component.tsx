@@ -20,7 +20,6 @@
 /// <reference path="../../src/types/next.d.ts" />
 
 import type { DehydratedState, QueryClient } from '@tanstack/react-query';
-import type { MountOptions } from 'cypress/react18';
 import type { NextPageAuthConfig } from 'next';
 import type { ReactNode } from 'react';
 
@@ -41,30 +40,6 @@ interface AllProviderProps {
   queryClient?: QueryClient;
   dehydratedState?: DehydratedState;
   auth?: NextPageAuthConfig;
-}
-
-type OriginalMount = typeof mount;
-type CustomMountOptions = Partial<
-  MountOptions & Omit<AllProviderProps, 'children'>
->;
-
-type CustomMount = (
-  jsx: Parameters<OriginalMount>[0],
-  options?: CustomMountOptions,
-  renderKey?: Parameters<OriginalMount>[2]
-) => ReturnType<OriginalMount>;
-
-// Augment the Cypress namespace to include type definitions for
-// your custom command.
-// Alternatively, can be defined in cypress/support/component.d.ts
-// with a <reference path="./component" /> at the top of your spec.
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Cypress {
-    interface Chainable {
-      mount: CustomMount;
-    }
-  }
 }
 
 const AllProvider = (props: AllProviderProps) => {
