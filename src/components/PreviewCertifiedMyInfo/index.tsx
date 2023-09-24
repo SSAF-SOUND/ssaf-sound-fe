@@ -19,8 +19,7 @@ const PreviewCertifiedMyInfo = (props: PreviewCertifiedMyInfoProps) => {
   return (
     <div css={selfCss}>
       <div css={topLayerCss}>
-        <p>SSAFY 캐릭터 프로필이</p>
-        <p>생성되었습니다</p>
+        <p>{`SSAFY 캐릭터 프로필이\n생성되었습니다`}</p>
         <p
           css={[
             fontCss.style.R16,
@@ -56,6 +55,9 @@ const selfCss = css(
   flex('center', 'center', 'column', 100)
 );
 
-const topLayerCss = css({ textAlign: 'center' }, fontCss.style.B28);
+const topLayerCss = css(
+  { textAlign: 'center', whiteSpace: 'pre-wrap' },
+  fontCss.style.B28
+);
 
 const bottomLayerCss = css(flex('center', '', 'column', 26));

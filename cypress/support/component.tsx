@@ -13,9 +13,6 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
-
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../../src/types/next.d.ts" />
 
@@ -25,9 +22,8 @@ import type { ReactNode } from 'react';
 
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { mount } from 'cypress/react18';
+import 'cypress-real-events';
 import { Toaster } from 'react-hot-toast';
-
-// Import commands.js using ES2015 syntax:
 
 import AuthChecker from '~/components/AuthChecker';
 import { GlobalModal } from '~/components/GlobalModal';
