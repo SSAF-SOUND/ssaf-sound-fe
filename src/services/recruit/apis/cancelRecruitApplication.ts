@@ -10,6 +10,6 @@ export type CancelRecruitApplicationApiData =
 export const cancelRecruitApplication = (recruitApplicationId: number) => {
   const endpoint = endpoints.recruit.application.cancel(recruitApplicationId);
   return privateAxios
-    .post<CancelRecruitApplicationApiData>(endpoint, null)
+    .patch<CancelRecruitApplicationApiData>(endpoint, null)
     .then((res) => res.data.data);
 };
