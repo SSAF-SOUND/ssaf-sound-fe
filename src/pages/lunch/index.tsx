@@ -57,7 +57,7 @@ const Lunch = () => {
   };
 
   useEffect(() => {
-    if (isValidQueryParams) return;
+    if (isValidQueryParams || !router.isReady) return;
 
     router.replace({
       pathname: router.pathname,
