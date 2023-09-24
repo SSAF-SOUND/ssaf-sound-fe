@@ -5,6 +5,7 @@ import { AlertText, TextInput } from '~/components/Common';
 import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { palettes } from '~/styles/utils';
+import { regex } from '~/utils';
 
 const fieldName = 'contact';
 const maxLength = 500;
@@ -13,6 +14,7 @@ const validateContact = (value: string) => {
   if (value.length > maxLength) {
     return `연락처의 길이는 ${maxLength}자 이하여야 합니다.`;
   }
+  if (!regex.url.test(value)) return '유효하지 않은 링크 형식입니다.';
   return true;
 };
 
