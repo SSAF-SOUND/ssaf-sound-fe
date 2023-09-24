@@ -74,7 +74,7 @@ const preview: Preview = {
     (Story) => (
       <QueryClientProvider client={getQueryClient()}>
         <Toaster />
-        <ReactQueryDevtools initialIsOpen position={'bottom-left'} />
+        <ReactQueryDevtools initialIsOpen={false} position={'bottom-left'} />
         <GlobalModal />
         <div>
           <StorybookGlobalStyles />
