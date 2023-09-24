@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 
 import {
   updateNickname,
-  validateNickname,
   validateNicknameRespondWithDuplicatedNickname,
 } from '~/mocks/handlers/member';
+import { mockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
 import { userInfo } from '~/mocks/handlers/member/data';
 import MyInfoSettingsNicknameEditPage from '~/pages/profile/myinfo-settings/nickname/edit';
 import { useSetMyInfo } from '~/services/member';
@@ -27,7 +27,7 @@ const meta: Meta<typeof MyInfoSettingsNicknameEditPage> = {
 
     msw: {
       handlers: {
-        member: [updateNickname, validateNickname],
+        member: [updateNickname, mockValidateNickname],
       },
     },
   },
