@@ -29,6 +29,8 @@ const nextConfig = {
   webpack(config, context) {
     svgrConfig(config);
     sentryConfig(config, context);
+    config.optimization.minimize = false;
+    config.optimization.minimizer = [];
     return config;
   },
   compiler: {
