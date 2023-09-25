@@ -15,6 +15,7 @@ export interface LunchCardProps {
   order: number;
   onPolledChange: (polled: boolean) => void;
   pollButtonDisabled?: boolean;
+  withPollButton?: boolean;
 }
 
 export const LunchCard = memo((props: LunchCardProps) => {
@@ -24,6 +25,7 @@ export const LunchCard = memo((props: LunchCardProps) => {
     order,
     onPolledChange,
     pollButtonDisabled,
+    withPollButton = true,
   } = props;
   const { pollCount } = menu;
 
@@ -31,13 +33,15 @@ export const LunchCard = memo((props: LunchCardProps) => {
     <div css={selfCss}>
       <LunchCardMenuDescription order={order} menu={menu} />
 
-      <LunchCardPollButton
-        css={{ width: likeButtonWidth }}
-        pollCount={pollCount}
-        polled={polled}
-        onPolledChange={onPolledChange}
-        disabled={pollButtonDisabled}
-      />
+      {withPollButton && (
+        <LunchCardPollButton
+          css={{ width: likeButtonWidth }}
+          pollCount={pollCount}
+          polled={polled}
+          onPolledChange={onPolledChange}
+          disabled={pollButtonDisabled}
+        />
+      )}
     </div>
   );
 });

@@ -1,15 +1,14 @@
-import type { LunchDateSpecifier } from '~/services/lunch';
-
 import { css } from '@emotion/react';
 
 import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIcon';
 import { LunchCard } from '~/components/Lunch/LunchCard';
 import { useSignInGuideModal } from '~/hooks';
 import {
+  emptyLunchMenuDescription,
+  LunchDateSpecifier,
   useLunchMenusWithPollStatus,
   usePollLunchMenu,
   useRevertPolledLunchMenu,
-  emptyLunchMenuDescription,
 } from '~/services/lunch';
 import { useMyInfo } from '~/services/member';
 import { flex } from '~/styles/utils';
@@ -57,6 +56,8 @@ const LunchMenus = (props: LunchMenusProps) => {
     campus,
     dateSpecifier,
   });
+
+  const showPollButton = dateSpecifier === LunchDateSpecifier.TODAY;
 
   const isButtonDisabled =
     isPollingLunchMenu || isRevertingPolledLunchMenu || isFetching;
@@ -106,6 +107,7 @@ const LunchMenus = (props: LunchMenusProps) => {
               polled={polled}
               onPolledChange={handlePolledChange}
               pollButtonDisabled={isButtonDisabled}
+              withPollButton={showPollButton}
             />
           );
         })}
