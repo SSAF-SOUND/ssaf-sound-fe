@@ -11,13 +11,23 @@ import {
 } from '~/services/recruit/utils/types';
 import { createRoute } from '~/utils/client-routes/utils';
 
-type PossibleRecruitParts = Exclude<RecruitParts, RecruitParts.STUDY>;
+const recruitsSelfRoute = createRoute('/recruits');
+
+type ProjectParts = Exclude<RecruitParts, RecruitParts.STUDY>;
+
+const getSafeCategory = (category?: string) => {
+  if (category && RecruitCategoryNameSet.has(category))
+    return category as RecruitCategoryName;
+  return RecruitCategoryName.PROJECT;
+};
+
+// ---------- recruits ----------
 
 export type RecruitsPageRouteQuery = {
   category?: RecruitCategoryName;
 
   includeCompleted?: boolean;
-  recruitParts?: PossibleRecruitParts | PossibleRecruitParts[];
+  recruitParts?: ProjectParts | ProjectParts[];
   skills?: SkillName | SkillName[];
   keyword?: string;
 };
@@ -25,14 +35,11 @@ export type RecruitsPageRouteQuery = {
 export type SafeRecruitsPageRouteQuery = {
   category: RecruitCategoryName;
   includeCompleted: boolean;
-  recruitParts: PossibleRecruitParts[];
+  recruitParts: ProjectParts[];
   skills: SkillName[];
   keyword?: string;
 };
 
-const recruitsSelfRoute = createRoute('/recruits');
-
-// ---------- recruits ----------
 const recruitsPageRoute = (query: RecruitsPageRouteQuery = {}) => {
   const pathname = recruitsSelfRoute().pathname;
   return createRoute<SafeRecruitsPageRouteQuery>(pathname)(
@@ -45,10 +52,7 @@ const toSafeRecruitsPageQuery = (
 ): SafeRecruitsPageRouteQuery => {
   const { category, keyword, recruitParts, skills, includeCompleted } = query;
 
-  const safeCategory =
-    category && RecruitCategoryNameSet.has(category)
-      ? category
-      : RecruitCategoryName.PROJECT; // default;
+  const safeCategory = getSafeCategory(category);
   const safeKeyword =
     isString(keyword) && validateSearchKeyword(keyword.trim())
       ? keyword.trim()
@@ -59,9 +63,7 @@ const toSafeRecruitsPageQuery = (
 
   const safeRecruitParts = (
     isArray(recruitParts) ? recruitParts : [recruitParts]
-  ).filter(
-    (dirty) => dirty && ProjectPartsSet.has(dirty)
-  ) as PossibleRecruitParts[];
+  ).filter((dirty) => dirty && ProjectPartsSet.has(dirty)) as ProjectParts[];
 
   const safeSkills = (isArray(skills) ? skills : [skills]).filter(
     (dirty) => dirty && SkillNameSet.has(dirty)
@@ -76,7 +78,31 @@ const toSafeRecruitsPageQuery = (
   };
 };
 
+// ---------- recruit create ----------
+
+export type RecruitCreatePageRouteQuery = {
+  category?: RecruitCategoryName;
+};
+export type SafeRecruitCreatePageRouteQuery = {
+  category: RecruitCategoryName;
+};
+const recruitCreatePageRoute = (query: RecruitCreatePageRouteQuery = {}) => {
+  const pathname = recruitsSelfRoute().pathname;
+
+  return createRoute<SafeRecruitCreatePageRouteQuery>(pathname)(
+    toSafeRecruitCreatePageQuery(query)
+  );
+};
+
+const toSafeRecruitCreatePageQuery = (
+  query: RecruitCreatePageRouteQuery
+): SafeRecruitCreatePageRouteQuery => {
+  const { category } = query;
+  return { category: getSafeCategory(category) };
+};
+
 export const recruits = {
   self: recruitsSelfRoute,
   list: recruitsPageRoute,
+  create: recruitCreatePageRoute,
 };
