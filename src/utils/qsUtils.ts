@@ -2,14 +2,12 @@ import type { IParseOptions } from 'qs';
 
 import qs from 'qs';
 
+import { hasOwnProperty } from '~/utils/hasOwnProperty';
+
 const tokenMapper = {
   true: true,
   false: false,
-};
-
-const hasOwnProperty = (obj: object, str: string): str is keyof typeof obj => {
-  return tokenMapper.hasOwnProperty(str);
-};
+} as const;
 
 export const qsDecoder = (token: string) => {
   if (hasOwnProperty(tokenMapper, token)) {
