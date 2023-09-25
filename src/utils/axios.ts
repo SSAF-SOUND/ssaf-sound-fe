@@ -11,6 +11,7 @@ import axios, { isAxiosError } from 'axios';
 import { reissueToken } from '~/services/auth';
 import { createRequestInfiniteLoopDetector } from '~/utils/createRequestInfiniteLoopDetector';
 import { customToast } from '~/utils/customToast';
+import { qsStringify } from '~/utils/qsUtils';
 import { webStorage } from '~/utils/webStorage';
 
 import { API_URL, isDevMode, ResponseCode } from './constants';
@@ -18,11 +19,13 @@ import { API_URL, isDevMode, ResponseCode } from './constants';
 export const publicAxios = axios.create({
   baseURL: API_URL,
   withCredentials: true,
+  paramsSerializer: (params) => qsStringify(params),
 });
 
 export const privateAxios = axios.create({
   baseURL: API_URL,
   withCredentials: true,
+  paramsSerializer: (params) => qsStringify(params),
 });
 
 const devPlugin = (config: InternalAxiosRequestConfig) => {
