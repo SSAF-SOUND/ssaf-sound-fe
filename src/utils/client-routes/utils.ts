@@ -1,5 +1,7 @@
 import { isNullOrUndefined } from 'is-what';
 
+import { identity } from '~/utils';
+
 export type PossibleRouteValue =
   | string
   | boolean
@@ -23,15 +25,18 @@ export const createRoute =
   >(
     pathname: Pathname
   ) =>
-  (query?: Query): Route<Query, Pathname> => {
+  (
+    query?: Query,
+    mapper: (query: Query) => Query = identity
+  ): Route<Query, Pathname> => {
     if (query) {
-      const mapped = Object.fromEntries(
+      const nonNullableQuery = Object.fromEntries(
         Object.entries(query).filter(
           ([key, value]) => !isNullOrUndefined(value)
         )
       ) as Query;
 
-      return { pathname, query: mapped };
+      return { pathname, query: mapper(nonNullableQuery) };
     }
 
     return { pathname } as const;
