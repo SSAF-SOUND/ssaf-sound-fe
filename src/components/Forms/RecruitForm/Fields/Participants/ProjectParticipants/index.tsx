@@ -91,7 +91,7 @@ const ProjectParticipants = () => {
           onClick={handleAddField}
           disabled={!canAddField}
         >
-          <Icon name="circle.plus" label="필드 추가" size={14} />
+          <Icon name="circle.plus" label="모집 필드 추가" size={14} />
         </Button>
 
         <div css={fieldContainerCss}>
