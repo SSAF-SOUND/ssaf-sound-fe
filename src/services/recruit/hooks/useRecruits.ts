@@ -1,27 +1,17 @@
-import type {
-  RecruitCategoryName,
-  RecruitParts,
-  SkillName,
-} from '~/services/recruit/utils';
+import type { RecruitsPageRouteQuery } from '~/utils/client-routes/recruits';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import { getRecruits } from '~/services/recruit/apis';
 
-export interface UseRecruitsOptions {
-  category: RecruitCategoryName;
-  keyword: string;
-  skills: SkillName[];
-  recruitParts: RecruitParts[];
-  completed: boolean;
-}
+export type UseRecruitsOptions = Partial<RecruitsPageRouteQuery>;
 
-export const useRecruits = (options: Partial<UseRecruitsOptions> = {}) => {
-  const { category, keyword, completed, recruitParts, skills } = options;
+export const useRecruits = (options: UseRecruitsOptions = {}) => {
+  const { category, keyword, includeCompleted, recruitParts, skills } = options;
 
   const queryKey = queryKeys.recruit.list({
-    completed,
+    includeCompleted,
     keyword,
     recruitParts,
     skills,
@@ -34,7 +24,7 @@ export const useRecruits = (options: Partial<UseRecruitsOptions> = {}) => {
       getRecruits({
         cursor: pageParam,
         keyword,
-        completed,
+        includeCompleted,
         recruitParts,
         skills,
         category,

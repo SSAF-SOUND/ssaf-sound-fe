@@ -15,6 +15,7 @@ import type {
 
 import { rest } from 'msw';
 
+import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
@@ -212,26 +213,6 @@ export const completeRecruitError = restError(
   {
     message: '리쿠르팅 모집 완료 실패',
   }
-);
-
-const getRecruitsEndpoint = removeQueryParams(
-  composeUrls(
-    API_URL,
-    endpoints.recruit.list({
-      cursor: 1,
-      recruitParts: [],
-      skills: [],
-      completed: false,
-      keyword: '',
-      size: 10,
-      category: RecruitCategoryName.PROJECT,
-    })
-  )
-);
-
-export const getRecruits = rest.get(
-  getRecruitsEndpoint,
-  restInfiniteRecruitsSuccess
 );
 
 const applyRecruitEndpoint =
@@ -513,7 +494,9 @@ export const recruitHandlers = [
   removeRecruit,
   updateRecruit,
   completeRecruit,
-  getRecruits,
+
+  mockGetRecruits,
+
   applyRecruit,
   getMyRecruitApplication, // /recruit-applications/mine
 

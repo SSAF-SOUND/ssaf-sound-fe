@@ -2,6 +2,7 @@ import type { OAuthProviders } from '~/services/auth/utils';
 import type { RecruitParts, SkillName, MatchStatus } from '~/services/recruit';
 
 import { RecruitCategoryName } from '~/services/recruit';
+import { recruits } from '~/utils/client-routes/recruits';
 
 export const routes = {
   root: () => '/' as const,
@@ -140,6 +141,8 @@ export const routes = {
     edit: (recruitId: number) =>
       `${routes.recruit.detail(recruitId)}/edit` as const,
   },
+
+  recruits: recruits,
 
   lunch: {
     self: () => '/lunch' as const,

@@ -9,6 +9,6 @@ export type LikeStatus = {
 };
 
 export type InfiniteParams = {
-  cursor: number | null;
+  cursor?: number;
   size: number;
 };

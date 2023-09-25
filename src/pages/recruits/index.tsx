@@ -1,8 +1,10 @@
 import type { GetServerSideProps } from 'next';
 import type { RecruitFilterFormProps } from '~/components/Forms/RecruitFilterForm';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
-import type { GetRecruitsParams, RecruitSummary } from '~/services/recruit';
-import type { RecruitsPageQueryStringObject } from '~/utils';
+import type {
+  RecruitsPageRouteQuery,
+  SafeRecruitsPageRouteQuery,
+} from '~/utils/client-routes/recruits';
 
 import { useRouter } from 'next/router';
 
@@ -29,6 +31,7 @@ import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCar
 import { RecruitCreateLink } from '~/components/Recruit/RecruitCreateLink';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
+import { toSSRSafeDehydratedState } from '~/react-query/server/toSSRSafeDehydratedState';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import { useMyInfo } from '~/services/member';
 import {
@@ -36,9 +39,6 @@ import {
   getRecruits,
   getRecruitThemeByCategory,
   RecruitCategoryName,
-  RecruitCategoryNameSet,
-  RecruitPartsSet,
-  SkillNameSet,
   useRecruits,
 } from '~/services/recruit';
 import {
@@ -58,12 +58,8 @@ import {
   routes,
   stringToBoolean,
 } from '~/utils';
-
-// /recruits
-// ? category = project | study
-// & skills = React & skills = Vu e & skills = ...
-// & recruitParts = 프론트엔드 & recruitParts = 백엔드
-// & keyword = ABC
+import { getQueryStringFromUrl } from '~/utils/getQueryStringFromUrl';
+import { qsParse, qsStringify } from '~/utils/qsUtils';
 
 const createMetaTitle = (category: RecruitCategoryName) => {
   const displayCategoryName = getDisplayCategoryName(category);
@@ -74,16 +70,25 @@ const createMetaDescription = (category: RecruitCategoryName) => {
   return `${globalMetaData.description} ${globalMetaData.title}는 삼성 청년 SW 아카데미(SSAFY) 학생들의 원활한 ${displayCategoryName} 진행을 위한 리쿠르팅 기능을 제공합니다.`;
 };
 
-const RecruitsPage = () => {
+const RecruitsPage = (props: Props) => {
+  const { ssrUrl } = props;
   const router = useRouter();
-  const query = router.query as Partial<Params>;
-  const params = toSafeParams(query);
+  const routerQuery = router.query as Params;
+
+  const { query: safeQuery } = routes.recruits.list({
+    ...routerQuery,
+    includeCompleted: stringToBoolean(
+      routerQuery?.[ParamsKey.INCLUDE_COMPLETED]
+    ),
+  });
+
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
+  const { category, includeCompleted } = safeQuery;
 
-  const { category, completed } = params;
-  const metaTitle = createMetaTitle(category);
-  const metaDescription = createMetaDescription(category);
+  const metaCategory = category;
+  const metaTitle = createMetaTitle(metaCategory);
+  const metaDescription = createMetaDescription(metaCategory);
 
   return (
     <>
@@ -94,7 +99,7 @@ const RecruitsPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: `${routes.recruit.list().pathname}?category=${category}`,
+          url: ssrUrl,
         }}
       />
 
@@ -106,18 +111,18 @@ const RecruitsPage = () => {
           <RecruitCategoryTabs category={category} />
           <div css={filterToolsContainerCss}>
             <div css={filterToolsCss}>
-              <OnlyPendingRecruitsSwitch
+              <IncludeCompletedRecruitsSwitch
                 category={category}
-                completed={completed}
+                includeCompleted={includeCompleted}
               />
-              <RecruitFilterModal params={params} />
+              <RecruitFilterModal query={safeQuery} />
             </div>
 
             {isSignedIn && <RecruitCreateLink category={category} />}
           </div>
         </div>
 
-        <RecruitsLayer />
+        <RecruitsLayer query={safeQuery} />
       </div>
     </>
   );
@@ -155,7 +160,7 @@ const filterToolsCss = css(flex('center', 'flex-start', 'row', 6));
 
 const SearchBar = () => {
   const router = useRouter();
-  const { keyword: queryKeyword } = router.query as Partial<Params>;
+  const { keyword: queryKeyword } = router.query as Params;
   const isValidKeyword = validateSearchKeyword(queryKeyword);
   const defaultKeyword = isValidKeyword ? queryKeyword : '';
 
@@ -199,27 +204,27 @@ const searchBarContainerCss = css(
   flex('', 'center')
 );
 
-interface OnlyPendingRecruitsSwitchProps {
+interface IncludeCompletedRecruitsSwitchProps {
   category: RecruitCategoryName;
-  completed: boolean;
+  includeCompleted: boolean;
 }
-const OnlyPendingRecruitsSwitch = (props: OnlyPendingRecruitsSwitchProps) => {
-  const { category, completed } = props;
+const IncludeCompletedRecruitsSwitch = (
+  props: IncludeCompletedRecruitsSwitchProps
+) => {
+  const { category, includeCompleted } = props;
   const recruitTheme = getRecruitThemeByCategory(category);
   const router = useRouter();
-  const showOnlyPendingRecruits = !completed;
+  const showOnlyPendingRecruits = !includeCompleted;
 
   const onPressedChange = (nextShowOnlyPendingRecruits: boolean) => {
     router.push({
       query: {
         ...router.query,
-        completed: !nextShowOnlyPendingRecruits,
+        [ParamsKey.INCLUDE_COMPLETED]: !nextShowOnlyPendingRecruits,
       },
     });
   };
 
-  // completed: true -> 모집 중 + 모집 완료
-  // completed: false -> 모집 중
   return (
     <Toggle
       pressed={showOnlyPendingRecruits}
@@ -234,10 +239,22 @@ const OnlyPendingRecruitsSwitch = (props: OnlyPendingRecruitsSwitchProps) => {
   );
 };
 
-const RecruitCategoryTabs = (props: { category: RecruitCategoryName }) => {
+interface RecruitCategoryTabs {
+  category: RecruitCategoryName;
+}
+
+const RecruitCategoryTabs = (props: RecruitCategoryTabs) => {
   const { category } = props;
   const router = useRouter();
-  const query = router.query as Partial<Params>;
+  const getRoute = (category: string) => {
+    return {
+      ...router,
+      query: {
+        ...router.query,
+        [ParamsKey.CATEGORY]: category,
+      },
+    };
+  };
 
   return (
     <Tabs.Root value={category} css={{ height: recruitTabsHeight }}>
@@ -246,20 +263,14 @@ const RecruitCategoryTabs = (props: { category: RecruitCategoryName }) => {
         <Tabs.TriggerWithLink
           value={RecruitCategoryName.PROJECT}
           theme={Theme.PRIMARY}
-          href={routes.recruit.list({
-            ...query,
-            category: RecruitCategoryName.PROJECT,
-          })}
+          href={getRoute(RecruitCategoryName.PROJECT)}
         >
           프로젝트
         </Tabs.TriggerWithLink>
         <Tabs.TriggerWithLink
           value={RecruitCategoryName.STUDY}
           theme={Theme.SECONDARY}
-          href={routes.recruit.list({
-            ...query,
-            category: RecruitCategoryName.STUDY,
-          })}
+          href={getRoute(RecruitCategoryName.STUDY)}
         >
           스터디
         </Tabs.TriggerWithLink>
@@ -268,18 +279,18 @@ const RecruitCategoryTabs = (props: { category: RecruitCategoryName }) => {
   );
 };
 
-const RecruitsLayer = () => {
-  const router = useRouter();
-  const query = router.query as Partial<Params>;
-  const { category, completed, skills, recruitParts, keyword } =
-    toSafeParams(query);
+interface RecruitsLayerProps {
+  query: SafeRecruitsPageRouteQuery;
+}
 
+const RecruitsLayer = (props: RecruitsLayerProps) => {
+  const { query } = props;
+  const { category, keyword, includeCompleted, skills, recruitParts } = query;
   const isValidKeyword = validateSearchKeyword(keyword);
-
   const infiniteRecruitsQuery = useRecruits({
     category,
     keyword,
-    completed,
+    includeCompleted,
     skills,
     recruitParts,
   });
@@ -288,7 +299,7 @@ const RecruitsLayer = () => {
     ? infiniteRecruitsQuery.data.pages
         .map(({ recruits }) => recruits)
         .reduce(concat)
-    : ([] as RecruitSummary[]);
+    : [];
 
   return (
     <div css={recruitLayerCss}>
@@ -332,13 +343,14 @@ const recruitLayerCss = css({
 });
 
 interface RecruitFilterModalProps {
-  params: SafeParams;
+  query: SafeRecruitsPageRouteQuery;
 }
 const RecruitFilterModal = (props: RecruitFilterModalProps) => {
   const router = useRouter();
-  const { params } = props;
-  const { recruitParts, skills, category } = params;
+  const { query } = props;
+  const { recruitParts, skills, category } = query;
   const recruitTheme = getRecruitThemeByCategory(category);
+
   const [open, setOpen] = useState(false);
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
@@ -351,8 +363,8 @@ const RecruitFilterModal = (props: RecruitFilterModalProps) => {
     router.push({
       query: {
         ...router.query,
-        recruitParts,
-        skills,
+        [ParamsKey.RECRUIT_PARTS]: recruitParts,
+        [ParamsKey.SKILLS]: skills,
       },
     });
   };
@@ -389,81 +401,48 @@ const RecruitFilterModal = (props: RecruitFilterModalProps) => {
   );
 };
 
-interface Props {}
-type Params = RecruitsPageQueryStringObject;
+interface Props {
+  ssrUrl: string;
+}
+enum ParamsKey {
+  CATEGORY = 'category',
+  INCLUDE_COMPLETED = 'includeCompleted',
+  RECRUIT_PARTS = 'recruitParts',
+  SKILLS = 'skills',
+  KEYWORD = 'keyword',
+}
+type Params = Partial<{
+  [ParamsKey.CATEGORY]: RecruitsPageRouteQuery['category'];
+  [ParamsKey.INCLUDE_COMPLETED]: string;
+  [ParamsKey.RECRUIT_PARTS]: RecruitsPageRouteQuery['recruitParts'];
+  [ParamsKey.SKILLS]: RecruitsPageRouteQuery['skills'];
+  [ParamsKey.KEYWORD]: RecruitsPageRouteQuery['keyword'];
+}>;
 
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   context
 ) => {
-  const apiParams = toSafeParams(context.query);
+  const queryString = getQueryStringFromUrl(context.resolvedUrl);
+  const parsed = qsParse(queryString) as RecruitsPageRouteQuery;
+
+  const { pathname, query } = routes.recruits.list(parsed);
+
   const queryClient = new QueryClient();
   const recruitListQueryKey = JSON.parse(
-    JSON.stringify(queryKeys.recruit.list(apiParams))
+    JSON.stringify(queryKeys.recruit.list(query))
   );
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: recruitListQueryKey,
-    queryFn: () => getRecruits(apiParams),
+    queryFn: () => getRecruits(query),
   });
 
   const { dehydratedState } = dehydrate(queryClient);
-  dehydratedState.queries.forEach((query) => {
-    // https://github.com/TanStack/query/issues/1458#issuecomment-1022396964
-    // eslint-disable-next-line
-    // @ts-ignore
-    if ('pageParams' in query.state.data) {
-      query.state.data.pageParams = [null];
-    }
-  });
-
   return {
     props: {
-      dehydratedState,
+      dehydratedState:
+        toSSRSafeDehydratedState.infiniteQueries(dehydratedState),
+      ssrUrl: `${pathname}${qsStringify(query)}`,
     },
-  };
-};
-
-type SafeParams = Required<Omit<GetRecruitsParams, 'size' | 'cursor'>>;
-
-/**
- * - category -> 유효하지 않으면 project
- * - completed -> 유효하지 않으면 false
- * - keyword -> 유효하지 않으면 ''
- * - recruitParts -> 유효한 필드로만 필터링
- *   - 값이 1개일 때는 string -> [string] 으로
- * - skills -> 유효한 필드로만 필터링
- *   - 값이 1개일 때는 string -> [string] 으로
- */
-const toSafeParams = (params: Partial<Params>): SafeParams => {
-  const { category, completed, skills, recruitParts, keyword = '' } = params;
-
-  const trimmedKeyword = keyword.trim();
-
-  const safeCategory =
-    !category || !RecruitCategoryNameSet.has(category)
-      ? RecruitCategoryName.PROJECT
-      : category;
-
-  const unsafeSkills = typeof skills === 'string' ? [skills] : skills ?? [];
-  const safeSkills = unsafeSkills.filter((skill) => SkillNameSet.has(skill));
-
-  const unsafeRecruitParts =
-    typeof recruitParts === 'string' ? [recruitParts] : recruitParts ?? [];
-  const safeRecruitParts = unsafeRecruitParts.filter((recruitPart) =>
-    RecruitPartsSet.has(recruitPart)
-  );
-
-  const safeCompleted = stringToBoolean(completed ?? '');
-
-  const safeKeyword = validateSearchKeyword(trimmedKeyword)
-    ? trimmedKeyword
-    : '';
-
-  return {
-    category: safeCategory,
-    completed: safeCompleted,
-    keyword: safeKeyword,
-    skills: safeSkills,
-    recruitParts: safeRecruitParts,
   };
 };

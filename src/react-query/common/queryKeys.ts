@@ -1,10 +1,10 @@
 import type { LunchDateSpecifier } from '~/services/lunch';
 import type {
   RecruitSummariesQueryStringObject,
-  RecruitSummariesQueryStringObjectWithoutInfiniteParams,
   MatchStatus,
   RecruitCategoryName,
 } from '~/services/recruit';
+import type { RecruitsPageRouteQuery } from '~/utils/client-routes/recruits';
 
 import {
   defaultRecruitsPageCursor,
@@ -78,10 +78,9 @@ export const queryKeys = {
       'my-scraped-recruits',
       params,
     ],
-    list: (
-      params: Partial<RecruitSummariesQueryStringObjectWithoutInfiniteParams>
-    ) => {
-      const { category, keyword, recruitParts, skills, completed } = params;
+    list: (params: RecruitsPageRouteQuery = {}) => {
+      const { category, keyword, recruitParts, skills, includeCompleted } =
+        params;
 
       return [
         ...queryKeys.recruit.self(),
@@ -90,7 +89,7 @@ export const queryKeys = {
           keyword,
           recruitParts,
           skills,
-          completed,
+          includeCompleted,
         },
       ];
     },
@@ -276,34 +275,7 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
     complete: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/expired` as const,
-    list: (params: Partial<RecruitSummariesQueryStringObject>) => {
-      const {
-        size = defaultRecruitsPageSize,
-        cursor = defaultRecruitsPageCursor,
-        category,
-        completed = false,
-        recruitParts = [],
-        skills = [],
-        keyword,
-      } = params;
-
-      const queryStringObject = new URLSearchParams({
-        size: size,
-        isFinished: completed,
-      } as never);
-
-      if (category) queryStringObject.append('category', category);
-      if (cursor) queryStringObject.append('cursor', String(cursor));
-      if (keyword) queryStringObject.append('keyword', keyword);
-
-      recruitParts.forEach((part) => {
-        queryStringObject.append('recruitTypes', part);
-      });
-      skills.forEach((skill) => queryStringObject.append('skills', skill));
-      const queryString = queryStringObject.toString();
-
-      return `${endpoints.recruit.self()}?${queryString}`;
-    },
+    list: () => endpoints.recruit.self(),
     joinedList: (params: JoinedRecruitsParams) => {
       const {
         category,

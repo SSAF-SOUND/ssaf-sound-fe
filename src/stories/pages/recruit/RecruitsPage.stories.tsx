@@ -47,7 +47,7 @@ const queryKey = queryKeys.recruit.list({
   keyword: '',
   recruitParts: [],
   skills: [],
-  completed: false,
+  includeCompleted: false,
 });
 export const SignedIn: RecruitsPageStory = {
   decorators: [
