@@ -1,4 +1,6 @@
+import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 import { SkillName } from '~/services/recruit';
+import { inlineFlex } from '~/styles/utils';
 
 import { Skills } from './skills';
 
@@ -16,7 +18,12 @@ export const SkillIcon = (props: SkillIconProps) => {
     filter: invert && invertable[name] ? 'invert(100%)' : undefined,
   };
 
-  return <SkillSVG style={style} />;
+  return (
+    <div css={inlineFlex()}>
+      <SkillSVG style={style} />
+      <VisuallyHidden>{name}</VisuallyHidden>
+    </div>
+  );
 };
 
 const invertable = {
