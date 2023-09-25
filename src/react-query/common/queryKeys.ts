@@ -276,34 +276,7 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
     complete: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/expired` as const,
-    list: (params: Partial<RecruitSummariesQueryStringObject>) => {
-      const {
-        size = defaultRecruitsPageSize,
-        cursor = defaultRecruitsPageCursor,
-        category,
-        completed = false,
-        recruitParts = [],
-        skills = [],
-        keyword,
-      } = params;
-
-      const queryStringObject = new URLSearchParams({
-        size: size,
-        isFinished: completed,
-      } as never);
-
-      if (category) queryStringObject.append('category', category);
-      if (cursor) queryStringObject.append('cursor', String(cursor));
-      if (keyword) queryStringObject.append('keyword', keyword);
-
-      recruitParts.forEach((part) => {
-        queryStringObject.append('recruitTypes', part);
-      });
-      skills.forEach((skill) => queryStringObject.append('skills', skill));
-      const queryString = queryStringObject.toString();
-
-      return `${endpoints.recruit.self()}?${queryString}`;
-    },
+    list: () => endpoints.recruit.self(),
     joinedList: (params: JoinedRecruitsParams) => {
       const {
         category,

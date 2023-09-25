@@ -214,20 +214,7 @@ export const completeRecruitError = restError(
   }
 );
 
-const getRecruitsEndpoint = removeQueryParams(
-  composeUrls(
-    API_URL,
-    endpoints.recruit.list({
-      cursor: 1,
-      recruitParts: [],
-      skills: [],
-      completed: false,
-      keyword: '',
-      size: 10,
-      category: RecruitCategoryName.PROJECT,
-    })
-  )
-);
+const getRecruitsEndpoint = composeUrls(API_URL, endpoints.recruit.list());
 
 export const getRecruits = rest.get(
   getRecruitsEndpoint,
