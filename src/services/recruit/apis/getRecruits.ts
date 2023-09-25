@@ -1,13 +1,13 @@
 import type { InfiniteParams } from '~/services/common';
 import type {
   RecruitSummary,
-  RecruitSummariesQueryStringObject,
   RecruitCursorData,
   RecruitCategoryName,
   RecruitParts,
   SkillName,
 } from '~/services/recruit';
 import type { ApiSuccessResponse } from '~/types';
+import type { RecruitsPageRouteQuery } from '~/utils/client-routes/recruits';
 
 import { endpoints } from '~/react-query/common';
 import {
@@ -16,7 +16,9 @@ import {
 } from '~/services/recruit/apis/constants';
 import { publicAxios } from '~/utils';
 
-export type GetRecruitsParams = Partial<RecruitSummariesQueryStringObject>;
+export type GetRecruitsParams = Partial<
+  RecruitsPageRouteQuery & InfiniteParams
+>;
 
 export type GetRecruitsApiData = ApiSuccessResponse<
   { recruits: RecruitSummary[] } & RecruitCursorData
@@ -35,9 +37,9 @@ export const getRecruits = (params: GetRecruitsParams) => {
     size = defaultRecruitsPageSize,
     cursor = defaultRecruitsPageCursor,
     category,
-    completed = false,
-    recruitParts = [],
-    skills = [],
+    includeCompleted = false,
+    recruitParts,
+    skills,
     keyword,
   } = params;
 
@@ -46,7 +48,7 @@ export const getRecruits = (params: GetRecruitsParams) => {
     size,
     cursor,
     category,
-    isFinished: completed,
+    isFinished: includeCompleted,
     recruitTypes: recruitParts,
     skills,
     keyword,

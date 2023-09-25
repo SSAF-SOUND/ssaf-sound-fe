@@ -87,7 +87,7 @@ export interface AppliedRecruitSummary extends RecruitSummary {
 export interface RecruitSummariesQueryStringObject extends InfiniteParams {
   keyword: string;
   category: RecruitCategoryName;
-  completed: boolean;
+  includeCompleted: boolean;
   recruitParts: RecruitParts[];
   skills: SkillName[];
 }

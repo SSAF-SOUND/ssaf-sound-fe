@@ -1,23 +1,8 @@
-export type RecruitCategory = 'study' | 'project';
-
-export type RecruitType =
-  | '프론트엔드'
-  | '백엔드'
-  | '기획/디자인'
-  | '앱'
-  | '스터디';
-
-export interface LimitType {
-  recruitType: RecruitType;
-  limit: number;
-  currentNumber?: number;
-}
-
-export type RecruitCategoryType = 'study' | 'project';
-
 /* enums */
 
 // ---- SkillName ----
+
+import { pickBy } from '~/utils/object';
 
 export enum SkillName {
   SPRING = 'Spring',
@@ -52,6 +37,12 @@ export enum RecruitParts {
 }
 
 export const RecruitPartsSet = new Set<string>(Object.values(RecruitParts));
+
+export const ProjectPartsSet = new Set<string>(
+  Object.values(
+    pickBy(([, value]) => value !== RecruitParts.STUDY, RecruitParts)
+  )
+);
 
 // ---- Category ----
 
