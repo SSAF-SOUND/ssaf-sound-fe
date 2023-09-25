@@ -8170,6 +8170,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/qs@npm:^6.9.8":
+  version: 6.9.8
+  resolution: "@types/qs@npm:6.9.8"
+  checksum: c28e07d00d07970e5134c6eed184a0189b8a4649e28fdf36d9117fe671c067a44820890de6bdecef18217647a95e9c6aebdaaae69f5fe4b0bec9345db885f77e
+  languageName: node
+  linkType: hard
+
 "@types/quill@npm:^1.3.10":
   version: 1.3.10
   resolution: "@types/quill@npm:1.3.10"
@@ -19056,7 +19063,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.11.0":
+"qs@npm:^6.11.0, qs@npm:^6.11.2":
   version: 6.11.2
   resolution: "qs@npm:6.11.2"
   dependencies:
@@ -20759,6 +20766,7 @@ __metadata:
     "@types/js-cookie": ^3
     "@types/node": 18.16.3
     "@types/prettier": ^2
+    "@types/qs": ^6.9.8
     "@types/react": 18.2.3
     "@types/react-dom": 18.2.3
     "@typescript-eslint/eslint-plugin": ^5.59.2
@@ -20786,6 +20794,7 @@ __metadata:
     next: 13.3.4
     next-router-mock: ^0.9.9
     prettier: ^2.8.8
+    qs: ^6.11.2
     react: 18.2.0
     react-calendar: ^4.3.0
     react-dom: 18.2.0
