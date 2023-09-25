@@ -23,7 +23,7 @@ interface LunchMenusProps {
 
 const LunchMenus = (props: LunchMenusProps) => {
   const { className, campus, dateSpecifier } = props;
-  const skeletonCount = 6;
+  const skeletonCount = 3;
   const { openSignInGuideModal } = useSignInGuideModal();
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
