@@ -5,6 +5,7 @@ import { isAxiosError } from 'axios';
 import { endpoints } from '~/react-query/common';
 import {
   clearPrivateData,
+  GlobalSymbol,
   isDevMode,
   privateAxios,
   publicAxios,
@@ -88,9 +89,7 @@ export const reissueToken = () => {
           await signOut();
           clearPrivateData();
         } catch (err) {
-          console.error(err);
-          // 로그아웃 실패시, 쿼리 재시도를 막기 위해 에러를 반환하지 않음.
-          return;
+          return GlobalSymbol.QUIT_REQUEST_RETRY;
         }
 
         return Promise.reject(error);
