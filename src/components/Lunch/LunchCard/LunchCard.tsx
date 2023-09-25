@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import React, { memo } from 'react';
 
 import { lunchCardMinHeight } from '~/components/Lunch/LunchCard/utils';
-import { flex, palettes } from '~/styles/utils';
+import { colorMix, flex, palettes } from '~/styles/utils';
 
 import { LunchCardMenuDescription } from './LunchCardMenuDescription';
 import { LunchCardPollButton } from './LunchCardPollButton';
@@ -52,7 +52,7 @@ const selfMinWidth = descriptionMinWidth + likeButtonWidth;
 const selfCss = css(
   {
     position: 'relative',
-    backgroundColor: palettes.white,
+    backgroundColor: colorMix('70%', palettes.white),
     borderRadius: 20,
     overflow: 'hidden',
     color: palettes.black,

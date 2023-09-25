@@ -108,7 +108,7 @@ const imageLayerCss = css({
   height: '100%',
   flexGrow: 1,
   zIndex: zIndex.image,
-  backgroundColor: 'black',
+  backgroundColor: colorMix('90%', palettes.black),
 });
 
 const imageCss = css({
