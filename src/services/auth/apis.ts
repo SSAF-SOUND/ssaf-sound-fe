@@ -5,6 +5,7 @@ import { isAxiosError } from 'axios';
 import { endpoints } from '~/react-query/common';
 import {
   clearPrivateData,
+  GlobalSymbol,
   isDevMode,
   privateAxios,
   publicAxios,
@@ -72,7 +73,7 @@ export const reissueToken = () => {
   // 인터셉터 내부에서 무한루프가 발생할 수 있으니 publicAxios 사용
   return publicAxios.post(endpoint, null, config).catch(async (error) => {
     if (!isAxiosError(error)) {
-      console.error(`${tag}: Unknown Error`);
+      console.error(`${tag}: Unknown Error ${error}`);
       return Promise.reject(error);
     }
 
@@ -84,8 +85,13 @@ export const reissueToken = () => {
       } else {
         console.error(`${tag}: Client Error`);
 
-        await signOut();
-        clearPrivateData();
+        try {
+          await signOut();
+          clearPrivateData();
+        } catch (err) {
+          return Promise.reject(GlobalSymbol.QUIT_REQUEST_RETRY);
+        }
+
         return Promise.reject(error);
       }
     }

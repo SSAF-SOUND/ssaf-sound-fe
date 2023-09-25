@@ -318,7 +318,7 @@ const cancelRecruitApplicationEndpoint = composeUrls(
   // @ts-ignore
   endpoints.recruit.application.cancel(':recruitApplicationId')
 );
-const cancelRecruitApplicationMethod = 'post';
+const cancelRecruitApplicationMethod = 'patch';
 
 export const cancelRecruitApplication = restSuccess<
   CancelRecruitApplicationApiData['data']

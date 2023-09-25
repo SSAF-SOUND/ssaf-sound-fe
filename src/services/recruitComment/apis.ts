@@ -90,7 +90,7 @@ export const updateRecruitComment = (params: UpdateRecruitCommentParams) => {
     content,
   };
 
-  return privateAxios.put(endpoint, body).then((res) => res.data);
+  return privateAxios.patch(endpoint, body).then((res) => res.data);
 };
 
 export const removeRecruitComment = (commentId: number) => {
