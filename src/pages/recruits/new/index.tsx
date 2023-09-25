@@ -1,9 +1,10 @@
 import type { CustomNextPage } from 'next/types';
 import type { RecruitFormProps } from '~/components/Forms/RecruitForm';
+import type { RecruitCreatePageRouteQuery } from '~/utils/client-routes/recruits';
 
 import { useRouter } from 'next/router';
 
-import { PageHeadingText } from '~/components/Common';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import RecruitForm, {
   defaultRecruitFormValues,
 } from '~/components/Forms/RecruitForm';
@@ -15,7 +16,6 @@ import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
 import {
   reconfirmRecruitFormUnload,
   RecruitCategoryName,
-  RecruitCategoryNameSet,
   useCreateRecruit,
 } from '~/services/recruit';
 import { globalVars } from '~/styles/utils';
@@ -29,26 +29,20 @@ import {
 
 const metaTitle = '리쿠르팅 등록';
 
-type Params = { category: RecruitCategoryName };
+type Params = RecruitCreatePageRouteQuery;
 
-// /recruits/new?category=project|study
 const RecruitCreatePage: CustomNextPage = () => {
   const router = useRouter();
-  const query = router.query as Partial<Params>;
-  const unsafeCategory = query?.category;
-  const safeCategory =
-    unsafeCategory &&
-    RecruitCategoryNameSet.has(unsafeCategory as RecruitCategoryName)
-      ? unsafeCategory
-      : RecruitCategoryName.PROJECT;
-
+  const routerQuery = router.query as Params;
+  const { query } = routes.recruits.create(routerQuery);
+  const { category } = query;
   const { mutateAsync: createRecruit } = useCreateRecruit();
 
   useUnloadReconfirmEffect();
 
   const onClickTitleBarClose = () => {
     if (reconfirmRecruitFormUnload()) {
-      router.push(routes.recruit.self());
+      router.push(routes.recruits.self().pathname);
     }
   };
 
@@ -70,7 +64,7 @@ const RecruitCreatePage: CustomNextPage = () => {
         ...restFormValues,
       });
 
-      router.replace(routes.recruit.detail(recruitId));
+      router.replace(routes.recruits.detail(recruitId).pathname);
     } catch (err) {
       handleAxiosError(err);
     }
@@ -88,7 +82,7 @@ const RecruitCreatePage: CustomNextPage = () => {
           onInvalidSubmit={onInvalidSubmit}
           defaultValues={{
             ...defaultRecruitFormValues,
-            category: safeCategory,
+            category,
           }}
           options={{
             onClickTitleBarClose: onClickTitleBarClose,
