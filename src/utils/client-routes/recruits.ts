@@ -11,8 +11,6 @@ import {
 } from '~/services/recruit/utils/types';
 import { createRoute } from '~/utils/client-routes/utils';
 
-const recruitsSelfRoute = createRoute('/recruits');
-
 type ProjectParts = Exclude<RecruitParts, RecruitParts.STUDY>;
 
 const getSafeCategory = (category?: string) => {
@@ -20,6 +18,8 @@ const getSafeCategory = (category?: string) => {
     return category as RecruitCategoryName;
   return RecruitCategoryName.PROJECT;
 };
+
+const recruitsSelfRoute = createRoute('/recruits');
 
 // ---------- recruits ----------
 
@@ -101,8 +101,14 @@ const toSafeRecruitCreatePageQuery = (
   return { category: getSafeCategory(category) };
 };
 
+// ---------- recruit detail ----------
+
+const recruitDetailPageRoute = (recruitId: number) =>
+  createRoute(`/recruit/${recruitId}`)();
+
 export const recruits = {
   self: recruitsSelfRoute,
   list: recruitsPageRoute,
   create: recruitCreatePageRoute,
+  detail: recruitDetailPageRoute,
 };
