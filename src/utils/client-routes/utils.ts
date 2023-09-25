@@ -1,7 +1,5 @@
 import { isNullOrUndefined } from 'is-what';
 
-import { identity } from '~/utils';
-
 export type PossibleRouteValue =
   | string
   | boolean
@@ -10,34 +8,23 @@ export type PossibleRouteValue =
   | undefined
   | null;
 
-export type Route<
-  Query extends Record<string, unknown> | Record<string, never> | undefined,
-  Pathname extends string = string
-> = {
+export type Route<Query extends object, Pathname extends string = string> = {
   pathname: Pathname;
-  query?: Query;
+  query: Query;
 };
 
 export const createRoute =
-  <
-    Query extends Record<string, unknown> | Record<string, never> | undefined,
-    Pathname extends string = string
-  >(
+  <Query extends object, Pathname extends string = string>(
     pathname: Pathname
   ) =>
-  (
-    query?: Query,
-    mapper: (query: Query) => Query = identity
-  ): Route<Query, Pathname> => {
+  (query?: Query): Route<Query, Pathname> => {
     if (query) {
       const nonNullableQuery = Object.fromEntries(
-        Object.entries(query).filter(
-          ([key, value]) => !isNullOrUndefined(value)
-        )
+        Object.entries(query).filter(([, value]) => !isNullOrUndefined(value))
       ) as Query;
 
-      return { pathname, query: mapper(nonNullableQuery) };
+      return { pathname, query: nonNullableQuery };
     }
 
-    return { pathname } as const;
+    return { pathname, query: Object.assign({}) };
   };
