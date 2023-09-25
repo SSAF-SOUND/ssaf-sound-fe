@@ -1,5 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 
+import { GlobalSymbol } from '~/utils/constants';
+
 let queryClient: QueryClient;
 
 const getQueryClient = () => {
@@ -11,7 +13,7 @@ const getQueryClient = () => {
         staleTime: Infinity,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
-        retry: 2,
+        retry: retryFunction,
       },
     },
   });
@@ -20,3 +22,12 @@ const getQueryClient = () => {
 };
 
 export default getQueryClient;
+
+const maxFailureCount = 3;
+const retryFunction = (failureCount: number, error: unknown) => {
+  if (error === GlobalSymbol.QUIT_REQUEST_RETRY) {
+    return false;
+  }
+
+  return maxFailureCount > failureCount;
+};
