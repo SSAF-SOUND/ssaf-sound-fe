@@ -4,9 +4,16 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const sentryConfig = require('./config/sentry');
 const svgrConfig = require('./config/svgr');
 
-const shouldNoIndex = ['preview', 'development'].includes(
+const isPreviewOrDevMode = ['preview', 'development'].includes(
   process.env.NEXT_PUBLIC_VERCEL_ENV
 );
+const shouldNoIndex = isPreviewOrDevMode;
+const optimizationConfig = (config) => {
+  if (isPreviewOrDevMode) {
+    config.optimization.minimize = false;
+    config.optimization.minimizer = [];
+  }
+};
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -29,10 +36,10 @@ const nextConfig = {
   webpack(config, context) {
     svgrConfig(config);
     sentryConfig(config, context);
-    config.optimization.minimize = false;
-    config.optimization.minimizer = [];
+    optimizationConfig(config);
     return config;
   },
+  productionBrowserSourceMaps: isPreviewOrDevMode,
   compiler: {
     emotion: {
       labelFormat: '[filename]_[local]',
@@ -76,7 +83,6 @@ const nextConfig = {
   //     },
   //   ];
   // },
-  productionBrowserSourceMaps: true,
 };
 
 // eslint-disable-next-line import/order
