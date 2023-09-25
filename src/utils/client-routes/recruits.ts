@@ -104,7 +104,7 @@ const toSafeRecruitCreatePageQuery = (
 // ---------- recruit detail ----------
 
 const recruitDetailPageRoute = (recruitId: number) =>
-  createRoute(`/recruit/${recruitId}`)();
+  createRoute(`/recruits/${recruitId}`)();
 
 export const recruits = {
   self: recruitsSelfRoute,
