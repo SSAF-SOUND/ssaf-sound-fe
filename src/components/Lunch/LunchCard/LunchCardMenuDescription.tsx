@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import React, { memo, useState } from 'react';
 
 import lunchImageFallback from '~/assets/images/lunch-image-fallback.png';
-import { Button, Icon, ImageWithFallback } from '~/components/Common';
+import { Button, Icon, NativeImageWithFallback } from '~/components/Common';
 import { LunchCardOrder } from '~/components/Lunch/LunchCard/LunchCardOrder';
 import { lunchCardMinHeight } from '~/components/Lunch/LunchCard/utils';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
@@ -31,12 +31,11 @@ export const LunchCardMenuDescription = memo(
         <LunchCardOrder order={order} css={{ zIndex: zIndex.order }} />
 
         <div css={imageLayerCss}>
-          <ImageWithFallback
+          <NativeImageWithFallback
             css={imageCss}
             src={imagePath}
             alt={mainMenu}
             fallbackSrc={lunchImageFallback.src}
-            fill={true}
           />
         </div>
 
