@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import * as RadixToggle from '@radix-ui/react-toggle';
 
 import lunchImageFallback from '~/assets/images/lunch-image-fallback.png';
-import { Icon, ImageWithFallback } from '~/components/Common';
+import { Icon, NativeImageWithFallback } from '~/components/Common';
 import { flex, fontCss, palettes, resetStyle } from '~/styles/utils';
 
 export interface LunchMenusPreviewMenuDescriptionProps {
@@ -25,14 +25,12 @@ export const LunchMenusPreviewMenuDescription = (
 
       <RadixToggle.Root type="button" css={buttonCss}>
         <div css={imageContainerCss} className={cn.imageContainer}>
-          <ImageWithFallback
+          <NativeImageWithFallback
             className={cn.image}
             css={imageCss}
             src={imagePath}
             fallbackSrc={lunchImageFallback.src}
             alt={mainMenu}
-            fill={true}
-            priority={true}
           />
 
           <strong className={cn.mainMenu} css={mainMenuCss}>
