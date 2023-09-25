@@ -1,10 +1,10 @@
 import type { LunchDateSpecifier } from '~/services/lunch';
 import type {
   RecruitSummariesQueryStringObject,
-  RecruitSummariesQueryStringObjectWithoutInfiniteParams,
   MatchStatus,
   RecruitCategoryName,
 } from '~/services/recruit';
+import type { RecruitsPageRouteQuery } from '~/utils/client-routes/recruits';
 
 import {
   defaultRecruitsPageCursor,
@@ -78,10 +78,9 @@ export const queryKeys = {
       'my-scraped-recruits',
       params,
     ],
-    list: (
-      params: Partial<RecruitSummariesQueryStringObjectWithoutInfiniteParams>
-    ) => {
-      const { category, keyword, recruitParts, skills, completed } = params;
+    list: (params: RecruitsPageRouteQuery = {}) => {
+      const { category, keyword, recruitParts, skills, includeCompleted } =
+        params;
 
       return [
         ...queryKeys.recruit.self(),
@@ -90,7 +89,7 @@ export const queryKeys = {
           keyword,
           recruitParts,
           skills,
-          completed,
+          includeCompleted,
         },
       ];
     },
