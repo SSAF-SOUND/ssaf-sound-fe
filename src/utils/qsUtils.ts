@@ -11,7 +11,7 @@ const hasOwnProperty = (obj: object, str: string): str is keyof typeof obj => {
   return tokenMapper.hasOwnProperty(str);
 };
 
-export const qsDecoder = (token: string): string => {
+export const qsDecoder = (token: string) => {
   if (hasOwnProperty(tokenMapper, token)) {
     return tokenMapper[token];
   }
@@ -58,5 +58,3 @@ export const qsParse = <
     ...options,
   }) as T;
 };
-
-const ff = qsParse('123132');
