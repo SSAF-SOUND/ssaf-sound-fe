@@ -41,7 +41,7 @@ const infiniteRecruitsHandler = () => {
       lastRecruitSummaryIndex === -1 ? null : lastRecruitSummaryIndex;
 
     return res(
-      ctx.delay(500),
+      ctx.delay(100),
       ...mockSuccess<GetRecruitsApiData['data']>(ctx, {
         recruits: data,
         nextCursor,
