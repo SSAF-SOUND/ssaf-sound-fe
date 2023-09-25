@@ -11,12 +11,12 @@ type StringToBooleanOptions = Partial<{
 export const stringToBoolean = (
   str?: string,
   options: StringToBooleanOptions = {}
-) => {
+): boolean => {
   const { exact } = options;
 
   if (exact) {
     if (str && hasOwnProperty(map, str)) {
-      return map[str];
+      return map[str] as boolean;
     } else {
       throw new Error(
         `[In stringToBoolean]: 올바른 파라미터가 전달되지 않았습니다. str: ${str}`
