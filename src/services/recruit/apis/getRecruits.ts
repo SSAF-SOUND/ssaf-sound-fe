@@ -1,7 +1,11 @@
+import type { InfiniteParams } from '~/services/common';
 import type {
   RecruitSummary,
   RecruitSummariesQueryStringObject,
   RecruitCursorData,
+  RecruitCategoryName,
+  RecruitParts,
+  SkillName,
 } from '~/services/recruit';
 import type { ApiSuccessResponse } from '~/types';
 
@@ -18,6 +22,14 @@ export type GetRecruitsApiData = ApiSuccessResponse<
   { recruits: RecruitSummary[] } & RecruitCursorData
 >;
 
+export interface GetRecruitsQueryParams extends InfiniteParams {
+  category?: RecruitCategoryName;
+  keyword?: string;
+  isFinished?: boolean;
+  recruitTypes?: RecruitParts | RecruitParts[];
+  skills?: SkillName | SkillName[];
+}
+
 export const getRecruits = (params: GetRecruitsParams) => {
   const {
     size = defaultRecruitsPageSize,
@@ -29,17 +41,20 @@ export const getRecruits = (params: GetRecruitsParams) => {
     keyword,
   } = params;
 
-  const endpoint = endpoints.recruit.list({
+  const endpoint = endpoints.recruit.list();
+  const queryParams: GetRecruitsQueryParams = {
     size,
     cursor,
     category,
-    completed,
-    recruitParts,
+    isFinished: completed,
+    recruitTypes: recruitParts,
     skills,
     keyword,
-  });
+  };
 
-  return publicAxios
-    .get<GetRecruitsApiData>(endpoint)
-    .then((res) => res.data.data);
+  return publicAxios<GetRecruitsApiData>({
+    method: 'get',
+    url: endpoint,
+    params: queryParams,
+  }).then((res) => res.data.data);
 };
