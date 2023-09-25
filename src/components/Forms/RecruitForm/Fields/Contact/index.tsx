@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { AlertText, TextInput } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { TextInput } from '~/components/Common/TextInput';
 import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
-import { palettes } from '~/styles/utils';
-import { regex } from '~/utils';
+import { palettes } from '~/styles/utils/palettes';
+import { regex } from '~/utils/regex';
 
 const fieldName = 'contact';
 const maxLength = 500;
@@ -37,6 +38,7 @@ export const Contact = (props: ContactProps) => {
 
       <TextInput
         size="md"
+        autoComplete="off"
         placeholder="링크를 입력해주세요"
         css={inputCss}
         defaultValue={defaultContact}
