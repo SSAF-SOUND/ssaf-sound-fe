@@ -8,7 +8,7 @@ import { DatePicker } from '~/components/Common/DatePicker';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { toEndDateFormValue } from '~/components/Forms/RecruitForm/utils/toEndDateFormValue';
 import { RecruitCategoryName } from '~/services/recruit';
-import { flex, Theme } from '~/styles/utils';
+import { flex, fontCss, palettes, Theme } from '~/styles/utils';
 
 const fieldName = 'endDate';
 const validateEndDate = (value: string) => {
@@ -76,8 +76,19 @@ export const EndDate = (props: EndDateProps) => {
         theme={datePickerTheme}
         onChange={handleChangeDate}
       />
+
+      <div css={guideCss}>
+        선택된 마감일의 다음 날이 되면, 모집이 자동으로 종료됩니다.
+      </div>
     </div>
   );
 };
 
 const selfCss = css(flex('center', 'center'));
+const guideCss = css(
+  {
+    marginTop: 20,
+    color: palettes.recruit.default,
+  },
+  fontCss.style.R14
+);

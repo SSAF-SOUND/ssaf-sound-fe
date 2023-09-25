@@ -1,4 +1,4 @@
-import { VisuallyHidden } from '~/components/Common';
+import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 
 interface PageHeadingTextProps {
   text: string;

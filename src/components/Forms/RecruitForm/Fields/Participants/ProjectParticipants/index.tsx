@@ -91,7 +91,7 @@ const ProjectParticipants = () => {
           onClick={handleAddField}
           disabled={!canAddField}
         >
-          <Icon name="circle.plus" label="필드 추가" size={14} />
+          <Icon name="circle.plus" label="모집 필드 추가" size={14} />
         </Button>
 
         <div css={fieldContainerCss}>
@@ -106,7 +106,7 @@ const ProjectParticipants = () => {
         </div>
       </div>
 
-      <div>
+      <div css={{ marginTop: 160, marginBottom: 60 }}>
         <FieldOverview>본인 파트</FieldOverview>
         <MyPart />
       </div>

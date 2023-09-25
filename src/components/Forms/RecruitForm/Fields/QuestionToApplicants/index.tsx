@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { AlertText, TextInput } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { TextInput } from '~/components/Common/TextInput';
 import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { fontCss, palettes } from '~/styles/utils';
@@ -55,6 +56,7 @@ export const QuestionToApplicants = (props: QuestionToApplicantsProps) => {
             {`질문을 작성하여 리쿠르팅 참여자에게 답변을 받을 수 있습니다. (글자 수 ${maxLength}자 내)`}
           </p>
           <TextInput
+            autoComplete="off"
             defaultValue={defaultQuestionToApplicants}
             css={inputCss}
             size="md"

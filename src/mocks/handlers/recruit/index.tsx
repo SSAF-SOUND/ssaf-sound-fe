@@ -3,7 +3,6 @@
 import type {
   ApplyRecruitApiData,
   CancelRecruitApplicationApiData,
-  CreateRecruitApiData,
   GetRecruitApplicantsApiData,
   GetRecruitDetailApiData,
   GetRecruitParticipantsApiData,
@@ -15,6 +14,7 @@ import type {
 
 import { rest } from 'msw';
 
+import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
@@ -50,31 +50,6 @@ export const getRecruitApplicants = rest.get(
         createMockRecruitApplicants(recruitId)
       )
     );
-  }
-);
-
-// 리쿠르팅 생성
-
-const createRecruitEndpoint = endpoints.recruit.self();
-const createRecruitHttpMethod = 'post';
-
-export const createRecruit = restSuccess<CreateRecruitApiData['data']>(
-  createRecruitHttpMethod,
-  createRecruitEndpoint,
-  {
-    data: {
-      recruitId: 1,
-    },
-  }
-);
-
-export const createRecruitError = restError(
-  createRecruitHttpMethod,
-  createRecruitEndpoint,
-  {
-    data: {
-      message: '리쿠르팅 생성 실패',
-    },
   }
 );
 
@@ -485,9 +460,9 @@ export const recruitHandlers = [
   getAppliedRecruits,
   getMyScrapedRecruits,
   // getMyScrapedRecruitsError,
-  //
+
   getRecruitApplicants,
-  createRecruit,
+  mockCreateRecruit,
   getRecruitDetail,
   getRecruitParticipants,
   scrapRecruit,

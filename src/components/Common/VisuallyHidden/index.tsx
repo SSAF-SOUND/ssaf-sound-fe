@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Slot } from '@radix-ui/react-slot';
 
-import { visuallyHidden } from '~/styles/utils';
+import { visuallyHidden } from '~/styles/utils/visuallyHidden';
 
 export interface VisuallyHiddenProps {
   children: ReactNode;

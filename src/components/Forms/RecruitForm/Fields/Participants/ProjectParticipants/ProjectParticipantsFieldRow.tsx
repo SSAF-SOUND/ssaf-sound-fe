@@ -8,7 +8,9 @@ import { css } from '@emotion/react';
 import { memo } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { Icon, IconButton, NumberInput } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
+import { NumberInput } from '~/components/Common/NumberInput';
 import { SelectBox } from '~/components/Common/SelectBox';
 import {
   maxParticipantsCount,
@@ -16,8 +18,8 @@ import {
   possibleProjectParts,
   useRecruitFormContext,
 } from '~/components/Forms/RecruitForm/utils';
-import { flex } from '~/styles/utils';
-import { createBoundClamp } from '~/utils';
+import { flex } from '~/styles/utils/flex';
+import { createBoundClamp } from '~/utils/number';
 
 const fieldArrayName = 'participants.project';
 
@@ -93,7 +95,7 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
         onClick={handleRemoveField}
         disabled={!canRemoveField}
       >
-        <Icon name="circle.minus" size={14} label="필드 제거" />
+        <Icon name="circle.minus" size={14} label="모집 필드 제거" />
       </IconButton>
     </div>
   );
