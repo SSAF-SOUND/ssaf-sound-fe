@@ -89,7 +89,7 @@ export const reissueToken = () => {
           await signOut();
           clearPrivateData();
         } catch (err) {
-          return GlobalSymbol.QUIT_REQUEST_RETRY;
+          return Promise.reject(GlobalSymbol.QUIT_REQUEST_RETRY);
         }
 
         return Promise.reject(error);
