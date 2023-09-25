@@ -5,7 +5,10 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Bar, Button, Icon, IconButton } from '~/components/Common';
+import { Bar } from '~/components/Common/Bar';
+import { Button } from '~/components/Common/Button';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { fixTopCenter, fontCss, zIndex } from '~/styles/utils';
 
 export interface FormTitleBarProps {
@@ -16,6 +19,10 @@ export interface FormTitleBarProps {
   onClickClose?: Route | MouseEventHandler<HTMLButtonElement>;
   onClickSubmitButton?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
+}
+
+export enum FormTitleBarIconLabel {
+  CLOSE = '닫기',
 }
 
 export const FormTitleBar = (props: FormTitleBarProps) => {
@@ -57,7 +64,11 @@ export const FormTitleBar = (props: FormTitleBarProps) => {
       {...restProps}
       left={
         <IconButton size={iconButtonSize} onClick={handleClickClose}>
-          <Icon name="close" size={iconSize} />
+          <Icon
+            name="close"
+            size={iconSize}
+            label={FormTitleBarIconLabel.CLOSE}
+          />
         </IconButton>
       }
       center={<h2 css={titleCss}>{title}</h2>}
