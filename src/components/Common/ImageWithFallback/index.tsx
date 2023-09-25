@@ -1,9 +1,14 @@
 import type { ImageProps } from 'next/image';
-import type { ComponentPropsWithoutRef} from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 
 import Image from 'next/image';
 
 import { useState } from 'react';
+
+const initializeSrc = <T,>(fallbackSrc: string, src: T) => {
+  if (!src) return fallbackSrc;
+  return src;
+};
 
 interface ImageWithFallbackProps extends ImageProps {
   fallbackSrc: string;
@@ -11,7 +16,7 @@ interface ImageWithFallbackProps extends ImageProps {
 
 export const ImageWithFallback = (props: ImageWithFallbackProps) => {
   const { src, fallbackSrc, alt, ...restProps } = props;
-  const [imgSrc, setImgSrc] = useState(src);
+  const [imgSrc, setImgSrc] = useState(() => initializeSrc(fallbackSrc, src));
 
   return (
     <Image
@@ -31,7 +36,7 @@ export interface NativeImageWithFallback
 }
 export const NativeImageWithFallback = (props: NativeImageWithFallback) => {
   const { src, fallbackSrc, alt, ...restProps } = props;
-  const [imgSrc, setImgSrc] = useState(src);
+  const [imgSrc, setImgSrc] = useState(() => initializeSrc(fallbackSrc, src));
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
