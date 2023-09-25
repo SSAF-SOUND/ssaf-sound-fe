@@ -106,7 +106,7 @@ const ProjectParticipants = () => {
         </div>
       </div>
 
-      <div>
+      <div css={{ marginTop: 160, marginBottom: 60 }}>
         <FieldOverview>본인 파트</FieldOverview>
         <MyPart />
       </div>
