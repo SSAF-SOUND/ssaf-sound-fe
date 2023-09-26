@@ -3,5 +3,8 @@
   "extends": ["plugin:cypress/recommended"],
   "env": {
     "cypress/globals": true
+  },
+  "rules": {
+    "cypress/unsafe-to-chain-command": "off"
   }
 }
