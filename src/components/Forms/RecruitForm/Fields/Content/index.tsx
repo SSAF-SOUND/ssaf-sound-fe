@@ -10,6 +10,7 @@ const fieldName = 'content';
 const minContentLength = 2;
 const maxContentLength = 3000;
 const lengthErrorMessage = `본문의 내용은 ${minContentLength}자 이상 ${maxContentLength}자 이하여야 합니다.`;
+const requiredErrorMessage = '본문의 내용은 필수로 입력해야 합니다.';
 const validateContent = (error?: string) => () => !error || error;
 
 interface ContentProps {
@@ -40,9 +41,7 @@ export const Content = (props: ContentProps) => {
     setValue(fieldName, value, {
       shouldDirty: true,
     });
-
     const textLength = editor.getText().length - 1;
-
     if (textLength < minContentLength || textLength > maxContentLength) {
       if (!errorMessage) setError(fieldName, { message: lengthErrorMessage });
       return;
@@ -53,6 +52,7 @@ export const Content = (props: ContentProps) => {
 
   register(fieldName, {
     validate: validateContent(errorMessage),
+    required: requiredErrorMessage,
   });
 
   return (
