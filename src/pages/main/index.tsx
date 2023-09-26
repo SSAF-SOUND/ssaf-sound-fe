@@ -88,6 +88,6 @@ export const getStaticProps: GetStaticProps = async () => {
       dehydratedState:
         toSSRSafeDehydratedState.infiniteQueries(dehydratedState),
     },
-    revalidate: 20,
+    revalidate: 30,
   };
 };
