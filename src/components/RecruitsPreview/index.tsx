@@ -15,13 +15,7 @@ interface RecruitsPreviewProps {
 const maxViewCount = 10;
 export const RecruitsPreview = (props: RecruitsPreviewProps) => {
   const { className, marginForExpand = '0px' } = props;
-  const {
-    data: recruits,
-    isLoading,
-    isError,
-  } = useRecruits({
-    category: RecruitCategoryName.PROJECT,
-  });
+  const { data: recruits, isLoading, isError } = useRecruits();
 
   const latestRecruits =
     recruits?.pages[0].recruits.slice(0, maxViewCount) ?? [];
