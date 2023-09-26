@@ -12,6 +12,7 @@ import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
 import { NumberInput } from '~/components/Common/NumberInput';
 import { SelectBox } from '~/components/Common/SelectBox';
+import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 import {
   maxParticipantsCount,
   minParticipantsCount,
@@ -68,6 +69,9 @@ const ProjectParticipantsFieldRow = memo((props: FieldRowProps) => {
 
   return (
     <div css={fieldRowCss}>
+      <VisuallyHidden asChild>
+        <h3>모집 파트 및 인원 선택</h3>
+      </VisuallyHidden>
       <SelectBox
         placeholder="선택"
         triggerTextAlign="center"
