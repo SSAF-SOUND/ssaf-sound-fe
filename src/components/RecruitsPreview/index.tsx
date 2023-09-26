@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import Skeleton from 'react-loading-skeleton';
 
+import { PreviewErrorCard } from '~/components/PreviewErrorCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
 import { RecruitsPreviewRecruitList } from '~/components/RecruitsPreview/RecruitsPreviewRecruitList';
 import { recruitPreviewMarginForExpandCssVar } from '~/components/RecruitsPreview/utils';
@@ -17,7 +17,12 @@ interface RecruitsPreviewProps {
 const maxViewCount = defaultRecruitsPageSize;
 export const RecruitsPreview = (props: RecruitsPreviewProps) => {
   const { className, marginForExpand = '0px' } = props;
-  const { data: recruits, isLoading, isError, isSuccess } = useRecruits();
+  const {
+    data: recruits,
+    isLoading: isRecruitsLoading,
+    isError: isRecruitsError,
+    isSuccess: isRecruitsSuccess,
+  } = useRecruits();
 
   const latestRecruits =
     recruits?.pages[0].recruits.slice(0, maxViewCount) ?? [];
@@ -35,9 +40,14 @@ export const RecruitsPreview = (props: RecruitsPreviewProps) => {
         css={{ marginBottom: 16 }}
       />
 
-      {isLoading && <RecruitsPreviewSkeleton />}
-      {isError && <div>에러</div>}
-      {isSuccess &&
+      {isRecruitsLoading && <RecruitsPreviewSkeleton />}
+      {isRecruitsError && (
+        <PreviewErrorCard
+          css={{ height: 226 }}
+          errorMessage={`리쿠르팅 목록을 불러오는 중 오류가 발생했습니다.`}
+        />
+      )}
+      {isRecruitsSuccess &&
         (notExistRecruits ? (
           <NotExistRecruits />
         ) : (
