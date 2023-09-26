@@ -1,6 +1,9 @@
+import dayjs from 'dayjs';
+
 import { datePickerClassnames } from '~/components/Common/DatePicker/datePickerClassnames';
 import { editorClassnames } from '~/components/Editor/editorClassnames';
 import RecruitForm from '~/components/Forms/RecruitForm';
+import { RecruitCategoryName, RecruitParts } from '~/services/recruit';
 
 const submitButtonText = '완료';
 const contactLink = {
@@ -20,7 +23,7 @@ const selectStudyCategory = () => {
   cy.findByRole('radio', { name: /스터디/ }).click();
 };
 
-const allAccordionOpen = () => {
+const openAllAccordion = () => {
   cy.findByRole('heading', { name: /모집 인원/ }).click();
 
   cy.findByRole('heading', { name: /모집 마감일 선택/ }).click();
@@ -74,7 +77,7 @@ const populateRecruitDescription = () => {
   cy.get(`.${editorClassnames.editor}`).type('Description');
 };
 
-const submitForm = () => {
+const submitRecruitCreateForm = () => {
   cy.findByRole('button', { name: '완료' }).click();
 
   cy.findByRole('dialog').within(() => {
@@ -83,12 +86,10 @@ const submitForm = () => {
 };
 
 const addParticipantsFieldRow = () => {
-  cy.findByRole('button', { name: '모집 필드 추가' })
-    .as('addParticipantsFieldRowButton')
-    .click();
+  cy.findByRole('button', { name: '모집 필드 추가' }).click();
 };
 
-describe('Recruit create form', () => {
+describe('Recruit Create Form', () => {
   let onValidSubmit: ReturnType<typeof cy.spy>;
   let onInvalidSubmit: ReturnType<typeof cy.spy>;
   beforeEach(() => {
@@ -104,14 +105,14 @@ describe('Recruit create form', () => {
         }}
       />
     );
-    allAccordionOpen();
+    openAllAccordion();
   });
 
   describe('필수 입력필드 검사', () => {
     it('필수 입력필드만 채우면 폼 제출이 가능하다.', () => {
       selectProjectCategory();
       populateAllProjectFields();
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy').should('have.been.calledOnce');
     });
@@ -122,7 +123,7 @@ describe('Recruit create form', () => {
       populateEndDate();
       populateRecruitTitle();
       populateRecruitDescription();
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy').should('not.have.been.called');
       cy.get('@onInvalidSubmitSpy').should('have.been.calledOnce');
@@ -134,7 +135,7 @@ describe('Recruit create form', () => {
       populateEndDate();
       populateRecruitTitle();
       populateRecruitDescription();
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy').should('not.have.been.called');
       cy.get('@onInvalidSubmitSpy').should('have.been.calledOnce');
@@ -146,7 +147,7 @@ describe('Recruit create form', () => {
       populateMyPart();
       populateRecruitTitle();
       populateRecruitDescription();
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy').should('not.have.been.called');
       cy.get('@onInvalidSubmitSpy').should('have.been.calledOnce');
@@ -158,7 +159,7 @@ describe('Recruit create form', () => {
       populateMyPart();
       populateEndDate();
       populateRecruitDescription();
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy').should('not.have.been.called');
       cy.get('@onInvalidSubmitSpy').should('have.been.calledOnce');
@@ -170,7 +171,7 @@ describe('Recruit create form', () => {
       populateMyPart();
       populateEndDate();
       populateRecruitTitle();
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy').should('not.have.been.called');
       cy.get('@onInvalidSubmitSpy').should('have.been.calledOnce');
@@ -183,7 +184,7 @@ describe('Recruit create form', () => {
       populateEndDate();
       populateRecruitTitle();
       populateRecruitDescription();
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy')
         .should('not.have.been.called')
@@ -194,7 +195,7 @@ describe('Recruit create form', () => {
         .invoke('resetHistory');
 
       selectStudyCategory();
-      submitForm();
+      submitRecruitCreateForm();
       cy.get('@onValidSubmitSpy').should('have.been.calledOnce');
       cy.get('@onInvalidSubmitSpy').should('not.have.been.called');
     });
@@ -210,7 +211,7 @@ describe('Recruit create form', () => {
       populateRecruitTitle();
       populateRecruitDescription();
 
-      submitForm();
+      submitRecruitCreateForm();
       cy.get('@onValidSubmitSpy')
         .should('not.have.been.called')
         .invoke('resetHistory');
@@ -221,7 +222,7 @@ describe('Recruit create form', () => {
       selectProjectCategory();
       populateProjectParticipants();
       populateMyPart();
-      submitForm();
+      submitRecruitCreateForm();
       cy.get('@onValidSubmitSpy').should('have.been.calledOnce');
       cy.get('@onInvalidSubmitSpy').should('not.have.been.called');
     });
@@ -242,7 +243,7 @@ describe('Recruit create form', () => {
           });
         });
 
-      submitForm();
+      submitRecruitCreateForm();
       cy.findByRole('alert', {
         name: /모집 파트는 중복이 불가능합니다/,
       }).should('be.exist');
@@ -257,7 +258,7 @@ describe('Recruit create form', () => {
       cy.findByPlaceholderText(/링크를 입력해주세요/)
         .as('contactLinkInput')
         .type(contactLink.invalid);
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy')
         .should('not.have.been.called')
@@ -267,10 +268,160 @@ describe('Recruit create form', () => {
         .invoke('resetHistory');
 
       cy.get('@contactLinkInput').clear().type(contactLink.valid);
-      submitForm();
+      submitRecruitCreateForm();
 
       cy.get('@onValidSubmitSpy').should('have.been.calledOnce');
       cy.get('@onInvalidSubmitSpy').should('not.have.been.called');
+    });
+  });
+
+  describe('모집 파트 입력필드 추가 및 제거', () => {
+    it('모집 파트 입력필드가 1개일 경우, 필드 제거가 불가능하다.', () => {
+      cy.findByRole('button', { name: '모집 필드 제거' }).should('be.disabled');
+
+      addParticipantsFieldRow();
+
+      cy.findAllByRole('button', { name: '모집 필드 제거' })
+        .as('participantsFieldRemoveButtons')
+        .then(($$row) => {
+          [...$$row].forEach(($row) => {
+            cy.wrap($row).should('not.be.disabled');
+          });
+        });
+
+      cy.get('@participantsFieldRemoveButtons').eq(0).click();
+      cy.get('@participantsFieldRemoveButtons').eq(0).should('be.disabled');
+    });
+
+    it('모집 파트 입력필드가 4개일 경우, 필드 추가가 불가능하다.', () => {
+      addParticipantsFieldRow();
+      addParticipantsFieldRow();
+      addParticipantsFieldRow();
+      cy.findByRole('button', { name: '모집 필드 추가' }).should('be.disabled');
+    });
+  });
+});
+
+const recruitEditFormDefaultValues = {
+  category: RecruitCategoryName.PROJECT,
+  participants: {
+    project: [{ part: RecruitParts.FRONTEND, count: 10 }],
+    study: [{ part: RecruitParts.STUDY, count: 10 }],
+  },
+  contact: contactLink.valid,
+  skills: {},
+  myPart: RecruitParts.FRONTEND,
+  questionToApplicants: 'Question',
+  title: 'Title',
+  content: '<p>Description</p>',
+  endDate: dayjs().add(10, 'day').format('YYYY-MM-DD'),
+};
+
+describe('Recruit Edit Form', () => {
+  let onValidSubmit: ReturnType<typeof cy.spy>;
+  let onInvalidSubmit: ReturnType<typeof cy.spy>;
+  let onClickRecruitComplete: ReturnType<typeof cy.spy>;
+
+  beforeEach(() => {
+    onValidSubmit = cy.spy().as('onValidSubmitSpy');
+    onInvalidSubmit = cy.spy().as('onInvalidSubmitSpy');
+    onClickRecruitComplete = cy.spy().as('onClickRecruitCompleteSpy');
+  });
+
+  describe('등록자 질문 제약', () => {
+    it('등록자 질문은 변경할 수 없다.', () => {
+      cy.mount(
+        <RecruitForm
+          onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
+          defaultValues={recruitEditFormDefaultValues}
+          options={{ submitButtonText, editMode: true, onClickRecruitComplete }}
+        />
+      );
+      openAllAccordion();
+
+      cy.contains('등록자 질문')
+        .parent()
+        .siblings('input')
+        .should('be.disabled');
+    });
+
+    it('등록자 질문이 없는 경우(최초에 등록하지 않음)에도 변경할 수 없다.', () => {
+      cy.mount(
+        <RecruitForm
+          onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
+          defaultValues={{
+            ...recruitEditFormDefaultValues,
+            questionToApplicants: '',
+          }}
+          options={{ submitButtonText, editMode: true, onClickRecruitComplete }}
+        />
+      );
+      openAllAccordion();
+
+      cy.contains('등록자 질문')
+        .parent()
+        .siblings('input')
+        .should('be.disabled');
+    });
+  });
+
+  describe('리쿠르팅 카테고리 제약', () => {
+    it('프로젝트 모집을 스터디 모집으로 변경할 수 없다.', () => {
+      cy.mount(
+        <RecruitForm
+          onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
+          defaultValues={{
+            ...recruitEditFormDefaultValues,
+            category: RecruitCategoryName.PROJECT,
+          }}
+          options={{ submitButtonText, editMode: true, onClickRecruitComplete }}
+        />
+      );
+      openAllAccordion();
+      cy.findByRole('radio', { name: /스터디/ }).should('be.disabled');
+    });
+
+    it('스터디 모집을 프로젝트 모집으로 변경할 수 없다.', () => {
+      cy.mount(
+        <RecruitForm
+          onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
+          defaultValues={{
+            ...recruitEditFormDefaultValues,
+            category: RecruitCategoryName.PROJECT,
+          }}
+          options={{ submitButtonText, editMode: true, onClickRecruitComplete }}
+        />
+      );
+      openAllAccordion();
+      cy.findByRole('radio', { name: /프로젝트/ }).should('be.disabled');
+    });
+  });
+
+  describe('모집 완료 인터랙션', () => {
+    it.only('모집 완료 요청에 성공하면, 모집 완료 버튼이 비활성화 된다.', () => {
+      cy.mount(
+        <RecruitForm
+          onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
+          defaultValues={{
+            ...recruitEditFormDefaultValues,
+            category: RecruitCategoryName.PROJECT,
+          }}
+          options={{ submitButtonText, editMode: true, onClickRecruitComplete }}
+        />
+      );
+      cy.findByText(/모집완료/).click();
+      cy.findByRole('dialog').within(() => {
+        cy.findByRole('button', { name: /모집완료/ }).click();
+      });
+      cy.get('@onClickRecruitCompleteSpy').should('have.been.calledOnce');
+      cy.findByRole('button', { name: /모집이 완료되었습니다/ })
+        .should('be.exist')
+        .and('be.disabled');
     });
   });
 });
