@@ -83,7 +83,7 @@ const titleCss = css(recruitFormExpandCss, {
 });
 
 const descriptionCss = css(
-  { color: palettes.primary.light, cursor: 'pointer', marginBottom: 10 },
+  { color: palettes.primary.light, marginBottom: 10 },
   fontCss.style.R12
 );
 

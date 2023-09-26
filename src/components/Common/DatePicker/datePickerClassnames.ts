@@ -1,4 +1,4 @@
-const classnames = {
+export const datePickerClassnames = {
   navigation: 'react-calendar__navigation',
   navigationLabel: 'react-calendar__navigation__label',
   navigationArrow: 'react-calendar__navigation__arrow',
@@ -14,5 +14,3 @@ const classnames = {
   monthViewNeighboringTile:
     'react-calendar__month-view__days__day--neighboringMonth',
 };
-
-export default classnames;

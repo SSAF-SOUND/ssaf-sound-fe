@@ -6,6 +6,9 @@ export default defineConfig({
       framework: 'next',
       bundler: 'webpack',
     },
+    viewportWidth: 500,
+    viewportHeight: 700,
+    specPattern: 'cypress/component/**/*.cy.{ts,tsx}',
   },
 
   e2e: {

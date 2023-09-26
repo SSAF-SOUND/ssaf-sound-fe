@@ -29,6 +29,7 @@ export const useLunchMenusWithPollStatus = (
   return useQuery({
     queryKey: queryKeys.lunch.list({ campus, dateSpecifier }),
     queryFn: () => getLunchMenusWithPollStatus(apiParams),
+    staleTime: 30,
   });
 };
 

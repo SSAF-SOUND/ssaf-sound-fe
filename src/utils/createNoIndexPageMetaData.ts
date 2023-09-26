@@ -1,4 +1,4 @@
-import type { PageHeadProps } from '~/components/Common';
+import type { PageHeadProps } from '~/components/Common/PageHead';
 
 export const createNoIndexPageMetaData = (metaTitle: string): PageHeadProps => {
   return {

@@ -1,6 +1,6 @@
 import type { NextPageAuthConfig } from 'next/types';
 
-import { FullPageLoader, loaderText } from '~/components/Common';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { routes } from '~/utils/routes';
 
 type CreateAuthGuardOptions = Omit<NextPageAuthConfig, 'loading'> & {

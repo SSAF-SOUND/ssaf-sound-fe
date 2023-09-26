@@ -18,7 +18,7 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
     data: hotArticles,
     isLoading: isHotArticlesLoading,
     isError: isHotArticlesError,
-    refetch,
+    isSuccess: isHotArticlesSuccess,
   } = useHotArticles();
 
   const maxViewCount = 5;
@@ -37,14 +37,17 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
         {isHotArticlesLoading && <HotArticlesPreviewSkeleton />}
 
         {isHotArticlesError && (
-          <PreviewErrorCard css={{ height: 200 }} onClickRetry={refetch} />
+          <PreviewErrorCard
+            css={{ height: 200 }}
+            errorMessage={`핫 게시글 목록을 불러오는 중 오류가 발생했습니다`}
+          />
         )}
 
-        {latestHotArticles &&
+        {isHotArticlesSuccess &&
           (notExistHotArticles ? (
             <NotExistHotArticles />
           ) : (
-            latestHotArticles.map((article) => (
+            latestHotArticles?.map((article) => (
               <HotArticlesPreviewArticleItem
                 key={article.postId}
                 article={article}

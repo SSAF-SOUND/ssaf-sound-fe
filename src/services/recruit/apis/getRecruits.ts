@@ -32,7 +32,7 @@ export interface GetRecruitsQueryParams extends InfiniteParams {
   skills?: SkillName | SkillName[];
 }
 
-export const getRecruits = (params: GetRecruitsParams) => {
+export const getRecruits = (params: GetRecruitsParams = {}) => {
   const {
     size = defaultRecruitsPageSize,
     cursor = defaultRecruitsPageCursor,

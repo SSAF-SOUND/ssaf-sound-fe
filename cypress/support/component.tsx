@@ -18,7 +18,10 @@
 
 import type { DehydratedState, QueryClient } from '@tanstack/react-query';
 import type { NextPageAuthConfig } from 'next';
+import type { NextRouter } from 'next/router';
 import type { ReactNode } from 'react';
+
+import { RouterContext } from 'next/dist/shared/lib/router-context';
 
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { mount } from 'cypress/react18';
@@ -31,34 +34,63 @@ import { getQueryClient } from '~/react-query/common';
 
 import './commands';
 
+import GlobalStyles from '~/styles/GlobalStyles';
+import { MainLayout } from '~/components/Layout';
+
 interface AllProviderProps {
   children?: ReactNode;
   queryClient?: QueryClient;
   dehydratedState?: DehydratedState;
   auth?: NextPageAuthConfig;
+  router: NextRouter;
 }
 
 const AllProvider = (props: AllProviderProps) => {
-  const { dehydratedState, auth, queryClient, children } = props;
+  const { dehydratedState, auth, queryClient, router, children } = props;
 
   const client = queryClient ?? getQueryClient();
 
   return (
-    <QueryClientProvider client={client}>
-      <Hydrate state={dehydratedState}>
-        <Toaster />
-        {auth ? <AuthChecker auth={auth}>{children}</AuthChecker> : children}
-      </Hydrate>
-      <GlobalModal />
-    </QueryClientProvider>
+    <RouterContext.Provider value={router}>
+      <QueryClientProvider client={client}>
+        <Hydrate state={dehydratedState}>
+          <Toaster />
+          <MainLayout>
+            {auth ? (
+              <AuthChecker auth={auth}>{children}</AuthChecker>
+            ) : (
+              children
+            )}
+          </MainLayout>
+        </Hydrate>
+        <GlobalStyles />
+        <GlobalModal />
+      </QueryClientProvider>
+    </RouterContext.Provider>
   );
 };
 
 Cypress.Commands.add('mount', (component, options = {}) => {
+  const router = {
+    route: '/',
+    pathname: '/',
+    query: {},
+    asPath: '/',
+    basePath: '',
+    back: cy.stub().as('router:back'),
+    forward: cy.stub().as('router:forward'),
+    push: cy.stub().as('router:push'),
+    reload: cy.stub().as('router:reload'),
+    replace: cy.stub().as('router:replace'),
+    isReady: true,
+    ...(options?.router || {}),
+  };
+
   const { dehydratedState, auth, queryClient, ...originalMountOptions } =
     options;
   return mount(
     <AllProvider
+      router={router}
       dehydratedState={dehydratedState}
       auth={auth}
       queryClient={queryClient}

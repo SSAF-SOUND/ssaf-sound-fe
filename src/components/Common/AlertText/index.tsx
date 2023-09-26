@@ -11,13 +11,20 @@ export interface AlertTextProps {
   className?: string;
   size?: AlertTextSize;
   bold?: boolean;
+  label?: string;
 }
 
 export const AlertText = (props: AlertTextProps) => {
-  const { children, className, size = 'sm', bold = false } = props;
+  const { children, className, size = 'sm', bold = false, label } = props;
+  const ariaLabel = label
+    ? label
+    : typeof children === 'string'
+    ? children
+    : undefined;
 
   return (
     <p
+      aria-label={ariaLabel}
       role="alert"
       css={[selfCss, sizeCss[size], bold && boldCss]}
       className={className}

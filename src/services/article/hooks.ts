@@ -209,6 +209,7 @@ export const useHotArticles = (
     getNextPageParam: (lastPage) => {
       return lastPage.cursor ?? undefined;
     },
+    staleTime: 60,
   });
 };
 

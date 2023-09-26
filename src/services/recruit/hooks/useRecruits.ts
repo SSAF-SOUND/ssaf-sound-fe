@@ -33,5 +33,6 @@ export const useRecruits = (options: UseRecruitsOptions = {}) => {
       if (lastPage.isLast) return undefined;
       return lastPage.nextCursor ?? undefined;
     },
+    staleTime: 60,
   });
 };

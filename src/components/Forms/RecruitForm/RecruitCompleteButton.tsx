@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { useState } from 'react';
 
 import { Button } from '~/components/Common';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
@@ -13,6 +14,7 @@ interface RecruitCompleteButtonProps {
 }
 
 export const RecruitCompleteButton = (props: RecruitCompleteButtonProps) => {
+  const [completed, setCompleted] = useState(false);
   const { onClickRecruitComplete = noop } = props;
   const { loading, handleAsync: handleRecruitComplete } = useAsyncState(
     onClickRecruitComplete
@@ -30,9 +32,10 @@ export const RecruitCompleteButton = (props: RecruitCompleteButtonProps) => {
       ),
       actionText: '모집완료',
       cancelText: '취소',
-      onClickAction: () => {
+      onClickAction: async () => {
         closeModal();
-        handleRecruitComplete();
+        await handleRecruitComplete();
+        setCompleted(true);
       },
       onClickCancel: closeModal,
     });
@@ -42,17 +45,22 @@ export const RecruitCompleteButton = (props: RecruitCompleteButtonProps) => {
     formState: { defaultValues: { category: defaultCategory } = {} },
   } = useRecruitFormContext();
 
-  return (
+  const buttonTheme =
+    defaultCategory === RecruitCategoryName.STUDY
+      ? Theme.SECONDARY
+      : Theme.PRIMARY;
+
+  return completed ? (
+    <Button css={completeButtonCss} size="lg" theme={buttonTheme} disabled>
+      모집이 완료되었습니다
+    </Button>
+  ) : (
     <Button
       loading={loading}
+      css={completeButtonCss}
       onClick={openRecruitCompleteReconfirmModal}
       size="lg"
-      css={completeButtonCss}
-      theme={
-        defaultCategory === RecruitCategoryName.STUDY
-          ? Theme.SECONDARY
-          : Theme.PRIMARY
-      }
+      theme={buttonTheme}
     >
       리쿠르팅 모집완료
     </Button>

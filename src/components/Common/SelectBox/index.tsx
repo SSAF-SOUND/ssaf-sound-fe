@@ -2,10 +2,9 @@ import { css } from '@emotion/react';
 import * as Select from '@radix-ui/react-select';
 import { useEffect, useRef } from 'react';
 
+import { selectBoxClassnames as cn } from '~/components/Common/SelectBox/classnames';
 import { colorMix, flex, fontCss, palettes, zIndex } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
-
-const triggerClassName = 'select-box-trigger';
 
 type TextAlign = 'center' | 'left';
 type SelectBoxSize = 'sm' | 'md' | 'lg';
@@ -106,7 +105,7 @@ export const SelectBox = <D,>(props: SelectBoxProps<D>) => {
           textAlignCss[triggerTextAlign],
           sizeCss[size],
         ]}
-        className={[triggerClassName, className].join(' ')}
+        className={[cn.trigger, className].join(' ')}
         data-theme={theme}
         style={{ paddingLeft: triggerPaddingX, paddingRight: triggerPaddingX }}
       >
@@ -201,10 +200,10 @@ const baseTriggerIconCss = css({
   userSelect: 'none',
   color: themeColorVars.mainDarkColor.var,
   transition: 'transform 200ms',
-  [`.${triggerClassName}[data-state="open"] &`]: {
+  [`.${cn.trigger}[data-state="open"] &`]: {
     transform: 'rotate(180deg)',
   },
-  [`.${triggerClassName}[data-disabled] &`]: {
+  [`.${cn.trigger}[data-disabled] &`]: {
     color: colorMix('50%', themeColorVars.mainDarkColor.var),
   },
 });
