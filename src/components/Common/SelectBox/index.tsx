@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import * as Select from '@radix-ui/react-select';
 import { useEffect, useRef } from 'react';
 
-import { VisuallyHidden } from '~/components/Common';
 import { selectBoxClassnames as cn } from '~/components/Common/SelectBox/classnames';
 import { colorMix, flex, fontCss, palettes, zIndex } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
@@ -110,8 +109,6 @@ export const SelectBox = <D,>(props: SelectBoxProps<D>) => {
         data-theme={theme}
         style={{ paddingLeft: triggerPaddingX, paddingRight: triggerPaddingX }}
       >
-        <VisuallyHidden>선택 버튼</VisuallyHidden>
-
         <div css={valueCss}>
           <Select.Value placeholder={placeholder} />
         </div>
