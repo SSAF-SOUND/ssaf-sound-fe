@@ -1,3 +1,5 @@
+import type { GetStaticProps } from 'next';
+
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
@@ -9,6 +11,7 @@ import NavigationGroup from '~/components/NavigationGroup';
 import { RecruitsPreview } from '~/components/RecruitsPreview';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
+import { toSSRSafeDehydratedState } from '~/react-query/server/toSSRSafeDehydratedState';
 import { getHotArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import { getRecruits, RecruitCategoryName } from '~/services/recruit';
@@ -59,40 +62,31 @@ const selfCss = css({
   padding: `${selfPaddingY}px 0px`,
 });
 
-export const getServerSideProps = async () => {
+export const getStatisProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
+
+  const recruitsQueryKey = JSON.parse(JSON.stringify(queryKeys.recruit.list()));
+  const hotArticlesQueryKey = JSON.parse(
+    JSON.stringify(queryKeys.articles.hot())
+  );
 
   await Promise.allSettled([
     queryClient.prefetchInfiniteQuery({
-      queryKey: queryKeys.articles.hot(),
-      queryFn: () => getHotArticles({}),
+      queryKey: hotArticlesQueryKey,
+      queryFn: () => getHotArticles(),
     }),
-    /* 리쿠르팅 리스트 */
     queryClient.prefetchInfiniteQuery({
-      queryKey: JSON.parse(
-        JSON.stringify(
-          queryKeys.recruit.list({
-            category: RecruitCategoryName.PROJECT,
-          })
-        )
-      ),
-      queryFn: () => getRecruits({ category: RecruitCategoryName.PROJECT }),
+      queryKey: recruitsQueryKey,
+      queryFn: () => getRecruits(),
     }),
   ]);
 
   const { dehydratedState } = dehydrate(queryClient);
-
-  dehydratedState.queries.forEach((query) => {
-    // eslint-disable-next-line
-    // @ts-ignore
-    if ('pageParams' in query.state.data) {
-      query.state.data.pageParams = [null];
-    }
-  });
-
   return {
     props: {
-      dehydratedState,
+      dehydratedState:
+        toSSRSafeDehydratedState.infiniteQueries(dehydratedState),
     },
+    revalidate: 20,
   };
 };
