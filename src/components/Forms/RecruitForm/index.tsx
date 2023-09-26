@@ -8,7 +8,7 @@ import { recruitFormMarginForExpandCssVar } from '~/components/Forms/RecruitForm
 import { RecruitBasicInfo } from '~/components/Forms/RecruitForm/Groups';
 import { RecruitCompleteButton } from '~/components/Forms/RecruitForm/RecruitCompleteButton';
 import { RecruitCategoryName, RecruitParts } from '~/services/recruit';
-import { titleBarHeight } from '~/styles/utils';
+import { globalVars, titleBarHeight } from '~/styles/utils';
 
 import {
   Category,
@@ -52,7 +52,7 @@ const RecruitForm = (props: RecruitFormProps) => {
     barTitle = '',
     submitButtonText = '',
     editMode = false,
-    marginForExpand = 0,
+    marginForExpand = globalVars.mainLayoutPaddingX.var,
     onClickTitleBarClose,
     onClickRecruitComplete,
   } = options;
