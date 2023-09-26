@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { css } from '@emotion/react';
 import 'react-quill/dist/quill.snow.css';
 
-import { classnames as cn } from '~/components/Editor/classnames';
+import { editorClassnames as cn } from '~/components/Editor/editorClassnames';
 import EditorSkeleton from '~/components/Editor/EditorSkeleton';
 import { articleCss } from '~/services/article';
 import { fontCss, palettes } from '~/styles/utils';

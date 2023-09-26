@@ -16,7 +16,7 @@ import {
   themeColorVars,
 } from '~/styles/utils';
 
-import cn from './classnames';
+import { datePickerClassnames as cn } from './datePickerClassnames';
 
 const Calendar = dynamic(
   () => import('react-calendar').then((mod) => mod.Calendar),
@@ -68,14 +68,14 @@ export const DatePicker = (props: DatePickerProps) => {
         nextLabel={
           <IconButton size={34} theme={theme} asChild>
             <div>
-              <Icon size={24} name="chevron.right" />
+              <Icon size={24} name="chevron.right" label="다음 페이지" />
             </div>
           </IconButton>
         }
         prevLabel={
           <IconButton size={34} theme={theme} asChild>
             <div>
-              <Icon size={24} name="chevron.left" />
+              <Icon size={24} name="chevron.left" label="이전 페이지" />
             </div>
           </IconButton>
         }
