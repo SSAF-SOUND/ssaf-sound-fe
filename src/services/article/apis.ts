@@ -148,7 +148,7 @@ export const getArticles = (params: GetArticlesParams) => {
 export type GetHotArticlesParams = Omit<GetArticlesParams, 'categoryId'>;
 export type GetHotArticlesApiData = GetArticlesApiData;
 
-export const getHotArticles = (params: GetHotArticlesParams) => {
+export const getHotArticles = (params: GetHotArticlesParams = {}) => {
   const { cursor = defaultCursor, size = defaultSize, keyword } = params;
   const endpoint = endpoints.articles.hot({ cursor, size, keyword });
 
