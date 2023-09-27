@@ -1,3 +1,4 @@
+import type { RecruitDetail } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
@@ -5,9 +6,7 @@ import ArticleContent from '~/components/Article/ArticleContent';
 import { Tabs } from '~/components/Common';
 
 import { RecruitTabsValue } from './constants';
-import {
-  RecruitParticipantsProgressDetail
-} from "./RecruitParticipantsProgressDetail";
+import { RecruitParticipantsProgressDetail } from './RecruitParticipantsProgressDetail';
 
 interface RecruitTabsDescriptionContentProps {
   html: string;
@@ -18,7 +17,11 @@ export const RecruitTabsDescriptionContent = (
 ) => {
   const { html, ...restProps } = props;
   return (
-    <Tabs.Content css={selfCss} value={RecruitTabsValue.DESCRIPTION} {...restProps}>
+    <Tabs.Content
+      css={selfCss}
+      value={RecruitTabsValue.DESCRIPTION}
+      {...restProps}
+    >
       <ArticleContent html={html} />
     </Tabs.Content>
   );
@@ -26,16 +29,20 @@ export const RecruitTabsDescriptionContent = (
 
 interface RecruitTabsParticipantsProgressContentProps {
   recruitId: number;
+  recruitDetail: RecruitDetail;
 }
 
 export const RecruitTabsParticipantsProgressContent = (
   props: RecruitTabsParticipantsProgressContentProps
 ) => {
-  const { recruitId } = props;
+  const { recruitId, recruitDetail } = props;
 
   return (
     <Tabs.Content css={selfCss} value={RecruitTabsValue.PARTICIPANTS_PROGRESS}>
-      <RecruitParticipantsProgressDetail recruitId={recruitId} />
+      <RecruitParticipantsProgressDetail
+        recruitDetail={recruitDetail}
+        recruitId={recruitId}
+      />
     </Tabs.Content>
   );
 };

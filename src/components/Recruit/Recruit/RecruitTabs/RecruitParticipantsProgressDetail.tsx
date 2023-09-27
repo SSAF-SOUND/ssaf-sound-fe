@@ -1,19 +1,36 @@
+import type {
+  RecruitDetail,
+  RecruitParticipantUserInfo,
+} from '~/services/recruit';
+
+import { useRouter } from 'next/router';
+
 import { css } from '@emotion/react';
 import { memo } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIcon';
+import { useModal } from '~/components/GlobalModal';
 import SquareAvatar from '~/components/SquareAvatar';
 import { RecruitParts, useRecruitParticipants } from '~/services/recruit';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { useExcludeRecruitParticipant } from '~/services/recruit/hooks/useExcludeRecruitParticipant';
+import { flex, fontCss, palettes, resetStyle } from '~/styles/utils';
+import { handleAxiosError, routes } from '~/utils';
 
 interface RecruitParticipantsProgressDetailProps {
   recruitId: number;
+  recruitDetail: RecruitDetail;
 }
 
 export const RecruitParticipantsProgressDetail = memo(
   (props: RecruitParticipantsProgressDetailProps) => {
-    const { recruitId } = props;
+    const router = useRouter();
+    const { recruitId, recruitDetail } = props;
+    const { author: recruitAuthor, mine } = recruitDetail;
+    const { openModal, closeModal } = useModal();
+    const { mutateAsync: excludeRecruitParticipant } =
+      useExcludeRecruitParticipant(recruitId);
+
     const {
       data: recruitParticipants,
       isLoading: isRecruitParticipantsLoading,
@@ -34,6 +51,43 @@ export const RecruitParticipantsProgressDetail = memo(
       );
     }
 
+    const handleOpenRecruitParticipantDetailModal = (
+      targetUserInfo: RecruitParticipantUserInfo
+    ) => {
+      const { recruitApplicationId } = targetUserInfo;
+      const onClickUserProfileLink = () => {
+        router.push(routes.profile.detail(targetUserInfo.memberId));
+        closeModal();
+      };
+      const onClickRecruitApplicationLink = () => {
+        router.push(
+          routes.recruit.applications.detail({
+            recruitId,
+            recruitApplicationId,
+          })
+        );
+        closeModal();
+      };
+      const onClickExcludeRecruitParticipant = async () => {
+        try {
+          await excludeRecruitParticipant(recruitApplicationId);
+          closeModal();
+        } catch (err) {
+          handleAxiosError(err);
+        }
+      };
+
+      openModal('recruitParticipantDetail', {
+        userInfo: targetUserInfo,
+        isRecruitAuthor: targetUserInfo.memberId === recruitAuthor.memberId,
+        showPrivateButtons: mine,
+        onClickUserProfileLink,
+        onClickRecruitApplicationLink,
+        onClickClose: closeModal,
+        onClickExcludeRecruitParticipant,
+      });
+    };
+
     return (
       <div>
         <RecruitParticipantsProgressDetailHeader css={{ marginBottom: 40 }} />
@@ -51,10 +105,19 @@ export const RecruitParticipantsProgressDetail = memo(
                     {part}
                   </h3>
                 )}
+
                 <ul css={flex('center', '', 'row', 12, 'wrap')}>
                   {members.map((userInfo) => (
                     <li key={userInfo.memberId}>
-                      <SquareAvatar userInfo={userInfo} />
+                      <button
+                        type="button"
+                        css={avatarButtonCss}
+                        onClick={() =>
+                          handleOpenRecruitParticipantDetailModal(userInfo)
+                        }
+                      >
+                        <SquareAvatar userInfo={userInfo} />
+                      </button>
                     </li>
                   ))}
                   {Array(requiredCount)
@@ -73,6 +136,13 @@ export const RecruitParticipantsProgressDetail = memo(
     );
   }
 );
+
+const avatarButtonCss = css(resetStyle.button(), {
+  borderRadius: 8,
+  '&:focus-visible': {
+    outline: `3px solid ${palettes.primary.default}`,
+  },
+});
 
 RecruitParticipantsProgressDetail.displayName =
   'RecruitParticipantsProgressDetail';
