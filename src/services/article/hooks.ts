@@ -23,6 +23,7 @@ import {
   getMyArticles,
   getMyScrapedArticles,
 } from '~/services/article/apis';
+import { toMs } from '~/utils/toMs';
 
 export const useArticleCategories = () => {
   return useQuery({
@@ -209,7 +210,7 @@ export const useHotArticles = (
     getNextPageParam: (lastPage) => {
       return lastPage.cursor ?? undefined;
     },
-    staleTime: 60,
+    staleTime: toMs(60),
   });
 };
 
