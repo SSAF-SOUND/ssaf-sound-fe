@@ -16,9 +16,9 @@ interface RecruitTabsDescriptionContentProps {
 export const RecruitTabsDescriptionContent = (
   props: RecruitTabsDescriptionContentProps
 ) => {
-  const { html } = props;
+  const { html, ...restProps } = props;
   return (
-    <Tabs.Content css={selfCss} value={RecruitTabsValue.DESCRIPTION} {...props}>
+    <Tabs.Content css={selfCss} value={RecruitTabsValue.DESCRIPTION} {...restProps}>
       <ArticleContent html={html} />
     </Tabs.Content>
   );
