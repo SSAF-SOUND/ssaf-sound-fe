@@ -1,5 +1,4 @@
 import type {
-  CertifyStudentApiData,
   GetMyPortfolioApiData,
   GetProfileVisibilityApiData,
   GetUserInfoApiData,

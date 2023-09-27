@@ -22,7 +22,7 @@ import {
 } from '~/services/recruit';
 
 import { mockHtmlString } from '../common';
-import { createMockUser, userInfo } from '../member/data';
+import { createMockUser, mockUserInfo, userInfo } from '../member/data';
 
 export const scrapStatus = {
   scraped: true,
@@ -74,12 +74,14 @@ export const createMockRecruitDetail = (
     completed?: boolean;
     matchStatus?: MatchStatus;
     mine?: boolean;
+    author?: UserInfo;
   } = {}
 ): RecruitDetail => {
   const {
     completed = false,
     matchStatus: matchStatusOption,
     mine: mineOption,
+    author: authorOption,
   } = options;
 
   const finishedRecruit = completed;
@@ -95,6 +97,11 @@ export const createMockRecruitDetail = (
       ? matchStatusArray[matchStatusIndex]
       : matchStatusOption;
 
+  const author =
+    authorOption === undefined
+      ? mockUserInfo.certifiedSsafyUserInfo
+      : authorOption;
+
   const limits = createMockRecruitParticipantsProgress(isStudy);
 
   const skills = Object.values(SkillName).map((skillName, index) => ({
@@ -106,7 +113,7 @@ export const createMockRecruitDetail = (
     recruitId,
     contactURI: 'https://www.naver.com',
     questions: ['Question'],
-    author: userInfo.certifiedSsafyUserInfo,
+    author,
     category: isStudy ? RecruitCategoryName.STUDY : RecruitCategoryName.PROJECT,
     title: faker.word.words({ count: 2 }),
     content: mockHtmlString,

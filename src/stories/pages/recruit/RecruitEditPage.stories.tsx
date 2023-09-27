@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { RecruitDetail } from '~/services/recruit';
 
-import {
-  completeRecruitError,
-  updateRecruit,
-  updateRecruitError,
-} from '~/mocks/handlers';
+import { completeRecruitError } from '~/mocks/handlers';
 import { userInfo } from '~/mocks/handlers/member/data';
+import {
+  mockUpdateRecruit,
+  mockUpdateRecruitError,
+} from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
 import { createMockRecruitDetail } from '~/mocks/handlers/recruit/data';
 import RecruitEditPage from '~/pages/recruits/[recruitId]/edit';
 import { useSetMyInfo } from '~/services/member';
@@ -47,7 +47,7 @@ const meta: Meta<typeof RecruitEditPage> = {
     msw: {
       handlers: {
         member: [],
-        recruit: [updateRecruit],
+        recruit: [mockUpdateRecruit],
       },
     },
   },
@@ -64,7 +64,7 @@ export const Error: RecruitEditPageStory = {
     msw: {
       handlers: {
         member: [],
-        recruit: [updateRecruitError, completeRecruitError],
+        recruit: [mockUpdateRecruitError, completeRecruitError],
       },
     },
   },
