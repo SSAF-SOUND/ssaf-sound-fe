@@ -89,12 +89,12 @@ export const createMockRecruitDetail = (
   const participantsProgress = participantsProgressOption
     ? participantsProgressOption
     : isStudy
-    ? [{ recruitType: RecruitParts.STUDY, limit: 10, currentNumber: 1 }]
+    ? [{ recruitType: RecruitParts.STUDY, limit: 10, currentNumber: 5 }]
     : [
-        { recruitType: RecruitParts.FRONTEND, limit: 10, currentNumber: 1 },
-        { recruitType: RecruitParts.BACKEND, limit: 10, currentNumber: 1 },
-        { recruitType: RecruitParts.APP, limit: 10, currentNumber: 1 },
-        { recruitType: RecruitParts.PM, limit: 10, currentNumber: 1 },
+        { recruitType: RecruitParts.FRONTEND, limit: 10, currentNumber: 5 },
+        { recruitType: RecruitParts.BACKEND, limit: 10, currentNumber: 5 },
+        { recruitType: RecruitParts.APP, limit: 10, currentNumber: 5 },
+        { recruitType: RecruitParts.PM, limit: 10, currentNumber: 5 },
       ];
 
   return {
