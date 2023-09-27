@@ -1,5 +1,10 @@
 import type { UserInfo } from '~/services/member';
-import type { RecruitParticipantUserInfo } from '~/services/recruit';
+import type {
+  RecruitDetail,
+  RecruitParticipantUserInfo,
+} from '~/services/recruit';
+
+import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
@@ -7,38 +12,36 @@ import { Button, Icon, IconButton, Modal } from '~/components/Common';
 import { FullDateTime } from '~/components/FullDateTime';
 import { Alert } from '~/components/ModalContent';
 import SquareAvatar from '~/components/SquareAvatar';
-import { useAsyncState } from '~/hooks';
+import { useExcludeRecruitParticipant } from '~/services/recruit/hooks/useExcludeRecruitParticipant';
 import { flex, fontCss, palettes, position, Theme } from '~/styles/utils';
-import { noop } from '~/utils';
+import { handleAxiosError, routes } from '~/utils';
 
 interface RecruitParticipantDetailProps {
+  recruitDetail: RecruitDetail;
   userInfo: RecruitParticipantUserInfo;
-  isRecruitAuthor?: boolean;
-  showPrivateButtons?: boolean;
   onClickClose?: () => void;
-  onClickUserProfileLink?: () => void;
-  onClickRecruitApplicationLink?: () => void;
-  onClickExcludeRecruitParticipant?: () => void;
 }
 
 export const RecruitParticipantDetail = (
   props: RecruitParticipantDetailProps
 ) => {
+  const { recruitDetail, userInfo: targetUserInfo, onClickClose } = props;
+  const { joinedAt, recruitApplicationId } = targetUserInfo;
+  const { author, mine, recruitId } = recruitDetail;
   const {
-    userInfo,
-    isRecruitAuthor = false,
-    showPrivateButtons = false,
-    onClickClose,
-    onClickUserProfileLink,
-    onClickRecruitApplicationLink,
-    onClickExcludeRecruitParticipant = noop,
-  } = props;
-  const { joinedAt } = userInfo;
+    mutateAsync: excludeRecruitParticipant,
+    isLoading: isExcludingRecruitParticipant,
+  } = useExcludeRecruitParticipant(recruitId);
+  const isRecruitAuthor = author.memberId === targetUserInfo.memberId;
+  const showPrivateButtons = mine;
 
-  const {
-    loading: isExcludingRecruitParticipant,
-    handleAsync: handleExcludeRecruitParticipant,
-  } = useAsyncState(onClickExcludeRecruitParticipant);
+  const handleExcludeRecruitParticipant = async () => {
+    try {
+      await excludeRecruitParticipant(recruitApplicationId);
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
 
   return (
     <div css={selfCss}>
@@ -63,7 +66,7 @@ export const RecruitParticipantDetail = (
         </header>
 
         <div css={{ marginBottom: 16 }}>
-          <SquareAvatar style={{ width: '100%' }} userInfo={userInfo} />
+          <SquareAvatar style={{ width: '100%' }} userInfo={targetUserInfo} />
         </div>
 
         <div css={buttonGroupCss}>
@@ -71,9 +74,14 @@ export const RecruitParticipantDetail = (
             css={[{ backgroundColor: palettes.primary.light }, buttonCss]}
             size="md"
             theme={Theme.PRIMARY}
-            onClick={onClickUserProfileLink}
+            asChild
           >
-            프로필 보러가기
+            <Link
+              onClick={onClickClose}
+              href={routes.profile.detail(targetUserInfo.memberId)}
+            >
+              프로필 보러가기
+            </Link>
           </Button>
 
           {!isRecruitAuthor && showPrivateButtons && (
@@ -83,14 +91,22 @@ export const RecruitParticipantDetail = (
                   css={[{ backgroundColor: palettes.primary.light }, buttonCss]}
                   size="md"
                   theme={Theme.PRIMARY}
-                  onClick={onClickRecruitApplicationLink}
+                  asChild
                 >
-                  지원서 보러가기
+                  <Link
+                    onClick={onClickClose}
+                    href={routes.recruit.applications.detail({
+                      recruitId,
+                      recruitApplicationId,
+                    })}
+                  >
+                    지원서 보러가기
+                  </Link>
                 </Button>
               }
 
               <RecruitParticipantExcludeButton
-                userInfo={userInfo}
+                userInfo={targetUserInfo}
                 isButtonLoading={isExcludingRecruitParticipant}
                 handleExcludeRecruitParticipant={
                   handleExcludeRecruitParticipant

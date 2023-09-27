@@ -3,8 +3,6 @@ import type {
   RecruitParticipantUserInfo,
 } from '~/services/recruit';
 
-import { useRouter } from 'next/router';
-
 import { css } from '@emotion/react';
 import { memo } from 'react';
 import Skeleton from 'react-loading-skeleton';
@@ -13,9 +11,7 @@ import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIco
 import { useModal } from '~/components/GlobalModal';
 import SquareAvatar from '~/components/SquareAvatar';
 import { RecruitParts, useRecruitParticipants } from '~/services/recruit';
-import { useExcludeRecruitParticipant } from '~/services/recruit/hooks/useExcludeRecruitParticipant';
 import { flex, fontCss, palettes, resetStyle } from '~/styles/utils';
-import { handleAxiosError, routes } from '~/utils';
 
 interface RecruitParticipantsProgressDetailProps {
   recruitId: number;
@@ -24,12 +20,8 @@ interface RecruitParticipantsProgressDetailProps {
 
 export const RecruitParticipantsProgressDetail = memo(
   (props: RecruitParticipantsProgressDetailProps) => {
-    const router = useRouter();
     const { recruitId, recruitDetail } = props;
-    const { author: recruitAuthor, mine } = recruitDetail;
     const { openModal, closeModal } = useModal();
-    const { mutateAsync: excludeRecruitParticipant } =
-      useExcludeRecruitParticipant(recruitId);
 
     const {
       data: recruitParticipants,
@@ -54,37 +46,10 @@ export const RecruitParticipantsProgressDetail = memo(
     const handleOpenRecruitParticipantDetailModal = (
       targetUserInfo: RecruitParticipantUserInfo
     ) => {
-      const { recruitApplicationId } = targetUserInfo;
-      const onClickUserProfileLink = () => {
-        router.push(routes.profile.detail(targetUserInfo.memberId));
-        closeModal();
-      };
-      const onClickRecruitApplicationLink = () => {
-        router.push(
-          routes.recruit.applications.detail({
-            recruitId,
-            recruitApplicationId,
-          })
-        );
-        closeModal();
-      };
-      const onClickExcludeRecruitParticipant = async () => {
-        try {
-          await excludeRecruitParticipant(recruitApplicationId);
-          closeModal();
-        } catch (err) {
-          handleAxiosError(err);
-        }
-      };
-
       openModal('recruitParticipantDetail', {
+        recruitDetail: recruitDetail,
         userInfo: targetUserInfo,
-        isRecruitAuthor: targetUserInfo.memberId === recruitAuthor.memberId,
-        showPrivateButtons: mine,
-        onClickUserProfileLink,
-        onClickRecruitApplicationLink,
         onClickClose: closeModal,
-        onClickExcludeRecruitParticipant,
       });
     };
 
