@@ -1,23 +1,22 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
+import type { RecruitDetail } from '~/services/recruit';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-
-import { userInfo } from '~/mocks/handlers/member/data';
+import {
+  createMockGetMyInfo,
+  mockGetMyInfoError,
+} from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUserInfo } from '~/mocks/handlers/member/data';
+import { createMockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
+import { createMockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import {
   createMockRecruitDetail,
   createMockRecruitParticipants,
 } from '~/mocks/handlers/recruit/data';
 import RecruitDetailPage from '~/pages/recruits/[recruitId]';
-import { queryKeys } from '~/react-query/common';
-import { useSetMyInfo } from '~/services/member';
-import {
-  MatchStatus,
-  RecruitCategoryName,
-  useSetRecruitDetail,
-} from '~/services/recruit';
+import { useMyInfo } from '~/services/member';
+import { MatchStatus } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
-import { disableArgs } from '~/stories/utils';
+import { createMswParameters, disableArgs } from '~/stories/utils';
 
 // 리쿠르팅 상태: 모집 미완료 | 모집 완료
 // 리쿠르팅 종류: 프로젝트 | 스터디
@@ -36,34 +35,12 @@ const studyDetail = createMockRecruitDetail(recruitId, true, {
   matchStatus: MatchStatus.INITIAL,
 });
 
-const signedInProjectDetail = { ...projectDetail };
-const signedInStudyDetail = { ...studyDetail };
-
-const notSignedInProjectDetail = { ...projectDetail, mine: false };
-const notSignedInStudyDetail = { ...studyDetail, mine: false };
-
-const projectParticipantsDetail = createMockRecruitParticipants(projectDetail);
-const studyParticipantsDetail = createMockRecruitParticipants(studyDetail);
-
 const meta: Meta<typeof RecruitDetailPage> = {
   title: 'Page/Recruit/Detail',
   component: RecruitDetailPage,
   decorators: [
     (Story) => {
-      const queryClient = useQueryClient();
-      const setMyInfo = useSetMyInfo();
-      const setRecruitDetail = useSetRecruitDetail(recruitId);
-
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-      setRecruitDetail(projectDetail);
-      queryClient.setQueryData(
-        queryKeys.recruit.participants(recruitId),
-        projectParticipantsDetail
-      );
-
-      useEffect(() => {
-        queryClient.cancelQueries(queryKeys.recruit.detail(recruitId));
-      }, [queryClient]);
+      useMyInfo({ enabled: true });
 
       return (
         <PageLayout>
@@ -81,132 +58,238 @@ const meta: Meta<typeof RecruitDetailPage> = {
 
 export default meta;
 
-interface RecruitDetailPageStoryArgs {
-  category: RecruitCategoryName;
-}
-type RecruitDetailPageStory = StoryObj<RecruitDetailPageStoryArgs>;
-
-export const NotSignedIn: RecruitDetailPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        setMyInfo(null);
-      }, [setMyInfo]);
-
-      return <Story />;
-    },
-  ],
-  args: {
-    category: RecruitCategoryName.PROJECT,
-  },
-  argTypes: {
-    category: {
-      name: '카테고리',
-      options: [RecruitCategoryName.PROJECT, RecruitCategoryName.STUDY],
-      control: {
-        type: 'radio',
-        labels: {
-          [RecruitCategoryName.PROJECT]: '프로젝트',
-          [RecruitCategoryName.STUDY]: '스터디',
-        },
-      },
-    },
-  },
-  render: function Render(args) {
-    const { category } = args;
-    const queryClient = useQueryClient();
-    const participantsQueryKey = queryKeys.recruit.participants(recruitId);
-    const setRecruitDetail = useSetRecruitDetail(recruitId);
-
-    if (category === RecruitCategoryName.STUDY) {
-      setRecruitDetail(notSignedInStudyDetail);
-      queryClient.setQueryData(participantsQueryKey, studyParticipantsDetail);
-    } else {
-      setRecruitDetail(notSignedInProjectDetail);
-      queryClient.setQueryData(participantsQueryKey, projectParticipantsDetail);
-    }
-
-    return <RecruitDetailPage recruitId={recruitId} />;
+export const NotSignedIn = {
+  name: '로그인 하지 않음',
+  parameters: {
+    ...createMswParameters({
+      member: [mockGetMyInfoError],
+      recruit: [
+        createMockGetRecruitDetail(projectDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(projectDetail)
+        ),
+      ],
+    }),
   },
 };
 
-interface RecruitDetailPageSignedInStoryArgs
-  extends RecruitDetailPageStoryArgs {
-  mine: boolean;
-  completed: boolean;
-  matchStatus: MatchStatus;
-  existsContact?: boolean;
-}
+const myInfo = mockUserInfo.certifiedSsafyUserInfo;
+const otherUser = mockUserInfo.uncertifiedSsafyUserInfo;
+const myRecruitDetail: RecruitDetail = {
+  ...projectDetail,
+  author: myInfo,
+  mine: true,
+};
 
-type RecruitDetailPageSignedInStory =
-  StoryObj<RecruitDetailPageSignedInStoryArgs>;
-export const SignedIn: RecruitDetailPageSignedInStory = {
-  ...NotSignedIn,
-  decorators: [],
-  args: {
-    ...NotSignedIn.args,
-    mine: false,
-    completed: false,
-    existsContact: true,
+export const Mine = {
+  name: '내 리쿠르팅',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(myRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(myRecruitDetail)
+        ),
+      ],
+    }),
   },
-  argTypes: {
-    ...NotSignedIn.argTypes,
-    completed: {
-      name: '모집 완료',
-    },
-    mine: {
-      name: '내 리쿠르팅',
-    },
-    matchStatus: {
-      name: '매칭 상태',
-      options: Object.values(MatchStatus),
-      control: {
-        type: 'radio',
-        labels: {
-          [MatchStatus.INITIAL]: '신청 전',
-          [MatchStatus.PENDING]: '수락 대기',
-          [MatchStatus.SUCCESS]: '참가 확정',
-          [MatchStatus.REJECTED]: '거절됨',
-        },
-      },
-    },
-    existsContact: {
-      name: '연락처 유무',
-    },
+};
+
+const initialAndNotCompletedRecruitDetail: RecruitDetail = {
+  ...myRecruitDetail,
+  mine: false,
+  matchStatus: MatchStatus.INITIAL,
+  finishedRecruit: false,
+  author: otherUser,
+};
+
+export const Initial_And_NotCompletedRecruit = {
+  name: '신청 안함 + 모집중',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(initialAndNotCompletedRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(initialAndNotCompletedRecruitDetail)
+        ),
+      ],
+    }),
   },
-  render: function Render(args) {
-    const {
-      category,
-      mine,
-      completed,
-      matchStatus,
-      existsContact = true,
-    } = args;
-    const queryClient = useQueryClient();
-    const participantsQueryKey = queryKeys.recruit.participants(recruitId);
-    const setRecruitDetail = useSetRecruitDetail(recruitId);
+};
 
-    if (category === RecruitCategoryName.STUDY) {
-      signedInStudyDetail.contactURI = existsContact ? 'www.example.com' : '';
-      signedInStudyDetail.mine = mine;
-      signedInStudyDetail.finishedRecruit = completed;
-      signedInStudyDetail.matchStatus = matchStatus;
-      setRecruitDetail(signedInStudyDetail);
+const initialAndCompletedRecruitDetail: RecruitDetail = {
+  ...initialAndNotCompletedRecruitDetail,
+  finishedRecruit: true,
+};
 
-      queryClient.setQueryData(participantsQueryKey, studyParticipantsDetail);
-    } else {
-      signedInProjectDetail.contactURI = existsContact ? 'www.example.com' : '';
-      signedInProjectDetail.mine = mine;
-      signedInProjectDetail.finishedRecruit = completed;
-      signedInProjectDetail.matchStatus = matchStatus;
-      setRecruitDetail(signedInProjectDetail);
+export const Initial_And_CompletedRecruit = {
+  name: '신청 안함 + 모집완료',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(initialAndCompletedRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(initialAndCompletedRecruitDetail)
+        ),
+      ],
+    }),
+  },
+};
 
-      queryClient.setQueryData(participantsQueryKey, projectParticipantsDetail);
-    }
+const pendingAndNotCompletedRecruitDetail: RecruitDetail = {
+  ...initialAndNotCompletedRecruitDetail,
+  matchStatus: MatchStatus.PENDING,
+};
 
-    return <RecruitDetailPage recruitId={recruitId} />;
+export const Pending_And_NotCompletedRecruit = {
+  name: '응답 대기 + 모집중',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(pendingAndNotCompletedRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(pendingAndNotCompletedRecruitDetail)
+        ),
+      ],
+    }),
+  },
+};
+
+const pendingAndCompletedRecruitDetail: RecruitDetail = {
+  ...initialAndCompletedRecruitDetail,
+  matchStatus: MatchStatus.PENDING,
+};
+
+export const Pending_And_CompletedRecruit = {
+  name: '응답 대기 + 모집완료',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(pendingAndCompletedRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(pendingAndCompletedRecruitDetail)
+        ),
+      ],
+    }),
+  },
+};
+
+const rejectedAndNotCompletedRecruitDetail: RecruitDetail = {
+  ...initialAndNotCompletedRecruitDetail,
+  matchStatus: MatchStatus.REJECTED,
+};
+
+export const Rejected_And_NotCompletedRecruit = {
+  name: '거절됨 + 모집중',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(rejectedAndNotCompletedRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(rejectedAndNotCompletedRecruitDetail)
+        ),
+      ],
+    }),
+  },
+};
+
+const rejectedAndCompletedRecruitDetail: RecruitDetail = {
+  ...initialAndCompletedRecruitDetail,
+  matchStatus: MatchStatus.REJECTED,
+};
+
+export const Rejected_And_CompletedRecruit = {
+  name: '거절됨 + 모집완료',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(rejectedAndCompletedRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(rejectedAndCompletedRecruitDetail)
+        ),
+      ],
+    }),
+  },
+};
+
+const successAndNotCompletedRecruitDetail: RecruitDetail = {
+  ...initialAndNotCompletedRecruitDetail,
+  matchStatus: MatchStatus.SUCCESS,
+};
+
+export const Success_And_NotCompletedRecruit = {
+  name: '수락됨 + 모집중',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(successAndNotCompletedRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(successAndNotCompletedRecruitDetail)
+        ),
+      ],
+    }),
+  },
+};
+
+const successAndCompletedRecruitDetail: RecruitDetail = {
+  ...initialAndCompletedRecruitDetail,
+  matchStatus: MatchStatus.SUCCESS,
+};
+
+export const Success_And_CompletedRecruit = {
+  name: '수락됨 + 모집완료',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(successAndCompletedRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(successAndCompletedRecruitDetail)
+        ),
+      ],
+    }),
+  },
+};
+
+const emptyContactURLRecruitDetail: RecruitDetail = {
+  ...projectDetail,
+  contactURI: '',
+};
+
+export const EmptyContactURL = {
+  name: '연락 URL이 비어있음',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(emptyContactURLRecruitDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(emptyContactURLRecruitDetail)
+        ),
+      ],
+    }),
+  },
+};
+
+export const StudyRecruitDetail = {
+  name: '스터디 리쿠르팅',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      recruit: [
+        createMockGetRecruitDetail(studyDetail),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(studyDetail)
+        ),
+      ],
+    }),
   },
 };
