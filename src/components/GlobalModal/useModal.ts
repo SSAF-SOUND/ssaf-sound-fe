@@ -27,7 +27,7 @@ export const useModal = () => {
   const openModal = useCallback(
     <T extends keyof typeof modals>(
       id: T,
-      modalProps: Partial<ComponentProps<(typeof modals)[T]>>,
+      modalProps: ComponentProps<(typeof modals)[T]>,
       options: Partial<OpenModalOptions> = {}
     ) => {
       const { onEscapeKeyDown, onPointerDownOutside, overlayTheme } = options;
