@@ -1,10 +1,9 @@
-import type {
-  GetRecruitDetailApiData,
-  RecruitDetail,
-} from '~/services/recruit';
+import type { GetRecruitDetailApiData } from '~/services/recruit';
+
+import { rest } from 'msw';
 
 import { createMockRecruitDetail } from '~/mocks/handlers/recruit/data';
-import { restError, restSuccess } from '~/mocks/utils';
+import { mockSuccess, restError } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
@@ -16,22 +15,37 @@ const getRecruitDetailEndpoint = composeUrls(
   endpoints.recruit.detail('recruitId')
 );
 
-export const createMockGetRecruitDetail = (recruitDetail: RecruitDetail) => {
-  return restSuccess<GetRecruitDetailApiData['data']>(
-    getRecruitDetailMethod,
+export const createMockGetRecruitDetail = (
+  recruitDetail: GetRecruitDetailApiData['data'],
+  fallbackRecruitId: number
+) => {
+  return rest[getRecruitDetailMethod](
     getRecruitDetailEndpoint,
-    { data: recruitDetail }
+    (req, res, ctx) => {
+      const params = req.params as { recruitId: string };
+      const recruitId = params.recruitId
+        ? Number(params.recruitId)
+        : fallbackRecruitId;
+
+      return res(
+        ...mockSuccess<GetRecruitDetailApiData['data']>(ctx, {
+          ...recruitDetail,
+          recruitId,
+        })
+      );
+    }
   );
 };
 
 export const mockGetRecruitDetail = createMockGetRecruitDetail(
-  createMockRecruitDetail(1, false)
+  createMockRecruitDetail(1, false),
+  1
 );
 
 export const mockGetRecruitDetailError = restError(
   getRecruitDetailMethod,
   getRecruitDetailEndpoint,
   {
-    message: 'mockCreateRecruit Error',
+    message: 'mockGetRecruitDetail Error',
   }
 );
