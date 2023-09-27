@@ -131,7 +131,10 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
         >
           <Recruit.Tabs.DescriptionContent html={content} />
 
-          <Recruit.Tabs.ParticipantsContent recruitId={recruitId} />
+          <Recruit.Tabs.ParticipantsContent
+            recruitId={recruitId}
+            recruitDetail={recruitDetail}
+          />
         </Recruit.Tabs.Root>
 
         <div css={separatorCss} />
