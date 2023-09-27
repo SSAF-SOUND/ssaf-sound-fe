@@ -35,7 +35,7 @@ export const RecruitApplicantsDetail = (
   const { part, applicants, recruitDetail } = props;
   const { openModal, closeModal } = useModal();
 
-  const { limits, recruitId, mine } = recruitDetail;
+  const { limits, recruitId, mine, author: recruitAuthor } = recruitDetail;
 
   const {
     data: recruitParticipants,
@@ -59,13 +59,12 @@ export const RecruitApplicantsDetail = (
 
   const pendingApplicantsCount = pendingApplicants.length;
 
-  const handleOpenRecruitParticipantModal = (params: {
-    userInfo: RecruitParticipantUserInfo;
-    recruitApplicationId: number;
-  }) => {
-    const { userInfo, recruitApplicationId } = params;
+  const handleOpenRecruitParticipantDetailModal = (
+    targetUserInfo: RecruitParticipantUserInfo
+  ) => {
+    const { recruitApplicationId } = targetUserInfo;
     const onClickUserProfileLink = () => {
-      router.push(routes.profile.detail(userInfo.memberId));
+      router.push(routes.profile.detail(targetUserInfo.memberId));
       closeModal();
     };
     const onClickRecruitApplicationLink = () => {
@@ -87,7 +86,8 @@ export const RecruitApplicantsDetail = (
     };
 
     openModal('recruitParticipantDetail', {
-      userInfo,
+      userInfo: targetUserInfo,
+      isRecruitAuthor: targetUserInfo.memberId === recruitAuthor.memberId,
       showPrivateButtons: mine,
       onClickUserProfileLink,
       onClickRecruitApplicationLink,
@@ -122,7 +122,7 @@ export const RecruitApplicantsDetail = (
 
           {isRecruitParticipantsSuccess && (
             <RecruitMembersAvatars
-              onClickAvatar={handleOpenRecruitParticipantModal}
+              onClickAvatar={handleOpenRecruitParticipantDetailModal}
               limit={limit}
               recruitMembers={
                 (recruitParticipants[part] as RecruitParticipantsDetail) ?? []
