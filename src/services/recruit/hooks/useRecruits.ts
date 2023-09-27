@@ -4,6 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import { getRecruits } from '~/services/recruit/apis';
+import { toMs } from '~/utils/toMs';
 
 export type UseRecruitsOptions = Partial<RecruitsPageRouteQuery>;
 
@@ -33,6 +34,6 @@ export const useRecruits = (options: UseRecruitsOptions = {}) => {
       if (lastPage.isLast) return undefined;
       return lastPage.nextCursor ?? undefined;
     },
-    staleTime: 60,
+    staleTime: toMs(60),
   });
 };

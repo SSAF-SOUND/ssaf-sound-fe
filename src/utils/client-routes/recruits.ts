@@ -19,7 +19,7 @@ const getSafeCategory = (category?: string) => {
   return RecruitCategoryName.PROJECT;
 };
 
-const recruitsSelfRoute = createRoute('/recruits');
+const recruitsSelfRoute = () => createRoute('/recruits')();
 
 // ---------- recruits ----------
 
@@ -88,7 +88,6 @@ export type SafeRecruitCreatePageRouteQuery = {
 };
 const recruitCreatePageRoute = (query: RecruitCreatePageRouteQuery = {}) => {
   const pathname = recruitsSelfRoute().pathname;
-
   return createRoute<SafeRecruitCreatePageRouteQuery>(pathname)(
     toSafeRecruitCreatePageQuery(query)
   );
@@ -103,12 +102,22 @@ const toSafeRecruitCreatePageQuery = (
 
 // ---------- recruit detail ----------
 
-const recruitDetailPageRoute = (recruitId: number) =>
-  createRoute(`/recruits/${recruitId}`)();
+const recruitDetailPageRoute = (recruitId: number) => {
+  const pathname = recruitsSelfRoute().pathname;
+  return createRoute(`${pathname}/${recruitId}`)();
+};
+
+// ---------- recruit edit ----------
+
+const recruitEditPageRoute = (recruitId: number) => {
+  const pathname = recruitsSelfRoute().pathname;
+  return createRoute(`${pathname}/${recruitId}/edit`)();
+};
 
 export const recruits = {
   self: recruitsSelfRoute,
   list: recruitsPageRoute,
   create: recruitCreatePageRoute,
   detail: recruitDetailPageRoute,
+  edit: recruitEditPageRoute,
 };

@@ -1,5 +1,6 @@
 import type { UserInfo } from '~/services/member';
 import type {
+  AppliedRecruitSummary,
   GetMyRecruitApplicationApiData,
   GetRecruitApplicantsApiData,
   GetRecruitApplicationApiData,
@@ -7,9 +8,8 @@ import type {
   RecruitDetail,
   RecruitParticipantsDetail,
   RecruitParticipantsProgress,
-  RecruitSummary,
   RecruitParticipantUserInfo,
-  AppliedRecruitSummary,
+  RecruitSummary,
 } from '~/services/recruit';
 
 import { faker } from '@faker-js/faker';
@@ -22,34 +22,11 @@ import {
 } from '~/services/recruit';
 
 import { mockHtmlString } from '../common';
-import { createMockUser, userInfo } from '../member/data';
+import { createMockUser, mockUserInfo, userInfo } from '../member/data';
 
 export const scrapStatus = {
   scraped: true,
   scrapCount: 777,
-};
-
-// 리쿠르팅 모집 현황 간략정보 (파트당 모집인원, 모집된 인원)
-export const createMockRecruitParticipantsProgress = (
-  isStudy: boolean
-): RecruitParticipantsProgress[] => {
-  const recruitParts = Object.values(RecruitParts);
-  const filteredRecruitParts = isStudy
-    ? recruitParts.filter((name) => name === RecruitParts.STUDY)
-    : recruitParts.filter((name) => name !== RecruitParts.STUDY);
-
-  return filteredRecruitParts.map((recruitPart) => {
-    const maxParticipantsCount = faker.number.int({ min: 5, max: 10 });
-    const currentParticipantsCount = faker.number.int({
-      min: 1,
-      max: maxParticipantsCount,
-    });
-    return {
-      recruitType: recruitPart,
-      limit: maxParticipantsCount,
-      currentNumber: currentParticipantsCount,
-    };
-  });
 };
 
 export const createMockParticipant = ({
@@ -74,12 +51,16 @@ export const createMockRecruitDetail = (
     completed?: boolean;
     matchStatus?: MatchStatus;
     mine?: boolean;
+    author?: UserInfo;
+    participantsProgress?: RecruitParticipantsProgress[];
   } = {}
 ): RecruitDetail => {
   const {
     completed = false,
     matchStatus: matchStatusOption,
     mine: mineOption,
+    author: authorOption,
+    participantsProgress: participantsProgressOption,
   } = options;
 
   const finishedRecruit = completed;
@@ -95,18 +76,32 @@ export const createMockRecruitDetail = (
       ? matchStatusArray[matchStatusIndex]
       : matchStatusOption;
 
-  const limits = createMockRecruitParticipantsProgress(isStudy);
+  const author =
+    authorOption === undefined
+      ? mockUserInfo.certifiedSsafyUserInfo
+      : authorOption;
 
   const skills = Object.values(SkillName).map((skillName, index) => ({
     skillId: index + 1,
     name: skillName,
   }));
 
+  const participantsProgress = participantsProgressOption
+    ? participantsProgressOption
+    : isStudy
+    ? [{ recruitType: RecruitParts.STUDY, limit: 10, currentNumber: 5 }]
+    : [
+        { recruitType: RecruitParts.FRONTEND, limit: 10, currentNumber: 5 },
+        { recruitType: RecruitParts.BACKEND, limit: 10, currentNumber: 5 },
+        { recruitType: RecruitParts.APP, limit: 10, currentNumber: 5 },
+        { recruitType: RecruitParts.PM, limit: 10, currentNumber: 5 },
+      ];
+
   return {
     recruitId,
     contactURI: 'https://www.naver.com',
     questions: ['Question'],
-    author: userInfo.certifiedSsafyUserInfo,
+    author,
     category: isStudy ? RecruitCategoryName.STUDY : RecruitCategoryName.PROJECT,
     title: faker.word.words({ count: 2 }),
     content: mockHtmlString,
@@ -115,7 +110,7 @@ export const createMockRecruitDetail = (
     finishedRecruit,
     scrapCount: scrapStatus.scrapCount,
     scraped: scrapStatus.scraped,
-    limits,
+    limits: participantsProgress,
     skills,
     view: faker.number.int({ min: 1, max: 1000000 }),
 
@@ -130,7 +125,7 @@ export const recruitDetails = Array(5)
 
 // 리쿠르팅 모집 현황중, 참가자의 상세정보 (파트마다 유저의 상세정보)
 export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
-  const { limits } = recruitDetail;
+  const { limits, author } = recruitDetail;
 
   return Object.fromEntries(
     limits.map(
@@ -151,9 +146,10 @@ export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
           part,
           {
             limit: maxParticipantsCount,
-            members: memberIds.map((memberId) =>
+            members: memberIds.map((memberId, index) =>
               createMockParticipant({
-                userId: memberId,
+                // 0번째는 모집자 본인
+                userId: index === 0 ? author.memberId : memberId,
                 recruitApplicationId: 1,
               })
             ),

@@ -17,7 +17,7 @@ export const RecruitContactLink = (props: RecruitContactLinkProps) => {
   return (
     <Button css={selfCss} variant="inverse" {...props} asChild>
       <a target="_blank" rel="noopener noreferrer">
-        <Icon name="chat.multiline" label="리쿠르팅 작성자와 연락하기" />
+        <Icon name="chat.multiline" aria-hidden="true" />
         <BoldText>Contact</BoldText>
       </a>
     </Button>

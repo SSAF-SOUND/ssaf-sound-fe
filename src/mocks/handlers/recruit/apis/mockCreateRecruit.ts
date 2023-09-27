@@ -2,9 +2,10 @@ import type { CreateRecruitApiData } from '~/services/recruit';
 
 import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
+import { API_URL, composeUrls } from '~/utils';
 
 const createRecruitMethod = 'post';
-const createRecruitEndpoint = endpoints.recruit.self();
+const createRecruitEndpoint = composeUrls(API_URL, endpoints.recruit.self());
 
 export const createMockCreateRecruit = (recruitId = 1) => {
   return restSuccess<CreateRecruitApiData['data']>(

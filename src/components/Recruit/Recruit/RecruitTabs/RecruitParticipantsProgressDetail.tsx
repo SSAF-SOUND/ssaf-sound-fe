@@ -1,19 +1,28 @@
+import type {
+  RecruitDetail,
+  RecruitParticipantUserInfo,
+} from '~/services/recruit';
+
 import { css } from '@emotion/react';
 import { memo } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIcon';
+import { useModal } from '~/components/GlobalModal';
 import SquareAvatar from '~/components/SquareAvatar';
 import { RecruitParts, useRecruitParticipants } from '~/services/recruit';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { flex, fontCss, palettes, resetStyle } from '~/styles/utils';
 
 interface RecruitParticipantsProgressDetailProps {
   recruitId: number;
+  recruitDetail: RecruitDetail;
 }
 
 export const RecruitParticipantsProgressDetail = memo(
   (props: RecruitParticipantsProgressDetailProps) => {
-    const { recruitId } = props;
+    const { recruitId, recruitDetail } = props;
+    const { openModal, closeModal } = useModal();
+
     const {
       data: recruitParticipants,
       isLoading: isRecruitParticipantsLoading,
@@ -34,6 +43,16 @@ export const RecruitParticipantsProgressDetail = memo(
       );
     }
 
+    const handleOpenRecruitParticipantDetailModal = (
+      targetUserInfo: RecruitParticipantUserInfo
+    ) => {
+      openModal('recruitParticipantDetail', {
+        recruitDetail: recruitDetail,
+        userInfo: targetUserInfo,
+        onClickClose: closeModal,
+      });
+    };
+
     return (
       <div>
         <RecruitParticipantsProgressDetailHeader css={{ marginBottom: 40 }} />
@@ -51,10 +70,19 @@ export const RecruitParticipantsProgressDetail = memo(
                     {part}
                   </h3>
                 )}
+
                 <ul css={flex('center', '', 'row', 12, 'wrap')}>
                   {members.map((userInfo) => (
                     <li key={userInfo.memberId}>
-                      <SquareAvatar userInfo={userInfo} />
+                      <button
+                        type="button"
+                        css={avatarButtonCss}
+                        onClick={() =>
+                          handleOpenRecruitParticipantDetailModal(userInfo)
+                        }
+                      >
+                        <SquareAvatar userInfo={userInfo} />
+                      </button>
                     </li>
                   ))}
                   {Array(requiredCount)
@@ -73,6 +101,13 @@ export const RecruitParticipantsProgressDetail = memo(
     );
   }
 );
+
+const avatarButtonCss = css(resetStyle.button(), {
+  borderRadius: 8,
+  '&:focus-visible': {
+    outline: `3px solid ${palettes.primary.default}`,
+  },
+});
 
 RecruitParticipantsProgressDetail.displayName =
   'RecruitParticipantsProgressDetail';

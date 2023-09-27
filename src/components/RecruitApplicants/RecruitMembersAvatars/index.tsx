@@ -1,4 +1,7 @@
-import type { RecruitParticipantsDetail , RecruitParticipantUserInfo } from '~/services/recruit';
+import type {
+  RecruitParticipantsDetail,
+  RecruitParticipantUserInfo,
+} from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
@@ -6,10 +9,7 @@ import { Avatar } from '~/components/Common';
 import { classnames as avatarClassnames } from '~/components/Common/Avatar/classnames';
 import { palettes } from '~/styles/utils';
 
-type OnClickAvatar = (params: {
-  recruitApplicationId: number;
-  userInfo: RecruitParticipantUserInfo;
-}) => void;
+type OnClickAvatar = (userInfo: RecruitParticipantUserInfo) => void;
 
 interface RecruitMembersAvatarsProps {
   recruitMembers: RecruitParticipantsDetail;
@@ -28,9 +28,8 @@ const RecruitMembersAvatarsComponent = (props: RecruitMembersAvatarsProps) => {
       overridableSize="lg"
     >
       {recruitMembers?.members.map((userInfo) => (
-        // TODO: recruitApplicationId Type  추가
         <button
-          onClick={() => onClickAvatar({ userInfo, recruitApplicationId: 1 })}
+          onClick={() => onClickAvatar(userInfo)}
           css={avatarButtonCss}
           type="button"
           key={userInfo.memberId}

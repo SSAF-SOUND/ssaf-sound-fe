@@ -4,8 +4,6 @@ import type {
   ApplyRecruitApiData,
   CancelRecruitApplicationApiData,
   GetRecruitApplicantsApiData,
-  GetRecruitDetailApiData,
-  GetRecruitParticipantsApiData,
   GetRejectedRecruitApplicantsApiData,
   LikeRecruitApplicationApiData,
   RejectRecruitApplicationApiData,
@@ -15,7 +13,13 @@ import type {
 import { rest } from 'msw';
 
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
+import {
+  mockGetRecruitDetail,
+  mockGetRecruitDetailError,
+} from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
+import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
+import { mockUpdateRecruit } from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
@@ -25,8 +29,6 @@ import {
   createMockMyRecruitApplication,
   createMockRecruitApplicants,
   createMockRecruitApplication,
-  recruitDetails,
-  recruitParticipantsList,
   scrapStatus,
 } from './data';
 import {
@@ -55,60 +57,6 @@ export const getRecruitApplicants = rest.get(
 
 // 리쿠르팅 상세정보 조회
 
-const getRecruitDetailEndpoint =
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.detail(':recruitId'));
-
-export const getRecruitDetail = rest.get(
-  getRecruitDetailEndpoint,
-  (req, res, ctx) => {
-    const recruitId = Number(req.params.recruitId as string);
-    const recruitDetail = recruitDetails[recruitId];
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<GetRecruitDetailApiData['data']>(ctx, recruitDetail)
-    );
-  }
-);
-
-export const getRecruitDetailError = restError(
-  'get',
-  getRecruitDetailEndpoint,
-  {
-    message: '리쿠르트 디테일 조회 에러',
-  }
-);
-
-// 리쿠르팅 참가자 조회
-const getRecruitParticipantsEndpoint =
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.participants(':recruitId'));
-
-export const getRecruitParticipants = rest.get(
-  getRecruitParticipantsEndpoint,
-  (req, res, ctx) => {
-    const recruitId = Number(req.params.recruitId as string);
-
-    const recruitParticipants = recruitParticipantsList[recruitId];
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<GetRecruitParticipantsApiData['data']>(ctx, {
-        recruitTypes: recruitParticipants,
-      })
-    );
-  }
-);
-
-export const getRecruitParticipantsError = restError(
-  'get',
-  getRecruitParticipantsEndpoint,
-  {
-    message: '리쿠르팅 참가자 조회에 실패했습니다.',
-  }
-);
-
 // 리쿠르팅 스크랩
 
 const scrapRecruitEndpoint =
@@ -136,7 +84,9 @@ export const scrapRecruitError = restError('post', scrapRecruitEndpoint, {
   message: '스크랩 업데이트에 실패했습니다.',
 });
 
-const removeRecruitEndpoint = getRecruitDetailEndpoint;
+const removeRecruitEndpoint =
+  // @ts-ignore
+  composeUrls(API_URL, endpoints.recruit.detail(':recruitId'));
 const removeRecruitMethod = 'delete';
 
 export const removeRecruit = restSuccess(
@@ -149,24 +99,6 @@ export const removeRecruitError = restError(
   removeRecruitMethod,
   removeRecruitEndpoint,
   { message: '리쿠르팅 삭제 실패' }
-);
-
-const updateRecruitEndpoint = getRecruitDetailEndpoint;
-const updateRecruitMethod = 'patch';
-
-export const updateRecruit = restSuccess(
-  updateRecruitMethod,
-  updateRecruitEndpoint,
-  {
-    data: null,
-  }
-);
-export const updateRecruitError = restError(
-  updateRecruitMethod,
-  updateRecruitEndpoint,
-  {
-    message: '리쿠르트 업데이트 실패',
-  }
 );
 
 const completeRecruitEndpoint =
@@ -463,11 +395,12 @@ export const recruitHandlers = [
 
   getRecruitApplicants,
   mockCreateRecruit,
-  getRecruitDetail,
-  getRecruitParticipants,
+  mockGetRecruitDetail,
+  // mockGetRecruitDetailError,
+  mockGetRecruitParticipants,
   scrapRecruit,
   removeRecruit,
-  updateRecruit,
+  mockUpdateRecruit,
   completeRecruit,
 
   mockGetRecruits,

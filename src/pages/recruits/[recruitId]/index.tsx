@@ -9,7 +9,8 @@ import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import ArticleComment from '~/components/ArticleComment';
-import { FullPageLoader, loaderText, PageHead } from '~/components/Common';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
+import { PageHead } from '~/components/Common/PageHead';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import { RecruitDetailLayout } from '~/components/Layout';
 import { Recruit } from '~/components/Recruit/Recruit';
@@ -104,7 +105,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
           withoutClose
         />
 
-        <article css={{ marginBottom: 40 }}>
+        <div css={{ marginBottom: 40 }}>
           <Recruit.Header
             css={{ marginBottom: 20 }}
             recruitDetail={recruitDetail}
@@ -116,7 +117,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
           />
 
           <Recruit.Stats recruitDetail={recruitDetail} />
-        </article>
+        </div>
 
         <Recruit.Links
           css={{ marginBottom: 60 }}
@@ -130,10 +131,13 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
         >
           <Recruit.Tabs.DescriptionContent html={content} />
 
-          <Recruit.Tabs.ParticipantsContent recruitId={recruitId} />
+          <Recruit.Tabs.ParticipantsContent
+            recruitId={recruitId}
+            recruitDetail={recruitDetail}
+          />
         </Recruit.Tabs.Root>
 
-        <div css={separtorCss} />
+        <div css={separatorCss} />
 
         <RecruitCommentsLayer
           recruitId={recruitId}
@@ -155,7 +159,7 @@ const getDescriptionTabText = (category: RecruitCategoryName) => {
 };
 
 const pageExpandCss = expandCss();
-const separtorCss = css(pageExpandCss, {
+const separatorCss = css(pageExpandCss, {
   marginBottom: 44,
   height: 20,
   backgroundColor: palettes.background.grey,

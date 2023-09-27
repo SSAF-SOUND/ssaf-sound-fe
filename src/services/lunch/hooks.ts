@@ -13,6 +13,7 @@ import {
   pollLunchMenu,
   revertPolledLunchMenu,
 } from '~/services/lunch';
+import { toMs } from '~/utils/toMs';
 
 export interface UseLunchMenusWithPollStatusParams {
   campus: string;
@@ -29,7 +30,7 @@ export const useLunchMenusWithPollStatus = (
   return useQuery({
     queryKey: queryKeys.lunch.list({ campus, dateSpecifier }),
     queryFn: () => getLunchMenusWithPollStatus(apiParams),
-    staleTime: 30,
+    staleTime: toMs(30),
   });
 };
 

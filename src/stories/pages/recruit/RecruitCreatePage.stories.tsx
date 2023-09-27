@@ -1,18 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { userInfo } from '~/mocks/handlers/member/data';
+import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import RecruitCreatePage from '~/pages/recruits/new';
-import { useSetMyInfo } from '~/services/member';
+import { useMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof RecruitCreatePage> = {
   title: 'Page/Recruit/Create',
   component: RecruitCreatePage,
   decorators: [
     (Story) => {
-      const setMyInfo = useSetMyInfo();
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-
+      useMyInfo({ enabled: true });
       return (
         <PageLayout>
           <Story />
@@ -22,11 +21,9 @@ const meta: Meta<typeof RecruitCreatePage> = {
   ],
   parameters: {
     layout: 'fullscreen',
-    msw: {
-      handlers: {
-        member: [],
-      },
-    },
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+    }),
   },
 };
 
@@ -34,4 +31,4 @@ export default meta;
 
 type RecruitCreatePageStory = StoryObj<typeof RecruitCreatePage>;
 
-export const Success: RecruitCreatePageStory = {};
+export const Default: RecruitCreatePageStory = {};

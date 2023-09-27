@@ -23,7 +23,9 @@ const getQueryClient = () => {
 
 export default getQueryClient;
 
-const maxFailureCount = 3;
+// `failureCount === retryFailureCount`으로, 초깃값이 0임.
+// 최초 실패시 2번 더 재시도 (총 3회)
+const maxFailureCount = 2;
 const retryFunction = (failureCount: number, error: unknown) => {
   if (error === GlobalSymbol.QUIT_REQUEST_RETRY) {
     return false;
