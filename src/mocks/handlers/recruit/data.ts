@@ -1,5 +1,6 @@
 import type { UserInfo } from '~/services/member';
 import type {
+  AppliedRecruitSummary,
   GetMyRecruitApplicationApiData,
   GetRecruitApplicantsApiData,
   GetRecruitApplicationApiData,
@@ -7,9 +8,8 @@ import type {
   RecruitDetail,
   RecruitParticipantsDetail,
   RecruitParticipantsProgress,
-  RecruitSummary,
   RecruitParticipantUserInfo,
-  AppliedRecruitSummary,
+  RecruitSummary,
 } from '~/services/recruit';
 
 import { faker } from '@faker-js/faker';
@@ -21,35 +21,13 @@ import {
   SkillName,
 } from '~/services/recruit';
 
+
 import { mockHtmlString } from '../common';
 import { createMockUser, mockUserInfo, userInfo } from '../member/data';
 
 export const scrapStatus = {
   scraped: true,
   scrapCount: 777,
-};
-
-// 리쿠르팅 모집 현황 간략정보 (파트당 모집인원, 모집된 인원)
-export const createMockRecruitParticipantsProgress = (
-  isStudy: boolean
-): RecruitParticipantsProgress[] => {
-  const recruitParts = Object.values(RecruitParts);
-  const filteredRecruitParts = isStudy
-    ? recruitParts.filter((name) => name === RecruitParts.STUDY)
-    : recruitParts.filter((name) => name !== RecruitParts.STUDY);
-
-  return filteredRecruitParts.map((recruitPart) => {
-    const maxParticipantsCount = faker.number.int({ min: 5, max: 10 });
-    const currentParticipantsCount = faker.number.int({
-      min: 1,
-      max: maxParticipantsCount,
-    });
-    return {
-      recruitType: recruitPart,
-      limit: maxParticipantsCount,
-      currentNumber: currentParticipantsCount,
-    };
-  });
 };
 
 export const createMockParticipant = ({
@@ -75,6 +53,7 @@ export const createMockRecruitDetail = (
     matchStatus?: MatchStatus;
     mine?: boolean;
     author?: UserInfo;
+    participantsProgress?: RecruitParticipantsProgress[];
   } = {}
 ): RecruitDetail => {
   const {
@@ -82,6 +61,7 @@ export const createMockRecruitDetail = (
     matchStatus: matchStatusOption,
     mine: mineOption,
     author: authorOption,
+    participantsProgress: participantsProgressOption,
   } = options;
 
   const finishedRecruit = completed;
@@ -102,12 +82,21 @@ export const createMockRecruitDetail = (
       ? mockUserInfo.certifiedSsafyUserInfo
       : authorOption;
 
-  const limits = createMockRecruitParticipantsProgress(isStudy);
-
   const skills = Object.values(SkillName).map((skillName, index) => ({
     skillId: index + 1,
     name: skillName,
   }));
+
+  const participantsProgress = participantsProgressOption
+    ? participantsProgressOption
+    : isStudy
+    ? [{ recruitType: RecruitParts.STUDY, limit: 10, currentNumber: 1 }]
+    : [
+        { recruitType: RecruitParts.FRONTEND, limit: 10, currentNumber: 1 },
+        { recruitType: RecruitParts.BACKEND, limit: 10, currentNumber: 1 },
+        { recruitType: RecruitParts.APP, limit: 10, currentNumber: 1 },
+        { recruitType: RecruitParts.PM, limit: 10, currentNumber: 1 },
+      ];
 
   return {
     recruitId,
@@ -122,7 +111,7 @@ export const createMockRecruitDetail = (
     finishedRecruit,
     scrapCount: scrapStatus.scrapCount,
     scraped: scrapStatus.scraped,
-    limits,
+    limits: participantsProgress,
     skills,
     view: faker.number.int({ min: 1, max: 1000000 }),
 
