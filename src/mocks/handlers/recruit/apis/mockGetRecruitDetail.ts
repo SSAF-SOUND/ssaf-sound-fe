@@ -12,20 +12,21 @@ const getRecruitDetailEndpoint = composeUrls(
   API_URL,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  endpoints.recruit.detail('recruitId')
+  endpoints.recruit.detail(':recruitId')
 );
 
 export const createMockGetRecruitDetail = (
   recruitDetail: GetRecruitDetailApiData['data'],
-  fallbackRecruitId: number
+  fallbackRecruitId = 1
 ) => {
   return rest[getRecruitDetailMethod](
     getRecruitDetailEndpoint,
     (req, res, ctx) => {
       const params = req.params as { recruitId: string };
-      const recruitId = params.recruitId
-        ? Number(params.recruitId)
-        : fallbackRecruitId;
+      const recruitId =
+        params.recruitId && !Number.isNaN(Number(params.recruitId))
+          ? Number(params.recruitId)
+          : fallbackRecruitId;
 
       return res(
         ...mockSuccess<GetRecruitDetailApiData['data']>(ctx, {

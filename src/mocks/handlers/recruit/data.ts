@@ -21,7 +21,6 @@ import {
   SkillName,
 } from '~/services/recruit';
 
-
 import { mockHtmlString } from '../common';
 import { createMockUser, mockUserInfo, userInfo } from '../member/data';
 
@@ -126,7 +125,7 @@ export const recruitDetails = Array(5)
 
 // 리쿠르팅 모집 현황중, 참가자의 상세정보 (파트마다 유저의 상세정보)
 export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
-  const { limits } = recruitDetail;
+  const { limits, author } = recruitDetail;
 
   return Object.fromEntries(
     limits.map(
@@ -147,9 +146,10 @@ export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
           part,
           {
             limit: maxParticipantsCount,
-            members: memberIds.map((memberId) =>
+            members: memberIds.map((memberId, index) =>
               createMockParticipant({
-                userId: memberId,
+                // 0번째는 모집자 본인
+                userId: index === 0 ? author.memberId : memberId,
                 recruitApplicationId: 1,
               })
             ),

@@ -4,7 +4,6 @@ import type {
   ApplyRecruitApiData,
   CancelRecruitApplicationApiData,
   GetRecruitApplicantsApiData,
-  GetRecruitParticipantsApiData,
   GetRejectedRecruitApplicantsApiData,
   LikeRecruitApplicationApiData,
   RejectRecruitApplicationApiData,
@@ -14,7 +13,11 @@ import type {
 import { rest } from 'msw';
 
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
-import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
+import {
+  mockGetRecruitDetail,
+  mockGetRecruitDetailError,
+} from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
+import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
 import { mockUpdateRecruit } from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
@@ -26,7 +29,6 @@ import {
   createMockMyRecruitApplication,
   createMockRecruitApplicants,
   createMockRecruitApplication,
-  recruitParticipantsList,
   scrapStatus,
 } from './data';
 import {
@@ -54,35 +56,6 @@ export const getRecruitApplicants = rest.get(
 );
 
 // 리쿠르팅 상세정보 조회
-
-// 리쿠르팅 참가자 조회
-const getRecruitParticipantsEndpoint =
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.participants(':recruitId'));
-
-export const getRecruitParticipants = rest.get(
-  getRecruitParticipantsEndpoint,
-  (req, res, ctx) => {
-    const recruitId = Number(req.params.recruitId as string);
-
-    const recruitParticipants = recruitParticipantsList[recruitId];
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<GetRecruitParticipantsApiData['data']>(ctx, {
-        recruitTypes: recruitParticipants,
-      })
-    );
-  }
-);
-
-export const getRecruitParticipantsError = restError(
-  'get',
-  getRecruitParticipantsEndpoint,
-  {
-    message: '리쿠르팅 참가자 조회에 실패했습니다.',
-  }
-);
 
 // 리쿠르팅 스크랩
 
@@ -423,7 +396,8 @@ export const recruitHandlers = [
   getRecruitApplicants,
   mockCreateRecruit,
   mockGetRecruitDetail,
-  getRecruitParticipants,
+  // mockGetRecruitDetailError,
+  mockGetRecruitParticipants,
   scrapRecruit,
   removeRecruit,
   mockUpdateRecruit,
