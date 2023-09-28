@@ -22,6 +22,7 @@ import { titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
+  customToast,
   getErrorResponse,
   handleAxiosError,
   routes,
@@ -153,6 +154,10 @@ const RecruitApplyPage: CustomNextPage = () => {
     }
   };
 
+  const onInvalidSubmit: RecruitApplyFormProps['onInvalidSubmit'] = () => {
+    customToast.clientError('올바르지 않은 입력이 있는지 확인해주세요.');
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
@@ -172,6 +177,7 @@ const RecruitApplyPage: CustomNextPage = () => {
         <RecruitApplyForm
           recruitDetail={recruitDetail}
           onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
         />
       </div>
     </>
