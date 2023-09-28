@@ -87,6 +87,7 @@ export const RecruitPartToApply = (props: RecruitPartToApplyProps) => {
           onValueChange={(selectedPart) =>
             setValue(fieldName, selectedPart as RecruitParts, {
               shouldDirty: true,
+              shouldValidate: true,
             })
           }
         />
