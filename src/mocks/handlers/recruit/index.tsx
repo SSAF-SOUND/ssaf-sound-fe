@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import type {
-  ApplyRecruitApiData,
   CancelRecruitApplicationApiData,
   GetRecruitApplicantsApiData,
   GetRejectedRecruitApplicantsApiData,
@@ -12,6 +11,8 @@ import type {
 
 import { rest } from 'msw';
 
+import { mockApplyRecruit } from '~/mocks/handlers/recruit/apis/mockApplyRecruit';
+import { mockCompleteRecruit } from '~/mocks/handlers/recruit/apis/mockCompleteRecruit';
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
 import {
   mockGetRecruitDetail,
@@ -99,51 +100,6 @@ export const removeRecruitError = restError(
   removeRecruitMethod,
   removeRecruitEndpoint,
   { message: '리쿠르팅 삭제 실패' }
-);
-
-const completeRecruitEndpoint =
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.complete(':recruitId'));
-const completeRecruitMethod = 'post';
-
-export const completeRecruit = restSuccess(
-  completeRecruitMethod,
-  completeRecruitEndpoint,
-  {
-    data: null,
-  }
-);
-
-export const completeRecruitError = restError(
-  completeRecruitMethod,
-  completeRecruitEndpoint,
-  {
-    message: '리쿠르팅 모집 완료 실패',
-  }
-);
-
-const applyRecruitEndpoint =
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.apply(':recruitId'));
-const applyRecruitMethod = 'post';
-
-export const applyRecruit = restSuccess<ApplyRecruitApiData['data']>(
-  applyRecruitMethod,
-  applyRecruitEndpoint,
-  {
-    data: {
-      matchStatus: MatchStatus.PENDING,
-      recruitApplicationId: 301,
-    },
-  }
-);
-
-export const applyRecruitError = restError(
-  applyRecruitMethod,
-  applyRecruitEndpoint,
-  {
-    message: '리쿠르팅 지원 실패',
-  }
 );
 
 const getMyRecruitApplicationEndpoint = removeQueryParams(
@@ -401,11 +357,11 @@ export const recruitHandlers = [
   scrapRecruit,
   removeRecruit,
   mockUpdateRecruit,
-  completeRecruit,
+  mockCompleteRecruit,
 
   mockGetRecruits,
 
-  applyRecruit,
+  mockApplyRecruit,
   getMyRecruitApplication, // /recruit-applications/mine
 
   getRecruitApplication, // /recruit-applications/:recruitApplicationId
