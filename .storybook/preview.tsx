@@ -23,6 +23,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { GlobalModal } from '../src/components/GlobalModal';
 import { Toaster } from 'react-hot-toast';
 import { useResetQueriesEffect } from '~/stories/utils';
+import { useMyInfo } from '~/services/member';
 
 initialize({
   onUnhandledRequest: 'bypass',
@@ -68,6 +69,7 @@ const preview: Preview = {
   decorators: [
     (Story) => {
       useResetQueriesEffect();
+      useMyInfo({ enabled: true });
 
       return <Story />;
     },
