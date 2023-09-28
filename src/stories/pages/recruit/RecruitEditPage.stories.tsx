@@ -1,79 +1,78 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import type { RecruitDetail } from '~/services/recruit';
+import type { Meta } from '@storybook/react';
 
-import { completeRecruitError } from '~/mocks/handlers';
-import { userInfo } from '~/mocks/handlers/member/data';
-import {
-  mockUpdateRecruit,
-  mockUpdateRecruitError,
-} from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
+import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUserInfo } from '~/mocks/handlers/member/data';
+import { createMockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
+import { mockUpdateRecruit } from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
 import { createMockRecruitDetail } from '~/mocks/handlers/recruit/data';
 import RecruitEditPage from '~/pages/recruits/[recruitId]/edit';
-import { useSetMyInfo } from '~/services/member';
-import { useSetRecruitDetail } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
-
-// `query string`에서 id를 읽어오는데, 스토리북에선 `undefined`이므로, 숫자로 변환시 NaN이 됨.
-const myRecruitId = NaN;
-const myRecruitDetail = createMockRecruitDetail(myRecruitId, true, {
-  completed: false,
-  mine: true,
-});
-const completedRecruitDetail: RecruitDetail = {
-  ...myRecruitDetail,
-  finishedRecruit: true,
-};
+import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof RecruitEditPage> = {
-  title: 'Page/Recruit/Edit',
+  title: 'Page/Recruit/리쿠르팅 수정하기',
   component: RecruitEditPage,
   decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-
-      const setRecruitDetail = useSetRecruitDetail(myRecruitId);
-      setRecruitDetail(myRecruitDetail);
-
-      return (
-        <PageLayout>
-          <Story />
-        </PageLayout>
-      );
-    },
+    (Story) => (
+      <PageLayout>
+        <Story />
+      </PageLayout>
+    ),
   ],
   parameters: {
     layout: 'fullscreen',
-    msw: {
-      handlers: {
-        member: [],
-        recruit: [mockUpdateRecruit],
-      },
-    },
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+    }),
   },
 };
 
 export default meta;
 
-type RecruitEditPageStory = StoryObj<typeof RecruitEditPage>;
+const myInfo = mockUserInfo.certifiedSsafyUserInfo;
+const projectDetail = createMockRecruitDetail(1, false, {
+  mine: true,
+  completed: false,
+  author: myInfo,
+});
 
-export const Success: RecruitEditPageStory = {};
-
-export const Error: RecruitEditPageStory = {
+export const Project = {
+  name: '프로젝트 리쿠르팅 수정',
   parameters: {
-    msw: {
-      handlers: {
-        member: [],
-        recruit: [mockUpdateRecruitError, completeRecruitError],
-      },
-    },
+    ...createMswParameters({
+      recruit: [mockUpdateRecruit, createMockGetRecruitDetail(projectDetail)],
+    }),
   },
 };
 
-export const CompletedRecruit: RecruitEditPageStory = {
-  render: function Render() {
-    const setRecruitDetail = useSetRecruitDetail(myRecruitId);
-    setRecruitDetail(completedRecruitDetail);
-    return <RecruitEditPage />;
+const studyDetail = createMockRecruitDetail(1, true, {
+  mine: true,
+  completed: false,
+  author: myInfo,
+});
+export const Study = {
+  name: '스터디 리쿠르팅 수정',
+  parameters: {
+    ...createMswParameters({
+      recruit: [mockUpdateRecruit, createMockGetRecruitDetail(studyDetail)],
+    }),
+  },
+};
+
+const completedRecruit = createMockRecruitDetail(1, false, {
+  completed: true,
+  mine: true,
+  author: myInfo,
+});
+
+export const Completed = {
+  name: '완료된 리쿠르팅 수정',
+  parameters: {
+    ...createMswParameters({
+      recruit: [
+        mockUpdateRecruit,
+        createMockGetRecruitDetail(completedRecruit),
+      ],
+    }),
   },
 };
