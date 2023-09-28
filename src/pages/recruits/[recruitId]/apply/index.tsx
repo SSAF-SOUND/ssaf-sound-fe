@@ -13,8 +13,8 @@ import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { useMyInfo } from '~/services/member';
 import {
+  ApplicableMatchStatusSet,
   getRecruitThemeByCategory,
-  MatchStatus,
   useApplyRecruit,
   useRecruitDetail,
 } from '~/services/recruit';
@@ -30,7 +30,7 @@ import {
 // Guard
 // 0. 로그인 -> isSignedIn
 // 1. 현재 참여중이 아님 -> recruitDetail.matchStatus
-// 2. 내 리쿠르팅이 아님 -> recruitDetail.mine
+// 2. 내 리쿠능르팅이 아님 -> recruitDetail.mine
 // 3. 모집 완료가 아님 -> recruitDetail.isFinished
 
 // Submit Error
@@ -41,7 +41,7 @@ const titleBarTitle = metaTitle;
 
 const RecruitApplyPage: CustomNextPage = () => {
   const router = useRouter();
-  const query = router.query as Partial<Params>;
+  const query = router.query as Params;
   const recruitId = Number(query.recruitId);
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
@@ -121,7 +121,9 @@ const RecruitApplyPage: CustomNextPage = () => {
   }
 
   const isUnauthorized =
-    !isSignedIn || mine || (matchStatus && matchStatus !== MatchStatus.INITIAL);
+    !isSignedIn ||
+    mine ||
+    (matchStatus && !ApplicableMatchStatusSet.has(matchStatus));
 
   if (isUnauthorized) {
     const message = !isSignedIn
@@ -176,9 +178,9 @@ const RecruitApplyPage: CustomNextPage = () => {
   );
 };
 
-type Params = {
+type Params = Partial<{
   recruitId: string;
-};
+}>;
 
 const selfCss = css({
   padding: `${titleBarHeight + 30}px 0`,
