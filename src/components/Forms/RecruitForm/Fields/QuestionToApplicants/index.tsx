@@ -46,7 +46,7 @@ export const QuestionToApplicants = (props: QuestionToApplicantsProps) => {
           <TextInput
             css={inputCss}
             size="md"
-            value={'asfddasfasddsa'}
+            value={defaultQuestionToApplicants}
             disabled
           />
         </>
