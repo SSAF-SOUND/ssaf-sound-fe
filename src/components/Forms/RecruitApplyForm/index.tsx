@@ -1,16 +1,18 @@
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { RecruitApplyFormValues } from '~/components/Forms/RecruitApplyForm/utils';
-import type { RecruitDetail } from '~/services/recruit';
+import type { RecruitDetail ,
+  RecruitCategoryName} from '~/services/recruit';
 
+import { useEffect } from 'react';
 import { FormProvider, useForm, useFormState, useWatch } from 'react-hook-form';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { useModal } from '~/components/GlobalModal';
 import {
   getRecruitThemeByCategory,
-  RecruitCategoryName,
+  RecruitParts,
 } from '~/services/recruit';
-import { isEqualString } from '~/utils';
+import { isEqualString } from '~/utils/isEqualString';
 
 import { AgreeToProvideProfile } from './Fields/AgreeToProvideProfile';
 import { AnswerToRecruitAuthor } from './Fields/AnswerToRecruitAuthor';
@@ -48,21 +50,11 @@ export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
     questions: [question],
   } = recruitDetail;
   const hasQuestion = question.length > 0;
-  const isCategoryProject = isEqualString(
-    category,
-    RecruitCategoryName.PROJECT,
-    { caseSensitive: false }
-  );
 
   return (
     <FormProvider {...methods}>
       <form className={className}>
-        {isCategoryProject && (
-          <RecruitPartToApply
-            recruitDetail={recruitDetail}
-            readonly={readonly}
-          />
-        )}
+        <RecruitPartToApply recruitDetail={recruitDetail} readonly={readonly} />
         <AgreeToProvideProfile
           category={category}
           css={{ marginBottom: 120 }}
