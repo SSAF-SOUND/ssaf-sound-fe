@@ -72,6 +72,10 @@ export enum MatchStatus {
 }
 
 export const MatchStatusSet = new Set<string>(Object.values(MatchStatus));
+export const ApplicableMatchStatusSet = new Set<string>([
+  MatchStatus.INITIAL,
+  MatchStatus.REJECTED,
+]);
 
 export interface RecruitParticipantsCount {
   part: RecruitParts;
