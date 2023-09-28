@@ -2,8 +2,8 @@ import type { GetServerSideProps } from 'next';
 import type { RecruitFilterFormProps } from '~/components/Forms/RecruitFilterForm';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
 import type {
-  RecruitsPageRouteQuery,
-  SafeRecruitsPageRouteQuery,
+  RecruitsListPageRouteQuery,
+  SafeRecruitsListPageRouteQuery,
 } from '~/utils/client-routes/recruits';
 
 import { useRouter } from 'next/router';
@@ -280,7 +280,7 @@ const RecruitCategoryTabs = (props: RecruitCategoryTabs) => {
 };
 
 interface RecruitsLayerProps {
-  query: SafeRecruitsPageRouteQuery;
+  query: SafeRecruitsListPageRouteQuery;
 }
 
 const RecruitsLayer = (props: RecruitsLayerProps) => {
@@ -343,7 +343,7 @@ const recruitLayerCss = css({
 });
 
 interface RecruitFilterModalProps {
-  query: SafeRecruitsPageRouteQuery;
+  query: SafeRecruitsListPageRouteQuery;
 }
 const RecruitFilterModal = (props: RecruitFilterModalProps) => {
   const router = useRouter();
@@ -412,18 +412,18 @@ enum ParamsKey {
   KEYWORD = 'keyword',
 }
 type Params = Partial<{
-  [ParamsKey.CATEGORY]: RecruitsPageRouteQuery['category'];
+  [ParamsKey.CATEGORY]: RecruitsListPageRouteQuery['category'];
   [ParamsKey.INCLUDE_COMPLETED]: string;
-  [ParamsKey.RECRUIT_PARTS]: RecruitsPageRouteQuery['recruitParts'];
-  [ParamsKey.SKILLS]: RecruitsPageRouteQuery['skills'];
-  [ParamsKey.KEYWORD]: RecruitsPageRouteQuery['keyword'];
+  [ParamsKey.RECRUIT_PARTS]: RecruitsListPageRouteQuery['recruitParts'];
+  [ParamsKey.SKILLS]: RecruitsListPageRouteQuery['skills'];
+  [ParamsKey.KEYWORD]: RecruitsListPageRouteQuery['keyword'];
 }>;
 
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   context
 ) => {
   const queryString = getQueryStringFromUrl(context.resolvedUrl);
-  const parsed = qsParse(queryString) as RecruitsPageRouteQuery;
+  const parsed = qsParse(queryString) as RecruitsListPageRouteQuery;
 
   const { pathname, query } = routes.recruits.list(parsed);
 

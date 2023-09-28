@@ -7,7 +7,7 @@ import type {
   SkillName,
 } from '~/services/recruit';
 import type { ApiSuccessResponse } from '~/types';
-import type { RecruitsPageRouteQuery } from '~/utils/client-routes/recruits';
+import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruits';
 
 import { endpoints } from '~/react-query/common';
 import {
@@ -17,7 +17,7 @@ import {
 import { publicAxios } from '~/utils';
 
 export type GetRecruitsParams = Partial<
-  RecruitsPageRouteQuery & InfiniteParams
+  RecruitsListPageRouteQuery & InfiniteParams
 >;
 
 export type GetRecruitsApiData = ApiSuccessResponse<

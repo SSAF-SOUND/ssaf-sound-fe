@@ -4,7 +4,7 @@ import type {
   MatchStatus,
   RecruitCategoryName,
 } from '~/services/recruit';
-import type { RecruitsPageRouteQuery } from '~/utils/client-routes/recruits';
+import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruits';
 
 import {
   defaultRecruitsPageCursor,
@@ -78,7 +78,7 @@ export const queryKeys = {
       'my-scraped-recruits',
       params,
     ],
-    list: (params: RecruitsPageRouteQuery = {}) => {
+    list: (params: RecruitsListPageRouteQuery = {}) => {
       const { category, keyword, recruitParts, skills, includeCompleted } =
         params;
 
