@@ -1,18 +1,12 @@
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { RecruitApplyFormValues } from '~/components/Forms/RecruitApplyForm/utils';
-import type { RecruitDetail ,
-  RecruitCategoryName} from '~/services/recruit';
+import type { RecruitDetail, RecruitCategoryName } from '~/services/recruit';
 
-import { useEffect } from 'react';
 import { FormProvider, useForm, useFormState, useWatch } from 'react-hook-form';
 
 import { Button } from '~/components/Common/Button';
 import { useModal } from '~/components/GlobalModal';
-import {
-  getRecruitThemeByCategory,
-  RecruitParts,
-} from '~/services/recruit';
-import { isEqualString } from '~/utils/isEqualString';
+import { getRecruitThemeByCategory } from '~/services/recruit';
 
 import { AgreeToProvideProfile } from './Fields/AgreeToProvideProfile';
 import { AnswerToRecruitAuthor } from './Fields/AnswerToRecruitAuthor';
