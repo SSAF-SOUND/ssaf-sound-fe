@@ -63,6 +63,7 @@ export const QuestionToApplicants = (props: QuestionToApplicantsProps) => {
             placeholder="질문을 작성해주세요"
             {...register(fieldName, {
               validate: validateQuestionToApplicants,
+              setValueAs: (value) => value.trim(),
             })}
           />
         </>
