@@ -113,7 +113,7 @@ const RecruitApplyPage: CustomNextPage = () => {
   if (finishedRecruit) {
     return (
       <RedirectionGuide
-        title="종료된 리쿠르팅입니다"
+        title="지원할 수 없습니다"
         description="모집 기간이 아니거나 이미 모집이 완료되었습니다."
         redirectionText="리쿠르팅 상세 페이지로"
         redirectionTo={routes.recruit.detail(recruitDetail.recruitId)}
