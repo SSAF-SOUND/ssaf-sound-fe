@@ -26,6 +26,10 @@ const toggleAgreeCheckbox = () => {
   cy.findByRole('checkbox', { name: /동의합니다/ }).click();
 };
 
+const populateAnswer = () => {
+  cy.findByPlaceholderText(/답변을 작성해주세요/).type('Answer');
+};
+
 const submitForm = () => {
   cy.findByRole('button', { name: /신청하기/ }).click();
   cy.findByRole('dialog').within(() => {
@@ -51,9 +55,10 @@ describe('Recruit Apply Form', () => {
       );
     });
 
-    it('신청 파트를 선택하고, 프로필 제공에 동의하면 폼을 제출할 수 있다.', () => {
+    it('모든 입력필드를 작성하면 폼을 제출할 수 있다.', () => {
       selectPartOption();
       toggleAgreeCheckbox();
+      populateAnswer();
       submitForm();
       cy.get('@onValidSubmitSpy').should('have.been.calledOnce');
       cy.get('@onInvalidSubmitSpy').should('not.have.been.called');
@@ -70,6 +75,16 @@ describe('Recruit Apply Form', () => {
     });
 
     it('신청 파트를 선택하지 않으면 폼 제출이 불가능하다.', () => {
+      toggleAgreeCheckbox();
+      populateAnswer();
+      submitForm();
+
+      cy.get('@onValidSubmitSpy').should('not.have.been.called');
+      cy.get('@onInvalidSubmitSpy').should('have.been.calledOnce');
+    });
+
+    it('등록자 질문에 답변하지 않으면 폼 제출이 불가능하다.', () => {
+      selectPartOption();
       toggleAgreeCheckbox();
       submitForm();
 
@@ -92,8 +107,9 @@ describe('Recruit Apply Form', () => {
       );
     });
 
-    it('프로필 제공에 동의하면 폼을 제출할 수 있다', () => {
+    it('모든 입력필드를 작성하면 폼을 제출할 수 있다.', () => {
       toggleAgreeCheckbox();
+      populateAnswer();
       submitForm();
       cy.get('@onValidSubmitSpy').should('have.been.calledOnce');
       cy.get('@onInvalidSubmitSpy').should('not.have.been.called');
@@ -113,6 +129,14 @@ describe('Recruit Apply Form', () => {
       toggleAgreeCheckbox();
 
       cy.get('@applyButton').should('not.be.disabled');
+    });
+
+    it('등록자 질문에 답변하지 않으면 폼 제출이 불가능하다.', () => {
+      toggleAgreeCheckbox();
+      submitForm();
+
+      cy.get('@onValidSubmitSpy').should('not.have.been.called');
+      cy.get('@onInvalidSubmitSpy').should('have.been.calledOnce');
     });
   });
 });
