@@ -13,7 +13,7 @@ interface UseAppliedRecruitsParams {
 export const useAppliedRecruits = (params: UseAppliedRecruitsParams) => {
   const { matchStatus, category } = params;
   return useInfiniteQuery({
-    queryKey: queryKeys.recruit.appliedList({ matchStatus, category }),
+    queryKey: queryKeys.recruit.appliedList.filter({ matchStatus, category }),
     queryFn: ({ pageParam }) =>
       getAppliedRecruits({
         matchStatus,

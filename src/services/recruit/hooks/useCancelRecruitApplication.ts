@@ -20,6 +20,7 @@ export const useCancelRecruitApplication = (
       queryClient.invalidateQueries(queryKeys.recruit.detail(recruitId), {
         exact: true,
       });
+      queryClient.invalidateQueries(queryKeys.recruit.appliedList.self());
       queryClient.setQueryData<MyRecruitApplicationDetail>(
         queryKeys.recruit.application.mine(recruitId),
         (prev) => {
