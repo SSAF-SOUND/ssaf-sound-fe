@@ -16,7 +16,10 @@ const fieldName = 'answerToRecruitAuthor';
 const validateAnswerToRecruitAuthor = (value: string) => {
   const { length } = value;
 
-  return length <= maxLength || '답변은 500자 이하로 작성해야 합니다.';
+  return (
+    (length >= 1 && length <= maxLength) ||
+    '답변은 1자 이상 500자 이하여야 합니다.'
+  );
 };
 
 interface AnswerToRecruitAuthorProps {
@@ -62,6 +65,7 @@ export const AnswerToRecruitAuthor = (props: AnswerToRecruitAuthorProps) => {
           placeholder="답변을 작성해주세요"
           {...register(fieldName, {
             validate: validateAnswerToRecruitAuthor,
+            setValueAs: (value) => value.trim(),
           })}
         />
       )}
