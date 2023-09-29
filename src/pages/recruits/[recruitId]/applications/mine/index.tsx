@@ -40,7 +40,7 @@ import {
 const metaTitle = '내 리쿠르팅 신청서';
 const MyRecruitApplicationPage: CustomNextPage = () => {
   const router = useRouter();
-  const query = router.query as Partial<Params>;
+  const query = router.query as Params;
   const recruitId = Number(query.recruitId);
 
   const {
@@ -144,9 +144,9 @@ const MyRecruitApplicationPage: CustomNextPage = () => {
   );
 };
 
-type Params = {
+type Params = Partial<{
   recruitId: string;
-};
+}>;
 
 const selfCss = css({
   padding: `${titleBarHeight + 30}px 0`,
