@@ -1,6 +1,7 @@
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import { createMockRecruitDetail } from '~/mocks/handlers/recruit/data';
-import { MatchStatus } from '~/services/recruit';
+import { MatchStatus, RecruitParts } from '~/services/recruit';
+import { noop } from '~/utils';
 
 const recruitId = 1000;
 const mockProjectDetail = createMockRecruitDetail(recruitId, false, {
@@ -141,4 +142,32 @@ describe('Recruit Apply Form', () => {
   });
 });
 
-// readOnly 모드 (지원서 상세보기에 사용)
+describe('Recruit Apply Form (readonly mode)', () => {
+  beforeEach(() => {
+    cy.mount(
+      <RecruitApplyForm
+        onValidSubmit={noop}
+        recruitDetail={mockProjectDetail}
+        options={{
+          readonly: true,
+        }}
+        defaultValues={{
+          agreeToProvideProfile: true,
+          recruitPartToApply: RecruitParts.FRONTEND,
+          answerToRecruitAuthor: 'Answer',
+        }}
+      />
+    );
+  });
+
+  it('모든 필드가 비활성화 되어있다.', () => {
+    cy.contains(/지원파트를/)
+      .next()
+      .should('not.be.enabled');
+    cy.contains(/동의합니다/).should('not.be.enabled');
+    cy.contains(/등록자 질문/)
+      .parent()
+      .next()
+      .should('not.be.enabled');
+  });
+});
