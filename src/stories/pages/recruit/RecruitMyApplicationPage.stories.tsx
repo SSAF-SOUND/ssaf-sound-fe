@@ -42,7 +42,7 @@ const mockStudyDetail = createMockRecruitDetail(recruitId, true, {
 });
 
 const meta: Meta<typeof RecruitMyApplicationPage> = {
-  title: 'Page/Recruit/내 신청서',
+  title: 'Page/Recruit/리쿠르팅 내 신청서',
   component: RecruitMyApplicationPage,
   decorators: [
     (Story) => (
