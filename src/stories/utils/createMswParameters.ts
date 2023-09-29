@@ -10,7 +10,8 @@ type HandlerCategory =
   | 's3'
   | 'lunch'
   | 'recruit'
-  | 'report';
+  | 'report'
+  | 'common';
 
 type CreateMswParametersParams = Partial<
   Record<HandlerCategory, RestHandler[]>

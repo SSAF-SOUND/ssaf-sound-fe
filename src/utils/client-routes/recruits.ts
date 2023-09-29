@@ -19,9 +19,11 @@ const getSafeCategory = (category?: string) => {
   return RecruitCategoryName.PROJECT;
 };
 
-const recruitsSelfRoute = () => createRoute('/recruits')();
+// ---------- recruit self ----------
 
-// ---------- recruits list ----------
+const recruitSelfRoute = () => createRoute('/recruits')();
+
+// ---------- recruit list ----------
 
 export type RecruitsListPageRouteQuery = {
   category?: RecruitCategoryName;
@@ -40,8 +42,8 @@ export type SafeRecruitsListPageRouteQuery = {
   keyword?: string;
 };
 
-const recruitsListPageRoute = (query: RecruitsListPageRouteQuery = {}) => {
-  const pathname = recruitsSelfRoute().pathname;
+const recruitListPageRoute = (query: RecruitsListPageRouteQuery = {}) => {
+  const pathname = recruitSelfRoute().pathname;
   return createRoute<SafeRecruitsListPageRouteQuery>(pathname)(
     toSafeRecruitsListPageQuery(query)
   );
@@ -87,7 +89,7 @@ export type SafeRecruitCreatePageRouteQuery = {
   category: RecruitCategoryName;
 };
 const recruitCreatePageRoute = (query: RecruitCreatePageRouteQuery = {}) => {
-  const pathname = recruitsSelfRoute().pathname;
+  const pathname = recruitSelfRoute().pathname;
   return createRoute<SafeRecruitCreatePageRouteQuery>(pathname)(
     toSafeRecruitCreatePageQuery(query)
   );
@@ -103,31 +105,61 @@ const toSafeRecruitCreatePageQuery = (
 // ---------- recruit detail ----------
 
 const recruitDetailPageRoute = (recruitId: number) => {
-  const pathname = recruitsSelfRoute().pathname;
+  const pathname = recruitSelfRoute().pathname;
   return createRoute(`${pathname}/${recruitId}`)();
 };
 
 // ---------- recruit edit ----------
 
 const recruitEditPageRoute = (recruitId: number) => {
-  const pathname = recruitsSelfRoute().pathname;
+  const pathname = recruitSelfRoute().pathname;
   return createRoute(`${pathname}/${recruitId}/edit`)();
 };
 
 // ---------- recruit apply ----------
 
 const recruitApplyPageRoute = (recruitId: number) => {
-  const pathname = recruitsSelfRoute().pathname;
+  const pathname = recruitSelfRoute().pathname;
   return createRoute(`${pathname}/${recruitId}/apply`)();
 };
 
-// ---------- recruit application ----------
+// ---------- recruit application self ----------
+
+const recruitApplicationSelfRoute = (recruitId: number) => {
+  const pathname = recruitDetailPageRoute(recruitId).pathname;
+  return createRoute(`${pathname}/applications`)();
+};
+
+// ---------- recruit application detail -----------
+
+interface RecruitApplicationDetailPageRouteParams {
+  recruitId: number;
+  recruitApplicationId: number;
+}
+const recruitApplicationDetailPageRoute = (
+  params: RecruitApplicationDetailPageRouteParams
+) => {
+  const { recruitId, recruitApplicationId } = params;
+  const pathname = recruitApplicationSelfRoute(recruitId).pathname;
+  return createRoute(`${pathname}/${recruitApplicationId}`)();
+};
+
+// ---------- recruit my application ----------
+const recruitMyApplicationPageRoute = (recruitId: number) => {
+  const pathname = recruitApplicationSelfRoute(recruitId).pathname;
+  return createRoute(`${pathname}/mine`);
+};
 
 export const recruits = {
-  self: recruitsSelfRoute,
-  list: recruitsListPageRoute,
+  self: recruitSelfRoute,
+  list: recruitListPageRoute,
   create: recruitCreatePageRoute,
   detail: recruitDetailPageRoute,
   edit: recruitEditPageRoute,
   apply: recruitApplyPageRoute,
+  applications: {
+    self: recruitApplicationSelfRoute,
+    detail: recruitApplicationDetailPageRoute,
+    mine: recruitMyApplicationPageRoute,
+  },
 };

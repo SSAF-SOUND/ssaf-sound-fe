@@ -96,8 +96,12 @@ export const queryKeys = {
     joinedList: (params: Omit<JoinedRecruitsParams, 'cursor' | 'size'>) => {
       return [...queryKeys.recruit.self(), 'joined', params];
     },
-    appliedList: (params: Omit<AppliedRecruitsParams, 'cursor' | 'size'>) => {
-      return [...queryKeys.recruit.self(), 'applied', params];
+    appliedList: {
+      self: () => [...queryKeys.recruit.self(), 'applied'],
+      filter: (params: Omit<AppliedRecruitsParams, 'cursor' | 'size'>) => [
+        ...queryKeys.recruit.appliedList.self(),
+        params,
+      ],
     },
     application: {
       self: (recruitId: number) => [

@@ -1,37 +1,32 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import type {
-  CancelRecruitApplicationApiData,
   GetRecruitApplicantsApiData,
   GetRejectedRecruitApplicantsApiData,
   LikeRecruitApplicationApiData,
-  RejectRecruitApplicationApiData,
   ScrapRecruitApiData,
 } from '~/services/recruit';
 
 import { rest } from 'msw';
 
 import { mockApplyRecruit } from '~/mocks/handlers/recruit/apis/mockApplyRecruit';
+import { mockApproveRecruitApplication } from '~/mocks/handlers/recruit/apis/mockApproveRecruitApplication';
+import { mockCancelRecruitApplication } from '~/mocks/handlers/recruit/apis/mockCancelRecruitApplication';
 import { mockCompleteRecruit } from '~/mocks/handlers/recruit/apis/mockCompleteRecruit';
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
-import {
-  mockGetRecruitDetail,
-  mockGetRecruitDetailError,
-} from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
+import { mockGetMyRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetMyRecruitApplication';
+import { mockGetRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetRecruitApplication';
+import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
 import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
+import { mockRejectRecruitApplication } from '~/mocks/handlers/recruit/apis/mockRejectRecruitApplication';
 import { mockUpdateRecruit } from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
 import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
 
-import {
-  createMockMyRecruitApplication,
-  createMockRecruitApplicants,
-  createMockRecruitApplication,
-  scrapStatus,
-} from './data';
+import { createMockRecruitApplicants, scrapStatus } from './data';
 import {
   restInfiniteAppliedRecruitsSuccess,
   restInfiniteRecruitsSuccess,
@@ -100,133 +95,6 @@ export const removeRecruitError = restError(
   removeRecruitMethod,
   removeRecruitEndpoint,
   { message: '리쿠르팅 삭제 실패' }
-);
-
-const getMyRecruitApplicationEndpoint = removeQueryParams(
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.mine(':recruitId'))
-);
-
-export const getMyRecruitApplication = rest.get(
-  getMyRecruitApplicationEndpoint,
-  (req, res, ctx) => {
-    const recruitId = req.params.recruitId ?? 1;
-    return res(
-      ctx.delay(500),
-      ...mockSuccess(
-        ctx,
-        createMockMyRecruitApplication(Number(recruitId), {
-          recruitApplicationId: 1,
-        })
-      )
-    );
-  }
-);
-
-export const getMyRecruitApplicationError = restError(
-  'get',
-  getMyRecruitApplicationEndpoint,
-  { message: '내 신청서 불러오기 오류' }
-);
-
-const getRecruitApplicationEndpoint = composeUrls(
-  API_URL,
-  // @ts-ignore
-  endpoints.recruit.application.detail(':recruitApplicationId')
-);
-export const getRecruitApplication = rest.get(
-  getRecruitApplicationEndpoint,
-  (req, res, ctx) => {
-    const recruitApplicationId = req.params.recruitApplicationId ?? 1;
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess(
-        ctx,
-        createMockRecruitApplication(1, {
-          recruitApplicationId: Number(recruitApplicationId),
-        })
-      )
-    );
-  }
-);
-
-export const getRecruitApplicationError = restError(
-  'get',
-  getRecruitApplicationEndpoint,
-  { message: '다른 사람의 신청서 불러오기 오류' }
-);
-
-const cancelRecruitApplicationEndpoint = composeUrls(
-  API_URL,
-  // @ts-ignore
-  endpoints.recruit.application.cancel(':recruitApplicationId')
-);
-const cancelRecruitApplicationMethod = 'patch';
-
-export const cancelRecruitApplication = restSuccess<
-  CancelRecruitApplicationApiData['data']
->(cancelRecruitApplicationMethod, cancelRecruitApplicationEndpoint, {
-  data: {
-    recruitApplicationId: 1,
-    matchStatus: MatchStatus.INITIAL,
-  },
-});
-
-export const cancelRecruitApplicationError = restError(
-  cancelRecruitApplicationMethod,
-  cancelRecruitApplicationEndpoint,
-  {
-    message: '리쿠르팅 신청 취소 실패',
-  }
-);
-
-const rejectRecruitApplicationEndpoint = composeUrls(
-  API_URL,
-  // @ts-ignore
-  endpoints.recruit.application.reject(':recruitApplicationId')
-);
-const rejectRecruitApplicationMethod = 'post';
-
-export const rejectRecruitApplication = restSuccess<
-  RejectRecruitApplicationApiData['data']
->(rejectRecruitApplicationMethod, rejectRecruitApplicationEndpoint, {
-  data: {
-    recruitApplicationId: 1,
-    matchStatus: MatchStatus.REJECTED,
-  },
-});
-
-export const rejectRecruitApplicationError = restError(
-  rejectRecruitApplicationMethod,
-  rejectRecruitApplicationEndpoint,
-  {
-    message: '리쿠르팅 신청 거절 실패',
-  }
-);
-
-const approveRecruitApplicationEndpoint = composeUrls(
-  API_URL,
-  // @ts-ignore
-  endpoints.recruit.application.approve(':recruitApplicationId')
-);
-const approveRecruitApplicationMethod = 'post';
-
-export const approveRecruitApplication = restSuccess<
-  RejectRecruitApplicationApiData['data']
->(approveRecruitApplicationMethod, approveRecruitApplicationEndpoint, {
-  data: {
-    recruitApplicationId: 1,
-    matchStatus: MatchStatus.SUCCESS,
-  },
-});
-
-export const approveRecruitApplicationError = restError(
-  approveRecruitApplicationMethod,
-  approveRecruitApplicationEndpoint,
-  {
-    message: '리쿠르팅 신청 수락 실패',
-  }
 );
 
 const likeRecruitApplicationEndpoint = composeUrls(
@@ -362,12 +230,12 @@ export const recruitHandlers = [
   mockGetRecruits,
 
   mockApplyRecruit,
-  getMyRecruitApplication, // /recruit-applications/mine
+  mockGetMyRecruitApplication, // /recruit-applications/mine
 
-  getRecruitApplication, // /recruit-applications/:recruitApplicationId
-  cancelRecruitApplication,
-  rejectRecruitApplication,
-  approveRecruitApplication,
+  mockGetRecruitApplication, // /recruit-applications/:recruitApplicationId
+  mockCancelRecruitApplication,
+  mockRejectRecruitApplication,
+  mockApproveRecruitApplication,
   likeRecruitApplication,
   excludeRecruitParticipant,
 ];

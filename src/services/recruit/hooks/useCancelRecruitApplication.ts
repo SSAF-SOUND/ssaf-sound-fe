@@ -16,10 +16,11 @@ export const useCancelRecruitApplication = (
   return useMutation({
     mutationFn: () => cancelRecruitApplication(recruitApplicationId),
     onSuccess: ({ matchStatus }) => {
-      // invalidate: 디테일, 내 신청서, TODO: 신청한 리쿠르팅 목록
+      // invalidate: 디테일, 내 신청서, 신청한 리쿠르팅 목록
       queryClient.invalidateQueries(queryKeys.recruit.detail(recruitId), {
         exact: true,
       });
+      queryClient.invalidateQueries(queryKeys.recruit.appliedList.self());
       queryClient.setQueryData<MyRecruitApplicationDetail>(
         queryKeys.recruit.application.mine(recruitId),
         (prev) => {

@@ -40,7 +40,7 @@ export default meta;
 
 type AppliedRecruitsPageStory = StoryObj<typeof AppliedRecruitsPage>;
 
-const appliedRecruitsQueryKey = queryKeys.recruit.appliedList({
+const appliedRecruitsQueryKey = queryKeys.recruit.appliedList.filter({
   category: RecruitCategoryName.PROJECT,
 });
 const allAppliedRecruitsQueryKey = appliedRecruitsQueryKey.slice(0, -1);

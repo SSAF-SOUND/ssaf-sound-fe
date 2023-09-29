@@ -35,13 +35,21 @@ import {
   routes,
 } from '~/utils';
 
+interface RecruitApplicationPageProps {
+  recruitId?: number;
+  recruitApplicationId?: number;
+}
+
 const metaTitle = '리쿠르팅 신청서';
 const titleBarTitle = metaTitle;
-const RecruitApplicationPage: CustomNextPage = () => {
+const RecruitApplicationPage: CustomNextPage<RecruitApplicationPageProps> = (
+  props
+) => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
-  const recruitApplicationId = Number(query.recruitApplicationId);
-  const recruitId = Number(query.recruitId);
+  const recruitApplicationId =
+    props.recruitApplicationId ?? Number(query.recruitApplicationId);
+  const recruitId = props.recruitId ?? Number(query.recruitId);
 
   const {
     data: recruitApplication,
@@ -187,10 +195,10 @@ const RecruitApplicationPage: CustomNextPage = () => {
   );
 };
 
-type Params = {
+type Params = Partial<{
   recruitId: string;
   recruitApplicationId: string;
-};
+}>;
 
 const selfCss = css({
   padding: `${titleBarHeight + 30}px 0`,
@@ -241,7 +249,6 @@ const ActionButtonLayer = (props: ActionButtonLayerProps) => {
 
   return (
     <div css={actionButtonLayerCss} className={className}>
-      {/* NOTE: PENDING 말고 INITIAL */}
       {matchStatus === MatchStatus.INITIAL && finishedRecruit && (
         <div css={inactiveButtonCss}>응답 안함</div>
       )}

@@ -367,12 +367,13 @@ export const createMockRecruitApplication = (
     matchStatus: MatchStatus;
     recruitApplicationId: number;
     liked: boolean;
+    author: UserInfo;
   }> = {}
 ): GetRecruitApplicationApiData['data'] => {
-  const { liked = false } = options;
+  const { liked = false, author = userInfo.certifiedSsafyUserInfo } = options;
   return {
     ...createMockMyRecruitApplication(recruitId, options),
-    author: userInfo.certifiedSsafyUserInfo,
+    author,
     liked,
   };
 };
