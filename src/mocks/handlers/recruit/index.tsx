@@ -2,7 +2,6 @@
 
 import type {
   GetRejectedRecruitApplicantsApiData,
-  LikeRecruitApplicationApiData,
   ScrapRecruitApiData,
 } from '~/services/recruit';
 
@@ -19,6 +18,7 @@ import { mockGetRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGet
 import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
 import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
+import { mockLikeRecruitApplication } from '~/mocks/handlers/recruit/apis/mockLikeRecruitApplication';
 import { mockRejectRecruitApplication } from '~/mocks/handlers/recruit/apis/mockRejectRecruitApplication';
 import { mockUpdateRecruit } from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
@@ -74,29 +74,6 @@ export const removeRecruitError = restError(
   removeRecruitMethod,
   removeRecruitEndpoint,
   { message: '리쿠르팅 삭제 실패' }
-);
-
-const likeRecruitApplicationEndpoint = composeUrls(
-  API_URL,
-  // @ts-ignore
-  endpoints.recruit.application.like(':recruitApplicationId')
-);
-
-let liked = false;
-const toggleLike = () => {
-  liked = !liked;
-  return liked;
-};
-export const likeRecruitApplication = rest.post(
-  likeRecruitApplicationEndpoint,
-  (req, res, ctx) => {
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<LikeRecruitApplicationApiData['data']>(ctx, {
-        liked: toggleLike(),
-      })
-    );
-  }
 );
 
 const excludeRecruitParticipantMethod = 'delete';
@@ -215,6 +192,6 @@ export const recruitHandlers = [
   mockCancelRecruitApplication,
   mockRejectRecruitApplication,
   mockApproveRecruitApplication,
-  likeRecruitApplication,
+  mockLikeRecruitApplication,
   excludeRecruitParticipant,
 ];
