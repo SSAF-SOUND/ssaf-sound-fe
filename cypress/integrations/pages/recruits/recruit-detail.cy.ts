@@ -1,5 +1,5 @@
 it('로그인 하지 않은 유저', () => {
-  cy.visitStory('page-recruit-detail--not-signed-in');
+  cy.visitStory('page-recruit-리쿠르팅-상세--not-signed-in');
 
   // 헤더 영역에 게시글 더보기(옵션) 버튼이 없어야 한다.
   cy.contains(/조회수/)
@@ -19,7 +19,7 @@ it('로그인 하지 않은 유저', () => {
 });
 
 it('로그인 유저', () => {
-  cy.visitStory('page-recruit-detail--mine');
+  cy.visitStory('page-recruit-리쿠르팅-상세--mine');
 
   // 헤더 영역에 게시글 더보기(옵션) 버튼이 있어야 한다.
   cy.contains(/조회수/)
@@ -33,7 +33,7 @@ it('로그인 유저', () => {
 });
 
 it('내 리쿠르팅', () => {
-  cy.visitStory('page-recruit-detail--mine');
+  cy.visitStory('page-recruit-리쿠르팅-상세--mine');
 
   // 게시글 더보기 버튼 클릭시 팝업되는 모달에 수정하기와 삭제하기 버튼이 보인다.
   cy.contains(/조회수/)
@@ -55,7 +55,9 @@ it('내 리쿠르팅', () => {
 describe('다른 사람의 리쿠르팅', () => {
   describe('아직 신청하지 않음 + 모집중인 리쿠르팅', () => {
     it('리쿠르팅 신청 버튼이 보인다.', () => {
-      cy.visitStory('page-recruit-detail--initial-and-not-completed-recruit');
+      cy.visitStory(
+        'page-recruit-리쿠르팅-상세--initial-and-not-completed-recruit'
+      );
 
       cy.findByRole('link', { name: /리쿠르팅 신청/ }).should('be.exist');
     });
@@ -63,7 +65,9 @@ describe('다른 사람의 리쿠르팅', () => {
 
   describe('아직 신청하지 않음 + 모집완료된 리쿠르팅', () => {
     it('리쿠르팅 신청 버튼이 보인다.', () => {
-      cy.visitStory('page-recruit-detail--initial-and-completed-recruit');
+      cy.visitStory(
+        'page-recruit-리쿠르팅-상세--initial-and-completed-recruit'
+      );
 
       cy.findByRole('link', { name: /리쿠르팅 신청/ }).should('be.exist');
     });
@@ -71,7 +75,9 @@ describe('다른 사람의 리쿠르팅', () => {
 
   describe('응답 대기 + 모집중인 리쿠르팅', () => {
     it('내 신청서 보기 버튼이 보인다.', () => {
-      cy.visitStory('page-recruit-detail--pending-and-not-completed-recruit');
+      cy.visitStory(
+        'page-recruit-리쿠르팅-상세--pending-and-not-completed-recruit'
+      );
 
       cy.findByRole('link', { name: /리쿠르팅 신청내용 보기/ }).should(
         'be.exist'
@@ -81,7 +87,9 @@ describe('다른 사람의 리쿠르팅', () => {
 
   describe('응답 대기 + 모집완료된 리쿠르팅', () => {
     it('내 신청서 보기 버튼이 보인다.', () => {
-      cy.visitStory('page-recruit-detail--pending-and-completed-recruit');
+      cy.visitStory(
+        'page-recruit-리쿠르팅-상세--pending-and-completed-recruit'
+      );
 
       cy.findByRole('link', { name: /리쿠르팅 신청내용 보기/ }).should(
         'be.exist'
@@ -91,7 +99,9 @@ describe('다른 사람의 리쿠르팅', () => {
 
   describe('거절된 리쿠르팅 + 모집중인 리쿠르팅', () => {
     it('내 신청서 보기 버튼이 보인다.', () => {
-      cy.visitStory('page-recruit-detail--rejected-and-not-completed-recruit');
+      cy.visitStory(
+        'page-recruit-리쿠르팅-상세--rejected-and-not-completed-recruit'
+      );
 
       cy.findByRole('link', { name: /리쿠르팅 신청내용 보기/ }).should(
         'be.exist'
@@ -101,7 +111,9 @@ describe('다른 사람의 리쿠르팅', () => {
 
   describe('거절된 리쿠르팅 + 모집완료된 리쿠르팅', () => {
     it('내 신청서 보기 버튼이 보인다.', () => {
-      cy.visitStory('page-recruit-detail--rejected-and-completed-recruit');
+      cy.visitStory(
+        'page-recruit-리쿠르팅-상세--rejected-and-completed-recruit'
+      );
 
       cy.findByRole('link', { name: /리쿠르팅 신청내용 보기/ }).should(
         'be.exist'
@@ -111,7 +123,9 @@ describe('다른 사람의 리쿠르팅', () => {
 
   describe('수락된 리쿠르팅 + 모집중인 리쿠르팅', () => {
     it('내 신청서 보기 버튼이 보인다.', () => {
-      cy.visitStory('page-recruit-detail--success-and-not-completed-recruit');
+      cy.visitStory(
+        'page-recruit-리쿠르팅-상세--success-and-not-completed-recruit'
+      );
 
       cy.findByRole('link', { name: /리쿠르팅 신청내용 보기/ }).should(
         'be.exist'
@@ -121,7 +135,9 @@ describe('다른 사람의 리쿠르팅', () => {
 
   describe('수락된 리쿠르팅 + 모집완료된 리쿠르팅', () => {
     it('내 신청서 보기 버튼이 보인다.', () => {
-      cy.visitStory('page-recruit-detail--success-and-completed-recruit');
+      cy.visitStory(
+        'page-recruit-리쿠르팅-상세--success-and-completed-recruit'
+      );
 
       cy.findByRole('link', { name: /리쿠르팅 신청내용 보기/ }).should(
         'be.exist'

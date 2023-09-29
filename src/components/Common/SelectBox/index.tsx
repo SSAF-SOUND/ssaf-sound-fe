@@ -88,6 +88,14 @@ export const SelectBox = <D,>(props: SelectBoxProps<D>) => {
     // eslint-disable-next-line
   }, []);
 
+  // https://github.com/radix-ui/primitives/issues/1658
+  const preventTouchEventAfterOptionSelect = (ref: HTMLDivElement | null) => {
+    if (!ref) return;
+    ref.ontouchstart = (e) => {
+      e.preventDefault();
+    };
+  };
+
   return (
     <Select.Root
       onValueChange={onValueChange}
@@ -128,6 +136,7 @@ export const SelectBox = <D,>(props: SelectBoxProps<D>) => {
         position="popper"
         sideOffset={5}
         data-theme={theme}
+        ref={preventTouchEventAfterOptionSelect}
       >
         <Select.Viewport css={viewportCss[variant]}>
           {items.map((item) => {

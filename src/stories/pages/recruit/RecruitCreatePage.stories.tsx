@@ -1,13 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
 import RecruitCreatePage from '~/pages/recruits/new';
 import { useMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof RecruitCreatePage> = {
-  title: 'Page/Recruit/Create',
+  title: 'Page/Recruit/리쿠르팅 만들기',
   component: RecruitCreatePage,
   decorators: [
     (Story) => {
@@ -23,6 +24,7 @@ const meta: Meta<typeof RecruitCreatePage> = {
     layout: 'fullscreen',
     ...createMswParameters({
       member: [mockGetCertifiedSsafyMyInfo],
+      recruit: [mockCreateRecruit],
     }),
   },
 };

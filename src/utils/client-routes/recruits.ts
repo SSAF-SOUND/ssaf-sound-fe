@@ -21,9 +21,9 @@ const getSafeCategory = (category?: string) => {
 
 const recruitsSelfRoute = () => createRoute('/recruits')();
 
-// ---------- recruits ----------
+// ---------- recruits list ----------
 
-export type RecruitsPageRouteQuery = {
+export type RecruitsListPageRouteQuery = {
   category?: RecruitCategoryName;
 
   includeCompleted?: boolean;
@@ -32,7 +32,7 @@ export type RecruitsPageRouteQuery = {
   keyword?: string;
 };
 
-export type SafeRecruitsPageRouteQuery = {
+export type SafeRecruitsListPageRouteQuery = {
   category: RecruitCategoryName;
   includeCompleted: boolean;
   recruitParts: ProjectParts[];
@@ -40,16 +40,16 @@ export type SafeRecruitsPageRouteQuery = {
   keyword?: string;
 };
 
-const recruitsPageRoute = (query: RecruitsPageRouteQuery = {}) => {
+const recruitsListPageRoute = (query: RecruitsListPageRouteQuery = {}) => {
   const pathname = recruitsSelfRoute().pathname;
-  return createRoute<SafeRecruitsPageRouteQuery>(pathname)(
-    toSafeRecruitsPageQuery(query)
+  return createRoute<SafeRecruitsListPageRouteQuery>(pathname)(
+    toSafeRecruitsListPageQuery(query)
   );
 };
 
-const toSafeRecruitsPageQuery = (
-  query: RecruitsPageRouteQuery
-): SafeRecruitsPageRouteQuery => {
+const toSafeRecruitsListPageQuery = (
+  query: RecruitsListPageRouteQuery
+): SafeRecruitsListPageRouteQuery => {
   const { category, keyword, recruitParts, skills, includeCompleted } = query;
 
   const safeCategory = getSafeCategory(category);
@@ -114,10 +114,20 @@ const recruitEditPageRoute = (recruitId: number) => {
   return createRoute(`${pathname}/${recruitId}/edit`)();
 };
 
+// ---------- recruit apply ----------
+
+const recruitApplyPageRoute = (recruitId: number) => {
+  const pathname = recruitsSelfRoute().pathname;
+  return createRoute(`${pathname}/${recruitId}/apply`)();
+};
+
+// ---------- recruit application ----------
+
 export const recruits = {
   self: recruitsSelfRoute,
-  list: recruitsPageRoute,
+  list: recruitsListPageRoute,
   create: recruitCreatePageRoute,
   detail: recruitDetailPageRoute,
   edit: recruitEditPageRoute,
+  apply: recruitApplyPageRoute,
 };

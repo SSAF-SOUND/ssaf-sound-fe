@@ -1,7 +1,8 @@
-import type { RecruitDetail, RecruitParts } from '~/services/recruit';
+import type { RecruitDetail } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
+import { useEffect } from 'react';
 
 import { AlertText } from '~/components/Common';
 import { SelectBox } from '~/components/Common/SelectBox';
@@ -10,8 +11,13 @@ import {
   recruitApplyFormFieldOrder,
   useRecruitApplyFormContext,
 } from '~/components/Forms/RecruitApplyForm/utils';
-import { RecruitCategoryName, RecruitPartsSet } from '~/services/recruit';
+import {
+  RecruitCategoryName,
+  RecruitPartsSet,
+  RecruitParts,
+} from '~/services/recruit';
 import { flex, fontCss, palettes } from '~/styles/utils';
+import { isEqualString } from '~/utils';
 
 const fieldName = 'recruitPartToApply';
 const validateRecruitPartToApply = (value: RecruitParts) =>
@@ -27,6 +33,7 @@ interface RecruitPartToApplyProps {
 
 export const RecruitPartToApply = (props: RecruitPartToApplyProps) => {
   const { recruitDetail, className, readonly = false } = props;
+  const { category } = recruitDetail;
   const {
     register,
     setValue,
@@ -38,9 +45,24 @@ export const RecruitPartToApply = (props: RecruitPartToApplyProps) => {
   const { limits } = recruitDetail;
   const possibleRecruitParts = limits.map(({ recruitType }) => recruitType);
 
+  const isCategoryProject = isEqualString(
+    category,
+    RecruitCategoryName.PROJECT,
+    { caseSensitive: false }
+  );
+
   register(fieldName, {
     validate: validateRecruitPartToApply,
   });
+
+  useEffect(() => {
+    if (isCategoryProject) return;
+    setValue(fieldName, RecruitParts.STUDY);
+
+    // eslint-disable-next-line
+  }, []);
+
+  if (!isCategoryProject) return <></>;
 
   return (
     <div css={[selfCss, readonly && readonlySelfCss]} className={className}>
@@ -65,6 +87,7 @@ export const RecruitPartToApply = (props: RecruitPartToApplyProps) => {
           onValueChange={(selectedPart) =>
             setValue(fieldName, selectedPart as RecruitParts, {
               shouldDirty: true,
+              shouldValidate: true,
             })
           }
         />

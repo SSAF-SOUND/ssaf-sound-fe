@@ -13,8 +13,8 @@ import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { useMyInfo } from '~/services/member';
 import {
+  ApplicableMatchStatusSet,
   getRecruitThemeByCategory,
-  MatchStatus,
   useApplyRecruit,
   useRecruitDetail,
 } from '~/services/recruit';
@@ -22,6 +22,7 @@ import { titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
+  customToast,
   getErrorResponse,
   handleAxiosError,
   routes,
@@ -30,7 +31,7 @@ import {
 // Guard
 // 0. 로그인 -> isSignedIn
 // 1. 현재 참여중이 아님 -> recruitDetail.matchStatus
-// 2. 내 리쿠르팅이 아님 -> recruitDetail.mine
+// 2. 내 리쿠능르팅이 아님 -> recruitDetail.mine
 // 3. 모집 완료가 아님 -> recruitDetail.isFinished
 
 // Submit Error
@@ -41,7 +42,7 @@ const titleBarTitle = metaTitle;
 
 const RecruitApplyPage: CustomNextPage = () => {
   const router = useRouter();
-  const query = router.query as Partial<Params>;
+  const query = router.query as Params;
   const recruitId = Number(query.recruitId);
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
@@ -112,7 +113,7 @@ const RecruitApplyPage: CustomNextPage = () => {
   if (finishedRecruit) {
     return (
       <RedirectionGuide
-        title="종료된 리쿠르팅입니다"
+        title="지원할 수 없습니다"
         description="모집 기간이 아니거나 이미 모집이 완료되었습니다."
         redirectionText="리쿠르팅 상세 페이지로"
         redirectionTo={routes.recruit.detail(recruitDetail.recruitId)}
@@ -121,7 +122,9 @@ const RecruitApplyPage: CustomNextPage = () => {
   }
 
   const isUnauthorized =
-    !isSignedIn || mine || (matchStatus && matchStatus !== MatchStatus.INITIAL);
+    !isSignedIn ||
+    mine ||
+    (matchStatus && !ApplicableMatchStatusSet.has(matchStatus));
 
   if (isUnauthorized) {
     const message = !isSignedIn
@@ -151,6 +154,10 @@ const RecruitApplyPage: CustomNextPage = () => {
     }
   };
 
+  const onInvalidSubmit: RecruitApplyFormProps['onInvalidSubmit'] = () => {
+    customToast.clientError('올바르지 않은 입력이 있는지 확인해주세요.');
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
@@ -170,15 +177,16 @@ const RecruitApplyPage: CustomNextPage = () => {
         <RecruitApplyForm
           recruitDetail={recruitDetail}
           onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
         />
       </div>
     </>
   );
 };
 
-type Params = {
+type Params = Partial<{
   recruitId: string;
-};
+}>;
 
 const selfCss = css({
   padding: `${titleBarHeight + 30}px 0`,

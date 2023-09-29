@@ -1,4 +1,4 @@
-import '@testing-library/cypress/add-commands'
+import '@testing-library/cypress/add-commands';
 
 /// <reference types="cypress" />
 // ***********************************************
@@ -40,5 +40,5 @@ import '@testing-library/cypress/add-commands'
 
 Cypress.Commands.add('visitStory', (storyName, options) => {
   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  return cy.visit(`iframe.html?id=${storyName}`, options).wait(0);
+  return cy.visit(`iframe.html?id=${encodeURI(storyName)}`, options).wait(0);
 });

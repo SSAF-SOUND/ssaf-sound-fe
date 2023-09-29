@@ -402,7 +402,7 @@ describe('Recruit Edit Form', () => {
   });
 
   describe('모집 완료 인터랙션', () => {
-    it.only('모집 완료 요청에 성공하면, 모집 완료 버튼이 비활성화 된다.', () => {
+    it('모집 완료 요청에 성공하면, 모집 완료 버튼이 비활성화 된다.', () => {
       cy.mount(
         <RecruitForm
           onValidSubmit={onValidSubmit}
