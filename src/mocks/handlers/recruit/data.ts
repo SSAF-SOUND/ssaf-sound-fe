@@ -172,16 +172,12 @@ export const createMockRecruitApplicant = (
     memberId: userId,
   };
 
-  const matchStatusValues = Object.values(MatchStatus);
-  const matchStatus =
-    matchStatusValues[
-      faker.number.int({ min: 0, max: matchStatusValues.length - 1 })
-    ];
+  const matchStatus = MatchStatus.PENDING;
 
   return {
     liked,
-    question: 'QuestionQuestionQuestionQuestion',
-    reply: 'ReplyReplyReplyReplyReplyReply',
+    question: 'Question'.repeat(4),
+    reply: 'Reply'.repeat(6),
     matchStatus,
     author,
     recruitApplicationId: userId,
@@ -190,25 +186,13 @@ export const createMockRecruitApplicant = (
 };
 
 export const createMockRecruitApplicants = (
-  recruitId: number,
-  options: Partial<{ recruitDetail: RecruitDetail }> = {}
+  recruitDetail: RecruitDetail
 ): GetRecruitApplicantsApiData['data'] => {
-  const { recruitDetail: optionRecruitDetail } = options;
-  const recruitDetail = optionRecruitDetail ?? recruitDetails[recruitId];
-  if (!recruitDetail) {
-    throw new Error(
-      `recruitId: ${recruitId}에 해당하는 리쿠르팅 디테일 데이터가 없습니다.`
-    );
-  }
-
-  const recruitParts = Object.values(RecruitParts);
-  const activeRecruitParts =
-    recruitDetail.category === RecruitCategoryName.PROJECT
-      ? recruitParts.filter((part) => part !== RecruitParts.STUDY)
-      : recruitParts.filter((part) => part === RecruitParts.STUDY);
+  const { limits } = recruitDetail;
+  const activeRecruitParts = limits.map(({ recruitType }) => recruitType);
 
   return {
-    recruitId,
+    recruitId: recruitDetail.recruitId,
     recruitApplications: {
       ...(Object.fromEntries(
         activeRecruitParts.map((part, partIndex) => {

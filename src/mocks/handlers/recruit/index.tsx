@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import type {
-  GetRecruitApplicantsApiData,
   GetRejectedRecruitApplicantsApiData,
   LikeRecruitApplicationApiData,
   ScrapRecruitApiData,
@@ -15,6 +14,7 @@ import { mockCancelRecruitApplication } from '~/mocks/handlers/recruit/apis/mock
 import { mockCompleteRecruit } from '~/mocks/handlers/recruit/apis/mockCompleteRecruit';
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
 import { mockGetMyRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetMyRecruitApplication';
+import { mockGetRecruitApplicants } from '~/mocks/handlers/recruit/apis/mockGetRecruitApplicants';
 import { mockGetRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetRecruitApplication';
 import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
 import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
@@ -31,27 +31,6 @@ import {
   restInfiniteAppliedRecruitsSuccess,
   restInfiniteRecruitsSuccess,
 } from './utils';
-
-const getRecruitApplicantsEndpoint = removeQueryParams(
-  composeUrls(API_URL, endpoints.recruit.application.applicants(1))
-);
-export const getRecruitApplicants = rest.get(
-  getRecruitApplicantsEndpoint,
-  (req, res, ctx) => {
-    const searchParams = req.url.searchParams;
-    const recruitId = Number(searchParams.get('recruitId'));
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<GetRecruitApplicantsApiData['data']>(
-        ctx,
-        createMockRecruitApplicants(recruitId)
-      )
-    );
-  }
-);
-
-// 리쿠르팅 상세정보 조회
 
 // 리쿠르팅 스크랩
 
@@ -217,7 +196,7 @@ export const recruitHandlers = [
   getMyScrapedRecruits,
   // getMyScrapedRecruitsError,
 
-  getRecruitApplicants,
+  mockGetRecruitApplicants,
   mockCreateRecruit,
   mockGetRecruitDetail,
   // mockGetRecruitDetailError,
