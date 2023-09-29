@@ -14,6 +14,7 @@ import { mockApproveRecruitApplication } from '~/mocks/handlers/recruit/apis/moc
 import { mockCancelRecruitApplication } from '~/mocks/handlers/recruit/apis/mockCancelRecruitApplication';
 import { mockCompleteRecruit } from '~/mocks/handlers/recruit/apis/mockCompleteRecruit';
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
+import { mockGetMyRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetMyRecruitApplication';
 import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
 import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
@@ -25,7 +26,6 @@ import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
 import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
 
 import {
-  createMockMyRecruitApplication,
   createMockRecruitApplicants,
   createMockRecruitApplication,
   scrapStatus,
@@ -98,33 +98,6 @@ export const removeRecruitError = restError(
   removeRecruitMethod,
   removeRecruitEndpoint,
   { message: '리쿠르팅 삭제 실패' }
-);
-
-const getMyRecruitApplicationEndpoint = removeQueryParams(
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.recruit.application.mine(':recruitId'))
-);
-
-export const getMyRecruitApplication = rest.get(
-  getMyRecruitApplicationEndpoint,
-  (req, res, ctx) => {
-    const recruitId = req.params.recruitId ?? 1;
-    return res(
-      ctx.delay(500),
-      ...mockSuccess(
-        ctx,
-        createMockMyRecruitApplication(Number(recruitId), {
-          recruitApplicationId: 1,
-        })
-      )
-    );
-  }
-);
-
-export const getMyRecruitApplicationError = restError(
-  'get',
-  getMyRecruitApplicationEndpoint,
-  { message: '내 신청서 불러오기 오류' }
 );
 
 const getRecruitApplicationEndpoint = composeUrls(
@@ -288,7 +261,7 @@ export const recruitHandlers = [
   mockGetRecruits,
 
   mockApplyRecruit,
-  getMyRecruitApplication, // /recruit-applications/mine
+  mockGetMyRecruitApplication, // /recruit-applications/mine
 
   getRecruitApplication, // /recruit-applications/:recruitApplicationId
   mockCancelRecruitApplication,
