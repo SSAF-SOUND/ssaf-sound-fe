@@ -15,6 +15,7 @@ import { mockCancelRecruitApplication } from '~/mocks/handlers/recruit/apis/mock
 import { mockCompleteRecruit } from '~/mocks/handlers/recruit/apis/mockCompleteRecruit';
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
 import { mockGetMyRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetMyRecruitApplication';
+import { mockGetRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetRecruitApplication';
 import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
 import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
@@ -25,11 +26,7 @@ import { endpoints } from '~/react-query/common';
 import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
 import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
 
-import {
-  createMockRecruitApplicants,
-  createMockRecruitApplication,
-  scrapStatus,
-} from './data';
+import { createMockRecruitApplicants, scrapStatus } from './data';
 import {
   restInfiniteAppliedRecruitsSuccess,
   restInfiniteRecruitsSuccess,
@@ -98,34 +95,6 @@ export const removeRecruitError = restError(
   removeRecruitMethod,
   removeRecruitEndpoint,
   { message: '리쿠르팅 삭제 실패' }
-);
-
-const getRecruitApplicationEndpoint = composeUrls(
-  API_URL,
-  // @ts-ignore
-  endpoints.recruit.application.detail(':recruitApplicationId')
-);
-export const getRecruitApplication = rest.get(
-  getRecruitApplicationEndpoint,
-  (req, res, ctx) => {
-    const recruitApplicationId = req.params.recruitApplicationId ?? 1;
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess(
-        ctx,
-        createMockRecruitApplication(1, {
-          recruitApplicationId: Number(recruitApplicationId),
-        })
-      )
-    );
-  }
-);
-
-export const getRecruitApplicationError = restError(
-  'get',
-  getRecruitApplicationEndpoint,
-  { message: '다른 사람의 신청서 불러오기 오류' }
 );
 
 const likeRecruitApplicationEndpoint = composeUrls(
@@ -263,7 +232,7 @@ export const recruitHandlers = [
   mockApplyRecruit,
   mockGetMyRecruitApplication, // /recruit-applications/mine
 
-  getRecruitApplication, // /recruit-applications/:recruitApplicationId
+  mockGetRecruitApplication, // /recruit-applications/:recruitApplicationId
   mockCancelRecruitApplication,
   mockRejectRecruitApplication,
   mockApproveRecruitApplication,
