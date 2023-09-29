@@ -34,14 +34,19 @@ import {
 } from '~/utils';
 
 // MatchStatus
-// INITIAL -> 신청 페이지로 리다이렉션
 // 그 외 -> 페이지 조회 가능
 
+interface MyRecruitApplicationPageProps {
+  recruitId?: number;
+}
+
 const metaTitle = '내 리쿠르팅 신청서';
-const MyRecruitApplicationPage: CustomNextPage = () => {
+const MyRecruitApplicationPage: CustomNextPage<
+  MyRecruitApplicationPageProps
+> = (props) => {
   const router = useRouter();
   const query = router.query as Params;
-  const recruitId = Number(query.recruitId);
+  const recruitId = props.recruitId ?? Number(query.recruitId);
 
   const {
     data: recruitDetail,
