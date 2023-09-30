@@ -132,7 +132,7 @@ export const NotMine: RecruitPendingApplicantsPageStory = {
 };
 
 export const Empty: RecruitPendingApplicantsPageStory = {
-  name: '빈 데이터',
+  name: '빈 신청자와 빈 참가자',
   parameters: {
     ...createMswParameters({
       recruit: [
