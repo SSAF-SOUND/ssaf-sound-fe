@@ -4,7 +4,7 @@ import type {
   MatchStatus,
   RecruitCategoryName,
 } from '~/services/recruit';
-import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruits';
+import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruit';
 
 import {
   defaultRecruitsPageCursor,

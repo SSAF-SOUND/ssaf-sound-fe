@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import type {
-  GetRecruitApplicantsApiData,
   GetRejectedRecruitApplicantsApiData,
-  LikeRecruitApplicationApiData,
   ScrapRecruitApiData,
 } from '~/services/recruit';
 
@@ -15,43 +13,25 @@ import { mockCancelRecruitApplication } from '~/mocks/handlers/recruit/apis/mock
 import { mockCompleteRecruit } from '~/mocks/handlers/recruit/apis/mockCompleteRecruit';
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
 import { mockGetMyRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetMyRecruitApplication';
+import { mockGetRecruitApplicants } from '~/mocks/handlers/recruit/apis/mockGetRecruitApplicants';
 import { mockGetRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetRecruitApplication';
 import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
 import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
+import { mockGetRejectedRecruitApplicants } from '~/mocks/handlers/recruit/apis/mockGetRejectedRecruitApplicants';
+import { mockLikeRecruitApplication } from '~/mocks/handlers/recruit/apis/mockLikeRecruitApplication';
 import { mockRejectRecruitApplication } from '~/mocks/handlers/recruit/apis/mockRejectRecruitApplication';
 import { mockUpdateRecruit } from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
-import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
+import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-import { createMockRecruitApplicants, scrapStatus } from './data';
+import { scrapStatus } from './data';
 import {
   restInfiniteAppliedRecruitsSuccess,
   restInfiniteRecruitsSuccess,
 } from './utils';
-
-const getRecruitApplicantsEndpoint = removeQueryParams(
-  composeUrls(API_URL, endpoints.recruit.application.applicants(1))
-);
-export const getRecruitApplicants = rest.get(
-  getRecruitApplicantsEndpoint,
-  (req, res, ctx) => {
-    const searchParams = req.url.searchParams;
-    const recruitId = Number(searchParams.get('recruitId'));
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<GetRecruitApplicantsApiData['data']>(
-        ctx,
-        createMockRecruitApplicants(recruitId)
-      )
-    );
-  }
-);
-
-// 리쿠르팅 상세정보 조회
 
 // 리쿠르팅 스크랩
 
@@ -97,29 +77,6 @@ export const removeRecruitError = restError(
   { message: '리쿠르팅 삭제 실패' }
 );
 
-const likeRecruitApplicationEndpoint = composeUrls(
-  API_URL,
-  // @ts-ignore
-  endpoints.recruit.application.like(':recruitApplicationId')
-);
-
-let liked = false;
-const toggleLike = () => {
-  liked = !liked;
-  return liked;
-};
-export const likeRecruitApplication = rest.post(
-  likeRecruitApplicationEndpoint,
-  (req, res, ctx) => {
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<LikeRecruitApplicationApiData['data']>(ctx, {
-        liked: toggleLike(),
-      })
-    );
-  }
-);
-
 const excludeRecruitParticipantMethod = 'delete';
 const excludeRecruitParticipantEndpoint = composeUrls(
   API_URL,
@@ -134,37 +91,6 @@ export const excludeRecruitParticipant = restSuccess(
   excludeRecruitParticipantEndpoint,
   {
     data: null,
-  }
-);
-
-const getRejectedApplicantsEndpoint = removeQueryParams(
-  composeUrls(
-    API_URL,
-    //@ts-ignore
-    endpoints.recruit.application.rejectedApplicants(1)
-  )
-);
-
-export const getRejectedApplicants = rest.get(
-  getRejectedApplicantsEndpoint,
-  (req, res, ctx) => {
-    const recruitId = Number(req.url.searchParams.get('recruitId'));
-
-    const safeRecruitId = Number.isNaN(recruitId) ? 1 : recruitId;
-
-    const mockRejectedApplicants = Object.entries(
-      createMockRecruitApplicants(safeRecruitId).recruitApplications
-    )
-      .map(([, applications]) => applications)
-      .reduce(concat, []);
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<GetRejectedRecruitApplicantsApiData['data']>(
-        ctx,
-        mockRejectedApplicants
-      )
-    );
   }
 );
 
@@ -211,13 +137,13 @@ export const getMyScrapedRecruitsError = restError(
 
 export const recruitHandlers = [
   //
-  getRejectedApplicants,
+  mockGetRejectedRecruitApplicants,
   getJoinedRecruits,
   getAppliedRecruits,
   getMyScrapedRecruits,
   // getMyScrapedRecruitsError,
 
-  getRecruitApplicants,
+  mockGetRecruitApplicants,
   mockCreateRecruit,
   mockGetRecruitDetail,
   // mockGetRecruitDetailError,
@@ -236,6 +162,6 @@ export const recruitHandlers = [
   mockCancelRecruitApplication,
   mockRejectRecruitApplication,
   mockApproveRecruitApplication,
-  likeRecruitApplication,
+  mockLikeRecruitApplication,
   excludeRecruitParticipant,
 ];

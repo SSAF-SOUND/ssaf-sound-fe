@@ -19,14 +19,14 @@ const assertExistsRejectConfirmText = () => {
 };
 
 it('내 리쿠르팅이 아니면, 해당 리쿠르팅에 대한 다른 사람의 신청서는 조회할 수 없다.', () => {
-  cy.visitStory('page-recruit-리쿠르팅-신청서--not-mine');
+  cy.visitStory('page-리쿠르팅-리쿠르팅-신청서--not-mine');
 
   cy.contains('권한이 없어요').should('be.exist');
 });
 
 describe('응답 대기중인 신청서', () => {
   beforeEach(() => {
-    cy.visitStory('page-recruit-리쿠르팅-신청서--pending-recruit-application');
+    cy.visitStory('page-리쿠르팅-리쿠르팅-신청서--pending-recruit-application');
   });
 
   it('수락할 수 있다.', () => {
@@ -44,7 +44,7 @@ describe('응답 대기중인 신청서', () => {
 
 describe('모집이 종료될 때 까지 응답하지 않은 신청서', () => {
   it('응답 안함 텍스트가 보인다.', () => {
-    cy.visitStory('page-recruit-리쿠르팅-신청서--initial-recruit-application');
+    cy.visitStory('page-리쿠르팅-리쿠르팅-신청서--initial-recruit-application');
 
     cy.contains('응답 안함').should('be.exist');
   });

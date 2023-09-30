@@ -45,17 +45,23 @@ import {
 const metaTitle = '리쿠르팅 신청 목록';
 const titleBarTitle = metaTitle;
 
-type Params = {
+type Params = Partial<{
   recruitId: string;
-};
+}>;
+
+interface RecruitApplicantsPageProps {
+  recruitId?: number;
+}
 
 /**
  * NOTE: 내 리쿠르트인 경우에만 접근 가능한 페이지 (서버에서 검증)
  */
-const RecruitApplicantsPage: CustomNextPage = () => {
+const RecruitApplicantsPage: CustomNextPage<RecruitApplicantsPageProps> = (
+  props
+) => {
   const router = useRouter();
-  const query = router.query as Partial<Params>;
-  const recruitId = Number(query.recruitId);
+  const query = router.query as Params;
+  const recruitId = props.recruitId ?? Number(query.recruitId);
 
   const {
     data: recruitApplicants,
@@ -106,8 +112,24 @@ const RecruitApplicantsPage: CustomNextPage = () => {
   const isUnauthorized = !recruitDetail.mine;
 
   if (isUnauthorized) {
-    router.replace(routes.unauthorized());
-    return <FullPageLoader />;
+    return (
+      <RedirectionGuide
+        title="권한이 없어요"
+        description="내 리쿠르팅인 경우에만 확인할 수 있습니다."
+        customLinkElements={
+          <div>
+            <Button asChild size="lg" css={{ marginBottom: 12 }}>
+              <Link href={routes.recruit.detail(recruitId)}>
+                리쿠르팅 상세 페이지로
+              </Link>
+            </Button>
+            <Button asChild size="lg">
+              <Link href={routes.recruit.list()}>리쿠르팅 목록 페이지로</Link>
+            </Button>
+          </div>
+        }
+      />
+    );
   }
 
   const { category, finishedRecruit } = recruitDetail;

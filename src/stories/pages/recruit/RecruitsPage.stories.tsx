@@ -1,40 +1,34 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { InfiniteData } from '@tanstack/query-core';
-import type { GetRecruitsApiData } from '~/services/recruit';
 
-import { useQueryClient } from '@tanstack/react-query';
-
-import { userInfo } from '~/mocks/handlers/member/data';
+import {
+  mockGetCertifiedSsafyMyInfo,
+  mockGetMyInfoError,
+} from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import {
+  mockGetEmptyRecruits,
+  mockGetRecruits,
+} from '~/mocks/handlers/recruit/apis/mockGetRecruits';
 import RecruitsPage from '~/pages/recruits';
-import { queryKeys } from '~/react-query/common';
-import { useSetMyInfo } from '~/services/member';
 import { RecruitCategoryName } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof RecruitsPage> = {
-  title: 'Page/Recruit/Retrieve',
+  title: 'Page/리쿠르팅/전체 리쿠르팅 조회',
   component: RecruitsPage,
   decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      queryClient.removeQueries(queryKey);
-      const setMyInfo = useSetMyInfo();
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-
-      return (
-        <PageLayout>
-          <Story />
-        </PageLayout>
-      );
-    },
+    (Story) => (
+      <PageLayout>
+        <Story />
+      </PageLayout>
+    ),
   ],
   parameters: {
     layout: 'fullscreen',
-    msw: {
-      handlers: {
-        member: [],
-      },
-    },
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+      recruit: [mockGetRecruits],
+    }),
   },
 };
 
@@ -42,49 +36,37 @@ export default meta;
 
 type RecruitsPageStory = StoryObj<typeof RecruitsPage>;
 
-const queryKey = queryKeys.recruit.list({
-  category: RecruitCategoryName.PROJECT,
-  keyword: '',
-  recruitParts: [],
-  skills: [],
-  includeCompleted: false,
-});
 export const SignedIn: RecruitsPageStory = {
-  decorators: [
-    (Story) => {
-
-
-      return <Story />;
-    },
-  ],
+  name: '로그인',
 };
+
 export const NotSignedIn: RecruitsPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      setMyInfo(null);
-
-      return <Story />;
-    },
-  ],
-};
-
-const emptyRecruits = {
-  pages: [{ recruits: [], nextCursor: null, isLast: true }],
-  pageParams: [null],
+  name: '로그인 하지 않음',
+  parameters: {
+    ...createMswParameters({
+      member: [mockGetMyInfoError],
+    }),
+  },
 };
 
 export const NotExist: RecruitsPageStory = {
-  decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      queryClient.setQueryData<InfiniteData<GetRecruitsApiData['data']>>(
-        queryKey,
-        emptyRecruits
-      );
-      return <Story />;
+  name: '빈 리쿠르팅 데이터',
+  parameters: {
+    ...createMswParameters({
+      recruit: [mockGetEmptyRecruits],
+    }),
+  },
+};
+
+export const Study: RecruitsPageStory = {
+  name: '스터디 조회',
+  parameters: {
+    nextjs: {
+      router: {
+        query: {
+          category: RecruitCategoryName.STUDY,
+        },
+      },
     },
-  ],
+  },
 };

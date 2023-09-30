@@ -8,7 +8,7 @@ import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof RecruitCreatePage> = {
-  title: 'Page/Recruit/리쿠르팅 만들기',
+  title: 'Page/리쿠르팅/리쿠르팅 만들기',
   component: RecruitCreatePage,
   decorators: [
     (Story) => {

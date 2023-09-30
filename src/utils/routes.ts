@@ -1,8 +1,12 @@
 import type { OAuthProviders } from '~/services/auth/utils';
-import type { RecruitParts, SkillName, MatchStatus } from '~/services/recruit';
+import type {
+  RecruitParts,
+  SkillName,
+  MatchStatus,
+  RecruitCategoryName,
+} from '~/services/recruit';
 
-import { RecruitCategoryName } from '~/services/recruit';
-import { recruits } from '~/utils/client-routes/recruits';
+import { recruit } from '~/utils/client-routes/recruit';
 
 export const routes = {
   root: () => '/' as const,
@@ -77,72 +81,7 @@ export const routes = {
   unauthorized: () => '/unauthorized' as const,
 
   //
-  recruit: {
-    self: () => '/recruits' as const,
-    list: (
-      options: Partial<RecruitsPageQueryStringObject> = {}
-    ): { pathname: string; query: Partial<RecruitsPageQueryStringObject> } => {
-      const {
-        category = RecruitCategoryName.PROJECT,
-        keyword = '',
-        completed = false,
-        recruitParts = [],
-        skills = [],
-      } = options;
-
-      return {
-        pathname: routes.recruit.self(),
-        query: {
-          category,
-          keyword,
-          completed: String(completed),
-          recruitParts,
-          skills,
-        },
-      };
-    },
-    appliedList: (options: Partial<AppliedRecruitsPageQueryStringObject>) => {
-      const { category, matchStatus = '' } = options;
-      const queryString = new URLSearchParams({
-        matchStatus,
-      }).toString();
-
-      return `${routes.profile.self()}/applied-recruits/${category}?${queryString}`;
-    },
-    detail: (recruitId: number) =>
-      `${routes.recruit.self()}/${recruitId}` as const,
-    applications: {
-      self: (recruitId: number) =>
-        `${routes.recruit.detail(recruitId)}/applications`,
-      mine: (recruitId: number) =>
-        `${routes.recruit.applications.self(recruitId)}/mine` as const,
-      detail: ({
-        recruitId,
-        recruitApplicationId,
-      }: RecruitApplicationRouteParams) =>
-        `${routes.recruit.applications.self(
-          recruitId
-        )}/${recruitApplicationId}` as const,
-      rejected: (recruitId: number) => {
-        return `${routes.recruit.applications.self(recruitId)}/rejected`;
-      },
-    },
-    apply: (recruitId: number) =>
-      `${routes.recruit.detail(recruitId)}/apply` as const,
-    create: (category?: RecruitCategoryName) => {
-      const queryString = category
-        ? `?${new URLSearchParams({
-            category,
-          }).toString()}`
-        : '';
-
-      return `${routes.recruit.self()}/new${queryString}` as const;
-    },
-    edit: (recruitId: number) =>
-      `${routes.recruit.detail(recruitId)}/edit` as const,
-  },
-
-  recruits: recruits,
+  recruit,
 
   lunch: {
     self: () => '/lunch' as const,

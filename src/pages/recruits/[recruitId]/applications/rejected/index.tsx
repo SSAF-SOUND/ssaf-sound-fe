@@ -10,7 +10,10 @@ import { RecruitApplicantBar } from '~/components/RecruitApplicants';
 import { RecruitApplicantsCount } from '~/components/RecruitApplicants/RecruitApplicantsCount';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
-import { useRejectedRecruitApplicants } from '~/services/recruit';
+import {
+  useRecruitDetail,
+  useRejectedRecruitApplicants,
+} from '~/services/recruit';
 import {
   flex,
   fontCss,
@@ -28,11 +31,24 @@ import {
 const metaTitle = '거절한 신청 목록';
 const titleBarTitle = metaTitle;
 
-const RejectedApplicantsPage: CustomNextPage = () => {
+interface RejectedApplicantsPageProps {
+  recruitId?: number;
+}
+
+const RejectedApplicantsPage: CustomNextPage<RejectedApplicantsPageProps> = (
+  props
+) => {
   const router = useRouter();
   const query = router.query as Partial<Params>;
 
-  const recruitId = Number(query.recruitId);
+  const recruitId = props.recruitId ?? Number(query.recruitId);
+
+  const {
+    data: recruitDetail,
+    isLoading: isRecruitDetailLoading,
+    isError: isRecruitDetailError,
+    error: recruitDetailError,
+  } = useRecruitDetail(recruitId);
 
   const {
     data: rejectedRecruitApplicants,
@@ -41,12 +57,14 @@ const RejectedApplicantsPage: CustomNextPage = () => {
     error: rejectedRecruitApplicantsError,
   } = useRejectedRecruitApplicants(recruitId);
 
-  if (isRejectedRecruitApplicantsLoading) {
+  if (isRejectedRecruitApplicantsLoading || isRecruitDetailLoading) {
     return <FullPageLoader text="리쿠르팅 데이터를 불러오는 중입니다." />;
   }
 
-  if (isRejectedRecruitApplicantsError) {
-    const errorResponse = getErrorResponse(rejectedRecruitApplicantsError);
+  if (isRejectedRecruitApplicantsError || isRecruitDetailError) {
+    const errorResponse =
+      getErrorResponse(rejectedRecruitApplicantsError) ??
+      getErrorResponse(recruitDetailError);
     const errorMessage =
       errorResponse?.message ??
       '리쿠르팅 데이터를 불러오는 중 오류가 발생했습니다.';
@@ -71,6 +89,29 @@ const RejectedApplicantsPage: CustomNextPage = () => {
     );
   }
 
+  const isUnauthorized = !recruitDetail.mine;
+
+  if (isUnauthorized) {
+    return (
+      <RedirectionGuide
+        title="권한이 없어요"
+        description="내 리쿠르팅인 경우에만 확인할 수 있습니다."
+        customLinkElements={
+          <div>
+            <Button asChild size="lg" css={{ marginBottom: 12 }}>
+              <Link href={routes.recruit.detail(recruitId)}>
+                리쿠르팅 상세 페이지로
+              </Link>
+            </Button>
+            <Button asChild size="lg">
+              <Link href={routes.recruit.list()}>리쿠르팅 목록 페이지로</Link>
+            </Button>
+          </div>
+        }
+      />
+    );
+  }
+
   const rejectedApplicantsCount = rejectedRecruitApplicants.length;
 
   const isEmpty = rejectedApplicantsCount === 0;
@@ -78,6 +119,7 @@ const RejectedApplicantsPage: CustomNextPage = () => {
   return (
     <>
       <PageHeadingText text={metaTitle} />
+
       <div css={selfCss}>
         <TitleBar.Default
           title={titleBarTitle}
