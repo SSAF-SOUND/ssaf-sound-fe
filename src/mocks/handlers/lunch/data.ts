@@ -1,4 +1,4 @@
-import type { LunchMenuDetail } from '~/services/lunch';
+import type { LunchMenuDetail } from '~/services/lunch/utils';
 
 import { faker } from '@faker-js/faker';
 

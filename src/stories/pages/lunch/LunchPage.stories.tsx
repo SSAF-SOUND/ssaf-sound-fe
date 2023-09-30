@@ -3,18 +3,24 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 import {
-  getEmptyLunchMenusWithPollStatus,
-  getLunchMenusWithPollStatus,
-  getLunchMenusWithPollStatusError,
-  pollLunchMenuError,
-  revertPolledLunchMenuError,
-} from '~/mocks/handlers';
+  mockGetEmptyLunchMenusWithPollStatus,
+  mockGetLunchMenusWithPollStatus,
+  mockGetLunchMenusWithPollStatusError,
+} from '~/mocks/handlers/lunch/apis/mockGetLunchMenusWithPollStatus';
+import {
+  mockPollLunchMenu,
+  mockPollLunchMenuError,
+} from '~/mocks/handlers/lunch/apis/mockPollLunchMenu';
+import {
+  mockRevertPolledLunchMenu,
+  mockRevertPolledLunchMenuError,
+} from '~/mocks/handlers/lunch/apis/mockRevertPolledLunchMenu';
 import {
   mockGetCertifiedSsafyMyInfo,
   mockGetMyInfoError,
 } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import LunchPage from '~/pages/lunch';
-import { LunchDateSpecifier } from '~/services/lunch';
+import { LunchDateSpecifier } from '~/services/lunch/utils';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
@@ -32,6 +38,11 @@ const meta: Meta<typeof LunchPage> = {
     layout: 'fullscreen',
     ...createMswParameters({
       member: [mockGetCertifiedSsafyMyInfo],
+      lunch: [
+        mockGetLunchMenusWithPollStatus,
+        mockPollLunchMenu,
+        mockRevertPolledLunchMenu,
+      ],
     }),
     nextjs: {
       router: {
@@ -56,9 +67,9 @@ export const PollError: LunchPageStory = {
   parameters: {
     ...createMswParameters({
       lunch: [
-        getLunchMenusWithPollStatus,
-        pollLunchMenuError,
-        revertPolledLunchMenuError,
+        mockGetLunchMenusWithPollStatus,
+        mockPollLunchMenuError,
+        mockRevertPolledLunchMenuError,
       ],
     }),
   },
@@ -68,7 +79,7 @@ export const FailToLoadLunchMenu: LunchPageStory = {
   name: '점심 메뉴 로딩 오류',
   parameters: {
     ...createMswParameters({
-      lunch: [getLunchMenusWithPollStatusError],
+      lunch: [mockGetLunchMenusWithPollStatusError],
     }),
   },
 };
@@ -86,7 +97,7 @@ export const NotExistData: LunchPageStory = {
   name: '빈 점심 메뉴',
   parameters: {
     ...createMswParameters({
-      lunch: [getEmptyLunchMenusWithPollStatus],
+      lunch: [mockGetEmptyLunchMenusWithPollStatus],
     }),
   },
 };

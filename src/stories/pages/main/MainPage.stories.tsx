@@ -5,11 +5,11 @@ import type { GetHotArticlesApiData } from '~/services/article';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+import { getHotArticles } from '~/mocks/handlers';
 import {
-  getEmptyLunchMenusWithPollStatus,
-  getHotArticles,
-  getLunchMenusWithPollStatus,
-} from '~/mocks/handlers';
+  mockGetEmptyLunchMenusWithPollStatus,
+  mockGetLunchMenusWithPollStatus,
+} from '~/mocks/handlers/lunch/apis/mockGetLunchMenusWithPollStatus';
 import { userInfo } from '~/mocks/handlers/member/data';
 import MainPage from '~/pages/main';
 import { queryKeys } from '~/react-query/common';
@@ -65,7 +65,7 @@ export const SignedIn: MainPageStory = {
   parameters: {
     msw: {
       handlers: {
-        lunch: [getLunchMenusWithPollStatus],
+        lunch: [mockGetLunchMenusWithPollStatus],
         article: [getHotArticles],
         // recruit: []
       },
@@ -122,7 +122,7 @@ export const NotExistData: MainPageStory = {
   parameters: {
     msw: {
       handlers: {
-        lunch: [getEmptyLunchMenusWithPollStatus],
+        lunch: [mockGetEmptyLunchMenusWithPollStatus],
         article: [],
         recruit: [],
       },
