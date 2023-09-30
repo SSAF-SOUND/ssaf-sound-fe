@@ -24,14 +24,14 @@ const validateDateSpecifier = (date?: string): date is LunchDateSpecifier => {
   return Object.values(LunchDateSpecifier).includes(date as LunchDateSpecifier);
 };
 
-type QueryString = {
+type Params = Partial<{
   campus: string;
   date: string;
-};
+}>;
 
-const Lunch = () => {
+const LunchPage = () => {
   const router = useRouter();
-  const query = router.query as Partial<QueryString>;
+  const query = router.query as Params;
 
   const { data: campuses } = useCampuses();
   const { campus, date: dateSpecifier } = query;
@@ -111,4 +111,4 @@ const lunchPageZIndex = {
 const lunchMenusCss = css({ zIndex: lunchPageZIndex.lunchMenu });
 const lunchCampusSelectBoxCss = css({ zIndex: lunchPageZIndex.selectBox });
 
-export default Lunch;
+export default LunchPage;

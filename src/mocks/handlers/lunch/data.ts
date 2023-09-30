@@ -38,12 +38,4 @@ export const lunchMock = {
     polledAt: -1,
     menus: [],
   },
-
-  vote: {
-    pollCount: 125,
-  },
-
-  revertVote: {
-    pollCount: 124,
-  },
 };
