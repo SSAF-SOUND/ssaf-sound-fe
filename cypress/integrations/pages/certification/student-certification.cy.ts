@@ -7,7 +7,7 @@ const skipToSubmitAnswer = (value: string) => {
 };
 
 it('정답을 입력하는 경우 인증 완료 알림창이 팝업되고, 확인 버튼을 누르면 생성된 유저의 네임카드를 볼 수 있다.', () => {
-  cy.visitStory('page-certification-student-certification--correct-answer');
+  cy.visitStory('page-ssafy-인증-ssafy-인증--correct-answer');
 
   skipToSubmitAnswer(answerValue);
   cy.findByRole('dialog').should('be.exist');
@@ -18,7 +18,7 @@ it('정답을 입력하는 경우 인증 완료 알림창이 팝업되고, 확�
 });
 
 it('오답을 입력하는 경우 오답 알림창이 팝업된다.', () => {
-  cy.visitStory('page-certification-student-certification--incorrect-answer');
+  cy.visitStory('page-ssafy-인증-ssafy-인증--incorrect-answer');
 
   skipToSubmitAnswer(answerValue);
   cy.findByRole('dialog').should('be.exist');
@@ -27,7 +27,7 @@ it('오답을 입력하는 경우 오답 알림창이 팝업된다.', () => {
 });
 
 it('시도 횟수를 초과했는데 입력하는 경우 알림 메세지가 팝업된다.', () => {
-  cy.visitStory('page-certification-student-certification--no-more-attempts');
+  cy.visitStory('page-ssafy-인증-ssafy-인증--no-more-attempts');
 
   skipToSubmitAnswer(answerValue);
   cy.findByRole('status').should('be.exist');
