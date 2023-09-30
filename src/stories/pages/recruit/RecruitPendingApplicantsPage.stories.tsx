@@ -130,3 +130,20 @@ export const NotMine: RecruitPendingApplicantsPageStory = {
     }),
   },
 };
+
+export const Empty: RecruitPendingApplicantsPageStory = {
+  name: '빈 데이터',
+  parameters: {
+    ...createMswParameters({
+      recruit: [
+        createMockGetRecruitApplicants(
+          createMockRecruitApplicants(mockProjectDetail, { empty: true })
+        ),
+        createMockGetRecruitParticipants(
+          createMockRecruitParticipants(mockProjectDetail, { empty: true })
+        ),
+        createMockGetRecruitDetail(mockProjectDetail),
+      ],
+    }),
+  },
+};

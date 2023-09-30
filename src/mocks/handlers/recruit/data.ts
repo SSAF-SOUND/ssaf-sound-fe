@@ -13,7 +13,6 @@ import type {
 } from '~/services/recruit';
 
 import { faker } from '@faker-js/faker';
-import { application } from 'express';
 
 import {
   MatchStatus,
@@ -126,8 +125,12 @@ export const recruitDetails = Array(5)
   .map((_, index) => createMockRecruitDetail(index, Boolean(index % 2)));
 
 // 리쿠르팅 모집 현황중, 참가자의 상세정보 (파트마다 유저의 상세정보)
-export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
+export const createMockRecruitParticipants = (
+  recruitDetail: RecruitDetail,
+  options: { empty?: boolean } = {}
+) => {
   const { limits, author } = recruitDetail;
+  const { empty = false } = options;
 
   return Object.fromEntries(
     limits.map(
@@ -139,10 +142,12 @@ export const createMockRecruitParticipants = (recruitDetail: RecruitDetail) => {
         },
         partIndex
       ) => {
-        const memberIds = Array(currentParticipantsCount)
-          .fill(5000)
-          .map((v, index) => v + index)
-          .map((v) => v * (partIndex + 1));
+        const memberIds = empty
+          ? []
+          : Array(currentParticipantsCount)
+              .fill(5000)
+              .map((v, index) => v + index)
+              .map((v) => v * (partIndex + 1));
 
         return [
           part,
@@ -188,9 +193,11 @@ export const createMockRecruitApplicant = (
 };
 
 export const createMockRecruitApplicants = (
-  recruitDetail: RecruitDetail
+  recruitDetail: RecruitDetail,
+  options: { empty?: boolean } = {}
 ): GetRecruitApplicantsApiData['data'] => {
   const { limits } = recruitDetail;
+  const { empty = false } = options;
   const activeRecruitParts = limits.map(({ recruitType }) => recruitType);
 
   return {
@@ -198,10 +205,12 @@ export const createMockRecruitApplicants = (
     recruitApplications: {
       ...(Object.fromEntries(
         activeRecruitParts.map((part, partIndex) => {
-          const userIds = Array(16)
-            .fill(1_000_000)
-            .map((v, index) => v + index)
-            .map((v) => v * (partIndex + 1));
+          const userIds = empty
+            ? []
+            : Array(16)
+                .fill(1_000_000)
+                .map((v, index) => v + index)
+                .map((v) => v * (partIndex + 1));
 
           return [
             part,
