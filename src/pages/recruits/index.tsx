@@ -4,7 +4,7 @@ import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
 import type {
   RecruitsListPageRouteQuery,
   SafeRecruitsListPageRouteQuery,
-} from '~/utils/client-routes/recruits';
+} from '~/utils/client-routes/recruit';
 
 import { useRouter } from 'next/router';
 

@@ -1,4 +1,4 @@
-import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruits';
+import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruit';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 

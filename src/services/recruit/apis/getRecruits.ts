@@ -7,7 +7,7 @@ import type {
   SkillName,
 } from '~/services/recruit';
 import type { ApiSuccessResponse } from '~/types';
-import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruits';
+import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruit';
 
 import { endpoints } from '~/react-query/common';
 import {

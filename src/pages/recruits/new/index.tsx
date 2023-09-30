@@ -1,6 +1,6 @@
 import type { CustomNextPage } from 'next/types';
 import type { RecruitFormProps } from '~/components/Forms/RecruitForm';
-import type { RecruitCreatePageRouteQuery } from '~/utils/client-routes/recruits';
+import type { RecruitCreatePageRouteQuery } from '~/utils/client-routes/recruit';
 
 import { useRouter } from 'next/router';
 

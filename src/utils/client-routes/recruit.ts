@@ -157,7 +157,7 @@ const recruitRejectedApplicantsPageRoute = (recruitId: number) => {
   return createRoute(`${pathname}/rejected`);
 };
 
-export const recruits = {
+export const recruit = {
   self: recruitSelfRoute,
   list: recruitListPageRoute,
   create: recruitCreatePageRoute,
