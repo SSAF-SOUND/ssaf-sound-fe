@@ -81,7 +81,7 @@ const infiniteAppliedRecruitsHandler = () => {
     return res(
       ctx.delay(500),
       ...mockSuccess<GetAppliedRecruitsApiData['data']>(ctx, {
-        appliedRecruits: data,
+        recruits: data,
         nextCursor,
         isLast: isReachingEnd,
       })
