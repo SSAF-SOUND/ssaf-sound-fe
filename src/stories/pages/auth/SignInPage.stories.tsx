@@ -10,6 +10,7 @@ import {
 } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import SignInPage from '~/pages/auth/sign-in';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
 import {
   createMockRouterMethods,
   getMockRouter,
@@ -18,7 +19,7 @@ import { useAutoSignOut } from '~/stories/utils/useAutoSignOut';
 import { routes, sleep, toMs } from '~/utils';
 
 const meta: Meta<typeof SignInPage> = {
-  title: 'Page/Auth/Sign In',
+  title: 'Page/인증/로그인',
   component: SignInPage,
   decorators: [
     (Story) => (
@@ -37,12 +38,11 @@ export default meta;
 type SignInPageStory = StoryObj<typeof SignInPage>;
 
 export const NotSignedIn: SignInPageStory = {
+  name: '아직 로그인 하지 않은 경우',
   parameters: {
-    msw: {
-      handlers: {
-        member: [mockGetMyInfoError],
-      },
-    },
+    ...createMswParameters({
+      member: [mockGetMyInfoError],
+    }),
   },
   decorators: [
     (Story) => {
@@ -77,12 +77,11 @@ export const NotSignedIn: SignInPageStory = {
 };
 
 export const SignedIn: SignInPageStory = {
+  name: '이미 로그인 한 경우',
   parameters: {
-    msw: {
-      handlers: {
-        member: [mockGetCertifiedSsafyMyInfo],
-      },
-    },
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+    }),
     nextjs: {
       router: createMockRouterMethods(),
     },

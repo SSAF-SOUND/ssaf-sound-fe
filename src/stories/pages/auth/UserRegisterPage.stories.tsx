@@ -8,7 +8,7 @@ import { useMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 
 const meta: Meta<typeof UserRegisterPage> = {
-  title: 'Page/Auth/User Register',
+  title: 'Page/인증/회원가입',
   component: UserRegisterPage,
   decorators: [
     (Story) => {
@@ -31,6 +31,7 @@ export default meta;
 type UserRegisterPageStory = StoryObj<typeof UserRegisterPage>;
 
 export const Default: UserRegisterPageStory = {
+  name: '회원가입',
   parameters: {
     msw: {
       handlers: {

@@ -11,7 +11,7 @@ import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof IntroStudentCertificationPage> = {
-  title: 'Page/Certification/Intro Student Certification',
+  title: 'Page/SSAFY 인증/SSAFY 인증 소개',
   component: IntroStudentCertificationPage,
   decorators: [
     (Story) => {
@@ -32,18 +32,21 @@ const meta: Meta<typeof IntroStudentCertificationPage> = {
 export default meta;
 
 export const NonSsafyUser = {
+  name: 'SSAFY 유저가 아님',
   parameters: createMswParameters({
     member: [mockGetNonSsafyMyInfo],
   }),
 };
 
 export const UncertifiedUser = {
+  name: 'SSAFY 유저 + 인증 전',
   parameters: createMswParameters({
     member: [mockGetUncertifiedSsafyMyInfo],
   }),
 };
 
 export const CertifiedUser = {
+  name: 'SSAFY 유저 + 인증 후',
   parameters: createMswParameters({
     member: [mockGetCertifiedSsafyMyInfo],
   }),
