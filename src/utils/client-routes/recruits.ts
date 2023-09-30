@@ -1,4 +1,5 @@
 import type { RecruitParts, SkillName } from '~/services/recruit/utils/types';
+import type { AppliedRecruitsPageQueryStringObject } from '~/utils';
 
 import { isArray, isBoolean, isString } from 'is-what';
 
@@ -123,7 +124,7 @@ const recruitApplyPageRoute = (recruitId: number) => {
   return createRoute(`${pathname}/${recruitId}/apply`)();
 };
 
-// ---------- recruit application self ----------
+// ---------- recruit application self (== applicants) ----------
 
 const recruitApplicationSelfRoute = (recruitId: number) => {
   const pathname = recruitDetailPageRoute(recruitId).pathname;
@@ -144,10 +145,16 @@ const recruitApplicationDetailPageRoute = (
   return createRoute(`${pathname}/${recruitApplicationId}`)();
 };
 
-// ---------- recruit my application ----------
+// ---------- recruit my application detail ----------
 const recruitMyApplicationPageRoute = (recruitId: number) => {
   const pathname = recruitApplicationSelfRoute(recruitId).pathname;
   return createRoute(`${pathname}/mine`);
+};
+
+// ---------- recruit rejected applicants ----------
+const recruitRejectedApplicantsPageRoute = (recruitId: number) => {
+  const pathname = recruitApplicationSelfRoute(recruitId).pathname;
+  return createRoute(`${pathname}/rejected`);
 };
 
 export const recruits = {
@@ -161,5 +168,15 @@ export const recruits = {
     self: recruitApplicationSelfRoute,
     detail: recruitApplicationDetailPageRoute,
     mine: recruitMyApplicationPageRoute,
+    rejected: recruitRejectedApplicantsPageRoute,
+  },
+  // TODO: Replace
+  appliedList: (options: Partial<AppliedRecruitsPageQueryStringObject>) => {
+    const { category, matchStatus = '' } = options;
+    const queryString = new URLSearchParams({
+      matchStatus,
+    }).toString();
+
+    return `profile/applied-recruits/${category}?${queryString}`;
   },
 };
