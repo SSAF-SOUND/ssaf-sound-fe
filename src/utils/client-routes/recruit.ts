@@ -91,7 +91,7 @@ export type SafeRecruitCreatePageRouteQuery = {
 };
 const recruitCreatePageRoute = (query: RecruitCreatePageRouteQuery = {}) => {
   const pathname = recruitSelfRoute().pathname;
-  return createRoute<SafeRecruitCreatePageRouteQuery>(pathname)(
+  return createRoute<SafeRecruitCreatePageRouteQuery>(`${pathname}/new`)(
     toSafeRecruitCreatePageQuery(query)
   );
 };
