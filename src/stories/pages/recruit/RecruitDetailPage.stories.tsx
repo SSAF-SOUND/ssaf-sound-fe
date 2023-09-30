@@ -36,7 +36,7 @@ const studyDetail = createMockRecruitDetail(recruitId, true, {
 });
 
 const meta: Meta<typeof RecruitDetailPage> = {
-  title: 'Page/Recruit/리쿠르팅 상세',
+  title: 'Page/리쿠르팅/리쿠르팅 상세',
   component: RecruitDetailPage,
   decorators: [
     (Story) => {

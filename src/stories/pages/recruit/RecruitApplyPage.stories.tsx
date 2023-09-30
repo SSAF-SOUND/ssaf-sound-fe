@@ -15,7 +15,7 @@ const myInfo = mockUserInfo.certifiedSsafyUserInfo;
 const author = mockUserInfo.uncertifiedSsafyUserInfo;
 
 const meta: Meta<typeof RecruitApplyPage> = {
-  title: 'Page/Recruit/리쿠르팅 신청하기',
+  title: 'Page/리쿠르팅/리쿠르팅 신청하기',
   component: RecruitApplyPage,
   decorators: [
     (Story) => (

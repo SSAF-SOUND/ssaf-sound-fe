@@ -25,7 +25,7 @@ const projectDetail = createMockRecruitDetail(recruitId, false, {
 });
 
 const meta: Meta<typeof RecruitRejectedApplicantsPage> = {
-  title: 'Page/Recruit/리쿠르팅 거절한 신청서 목록',
+  title: 'Page/리쿠르팅/리쿠르팅 거절한 신청서 목록',
   component: RecruitRejectedApplicantsPage,
   decorators: [
     (Story) => (

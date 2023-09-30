@@ -10,7 +10,7 @@ import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof RecruitEditPage> = {
-  title: 'Page/Recruit/리쿠르팅 수정하기',
+  title: 'Page/리쿠르팅/리쿠르팅 수정하기',
   component: RecruitEditPage,
   decorators: [
     (Story) => (
