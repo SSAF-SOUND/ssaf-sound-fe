@@ -15,7 +15,7 @@ export const RecruitCreateLink = (props: RecruitCreateLinkProps) => {
   return (
     <CircleButton
       asLink
-      href={routes.recruit.create(category)}
+      href={routes.recruit.create({ category })}
       css={{ width: 44, height: 44 }}
       name="pencil.plus"
       label="리쿠르팅 작성 버튼"

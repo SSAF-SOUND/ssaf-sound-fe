@@ -1,5 +1,10 @@
 import type { OAuthProviders } from '~/services/auth/utils';
-import type { RecruitParts, SkillName, MatchStatus , RecruitCategoryName } from '~/services/recruit';
+import type {
+  RecruitParts,
+  SkillName,
+  MatchStatus,
+  RecruitCategoryName,
+} from '~/services/recruit';
 
 import { recruit } from '~/utils/client-routes/recruit';
 
@@ -76,7 +81,7 @@ export const routes = {
   unauthorized: () => '/unauthorized' as const,
 
   //
-  recruit: recruit,
+  recruit,
 
   lunch: {
     self: () => '/lunch' as const,

@@ -14,7 +14,10 @@ export type Route<Query extends object, Pathname extends string = string> = {
 };
 
 export const createRoute =
-  <Query extends object, Pathname extends string = string>(
+  <
+    Query extends object = Record<string, never>,
+    Pathname extends string = string
+  >(
     pathname: Pathname
   ) =>
   (query?: Query): Route<Query, Pathname> => {

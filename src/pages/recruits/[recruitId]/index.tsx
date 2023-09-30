@@ -83,7 +83,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
 
   const metaTitle = title;
   const metaDescription = stripHtmlTags(content).slice(0, 100);
-  const pageUrl = routes.recruit.detail(recruitId);
+  const pageUrl = routes.recruit.detail(recruitId).pathname;
 
   return (
     <>

@@ -64,7 +64,7 @@ const RejectedApplicantsPage: CustomNextPage<RejectedApplicantsPageProps> = (
   if (isRejectedRecruitApplicantsError || isRecruitDetailError) {
     const errorResponse =
       getErrorResponse(rejectedRecruitApplicantsError) ??
-      getErrorResponse(isRecruitDetailError);
+      getErrorResponse(recruitDetailError);
     const errorMessage =
       errorResponse?.message ??
       '리쿠르팅 데이터를 불러오는 중 오류가 발생했습니다.';

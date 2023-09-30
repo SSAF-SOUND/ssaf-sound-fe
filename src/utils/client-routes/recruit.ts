@@ -148,13 +148,13 @@ const recruitApplicationDetailPageRoute = (
 // ---------- recruit my application detail ----------
 const recruitMyApplicationPageRoute = (recruitId: number) => {
   const pathname = recruitApplicationSelfRoute(recruitId).pathname;
-  return createRoute(`${pathname}/mine`);
+  return createRoute(`${pathname}/mine`)();
 };
 
 // ---------- recruit rejected applicants ----------
 const recruitRejectedApplicantsPageRoute = (recruitId: number) => {
   const pathname = recruitApplicationSelfRoute(recruitId).pathname;
-  return createRoute(`${pathname}/rejected`);
+  return createRoute(`${pathname}/rejected`)();
 };
 
 export const recruit = {

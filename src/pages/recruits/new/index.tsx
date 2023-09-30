@@ -34,7 +34,7 @@ type Params = RecruitCreatePageRouteQuery;
 const RecruitCreatePage: CustomNextPage = () => {
   const router = useRouter();
   const routerQuery = router.query as Params;
-  const { query } = routes.recruits.create(routerQuery);
+  const { query } = routes.recruit.create(routerQuery);
   const { category } = query;
   const { mutateAsync: createRecruit } = useCreateRecruit();
 
@@ -42,7 +42,7 @@ const RecruitCreatePage: CustomNextPage = () => {
 
   const onClickTitleBarClose = () => {
     if (reconfirmRecruitFormUnload()) {
-      router.push(routes.recruits.self().pathname);
+      router.push(routes.recruit.self());
     }
   };
 
@@ -64,7 +64,7 @@ const RecruitCreatePage: CustomNextPage = () => {
         ...restFormValues,
       });
 
-      router.replace(routes.recruits.detail(recruitId).pathname);
+      router.replace(routes.recruit.detail(recruitId));
     } catch (err) {
       handleAxiosError(err);
     }

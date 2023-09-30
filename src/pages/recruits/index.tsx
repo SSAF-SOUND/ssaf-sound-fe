@@ -75,7 +75,7 @@ const RecruitsPage = (props: Props) => {
   const router = useRouter();
   const routerQuery = router.query as Params;
 
-  const { query: safeQuery } = routes.recruits.list({
+  const { query: safeQuery } = routes.recruit.list({
     ...routerQuery,
     includeCompleted: stringToBoolean(
       routerQuery?.[ParamsKey.INCLUDE_COMPLETED]
@@ -425,7 +425,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const queryString = getQueryStringFromUrl(context.resolvedUrl);
   const parsed = qsParse(queryString) as RecruitsListPageRouteQuery;
 
-  const { pathname, query } = routes.recruits.list(parsed);
+  const { pathname, query } = routes.recruit.list(parsed);
 
   const queryClient = new QueryClient();
   const recruitListQueryKey = JSON.parse(
