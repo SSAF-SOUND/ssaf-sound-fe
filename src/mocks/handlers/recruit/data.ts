@@ -13,6 +13,7 @@ import type {
 } from '~/services/recruit';
 
 import { faker } from '@faker-js/faker';
+import { application } from 'express';
 
 import {
   MatchStatus,
@@ -20,6 +21,7 @@ import {
   RecruitParts,
   SkillName,
 } from '~/services/recruit';
+import { concat } from '~/utils';
 
 import { mockHtmlString } from '../common';
 import { createMockUser, mockUserInfo, userInfo } from '../member/data';
@@ -209,6 +211,16 @@ export const createMockRecruitApplicants = (
       ) as Partial<Record<RecruitParts, RecruitApplicant[]>>),
     },
   };
+};
+
+export const createMockRejectedRecruitApplicants = (
+  recruitDetail: RecruitDetail
+): RecruitApplicant[] => {
+  return Object.entries(
+    createMockRecruitApplicants(recruitDetail).recruitApplications
+  )
+    .map(([, applicants]) => applicants ?? [])
+    .reduce(concat, []);
 };
 
 export const createMockRecruitSummary = (

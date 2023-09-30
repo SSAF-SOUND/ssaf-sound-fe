@@ -18,15 +18,16 @@ import { mockGetRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGet
 import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
 import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
 import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
+import { mockGetRejectedRecruitApplicants } from '~/mocks/handlers/recruit/apis/mockGetRejectedRecruitApplicants';
 import { mockLikeRecruitApplication } from '~/mocks/handlers/recruit/apis/mockLikeRecruitApplication';
 import { mockRejectRecruitApplication } from '~/mocks/handlers/recruit/apis/mockRejectRecruitApplication';
 import { mockUpdateRecruit } from '~/mocks/handlers/recruit/apis/mockUpdateRecruit';
 import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
-import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
+import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
-import { createMockRecruitApplicants, scrapStatus } from './data';
+import { scrapStatus } from './data';
 import {
   restInfiniteAppliedRecruitsSuccess,
   restInfiniteRecruitsSuccess,
@@ -93,37 +94,6 @@ export const excludeRecruitParticipant = restSuccess(
   }
 );
 
-const getRejectedApplicantsEndpoint = removeQueryParams(
-  composeUrls(
-    API_URL,
-    //@ts-ignore
-    endpoints.recruit.application.rejectedApplicants(1)
-  )
-);
-
-export const getRejectedApplicants = rest.get(
-  getRejectedApplicantsEndpoint,
-  (req, res, ctx) => {
-    const recruitId = Number(req.url.searchParams.get('recruitId'));
-
-    const safeRecruitId = Number.isNaN(recruitId) ? 1 : recruitId;
-
-    const mockRejectedApplicants = Object.entries(
-      createMockRecruitApplicants(safeRecruitId).recruitApplications
-    )
-      .map(([, applications]) => applications)
-      .reduce(concat, []);
-
-    return res(
-      ctx.delay(500),
-      ...mockSuccess<GetRejectedRecruitApplicantsApiData['data']>(
-        ctx,
-        mockRejectedApplicants
-      )
-    );
-  }
-);
-
 const getJoinedRecruitsEndpoint = removeQueryParams(
   composeUrls(API_URL, endpoints.recruit.joinedList({ memberId: 1 }))
 );
@@ -167,7 +137,7 @@ export const getMyScrapedRecruitsError = restError(
 
 export const recruitHandlers = [
   //
-  getRejectedApplicants,
+  mockGetRejectedRecruitApplicants,
   getJoinedRecruits,
   getAppliedRecruits,
   getMyScrapedRecruits,
