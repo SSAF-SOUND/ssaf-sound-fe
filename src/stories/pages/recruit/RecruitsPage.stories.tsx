@@ -9,6 +9,7 @@ import {
   mockGetRecruits,
 } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
 import RecruitsPage from '~/pages/recruits';
+import { RecruitCategoryName } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
@@ -54,5 +55,18 @@ export const NotExist: RecruitsPageStory = {
     ...createMswParameters({
       recruit: [mockGetEmptyRecruits],
     }),
+  },
+};
+
+export const Study: RecruitsPageStory = {
+  name: '스터디 조회',
+  parameters: {
+    nextjs: {
+      router: {
+        query: {
+          category: RecruitCategoryName.STUDY,
+        },
+      },
+    },
   },
 };
