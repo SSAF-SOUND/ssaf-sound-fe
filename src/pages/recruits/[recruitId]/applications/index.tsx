@@ -112,7 +112,6 @@ const RecruitApplicantsPage: CustomNextPage<RecruitApplicantsPageProps> = (
   const isUnauthorized = !recruitDetail.mine;
 
   if (isUnauthorized) {
-    router.replace(routes.unauthorized());
     return (
       <RedirectionGuide
         title="권한이 없어요"
