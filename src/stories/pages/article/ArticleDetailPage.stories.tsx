@@ -1,35 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { ArticleDetail } from '~/services/article';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-
-import {
-  likeArticleCommentError,
-  removeArticleCommentError,
-  replyArticleCommentError,
-  updateArticleCommentError,
-} from '~/mocks/handlers';
-import {
-  createMockGetArticleDetail,
-  mockGetArticleDetail,
-} from '~/mocks/handlers/article/apis/mockGetArticleDetail';
-import {
-  createMockLikeArticle,
-  mockLikeArticleError,
-} from '~/mocks/handlers/article/apis/mockLikeArticle';
-import {
-  createMockScrapArticle,
-  mockScrapArticleError,
-} from '~/mocks/handlers/article/apis/mockScrapArticle';
-import { articles, createMockArticle } from '~/mocks/handlers/article/data';
+import { createMockGetArticleDetail } from '~/mocks/handlers/article/apis/mockGetArticleDetail';
+import { createMockLikeArticle } from '~/mocks/handlers/article/apis/mockLikeArticle';
+import { mockRemoveArticle } from '~/mocks/handlers/article/apis/mockRemoveArticle';
+import { createMockScrapArticle } from '~/mocks/handlers/article/apis/mockScrapArticle';
+import { createMockArticle } from '~/mocks/handlers/article/data';
 import {
   createMockGetMyInfo,
   mockGetMyInfoError,
 } from '~/mocks/handlers/member/apis/mockGetMyInfo';
-import { mockUserInfo, userInfo } from '~/mocks/handlers/member/data';
+import { mockUserInfo } from '~/mocks/handlers/member/data';
 import ArticleDetailPage from '~/pages/articles/[articleId]';
-import { queryKeys } from '~/react-query/common';
-import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
@@ -51,6 +33,7 @@ const meta: Meta<typeof ArticleDetailPage> = {
     layout: 'fullscreen',
     ...createMswParameters({
       member: [createMockGetMyInfo(myInfo)],
+      common: [mockRemoveArticle],
     }),
   },
   args: {
@@ -107,5 +90,23 @@ export const NotSignedIn: ArticleDetailPageStory = {
         member: [mockGetMyInfoError],
       }).msw,
     },
+  },
+};
+
+const modifiedArticleDetail: ArticleDetail = {
+  ...myArticleDetail,
+  modified: true,
+};
+
+export const Modified: ArticleDetailPageStory = {
+  name: '수정된 게시글',
+  parameters: {
+    ...createMswParameters({
+      article: [
+        createMockGetArticleDetail(modifiedArticleDetail),
+        createMockLikeArticle(modifiedArticleDetail),
+        createMockScrapArticle(modifiedArticleDetail),
+      ],
+    }),
   },
 };
