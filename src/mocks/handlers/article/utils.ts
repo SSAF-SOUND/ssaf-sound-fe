@@ -1,5 +1,6 @@
 import type { ResponseComposition, RestContext, RestRequest } from 'msw';
-import type { ArticleSummary, GetArticlesApiData } from '~/services/article';
+import type { GetArticlesApiData } from '~/services/article/apis';
+import type { ArticleSummary } from '~/services/article/utils';
 
 import { articleSummaries } from '~/mocks/handlers/article/data';
 import { mockError, mockSuccess } from '~/mocks/utils';

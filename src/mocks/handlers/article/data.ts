@@ -2,7 +2,7 @@ import type {
   ArticleCategory,
   ArticleDetail,
   ArticleSummary,
-} from '~/services/article';
+} from '~/services/article/utils';
 
 import { faker } from '@faker-js/faker';
 
@@ -33,7 +33,21 @@ const createMockImages = (urls: string[]) => {
   return urls.map((url) => ({ imageUrl: url, imagePath: url }));
 };
 
-export const createMockArticle = (id: number): ArticleDetail => {
+export const createMockArticle = (
+  id: number,
+  options: {
+    mine?: boolean;
+    liked?: boolean;
+    scraped?: boolean;
+    modified?: boolean;
+  } = {}
+): ArticleDetail => {
+  const {
+    mine = false,
+    scraped = false,
+    modified = false,
+    liked = false,
+  } = options;
   const booleanValue = Boolean(id % 2);
   const numberRange = { min: 1000, max: 100000 };
   const { boardId, title: boardTitle } = articleCategories[id % 5];
@@ -44,10 +58,10 @@ export const createMockArticle = (id: number): ArticleDetail => {
     likeCount: faker.number.int(numberRange),
     scrapCount: faker.number.int(numberRange),
     createdAt: faker.date.past().toISOString(),
-    mine: booleanValue,
-    liked: !booleanValue,
-    modified: booleanValue,
-    scraped: booleanValue,
+    mine,
+    liked,
+    modified,
+    scraped,
     images: createMockImages(imageUrls),
     postId: id,
     anonymity: booleanValue,
@@ -60,9 +74,6 @@ export const createMockArticle = (id: number): ArticleDetail => {
 export const articles: ArticleDetail[] = Array(5)
   .fill(undefined)
   .map((_, index) => createMockArticle(index));
-
-// TODO: 없는 article 요청시 응답할 데이터로 바꾸기
-export const articleFallback = createMockArticle(100);
 
 export const createMockArticleSummary = (id: number): ArticleSummary => {
   const anonymity = Boolean(id % 2);
