@@ -1,7 +1,9 @@
+import type { GetHotArticlesApiData } from '~/services/article';
+
 import { rest } from 'msw';
 
 import { restInfiniteArticlesSuccess } from '~/mocks/handlers/article/utils';
-import { restError } from '~/mocks/utils';
+import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
@@ -23,3 +25,14 @@ export const mockGetHotArticlesByKeywordError = restError(
   getHotArticlesByKeywordEndpoint,
   { message: 'mockGetHotArticlesByKeyword Error' }
 );
+
+const emptyHotArticles = {
+  posts: [],
+  cursor: null,
+};
+
+export const mockGetEmptyHotArticlesByKeyword = restSuccess<
+  GetHotArticlesApiData['data']
+>(getHotArticlesByKeywordMethod, getHotArticlesByKeywordEndpoint, {
+  data: emptyHotArticles,
+});
