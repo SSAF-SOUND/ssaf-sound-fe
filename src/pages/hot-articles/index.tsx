@@ -48,7 +48,7 @@ const HotArticlesPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: routes.articles.hot(),
+          url: routes.article.hot(),
         }}
       />
 
@@ -58,7 +58,7 @@ const HotArticlesPage = () => {
         <TitleBar.Default
           css={fontCss.style.B16}
           title={titleBarTitle}
-          onClickBackward={routes.articles.categories()}
+          onClickBackward={routes.article.categories()}
           withoutClose
         />
 
@@ -120,7 +120,7 @@ const SearchBar = () => {
       return;
     }
     reset({ keyword });
-    router.push(routes.articles.hot(keyword));
+    router.push(routes.article.hot(keyword));
   };
 
   const onInvalidSubmit: SearchBarFormProps['onInvalidSubmit'] = (

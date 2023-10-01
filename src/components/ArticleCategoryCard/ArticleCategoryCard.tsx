@@ -21,7 +21,7 @@ const ArticleCategoryCard = (props: ArticleCategoryCardProps) => {
   const isValidImageUrl = !isNullOrUndefined(imageUrl);
 
   return (
-    <Link css={selfCss} href={routes.articles.category(boardId)}>
+    <Link css={selfCss} href={routes.article.category(boardId)}>
       <div>
         <h2 css={titleCss}>{title}</h2>
         <p css={descriptionCss}>{description}</p>

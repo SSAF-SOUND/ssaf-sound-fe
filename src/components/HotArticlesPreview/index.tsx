@@ -29,7 +29,7 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
     <div className={className}>
       <TitleBar.Preview
         title="HOT 게시글"
-        moreLinkRoute={routes.articles.hot()}
+        moreLinkRoute={routes.article.hot()}
         css={{ marginBottom: 16 }}
       />
 

@@ -26,7 +26,7 @@ const ArticleCategoriesPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: routes.articles.categories(),
+          url: routes.article.categories(),
         }}
       />
 
@@ -35,7 +35,7 @@ const ArticleCategoriesPage = () => {
       <div css={selfCss}>
         <div css={hotArticlesPageLinkLayerCss}>
           <Link
-            href={routes.articles.hot()}
+            href={routes.article.hot()}
             css={[hotArticlesPageLinkCss, { marginBottom: 56 }]}
           >
             Hot 게시글

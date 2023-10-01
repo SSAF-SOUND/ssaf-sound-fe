@@ -48,7 +48,7 @@ const ArticleEditPage: CustomNextPage = () => {
   ) => {
     try {
       await updateArticle(formValues);
-      await router.push(routes.articles.detail(articleId));
+      await router.push(routes.article.detail(articleId));
     } catch (err) {
       handleAxiosError(err);
     }
@@ -63,7 +63,7 @@ const ArticleEditPage: CustomNextPage = () => {
           onValidSubmit={onValidSubmit}
           options={{
             titleBarText: '게시글 수정',
-            titleBarCloseRoute: routes.articles.detail(articleId),
+            titleBarCloseRoute: routes.article.detail(articleId),
           }}
           defaultValues={{
             title,

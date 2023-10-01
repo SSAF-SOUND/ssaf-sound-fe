@@ -34,7 +34,7 @@ const ArticleCreatePage: CustomNextPage = () => {
     );
 
     if (!isValidCategoryId) {
-      router.replace(routes.articles.create(articleCategories[0].boardId));
+      router.replace(routes.article.create(articleCategories[0].boardId));
     }
   }, [articleCategories, router, categoryId]);
 
@@ -51,7 +51,7 @@ const ArticleCreatePage: CustomNextPage = () => {
         ...formValues,
       });
 
-      await router.replace(routes.articles.detail(articleId));
+      await router.replace(routes.article.detail(articleId));
     } catch (err) {
       handleAxiosError(err);
     }
@@ -65,7 +65,7 @@ const ArticleCreatePage: CustomNextPage = () => {
         <ArticleForm
           onValidSubmit={onValidSubmit}
           options={{
-            titleBarCloseRoute: routes.articles.category(categoryId),
+            titleBarCloseRoute: routes.article.category(categoryId),
           }}
         />
       </div>

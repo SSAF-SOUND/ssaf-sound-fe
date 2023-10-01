@@ -24,7 +24,7 @@ export const ArticleError = (props: ArticleErrorProps) => {
       customLinkElements={
         <div css={flex('', '', 'column', 10)}>
           <Button size="lg" asChild>
-            <Link href={routes.articles.categories()}>
+            <Link href={routes.article.categories()}>
               게시판 모아보기 페이지로
             </Link>
           </Button>

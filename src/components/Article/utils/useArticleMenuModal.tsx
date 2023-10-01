@@ -22,7 +22,7 @@ export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
 
   const onRemoveSuccess = () => {
     closeModal();
-    router.push(routes.articles.category(categoryId));
+    router.push(routes.article.category(categoryId));
     customToast.success('게시글을 삭제했습니다.');
   };
 
@@ -33,7 +33,7 @@ export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
 
   const handleClickModifyButton = () => {
     closeModal();
-    router.push(routes.articles.edit(articleId));
+    router.push(routes.article.edit(articleId));
   };
 
   const openArticleMenuModal = () => {

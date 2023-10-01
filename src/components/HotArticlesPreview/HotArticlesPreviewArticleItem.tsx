@@ -20,7 +20,7 @@ export const HotArticlesPreviewArticleItem = (
   const { boardTitle, title, likeCount, commentCount, postId } = article;
 
   return (
-    <Link css={selfCss} href={routes.articles.detail(postId)}>
+    <Link css={selfCss} href={routes.article.detail(postId)}>
       <ArticleCategoryNameBadge categoryName={boardTitle} />
       <h3 css={titleCss}>{title}</h3>
       <div css={statLayerCss}>

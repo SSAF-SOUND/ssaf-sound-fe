@@ -12,23 +12,23 @@ import { recruit } from '~/utils/client-routes/recruit';
 export const routes = {
   root: () => '/' as const,
   main: () => '/main' as const,
-  articles: {
+  article: {
     self: () => '/articles' as const,
-    categories: () => `${routes.articles.self()}/categories` as const,
+    categories: () => `${routes.article.self()}/categories` as const,
     category: (categoryId: number, searchKeyword?: string) => {
       const queryString = searchKeyword ? `?keyword=${searchKeyword}` : '';
-      return `${routes.articles.categories()}/${categoryId}${queryString}` as const;
+      return `${routes.article.categories()}/${categoryId}${queryString}` as const;
     },
     hot: (searchKeyword?: string) => {
       const queryString = searchKeyword ? `?keyword=${searchKeyword}` : '';
       return `/hot-articles${queryString}` as const;
     },
     detail: (articleId: number) =>
-      `${routes.articles.self()}/${articleId}` as const,
+      `${routes.article.self()}/${articleId}` as const,
     edit: (articleId: number) =>
-      `${routes.articles.detail(articleId)}/edit` as const,
+      `${routes.article.detail(articleId)}/edit` as const,
     create: (categoryId: number) =>
-      `${routes.articles.self()}/new?categoryId=${categoryId}` as const,
+      `${routes.article.self()}/new?categoryId=${categoryId}` as const,
   },
 
   //
