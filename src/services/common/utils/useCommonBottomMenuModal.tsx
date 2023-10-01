@@ -12,7 +12,7 @@ interface UseCommonBottomMenuModalOptions {
   disableEdit: boolean;
 }
 
-interface UseCommonBottomMenuModalParams {
+export interface UseCommonBottomMenuModalParams {
   mine: boolean;
   reportDomain: ReportDomain;
   onClickRemove: () => void;
