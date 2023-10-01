@@ -5,6 +5,10 @@ export enum LunchDateSpecifier {
   TODAY = 'today',
 }
 
+export const LunchDateSpecifierSet = new Set<string>(
+  Object.values(LunchDateSpecifier)
+);
+
 export const getDateFromLunchDateSpecifier = (
   specifier: LunchDateSpecifier
 ) => {

@@ -1,12 +1,6 @@
 import { useMemo } from 'react';
 
-export const initialCampuses = [
-  { id: 1, name: '서울' },
-  { id: 2, name: '대전' },
-  { id: 3, name: '광주' },
-  { id: 4, name: '구미' },
-  { id: 5, name: '부울경' },
-];
+import { initialCampuses } from '~/services/meta/utils';
 
 export const useCampuses = () => {
   const campuses = useMemo(() => {
