@@ -27,9 +27,9 @@ import {
 } from '~/services/articleComment';
 import { useMyInfo } from '~/services/member';
 import {
+  expandCss,
   flex,
   fontCss,
-  globalVars,
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
@@ -94,7 +94,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
         />
 
         <Article
-          css={[articleCss, expandCss, { marginBottom: 40 }]}
+          css={[articleCss, expandCss(), { marginBottom: 40 }]}
           articleDetail={articleDetail}
         />
 
@@ -111,15 +111,8 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
 export default ArticleDetailPage;
 
-const negativeMarginForExpand = `calc(-1 * ${globalVars.mainLayoutPaddingX.var})`;
-
 const selfCss = css({
   padding: `${titleBarHeight}px 0 240px`,
-});
-
-const expandCss = css({
-  width: 'auto',
-  margin: `0 ${negativeMarginForExpand}`,
 });
 
 const articleCss = css({
