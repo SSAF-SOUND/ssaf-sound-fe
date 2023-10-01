@@ -75,10 +75,8 @@ const MineBottomMenuButtons = (props: MineBottomMenuButtonsProps) => {
   const { handleAsync: handleClickRemove, loading: isRemoving } =
     useAsyncState(onClickRemove);
 
-  const { closeModal } = useModal();
   const handleClickEdit = () => {
     onClickEdit();
-    closeModal();
   };
 
   return (
