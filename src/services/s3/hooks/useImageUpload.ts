@@ -1,29 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
 import { produce } from 'immer';
 import { useState } from 'react';
 
-import { customToast, handleAxiosError } from '~/utils';
-
-import { createPreSignedUrl, uploadImageToS3 } from './apis';
-import { openImageUploader } from './utils';
-
-const useCreatePreSignedUrl = () => {
-  return useMutation({
-    mutationFn: createPreSignedUrl,
-    onError: (error) => {
-      console.error('[In useCreatePreSignedUrl]:', error);
-    },
-  });
-};
-
-const useUploadImageToS3 = () => {
-  return useMutation({
-    mutationFn: uploadImageToS3,
-    onError: (error) => {
-      console.error('[In useUploadImageToS3]:', error);
-    },
-  });
-};
+import { useCreatePreSignedUrl, useUploadImageToS3 } from '~/services/s3/hooks';
+import { openImageUploader } from '~/services/s3/utils';
+import { customToast } from '~/utils/customToast';
+import { handleAxiosError } from '~/utils/handleAxiosError';
 
 export interface UseImageUploadOptions {
   maxImageCount: number;
@@ -39,7 +20,7 @@ export interface ImageState {
   thumbnailUrl: string;
 }
 
-const exceedMaxCountErrorMessage = (maxCount: number) =>
+const createMaxUploadCountExceededErrorMessage = (maxCount: number) =>
   `이미지는 최대 ${maxCount}개 까지 업로드할 수 있습니다.`;
 
 export const useImageUpload = (
@@ -56,7 +37,7 @@ export const useImageUpload = (
 
   const uploadImage = async (file: File) => {
     if (maxImageCount <= images.length) {
-      throw exceedMaxCountErrorMessage(maxImageCount);
+      throw createMaxUploadCountExceededErrorMessage(maxImageCount);
     }
 
     const index = images.length;
@@ -89,7 +70,9 @@ export const useImageUpload = (
 
   const handleOpenImageUploader = () => {
     if (maxImageCount <= images.length) {
-      customToast.clientError(exceedMaxCountErrorMessage(maxImageCount));
+      customToast.clientError(
+        createMaxUploadCountExceededErrorMessage(maxImageCount)
+      );
       return;
     }
 
