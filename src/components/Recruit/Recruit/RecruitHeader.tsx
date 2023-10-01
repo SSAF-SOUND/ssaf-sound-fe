@@ -49,7 +49,10 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
 
   const recruitTheme = getRecruitThemeByCategory(category);
 
-  const onClickEdit = () => router.push(routes.recruit.edit(recruitId));
+  const onClickEdit = () => {
+    router.push(routes.recruit.edit(recruitId));
+    closeModal();
+  };
   const onClickRemove = async () => {
     try {
       await customToast.promise(removeRecruit(), {

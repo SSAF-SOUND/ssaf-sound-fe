@@ -41,7 +41,10 @@ const ArticleHeader = (props: ArticleHeaderProps) => {
   const { mutateAsync: reportArticle } = useReport();
   const { closeModal } = useModal();
 
-  const onClickEdit = () => router.push(routes.article.edit(articleId));
+  const onClickEdit = () => {
+    router.push(routes.article.edit(articleId));
+    closeModal();
+  };
   const onClickRemove = async () => {
     try {
       await customToast.promise(removeArticle(), {
