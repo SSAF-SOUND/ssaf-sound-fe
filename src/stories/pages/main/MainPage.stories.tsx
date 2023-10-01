@@ -1,48 +1,50 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { InfiniteData } from '@tanstack/query-core';
-import type { GetHotArticlesApiData } from '~/services/article';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { produce } from 'immer';
 
-import { getHotArticles } from '~/mocks/handlers';
+import {
+  mockGetEmptyHotArticles,
+  mockGetHotArticles,
+} from '~/mocks/handlers/article/apis/mockGetHotArticles';
 import {
   mockGetEmptyLunchMenusWithPollStatus,
   mockGetLunchMenusWithPollStatus,
 } from '~/mocks/handlers/lunch/apis/mockGetLunchMenusWithPollStatus';
+import {
+  createMockGetMyInfo,
+  mockGetCertifiedSsafyMyInfo,
+  mockGetMyInfoError,
+} from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { userInfo } from '~/mocks/handlers/member/data';
+import {
+  mockGetEmptyRecruits,
+  mockGetRecruits,
+} from '~/mocks/handlers/recruit/apis/mockGetRecruits';
 import MainPage from '~/pages/main';
-import { queryKeys } from '~/react-query/common';
-import { useSetMyInfo } from '~/services/member';
-import { RecruitCategoryName } from '~/services/recruit';
+import { SsafyCampus } from '~/services/meta/utils';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
+
+const certifiedUserInfo = userInfo.certifiedSsafyUserInfo;
 
 const meta: Meta<typeof MainPage> = {
-  title: 'Page/Main',
+  title: 'Page/메인 페이지',
   component: MainPage,
   decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      const [queryRemoved, setQueryRemoved] = useState(false);
-
-      if (!queryRemoved) {
-        queryClient.removeQueries(queryKeys.lunch.self());
-        queryClient.removeQueries(queryKeys.articles.hot());
-        queryClient.removeQueries(
-          queryKeys.recruit.list({ category: RecruitCategoryName.PROJECT })
-        );
-        setQueryRemoved(true);
-      }
-
-      return (
-        <PageLayout>
-          <Story />
-        </PageLayout>
-      );
-    },
+    (Story) => (
+      <PageLayout>
+        <Story />
+      </PageLayout>
+    ),
   ],
   parameters: {
     layout: 'fullscreen',
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+      lunch: [mockGetLunchMenusWithPollStatus],
+      article: [mockGetHotArticles],
+      recruit: [mockGetRecruits],
+    }),
   },
 };
 
@@ -50,47 +52,58 @@ export default meta;
 
 type MainPageStory = StoryObj<typeof MainPage>;
 
-export const SignedIn: MainPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-
-      useEffect(() => {
-        setMyInfo(userInfo.certifiedSsafyUserInfo);
-      }, [setMyInfo]);
-
-      return <Story />;
-    },
-  ],
+export const NotSignedIn: MainPageStory = {
+  name: '로그인 하지 않은 경우',
   parameters: {
-    msw: {
-      handlers: {
-        lunch: [mockGetLunchMenusWithPollStatus],
-        article: [getHotArticles],
-        // recruit: []
-      },
-    },
+    ...createMswParameters({
+      member: [mockGetMyInfoError],
+    }),
   },
 };
 
-export const NotSignedIn: MainPageStory = {
-  ...SignedIn,
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-
-      useEffect(() => {
-        // eslint-disable-next-line
-        // @ts-ignore
-        setMyInfo(null);
-      }, [setMyInfo]);
-
-      return <Story />;
+const createStoryByUserCampus = (campus: SsafyCampus): MainPageStory => {
+  return {
+    parameters: {
+      ...createMswParameters({
+        member: [
+          createMockGetMyInfo(
+            produce(certifiedUserInfo, (draft) => {
+              draft.ssafyInfo.campus = campus;
+            })
+          ),
+        ],
+      }),
     },
-  ],
+  };
+};
+
+export const Seoul: MainPageStory = {
+  name: '서울 캠퍼스 유저',
+  ...createStoryByUserCampus(SsafyCampus.SEOUL),
+};
+
+export const Gwangju: MainPageStory = {
+  name: '광주 캠퍼스 유저',
+  ...createStoryByUserCampus(SsafyCampus.GWANGJU),
+};
+
+export const Gumi: MainPageStory = {
+  name: '구미 캠퍼스 유저',
+  ...createStoryByUserCampus(SsafyCampus.GUMI),
+};
+
+export const Deajeon: MainPageStory = {
+  name: '대전 캠퍼스 유저',
+  ...createStoryByUserCampus(SsafyCampus.DAEJEON),
+};
+
+export const Buulgyeong: MainPageStory = {
+  name: '부울경 캠퍼스 유저',
+  ...createStoryByUserCampus(SsafyCampus.BUULGYEONG),
 };
 
 export const Error: MainPageStory = {
+  name: '에러',
   parameters: {
     msw: {
       handlers: {
@@ -102,29 +115,14 @@ export const Error: MainPageStory = {
   },
 };
 
-const emptyHotArticles = {
-  pages: [{ posts: [], cursor: null }],
-  pageParams: [null],
-};
-
-export const NotExistData: MainPageStory = {
-  decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      queryClient.setQueryData<InfiniteData<GetHotArticlesApiData['data']>>(
-        queryKeys.articles.hot(),
-        emptyHotArticles
-      );
-
-      return <Story />;
-    },
-  ],
+export const Empty: MainPageStory = {
+  name: '빈 데이터',
   parameters: {
     msw: {
       handlers: {
         lunch: [mockGetEmptyLunchMenusWithPollStatus],
-        article: [],
-        recruit: [],
+        article: [mockGetEmptyHotArticles],
+        recruit: [mockGetEmptyRecruits],
       },
     },
   },

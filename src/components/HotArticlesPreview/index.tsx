@@ -67,7 +67,7 @@ const HotArticlesPreviewSkeleton = () => {
     <Skeleton
       count={skeletonCount}
       width="100%"
-      height={30}
+      height={50}
       style={{ marginBottom: 4 }}
       baseColor={palettes.background.grey}
       enableAnimation={false}
