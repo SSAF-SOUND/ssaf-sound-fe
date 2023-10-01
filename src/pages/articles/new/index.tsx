@@ -38,7 +38,9 @@ const ArticleCreatePage: CustomNextPage = () => {
     );
 
     if (!isValidCategoryId) {
-      router.replace(routes.article.create(articleCategories[0].boardId));
+      router.replace(
+        routes.article.create({ categoryId: articleCategories[0].boardId })
+      );
     }
   }, [articleCategories, router, categoryId]);
 
@@ -69,7 +71,7 @@ const ArticleCreatePage: CustomNextPage = () => {
         <ArticleForm
           onValidSubmit={onValidSubmit}
           options={{
-            titleBarCloseRoute: routes.article.category(categoryId),
+            titleBarCloseRoute: routes.article.category({ categoryId }),
           }}
         />
       </div>

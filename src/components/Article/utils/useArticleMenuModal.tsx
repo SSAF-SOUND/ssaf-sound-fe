@@ -24,7 +24,7 @@ export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
 
   const onRemoveSuccess = () => {
     closeModal();
-    router.push(routes.article.category(categoryId));
+    router.push(routes.article.category({ categoryId }));
     customToast.success('게시글을 삭제했습니다.');
   };
 

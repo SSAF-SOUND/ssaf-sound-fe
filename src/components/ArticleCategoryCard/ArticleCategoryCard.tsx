@@ -1,4 +1,4 @@
-import type { ArticleCategory } from '~/services/article';
+import type { ArticleCategory } from '~/services/article/utils';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,7 +7,7 @@ import { css } from '@emotion/react';
 import { isNullOrUndefined } from 'is-what';
 
 import { flex, fontCss, palettes } from '~/styles/utils';
-import { routes } from '~/utils';
+import { routes } from '~/utils/routes';
 
 const imageSize = 100;
 
@@ -21,7 +21,7 @@ const ArticleCategoryCard = (props: ArticleCategoryCardProps) => {
   const isValidImageUrl = !isNullOrUndefined(imageUrl);
 
   return (
-    <Link css={selfCss} href={routes.article.category(boardId)}>
+    <Link css={selfCss} href={routes.article.category({ categoryId: boardId })}>
       <div>
         <h2 css={titleCss}>{title}</h2>
         <p css={descriptionCss}>{description}</p>

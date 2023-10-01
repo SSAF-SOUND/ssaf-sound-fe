@@ -67,7 +67,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
   const metaTitle = articleDetail.title;
   const metaDescription = stripHtmlTags(articleDetail.content).slice(0, 100);
-  const pageUrl = routes.article.detail(articleDetail.postId);
+  const pageUrl = routes.article.detail(articleDetail.postId).pathname;
 
   return (
     <>
@@ -88,7 +88,9 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
           css={titleBarCss}
           title={articleCategoryTitle}
           withoutClose
-          onClickBackward={routes.article.category(articleCategoryId)}
+          onClickBackward={routes.article.category({
+            categoryId: articleCategoryId,
+          })}
         />
 
         <Article

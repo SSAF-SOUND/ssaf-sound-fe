@@ -28,7 +28,7 @@ const ArticleCategoriesPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: routes.article.categories(),
+          url: routes.article.categories().pathname,
         }}
       />
 

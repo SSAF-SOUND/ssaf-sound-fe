@@ -6,30 +6,14 @@ import type {
   RecruitCategoryName,
 } from '~/services/recruit';
 
+import { article } from '~/utils/client-routes/article';
 import { lunch } from '~/utils/client-routes/lunch';
 import { recruit } from '~/utils/client-routes/recruit';
 
 export const routes = {
   root: () => '/' as const,
   main: () => '/main' as const,
-  article: {
-    self: () => '/articles' as const,
-    categories: () => `${routes.article.self()}/categories` as const,
-    category: (categoryId: number, searchKeyword?: string) => {
-      const queryString = searchKeyword ? `?keyword=${searchKeyword}` : '';
-      return `${routes.article.categories()}/${categoryId}${queryString}` as const;
-    },
-    hot: (searchKeyword?: string) => {
-      const queryString = searchKeyword ? `?keyword=${searchKeyword}` : '';
-      return `/hot-articles${queryString}` as const;
-    },
-    detail: (articleId: number) =>
-      `${routes.article.self()}/${articleId}` as const,
-    edit: (articleId: number) =>
-      `${routes.article.detail(articleId)}/edit` as const,
-    create: (categoryId: number) =>
-      `${routes.article.self()}/new?categoryId=${categoryId}` as const,
-  },
+  article,
 
   //
   signIn: () => '/auth/sign-in' as const,
