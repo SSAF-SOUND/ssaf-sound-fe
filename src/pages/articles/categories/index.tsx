@@ -35,6 +35,8 @@ const ArticleCategoriesPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
+        <NavigationGroup />
+
         <div css={hotArticlesPageLinkLayerCss}>
           <Link
             href={routes.article.hot()}
@@ -62,7 +64,6 @@ const ArticleCategoriesPage = () => {
             </>
           )}
         </div>
-        <NavigationGroup />
       </div>
     </>
   );
@@ -73,6 +74,7 @@ export default ArticleCategoriesPage;
 const selfCss = css({ padding: `${topBarHeight + 40}px 0` });
 
 const hotArticlesPageLinkLayerCss = css(flex('center', 'flex-end', 'row'));
+
 const hotArticlesPageLinkCss = css(
   {
     color: palettes.secondary.dark,
