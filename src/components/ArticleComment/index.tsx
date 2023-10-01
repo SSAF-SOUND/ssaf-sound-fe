@@ -1,10 +1,8 @@
-import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
-import type { ReportProps } from '~/components/ModalContent';
 import type {
   CommentDetail,
   CommentDetailWithoutReplies,
 } from '~/services/articleComment';
-import type { AnyFunction } from '~/types';
+import type { UseCommonBottomMenuModalParams } from '~/services/common';
 
 import { css } from '@emotion/react';
 import { memo } from 'react';
@@ -15,6 +13,7 @@ import LikeLayer from '~/components/ArticleComment/LikeLayer';
 import MoreButton from '~/components/ArticleComment/MoreButton';
 import ReplyButton from '~/components/ArticleComment/ReplyButton';
 import { Icon } from '~/components/Common';
+import { useModal } from '~/components/GlobalModal';
 import Name from '~/components/Name';
 import {
   useInvalidateComments,
@@ -22,13 +21,14 @@ import {
   useReplyComment,
   useUpdateComment,
 } from '~/services/comment';
+import { useCommonBottomMenuModal } from '~/services/common';
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';
-import { useReport } from '~/services/report';
+import { ReportDomain, useReport } from '~/services/report';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
-import { handleAxiosError } from '~/utils';
+import { customToast, handleAxiosError } from '~/utils';
 
-import { useArticleCommentMenu, useArticleCommentModalForm } from './utils';
+import { useArticleCommentModalForm } from './utils';
 
 interface ArticleCommentProps {
   articleId: number;
@@ -40,13 +40,14 @@ interface ArticleCommentProps {
 const ArticleComment = memo((props: ArticleCommentProps) => {
   const { articleId, comment, leaf = false, isRecruitComment = false } = props;
   const { data: myInfo } = useMyInfo();
+  const { mutateAsync: reportComment, isLoading: isReportingComment } =
+    useReport();
+  const { closeModal } = useModal();
   const {
     isOpen: isArticleCommentModalFormOpen,
     openArticleCommentModalForm,
     closeArticleCommentModalForm,
   } = useArticleCommentModalForm();
-
-  const { openArticleCommentMenu } = useArticleCommentMenu();
 
   const {
     author,
@@ -59,6 +60,7 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
     replies,
     modified,
     deletedComment,
+    mine,
   } = comment;
 
   const invalidateComments = useInvalidateComments(articleId, {
@@ -76,80 +78,87 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
   const { mutateAsync: removeComment, isLoading: isRemovingComment } =
     useRemoveComment(commentId, { recruit: isRecruitComment });
 
-  const { mutateAsync: reportComment, isLoading: isReportingComment } =
-    useReport();
-
   const isMutating =
     isUpdatingComment || isRemovingComment || isReportingComment;
+
+  const onClickReplyButton = () => {
+    openArticleCommentModalForm({
+      onValidSubmit: async (_, formValues) => {
+        try {
+          await replyComment(formValues);
+          closeArticleCommentModalForm();
+          invalidateComments();
+        } catch (err) {
+          handleAxiosError(err);
+        }
+      },
+      isRecruitComment,
+    });
+  };
+
+  const onClickEdit = () => {
+    openArticleCommentModalForm({
+      defaultValues: { content, anonymous: anonymity },
+      onValidSubmit: async (_, formValues) => {
+        try {
+          await customToast.promise(updateComment(formValues), {
+            loading: '댓글을 수정중입니다.',
+            success: '댓글을 성공적으로 수정했습니다.',
+          });
+          invalidateComments();
+          closeArticleCommentModalForm();
+        } catch (err) {}
+      },
+      isRecruitComment,
+    });
+  };
+
+  const onClickRemove = async () => {
+    try {
+      await customToast.promise(removeComment(), {
+        loading: '댓글을 삭제중입니다.',
+        success: '댓글을 성공적으로 삭제하였습니다.',
+      });
+      invalidateComments();
+      closeModal();
+    } catch (err) {}
+  };
+
+  const onClickReport: UseCommonBottomMenuModalParams['onClickReport'] = ({
+    domain,
+    reportReasonId,
+  }) => {
+    return customToast.promise(
+      reportComment({
+        domain,
+        reasonId: reportReasonId,
+        sourceId: commentId,
+      }),
+      {
+        loading: '신고 요청을 처리중입니다.',
+        success: '해당 댓글을 성공적으로 신고하였습니다.',
+      }
+    );
+  };
+
+  const { openCommonBottomMenuModal } = useCommonBottomMenuModal({
+    mine,
+    reportDomain: isRecruitComment
+      ? ReportDomain.RECRUIT_COMMENT
+      : ReportDomain.ARTICLE_COMMENT,
+    onClickEdit,
+    onClickRemove,
+    onClickReport,
+    options: {
+      modalTitle: '댓글 메뉴',
+      removeAlertDescription: '댓글을 삭제하시겠습니까?',
+    },
+  });
 
   const isSignedIn = !!myInfo;
   const userInfo = populateDefaultUserInfo(author);
   const hasReplies = replies && replies.length > 0;
   const showReplyButton = isSignedIn && !leaf;
-
-  const handleCommentRequest = async (
-    callback: AnyFunction,
-    modalCloseBeforeCallbackInvoked = false
-  ) => {
-    try {
-      if (modalCloseBeforeCallbackInvoked) {
-        closeArticleCommentModalForm();
-        await callback();
-      } else {
-        await callback();
-        closeArticleCommentModalForm();
-      }
-      invalidateComments();
-    } catch (err) {
-      handleAxiosError(err);
-    }
-  };
-
-  const handleCreateCommentReply: ArticleCommentFormProps['onValidSubmit'] =
-    async (_, formValues) => {
-      await handleCommentRequest(() => replyComment(formValues));
-    };
-
-  const handleEditComment: ArticleCommentFormProps['onValidSubmit'] = async (
-    _,
-    formValues
-  ) => {
-    await handleCommentRequest(() => updateComment(formValues));
-  };
-
-  const handleRemoveComment = () => {
-    handleCommentRequest(removeComment, true);
-  };
-
-  const handleReportComment: ReportProps['onClickReport'] = ({
-    domain,
-    reportReasonId,
-  }) => {
-    handleCommentRequest(() =>
-      reportComment({ domain, reasonId: reportReasonId, sourceId: commentId })
-    );
-  };
-
-  const onClickReplyButton = () => {
-    openArticleCommentModalForm({
-      onValidSubmit: handleCreateCommentReply,
-      isRecruitComment,
-    });
-  };
-
-  const onClickMoreButton = () => {
-    openArticleCommentMenu({
-      comment,
-      isRecruitComment,
-      onClickEdit: () =>
-        openArticleCommentModalForm({
-          defaultValues: { content, anonymous: anonymity },
-          onValidSubmit: handleEditComment,
-        }),
-      onClickRemoveAction: handleRemoveComment,
-      onClickReportAction: handleReportComment,
-    });
-  };
 
   return (
     <div css={selfCss}>
@@ -183,7 +192,7 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
                 />
                 {isSignedIn && (
                   <MoreButton
-                    onClick={onClickMoreButton}
+                    onClick={openCommonBottomMenuModal}
                     loading={isMutating}
                   />
                 )}
@@ -205,7 +214,7 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
         <div css={replyLayerCss}>
           {replies.map((reply) => (
             <div key={reply.commentId} css={replyCss}>
-              <Icon name="reply" size={24} />
+              <Icon name="reply" size={24} label="대댓글" />
               <ArticleComment
                 articleId={articleId}
                 leaf

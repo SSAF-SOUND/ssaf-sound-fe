@@ -1,42 +1,43 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { ArticleDetail } from '~/services/article';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-
+import { createMockGetArticleDetail } from '~/mocks/handlers/article/apis/mockGetArticleDetail';
+import { createMockLikeArticle } from '~/mocks/handlers/article/apis/mockLikeArticle';
+import { mockRemoveArticle } from '~/mocks/handlers/article/apis/mockRemoveArticle';
+import { createMockScrapArticle } from '~/mocks/handlers/article/apis/mockScrapArticle';
+import { createMockArticle } from '~/mocks/handlers/article/data';
 import {
-  likeArticleCommentError,
-  likeArticleError,
-  removeArticleCommentError,
-  replyArticleCommentError,
-  scrapArticleError,
-  updateArticleCommentError,
-} from '~/mocks/handlers';
-import { articles } from '~/mocks/handlers/article/data';
-import { userInfo } from '~/mocks/handlers/member/data';
+  createMockGetMyInfo,
+  mockGetMyInfoError,
+} from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUserInfo } from '~/mocks/handlers/member/data';
 import ArticleDetailPage from '~/pages/articles/[articleId]';
-import { queryKeys } from '~/react-query/common';
-import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
+
+const myInfo = mockUserInfo.certifiedSsafyUserInfo;
+const otherUserInfo = mockUserInfo.uncertifiedSsafyUserInfo;
+const articleId = 10000;
 
 const meta: Meta<typeof ArticleDetailPage> = {
-  title: 'Page/Article/Detail',
+  title: 'Page/게시글/게시글 상세',
   component: ArticleDetailPage,
   decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      useEffect(() => {
-        queryClient.invalidateQueries(queryKeys.user.myInfo());
-      }, [queryClient]);
-
-      return (
-        <PageLayout>
-          <Story />
-        </PageLayout>
-      );
-    },
+    (Story) => (
+      <PageLayout>
+        <Story />
+      </PageLayout>
+    ),
   ],
   parameters: {
     layout: 'fullscreen',
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+      common: [mockRemoveArticle],
+    }),
+  },
+  args: {
+    articleId,
   },
 };
 
@@ -44,94 +45,68 @@ export default meta;
 
 type ArticleDetailPageStory = StoryObj<typeof ArticleDetailPage>;
 
-export const MyArticle: ArticleDetailPageStory = {
-  render: function Render() {
-    const articleId = 1; // 홀수 id는 `mine`값이 `true`
-    const queryClient = useQueryClient();
-    const queryKey = queryKeys.articles.detail(articleId);
-    queryClient.setQueryData(queryKey, articles[articleId]);
+const myArticleDetail = createMockArticle(articleId, {
+  mine: true,
+  author: myInfo,
+});
 
-    return <ArticleDetailPage articleId={articleId} />;
+export const MyArticle: ArticleDetailPageStory = {
+  name: '내 게시글',
+  parameters: {
+    ...createMswParameters({
+      article: [
+        createMockGetArticleDetail(myArticleDetail),
+        createMockLikeArticle(myArticleDetail),
+        createMockScrapArticle(myArticleDetail),
+      ],
+    }),
   },
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-      return <Story />;
-    },
-  ],
 };
 
-export const NotMine: ArticleDetailPageStory = {
-  render: function Render() {
-    const articleId = 2; // 짝수 id는 `mine`값이 `false`
-    const queryClient = useQueryClient();
-    const queryKey = queryKeys.articles.detail(articleId);
-    queryClient.setQueryData(queryKey, articles[articleId]);
+const notMyArticleDetail = createMockArticle(articleId, {
+  mine: false,
+  author: otherUserInfo,
+});
 
-    return <ArticleDetailPage articleId={articleId} />;
+export const NotMine: ArticleDetailPageStory = {
+  name: '다른 사람의 게시글',
+  parameters: {
+    ...createMswParameters({
+      article: [
+        createMockGetArticleDetail(notMyArticleDetail),
+        createMockLikeArticle(notMyArticleDetail),
+        createMockScrapArticle(notMyArticleDetail),
+      ],
+    }),
   },
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-      return <Story />;
-    },
-  ],
 };
 
 export const NotSignedIn: ArticleDetailPageStory = {
-  ...NotMine,
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-
-      useEffect(() => {
-        // eslint-disable-next-line
-        // @ts-ignore
-        setMyInfo(null);
-      }, [setMyInfo]);
-      return <Story />;
-    },
-  ],
+  name: '로그인 하지 않은 경우',
   parameters: {
     msw: {
-      handlers: {
-        member: [],
-      },
+      ...NotMine.parameters?.msw,
+      ...createMswParameters({
+        member: [mockGetMyInfoError],
+      }).msw,
     },
   },
 };
 
-export const NotExistsArticle: ArticleDetailPageStory = {
-  render: () => {
-    return <ArticleDetailPage articleId={100} />;
-  },
+const modifiedArticleDetail: ArticleDetail = {
+  ...myArticleDetail,
+  modified: true,
 };
 
-export const ArticleLikeAndScrapError = {
-  ...MyArticle,
+export const Modified: ArticleDetailPageStory = {
+  name: '수정된 게시글',
   parameters: {
-    msw: {
-      handlers: {
-        article: [likeArticleError, scrapArticleError],
-      },
-    },
-  },
-};
-
-export const CommentInteractionError = {
-  ...MyArticle,
-  parameters: {
-    msw: {
-      handlers: {
-        articleComment: [
-          likeArticleCommentError,
-          replyArticleCommentError,
-          updateArticleCommentError,
-          removeArticleCommentError,
-        ],
-      },
-    },
+    ...createMswParameters({
+      article: [
+        createMockGetArticleDetail(modifiedArticleDetail),
+        createMockLikeArticle(modifiedArticleDetail),
+        createMockScrapArticle(modifiedArticleDetail),
+      ],
+    }),
   },
 };

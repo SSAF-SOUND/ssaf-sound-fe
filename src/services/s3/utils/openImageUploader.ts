@@ -4,7 +4,9 @@ const LIMIT_FILE_SIZE = MB * 10; /* byte */
 const QUALITY = 0.5;
 
 export interface UploadImageToBrowserOptions {
-  onLoadImage: (loaded: Awaited<ReturnType<typeof toWebp>>) => void;
+  onLoadImage: (
+    loaded: Awaited<ReturnType<typeof toWebp>>
+  ) => void | Promise<void>;
   onError: (reason: unknown) => void;
   onSettled: () => void;
 }

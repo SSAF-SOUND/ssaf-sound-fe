@@ -1,6 +1,6 @@
 import type { GetServerSideProps } from 'next/types';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
-import type { ArticleSummary } from '~/services/article';
+import type { ArticleSummary } from '~/services/article/utils';
 
 import { useRouter } from 'next/router';
 
@@ -16,7 +16,8 @@ import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
-import { getHotArticles, useHotArticles } from '~/services/article';
+import { getHotArticles } from '~/services/article/apis';
+import { useHotArticles } from '~/services/article/hooks';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   flex,
@@ -48,7 +49,7 @@ const HotArticlesPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: routes.articles.hot(),
+          url: routes.article.hot().pathname,
         }}
       />
 
@@ -58,7 +59,7 @@ const HotArticlesPage = () => {
         <TitleBar.Default
           css={fontCss.style.B16}
           title={titleBarTitle}
-          onClickBackward={routes.articles.categories()}
+          onClickBackward={routes.article.categories()}
           withoutClose
         />
 
@@ -93,9 +94,9 @@ const HotArticleLayer = (props: HotArticleLayerProps) => {
       skeletonCount={6}
       useWindowScroll={true}
       skeletonGap={16}
-      itemContent={(index, article) => <HotArticleCard article={article} />}
+      itemContent={(_, article) => <HotArticleCard article={article} />}
       emptyElement={
-        !isValidKeyword ? (
+        isValidKeyword ? (
           <NoSearchResults keyword={keyword} />
         ) : (
           <EmptyInfiniteList text="아직 핫 게시글이 없습니다." />
@@ -120,7 +121,7 @@ const SearchBar = () => {
       return;
     }
     reset({ keyword });
-    router.push(routes.articles.hot(keyword));
+    await router.push(routes.article.hot({ keyword }));
   };
 
   const onInvalidSubmit: SearchBarFormProps['onInvalidSubmit'] = (

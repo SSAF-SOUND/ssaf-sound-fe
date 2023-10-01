@@ -1,14 +1,16 @@
 import type { ReportProps } from '~/components/ModalContent';
-import type { ArticleDetail } from '~/services/article';
+import type { ArticleDetail } from '~/services/article/utils';
 
 import { useRouter } from 'next/router';
 
-import { Modal } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
 import { useModal } from '~/components/GlobalModal';
 import { Alert, BottomMenu, Report } from '~/components/ModalContent';
-import { useRemoveArticle } from '~/services/article';
+import { useRemoveArticle } from '~/services/article/hooks';
 import { ReportDomain, useReport } from '~/services/report';
-import { customToast, handleAxiosError, routes } from '~/utils';
+import { customToast } from '~/utils/customToast';
+import { handleAxiosError } from '~/utils/handleAxiosError';
+import { routes } from '~/utils/routes';
 
 interface UseArticleMenuModalParams {
   articleDetail: ArticleDetail;
@@ -22,7 +24,7 @@ export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
 
   const onRemoveSuccess = () => {
     closeModal();
-    router.push(routes.articles.category(categoryId));
+    router.push(routes.article.category({ categoryId }));
     customToast.success('게시글을 삭제했습니다.');
   };
 
@@ -33,7 +35,7 @@ export const useArticleMenuModal = (params: UseArticleMenuModalParams) => {
 
   const handleClickModifyButton = () => {
     closeModal();
-    router.push(routes.articles.edit(articleId));
+    router.push(routes.article.edit(articleId));
   };
 
   const openArticleMenuModal = () => {

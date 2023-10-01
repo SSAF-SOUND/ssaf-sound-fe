@@ -1,17 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { InfiniteData } from '@tanstack/query-core';
-import type { GetHotArticlesApiData } from '~/services/article';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-
-import { getHotArticlesError } from '~/mocks/handlers';
+import {
+  mockGetEmptyHotArticles,
+  mockGetHotArticlesError,
+} from '~/mocks/handlers/article/apis/mockGetHotArticles';
+import { mockGetEmptyHotArticlesByKeyword } from "~/mocks/handlers/article/apis/mockGetHotArticlesByKeyword";
+import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUserInfo } from '~/mocks/handlers/member/data';
 import HotArticlesPage from '~/pages/hot-articles';
-import { queryKeys } from '~/react-query/common';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
+
+const myInfo = mockUserInfo.certifiedSsafyUserInfo;
 
 const meta: Meta<typeof HotArticlesPage> = {
-  title: 'Page/Article/Hot',
+  title: 'Page/게시글/핫 게시글 목록',
   component: HotArticlesPage,
   decorators: [
     (Story) => (
@@ -22,6 +25,9 @@ const meta: Meta<typeof HotArticlesPage> = {
   ],
   parameters: {
     layout: 'fullscreen',
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+    }),
   },
 };
 
@@ -29,53 +35,40 @@ export default meta;
 
 type HotArticlesPageStory = StoryObj<typeof HotArticlesPage>;
 
-export const Success: HotArticlesPageStory = {
-  decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      useEffect(() => {
-        queryClient.resetQueries(queryKeys.articles.hot());
-      }, [queryClient]);
-
-      return <Story />;
-    },
-  ],
+export const Normal: HotArticlesPageStory = {
+  name: '핫 게시글 목록',
 };
 
 export const FetchError: HotArticlesPageStory = {
-  ...Success,
+  name: '핫 게시글 목록 불러오기 오류',
   parameters: {
-    msw: {
-      handlers: {
-        article: [getHotArticlesError],
-      },
-    },
+    ...createMswParameters({
+      article: [mockGetHotArticlesError],
+    }),
   },
 };
 
-const notExistData: InfiniteData<GetHotArticlesApiData['data']> = {
-  pages: [
-    {
-      posts: [],
-      cursor: null,
-    },
-  ],
-  pageParams: [null],
-};
-
 export const NotExist: HotArticlesPageStory = {
-  decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      const queryKey = queryKeys.articles.hot();
-      queryClient.setQueryData(queryKey, notExistData);
-
-      return <Story />;
-    },
-  ],
+  name: '빈 핫 게시글 목록',
+  parameters: {
+    ...createMswParameters({
+      article: [mockGetEmptyHotArticles],
+    }),
+  },
 };
 
-/**
- * 검색 결과가 없는 스토리(NoSearchResultsStory)는 작성하지 않음
- * 검색어는 `query parameters`기반으로 동작하는데, 관련 애드온인 `@storybook/addon-queryparams`가 최신 스토리북 버전과 호환되지 않음
- */
+export const NoSearchResult: HotArticlesPageStory = {
+  name: '빈 핫 게시글 검색 목록',
+  parameters: {
+    ...createMswParameters({
+      article:[mockGetEmptyHotArticlesByKeyword],
+    }),
+    nextjs: {
+      router: {
+        query: {
+          keyword: 'keyword'
+        }
+      }
+    }
+  }
+}

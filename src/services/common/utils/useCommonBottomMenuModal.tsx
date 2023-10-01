@@ -12,7 +12,7 @@ interface UseCommonBottomMenuModalOptions {
   disableEdit: boolean;
 }
 
-interface UseCommonBottomMenuModalParams {
+export interface UseCommonBottomMenuModalParams {
   mine: boolean;
   reportDomain: ReportDomain;
   onClickRemove: () => void;
@@ -75,10 +75,8 @@ const MineBottomMenuButtons = (props: MineBottomMenuButtonsProps) => {
   const { handleAsync: handleClickRemove, loading: isRemoving } =
     useAsyncState(onClickRemove);
 
-  const { closeModal } = useModal();
   const handleClickEdit = () => {
     onClickEdit();
-    closeModal();
   };
 
   return (

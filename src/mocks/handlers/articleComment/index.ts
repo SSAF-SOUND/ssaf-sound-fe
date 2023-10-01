@@ -134,7 +134,7 @@ export const replyArticleCommentError = restError(
   { message: '대댓글 작성 실패' }
 );
 
-export const updateArticleComment = rest.put(
+export const updateArticleComment = rest.patch(
   // @ts-ignore
   composeUrls(API_URL, endpoints.articleComments.detail(':commentId')),
   async (req, res, ctx) => {

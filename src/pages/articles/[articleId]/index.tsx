@@ -11,16 +11,15 @@ import Skeleton from 'react-loading-skeleton';
 import { Article } from '~/components/Article';
 import { ArticleError } from '~/components/Article/ArticleError';
 import ArticleComment from '~/components/ArticleComment';
-import {
-  FullPageLoader,
-  PageHead,
-  PageHeadingText,
-} from '~/components/Common';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
-import { getArticleDetail, useArticleDetail } from '~/services/article';
+import { getArticleDetail } from '~/services/article/apis';
+import { useArticleDetail } from '~/services/article/hooks';
 import {
   useArticleComments,
   useCreateArticleComment,
@@ -28,13 +27,14 @@ import {
 } from '~/services/articleComment';
 import { useMyInfo } from '~/services/member';
 import {
+  expandCss,
   flex,
   fontCss,
-  globalVars,
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
-import { handleAxiosError, routes } from '~/utils';
+import { handleAxiosError } from '~/utils/handleAxiosError';
+import { routes } from '~/utils/routes';
 import { stripHtmlTags } from '~/utils/stripHtmlTags';
 
 interface ArticleDetailPageProps
@@ -67,7 +67,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
   const metaTitle = articleDetail.title;
   const metaDescription = stripHtmlTags(articleDetail.content).slice(0, 100);
-  const pageUrl = routes.articles.detail(articleDetail.postId);
+  const pageUrl = routes.article.detail(articleDetail.postId).pathname;
 
   return (
     <>
@@ -88,11 +88,13 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
           css={titleBarCss}
           title={articleCategoryTitle}
           withoutClose
-          onClickBackward={routes.articles.category(articleCategoryId)}
+          onClickBackward={routes.article.category({
+            categoryId: articleCategoryId,
+          })}
         />
 
         <Article
-          css={[articleCss, expandCss, { marginBottom: 40 }]}
+          css={[articleCss, expandCss(), { marginBottom: 40 }]}
           articleDetail={articleDetail}
         />
 
@@ -109,15 +111,8 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
 export default ArticleDetailPage;
 
-const negativeMarginForExpand = `calc(-1 * ${globalVars.mainLayoutPaddingX.var})`;
-
 const selfCss = css({
   padding: `${titleBarHeight}px 0 240px`,
-});
-
-const expandCss = css({
-  width: 'auto',
-  margin: `0 ${negativeMarginForExpand}`,
 });
 
 const articleCss = css({

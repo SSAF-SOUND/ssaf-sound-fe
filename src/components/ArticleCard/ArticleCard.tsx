@@ -29,7 +29,7 @@ export const ArticleCard = memo((props: ArticleCardProps) => {
   const strippedHtml = useStripHtml(content);
 
   return (
-    <ArticleCardLink href={routes.articles.detail(articleId)}>
+    <ArticleCardLink href={routes.article.detail(articleId)}>
       <h2 css={[titleCss, { marginBottom: 2 }]}>{title}</h2>
 
       <p css={[contentCss, { marginBottom: 24 }]}>{strippedHtml}</p>

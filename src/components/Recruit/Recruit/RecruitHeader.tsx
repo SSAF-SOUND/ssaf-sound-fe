@@ -1,4 +1,4 @@
-import type { ReportProps } from '~/components/ModalContent';
+import type { UseCommonBottomMenuModalParams } from '~/services/common';
 import type { RecruitDetail } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
@@ -49,19 +49,22 @@ export const RecruitHeader = (props: RecruitHeaderProps) => {
 
   const recruitTheme = getRecruitThemeByCategory(category);
 
-  const onClickEdit = () => router.push(routes.recruit.edit(recruitId));
+  const onClickEdit = () => {
+    router.push(routes.recruit.edit(recruitId));
+    closeModal();
+  };
   const onClickRemove = async () => {
     try {
       await customToast.promise(removeRecruit(), {
         loading: '리쿠르팅을 삭제중입니다.',
-        success: '해당 리쿠르팅을 성공적으로 삭제하였습니다.',
+        success: '리쿠르팅을 성공적으로 삭제하였습니다.',
       });
 
       closeModal();
       await router.replace(routes.recruit.self());
     } catch (err) {}
   };
-  const onClickReport: ReportProps['onClickReport'] = ({
+  const onClickReport: UseCommonBottomMenuModalParams['onClickReport'] = ({
     domain,
     reportReasonId,
   }) => {

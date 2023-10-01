@@ -3,14 +3,16 @@ import Link from 'next/link';
 import { css } from '@emotion/react';
 
 import { ArticleCategoryCard } from '~/components/ArticleCategoryCard';
-import { PageHead, PageHeadingText } from '~/components/Common';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import NavigationGroup from '~/components/NavigationGroup';
 import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
-import { getArticleCategories, useArticleCategories } from '~/services/article';
+import { getArticleCategories } from '~/services/article/apis';
+import { useArticleCategories } from '~/services/article/hooks';
 import { flex, fontCss, palettes, topBarHeight } from '~/styles/utils';
-import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
+import { routes } from '~/utils/routes';
 
 const metaTitle = '게시판 모음';
 const metaDescription = `${globalMetaData.description} 다양한 주제로 소통할 수 있는 게시판 기능을 이용해보세요.`;
@@ -26,16 +28,18 @@ const ArticleCategoriesPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: routes.articles.categories(),
+          url: routes.article.categories().pathname,
         }}
       />
 
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
+        <NavigationGroup />
+
         <div css={hotArticlesPageLinkLayerCss}>
           <Link
-            href={routes.articles.hot()}
+            href={routes.article.hot()}
             css={[hotArticlesPageLinkCss, { marginBottom: 56 }]}
           >
             Hot 게시글
@@ -60,7 +64,6 @@ const ArticleCategoriesPage = () => {
             </>
           )}
         </div>
-        <NavigationGroup />
       </div>
     </>
   );
@@ -71,6 +74,7 @@ export default ArticleCategoriesPage;
 const selfCss = css({ padding: `${topBarHeight + 40}px 0` });
 
 const hotArticlesPageLinkLayerCss = css(flex('center', 'flex-end', 'row'));
+
 const hotArticlesPageLinkCss = css(
   {
     color: palettes.secondary.dark,

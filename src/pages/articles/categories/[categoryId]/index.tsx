@@ -68,7 +68,7 @@ const ArticleCategoryPage = (
         openGraph={{
           title: categoryName,
           description: metaDescription,
-          url: routes.articles.category(categoryId),
+          url: routes.article.category({ categoryId }).pathname,
         }}
       />
 
@@ -78,7 +78,7 @@ const ArticleCategoryPage = (
         <TitleBar.Default
           css={fontCss.style.B16}
           title={categoryName}
-          onClickBackward={routes.articles.categories()}
+          onClickBackward={routes.article.categories()}
           withoutClose
         />
 
@@ -95,7 +95,7 @@ const ArticleCategoryPage = (
               name="pencil.plus"
               label="게시글 작성 버튼"
               asLink
-              href={routes.articles.create(categoryId)}
+              href={routes.article.create({ categoryId })}
             />
           </div>
         )}
@@ -158,7 +158,7 @@ const SearchBar = (props: SearchBarProps) => {
       return;
     }
     reset({ keyword });
-    router.push(routes.articles.category(categoryId, keyword));
+    router.push(routes.article.category({ categoryId, keyword }));
   };
 
   const onInvalidSubmit: SearchBarFormProps['onInvalidSubmit'] = (

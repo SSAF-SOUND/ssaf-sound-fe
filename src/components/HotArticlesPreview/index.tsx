@@ -4,9 +4,9 @@ import Skeleton from 'react-loading-skeleton';
 import { HotArticlesPreviewArticleItem } from '~/components/HotArticlesPreview/HotArticlesPreviewArticleItem';
 import { PreviewErrorCard } from '~/components/PreviewErrorCard';
 import TitleBar from '~/components/TitleBar';
-import { useHotArticles } from '~/services/article';
+import { useHotArticles } from '~/services/article/hooks';
 import { flex, palettes } from '~/styles/utils';
-import { routes } from '~/utils';
+import { routes } from '~/utils/routes';
 
 export interface HotArticlesPreviewProps {
   className?: string;
@@ -29,7 +29,7 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
     <div className={className}>
       <TitleBar.Preview
         title="HOT 게시글"
-        moreLinkRoute={routes.articles.hot()}
+        moreLinkRoute={routes.article.hot()}
         css={{ marginBottom: 16 }}
       />
 

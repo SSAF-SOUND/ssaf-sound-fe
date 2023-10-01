@@ -5,9 +5,13 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { FullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import ArticleForm from '~/components/Forms/ArticleForm';
-import { useArticleCategories, useCreateArticle } from '~/services/article';
+import {
+  useArticleCategories,
+  useCreateArticle,
+} from '~/services/article/hooks';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -34,7 +38,9 @@ const ArticleCreatePage: CustomNextPage = () => {
     );
 
     if (!isValidCategoryId) {
-      router.replace(routes.articles.create(articleCategories[0].boardId));
+      router.replace(
+        routes.article.create({ categoryId: articleCategories[0].boardId })
+      );
     }
   }, [articleCategories, router, categoryId]);
 
@@ -51,7 +57,7 @@ const ArticleCreatePage: CustomNextPage = () => {
         ...formValues,
       });
 
-      await router.replace(routes.articles.detail(articleId));
+      await router.replace(routes.article.detail(articleId));
     } catch (err) {
       handleAxiosError(err);
     }
@@ -65,7 +71,7 @@ const ArticleCreatePage: CustomNextPage = () => {
         <ArticleForm
           onValidSubmit={onValidSubmit}
           options={{
-            titleBarCloseRoute: routes.articles.category(categoryId),
+            titleBarCloseRoute: routes.article.category({ categoryId }),
           }}
         />
       </div>

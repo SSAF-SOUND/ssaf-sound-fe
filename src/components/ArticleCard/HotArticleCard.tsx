@@ -1,4 +1,4 @@
-import type { ArticleSummary } from '~/services/article';
+import type { ArticleSummary } from '~/services/article/utils';
 
 import { css } from '@emotion/react';
 import { memo } from 'react';
@@ -30,7 +30,7 @@ export const HotArticleCard = memo((props: HotArticleCardProps) => {
   const strippedHtml = useStripHtml(content);
 
   return (
-    <ArticleCardLink href={routes.articles.detail(articleId)}>
+    <ArticleCardLink href={routes.article.detail(articleId)}>
       <div css={[headerCss, { marginBottom: 10 }]}>
         <div css={categoryCss}>
           <strong>{categoryTitle}</strong>
