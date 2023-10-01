@@ -1,5 +1,5 @@
 import type { GetArticlesParams, GetArticlesApiData } from './getArticles';
-import type { PublicRequestOption } from '~/services/common';
+import type { InfiniteParams, PublicRequestOption } from '~/services/common';
 
 import { endpoints } from '~/react-query/common';
 import {
@@ -12,6 +12,9 @@ import { isClient } from '~/utils/misc';
 export type GetHotArticlesParams = Omit<GetArticlesParams, 'categoryId'>;
 export type GetHotArticlesApiData = GetArticlesApiData;
 export type GetHotArticlesOptions = PublicRequestOption;
+export interface GetHotArticlesQueryParams extends InfiniteParams {
+  keyword?: string;
+}
 
 export const getHotArticles = (
   params: GetHotArticlesParams = {},
@@ -23,11 +26,18 @@ export const getHotArticles = (
     size = defaultArticlesPageSize,
     keyword,
   } = params;
-  const endpoint = endpoints.articles.hot({ cursor, size, keyword });
+  const endpoint = endpoints.articles.hot({ keyword });
+  const queryParams: GetHotArticlesQueryParams = {
+    cursor,
+    size,
+    keyword,
+  };
 
   const axiosInstance = publicRequest ? publicAxios : privateAxios;
 
-  return axiosInstance
-    .get<GetHotArticlesApiData>(endpoint)
-    .then((res) => res.data.data);
+  return axiosInstance<GetHotArticlesApiData>({
+    method: 'get',
+    url: endpoint,
+    params: queryParams,
+  }).then((res) => res.data.data);
 };

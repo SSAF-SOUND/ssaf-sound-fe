@@ -8,7 +8,7 @@ import type {
   LikeArticleApiData,
   ScrapArticleApiData,
   UpdateArticleParams,
-} from '~/services/article';
+} from '~/services/article/apis';
 
 import { rest } from 'msw';
 
@@ -219,130 +219,82 @@ export const scrapArticleError = restError(
 );
 
 export const getArticles = rest.get(
-  removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.list({
-        categoryId: 0,
-        cursor: 0,
-        size: 0,
-      })
-    )
-  ),
+  composeUrls(API_URL, endpoints.articles.list()),
   restInfiniteArticlesSuccess
 );
 
 export const getArticlesError = rest.get(
-  removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.list({
-        categoryId: 0,
-        cursor: 0,
-        size: 0,
-      })
-    )
-  ),
+  composeUrls(API_URL, endpoints.articles.list()),
   restInfiniteArticlesError
 );
 
 export const getArticlesByKeyword = rest.get(
-  removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.list({
-        categoryId: 0,
-        cursor: 0,
-        size: 0,
-        keyword: 'keyword',
-      })
-    )
+  composeUrls(
+    API_URL,
+    endpoints.articles.list({
+      keyword: 'keyword',
+    })
   ),
   restInfiniteArticlesSuccess
 );
 
 export const getArticlesByKeywordError = rest.get(
-  removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.list({
-        categoryId: 0,
-        cursor: 0,
-        size: 0,
-        keyword: 'keyword',
-      })
-    )
+  composeUrls(
+    API_URL,
+    endpoints.articles.list({
+      keyword: 'keyword',
+    })
   ),
   restInfiniteArticlesError
 );
 
 export const getHotArticles = rest.get(
-  removeQueryParams(
-    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
-  ),
+  composeUrls(API_URL, endpoints.articles.hot()),
   restInfiniteArticlesSuccess
 );
 
 export const getHotArticlesError = rest.get(
-  removeQueryParams(
-    composeUrls(API_URL, endpoints.articles.hot({ cursor: 0, size: 0 }))
-  ),
+  composeUrls(API_URL, endpoints.articles.hot()),
   restInfiniteArticlesError
 );
 
 export const getHotArticlesByKeyword = rest.get(
-  removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.hot({
-        cursor: 0,
-        size: 0,
-        keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
-      })
-    )
+  composeUrls(
+    API_URL,
+    endpoints.articles.hot({
+      keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
+    })
   ),
   restInfiniteArticlesSuccess
 );
 
 export const getHotArticlesByKeywordError = rest.get(
-  removeQueryParams(
-    composeUrls(
-      API_URL,
-      endpoints.articles.hot({
-        cursor: 0,
-        size: 0,
-        keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
-      })
-    )
+  composeUrls(
+    API_URL,
+    endpoints.articles.hot({
+      keyword: 'keyword', // 이 값이 있어야 `endpoint`가 달라짐
+    })
   ),
   restInfiniteArticlesError
 );
 
 export const getMyArticles = rest.get(
-  removeQueryParams(
-    composeUrls(API_URL, endpoints.articles.mine({ cursor: 0, size: 0 }))
-  ),
+  composeUrls(API_URL, endpoints.articles.mine()),
   restInfiniteArticlesSuccess
 );
 
 export const getMyArticlesError = rest.get(
-  removeQueryParams(
-    composeUrls(API_URL, endpoints.articles.mine({ cursor: 0, size: 0 }))
-  ),
+  composeUrls(API_URL, endpoints.articles.mine()),
   restInfiniteArticlesError
 );
 
 export const getMyScrapedArticles = rest.get(
-  removeQueryParams(
-    composeUrls(API_URL, endpoints.articles.myScraped({ cursor: 0, size: 0 }))
-  ),
+  composeUrls(API_URL, endpoints.articles.myScraped()),
   restInfiniteArticlesSuccess
 );
 
 export const getMyScrapedArticlesError = rest.get(
-  removeQueryParams(
-    composeUrls(API_URL, endpoints.articles.myScraped({ cursor: 0, size: 0 }))
-  ),
+  composeUrls(API_URL, endpoints.articles.myScraped()),
   restInfiniteArticlesError
 );
 

@@ -1,5 +1,5 @@
 import type { ArticleSummary } from '~/services/article/utils';
-import type { PublicRequestOption } from '~/services/common';
+import type { PublicRequestOption, InfiniteParams } from '~/services/common';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';
@@ -24,6 +24,11 @@ export type GetArticlesApiData = ApiSuccessResponse<{
   cursor: number | null;
 }>;
 
+export interface GetArticlesQueryParams extends InfiniteParams {
+  boardId: number;
+  keyword?: string;
+}
+
 export const getArticles = (
   params: GetArticlesParams,
   options: GetArticlesOptions = {}
@@ -37,15 +42,20 @@ export const getArticles = (
   } = params;
 
   const endpoint = endpoints.articles.list({
-    categoryId,
+    keyword,
+  });
+  const queryParams: GetArticlesQueryParams = {
+    boardId: categoryId,
     cursor,
     size,
     keyword,
-  });
+  };
 
   const axiosInstance = publicRequest ? publicAxios : privateAxios;
 
-  return axiosInstance
-    .get<GetArticlesApiData>(endpoint)
-    .then((res) => res.data.data);
+  return axiosInstance<GetArticlesApiData>({
+    method: 'get',
+    url: endpoint,
+    params: queryParams,
+  }).then((res) => res.data.data);
 };

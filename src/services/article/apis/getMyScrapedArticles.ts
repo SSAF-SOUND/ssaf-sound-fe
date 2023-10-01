@@ -1,4 +1,5 @@
 import type { GetArticlesApiData } from './getArticles';
+import type { InfiniteParams } from '~/services/common';
 
 import { endpoints } from '~/react-query/common';
 import {
@@ -14,11 +15,20 @@ export interface GetMyScrapedArticlesParams {
 
 export type GetMyScrapedArticlesApiData = GetArticlesApiData;
 
+export interface GetMyScrapedArticlesQueryParams extends InfiniteParams {}
+
 export const getMyScrapedArticles = (params: GetMyScrapedArticlesParams) => {
   const { cursor = defaultArticlesPageCursor, size = defaultArticlesPageSize } =
     params;
-  const endpoint = endpoints.articles.myScraped({ cursor, size });
-  return privateAxios
-    .get<GetMyScrapedArticlesApiData>(endpoint)
-    .then((res) => res.data.data);
+  const endpoint = endpoints.articles.myScraped();
+  const queryParams: GetMyScrapedArticlesQueryParams = {
+    cursor,
+    size,
+  };
+
+  return privateAxios<GetMyScrapedArticlesApiData>({
+    method: 'get',
+    url: endpoint,
+    params: queryParams,
+  }).then((res) => res.data.data);
 };

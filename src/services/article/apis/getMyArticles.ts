@@ -1,4 +1,5 @@
 import type { GetArticlesApiData } from './getArticles';
+import type { InfiniteParams } from '~/services/common';
 
 import { endpoints } from '~/react-query/common';
 import {
@@ -13,13 +14,20 @@ export interface GetMyArticlesParams {
 }
 
 export type GetMyArticlesApiData = GetArticlesApiData;
+export interface GetMyArticlesQueryParams extends InfiniteParams {}
 
 export const getMyArticles = (params: GetMyArticlesParams) => {
   const { cursor = defaultArticlesPageCursor, size = defaultArticlesPageSize } =
     params;
-  const endpoint = endpoints.articles.mine({ cursor, size });
+  const endpoint = endpoints.articles.mine();
+  const queryParams: GetMyArticlesQueryParams = {
+    cursor,
+    size,
+  };
 
-  return privateAxios
-    .get<GetMyArticlesApiData>(endpoint)
-    .then((res) => res.data.data);
+  return privateAxios<GetMyArticlesApiData>({
+    method: 'get',
+    url: endpoint,
+    params: queryParams,
+  }).then((res) => res.data.data);
 };

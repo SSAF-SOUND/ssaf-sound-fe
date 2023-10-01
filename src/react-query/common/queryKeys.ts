@@ -156,60 +156,17 @@ export const endpoints = {
   },
   articles: {
     categories: () => '/boards' as const,
-    list: (params: {
-      categoryId: number;
-      cursor: number;
-      size: number;
-      keyword?: string;
-    }) => {
-      const { categoryId: boardId, size, cursor, keyword = '' } = params;
-
-      if (keyword) {
-        // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1568
-        const queryString = new URLSearchParams({
-          boardId,
-          size,
-          cursor,
-          keyword,
-        } as never).toString();
-        return `/posts/search?${queryString}` as const;
-      }
-
-      const queryString = new URLSearchParams({
-        boardId,
-        size,
-        cursor,
-      } as never).toString();
-
-      return `/posts?${queryString}` as const;
+    list: (params: { keyword?: string } = {}) => {
+      const { keyword } = params;
+      return keyword ? ('/posts/search' as const) : ('/posts' as const);
     },
-    hot: (params: { cursor: number; size: number; keyword?: string }) => {
-      const { size, cursor, keyword = '' } = params;
-
-      if (keyword) {
-        const queryString = new URLSearchParams({
-          size,
-          cursor,
-          keyword,
-        } as never).toString();
-        return `/posts/hot/search?${queryString}` as const;
-      }
-
-      const queryString = new URLSearchParams({
-        size,
-        cursor,
-      } as never).toString();
-
-      return `/posts/hot?${queryString}` as const;
+    hot: (params: { keyword?: string } = {}) => {
+      const { keyword } = params;
+      return keyword ? ('/posts/hot/search' as const) : ('/posts/hot' as const);
     },
-    mine: (params: { cursor: number; size: number }) => {
-      const queryString = new URLSearchParams(params as never).toString();
-      return `/posts/my?${queryString}` as const;
-    },
-    myScraped: (params: { cursor: number; size: number }) => {
-      const queryString = new URLSearchParams(params as never).toString();
-      return `/posts/my-scrap?${queryString}`;
-    },
+    mine: () => '/posts/my' as const,
+    myScraped: () => '/posts/my-scrap' as const,
+
     create: (categoryId: number) => `/posts?boardId=${categoryId}` as const,
     detail: (articleId: number) => `/posts/${articleId}` as const,
     like: (articleId: number) =>
