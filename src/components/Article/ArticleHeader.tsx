@@ -1,15 +1,21 @@
 import type { ArticleDetail } from '~/services/article';
+import type { UseCommonBottomMenuModalParams } from '~/services/common';
+
+import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
 import { ArticleIconButton } from '~/components/Article/ArticleIconButton';
-import { useArticleMenuModal } from '~/components/Article/utils';
 import { Separator } from '~/components/Common';
+import { useModal } from '~/components/GlobalModal';
 import Name from '~/components/Name';
+import { useRemoveArticle } from '~/services/article';
+import { useCommonBottomMenuModal } from '~/services/common';
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';
+import { ReportDomain, useReport } from '~/services/report';
 import { flex, fontCss } from '~/styles/utils';
-import { formatDateTime } from '~/utils';
+import { customToast, formatDateTime, routes } from '~/utils';
 
 interface ArticleHeaderProps {
   className?: string;
@@ -17,15 +23,63 @@ interface ArticleHeaderProps {
 }
 
 const ArticleHeader = (props: ArticleHeaderProps) => {
+  const router = useRouter();
   const { articleDetail, className } = props;
   const { data: myInfo } = useMyInfo();
-  const { openArticleMenuModal } = useArticleMenuModal({
-    articleDetail,
-  });
 
   const isSignedIn = !!myInfo;
-  const { author, createdAt, anonymity } = articleDetail;
+  const {
+    author,
+    createdAt,
+    anonymity,
+    mine,
+    postId: articleId,
+    boardId: categoryId,
+  } = articleDetail;
   const { date, time } = formatDateTime(createdAt);
+  const { mutateAsync: removeArticle } = useRemoveArticle(articleId);
+  const { mutateAsync: reportArticle } = useReport();
+  const { closeModal } = useModal();
+
+  const onClickEdit = () => router.push(routes.article.edit(articleId));
+  const onClickRemove = async () => {
+    try {
+      await customToast.promise(removeArticle(), {
+        loading: '게시글을 삭제중입니다.',
+        success: '게시글을 성공적으로 삭제하였습니다.',
+      });
+      closeModal();
+      await router.replace(routes.article.category({ categoryId }));
+    } catch (err) {}
+  };
+  const onClickReport: UseCommonBottomMenuModalParams['onClickReport'] = ({
+    domain,
+    reportReasonId,
+  }) => {
+    return customToast.promise(
+      reportArticle({
+        domain,
+        reasonId: reportReasonId,
+        sourceId: articleId,
+      }),
+      {
+        loading: '신고 요청을 처리중입니다.',
+        success: '해당 게시글을 성공적으로 신고하였습니다.',
+      }
+    );
+  };
+
+  const { openCommonBottomMenuModal } = useCommonBottomMenuModal({
+    mine,
+    reportDomain: ReportDomain.ARTICLE,
+    onClickEdit,
+    onClickRemove,
+    onClickReport,
+    options: {
+      modalTitle: '게시글 메뉴',
+      removeAlertDescription: '게시글을 삭제하시겠습니까?',
+    },
+  });
 
   return (
     <header css={selfCss} className={className}>
@@ -39,7 +93,7 @@ const ArticleHeader = (props: ArticleHeaderProps) => {
           <ArticleIconButton
             iconName="more"
             label="더보기"
-            onClick={openArticleMenuModal}
+            onClick={openCommonBottomMenuModal}
           />
         )}
       </div>
