@@ -1,3 +1,5 @@
+import type { GetLunchMenusWithPollStatusApiData } from '~/services/lunch';
+
 import { rest } from 'msw';
 
 import { lunchMock } from '~/mocks/handlers/lunch/data';
@@ -11,25 +13,32 @@ const pollLunchMenuEndpoint =
   // @ts-ignore
   composeUrls(API_URL, endpoints.lunch.vote(':lunchId'));
 
-export const mockPollLunchMenu = rest[pollLunchMenuMethod](
-  pollLunchMenuEndpoint,
-  async (req, res, ctx) => {
-    const query = req.params as { lunchId: string };
-    const lunchId = Number(query.lunchId);
+export const createMockPollLunchMenu = (
+  data: GetLunchMenusWithPollStatusApiData['data']
+) => {
+  return rest[pollLunchMenuMethod](
+    pollLunchMenuEndpoint,
+    async (req, res, ctx) => {
+      const query = req.params as { lunchId: string };
+      const lunchId = Number(query.lunchId);
 
-    const targetIndex = lunchMock.menus.menus.findIndex(
-      (menu) => menu.lunchId === lunchId
-    );
+      const targetIndex = data.menus.findIndex(
+        (menu) => menu.lunchId === lunchId
+      );
 
-    const prevPolledAt = lunchMock.menus.polledAt;
-    if (prevPolledAt > -1) lunchMock.menus.menus[prevPolledAt].pollCount -= 1;
+      const prevPolledAt = data.polledAt;
+      if (prevPolledAt > -1) data.menus[prevPolledAt].pollCount -= 1;
 
-    lunchMock.menus.polledAt = targetIndex;
-    if (targetIndex > -1) lunchMock.menus.menus[targetIndex].pollCount += 1;
+      data.polledAt = targetIndex;
+      if (targetIndex > -1) data.menus[targetIndex].pollCount += 1;
 
-    return res(ctx.delay(100), ...mockSuccess(ctx, null));
-  }
-);
+      return res(ctx.delay(100), ...mockSuccess(ctx, null));
+    }
+  );
+};
+
+export const mockPollLunchMenu = createMockPollLunchMenu(lunchMock.menus);
+
 export const mockPollLunchMenuError = restError(
   pollLunchMenuMethod,
   pollLunchMenuEndpoint,
