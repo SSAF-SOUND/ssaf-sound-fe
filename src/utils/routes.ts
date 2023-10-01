@@ -6,6 +6,7 @@ import type {
   RecruitCategoryName,
 } from '~/services/recruit';
 
+import { lunch } from '~/utils/client-routes/lunch';
 import { recruit } from '~/utils/client-routes/recruit';
 
 export const routes = {
@@ -83,23 +84,8 @@ export const routes = {
   //
   recruit,
 
-  lunch: {
-    self: () => '/lunch' as const,
-    detail: ({
-      campus,
-      dateSpecifier,
-    }: {
-      campus: string;
-      dateSpecifier: string;
-    }) => {
-      const queryString = new URLSearchParams({
-        campus,
-        date: dateSpecifier,
-      }).toString();
-
-      return `${routes.lunch.self()}?${queryString}` as const;
-    },
-  },
+  //
+  lunch,
 };
 
 export enum EditableMyInfoFields {
