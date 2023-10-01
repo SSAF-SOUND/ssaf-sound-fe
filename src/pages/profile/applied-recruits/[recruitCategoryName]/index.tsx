@@ -202,7 +202,7 @@ const TabContentInner = (props: TabContentProps) => {
   const { data: appliedRecruits } = infiniteQuery;
   const infiniteData =
     appliedRecruits?.pages
-      .map(({ appliedRecruits }) => appliedRecruits)
+      .map(({ recruits }) => recruits)
       .reduce(concat) ?? [];
 
   const emptyRecruitsText = getEmptyRecruitText(category, tabValue);

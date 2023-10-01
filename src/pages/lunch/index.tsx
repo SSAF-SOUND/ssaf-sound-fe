@@ -12,8 +12,12 @@ import {
 } from '~/components/Lunch';
 import LunchMenus from '~/components/Lunch/LunchMenus';
 import NavigationGroup from '~/components/NavigationGroup';
-import { LunchDateSpecifier } from '~/services/lunch/utils';
+import {
+  LunchDateSpecifier,
+  LunchDateSpecifierSet,
+} from '~/services/lunch/utils';
 import { useCampuses } from '~/services/meta';
+import { SsafyCampus, SsafyCampusSet } from '~/services/meta/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
@@ -21,27 +25,27 @@ const metaTitle = '점심 메뉴';
 const metaDescription = `${globalMetaData.description} 삼성 청년 SW 아카데미(SSAFY)의 각 캠퍼스별 점심 메뉴를 확인해보세요.`;
 
 const validateDateSpecifier = (date?: string): date is LunchDateSpecifier => {
-  return Object.values(LunchDateSpecifier).includes(date as LunchDateSpecifier);
+  return !!date && LunchDateSpecifierSet.has(date);
 };
 
-type QueryString = {
+type Params = Partial<{
   campus: string;
   date: string;
-};
+}>;
 
-const Lunch = () => {
+const LunchPage = () => {
   const router = useRouter();
-  const query = router.query as Partial<QueryString>;
+  const query = router.query as Params;
 
   const { data: campuses } = useCampuses();
   const { campus, date: dateSpecifier } = query;
 
-  const isValidCampus = campus && campuses.includes(campus);
+  const isValidCampus = campus && SsafyCampusSet.has(campus);
   const isValidDateSpecifier =
     dateSpecifier && validateDateSpecifier(dateSpecifier);
   const isValidQueryParams = isValidCampus && isValidDateSpecifier;
 
-  const safeCampus = isValidCampus ? campus : campuses[0];
+  const safeCampus = isValidCampus ? campus : SsafyCampus.SEOUL;
   const safeDateSpecifier = isValidDateSpecifier
     ? dateSpecifier
     : LunchDateSpecifier.TODAY;
@@ -59,14 +63,12 @@ const Lunch = () => {
   useEffect(() => {
     if (isValidQueryParams || !router.isReady) return;
 
-    router.replace({
-      pathname: router.pathname,
-      query: {
-        ...router.query,
+    router.replace(
+      routes.lunch.detail({
         campus: safeCampus,
         date: safeDateSpecifier,
-      },
-    });
+      })
+    );
   }, [isValidQueryParams, router, safeCampus, safeDateSpecifier]);
 
   return (
@@ -77,7 +79,7 @@ const Lunch = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: routes.lunch.self(),
+          url: routes.lunch.self().pathname,
         }}
       />
 
@@ -111,4 +113,4 @@ const lunchPageZIndex = {
 const lunchMenusCss = css({ zIndex: lunchPageZIndex.lunchMenu });
 const lunchCampusSelectBoxCss = css({ zIndex: lunchPageZIndex.selectBox });
 
-export default Lunch;
+export default LunchPage;

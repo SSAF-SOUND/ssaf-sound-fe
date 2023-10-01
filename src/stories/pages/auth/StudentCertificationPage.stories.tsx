@@ -12,7 +12,7 @@ import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof StudentCertificationPage> = {
-  title: 'Page/Certification/Student Certification',
+  title: 'Page/SSAFY 인증/SSAFY 인증',
   component: StudentCertificationPage,
   decorators: [
     (Story) => {
@@ -33,18 +33,21 @@ const meta: Meta<typeof StudentCertificationPage> = {
 export default meta;
 
 export const CorrectAnswer = {
+  name: '정답',
   parameters: createMswParameters({
     member: [mockGetUncertifiedSsafyMyInfo, mockCertifyStudent],
   }),
 };
 
 export const IncorrectAnswer = {
+  name: '오답',
   parameters: createMswParameters({
     member: [mockGetUncertifiedSsafyMyInfo, createMockCertifyStudent(false)],
   }),
 };
 
 export const NoMoreAttempts = {
+  name: '기회 없음',
   parameters: createMswParameters({
     member: [
       mockGetUncertifiedSsafyMyInfo,

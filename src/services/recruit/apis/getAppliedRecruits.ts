@@ -23,7 +23,7 @@ export interface GetAppliedRecruitsParams {
 }
 
 export type GetAppliedRecruitsApiData = ApiSuccessResponse<
-  { appliedRecruits: AppliedRecruitSummary[] } & RecruitCursorData
+  { recruits: AppliedRecruitSummary[] } & RecruitCursorData
 >;
 
 export const getAppliedRecruits = (params: GetAppliedRecruitsParams) => {

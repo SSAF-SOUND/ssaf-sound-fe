@@ -1,4 +1,4 @@
-import type { CampusInfo } from './utils';
+import type { CampusInfo } from '~/services/meta/utils';
 import type { ApiSuccessResponse } from '~/types';
 
 import { endpoints } from '~/react-query/common';

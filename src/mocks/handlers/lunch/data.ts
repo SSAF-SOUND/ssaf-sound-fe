@@ -1,4 +1,4 @@
-import type { LunchMenuDetail } from '~/services/lunch';
+import type { LunchMenuDetail } from '~/services/lunch/utils';
 
 import { faker } from '@faker-js/faker';
 
@@ -37,13 +37,5 @@ export const lunchMock = {
     totalPollCount: 0,
     polledAt: -1,
     menus: [],
-  },
-
-  vote: {
-    pollCount: 125,
-  },
-
-  revertVote: {
-    pollCount: 124,
   },
 };

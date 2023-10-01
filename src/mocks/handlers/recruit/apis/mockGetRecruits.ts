@@ -19,7 +19,7 @@ export const mockGetRecruitsError = restError(
   getRecruitsMethod,
   getRecruitsEndpoint,
   {
-    message: 'mockGetRecruitsError',
+    message: 'mockGetRecruits Error',
   }
 );
 

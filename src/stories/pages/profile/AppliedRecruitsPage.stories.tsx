@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 import type { InfiniteData } from '@tanstack/query-core';
 import type { GetAppliedRecruitsApiData } from '~/services/recruit';
 
-
 import { useQueryClient } from '@tanstack/react-query';
 
 import { userInfo } from '~/mocks/handlers/member/data';
@@ -48,7 +47,7 @@ const allAppliedRecruitsQueryKey = appliedRecruitsQueryKey.slice(0, -1);
 export const Default: AppliedRecruitsPageStory = {};
 
 const emptyRecruits: InfiniteData<GetAppliedRecruitsApiData['data']> = {
-  pages: [{ appliedRecruits: [], nextCursor: null, isLast: true }],
+  pages: [{ recruits: [], nextCursor: null, isLast: true }],
   pageParams: [null],
 };
 

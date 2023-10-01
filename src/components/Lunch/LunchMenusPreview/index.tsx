@@ -8,7 +8,7 @@ import {
   LunchDateSpecifier,
   useLunchMenusWithPollStatus,
 } from '~/services/lunch';
-import { useCampuses } from '~/services/meta';
+import { SsafyCampus, SsafyCampusSet } from '~/services/meta/utils';
 import { flex, fontCss, pageMinWidth, palettes } from '~/styles/utils';
 
 import { LunchMenusPreviewHeader } from './LunchMenusPreviewHeader';
@@ -22,8 +22,8 @@ const dateSpecifier = LunchDateSpecifier.TODAY;
 
 export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
   const { className, campus } = props;
-  const { data: campuses } = useCampuses();
-  const safeCampus = campus && campuses.includes(campus) ? campus : campuses[0];
+  const safeCampus =
+    campus && SsafyCampusSet.has(campus) ? campus : SsafyCampus.SEOUL;
 
   const {
     data: lunchMenusWithPollStatus,
