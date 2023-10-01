@@ -5,6 +5,7 @@ import {
   mockGetArticlesError,
   mockGetEmptyArticles,
 } from '~/mocks/handlers/article/apis/mockGetArticles';
+import { mockGetEmptyArticlesByKeyword } from '~/mocks/handlers/article/apis/mockGetArticlesByKeyword';
 import {
   createMockGetMyInfo,
   mockGetMyInfoError,
@@ -57,20 +58,32 @@ export const NotSignedIn: ArticleCategoryPageStory = {
 export const FetchError: ArticleCategoryPageStory = {
   name: '게시글 목록 불러오기 오류',
   parameters: {
-    msw: {
-      handlers: {
-        article: [mockGetArticlesError],
-      },
-    },
+    ...createMswParameters({
+      article: [mockGetArticlesError],
+    }),
   },
 };
 
 export const NotExist: ArticleCategoryPageStory = {
   name: '빈 게시글 목록',
   parameters: {
-    msw: {
-      handlers: {
-        article: [mockGetEmptyArticles],
+    ...createMswParameters({
+      article: [mockGetEmptyArticles],
+    }),
+  },
+};
+
+export const NoSearchResult: ArticleCategoryPageStory = {
+  name: '빈 게시글 검색 목록',
+  parameters: {
+    ...createMswParameters({
+      article: [mockGetEmptyArticlesByKeyword],
+    }),
+    nextjs: {
+      router: {
+        query: {
+          keyword: 'keyword',
+        },
       },
     },
   },
