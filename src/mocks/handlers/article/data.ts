@@ -3,6 +3,7 @@ import type {
   ArticleDetail,
   ArticleSummary,
 } from '~/services/article/utils';
+import type { UserInfo } from '~/services/member';
 
 import { faker } from '@faker-js/faker';
 
@@ -40,6 +41,7 @@ export const createMockArticle = (
     liked?: boolean;
     scraped?: boolean;
     modified?: boolean;
+    author?: UserInfo;
   } = {}
 ): ArticleDetail => {
   const {
@@ -47,6 +49,7 @@ export const createMockArticle = (
     scraped = false,
     modified = false,
     liked = false,
+    author = userInfo.certifiedSsafyUserInfo,
   } = options;
   const booleanValue = Boolean(id % 2);
   const numberRange = { min: 1000, max: 100000 };
@@ -65,7 +68,7 @@ export const createMockArticle = (
     images: createMockImages(imageUrls),
     postId: id,
     anonymity: booleanValue,
-    author: userInfo.certifiedSsafyUserInfo,
+    author,
     boardId,
     boardTitle,
   };

@@ -13,7 +13,7 @@ const getArticleDetailEndpoint = composeUrls(
   endpoints.articles.detail(':articleId')
 );
 
-const createMockGetArticleDetail = (
+export const createMockGetArticleDetail = (
   articleDetail: GetArticleDetailApiData['data']['post']
 ) => {
   return restSuccess<GetArticleDetailApiData['data']>(

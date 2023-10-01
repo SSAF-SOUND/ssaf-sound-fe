@@ -23,6 +23,8 @@ export const createMockScrapArticle = (articleDetail: ArticleDetail) => {
     const delta = articleDetail.scraped ? -1 : 1;
     const latestScraped = !articleDetail.scraped;
     const latestScrapCount = articleDetail.scrapCount + delta;
+    articleDetail.scraped = latestScraped;
+    articleDetail.scrapCount = latestScrapCount;
 
     return res(
       ...mockSuccess<ScrapArticleApiData['data']>(ctx, {

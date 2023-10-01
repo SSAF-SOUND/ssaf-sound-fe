@@ -21,6 +21,9 @@ export const createMockLikeArticle = (articleDetail: ArticleDetail) => {
     const delta = articleDetail.liked ? -1 : 1;
     const latestLiked = !articleDetail.liked;
     const latestLikeCount = articleDetail.likeCount + delta;
+    articleDetail.liked = latestLiked;
+    articleDetail.likeCount = latestLikeCount;
+
     return res(
       ...mockSuccess<LikeArticleApiData['data']>(ctx, {
         liked: latestLiked,
