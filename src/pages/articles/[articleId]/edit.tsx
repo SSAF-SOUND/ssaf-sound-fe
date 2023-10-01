@@ -4,15 +4,14 @@ import type { ArticleFormProps } from '~/components/Forms/ArticleForm';
 import { useRouter } from 'next/router';
 
 import { ArticleError } from '~/components/Article/ArticleError';
-import { FullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import ArticleForm from '~/components/Forms/ArticleForm';
-import { useArticleDetail, useUpdateArticle } from '~/services/article';
-import {
-  createAuthGuard,
-  createNoIndexPageMetaData,
-  handleAxiosError,
-  routes,
-} from '~/utils';
+import { useArticleDetail, useUpdateArticle } from '~/services/article/hooks';
+import { createAuthGuard } from '~/utils/createAuthGuard';
+import { createNoIndexPageMetaData } from '~/utils/createNoIndexPageMetaData';
+import { handleAxiosError } from '~/utils/handleAxiosError';
+import { routes } from '~/utils/routes';
 
 const metaTitle = '게시글 수정';
 

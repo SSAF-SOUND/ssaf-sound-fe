@@ -1,16 +1,16 @@
-import type { ArticleDetail } from '~/services/article';
+import type { ArticleDetail } from '~/services/article/utils';
 
 import { css } from '@emotion/react';
 
 import { ArticleIconButton } from '~/components/Article/ArticleIconButton';
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { useSignInGuideModal } from '~/hooks';
-import { useLikeArticle, useScrapArticle } from '~/services/article';
+import { useLikeArticle, useScrapArticle } from '~/services/article/hooks';
 import { useArticleComments } from '~/services/articleComment';
 import { countAllComments } from '~/services/comment/utils';
 import { useMyInfo } from '~/services/member';
 import { flex, fontCss, inlineFlex, palettes, Theme } from '~/styles/utils';
-import { handleAxiosError } from '~/utils';
+import { handleAxiosError } from '~/utils/handleAxiosError';
 
 const iconSize = 24;
 

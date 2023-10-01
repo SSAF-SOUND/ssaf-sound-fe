@@ -1,14 +1,16 @@
 import type { ReportProps } from '~/components/ModalContent';
-import type { ArticleDetail } from '~/services/article';
+import type { ArticleDetail } from '~/services/article/utils';
 
 import { useRouter } from 'next/router';
 
-import { Modal } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
 import { useModal } from '~/components/GlobalModal';
 import { Alert, BottomMenu, Report } from '~/components/ModalContent';
-import { useRemoveArticle } from '~/services/article';
+import { useRemoveArticle } from '~/services/article/hooks';
 import { ReportDomain, useReport } from '~/services/report';
-import { customToast, handleAxiosError, routes } from '~/utils';
+import { customToast } from '~/utils/customToast';
+import { handleAxiosError } from '~/utils/handleAxiosError';
+import { routes } from '~/utils/routes';
 
 interface UseArticleMenuModalParams {
   articleDetail: ArticleDetail;

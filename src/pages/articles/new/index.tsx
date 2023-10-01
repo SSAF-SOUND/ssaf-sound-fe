@@ -5,9 +5,13 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { FullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import ArticleForm from '~/components/Forms/ArticleForm';
-import { useArticleCategories, useCreateArticle } from '~/services/article';
+import {
+  useArticleCategories,
+  useCreateArticle,
+} from '~/services/article/hooks';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,

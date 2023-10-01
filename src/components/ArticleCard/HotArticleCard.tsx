@@ -1,4 +1,4 @@
-import type { ArticleSummary } from '~/services/article';
+import type { ArticleSummary } from '~/services/article/utils';
 
 import { css } from '@emotion/react';
 import { memo } from 'react';
