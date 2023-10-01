@@ -12,3 +12,7 @@ export type InfiniteParams = {
   cursor?: number;
   size: number;
 };
+
+export type PublicRequestOption = {
+  publicRequest?: boolean;
+};
