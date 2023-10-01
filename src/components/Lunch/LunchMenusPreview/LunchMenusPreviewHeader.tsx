@@ -39,7 +39,7 @@ export const LunchMenusPreviewHeader = (
         <Link
           href={routes.lunch.detail({
             campus,
-            dateSpecifier,
+            date: dateSpecifier,
           })}
         >
           투표하기
