@@ -96,7 +96,7 @@ const HotArticleLayer = (props: HotArticleLayerProps) => {
       skeletonGap={16}
       itemContent={(_, article) => <HotArticleCard article={article} />}
       emptyElement={
-        !isValidKeyword ? (
+        isValidKeyword ? (
           <NoSearchResults keyword={keyword} />
         ) : (
           <EmptyInfiniteList text="아직 핫 게시글이 없습니다." />
