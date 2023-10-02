@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { flex, fontCss } from '~/styles/utils';
 
 export interface PreviewTitleBarProps {

@@ -5,7 +5,9 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Bar, Icon, IconButton } from '~/components/Common';
+import { Bar } from '~/components/Common/Bar';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { fixTopCenter, zIndex } from '~/styles/utils';
 
 export interface DefaultTitleBarProps {

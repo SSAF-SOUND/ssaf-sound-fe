@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { flex, fontCss, palettes, position } from '~/styles/utils';
 
 import { Modal } from './index';

@@ -3,7 +3,8 @@ import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils
 import { css } from '@emotion/react';
 import { useFieldArray } from 'react-hook-form';
 
-import { Button, Icon } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Icon } from '~/components/Common/Icon';
 import LinkField from '~/components/Forms/PortfolioForm/Fields/Links/LinkField';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 

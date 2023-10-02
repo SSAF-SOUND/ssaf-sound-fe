@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import { isValidElement } from 'react';
 
-import { FullPageLoader } from '~/components/Common';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { role, useMyInfo } from '~/services/member';
 
 export interface AuthCheckerProps {

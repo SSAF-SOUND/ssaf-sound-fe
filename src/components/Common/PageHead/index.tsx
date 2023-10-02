@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
-import { composeUrls } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
+import { composeUrls } from '~/utils/misc';
 
 interface MetaRobots {
   index: boolean;

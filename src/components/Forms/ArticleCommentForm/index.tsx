@@ -12,7 +12,10 @@ import { ErrorMessage } from '@hookform/error-message';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import TextAreaAutoSize from 'react-textarea-autosize';
 
-import { AlertText, Checkbox, Icon, IconButton } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { Checkbox } from '~/components/Common/Checkbox';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { flex, fontCss, palettes, Theme } from '~/styles/utils';
 import { getPathname, routes, webStorage } from '~/utils';
 

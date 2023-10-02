@@ -2,7 +2,7 @@ import type { SkillName } from '~/services/recruit';
 
 import { memo } from 'react';
 
-import { SkillIcon } from '~/components/Common';
+import { SkillIcon } from '~/components/Common/SkillIcon';
 import { inlineFlex } from '~/styles/utils';
 
 interface SkillsSorterProps {

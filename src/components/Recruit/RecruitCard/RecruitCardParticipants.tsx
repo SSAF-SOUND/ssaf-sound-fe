@@ -5,7 +5,7 @@ import type {
 
 import { css } from '@emotion/react';
 
-import { Avatar } from '~/components/Common';
+import { Avatar } from '~/components/Common/Avatar';
 import { Scroll } from '~/components/Common/Scroll';
 import { middleRecruitCardPaddingX } from '~/components/Recruit/RecruitCard/constants';
 import { RecruitParts } from '~/services/recruit';

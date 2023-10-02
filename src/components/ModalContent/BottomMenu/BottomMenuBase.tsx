@@ -2,7 +2,8 @@ import type { MouseEventHandler, ReactElement } from 'react';
 
 import { css } from '@emotion/react';
 
-import { Modal, VisuallyHidden } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
+import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 import {
   flex,
   fontCss,

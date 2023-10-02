@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
-import { Avatar, Icon, IconButton } from '~/components/Common';
+import { Avatar } from '~/components/Common/Avatar';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { FullDateTime } from '~/components/FullDateTime';
 import { RecruitApplicantLikeButton } from '~/components/RecruitApplicants/RecruitApplicantBar/RecruitApplicantLikeButton';
 import { useLikeRecruitApplication } from '~/services/recruit';

@@ -4,7 +4,7 @@ import type { UserRegisterFormValues } from '~/components/Forms/UserRegisterForm
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ProgressBar } from '~/components/Common';
+import { ProgressBar } from '~/components/Common/ProgressBar';
 import { UserRegisterFormFields } from '~/components/Forms/UserRegisterForm/Fields';
 import TitleBar from '~/components/TitleBar';
 import { useStack } from '~/hooks';

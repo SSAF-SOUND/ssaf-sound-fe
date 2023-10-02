@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { useFormState } from 'react-hook-form';
 
-import { AlertText } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
 import Editor from '~/components/Editor';
 import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import { fontCss, palettes } from '~/styles/utils';

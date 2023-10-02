@@ -1,4 +1,4 @@
-import { Tabs } from '~/components/Common';
+import { Tabs } from '~/components/Common/Tabs';
 
 import { ProfileTabs } from './utils';
 

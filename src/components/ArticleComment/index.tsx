@@ -12,7 +12,7 @@ import CommentDateTime from '~/components/ArticleComment/CommentDateTime';
 import LikeLayer from '~/components/ArticleComment/LikeLayer';
 import MoreButton from '~/components/ArticleComment/MoreButton';
 import ReplyButton from '~/components/ArticleComment/ReplyButton';
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { useModal } from '~/components/GlobalModal';
 import Name from '~/components/Name';
 import {

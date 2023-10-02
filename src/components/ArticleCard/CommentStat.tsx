@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { inlineFlex, palettes } from '~/styles/utils';
 
 interface CommentStatProps {

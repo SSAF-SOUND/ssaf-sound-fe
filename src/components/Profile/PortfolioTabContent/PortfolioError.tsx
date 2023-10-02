@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 import * as Sentry from '@sentry/nextjs';
 import { isAxiosError } from 'axios';
 
-import { AlertText, TrackSize } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { TrackSize } from '~/components/Common/SsafyIcon';
 import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIcon';
 import { flex } from '~/styles/utils';
 import { getErrorResponse, isDevMode, ResponseCode } from '~/utils';

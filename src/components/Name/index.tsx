@@ -3,7 +3,8 @@ import type { UserInfo } from '~/services/member/utils';
 
 import { css } from '@emotion/react';
 
-import { Avatar, SsafyIcon, TrackSize } from '~/components/Common';
+import { Avatar } from '~/components/Common/Avatar';
+import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import { CertificationState } from '~/services/member/utils';
 import { fontCss, inlineFlex } from '~/styles/utils';
 

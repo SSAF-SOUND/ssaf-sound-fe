@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { PortfolioLinkDataAttrKeys } from '~/components/PortfolioLink/dataAttrs';
 import { palettes } from '~/styles/utils';
 

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
-import { AlertText, SsafyIcon, TrackSize } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import { flex } from '~/styles/utils';
 import { getErrorResponse } from '~/utils';
 

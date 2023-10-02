@@ -8,7 +8,7 @@ import {
   useTransformContext,
 } from 'react-zoom-pan-pinch';
 
-import { SsafyIcon, TrackSize } from '~/components/Common';
+import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import SkillsSorter from '~/components/Forms/PortfolioForm/Fields/Skills/SkillsSorter';
 import PortfolioLink from '~/components/PortfolioLink';
 import { articleCss } from '~/services/article';

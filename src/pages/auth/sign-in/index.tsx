@@ -3,14 +3,11 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  Logo,
-  SsafyIcon,
-  FullPageLoader,
-  PageHead,
-  PageHeadingText,
-  loaderText,
-} from '~/components/Common';
+import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { Logo } from '~/components/Common/Logo';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { SsafyIcon } from '~/components/Common/SsafyIcon';
 import SignInButton from '~/components/SignInButton';
 import TitleBar from '~/components/TitleBar';
 import { useMyInfo } from '~/services/member';

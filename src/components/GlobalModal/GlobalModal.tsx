@@ -1,6 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 
-import { Modal } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
 
 import { modalAtoms } from './atoms';
 import { modals } from './modals';

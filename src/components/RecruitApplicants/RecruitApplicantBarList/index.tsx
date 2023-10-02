@@ -3,7 +3,7 @@ import type { RecruitApplicant, RecruitParts } from '~/services/recruit';
 import { css } from '@emotion/react';
 import { memo, useState } from 'react';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { RecruitApplicantBar } from '~/components/RecruitApplicants';
 import { RecruitApplicantsSortToggle } from '~/components/RecruitApplicants/RecruitApplicantsSortToggle';
 import { flex, fontCss, palettes } from '~/styles/utils';

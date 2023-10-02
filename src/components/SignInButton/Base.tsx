@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { endpoints } from '~/react-query/common';
 import { flex, fontCss, inlineFlex, palettes } from '~/styles/utils';
 import { API_URL, composeUrls } from '~/utils';

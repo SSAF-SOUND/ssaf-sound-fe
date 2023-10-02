@@ -11,8 +11,10 @@ import StudentCertificationForm, {
 import {
   FullPageLoader,
   loaderText,
+} from '~/components/Common/FullPageLoader';
+import {
   PageHeadingText,
-} from '~/components/Common';
+} from '~/components/Common/PageHeadingText';
 import { useModal } from '~/components/GlobalModal';
 import PreviewCertifiedMyInfo from '~/components/PreviewCertifiedMyInfo';
 import {

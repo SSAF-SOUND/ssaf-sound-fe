@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 
-import { Toast } from '~/components/Common';
+import { Toast } from '~/components/Common/Toast';
 import { getErrorResponse } from '~/utils/handleAxiosError';
 
 const clientErrorToast = (message: string) => {

@@ -5,7 +5,7 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { memo, useCallback } from 'react';
 import { useWatch } from 'react-hook-form';
 
-import { Badge } from '~/components/Common';
+import { Badge } from '~/components/Common/Badge';
 import { RecruitFilterFieldTitleBar } from '~/components/Forms/RecruitFilterForm/RecruitFilterFieldTitleBar';
 import { useRecruitFilterFormContext } from '~/components/Forms/RecruitFilterForm/utils';
 import { RecruitParts } from '~/services/recruit';

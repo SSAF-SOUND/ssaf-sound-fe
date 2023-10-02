@@ -10,14 +10,13 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import AuthChecker from '~/components/AuthChecker';
 import Background from '~/components/Background';
-import { PageHead } from '~/components/Common';
+import { PageHead } from '~/components/Common/PageHead';
 import { GlobalModal } from '~/components/GlobalModal';
 import { MainLayout } from '~/components/Layout';
 import { useMSW } from '~/hooks';
 import { initServerMocks } from '~/mocks';
 import { getQueryClient } from '~/react-query/common';
 import GlobalStyles from '~/styles/GlobalStyles';
-
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') initServerMocks();
 

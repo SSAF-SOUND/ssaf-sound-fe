@@ -2,7 +2,8 @@ import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentF
 
 import { css } from '@emotion/react';
 
-import { Modal, VisuallyHidden } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
+import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import { fontCss, pageMaxWidth, palettes } from '~/styles/utils';
 import { position } from '~/styles/utils/position';

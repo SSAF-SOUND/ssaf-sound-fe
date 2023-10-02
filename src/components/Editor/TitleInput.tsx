@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { css } from '@emotion/react';
 import { forwardRef } from 'react';
 
-import { TextInput } from '~/components/Common';
+import { TextInput } from '~/components/Common/TextInput';
 import { fontCss, palettes } from '~/styles/utils';
 
 interface TitleInputProps extends ComponentPropsWithoutRef<'input'> {}

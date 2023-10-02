@@ -9,11 +9,8 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import {
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import DelayedRedirection from '~/components/DelayedRedirection';
 import { useSignIn } from '~/services/auth';
 import { oauthProviders } from '~/services/auth/utils';
@@ -73,7 +70,10 @@ export const enum ParamsKey {
   CODE = 'code',
 }
 export type Props = Pick<Params, ParamsKey.PROVIDER>;
-export type Params = { [ParamsKey.PROVIDER]: string; [ParamsKey.CODE]?: string };
+export type Params = {
+  [ParamsKey.PROVIDER]: string;
+  [ParamsKey.CODE]?: string;
+};
 export const getStaticProps: GetStaticProps<Props, Params> = (context) => {
   const provider = context.params?.provider || '';
 

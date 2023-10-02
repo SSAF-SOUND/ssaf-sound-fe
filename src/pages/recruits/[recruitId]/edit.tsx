@@ -4,11 +4,8 @@ import type { RecruitDetail } from '~/services/recruit';
 
 import { useRouter } from 'next/router';
 
-import {
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import RecruitForm from '~/components/Forms/RecruitForm';
 import {
   convertRecruitDetailToRecruitFormValues,

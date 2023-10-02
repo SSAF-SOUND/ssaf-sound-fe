@@ -1,6 +1,7 @@
-import type { IconNames } from '~/components/Common';
+import type { IconNames } from '~/components/Common/Icon';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { Theme } from '~/styles/utils';
 
 interface CustomToolbarItemProps {

@@ -3,10 +3,10 @@ import type { UserInfo } from '~/services/member';
 
 import { css } from '@emotion/react';
 
+import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 import VacantSquareAvatar from './Vacant';
-import { SsafyIcon, TrackSize } from '../Common';
 
 export interface SquareAvatarProps {
   userInfo?: UserInfo;

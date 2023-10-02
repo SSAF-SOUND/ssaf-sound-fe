@@ -5,7 +5,8 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Button, PageHeadingText } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import TitleBar from '~/components/TitleBar';
 import { useDeleteAccount } from '~/services/auth';
 import { flex, fontCss, pageMinHeight, titleBarHeight } from '~/styles/utils';

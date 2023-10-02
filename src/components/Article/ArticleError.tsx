@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import { flex } from '~/styles/utils';
 import { getErrorResponse, routes } from '~/utils';

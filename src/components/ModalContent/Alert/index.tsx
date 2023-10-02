@@ -3,7 +3,7 @@ import type { AnyFunction } from '~/types';
 
 import { css } from '@emotion/react';
 
-import { Modal } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
 import { flex, fontCss, palettes } from '~/styles/utils';
 import { position } from '~/styles/utils/position';
 

@@ -2,7 +2,7 @@ import type { SkillName } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
-import { SkillIcon } from '~/components/Common';
+import { SkillIcon } from '~/components/Common/SkillIcon';
 import { flex } from '~/styles/utils';
 
 interface RecruitSkillInfoProps {

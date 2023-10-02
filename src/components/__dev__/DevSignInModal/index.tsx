@@ -3,13 +3,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  Button,
-  Icon,
-  IconButton,
-  Modal,
-  TextInput,
-} from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
+import { Modal } from '~/components/Common/Modal';
+import { TextInput } from '~/components/Common/TextInput';
 import { queryKeys } from '~/react-query/common';
 import { getMyInfo } from '~/services/member';
 import { flex, fontCss, palettes } from '~/styles/utils';

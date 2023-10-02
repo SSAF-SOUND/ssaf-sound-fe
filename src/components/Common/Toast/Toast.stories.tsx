@@ -2,7 +2,7 @@ import type { StoryObj, Meta } from '@storybook/react';
 
 import toast, { Toaster } from 'react-hot-toast';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import SuccessToast from '~/components/Common/Toast/SuccessToast';
 import { customToast } from '~/utils';
 

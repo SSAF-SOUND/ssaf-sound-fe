@@ -5,7 +5,8 @@ import dynamic from 'next/dynamic';
 import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import {
   Theme,
   colorMix,

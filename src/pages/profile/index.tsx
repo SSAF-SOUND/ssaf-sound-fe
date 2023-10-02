@@ -5,11 +5,8 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import NameCard from '~/components/NameCard';
 import NavigationGroup from '~/components/NavigationGroup';
 import { getSafeProfileTabValue, Profile } from '~/components/Profile';

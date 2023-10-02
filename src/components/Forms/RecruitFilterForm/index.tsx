@@ -3,7 +3,7 @@ import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import {
   RecruitPartsField,
   RecruitSkillsField,

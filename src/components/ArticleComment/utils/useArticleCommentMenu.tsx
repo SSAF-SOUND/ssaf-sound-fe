@@ -5,7 +5,7 @@ import type {
 } from '~/services/articleComment';
 import type { AnyFunction } from '~/types';
 
-import { Modal } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
 import { useModal } from '~/components/GlobalModal';
 import { Alert, BottomMenu, Report } from '~/components/ModalContent';
 import { ReportDomain } from '~/services/report';

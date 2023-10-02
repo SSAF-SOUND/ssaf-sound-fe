@@ -3,7 +3,7 @@ import type { CheckboxProps as RadixCheckboxProps } from '@radix-ui/react-checkb
 import { css } from '@emotion/react';
 import * as RadixCheckbox from '@radix-ui/react-checkbox';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { colorMix, inlineFlex, palettes, themeColorVars } from '~/styles/utils';
 
 export interface CheckboxProps extends Omit<RadixCheckboxProps, 'asChild'> {

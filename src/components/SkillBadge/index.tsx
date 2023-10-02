@@ -1,12 +1,13 @@
-import type { BadgeProps } from '../Common';
+import type { BadgeProps } from '~/components/Common/Badge';
 import type { SkillName } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { forwardRef } from 'react';
 
+import { Badge } from '~/components/Common/Badge';
+import { SkillIcon } from '~/components/Common/SkillIcon';
 import { fontCss } from '~/styles/utils';
 
-import { SkillIcon, Badge } from '../Common';
 
 interface SkillBadgeProps extends Omit<BadgeProps, 'asChild'> {
   name: SkillName;

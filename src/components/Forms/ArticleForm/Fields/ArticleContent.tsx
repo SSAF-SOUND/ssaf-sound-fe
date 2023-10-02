@@ -2,7 +2,7 @@ import type { EditorProps } from '~/components/Editor';
 
 import { css } from '@emotion/react';
 
-import { AlertText } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
 import Editor from '~/components/Editor';
 import { useArticleFormContext } from '~/components/Forms/ArticleForm/utils';
 import { palettes } from '~/styles/utils';

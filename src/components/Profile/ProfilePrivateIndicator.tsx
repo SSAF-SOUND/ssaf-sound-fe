@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { SsafyIcon, TrackSize } from '~/components/Common';
+import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 interface ProfilePrivateIndicatorProps {

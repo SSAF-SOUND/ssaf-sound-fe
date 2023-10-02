@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { ArticleIconButton } from '~/components/Article/ArticleIconButton';
-import { Separator } from '~/components/Common';
+import { Separator } from '~/components/Common/Separator';
 import { useModal } from '~/components/GlobalModal';
 import Name from '~/components/Name';
 import { useRemoveArticle } from '~/services/article';

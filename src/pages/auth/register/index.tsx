@@ -7,13 +7,10 @@ import { css, keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import UserRegisterForm from 'src/components/Forms/UserRegisterForm';
-import {
-  FullPageLoader,
-  loaderText,
-  Logo,
-  PageHeadingText,
-  SsafyIcon,
-} from '~/components/Common';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
+import { Logo } from '~/components/Common/Logo';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { SsafyIcon } from '~/components/Common/SsafyIcon';
 import { useMyAccountStatus, useUpdateMyInfo } from '~/services/member';
 import {
   flex,

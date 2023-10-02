@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
-import { AlertText, Button } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { Button } from '~/components/Common/Button';
 import { flex, palettes } from '~/styles/utils';
 
 interface PreviewErrorCardProps {

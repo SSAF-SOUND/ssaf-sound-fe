@@ -2,7 +2,8 @@ import { css } from '@emotion/react';
 import { useCallback, useState } from 'react';
 import { TransformWrapper } from 'react-zoom-pan-pinch';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { colorMix, flex, palettes, position } from '~/styles/utils';
 
 import ImageLayer from './ImageLayer';

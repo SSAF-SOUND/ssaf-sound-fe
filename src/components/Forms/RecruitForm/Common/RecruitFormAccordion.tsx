@@ -1,12 +1,12 @@
 import type { CSSProperties, ReactNode } from 'react';
-import type { IconNames } from '~/components/Common';
+import type { IconNames } from '~/components/Common/Icon';
 
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
-import { Icon } from '~/components/Common';
 import { Accordion } from '~/components/Common/Accordion';
 import { accordionTimingFunction } from '~/components/Common/Accordion/utils';
+import { Icon } from '~/components/Common/Icon';
 import { recruitFormExpandCss } from '~/components/Forms/RecruitForm/Common/recruitFormExpandCss';
 import { flex, fontCss, palettes } from '~/styles/utils';
 

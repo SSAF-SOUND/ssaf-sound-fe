@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { expect } from '@storybook/jest';
 import { waitForElementToBeRemoved, within } from '@storybook/testing-library';
 
-import { loaderText } from '~/components/Common';
+import { loaderText } from '~/components/Common/FullPageLoader';
 import {
   mockGetCertifiedSsafyMyInfo,
   mockGetMyInfoError,

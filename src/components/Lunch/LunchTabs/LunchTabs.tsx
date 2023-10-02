@@ -1,6 +1,6 @@
 import * as Tabs from '@radix-ui/react-tabs';
 
-import { Separator } from '~/components/Common';
+import { Separator } from '~/components/Common/Separator';
 import { LunchDateSpecifier } from '~/services/lunch/utils';
 import { palettes } from '~/styles/utils';
 

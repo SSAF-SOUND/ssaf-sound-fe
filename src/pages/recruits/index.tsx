@@ -12,15 +12,13 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import {
-  Badge,
-  Icon,
-  Modal,
-  PageHead,
-  PageHeadingText,
-  Tabs,
-  Toggle,
-} from '~/components/Common';
+import { Badge } from '~/components/Common/Badge';
+import { Icon } from '~/components/Common/Icon';
+import { Modal } from '~/components/Common/Modal';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Tabs } from '~/components/Common/Tabs';
+import { Toggle } from '~/components/Common/Toggle';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import { InfiniteList } from '~/components/InfiniteList';
 import { RecruitFilterModalForm } from '~/components/ModalContent';

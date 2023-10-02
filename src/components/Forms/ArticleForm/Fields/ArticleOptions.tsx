@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 import { useEffect } from 'react';
 
-import { Checkbox } from '~/components/Common';
+import { Checkbox } from '~/components/Common/Checkbox';
 import Editor from '~/components/Editor';
 import { useArticleFormContext } from '~/components/Forms/ArticleForm/utils';
 import { useModal } from '~/components/GlobalModal';

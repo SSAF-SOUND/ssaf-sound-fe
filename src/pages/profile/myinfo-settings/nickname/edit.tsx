@@ -6,7 +6,8 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { produce } from 'immer';
 
-import { FullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateNickname } from '~/services/member';
 import { flex, titleBarHeight } from '~/styles/utils';

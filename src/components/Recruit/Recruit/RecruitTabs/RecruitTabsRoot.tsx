@@ -3,7 +3,7 @@ import type { Theme } from '~/styles/utils';
 
 import { css } from '@emotion/react';
 
-import { Tabs } from '~/components/Common';
+import { Tabs } from '~/components/Common/Tabs';
 
 import { RecruitTabsValue } from './constants';
 

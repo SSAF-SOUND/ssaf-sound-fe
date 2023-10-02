@@ -1,4 +1,4 @@
-import { Toggle } from '~/components/Common';
+import { Toggle } from '~/components/Common/Toggle';
 import { fontCss } from '~/styles/utils';
 
 interface ProfileVisibilityToggle {
