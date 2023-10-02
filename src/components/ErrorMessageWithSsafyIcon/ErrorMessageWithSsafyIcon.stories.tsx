@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { TrackSize } from '~/components/Common';
+import { TrackSize } from '~/components/Common/SsafyIcon';
 import { PageLayout } from '~/stories/Layout';
 import { disableArgs } from '~/stories/utils';
 

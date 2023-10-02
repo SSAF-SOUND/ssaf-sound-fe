@@ -1,7 +1,7 @@
 import { memo } from 'react';
 
 import LunchTitleSVG from '~/assets/images/lunch-menu-title.svg';
-import { VisuallyHidden } from '~/components/Common';
+import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 
 export interface LunchTitleProps {
   color?: string;

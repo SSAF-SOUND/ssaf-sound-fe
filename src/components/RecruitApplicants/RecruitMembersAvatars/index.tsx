@@ -5,7 +5,7 @@ import type {
 
 import { css } from '@emotion/react';
 
-import { Avatar } from '~/components/Common';
+import { Avatar } from '~/components/Common/Avatar';
 import { classnames as avatarClassnames } from '~/components/Common/Avatar/classnames';
 import { palettes } from '~/styles/utils';
 

@@ -8,7 +8,9 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { forwardRef } from 'react';
 
-import { PageHead, PageHeadingText, Tabs } from '~/components/Common';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Tabs } from '~/components/Common/Tabs';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import { ProfileTabs } from '~/components/Profile';
@@ -201,9 +203,7 @@ const TabContentInner = (props: TabContentProps) => {
   });
   const { data: appliedRecruits } = infiniteQuery;
   const infiniteData =
-    appliedRecruits?.pages
-      .map(({ recruits }) => recruits)
-      .reduce(concat) ?? [];
+    appliedRecruits?.pages.map(({ recruits }) => recruits).reduce(concat) ?? [];
 
   const emptyRecruitsText = getEmptyRecruitText(category, tabValue);
 

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 
-import { FullPageLoader, loaderText } from '~/components/Common';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { useMyAccountStatus, useMyInfo } from '~/services/member';
 import { routes } from '~/utils';
 import { webStorage } from '~/utils/webStorage';

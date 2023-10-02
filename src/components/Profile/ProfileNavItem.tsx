@@ -1,11 +1,11 @@
 import type { LinkProps } from 'next/link';
-import type { IconProps } from '~/components/Common';
+import type { IconProps } from '~/components/Common/Icon';
 
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 interface ProfileNavItemProps {

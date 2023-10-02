@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { Theme } from '~/styles/utils';
 import { routes } from '~/utils';
 

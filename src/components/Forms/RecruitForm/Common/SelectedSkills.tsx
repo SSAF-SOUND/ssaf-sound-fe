@@ -4,7 +4,7 @@ import type { SkillName } from '~/services/recruit';
 import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
 
-import { SkillIcon } from '~/components/Common';
+import { SkillIcon } from '~/components/Common/SkillIcon';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import { flex } from '~/styles/utils';
 

@@ -2,7 +2,8 @@ import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Button, Tabs } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Tabs } from '~/components/Common/Tabs';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import { ProfileTabs } from '~/components/Profile';

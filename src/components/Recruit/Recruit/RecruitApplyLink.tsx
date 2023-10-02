@@ -2,7 +2,7 @@ import type { Theme } from '~/styles/utils';
 
 import Link from 'next/link';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { routes } from '~/utils';
 
 interface RecruitApplyLinkProps {

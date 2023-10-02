@@ -1,4 +1,4 @@
-import type { IconNames } from '~/components/Common';
+import type { IconNames } from '~/components/Common/Icon';
 
 import { useRouter } from 'next/router';
 
@@ -6,7 +6,9 @@ import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
 
 import { DevSignInModalTrigger } from '~/components/__dev__/DevSignInModalTrigger';
-import { Dot, Icon, IconButton } from '~/components/Common';
+import { Dot } from '~/components/Common/Dot';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { useSignOutReconfirmModal } from '~/hooks';
 import { useMyInfo } from '~/services/member';
 import { flex, palettes } from '~/styles/utils';

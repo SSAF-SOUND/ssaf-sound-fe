@@ -9,7 +9,7 @@ import type { PartialDeep } from 'type-fest';
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { Nickname } from '~/components/Forms/UserRegisterForm/Fields/Nickname';
 import TitleBar from '~/components/TitleBar';
 import { flex, pageMinHeight } from '~/styles/utils';

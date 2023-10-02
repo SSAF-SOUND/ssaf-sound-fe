@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 
-import { Bar, Logo } from '~/components/Common';
+import { Bar } from '~/components/Common/Bar';
+import { Logo } from '~/components/Common/Logo';
 import { topBarHeight, fixTopCenter, zIndex } from '~/styles/utils';
 
 import { PrivateButtonsLayer } from './PrivateButtonsLayer';

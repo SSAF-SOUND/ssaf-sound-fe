@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { css } from '@emotion/react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { PageLayout } from '~/stories/Layout';
 import { flex, palettes } from '~/styles/utils';
 

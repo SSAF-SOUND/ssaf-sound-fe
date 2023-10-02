@@ -5,7 +5,8 @@ import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Button, SsafyIcon, TrackSize } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import { flex, fontCss, pageCss, themeColorVars } from '~/styles/utils';
 
 type RedirectionGuideTheme = 'primary' | 'secondary';

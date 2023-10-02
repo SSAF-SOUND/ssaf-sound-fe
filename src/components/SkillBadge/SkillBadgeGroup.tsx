@@ -4,8 +4,9 @@ import type { SkillName } from '~/services/recruit';
 
 import * as RadixToggleGroup from '@radix-ui/react-toggle-group';
 
+import { Badge } from '~/components/Common/Badge';
+
 import SkillBadge from './index';
-import { Badge } from '../Common';
 
 export interface ToggleGroupProps
   extends Omit<ToggleGroupMultipleProps, 'type'> {

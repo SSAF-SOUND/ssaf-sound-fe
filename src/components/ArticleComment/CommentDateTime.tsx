@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { Separator } from '~/components/Common';
+import { Separator } from '~/components/Common/Separator';
 import { flex, fontCss, palettes } from '~/styles/utils';
 import { formatDateTime } from '~/utils';
 

@@ -2,7 +2,7 @@ import type { Toast } from 'react-hot-toast';
 
 import toast from 'react-hot-toast';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { palettes } from '~/styles/utils';
 
 import ToastRoot from './ToastRoot';

@@ -7,7 +7,8 @@ import type {
 import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { usePortfolioFormContext } from '~/components/Forms/PortfolioForm/utils';
 import PortfolioLinkInputGroup from '~/components/PortfolioLinkInputGroup';
 import { getPortfolioLinkColor } from '~/services/member';

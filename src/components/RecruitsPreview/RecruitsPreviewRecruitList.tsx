@@ -1,10 +1,11 @@
-import type { IconNames } from '~/components/Common';
+import type { IconNames } from '~/components/Common/Icon';
 import type { RecruitSummary } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 import { useRef } from 'react';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { Scroll } from '~/components/Common/Scroll';
 import { RecruitsPreviewRecruitItem } from '~/components/RecruitsPreview/RecruitsPreviewRecruitItem';
 import { recruitPreviewMarginForExpandCssVar } from '~/components/RecruitsPreview/utils';

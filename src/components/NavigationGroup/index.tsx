@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { Gnb } from '~/components/Common';
+import { Gnb } from '~/components/Common/Gnb';
 import TopBar from '~/components/TopBar';
 
 interface NavigationGroupProps {

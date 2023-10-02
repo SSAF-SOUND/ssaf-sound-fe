@@ -3,7 +3,7 @@ import type { RecruitDetail } from '~/services/recruit';
 import { css } from '@emotion/react';
 
 import ArticleContent from '~/components/Article/ArticleContent';
-import { Tabs } from '~/components/Common';
+import { Tabs } from '~/components/Common/Tabs';
 
 import { RecruitTabsValue } from './constants';
 import { RecruitParticipantsProgressDetail } from './RecruitParticipantsProgressDetail';

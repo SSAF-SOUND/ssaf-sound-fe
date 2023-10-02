@@ -2,7 +2,9 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import { Icon, IconButton, Modal } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
+import { Modal } from '~/components/Common/Modal';
 import { flex, palettes } from '~/styles/utils';
 
 export interface ViewerHeaderProps {

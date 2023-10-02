@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { isBoolean } from 'is-what';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import {
   UserRegisterFormFieldQuestion,
   useUserRegisterFormContext,

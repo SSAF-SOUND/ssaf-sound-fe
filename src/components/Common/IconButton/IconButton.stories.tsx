@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { palettes, Theme } from '~/styles/utils';
 
 import { IconButton } from './index';

@@ -6,13 +6,10 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
-import {
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-  Separator,
-  Tabs,
-} from '~/components/Common';
+import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Separator } from '~/components/Common/Separator';
+import { Tabs } from '~/components/Common/Tabs';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';

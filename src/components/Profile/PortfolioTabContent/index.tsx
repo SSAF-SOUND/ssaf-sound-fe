@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-import { Tabs } from '~/components/Common';
+import { Tabs } from '~/components/Common/Tabs';
 import { useMyPortfolio, useUserPortfolio } from '~/services/member';
 
 import Portfolio from './Portfolio';

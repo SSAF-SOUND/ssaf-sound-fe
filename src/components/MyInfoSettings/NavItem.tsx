@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 
 interface NavItemProps {

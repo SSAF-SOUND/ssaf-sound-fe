@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { Modal, Separator } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
 import { SelectBox } from '~/components/Common/SelectBox';
+import { Separator } from '~/components/Common/Separator';
 import { ReportDomain, reportReasons } from '~/services/report';
 import {
   flex,

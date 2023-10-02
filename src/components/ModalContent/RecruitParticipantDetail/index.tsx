@@ -8,7 +8,10 @@ import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Button, Icon, IconButton, Modal } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
+import { Modal } from '~/components/Common/Modal';
 import { FullDateTime } from '~/components/FullDateTime';
 import { Alert } from '~/components/ModalContent';
 import SquareAvatar from '~/components/SquareAvatar';

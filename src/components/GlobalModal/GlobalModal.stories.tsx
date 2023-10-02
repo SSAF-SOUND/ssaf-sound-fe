@@ -1,6 +1,7 @@
 import type { Meta } from '@storybook/react';
 
-import { Button, Modal } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Modal } from '~/components/Common/Modal';
 import { Alert, BottomMenu } from '~/components/ModalContent';
 import { noop } from '~/utils';
 

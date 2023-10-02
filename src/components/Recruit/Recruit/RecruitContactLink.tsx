@@ -2,7 +2,9 @@ import type { Theme } from '~/styles/utils';
 
 import { css } from '@emotion/react';
 
-import { BoldText, Button, Icon } from '~/components/Common';
+import { BoldText } from '~/components/Common/BoldText';
+import { Button } from '~/components/Common/Button';
+import { Icon } from '~/components/Common/Icon';
 import { flex } from '~/styles/utils';
 
 interface RecruitContactLinkProps {

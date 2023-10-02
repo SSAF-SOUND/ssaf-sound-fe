@@ -8,7 +8,8 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { HotArticleCard } from '~/components/ArticleCard';
-import { PageHead, PageHeadingText } from '~/components/Common';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';

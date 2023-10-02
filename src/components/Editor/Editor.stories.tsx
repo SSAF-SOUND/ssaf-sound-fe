@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { AlertText } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
 import { useModal } from '~/components/GlobalModal';
 import ThumbnailBar from '~/components/ThumbnailBar';
 import { useImageUpload } from '~/services/s3/hooks';

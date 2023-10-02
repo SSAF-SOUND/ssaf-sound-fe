@@ -4,7 +4,7 @@ import type { RecruitParticipantsCount } from '~/services/recruit';
 import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
 
-import { NumberInput } from '~/components/Common';
+import { NumberInput } from '~/components/Common/NumberInput';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import {
   maxParticipantsCount,

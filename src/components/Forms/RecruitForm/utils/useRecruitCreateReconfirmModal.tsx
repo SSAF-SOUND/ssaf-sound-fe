@@ -1,4 +1,4 @@
-import { BoldText } from '~/components/Common';
+import { BoldText } from '~/components/Common/BoldText';
 import { useModal } from '~/components/GlobalModal';
 
 const RecruitCreateReconfirmModalDescription = () => (

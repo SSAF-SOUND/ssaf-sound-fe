@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { AlertText, TextInput } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { TextInput } from '~/components/Common/TextInput';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { fontCss, palettes } from '~/styles/utils';
 

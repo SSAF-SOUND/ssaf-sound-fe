@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useEffect, useId, useState } from 'react';
 import { useFormState, useWatch } from 'react-hook-form';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import {
   UserRegisterFormFieldQuestion,
   useUserRegisterFormContext,

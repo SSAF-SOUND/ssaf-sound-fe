@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { useIsImageLoading } from '~/hooks/useIsImageLoading';
 import { colorMix, inlineFlex, palettes } from '~/styles/utils';
 

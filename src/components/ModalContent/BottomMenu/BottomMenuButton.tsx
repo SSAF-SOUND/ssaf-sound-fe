@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
 
-import { Modal } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
 import { fontCss, palettes } from '~/styles/utils';
 
 const ButtonLoader = () => {

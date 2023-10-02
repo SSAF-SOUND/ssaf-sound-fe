@@ -1,4 +1,4 @@
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 
 import Base from './Base';
 

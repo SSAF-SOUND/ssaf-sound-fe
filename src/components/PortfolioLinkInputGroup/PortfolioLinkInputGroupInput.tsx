@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { css } from '@emotion/react';
 import { forwardRef, useId } from 'react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 type PortfolioLinkInputGroupInputType = 'href' | 'text';

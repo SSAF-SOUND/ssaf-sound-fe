@@ -6,12 +6,9 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import {
-  Button,
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import {
   RecruitCompletedBar,
   recruitCompletedBarHeight,

@@ -5,7 +5,9 @@ import { css } from '@emotion/react';
 import React, { memo, useState } from 'react';
 
 import lunchImageFallback from '~/assets/images/lunch-image-fallback.png';
-import { Button, Icon, ImageWithFallback } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Icon } from '~/components/Common/Icon';
+import { ImageWithFallback } from '~/components/Common/ImageWithFallback';
 import { LunchCardOrder } from '~/components/Lunch/LunchCard/LunchCardOrder';
 import { lunchCardMinHeight } from '~/components/Lunch/LunchCard/utils';
 import { colorMix, flex, fontCss, palettes } from '~/styles/utils';

@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 
 import DevSignInModal from '~/components/__dev__/DevSignInModal';
-import { Button, Modal } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Modal } from '~/components/Common/Modal';
 import { fontCss } from '~/styles/utils';
 import { isDevMode } from '~/utils';
 

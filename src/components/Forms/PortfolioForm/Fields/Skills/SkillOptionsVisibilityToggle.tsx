@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import * as RadixCheckbox from '@radix-ui/react-checkbox';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { palettes } from '~/styles/utils';
 
 interface CheckboxProps {

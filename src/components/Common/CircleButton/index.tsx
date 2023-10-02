@@ -1,13 +1,14 @@
 import type { LinkProps } from 'next/link';
 import type { ComponentPropsWithoutRef } from 'react';
-import type { IconNames } from '~/components/Common';
 import type { ButtonProps } from '~/components/Common/Button';
+import type { IconNames } from '~/components/Common/Icon';
 
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Button, Icon } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Icon } from '~/components/Common/Icon';
 
 export interface CircleButtonProps extends ComponentPropsWithoutRef<'button'> {
   /* `Button`의 `variant`와 동일  */

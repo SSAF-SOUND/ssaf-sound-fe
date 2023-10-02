@@ -1,7 +1,7 @@
 import { css, keyframes } from '@emotion/react';
 import { useLayoutEffect, useRef, useState } from 'react';
 
-import { SsafyIcon, TrackSize } from '~/components/Common';
+import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import { SsafyTrack } from '~/services/member';
 import { inlineFlex } from '~/styles/utils';
 

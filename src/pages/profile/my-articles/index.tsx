@@ -4,18 +4,20 @@ import type { ArticleSummary } from '~/services/article';
 import { css } from '@emotion/react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
-import {
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import TitleBar from '~/components/TitleBar';
 import { useMyArticles } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import { flex, pageCss, titleBarHeight } from '~/styles/utils';
-import { concat, createAuthGuard, createNoIndexPageMetaData, routes } from "~/utils";
+import {
+  concat,
+  createAuthGuard,
+  createNoIndexPageMetaData,
+  routes,
+} from '~/utils';
 
 const titleBarTitle = '내가 작성한 게시글';
 const metaTitle = titleBarTitle;
@@ -52,7 +54,7 @@ const selfCss = css(
 
 export default MyArticlesPage;
 MyArticlesPage.auth = createAuthGuard();
-MyArticlesPage.meta = createNoIndexPageMetaData(metaTitle)
+MyArticlesPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const ArticleLayer = () => {
   const infiniteQuery = useMyArticles();

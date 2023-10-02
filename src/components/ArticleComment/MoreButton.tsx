@@ -1,7 +1,8 @@
 import { ClipLoader } from 'react-spinners';
 
 import { commentIconSize } from '~/components/ArticleComment/utils';
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { palettes } from '~/styles/utils';
 
 interface MoreButtonProps {

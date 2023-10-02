@@ -2,7 +2,7 @@ import type { Theme } from '~/styles/utils';
 
 import { css } from '@emotion/react';
 
-import { Checkbox } from '~/components/Common';
+import { Checkbox } from '~/components/Common/Checkbox';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 interface AgreeToProvideProfileCheckboxProps {

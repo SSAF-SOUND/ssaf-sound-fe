@@ -1,7 +1,8 @@
 import * as RadixToggle from '@radix-ui/react-toggle';
 import { ClipLoader } from 'react-spinners';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { colorMix, palettes, Theme } from '~/styles/utils';
 
 interface RecruitApplicantLikeButtonProps {

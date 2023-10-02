@@ -3,7 +3,9 @@ import type { StudentCertificationFormValues } from '~/components/Forms/StudentC
 import { css } from '@emotion/react';
 import { useWatch } from 'react-hook-form';
 
-import { AlertText, Button, TextInput } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { Button } from '~/components/Common/Button';
+import { TextInput } from '~/components/Common/TextInput';
 import { useStudentCertificationFormContext } from '~/components/Forms/StudentCertificationForm/utils';
 
 const fieldName = 'answer';

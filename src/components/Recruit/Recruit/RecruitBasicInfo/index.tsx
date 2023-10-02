@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import type { IconNames } from '~/components/Common';
+import type { IconNames } from '~/components/Common/Icon';
 import type { RecruitDetail } from '~/services/recruit';
 
 import { css } from '@emotion/react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { RecruitSkillInfo } from '~/components/Recruit/Recruit/RecruitBasicInfo/RecruitSkillInfo';
 import { flex, fontCss, palettes } from '~/styles/utils';
 

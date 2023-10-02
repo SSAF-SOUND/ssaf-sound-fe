@@ -1,11 +1,11 @@
-import type { IconNames } from '~/components/Common';
+import type { IconNames } from '~/components/Common/Icon';
 import type { ArticleSummary } from '~/services/article';
 
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { expandCss, flex, fontCss, lineClamp, palettes } from '~/styles/utils';
 import { routes } from '~/utils';
 

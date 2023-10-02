@@ -5,7 +5,9 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { Button, FullPageLoader, PageHeadingText } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { RecruitApplicantBar } from '~/components/RecruitApplicants';
 import { RecruitApplicantsCount } from '~/components/RecruitApplicants/RecruitApplicantsCount';
 import RedirectionGuide from '~/components/RedirectionGuide';

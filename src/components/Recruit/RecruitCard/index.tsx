@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
-import { SkillIcon } from '~/components/Common';
+import { SkillIcon } from '~/components/Common/SkillIcon';
 import { RecruitBadge } from '~/components/Recruit/RecruitBadge';
 import {
   middleRecruitCardPaddingX,

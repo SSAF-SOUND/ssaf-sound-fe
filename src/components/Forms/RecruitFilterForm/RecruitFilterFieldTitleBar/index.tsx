@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { flex, fontCss } from '~/styles/utils';
 
 interface RecruitFilterFieldTitleBarProps {

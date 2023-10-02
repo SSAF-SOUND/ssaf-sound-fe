@@ -6,7 +6,7 @@ import { memo } from 'react';
 import ArticleCardLink from '~/components/ArticleCard/ArticleCardLink';
 import CommentStat from '~/components/ArticleCard/CommentStat';
 import LikeStat from '~/components/ArticleCard/LikeStat';
-import { Separator } from '~/components/Common';
+import { Separator } from '~/components/Common/Separator';
 import { useStripHtml } from '~/hooks';
 import { flex, fontCss, lineClamp, palettes } from '~/styles/utils';
 import { routes, timeAgo } from '~/utils';

@@ -4,7 +4,8 @@ import type { RecruitParticipantsCount } from '~/services/recruit';
 import { css } from '@emotion/react';
 import { useFieldArray, useFormState, useWatch } from 'react-hook-form';
 
-import { Button, Icon } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Icon } from '~/components/Common/Icon';
 import { SelectBox } from '~/components/Common/SelectBox';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import {

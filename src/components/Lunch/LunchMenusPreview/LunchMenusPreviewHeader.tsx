@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { LunchTitle } from '~/components/Lunch/LunchTitle';
 import { flex, fontCss, palettes } from '~/styles/utils';
 import { routes } from '~/utils';

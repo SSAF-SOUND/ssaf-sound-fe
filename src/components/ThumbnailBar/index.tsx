@@ -6,7 +6,9 @@ import { css } from '@emotion/react';
 import { memo, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
-import { Icon, IconButton, Modal } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
+import { Modal } from '~/components/Common/Modal';
 import { flex, palettes } from '~/styles/utils';
 
 import Thumbnail from './Thumbnail';

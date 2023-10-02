@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { Button } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
 import { useRecruitFormContext } from '~/components/Forms/RecruitForm/utils';
 import { useModal } from '~/components/GlobalModal';
 import { useAsyncState } from '~/hooks';

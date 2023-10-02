@@ -4,7 +4,8 @@ import { css } from '@emotion/react';
 import * as RadixToggle from '@radix-ui/react-toggle';
 
 import lunchImageFallback from '~/assets/images/lunch-image-fallback.png';
-import { Icon, ImageWithFallback } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { ImageWithFallback } from '~/components/Common/ImageWithFallback';
 import { flex, fontCss, palettes, resetStyle } from '~/styles/utils';
 
 export interface LunchMenusPreviewMenuDescriptionProps {

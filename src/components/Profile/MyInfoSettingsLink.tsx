@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { routes } from '~/utils';
 
 const MyInfoSettingsLink = () => {

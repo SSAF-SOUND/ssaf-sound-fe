@@ -4,7 +4,10 @@ import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { useFormContext } from 'react-hook-form';
 
-import { AlertText, Icon, IconButton, TextInput } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
+import { TextInput } from '~/components/Common/TextInput';
 import { nicknameValidator } from '~/services/member';
 import { createRandomNickname } from '~/services/member/utils/createRandomNickname';
 import { flex } from '~/styles/utils';

@@ -7,7 +7,8 @@ import { css } from '@emotion/react';
 import { produce } from 'immer';
 import { isBoolean } from 'is-what';
 
-import { FullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import {
   CertificationState,

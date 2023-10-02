@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { useWatch } from 'react-hook-form';
 
-import { AlertText } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
 import FieldOverview from '~/components/Forms/RecruitForm/Common/FieldOverview';
 import { RecruitFormAccordion } from '~/components/Forms/RecruitForm/Common/RecruitFormAccordion';
 import SelectedSkills from '~/components/Forms/RecruitForm/Common/SelectedSkills';

@@ -5,11 +5,8 @@ import type { UserPortfolio } from '~/services/member';
 import { useRouter } from 'next/router';
 
 import PortfolioForm from 'src/components/Forms/PortfolioForm';
-import {
-  FullPageLoader,
-  loaderText,
-  PageHeadingText,
-} from '~/components/Common';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import {
   useMyInfo,
@@ -45,9 +42,7 @@ const PortfolioEditPage: CustomNextPage = () => {
   }
 
   if (isLoadingMyPortfolio) {
-    return (
-      <FullPageLoader text="내 포트폴리오 데이터를 가져오는 중입니다." />
-    );
+    return <FullPageLoader text="내 포트폴리오 데이터를 가져오는 중입니다." />;
   }
 
   if (isErrorMyPortfolio) {

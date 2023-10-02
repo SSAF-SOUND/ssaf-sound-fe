@@ -3,7 +3,7 @@ import type { RecruitCategoryName } from '~/services/recruit';
 import { css } from '@emotion/react';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { AlertText } from '~/components/Common';
+import { AlertText } from '~/components/Common/AlertText';
 import { AgreeToProvideProfileCheckbox } from '~/components/Forms/RecruitApplyForm/Fields/AgreeToProvideProfile/AgreeToProvideProfileCheckbox';
 import { RecruitApplyFormFieldTitle } from '~/components/Forms/RecruitApplyForm/RecruitApplyFormFieldTitle';
 import {

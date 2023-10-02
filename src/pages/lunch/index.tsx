@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import React, { useEffect } from 'react';
 
-import { PageHead, PageHeadingText } from '~/components/Common';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { LunchLayout } from '~/components/Layout';
 import {
   LunchTabs,

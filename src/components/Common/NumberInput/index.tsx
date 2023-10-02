@@ -3,7 +3,8 @@ import type { ComponentPropsWithoutRef, MouseEvent } from 'react';
 import { css } from '@emotion/react';
 import { forwardRef, memo, useRef } from 'react';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { useComposedRefs } from '~/hooks/useComposedRefs';
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 

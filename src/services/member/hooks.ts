@@ -10,8 +10,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { queryKeys } from '~/react-query/common';
-import { toMs } from '~/utils';
 import { routes } from '~/utils/routes';
+import { toMs } from '~/utils/toMs';
 
 import {
   certifyStudent,

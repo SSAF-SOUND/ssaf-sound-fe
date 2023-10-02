@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { Toggle } from '@radix-ui/react-toggle';
 import React from 'react';
 
-import { Icon } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 export interface LunchCardPollButtonProps {

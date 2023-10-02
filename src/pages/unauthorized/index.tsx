@@ -1,4 +1,5 @@
-import { PageHead, PageHeadingText } from '~/components/Common';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import { routes } from '~/utils';
 

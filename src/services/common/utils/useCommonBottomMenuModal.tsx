@@ -1,7 +1,7 @@
 import type { ReportProps } from '~/components/ModalContent';
 import type { ReportDomain } from '~/services/report';
 
-import { Modal } from '~/components/Common';
+import { Modal } from '~/components/Common/Modal';
 import { useModal } from '~/components/GlobalModal';
 import { Alert, BottomMenu, Report } from '~/components/ModalContent';
 import { useAsyncState } from '~/hooks';

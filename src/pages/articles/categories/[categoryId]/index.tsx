@@ -11,7 +11,9 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { ArticleCard } from '~/components/ArticleCard';
-import { CircleButton, PageHead, PageHeadingText } from '~/components/Common';
+import { CircleButton } from '~/components/Common/CircleButton';
+import { PageHead } from '~/components/Common/PageHead';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';

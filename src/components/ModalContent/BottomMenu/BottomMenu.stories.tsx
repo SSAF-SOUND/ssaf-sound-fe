@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button, Modal } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { Modal } from '~/components/Common/Modal';
 import { Alert } from '~/components/ModalContent';
 
 import BottomMenu from './index';

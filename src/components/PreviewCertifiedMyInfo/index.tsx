@@ -4,7 +4,8 @@ import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
-import { Button, SsafyIcon, TrackSize } from '~/components/Common';
+import { Button } from '~/components/Common/Button';
+import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import NameCard from '~/components/NameCard';
 import { flex, fontCss, pageMinHeight, palettes } from '~/styles/utils';
 import { routes } from '~/utils';

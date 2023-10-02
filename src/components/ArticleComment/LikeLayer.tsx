@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
 
 import { commentIconSize } from '~/components/ArticleComment/utils';
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { useSignInGuideModal } from '~/hooks';
 import { useLikeComment } from '~/services/comment';
 import { flex, fontCss } from '~/styles/utils';

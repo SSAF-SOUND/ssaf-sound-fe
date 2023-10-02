@@ -1,6 +1,6 @@
 import type { RecruitCategoryName } from '~/services/recruit';
 
-import { CircleButton } from '~/components/Common';
+import { CircleButton } from '~/components/Common/CircleButton';
 import { getRecruitThemeByCategory } from '~/services/recruit';
 import { routes } from '~/utils';
 

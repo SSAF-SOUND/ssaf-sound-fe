@@ -1,6 +1,8 @@
-import type { IconButtonProps, IconNames } from '~/components/Common';
+import type { IconNames } from '~/components/Common/Icon';
+import type { IconButtonProps } from '~/components/Common/IconButton';
 
-import { Icon, IconButton } from '~/components/Common';
+import { Icon } from '~/components/Common/Icon';
+import { IconButton } from '~/components/Common/IconButton';
 import { colorMix } from '~/styles/utils';
 
 interface ArticleIconButtonProps {

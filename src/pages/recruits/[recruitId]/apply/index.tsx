@@ -6,7 +6,8 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
-import { FullPageLoader, PageHeadingText } from '~/components/Common';
+import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import { RecruitApplyFormHeader } from '~/components/Forms/RecruitApplyForm/RecruitApplyFormHeader';
 import RedirectionGuide from '~/components/RedirectionGuide';
