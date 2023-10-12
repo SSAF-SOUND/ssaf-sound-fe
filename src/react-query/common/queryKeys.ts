@@ -237,28 +237,7 @@ export const endpoints = {
     complete: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/expired` as const,
     list: () => endpoints.recruit.self(),
-    joinedList: (params: JoinedRecruitsParams) => {
-      const {
-        category,
-        memberId,
-        cursor = defaultRecruitsPageCursor,
-        size = defaultRecruitsPageSize,
-      } = params;
-      const searchParams = new URLSearchParams();
-
-      const joinedRecruitsQueryStringObject = {
-        category,
-        memberId,
-        cursor,
-        size,
-      };
-      Object.entries(joinedRecruitsQueryStringObject).map(([key, value]) => {
-        if (value) searchParams.append(key, String(value));
-      });
-      const queryString = searchParams.toString();
-
-      return `${endpoints.recruit.self()}/joined?${queryString}` as const;
-    },
+    joinedList: () => `${endpoints.recruit.self()}/joined` as const,
     appliedList: (params: AppliedRecruitsParams) => {
       const searchParams = new URLSearchParams();
       const {
