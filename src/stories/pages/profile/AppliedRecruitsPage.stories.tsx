@@ -4,6 +4,7 @@ import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo'
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import {
   mockGetAppliedRecruits,
+  mockGetAppliedRecruitsError,
   mockGetEmptyAppliedRecruits,
 } from '~/mocks/handlers/recruit/apis/mockGetAppliedRecruits';
 import AppliedRecruitsPage from '~/pages/profile/applied-recruits/[recruitCategoryName]';
@@ -64,4 +65,13 @@ export const Study__Empty: AppliedRecruitsPageStory = {
     }),
   },
   args: { recruitCategoryName: RecruitCategoryName.STUDY },
+};
+
+export const Error: AppliedRecruitsPageStory = {
+  name: '에러',
+  parameters: {
+    ...createMswParameters({
+      recruit: [mockGetAppliedRecruitsError],
+    }),
+  },
 };
