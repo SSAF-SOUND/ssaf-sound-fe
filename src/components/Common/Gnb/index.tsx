@@ -1,3 +1,5 @@
+import type { ReactElement } from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -5,6 +7,7 @@ import { css } from '@emotion/react';
 import { useMemo } from 'react';
 import { MdHome, MdArticle, MdGroupAdd, MdAccountCircle } from 'react-icons/md';
 
+import { useMyInfo } from '~/services/member';
 import {
   flex,
   fontCss,
@@ -12,6 +15,7 @@ import {
   palettes,
   fixBottomCenter,
   zIndex,
+  colorMix,
 } from '~/styles/utils';
 import { routes } from '~/utils';
 
@@ -19,48 +23,73 @@ export interface GnbProps {
   className?: string;
 }
 
+interface NavigationDetail {
+  text: string;
+  icon: ReactElement;
+  href: string;
+  auth: boolean;
+}
+
+const createNavigationDetail = (
+  text: string,
+  icon: ReactElement,
+  href: string,
+  auth?: boolean
+): NavigationDetail => {
+  return {
+    text,
+    icon,
+    href,
+    auth: auth ?? false,
+  };
+};
+
 export const Gnb = (props: GnbProps) => {
   const { className } = props;
   const navItems = useMemo(
     () => [
-      {
-        text: '홈',
-        icon: <MdHome />,
-        href: routes.main(),
-      },
-      {
-        text: '게시판',
-        icon: <MdArticle />,
-        href: routes.article.categories().pathname,
-      },
-      {
-        text: '리쿠르팅',
-        icon: <MdGroupAdd />,
-        href: routes.recruit.list().pathname,
-      },
-      {
-        text: '프로필',
-        icon: <MdAccountCircle />,
-        href: routes.profile.self(),
-      },
+      createNavigationDetail('홈', <MdHome />, routes.main()),
+      createNavigationDetail(
+        '게시판',
+        <MdArticle />,
+        routes.article.categories().pathname
+      ),
+      createNavigationDetail(
+        '리쿠르팅',
+        <MdGroupAdd />,
+        routes.recruit.list().pathname
+      ),
+      createNavigationDetail(
+        '프로필',
+        <MdAccountCircle />,
+        routes.profile.self(),
+        true
+      ),
     ],
     []
   );
   const router = useRouter();
   const { pathname } = router;
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
 
   return (
     <nav css={selfCss} className={className}>
       <div css={itemContainerCss}>
         {navItems.map((navItem) => {
-          const { text, icon, href } = navItem;
+          const { text, icon, href, auth } = navItem;
           const isActive = pathname.startsWith(href);
+          const isDisabled = auth && !isSignedIn;
 
           return (
             <Link
               key={text}
               href={href}
-              css={[itemCss, isActive && iconHighlightCss]}
+              css={[
+                itemCss,
+                isActive && iconHighlightCss,
+                isDisabled && disableCss,
+              ]}
             >
               <div css={iconCss}>{icon}</div>
               <p css={textCss}>{text}</p>
@@ -110,9 +139,14 @@ const iconCss = css(
 
 const textCss = css(fontCss.style.B12);
 
-const iconHighlightCss = {
+const iconHighlightCss = css({
   color: palettes.primary.darken,
   ':hover': {
     color: palettes.primary.darken,
   },
-};
+});
+
+const disableCss = css({
+  color: colorMix('50%', palettes.font.grey),
+  pointerEvents: 'none',
+});
