@@ -1,12 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { userInfo } from '~/mocks/handlers/member/data';
+import {
+  mockGetEmptyMyArticles,
+  mockGetMyArticles,
+  mockGetMyArticlesError,
+} from '~/mocks/handlers/article/apis/mockGetMyArticles';
+import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUserInfo } from '~/mocks/handlers/member/data';
 import MyArticlesPage from '~/pages/profile/my-articles';
-import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
+
+const myInfo = mockUserInfo.certifiedSsafyUserInfo;
 
 const meta: Meta<typeof MyArticlesPage> = {
-  title: 'Page/Profile/MyArticles',
+  title: 'Page/프로필/내가 작성한 게시글',
   component: MyArticlesPage,
   decorators: [
     (Story) => (
@@ -17,6 +25,9 @@ const meta: Meta<typeof MyArticlesPage> = {
   ],
   parameters: {
     layout: 'fullscreen',
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+    }),
   },
 };
 
@@ -25,11 +36,28 @@ export default meta;
 type MyArticlesPageStory = StoryObj<typeof MyArticlesPage>;
 
 export const Default: MyArticlesPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-      return <Story />;
-    },
-  ],
+  name: '정상',
+  parameters: {
+    ...createMswParameters({
+      article: [mockGetMyArticles],
+    }),
+  },
+};
+
+export const Empty: MyArticlesPageStory = {
+  name: '빈 데이터',
+  parameters: {
+    ...createMswParameters({
+      article: [mockGetEmptyMyArticles],
+    }),
+  },
+};
+
+export const Error: MyArticlesPageStory = {
+  name: '에러',
+  parameters: {
+    ...createMswParameters({
+      article: [mockGetMyArticlesError],
+    }),
+  },
 };
