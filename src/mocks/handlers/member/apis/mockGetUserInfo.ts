@@ -1,4 +1,4 @@
-import type { GetUserInfoApiData, UserInfo } from '~/services/member';
+import type { GetUserInfo, UserInfo } from '~/services/member';
 
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import { restError, restSuccess } from '~/mocks/utils';
@@ -14,7 +14,7 @@ const getUserInfoEndpoint = composeUrls(
 );
 
 export const createMockGetUserInfo = (data: UserInfo) => {
-  return restSuccess<GetUserInfoApiData['data']>(
+  return restSuccess<GetUserInfo['data']>(
     getUserInfoMethod,
     getUserInfoEndpoint,
     { data }
