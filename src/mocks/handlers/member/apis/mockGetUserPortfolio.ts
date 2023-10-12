@@ -1,6 +1,9 @@
 import type { GetUserPortfolioApiData, UserPortfolio } from '~/services/member';
 
-import { mockPortfolio } from '~/mocks/handlers/member/data';
+import {
+  mockEmptyPortfolio,
+  mockPortfolio,
+} from '~/mocks/handlers/member/data';
 import { restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
@@ -19,3 +22,5 @@ export const createMockGetUserPortfolio = (portfolio: UserPortfolio) => {
 };
 
 export const mockGetUserPortfolio = createMockGetUserPortfolio(mockPortfolio);
+export const mockGetEmptyUserPortfolio =
+  createMockGetUserPortfolio(mockEmptyPortfolio);

@@ -10,7 +10,7 @@ const getProfileVisibilityEndpoint = composeUrls(
   endpoints.user.profileVisibility()
 );
 
-const createMockGetProfileVisibility = (isPublic: boolean) => {
+export const createMockGetProfileVisibility = (isPublic: boolean) => {
   return restSuccess<GetProfileVisibilityApiData['data']>(
     getProfileVisibilityMethod,
     getProfileVisibilityEndpoint,

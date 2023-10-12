@@ -9,7 +9,7 @@ const getUserProfileVisibilityEndpoint = // eslint-disable-next-line
   // @ts-ignore
   composeUrls(API_URL, endpoints.user.userProfileVisibility(':id'));
 
-const createMockGetUserProfileVisibility = (isPublic: boolean) => {
+export const createMockGetUserProfileVisibility = (isPublic: boolean) => {
   return restSuccess<GetUserProfileVisibilityApiData['data']>(
     getUserProfileVisibilityMethod,
     getUserProfileVisibilityEndpoint,
