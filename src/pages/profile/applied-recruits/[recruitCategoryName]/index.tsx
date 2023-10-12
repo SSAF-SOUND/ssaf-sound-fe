@@ -93,7 +93,7 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
         <TitleBar.Default
           title={titleBarTitle}
           withoutClose
-          onClickBackward={routes.profile.self(backwardRouteTab)}
+          onClickBackward={routes.profile.self({ tab: backwardRouteTab })}
         />
 
         <Tabs.Root defaultValue={tabValue} onValueChange={onTabValueChange}>
