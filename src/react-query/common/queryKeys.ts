@@ -238,30 +238,8 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/expired` as const,
     list: () => endpoints.recruit.self(),
     joinedList: () => `${endpoints.recruit.self()}/joined` as const,
-    appliedList: (params: AppliedRecruitsParams) => {
-      const searchParams = new URLSearchParams();
-      const {
-        category,
-        cursor = defaultRecruitsPageCursor,
-        size = defaultRecruitsPageSize,
-        matchStatus,
-      } = params;
+    appliedList: () => `${endpoints.recruit.self()}/applied` as const,
 
-      const appliedRecruitsQueryStringObject = {
-        category,
-        cursor,
-        size,
-        matchStatus,
-      };
-
-      Object.entries(appliedRecruitsQueryStringObject).forEach(
-        ([key, value]) => {
-          if (value) searchParams.append(key, String(value));
-        }
-      );
-      const queryString = searchParams.toString();
-      return `${endpoints.recruit.self()}/applied?${queryString}` as const;
-    },
     apply: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/application` as const,
     application: {
