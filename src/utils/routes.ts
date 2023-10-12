@@ -1,13 +1,9 @@
 import type { OAuthProviders } from '~/services/auth/utils';
-import type {
-  RecruitParts,
-  SkillName,
-  MatchStatus,
-  RecruitCategoryName,
-} from '~/services/recruit';
+import type { MatchStatus, RecruitCategoryName } from '~/services/recruit';
 
 import { article } from '~/utils/client-routes/article';
 import { lunch } from '~/utils/client-routes/lunch';
+import { profile } from '~/utils/client-routes/profile';
 import { recruit } from '~/utils/client-routes/recruit';
 
 export const routes = {
@@ -30,37 +26,7 @@ export const routes = {
     studentCertification: () => '/intro/student-certification' as const,
   },
 
-  profile: {
-    self: (tab?: string) => {
-      if (tab) {
-        return `/profile?tab=${tab}`;
-      }
-
-      return `/profile` as const;
-    },
-    detail: (id: number) => `${routes.profile.self()}/${id}` as const,
-    myInfoSettings: () => `${routes.profile.self()}/myinfo-settings` as const,
-    myArticles: () => `${routes.profile.self()}/my-articles` as const,
-    myScraps: (category?: PossibleMyScrapsCategories) => {
-      const route = `${routes.profile.self()}/my-scraps` as const;
-      if (category) {
-        return `${route}?tab=${category}` as const;
-      }
-      return route;
-    },
-
-    edit: {
-      myInfo: (field: EditableMyInfoFields) =>
-        `${routes.profile.myInfoSettings()}/${field}/edit` as const,
-
-      portfolio: () => `${routes.profile.self()}/portfolio/edit` as const,
-    },
-
-    delete: {
-      account: () =>
-        `${routes.profile.myInfoSettings()}/account/delete` as const,
-    },
-  },
+  profile,
 
   //
   unauthorized: () => '/unauthorized' as const,
@@ -72,32 +38,7 @@ export const routes = {
   lunch,
 };
 
-export enum EditableMyInfoFields {
-  SSAFY_BASIC_INFO = 'ssafy-basic-info', // 기수, 캠퍼스, 멤버여부(학생 인증시 못바꿈)
-  NICKNAME = 'nickname',
-  IS_MAJOR = 'is-major',
-  TRACK = 'track', // 인증된 상태에서만 바꿀 수 있음
-}
-
-export enum PossibleMyScrapsCategories {
-  ARTICLES = 'articles',
-  RECRUITS = 'recruits',
-}
-
-export type RecruitsPageQueryStringObject = {
-  category: RecruitCategoryName;
-  completed: string;
-  keyword: string;
-  skills: SkillName | SkillName[];
-  recruitParts: RecruitParts | RecruitParts[];
-};
-
 export type AppliedRecruitsPageQueryStringObject = {
   category: RecruitCategoryName;
   matchStatus: MatchStatus;
 };
-
-interface RecruitApplicationRouteParams {
-  recruitId: number;
-  recruitApplicationId: number;
-}
