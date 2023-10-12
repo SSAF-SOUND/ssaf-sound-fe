@@ -26,6 +26,7 @@ export interface PageHeadProps {
   robots?: Partial<MetaRobots>;
   openGraph?: Partial<MetaOpenGraph>;
   options?: Partial<PageHeadOptions>;
+  canonical?: string;
 }
 
 const createMetaRobotsContent = (robots: MetaRobots) => {
@@ -50,6 +51,7 @@ export const PageHead = (props: PageHeadProps) => {
       type: openGraphType = globalMetaData.pageType,
     } = {},
     options: { formatTitle = defaultFormatTitle } = {},
+    canonical,
   } = props;
 
   const renderMetaRobots = !follow || !index;
@@ -79,6 +81,12 @@ export const PageHead = (props: PageHeadProps) => {
       <meta name="twitter:title" content={openGraphTitle} />
       <meta name="twitter:description" content={openGraphDescription} />
       <meta name="twitter:image" content={image} />
+      {canonical && (
+        <link
+          rel="canonical"
+          href={composeUrls(globalMetaData.url, canonical)}
+        />
+      )}
     </Head>
   );
 };
