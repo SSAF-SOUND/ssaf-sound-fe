@@ -4,7 +4,7 @@ import {
   mockEmptyPortfolio,
   mockPortfolio,
 } from '~/mocks/handlers/member/data';
-import { restSuccess } from '~/mocks/utils';
+import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
@@ -26,3 +26,9 @@ export const mockGetMyPortfolio = createMockGetMyPortfolio(mockPortfolio);
 
 export const mockGetMyEmptyPortfolio =
   createMockGetMyPortfolio(mockEmptyPortfolio);
+
+export const mockGetMyPortfolioError = restError(
+  getMyPortfolioMethod,
+  getMyPortfolioEndpoint,
+  { message: 'mockGetMyPortfolio Error' }
+);
