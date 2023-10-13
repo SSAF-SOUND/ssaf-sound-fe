@@ -7,6 +7,7 @@ import { Clock } from '~/components/Clock';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { HotArticlesPreview } from '~/components/HotArticlesPreview';
+import { JsonLD } from '~/components/JsonLD';
 import { LunchMenusPreview } from '~/components/Lunch';
 import NavigationGroup from '~/components/NavigationGroup';
 import { RecruitsPreview } from '~/components/RecruitsPreview';
@@ -22,6 +23,12 @@ import { globalMetaData } from '~/utils/metadata';
 
 const metaTitle = '홈';
 const metaDescription = `${globalMetaData.description} 점심 메뉴, 리쿠르팅, 핫 게시글 등 다양한 SSAF SOUND의 기능을 활용해보세요.`;
+const siteNameSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'SSAF SOUND',
+  url: process.env.NEXT_PUBLIC_APP_URL as string,
+};
 
 const MainPage = () => {
   const { data: myInfo } = useMyInfo();
@@ -40,6 +47,8 @@ const MainPage = () => {
       />
 
       <PageHeadingText text={metaTitle} />
+
+      <JsonLD object={siteNameSchema} />
 
       <div css={selfCss}>
         <NavigationGroup />
