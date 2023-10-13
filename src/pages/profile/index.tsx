@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import NameCard from '~/components/NameCard';
 import NavigationGroup from '~/components/NavigationGroup';
@@ -19,16 +19,12 @@ import {
   gnbHeight,
   titleBarHeight,
 } from '~/styles/utils';
-import {
-  createAuthGuard,
-  createNoIndexPageMetaData,
-  customToast,
-  routes,
-} from '~/utils';
+import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 
 const enum ParamsKey {
   TAB = 'tab',
 }
+
 type Params = {
   [ParamsKey.TAB]: ProfileTabs;
 };
@@ -41,7 +37,6 @@ const MyProfilePage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
 
   if (!myInfo) {
-    customToast.clientError('로그인이 필요합니다.');
     router.replace(routes.signIn());
     return <FullPageLoader text={loaderText.checkUser} />;
   }
