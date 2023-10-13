@@ -11,7 +11,7 @@ import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIco
 import { useModal } from '~/components/GlobalModal';
 import SquareAvatar from '~/components/SquareAvatar';
 import { RecruitParts, useRecruitParticipants } from '~/services/recruit';
-import { flex, fontCss, palettes, resetStyle } from '~/styles/utils';
+import { colorMix, flex, fontCss, palettes, resetStyle } from '~/styles/utils';
 
 interface RecruitParticipantsProgressDetailProps {
   recruitId: number;
@@ -104,7 +104,8 @@ export const RecruitParticipantsProgressDetail = memo(
 
 const avatarButtonCss = css(resetStyle.button(), {
   borderRadius: 8,
-  '&:focus-visible': {
+  transition: 'outline 100ms',
+  '&:focus-visible, &:hover': {
     outline: `3px solid ${palettes.primary.default}`,
   },
 });
