@@ -54,6 +54,7 @@ const DeleteAccountPage: CustomNextPage = () => {
           <Button size="lg" variant="inverse" css={buttonCss} asChild>
             <Link href={routes.profile.myInfoSettings()}>아니오</Link>
           </Button>
+          {/* TODO: 재확인 모달 + 약관표시 */}
           <Button
             size="lg"
             loading={isDeletingAccount}
