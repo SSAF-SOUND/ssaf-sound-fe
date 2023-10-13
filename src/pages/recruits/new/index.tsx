@@ -99,5 +99,6 @@ const RecruitCreatePage: CustomNextPage = () => {
 export default RecruitCreatePage;
 RecruitCreatePage.auth = createAuthGuard();
 RecruitCreatePage.meta = createNoIndexPageMetaData(metaTitle);
+RecruitCreatePage.mainLayoutStyle = { overflow: 'unset' };
 
 const marginForExpand = globalVars.mainLayoutPaddingX.var;

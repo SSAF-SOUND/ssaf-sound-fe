@@ -20,7 +20,7 @@ import {
   mockGetEmptyRecruits,
   mockGetRecruits,
 } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
-import MainPage from '~/pages/main';
+import MainPage from '~/pages';
 import { SsafyCampus } from '~/services/meta/utils';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';

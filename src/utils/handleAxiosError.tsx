@@ -5,7 +5,7 @@ import { isAxiosError } from 'axios';
 import toast from 'react-hot-toast';
 
 import { Toast } from '~/components/Common/Toast';
-import { customToast } from '~/utils';
+import { customToast } from '~/utils/customToast';
 
 interface HandleAxiosErrorOptions {
   /**

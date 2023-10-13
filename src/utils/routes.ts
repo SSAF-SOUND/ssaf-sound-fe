@@ -5,8 +5,7 @@ import { profile } from '~/utils/client-routes/profile';
 import { recruit } from '~/utils/client-routes/recruit';
 
 export const routes = {
-  root: () => '/' as const,
-  main: () => '/main' as const,
+  main: () => '/' as const,
   article,
 
   //

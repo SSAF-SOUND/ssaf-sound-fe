@@ -26,20 +26,20 @@ export interface GnbProps {
 interface NavigationDetail {
   text: string;
   icon: ReactElement;
-  href: string;
+  pathname: string;
   auth: boolean;
 }
 
 const createNavigationDetail = (
   text: string,
   icon: ReactElement,
-  href: string,
+  pathname: string,
   auth?: boolean
 ): NavigationDetail => {
   return {
     text,
     icon,
-    href,
+    pathname,
     auth: auth ?? false,
   };
 };
@@ -69,7 +69,7 @@ export const Gnb = (props: GnbProps) => {
     []
   );
   const router = useRouter();
-  const { pathname } = router;
+  const { pathname: currentPathname } = router;
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
 
@@ -77,14 +77,14 @@ export const Gnb = (props: GnbProps) => {
     <nav css={selfCss} className={className}>
       <div css={itemContainerCss}>
         {navItems.map((navItem) => {
-          const { text, icon, href, auth } = navItem;
-          const isActive = pathname.startsWith(href);
+          const { text, icon, pathname: itemPathname, auth } = navItem;
+          const isActive = currentPathname === itemPathname;
           const isDisabled = auth && !isSignedIn;
 
           return (
             <Link
               key={text}
-              href={href}
+              href={itemPathname}
               css={[
                 itemCss,
                 isActive && iconHighlightCss,

@@ -8,11 +8,13 @@ import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import RedirectionGuide from '~/components/RedirectionGuide';
+import UnloadReconfirmEffectSlot from '~/components/UnloadReconfirmEffectSlot';
 import {
   useMyInfo,
   useMyPortfolio,
   useUpdateMyPortfolio,
 } from '~/services/member';
+import { reconfirmPortfolioFormUnload } from '~/services/member/utils/reconfirmPortfolioFormUnload';
 import { globalVars } from '~/styles/utils';
 import {
   createAuthGuard,
@@ -97,24 +99,32 @@ const PortfolioEditPage: CustomNextPage = () => {
     }
   };
 
+  const onClickTitleBarClose = () => {
+    if (reconfirmPortfolioFormUnload()) {
+      router.push(routes.profile.detail(myInfo.memberId));
+    }
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
 
       <div>
-        <PortfolioForm
-          defaultValues={{
-            selfIntroduction: myPortfolio.selfIntroduction,
-            links: portfolioLinksToFormLinksField(myPortfolio.memberLinks),
-            skills: portfolioSkillsToFormSkillsField(myPortfolio.skills),
-          }}
-          options={{
-            marginForExpand: globalVars.mainLayoutPaddingX.var,
-            titleBarCloseRoute: routes.profile.detail(myInfo.memberId),
-          }}
-          onInvalidSubmit={onInvalidSubmit}
-          onValidSubmit={onValidSubmit}
-        />
+        <UnloadReconfirmEffectSlot>
+          <PortfolioForm
+            defaultValues={{
+              selfIntroduction: myPortfolio.selfIntroduction,
+              links: portfolioLinksToFormLinksField(myPortfolio.memberLinks),
+              skills: portfolioSkillsToFormSkillsField(myPortfolio.skills),
+            }}
+            options={{
+              marginForExpand: globalVars.mainLayoutPaddingX.var,
+              onClickTitleBarClose,
+            }}
+            onInvalidSubmit={onInvalidSubmit}
+            onValidSubmit={onValidSubmit}
+          />
+        </UnloadReconfirmEffectSlot>
       </div>
     </>
   );
@@ -145,3 +155,4 @@ const portfolioSkillsToFormSkillsField = (
 export default PortfolioEditPage;
 PortfolioEditPage.auth = createAuthGuard();
 PortfolioEditPage.meta = createNoIndexPageMetaData(metaTitle);
+PortfolioEditPage.mainLayoutStyle = { overflow: 'unset' };

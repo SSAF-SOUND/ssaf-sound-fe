@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
+import { Scroll } from '~/components/Common/Scroll';
 import { LunchMenusPreviewError } from '~/components/Lunch/LunchMenusPreview/LunchMenusPreviewError';
 import { LunchMenusPreviewMenuDescription } from '~/components/Lunch/LunchMenusPreview/LunchMenusPreviewMenuDescription';
 import {
@@ -31,13 +32,11 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
     isError: isLunchMenusWithPollStatusError,
     error: lunchMenusWithPollStatusError,
     isSuccess: lunchMenusWithPollStatusSuccess,
-    refetch,
   } = useLunchMenusWithPollStatus({
     campus: safeCampus,
     dateSpecifier,
   });
 
-  const lunchMenusViewCount = 3;
   const isLunchMenusEmpty =
     lunchMenusWithPollStatusSuccess &&
     lunchMenusWithPollStatus.menus.length === 0;
@@ -58,21 +57,29 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
         {isLunchMenusWithPollStatusError && (
           <LunchMenusPreviewError
             error={lunchMenusWithPollStatusError}
-            onClickRetry={refetch}
+            css={{ height: 172 }}
           />
         )}
 
         {isLunchMenusEmpty && <LunchMenusPreviewEmptyDescription />}
 
-        {lunchMenusWithPollStatusSuccess &&
-          lunchMenusWithPollStatus.menus
-            .slice(0, lunchMenusViewCount)
-            .map((menu) => (
-              <LunchMenusPreviewMenuDescription
-                key={menu.lunchId}
-                menu={menu}
-              />
-            ))}
+        {lunchMenusWithPollStatusSuccess && (
+          <Scroll.Root css={scrollRootCss}>
+            <Scroll.Viewport>
+              <div css={scrollViewportContentCss}>
+                {lunchMenusWithPollStatus.menus.map((menu) => (
+                  <LunchMenusPreviewMenuDescription
+                    key={menu.lunchId}
+                    menu={menu}
+                  />
+                ))}
+              </div>
+            </Scroll.Viewport>
+            <Scroll.Bar orientation="horizontal">
+              <Scroll.Thumb />
+            </Scroll.Bar>
+          </Scroll.Root>
+        )}
       </div>
     </div>
   );
@@ -87,13 +94,19 @@ const selfCss = css({
   overflow: 'hidden',
 });
 
-const menusCss = css({ width: '100%' }, flex('center', 'space-between', 'row'));
+const menusCss = css({
+  position: 'relative',
+  width: '100%',
+});
+
+const scrollRootCss = css({ width: '100%', paddingBottom: 24 });
+const scrollViewportContentCss = css(flex('center', 'flex-start', 'row', 16));
 
 const LunchMenusPreviewMenuDescriptionSkeleton = () => {
-  const skeletonCount = 3;
+  const skeletonCount = 4;
 
   return (
-    <>
+    <div css={skeletonSelfCss}>
       {Array(skeletonCount)
         .fill(undefined)
         .map((_, index) => (
@@ -102,17 +115,22 @@ const LunchMenusPreviewMenuDescriptionSkeleton = () => {
             <Skeleton circle width={110} height={110} />
           </div>
         ))}
-    </>
+    </div>
   );
 };
-const skeletonContainerCss = css(flex('center', '', 'column', 4));
+const skeletonSelfCss = css(flex('center', 'space-between', 'row', 16));
+
+const skeletonContainerCss = css(
+  { height: 172 },
+  flex('center', '', 'column', 4)
+);
 
 const LunchMenusPreviewEmptyDescription = () => {
   return <div css={emptyDescriptionCss}>{emptyLunchMenuDescription}</div>;
 };
 
 const emptyDescriptionCss = css(
-  { width: '100%', height: 140 },
+  { width: '100%', height: 172 },
   flex('center', 'center'),
   fontCss.style.B14
 );

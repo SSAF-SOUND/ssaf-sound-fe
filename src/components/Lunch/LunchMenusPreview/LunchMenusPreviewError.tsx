@@ -6,24 +6,28 @@ import { getErrorResponse, ResponseCode } from '~/utils';
 
 interface LunchMenusPreviewErrorProps {
   error: unknown;
-  onClickRetry: () => void;
+  className?: string;
 }
 
 export const LunchMenusPreviewError = (props: LunchMenusPreviewErrorProps) => {
-  const { error, onClickRetry } = props;
+  const { error, className } = props;
   const errorResponse = getErrorResponse(error);
   const errorCode = errorResponse?.code;
   const invalidLunchDate = errorCode === ResponseCode.INVALID_LUNCH_DATE;
 
   if (invalidLunchDate) {
-    return <div css={invalidLunchDateCss}>{errorResponse?.message}</div>;
+    return (
+      <div css={invalidLunchDateCss} className={className}>
+        {errorResponse?.message}
+      </div>
+    );
   }
 
-  return <PreviewErrorCard onClickRetry={onClickRetry} />;
+  return <PreviewErrorCard className={className} />;
 };
 
 const invalidLunchDateCss = css(
-  { width: '100%', height: 140 },
+  { width: '100%' },
   flex('center', 'center'),
   fontCss.style.B14
 );

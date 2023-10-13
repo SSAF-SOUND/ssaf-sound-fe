@@ -21,14 +21,14 @@ const metaDescription = `${globalMetaData.description} 로그인을 통해 다�
 
 const SignInPage = () => {
   const router = useRouter();
-  const { data: myInfo, isLoading: isMyInfoLoading } = useMyInfo({
+  const { data: myInfo, isFetching: isMyInfoFetching } = useMyInfo({
     enabled: true,
     retry: 0,
   });
 
   const isSignedIn = !!myInfo;
 
-  if (isMyInfoLoading) {
+  if (isMyInfoFetching) {
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 

@@ -18,7 +18,7 @@ const CODE = '127';
 createMockMatchMedia();
 
 describe('Callback Page', () => {
-  it('로그인에 성공하면 루트(`/`) 페이지로 리다이렉션 된다.', async () => {
+  it('로그인에 성공하면 메인(`/`) 페이지로 리다이렉션 된다.', async () => {
     server.use(mockSignIn);
 
     await mockRouter.push({
@@ -32,7 +32,7 @@ describe('Callback Page', () => {
 
     await waitFor(() => {
       expect(mockRouter).toMatchObject({
-        pathname: routes.root(),
+        pathname: routes.main(),
       });
     });
   });

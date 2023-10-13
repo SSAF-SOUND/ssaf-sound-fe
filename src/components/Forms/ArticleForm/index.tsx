@@ -1,6 +1,5 @@
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils';
-import type { Route } from '~/types';
 
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -11,7 +10,7 @@ import { titleBarHeight } from '~/styles/utils';
 import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
 
 interface ArticleFormOptions {
-  titleBarCloseRoute: Route;
+  onClickTitleBarClose: () => void;
   titleBarText: string;
 }
 
@@ -34,7 +33,7 @@ const ArticleForm = (props: ArticleFormProps) => {
     defaultValues = defaultArticleFormValues,
     onValidSubmit,
     onInvalidSubmit,
-    options: { titleBarCloseRoute, titleBarText = '게시글 쓰기' } = {},
+    options: { onClickTitleBarClose, titleBarText = '게시글 쓰기' } = {},
   } = props;
 
   const methods = useForm<ArticleFormValues>({
@@ -65,7 +64,7 @@ const ArticleForm = (props: ArticleFormProps) => {
           title={titleBarText}
           submitButtonText="완료"
           isSubmitting={isSubmitting}
-          onClickClose={titleBarCloseRoute}
+          onClickClose={onClickTitleBarClose}
         />
         <ArticleTitle />
         <ArticleContent />

@@ -18,7 +18,7 @@ interface RecruitContactLinkProps {
 export const RecruitContactLink = (props: RecruitContactLinkProps) => {
   return (
     <Button css={selfCss} variant="inverse" {...props} asChild>
-      <a target="_blank" rel="noopener noreferrer">
+      <a target="_blank" rel="noopener noreferrer ugc nofollow">
         <Icon name="chat.multiline" aria-hidden="true" />
         <BoldText>Contact</BoldText>
       </a>
