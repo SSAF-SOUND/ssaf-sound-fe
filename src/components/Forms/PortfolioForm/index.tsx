@@ -13,7 +13,7 @@ import { Links, SelfIntroduction, Skills } from './Fields';
 
 interface PortfolioFormOptions {
   marginForExpand: string;
-  titleBarCloseRoute: LinkProps['href'];
+  onClickTitleBarClose: () => void;
 }
 
 export interface PortfolioFormProps {
@@ -30,7 +30,7 @@ const PortfolioForm = (props: PortfolioFormProps) => {
     onValidSubmit,
     onInvalidSubmit,
     defaultValues,
-    options: { marginForExpand, titleBarCloseRoute } = {},
+    options: { marginForExpand, onClickTitleBarClose } = {},
   } = props;
 
   const methods = useForm({
@@ -63,7 +63,7 @@ const PortfolioForm = (props: PortfolioFormProps) => {
         <TitleBar.Form
           title="포트폴리오 입력"
           submitButtonText="완료"
-          onClickClose={titleBarCloseRoute}
+          onClickClose={onClickTitleBarClose}
           isSubmitting={isSubmitting}
           isSubmitDisabled={!isDirty}
         />
