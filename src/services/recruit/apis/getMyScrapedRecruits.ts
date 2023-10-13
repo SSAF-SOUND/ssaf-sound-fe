@@ -1,3 +1,4 @@
+import type { InfiniteParams } from '~/services/common';
 import type { GetRecruitsApiData } from '~/services/recruit';
 import type { RecruitCategoryName } from '~/services/recruit/utils';
 
@@ -14,6 +15,10 @@ export interface GetMyScrapedRecruitsParams {
   size?: number;
 }
 
+export interface GetMyScrapedRecruitsQueryParams extends InfiniteParams {
+  category?: RecruitCategoryName;
+}
+
 export type GetMyScrapedRecruitsApiData = GetRecruitsApiData;
 
 export const getMyScrapedRecruits = (
@@ -24,8 +29,17 @@ export const getMyScrapedRecruits = (
     cursor = defaultRecruitsPageCursor,
     size = defaultRecruitsPageSize,
   } = params;
-  const endpoint = endpoints.recruit.myScraped({ category, size, cursor });
-  return privateAxios
-    .get<GetMyScrapedRecruitsApiData>(endpoint)
-    .then((res) => res.data.data);
+
+  const endpoint = endpoints.recruit.myScraped();
+  const queryParams: GetMyScrapedRecruitsQueryParams = {
+    category,
+    size,
+    cursor,
+  };
+
+  return privateAxios<GetMyScrapedRecruitsApiData>({
+    method: 'get',
+    url: endpoint,
+    params: queryParams,
+  }).then((res) => res.data.data);
 };

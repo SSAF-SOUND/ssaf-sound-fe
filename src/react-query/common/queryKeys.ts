@@ -219,19 +219,7 @@ export const endpoints = {
       recruitApplicationId: number;
     }) =>
       `${endpoints.recruit.detail(recruitId)}/${recruitApplicationId}` as const,
-    myScraped: (params: MyScrapedRecruitsParams = {}) => {
-      const {
-        size = defaultRecruitsPageSize,
-        cursor = defaultRecruitsPageCursor,
-      } = params;
-      const searchParams = new URLSearchParams();
-      const queryStringObject = { size, cursor };
-      Object.entries(queryStringObject).forEach(([key, value]) => {
-        if (value) searchParams.append(key, String(value));
-      });
-      const queryString = searchParams.toString();
-      return `/recruits/my-scrap?${queryString}` as const;
-    },
+    myScraped: () => `/recruits/my-scrap` as const,
     scrap: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
     complete: (recruitId: number) =>
