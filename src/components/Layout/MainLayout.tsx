@@ -1,18 +1,19 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
 import { globalVars, pageMaxWidth, pageMinWidth } from '~/styles/utils';
 
-interface MainLayoutProps {
+export interface MainLayoutProps {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 }
 
 const MainLayout = (props: MainLayoutProps) => {
-  const { children, className } = props;
+  const { children, ...restProps } = props;
   return (
-    <div css={selfCss} className={className}>
+    <div css={selfCss} {...restProps}>
       <main>{children}</main>
     </div>
   );
