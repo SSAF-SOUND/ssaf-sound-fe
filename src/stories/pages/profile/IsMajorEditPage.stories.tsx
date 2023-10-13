@@ -1,15 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { useEffect } from 'react';
-
-import { updateIsMajor } from '~/mocks/handlers/member';
-import { userInfo } from '~/mocks/handlers/member/data';
+import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import {
+  mockUpdateIsMajor,
+  mockUpdateIsMajorError,
+} from '~/mocks/handlers/member/apis/mockUpdateIsMajor';
 import MyInfoSettingsIsMajorEditPage from '~/pages/profile/myinfo-settings/is-major/edit';
-import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof MyInfoSettingsIsMajorEditPage> = {
-  title: 'Page/Profile/MyInfoSettings/IsMajorEdit',
+  title: 'Page/프로필/내 정보 세팅/전공자 여부 수정',
   component: MyInfoSettingsIsMajorEditPage,
   decorators: [
     (Story) => (
@@ -20,12 +21,10 @@ const meta: Meta<typeof MyInfoSettingsIsMajorEditPage> = {
   ],
   parameters: {
     layout: 'fullscreen',
-
-    msw: {
-      handlers: {
-        member: [updateIsMajor],
-      },
-    },
+    ...createMswParameters({
+      member: [],
+      common: [mockGetCertifiedSsafyMyInfo],
+    }),
   },
 };
 
@@ -34,14 +33,19 @@ export default meta;
 type IsMajorEditPageStory = StoryObj<typeof MyInfoSettingsIsMajorEditPage>;
 
 export const Default: IsMajorEditPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      useEffect(() => {
-        setMyInfo(userInfo.certifiedSsafyUserInfo);
-      }, [setMyInfo]);
+  name: '정상',
+  parameters: {
+    ...createMswParameters({
+      member: [mockUpdateIsMajor],
+    }),
+  },
+};
 
-      return <Story />;
-    },
-  ],
+export const Error: IsMajorEditPageStory = {
+  name: '수정 에러',
+  parameters: {
+    ...createMswParameters({
+      member: [mockUpdateIsMajorError],
+    }),
+  },
 };
