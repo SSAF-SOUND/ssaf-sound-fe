@@ -8,6 +8,7 @@ import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import { useArticleDetail, useUpdateArticle } from '~/services/article/hooks';
+import { reconfirmArticleFormUnload } from '~/services/article/utils/reconfirmArticleFormUnload';
 import { createAuthGuard } from '~/utils/createAuthGuard';
 import { createNoIndexPageMetaData } from '~/utils/createNoIndexPageMetaData';
 import { handleAxiosError } from '~/utils/handleAxiosError';
@@ -53,6 +54,12 @@ const ArticleEditPage: CustomNextPage = () => {
     }
   };
 
+  const onClickTitleBarClose = () => {
+    if (reconfirmArticleFormUnload()) {
+      router.push(routes.article.detail(articleId));
+    }
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
@@ -62,7 +69,7 @@ const ArticleEditPage: CustomNextPage = () => {
           onValidSubmit={onValidSubmit}
           options={{
             titleBarText: '게시글 수정',
-            titleBarCloseRoute: routes.article.detail(articleId),
+            onClickTitleBarClose,
           }}
           defaultValues={{
             title,
