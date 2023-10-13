@@ -1,19 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { useEffect } from 'react';
-
-import {
-  updateNickname,
-  validateNicknameRespondWithDuplicatedNickname,
-} from '~/mocks/handlers/member';
-import { mockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
-import { userInfo } from '~/mocks/handlers/member/data';
+import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUpdateNickname } from '~/mocks/handlers/member/apis/mockUpdateNickname';
+import { createMockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
 import MyInfoSettingsNicknameEditPage from '~/pages/profile/myinfo-settings/nickname/edit';
-import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
 
 const meta: Meta<typeof MyInfoSettingsNicknameEditPage> = {
-  title: 'Page/Profile/MyInfoSettings/NicknameEdit',
+  title: 'Page/프로필/내 정보 세팅/닉네임 수정',
   component: MyInfoSettingsNicknameEditPage,
   decorators: [
     (Story) => (
@@ -24,12 +19,10 @@ const meta: Meta<typeof MyInfoSettingsNicknameEditPage> = {
   ],
   parameters: {
     layout: 'fullscreen',
-
-    msw: {
-      handlers: {
-        member: [updateNickname, mockValidateNickname],
-      },
-    },
+    ...createMswParameters({
+      member: [],
+      common: [mockUpdateNickname, mockGetCertifiedSsafyMyInfo],
+    }),
   },
 };
 
@@ -38,25 +31,19 @@ export default meta;
 type NicknameEditPageStory = StoryObj<typeof MyInfoSettingsNicknameEditPage>;
 
 export const Success: NicknameEditPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      useEffect(() => {
-        setMyInfo(userInfo.certifiedSsafyUserInfo);
-      }, [setMyInfo]);
-
-      return <Story />;
-    },
-  ],
+  name: '정상',
+  parameters: {
+    ...createMswParameters({
+      member: [createMockValidateNickname(true)],
+    }),
+  },
 };
 
 export const DuplicatedNickname: NicknameEditPageStory = {
-  ...Success,
+  name: '닉네임 중복',
   parameters: {
-    msw: {
-      handlers: {
-        member: [validateNicknameRespondWithDuplicatedNickname],
-      },
-    },
+    ...createMswParameters({
+      member: [createMockValidateNickname(false)],
+    }),
   },
 };

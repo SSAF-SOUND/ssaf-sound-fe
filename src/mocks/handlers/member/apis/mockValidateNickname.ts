@@ -10,11 +10,6 @@ const validateNicknameEndpoint = composeUrls(
   endpoints.user.nickname()
 );
 
-/**
- * - 닉네임 중복 검사
- * - possible: true -> 생성 가능
- * - possible: false -> 중복된 닉네임이라 생성이 불가능
- */
 export const createMockValidateNickname = (valid: boolean) => {
   return restSuccess<ValidateNicknameApiData['data']>(
     validateNicknameMethod,
@@ -28,5 +23,7 @@ export const mockValidateNickname = createMockValidateNickname(true);
 export const mockValidateNicknameError = restError(
   validateNicknameMethod,
   validateNicknameEndpoint,
-  { message: 'validateNicknameError' }
+  {
+    message: 'mockValidateNickname Error',
+  }
 );

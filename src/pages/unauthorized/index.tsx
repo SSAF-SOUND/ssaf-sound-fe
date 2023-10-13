@@ -1,15 +1,14 @@
-import { PageHead } from '~/components/Common/PageHead';
+import type { CustomNextPage } from 'next/types';
+
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import RedirectionGuide from '~/components/RedirectionGuide';
-import { routes } from '~/utils';
+import { createNoIndexPageMetaData, routes } from '~/utils';
 
 const metaTitle = '권한 없음';
 
-const UnauthorizedPage = () => {
+const UnauthorizedPage: CustomNextPage = () => {
   return (
     <>
-      <PageHead title={metaTitle} />
-
       <PageHeadingText text="페이지를 방문하기 위한 권한이 없습니다." />
 
       <RedirectionGuide
@@ -27,3 +26,4 @@ const UnauthorizedPage = () => {
 };
 
 export default UnauthorizedPage;
+UnauthorizedPage.meta = createNoIndexPageMetaData(metaTitle);

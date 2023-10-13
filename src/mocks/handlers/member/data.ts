@@ -54,7 +54,13 @@ export const userInfo = {
   nonSsafyUserInfo,
 };
 
-export const portfolio: UserPortfolio = {
+export const mockEmptyPortfolio: UserPortfolio = {
+  selfIntroduction: '',
+  skills: [],
+  memberLinks: [],
+};
+
+export const mockPortfolio: UserPortfolio = {
   selfIntroduction: mockHtmlString,
   skills: Object.values(SkillName).slice(0, 10),
   memberLinks: Array(10)

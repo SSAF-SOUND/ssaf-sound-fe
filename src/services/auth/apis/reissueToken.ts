@@ -1,52 +1,11 @@
-import type { ApiSuccessResponse } from '~/types';
-
 import { isAxiosError } from 'axios';
 
 import { endpoints } from '~/react-query/common';
-import {
-  clearPrivateData,
-  GlobalSymbol,
-  isDevMode,
-  privateAxios,
-  publicAxios,
-  webStorage,
-} from '~/utils';
-
-export interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-}
-export type SignInApiData = ApiSuccessResponse<Tokens>;
-export interface SignInParams {
-  code: string;
-  oauthName: string;
-}
-
-const signInDevPlugin = (tokens: Tokens) => {
-  if (isDevMode) {
-    webStorage.DEV__setTokens(tokens);
-  }
-};
-
-export const signIn = (params: SignInParams) => {
-  const endpoint = endpoints.auth.signIn();
-
-  return publicAxios.post<SignInApiData>(endpoint, params).then((res) => {
-    const tokens = res.data.data;
-    signInDevPlugin(tokens);
-    return tokens;
-  });
-};
-
-export const signOut = () => {
-  const endpoint = endpoints.auth.signOut();
-
-  return publicAxios.delete(endpoint).then(() => {
-    if (isDevMode) {
-      webStorage.DEV__removeTokens();
-    }
-  });
-};
+import { signOut } from '~/services/auth/apis/signOut';
+import { publicAxios } from '~/utils/axios';
+import { clearPrivateData } from '~/utils/clearPrivateData';
+import { GlobalSymbol, isDevMode } from '~/utils/constants';
+import { webStorage } from '~/utils/webStorage';
 
 const getReissueRequestConfig = () => {
   let config;
@@ -64,7 +23,6 @@ const getReissueRequestConfig = () => {
 
   return config;
 };
-
 export const reissueToken = () => {
   const endpoint = endpoints.auth.refresh();
   const tag = '[In reissueToken api request]';
@@ -96,10 +54,4 @@ export const reissueToken = () => {
       }
     }
   });
-};
-
-export const deleteAccount = () => {
-  const endpoint = endpoints.user.myInfo();
-
-  return privateAxios.delete(endpoint).then((res) => res.data);
 };

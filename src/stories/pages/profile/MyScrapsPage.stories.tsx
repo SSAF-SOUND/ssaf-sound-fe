@@ -1,32 +1,38 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { InfiniteData } from '@tanstack/query-core';
-import type { GetMyScrapedArticlesApiData } from '~/services/article';
-import type { GetMyScrapedRecruitsApiData } from '~/services/recruit';
 
-import { useQueryClient } from '@tanstack/react-query';
-
-import { userInfo } from '~/mocks/handlers/member/data';
+import {
+  mockGetEmptyMyScrapedArticles,
+  mockGetMyScrapedArticles,
+  mockGetMyScrapedArticlesError,
+} from '~/mocks/handlers/article/apis/mockGetMyScrapedArticles';
+import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUserInfo } from '~/mocks/handlers/member/data';
+import {
+  mockGetEmptyMyScrapedRecruits,
+  mockGetMyScrapedRecruits,
+  mockGetMyScrapedRecruitsError,
+} from '~/mocks/handlers/recruit/apis/mockGetMyScrapedRecruits';
 import MyScrapsPage from '~/pages/profile/my-scraps';
-import { queryKeys } from '~/react-query/common';
-import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
+
+const myInfo = mockUserInfo.certifiedSsafyUserInfo;
 
 const meta: Meta<typeof MyScrapsPage> = {
-  title: 'Page/Profile/MyScraps',
+  title: 'Page/프로필/내 스크랩',
   component: MyScrapsPage,
   decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      setMyInfo(mockUser);
-      return (
-        <PageLayout>
-          <Story />
-        </PageLayout>
-      );
-    },
+    (Story) => (
+      <PageLayout>
+        <Story />
+      </PageLayout>
+    ),
   ],
   parameters: {
     layout: 'fullscreen',
+    ...createMswParameters({
+      member: [createMockGetMyInfo(myInfo)],
+    }),
   },
 };
 
@@ -34,45 +40,32 @@ export default meta;
 
 type MyScrapsPageStory = StoryObj<typeof MyScrapsPage>;
 
-const mockUser = userInfo.certifiedSsafyUserInfo;
-const myScrapedArticlesQueryKey = queryKeys.articles.myScraped();
-const myScrapedRecruitsQueryKey = queryKeys.recruit.myScraped();
-const emptyMyScrapedArticles: InfiniteData<
-  GetMyScrapedArticlesApiData['data']
-> = {
-  pages: [{ cursor: null, posts: [] }],
-  pageParams: [null],
-};
-const emptyMyScrapedRecruits: InfiniteData<
-  GetMyScrapedRecruitsApiData['data']
-> = {
-  pages: [{ nextCursor: null, recruits: [], isLast: true }],
-  pageParams: [null],
-};
 export const Default: MyScrapsPageStory = {
-  decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      queryClient.removeQueries(myScrapedArticlesQueryKey);
-      queryClient.removeQueries(myScrapedRecruitsQueryKey);
-      return <Story />;
-    },
-  ],
+  name: '정상',
+  parameters: {
+    ...createMswParameters({
+      article: [mockGetMyScrapedArticles],
+      recruit: [mockGetMyScrapedRecruits],
+    }),
+  },
 };
 
 export const Empty: MyScrapsPageStory = {
-  decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      queryClient.setQueryData(
-        myScrapedArticlesQueryKey,
-        emptyMyScrapedArticles
-      );
-      queryClient.setQueryData(
-        myScrapedRecruitsQueryKey,
-        emptyMyScrapedRecruits
-      );
-      return <Story />;
-    },
-  ],
+  name: '빈 데이터',
+  parameters: {
+    ...createMswParameters({
+      article: [mockGetEmptyMyScrapedArticles],
+      recruit: [mockGetEmptyMyScrapedRecruits],
+    }),
+  },
+};
+
+export const Error: MyScrapsPageStory = {
+  name: '에러',
+  parameters: {
+    ...createMswParameters({
+      article: [mockGetMyScrapedArticlesError],
+      recruit: [mockGetMyScrapedRecruitsError],
+    }),
+  },
 };

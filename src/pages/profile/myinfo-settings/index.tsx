@@ -27,10 +27,10 @@ import {
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
-  EditableMyInfoFields,
   handleAxiosError,
   routes,
 } from '~/utils';
+import { EditableMyInfoFields } from '~/utils/client-routes/profile';
 
 const metaTitle = '프로필 설정';
 
@@ -165,7 +165,7 @@ const ProfileVisibilityToggleLayer = () => {
   const { openModal, closeModal } = useModal();
   const { data: profileVisibility } = useProfileVisibility();
   const {
-    mutate: updatePortfolioVisibility,
+    mutateAsync: updatePortfolioVisibility,
     isLoading: isUpdatingPortfolioVisibility,
   } = useUpdateProfileVisibility();
 
@@ -178,19 +178,16 @@ const ProfileVisibilityToggleLayer = () => {
     });
   };
 
-  const handleToggleProfileVisibility = (isPublic: boolean) => {
+  const handleToggleProfileVisibility = async (isPublic: boolean) => {
     if (!isPublic) {
       openPrivateProfileAlertModal();
     }
 
-    updatePortfolioVisibility(
-      { isPublic },
-      {
-        onError: (err) => {
-          handleAxiosError(err);
-        },
-      }
-    );
+    try {
+      await updatePortfolioVisibility({ isPublic });
+    } catch (err) {
+      handleAxiosError(err);
+    }
   };
 
   return !profileVisibility ? (

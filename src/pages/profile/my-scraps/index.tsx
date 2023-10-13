@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
-import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Separator } from '~/components/Common/Separator';
 import { Tabs } from '~/components/Common/Tabs';
@@ -30,18 +30,20 @@ import {
   concat,
   createAuthGuard,
   createNoIndexPageMetaData,
-  PossibleMyScrapsCategories,
   routes,
 } from '~/utils';
+import {
+  PossibleMyScrapsTabValue,
+  PossibleMyScrapsTabValueSet,
+} from '~/utils/client-routes/profile';
 
-const possibleCategories = Object.values(PossibleMyScrapsCategories);
-const defaultTab = PossibleMyScrapsCategories.ARTICLES;
+const defaultTab = PossibleMyScrapsTabValue.ARTICLES;
 
 const titleBarTitle = '나의 스크랩';
 const metaTitle = titleBarTitle;
 
 const getSafeTab = (category?: string) => {
-  if (possibleCategories.includes(category as PossibleMyScrapsCategories)) {
+  if (PossibleMyScrapsTabValueSet.has(category as PossibleMyScrapsTabValue)) {
     return category;
   }
 
@@ -94,13 +96,13 @@ const MyScrapsPage: CustomNextPage = () => {
           <TabList />
           <Tabs.Content
             css={contentCss}
-            value={PossibleMyScrapsCategories.ARTICLES}
+            value={PossibleMyScrapsTabValue.ARTICLES}
           >
             <MyScrapedArticlesLayer />
           </Tabs.Content>
           <Tabs.Content
             css={contentCss}
-            value={PossibleMyScrapsCategories.RECRUITS}
+            value={PossibleMyScrapsTabValue.RECRUITS}
           >
             <MyScrapedRecruitsLayer />
           </Tabs.Content>
@@ -128,8 +130,8 @@ const selfCss = css(pageCss.minHeight, {
 });
 
 const tabTriggersTextMap = {
-  [PossibleMyScrapsCategories.ARTICLES]: '게시글',
-  [PossibleMyScrapsCategories.RECRUITS]: '리쿠르팅',
+  [PossibleMyScrapsTabValue.ARTICLES]: '게시글',
+  [PossibleMyScrapsTabValue.RECRUITS]: '리쿠르팅',
 };
 
 const contentCss = css({});
@@ -138,14 +140,14 @@ const TabList = () => {
   return (
     <div css={tabListContainerCss}>
       <Tabs.List css={tabListCss}>
-        <TabTrigger value={PossibleMyScrapsCategories.ARTICLES} />
+        <TabTrigger value={PossibleMyScrapsTabValue.ARTICLES} />
         <Separator
           orientation="vertical"
           width={2}
           backgroundColor={palettes.primary.default}
           css={separatorCss}
         />
-        <TabTrigger value={PossibleMyScrapsCategories.RECRUITS} />
+        <TabTrigger value={PossibleMyScrapsTabValue.RECRUITS} />
       </Tabs.List>
     </div>
   );
@@ -159,7 +161,7 @@ const tabListCss = css({
 
 const separatorCss = css({ flexShrink: 0, margin: '0 24px' });
 
-const TabTrigger = (props: { value: PossibleMyScrapsCategories }) => {
+const TabTrigger = (props: { value: PossibleMyScrapsTabValue }) => {
   const { value } = props;
   return (
     <Tabs.Trigger css={tabTriggerCss} value={value}>

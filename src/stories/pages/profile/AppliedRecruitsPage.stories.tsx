@@ -1,36 +1,36 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { InfiniteData } from '@tanstack/query-core';
-import type { GetAppliedRecruitsApiData } from '~/services/recruit';
 
-import { useQueryClient } from '@tanstack/react-query';
-
-import { userInfo } from '~/mocks/handlers/member/data';
+import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUserInfo } from '~/mocks/handlers/member/data';
+import {
+  mockGetAppliedRecruits,
+  mockGetAppliedRecruitsError,
+  mockGetEmptyAppliedRecruits,
+} from '~/mocks/handlers/recruit/apis/mockGetAppliedRecruits';
 import AppliedRecruitsPage from '~/pages/profile/applied-recruits/[recruitCategoryName]';
-import { queryKeys } from '~/react-query/common';
-import { useSetMyInfo } from '~/services/member';
 import { RecruitCategoryName } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
+
+const myInfo = mockUserInfo.certifiedSsafyUserInfo;
 
 const meta: Meta<typeof AppliedRecruitsPage> = {
-  title: 'Page/Profile/AppliedRecruits',
+  title: 'Page/프로필/지원한 리쿠르팅 목록',
   component: AppliedRecruitsPage,
   decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      queryClient.removeQueries(allAppliedRecruitsQueryKey);
-
-      const setMyInfo = useSetMyInfo();
-      setMyInfo(userInfo.certifiedSsafyUserInfo);
-
-      return (
-        <PageLayout>
-          <Story />
-        </PageLayout>
-      );
-    },
+    (Story) => (
+      <PageLayout>
+        <Story />
+      </PageLayout>
+    ),
   ],
   parameters: {
     layout: 'fullscreen',
+    ...createMswParameters({
+      member: [],
+      common: [createMockGetMyInfo(myInfo)],
+      recruit: [mockGetAppliedRecruits],
+    }),
   },
   args: { recruitCategoryName: RecruitCategoryName.PROJECT },
 };
@@ -39,27 +39,39 @@ export default meta;
 
 type AppliedRecruitsPageStory = StoryObj<typeof AppliedRecruitsPage>;
 
-const appliedRecruitsQueryKey = queryKeys.recruit.appliedList.filter({
-  category: RecruitCategoryName.PROJECT,
-});
-const allAppliedRecruitsQueryKey = appliedRecruitsQueryKey.slice(0, -1);
-
-export const Default: AppliedRecruitsPageStory = {};
-
-const emptyRecruits: InfiniteData<GetAppliedRecruitsApiData['data']> = {
-  pages: [{ recruits: [], nextCursor: null, isLast: true }],
-  pageParams: [null],
+export const Project: AppliedRecruitsPageStory = {
+  name: '프로젝트',
 };
 
-export const NotExist: AppliedRecruitsPageStory = {
-  decorators: [
-    (Story) => {
-      const queryClient = useQueryClient();
-      queryClient.setQueryData<InfiniteData<GetAppliedRecruitsApiData['data']>>(
-        appliedRecruitsQueryKey,
-        emptyRecruits
-      );
-      return <Story />;
-    },
-  ],
+export const Project__Empty: AppliedRecruitsPageStory = {
+  name: '프로젝트 - 빈 데이터',
+  parameters: {
+    ...createMswParameters({
+      recruit: [mockGetEmptyAppliedRecruits],
+    }),
+  },
+};
+
+export const Study: AppliedRecruitsPageStory = {
+  name: '스터디',
+  args: { recruitCategoryName: RecruitCategoryName.STUDY },
+};
+
+export const Study__Empty: AppliedRecruitsPageStory = {
+  name: '스터디 - 빈 데이터',
+  parameters: {
+    ...createMswParameters({
+      recruit: [mockGetEmptyAppliedRecruits],
+    }),
+  },
+  args: { recruitCategoryName: RecruitCategoryName.STUDY },
+};
+
+export const Error: AppliedRecruitsPageStory = {
+  name: '에러',
+  parameters: {
+    ...createMswParameters({
+      recruit: [mockGetAppliedRecruitsError],
+    }),
+  },
 };

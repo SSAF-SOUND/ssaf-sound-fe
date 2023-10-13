@@ -2,17 +2,19 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { expect } from '@storybook/jest';
 import { userEvent, within } from '@storybook/testing-library';
-import { useEffect } from 'react';
 
-import { updateSsafyBasicInfo } from '~/mocks/handlers';
-import { userInfo } from '~/mocks/handlers/member/data';
+import {
+  mockGetCertifiedSsafyMyInfo,
+  mockGetUncertifiedSsafyMyInfo,
+} from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockUpdateSsafyBasicInfo } from '~/mocks/handlers/member/apis/mockUpdateSsafyBasicInfo';
 import MyInfoSettingsSsafyBasicInfoEditPage from '~/pages/profile/myinfo-settings/ssafy-basic-info/edit';
-import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
+import { createMswParameters } from '~/stories/utils';
 import { sleep } from '~/utils';
 
 const meta: Meta<typeof MyInfoSettingsSsafyBasicInfoEditPage> = {
-  title: 'Page/Profile/MyInfoSettings/SsafyBasicInfoEdit',
+  title: 'Page/프로필/내 정보 세팅/SSAFY 기본정보 수정',
   component: MyInfoSettingsSsafyBasicInfoEditPage,
   decorators: [
     (Story) => (
@@ -23,12 +25,10 @@ const meta: Meta<typeof MyInfoSettingsSsafyBasicInfoEditPage> = {
   ],
   parameters: {
     layout: 'fullscreen',
-
-    msw: {
-      handlers: {
-        member: [updateSsafyBasicInfo],
-      },
-    },
+    ...createMswParameters({
+      member: [],
+      common: [mockUpdateSsafyBasicInfo],
+    }),
   },
 };
 
@@ -39,16 +39,7 @@ type SsafyBasicInfoEditPageStory = StoryObj<
 >;
 
 export const UnCertifiedSsafyUser: SsafyBasicInfoEditPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      useEffect(() => {
-        setMyInfo(userInfo.uncertifiedSsafyUserInfo);
-      }, [setMyInfo]);
-
-      return <Story />;
-    },
-  ],
+  name: 'SSAFY 멤버 + SSAFY 인증 안함',
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     await sleep(500);
@@ -87,19 +78,15 @@ export const UnCertifiedSsafyUser: SsafyBasicInfoEditPageStory = {
       }
     );
   },
+  parameters: {
+    ...createMswParameters({
+      member: [mockGetUncertifiedSsafyMyInfo],
+    }),
+  },
 };
 
 export const CertifiedSsafyUser: SsafyBasicInfoEditPageStory = {
-  decorators: [
-    (Story) => {
-      const setMyInfo = useSetMyInfo();
-      useEffect(() => {
-        setMyInfo(userInfo.certifiedSsafyUserInfo);
-      }, [setMyInfo]);
-
-      return <Story />;
-    },
-  ],
+  name: 'SSAFY 멤버 + SSAFY 인증 완료',
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     await sleep(500);
@@ -114,5 +101,10 @@ export const CertifiedSsafyUser: SsafyBasicInfoEditPageStory = {
         expect(ssafyMemberSelectBox).toBeDisabled();
       }
     );
+  },
+  parameters: {
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+    }),
   },
 };

@@ -34,7 +34,7 @@ const PortfolioLinkRoot = (props: PortfolioLinkRootProps) => {
       className={classNames}
       href={asChild ? undefined : href}
       target={asChild ? undefined : '_blank'}
-      rel={asChild ? undefined : 'noreferrer noopener'}
+      rel={asChild ? undefined : 'noreferrer noopener ugc'}
       css={selfCss}
       {...dataAttrs}
       {...restProps}

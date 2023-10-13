@@ -5,7 +5,7 @@ import { userInfo } from '~/mocks/handlers/member/data';
 import SquareAvatar from './index';
 
 const meta: Meta<typeof SquareAvatar> = {
-  title: 'Recruit/SquareAvatar',
+  title: 'Profile/SquareAvatar',
   component: SquareAvatar,
   argTypes: {},
 };

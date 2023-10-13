@@ -1,3 +1,4 @@
+import type { LinkProps } from 'next/link';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 import Link from 'next/link';
@@ -12,7 +13,7 @@ interface NavItemProps {
   withStateCss?: boolean;
   withIcon?: boolean;
   asLink?: boolean;
-  href?: string;
+  href?: LinkProps['href'];
 }
 
 export const NavItem = (props: NavItemProps) => {

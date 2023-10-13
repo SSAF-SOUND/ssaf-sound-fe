@@ -18,7 +18,6 @@ import { useMyInfo } from '~/services/member';
 import { getRecruits } from '~/services/recruit';
 import { globalVars, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
-import { article } from '~/utils/client-routes/article';
 import { globalMetaData } from '~/utils/metadata';
 
 const metaTitle = '메인';
@@ -27,7 +26,7 @@ const metaDescription = `${globalMetaData.description} 점심 메뉴, 리쿠르�
 const MainPage = () => {
   const { data: myInfo } = useMyInfo();
   const myCampus = myInfo?.ssafyInfo?.campus;
-  console.log(article);
+
   return (
     <>
       <PageHead

@@ -1,7 +1,9 @@
+import type { GetMyScrapedArticlesApiData } from '~/services/article';
+
 import { rest } from 'msw';
 
 import { restInfiniteArticlesSuccess } from '~/mocks/handlers/article/utils';
-import { restError } from '~/mocks/utils';
+import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
@@ -21,3 +23,14 @@ export const mockGetMyScrapedArticlesError = restError(
   getMyScrapedArticlesEndpoint,
   { message: 'mockGetMyScrapedArticles Error' }
 );
+
+const emptyArticles = {
+  posts: [],
+  cursor: null,
+};
+
+export const mockGetEmptyMyScrapedArticles = restSuccess<
+  GetMyScrapedArticlesApiData['data']
+>(getMyScrapedArticlesMethod, getMyScrapedArticlesEndpoint, {
+  data: emptyArticles,
+});

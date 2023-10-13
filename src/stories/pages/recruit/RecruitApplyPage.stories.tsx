@@ -158,7 +158,7 @@ export const Mine: RecruitApplyPageStory = {
 
 const projectDetailWithoutQuestion: RecruitDetail = {
   ...projectDetailWithQuestion,
-  questions: [''],
+  questions: [],
 };
 
 export const WithoutQuestion: RecruitApplyPageStory = {

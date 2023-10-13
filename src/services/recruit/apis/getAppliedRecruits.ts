@@ -1,3 +1,4 @@
+import type { InfiniteParams } from '~/services/common';
 import type {
   AppliedRecruitSummary,
   RecruitCursorData,
@@ -22,6 +23,11 @@ export interface GetAppliedRecruitsParams {
   size?: number;
 }
 
+export interface GetAppliedRecruitsQueryParams extends InfiniteParams {
+  matchStatus?: MatchStatus;
+  category?: RecruitCategoryName;
+}
+
 export type GetAppliedRecruitsApiData = ApiSuccessResponse<
   { recruits: AppliedRecruitSummary[] } & RecruitCursorData
 >;
@@ -33,14 +39,18 @@ export const getAppliedRecruits = (params: GetAppliedRecruitsParams) => {
     cursor = defaultRecruitsPageCursor,
     size = defaultRecruitsPageSize,
   } = params;
-  const endpoint = endpoints.recruit.appliedList({
-    category,
+
+  const endpoint = endpoints.recruit.appliedList();
+  const queryParams: GetAppliedRecruitsQueryParams = {
     matchStatus,
+    category,
     cursor,
     size,
-  });
+  };
 
-  return privateAxios
-    .get<GetAppliedRecruitsApiData>(endpoint)
-    .then((res) => res.data.data);
+  return privateAxios<GetAppliedRecruitsApiData>({
+    method: 'get',
+    url: endpoint,
+    params: queryParams,
+  }).then((res) => res.data.data);
 };

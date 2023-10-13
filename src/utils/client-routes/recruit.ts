@@ -1,5 +1,4 @@
 import type { RecruitParts, SkillName } from '~/services/recruit/utils/types';
-import type { AppliedRecruitsPageQueryStringObject } from '~/utils';
 
 import { isArray, isBoolean, isString } from 'is-what';
 
@@ -9,7 +8,9 @@ import {
   RecruitCategoryName,
   RecruitCategoryNameSet,
   SkillNameSet,
+  MatchStatus,
 } from '~/services/recruit/utils/types';
+import { profile } from '~/utils/client-routes/profile';
 import { createRoute } from '~/utils/client-routes/utils';
 
 type ProjectParts = Exclude<RecruitParts, RecruitParts.STUDY>;
@@ -157,6 +158,46 @@ const recruitRejectedApplicantsPageRoute = (recruitId: number) => {
   return createRoute(`${pathname}/rejected`)();
 };
 
+// ---------- applied recruits list ----------
+const PossibleMatchStatusSet = new Set(
+  Object.values(MatchStatus).filter((v) => v !== MatchStatus.INITIAL)
+);
+
+export interface AppliedRecruitsPageRouteParams {
+  category: RecruitCategoryName;
+  matchStatus?: MatchStatus;
+}
+
+export type AppliedRecruitsPageRouteQuery = {
+  matchStatus?: MatchStatus;
+};
+
+const appliedRecruitsPageRoute = (params: AppliedRecruitsPageRouteParams) => {
+  const { category, matchStatus } = params;
+  const query = { matchStatus };
+
+  const pathname = `${
+    profile.self().pathname
+  }/applied-recruits/${category}` as const;
+  return createRoute<AppliedRecruitsPageRouteQuery>(pathname)(
+    toSafeAppliedRecruitsPageRouteQuery(query)
+  );
+};
+
+const toSafeAppliedRecruitsPageRouteQuery = (
+  query: AppliedRecruitsPageRouteQuery
+): AppliedRecruitsPageRouteQuery => {
+  const { matchStatus } = query;
+  const safeMatchStatus =
+    matchStatus && PossibleMatchStatusSet.has(matchStatus)
+      ? matchStatus
+      : undefined;
+
+  return {
+    matchStatus: safeMatchStatus,
+  };
+};
+
 export const recruit = {
   self: recruitSelfRoute,
   list: recruitListPageRoute,
@@ -170,13 +211,5 @@ export const recruit = {
     mine: recruitMyApplicationPageRoute,
     rejected: recruitRejectedApplicantsPageRoute,
   },
-  // TODO: Replace
-  appliedList: (options: Partial<AppliedRecruitsPageQueryStringObject>) => {
-    const { category, matchStatus = '' } = options;
-    const queryString = new URLSearchParams({
-      matchStatus,
-    }).toString();
-
-    return `profile/applied-recruits/${category}?${queryString}`;
-  },
+  appliedList: appliedRecruitsPageRoute,
 };

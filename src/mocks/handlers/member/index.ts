@@ -1,177 +1,18 @@
-import type {
-  GetMyPortfolioApiData,
-  GetProfileVisibilityApiData,
-  GetUserInfoApiData,
-  GetUserPortfolioApiData,
-  ValidateNicknameApiData,
-} from '~/services/member';
-
 import { mockCertifyStudent } from '~/mocks/handlers/member/apis/mockCertifyStudent';
 import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockGetMyPortfolio } from '~/mocks/handlers/member/apis/mockGetMyPortfolio';
+import { mockGetProfileVisibility } from '~/mocks/handlers/member/apis/mockGetProfileVisibility';
+import { mockGetCertifiedUserInfo } from '~/mocks/handlers/member/apis/mockGetUserInfo';
+import { mockGetUserPortfolio } from '~/mocks/handlers/member/apis/mockGetUserPortfolio';
+import { mockGetUserProfileVisibility } from '~/mocks/handlers/member/apis/mockGetUserProfileVisibility';
+import { mockUpdateIsMajor } from '~/mocks/handlers/member/apis/mockUpdateIsMajor';
 import { mockUpdateMyInfo } from '~/mocks/handlers/member/apis/mockUpdateMyInfo';
+import { mockUpdateMyPortfolio } from '~/mocks/handlers/member/apis/mockUpdateMyPortfolio';
+import { mockUpdateNickname } from '~/mocks/handlers/member/apis/mockUpdateNickname';
+import { mockUpdateProfileVisibility } from '~/mocks/handlers/member/apis/mockUpdateProfileVisibility';
+import { mockUpdateSsafyBasicInfo } from '~/mocks/handlers/member/apis/mockUpdateSsafyBasicInfo';
+import { mockUpdateTrack } from '~/mocks/handlers/member/apis/mockUpdateTrack';
 import { mockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
-import { userInfo, portfolio } from '~/mocks/handlers/member/data';
-import { restError, restSuccess } from '~/mocks/utils';
-import { endpoints } from '~/react-query/common';
-import { API_URL, composeUrls, ResponseCode } from '~/utils';
-
-export const getUserInfo = restSuccess<GetUserInfoApiData['data']>(
-  'get',
-  // eslint-disable-next-line
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.user.userInfo(':id')),
-  {
-    data: userInfo.initialUserInfo,
-    // data: userInfo.certifiedSsafyUserInfo,
-    // data: userInfo.uncertifiedSsafyUserInfo,
-    // data: userInfo.nonSsafyUserInfo,
-  }
-);
-
-export const getUserInfoError = restError(
-  'get',
-  // eslint-disable-next-line
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.user.userInfo(':id')),
-  {
-    data: null,
-  }
-);
-
-export const validateNicknameRespondWithDuplicatedNickname = restSuccess<
-  ValidateNicknameApiData['data']
->('post', composeUrls(API_URL, endpoints.user.nickname()), {
-  data: { possible: false },
-});
-
-export const validateNicknameError = restError(
-  'post',
-  composeUrls(API_URL, endpoints.user.nickname()),
-  {
-    message: '닉네임이 유효하지 않습니다.',
-  }
-);
-
-export const updateNickname = restSuccess(
-  'patch',
-  composeUrls(API_URL, endpoints.user.nickname())
-);
-
-export const updateNicknameError = restError(
-  'patch',
-  composeUrls(API_URL, endpoints.user.nickname()),
-  {
-    message: '유효하지 않은 닉네임입니다.',
-  }
-);
-
-export const updateIsMajor = restSuccess(
-  'patch',
-  composeUrls(API_URL, endpoints.user.isMajor())
-);
-
-export const updateIsMajorError = restError(
-  'patch',
-  composeUrls(API_URL, endpoints.user.isMajor()),
-  {
-    message: '오류가 발생했습니다.',
-  }
-);
-
-export const updateSsafyBasicInfo = restSuccess(
-  'patch',
-  composeUrls(API_URL, endpoints.user.ssafyBasicInfo())
-);
-
-export const updateSsafyBasicInfoError = restError(
-  'patch',
-  composeUrls(API_URL, endpoints.user.ssafyBasicInfo()),
-  {
-    message: '오류가 발생했습니다.',
-  }
-);
-
-export const updateTrack = restSuccess(
-  'patch',
-  composeUrls(API_URL, endpoints.user.track())
-);
-
-export const updateTrackError = restError(
-  'patch',
-  composeUrls(API_URL, endpoints.user.track())
-);
-
-export const getProfileVisibility = restSuccess<
-  GetProfileVisibilityApiData['data']
->('get', composeUrls(API_URL, endpoints.user.profileVisibility()), {
-  data: {
-    isPublic: true,
-    // isPublic: false,
-  },
-});
-
-export const getUserProfileVisibility = restSuccess(
-  'get',
-  // eslint-disable-next-line
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.user.userProfileVisibility(':id')),
-  {
-    data: {
-      isPublic: true,
-      // isPublic: false,
-    },
-  }
-);
-
-export const updateProfileVisibility = restSuccess(
-  'patch',
-  composeUrls(API_URL, endpoints.user.profileVisibility()),
-  { data: null }
-);
-
-export const updateProfileVisibilityError = restError(
-  'patch',
-  composeUrls(API_URL, endpoints.user.profileVisibility()),
-  { message: '에러가 발생했습니다' }
-);
-
-export const getUserPortfolio = restSuccess<GetUserPortfolioApiData['data']>(
-  'get',
-  // eslint-disable-next-line
-  // @ts-ignore
-  composeUrls(API_URL, endpoints.user.portfolio(':id')),
-  {
-    data: {
-      portfolioElement: portfolio,
-    },
-  }
-);
-
-export const getMyPortfolio = restSuccess<GetMyPortfolioApiData['data']>(
-  'get',
-  composeUrls(API_URL, endpoints.user.myPortfolio()),
-  {
-    data: {
-      portfolioElement: portfolio,
-    },
-  }
-);
-
-export const updateMyPortfolio = restSuccess(
-  'put',
-  composeUrls(API_URL, endpoints.user.myPortfolio()),
-  {
-    data: null,
-  }
-);
-
-export const updateMyPortfolioError = restError(
-  'put',
-  composeUrls(API_URL, endpoints.user.myPortfolio()),
-  {
-    message: '오류가 발생했습니다.',
-  }
-);
 
 export const memberHandlers = [
   mockGetCertifiedSsafyMyInfo,
@@ -179,16 +20,16 @@ export const memberHandlers = [
   mockUpdateMyInfo,
   mockCertifyStudent,
 
-  updateNickname,
-  updateIsMajor,
-  updateSsafyBasicInfo,
-  updateTrack,
-  getProfileVisibility,
-  getUserProfileVisibility,
-  updateProfileVisibility,
-  getUserPortfolio,
-  getMyPortfolio,
-  getUserInfo,
-  updateMyPortfolio,
+  mockUpdateNickname,
+  mockUpdateIsMajor,
+  mockUpdateSsafyBasicInfo,
+  mockUpdateTrack,
+  mockGetProfileVisibility,
+  mockGetUserProfileVisibility,
+  mockUpdateProfileVisibility,
+  mockGetUserPortfolio,
+  mockGetMyPortfolio,
+  mockGetCertifiedUserInfo,
+  mockUpdateMyPortfolio,
   // updateMyPortfolioError,
 ];

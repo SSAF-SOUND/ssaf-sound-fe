@@ -1,4 +1,5 @@
 import type { MyInfoEditFormValues } from './utils';
+import type { LinkProps } from 'next/link';
 import type {
   SubmitErrorHandler,
   SubmitHandler,
@@ -27,7 +28,7 @@ const titleMap: Record<MyInfoEditFormFields, string> = {
 
 interface MyInfoEditFormPropsOptions {
   forceSsafyMemberToTrue: boolean;
-  titleBarBackwardRoute: string;
+  titleBarBackwardRoute: LinkProps['href'];
 }
 
 type OriginalOnValidSubmit = SubmitHandler<MyInfoEditFormValues>;

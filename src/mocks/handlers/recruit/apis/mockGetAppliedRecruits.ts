@@ -5,18 +5,12 @@ import { rest } from 'msw';
 import { restInfiniteAppliedRecruitsSuccess } from '~/mocks/handlers/recruit/utils';
 import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { MatchStatus, RecruitCategoryName } from '~/services/recruit';
-import { API_URL, composeUrls, removeQueryParams } from '~/utils';
+import { API_URL, composeUrls } from '~/utils';
 
 const getAppliedRecruitsMethod = 'get';
-const getAppliedRecruitsEndpoint = removeQueryParams(
-  composeUrls(
-    API_URL,
-    endpoints.recruit.appliedList({
-      category: RecruitCategoryName.PROJECT,
-      matchStatus: MatchStatus.SUCCESS,
-    })
-  )
+const getAppliedRecruitsEndpoint = composeUrls(
+  API_URL,
+  endpoints.recruit.appliedList()
 );
 
 export const mockGetAppliedRecruits = rest[getAppliedRecruitsMethod](
