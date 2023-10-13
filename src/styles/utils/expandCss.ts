@@ -16,7 +16,7 @@ export const expandCss = (marginForExpand: string = mainLayoutPaddingX) => {
 };
 
 export const expandStyle = (marginForExpand: string = mainLayoutPaddingX) => {
-  const negativeMarginForExpand = cssArithmetic.multiply(-1, marginForExpand);
+  const negativeMarginForExpand = cssArithmetic.multiply('-1', marginForExpand);
 
   return {
     width: 'auto',
