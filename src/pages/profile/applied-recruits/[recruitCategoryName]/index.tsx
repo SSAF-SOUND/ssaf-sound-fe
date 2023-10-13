@@ -72,7 +72,7 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
     ? query.matchStatus
     : defaultTabValue;
   const onTabValueChange = (matchStatus: string) => {
-    router.push({
+    router.replace({
       query: {
         ...router.query,
         matchStatus,

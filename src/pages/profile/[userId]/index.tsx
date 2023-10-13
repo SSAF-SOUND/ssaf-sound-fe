@@ -76,7 +76,7 @@ const UserProfilePage: CustomNextPage = () => {
   const metaTitle = createMetaTitle(userInfo.nickname);
   const tabValue = getSafeProfileTabValue(query.tab);
   const onTabValueChange = (value: string) => {
-    router.push({
+    router.replace({
       query: { ...router.query, [ParamsKey.TAB]: value },
     });
   };

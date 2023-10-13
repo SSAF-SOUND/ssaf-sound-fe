@@ -43,7 +43,7 @@ const MyProfilePage: CustomNextPage = () => {
 
   const tabValue = getSafeProfileTabValue(query.tab);
   const onTabValueChange = (value: string) => {
-    router.push({
+    router.replace({
       query: { ...router.query, [ParamsKey.TAB]: value },
     });
   };

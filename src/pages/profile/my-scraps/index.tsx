@@ -69,7 +69,7 @@ const MyScrapsPage: CustomNextPage = () => {
   }
 
   const onTabValueChange = (value: string) => {
-    router.push({
+    router.replace({
       query: {
         ...router.query,
         [ParamsKey.TAB]: value,
