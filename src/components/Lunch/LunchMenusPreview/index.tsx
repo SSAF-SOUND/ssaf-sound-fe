@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
+import { Scroll } from '~/components/Common/Scroll';
 import { LunchMenusPreviewError } from '~/components/Lunch/LunchMenusPreview/LunchMenusPreviewError';
 import { LunchMenusPreviewMenuDescription } from '~/components/Lunch/LunchMenusPreview/LunchMenusPreviewMenuDescription';
 import {
@@ -37,7 +38,6 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
     dateSpecifier,
   });
 
-  const lunchMenusViewCount = 3;
   const isLunchMenusEmpty =
     lunchMenusWithPollStatusSuccess &&
     lunchMenusWithPollStatus.menus.length === 0;
@@ -64,15 +64,22 @@ export const LunchMenusPreview = (props: LunchMenusPreviewProps) => {
 
         {isLunchMenusEmpty && <LunchMenusPreviewEmptyDescription />}
 
-        {lunchMenusWithPollStatusSuccess &&
-          lunchMenusWithPollStatus.menus
-            .slice(0, lunchMenusViewCount)
-            .map((menu) => (
-              <LunchMenusPreviewMenuDescription
-                key={menu.lunchId}
-                menu={menu}
-              />
-            ))}
+        <Scroll.Root css={scrollRootCss}>
+          <Scroll.Viewport>
+            <div css={scrollViewportContentCss}>
+              {lunchMenusWithPollStatusSuccess &&
+                lunchMenusWithPollStatus.menus.map((menu) => (
+                  <LunchMenusPreviewMenuDescription
+                    key={menu.lunchId}
+                    menu={menu}
+                  />
+                ))}
+            </div>
+          </Scroll.Viewport>
+          <Scroll.Bar orientation="horizontal">
+            <Scroll.Thumb />
+          </Scroll.Bar>
+        </Scroll.Root>
       </div>
     </div>
   );
@@ -87,7 +94,16 @@ const selfCss = css({
   overflow: 'hidden',
 });
 
-const menusCss = css({ width: '100%' }, flex('center', 'space-between', 'row'));
+const menusCss = css(
+  {
+    position: 'relative',
+    width: '100%',
+  },
+  flex('center', 'space-between', 'row')
+);
+
+const scrollRootCss = css({ width: '100%', paddingBottom: 24 });
+const scrollViewportContentCss = css(flex('center', 'flex-start', 'row', 16));
 
 const LunchMenusPreviewMenuDescriptionSkeleton = () => {
   const skeletonCount = 3;

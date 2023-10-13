@@ -51,7 +51,7 @@ const cn = {
   mainMenu: 'lunch-preview-menu-main-menu',
 };
 
-const selfCss = css(flex('center', '', 'column', 4));
+const selfCss = css({ padding: '4px 0' }, flex('center', '', 'column', 4));
 
 const likeLayerCss = css(flex('center', '', 'row'), fontCss.style.B16);
 
@@ -102,7 +102,7 @@ const buttonCss = css(resetStyle.button(), {
       opacity: 1,
     },
   },
-  ':focus-visible': {
+  '&:focus-visible': {
     outline: `2px solid ${palettes.primary.dark}`,
   },
 });
