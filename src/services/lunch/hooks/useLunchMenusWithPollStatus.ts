@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '~/react-query/common';
 import { getLunchMenusWithPollStatus } from '~/services/lunch/apis';
 import { getDateFromLunchDateSpecifier } from '~/services/lunch/utils';
-import { toMs } from '~/utils';
+import { toMs } from '~/utils/toMs';
 
 export interface UseLunchMenusWithPollStatusParams {
   campus: string;
