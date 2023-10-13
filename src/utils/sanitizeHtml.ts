@@ -5,8 +5,11 @@ import { isClient } from '~/utils/misc';
 const addHook = () => {
   if (isClient) {
     DOMPurify.addHook('afterSanitizeAttributes', function (node) {
-      if ('target' in node) {
+      if (node.nodeName === 'A') {
         node.setAttribute('target', '_blank');
+
+        const prevRelAttributes = node.getAttribute('rel');
+        node.setAttribute('rel', `${prevRelAttributes} ugc nofollow`);
       }
     });
   }
