@@ -62,7 +62,7 @@ export const Gnb = (props: GnbProps) => {
       createNavigationDetail(
         '프로필',
         <MdAccountCircle />,
-        routes.profile.self(),
+        routes.profile.self().pathname,
         true
       ),
     ],
