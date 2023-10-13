@@ -14,7 +14,7 @@ import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import DelayedRedirection from '~/components/DelayedRedirection';
 import { useSignIn } from '~/services/auth';
 import { oauthProviders } from '~/services/auth/utils';
-import { useMyInfo } from '~/services/member';
+import { useMyAccountStatus, useMyInfo } from '~/services/member';
 import {
   createNoIndexPageMetaData,
   handleAxiosError,
@@ -22,7 +22,7 @@ import {
 } from '~/utils';
 import { routes } from '~/utils/routes';
 
-const metaTitle = '유저정보 확인';
+const metaTitle = '로그인 중입니다.';
 
 const CallbackPage: CustomNextPage<
   InferGetStaticPropsType<typeof getStaticProps>
@@ -36,16 +36,22 @@ const CallbackPage: CustomNextPage<
   const { mutateAsync: signIn } = useSignIn();
 
   const [myInfoEnabled, setMyInfoEnabled] = useState(false);
-  const { data: myInfo } = useMyInfo({ enabled: myInfoEnabled, retry: 1 });
+
+  useMyInfo({ enabled: myInfoEnabled, retry: 1 });
+  const { isAuthenticated, isRegisterRequired } = useMyAccountStatus();
 
   const redirectSignInReturnPage = async () => {
+    if (isRegisterRequired) {
+      return;
+    }
+
     const returnPage = webStorage.getSignInReturnPage();
     await router.replace(returnPage);
     webStorage.clearSignInReturnPage();
   };
 
   useEffect(() => {
-    if (!code || !!myInfo) return;
+    if (!code) return;
 
     const handleSignIn = async () => {
       try {
@@ -58,9 +64,9 @@ const CallbackPage: CustomNextPage<
     };
 
     handleSignIn();
-  }, [code, provider, router, signIn, myInfo]);
+  }, [code, provider, router, signIn]);
 
-  if (!!myInfo) {
+  if (isAuthenticated) {
     redirectSignInReturnPage();
   }
 
