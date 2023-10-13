@@ -1,3 +1,4 @@
+import type { LinkProps } from 'next/link';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils';
 import type { SubmitErrorHandlerWithErrorMessage } from '~/components/Forms/utils';
@@ -12,7 +13,7 @@ import { Links, SelfIntroduction, Skills } from './Fields';
 
 interface PortfolioFormOptions {
   marginForExpand: string;
-  titleBarCloseRoute: string;
+  titleBarCloseRoute: LinkProps['href'];
 }
 
 export interface PortfolioFormProps {
