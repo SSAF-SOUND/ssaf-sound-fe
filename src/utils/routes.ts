@@ -1,6 +1,7 @@
 import type { OAuthProviders } from '~/services/auth/utils';
 
 import { article } from '~/utils/client-routes/article';
+import { auth } from '~/utils/client-routes/auth';
 import { lunch } from '~/utils/client-routes/lunch';
 import { profile } from '~/utils/client-routes/profile';
 import { recruit } from '~/utils/client-routes/recruit';
@@ -11,9 +12,7 @@ export const routes = {
   article,
 
   //
-  signIn: () => '/auth/sign-in' as const,
-  userRegister: () => '/auth/register' as const,
-  callback: (provider: OAuthProviders) => `/auth/callback/${provider}` as const,
+  auth,
 
   //
   certification: {
