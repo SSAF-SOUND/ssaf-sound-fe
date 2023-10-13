@@ -1,5 +1,4 @@
 import type { OAuthProviders } from '~/services/auth/utils';
-import type { MatchStatus, RecruitCategoryName } from '~/services/recruit';
 
 import { article } from '~/utils/client-routes/article';
 import { lunch } from '~/utils/client-routes/lunch';
@@ -36,9 +35,4 @@ export const routes = {
 
   //
   lunch,
-};
-
-export type AppliedRecruitsPageQueryStringObject = {
-  category: RecruitCategoryName;
-  matchStatus: MatchStatus;
 };
