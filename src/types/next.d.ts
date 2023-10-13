@@ -2,7 +2,9 @@ import type { AppProps } from 'next/app';
 import type { NextPage, NextComponentType, NextPageContext } from 'next/types';
 import type { ReactElement } from 'react';
 import type { PageHeadProps } from '~/components/Common';
+import type { MainLayoutProps } from '~/components/Layout/MainLayout';
 import type { UserRole } from '~/services/member';
+
 
 type NextPageConfig = {
   auth: {
@@ -26,6 +28,8 @@ type NextPageConfig = {
    * - 페이지 컴포넌트 내부에서 메타 태그를 사용한다면 이 프로퍼티를 사용하면 안됩니다. (여러개의 메타 태그가 렌더링 되기 때문)
    */
   meta: PageHeadProps;
+
+  mainLayoutStyle: MainLayoutProps['style'];
 };
 
 declare module 'next/types' {
