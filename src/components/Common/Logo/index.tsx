@@ -23,7 +23,7 @@ export const Logo = (props: LogoProps) => {
 
   return (
     <div css={[selfCss, navigateToMainPage && cursorCss]} onClick={handleClick}>
-      <AccessibleIcon.Root label="로고">
+      <AccessibleIcon.Root label="SSAF SOUND">
         <LogoSVG css={[svgBaseCss, svgCss[size]]} />
       </AccessibleIcon.Root>
     </div>
