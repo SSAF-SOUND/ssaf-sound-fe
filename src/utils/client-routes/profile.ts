@@ -106,7 +106,7 @@ const myInfoEditRoute = (field: EditableMyInfoFields) => {
 // ---------- portfolio edit ----------
 
 const portfolioEditRoute = () => {
-  const pathname = `${myInfoSettingsRoute().pathname}/portfolio/edit` as const;
+  const pathname = `${profileSelfRoute().pathname}/portfolio/edit` as const;
   return createRoute(pathname)();
 };
 
