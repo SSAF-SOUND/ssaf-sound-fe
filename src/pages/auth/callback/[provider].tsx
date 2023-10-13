@@ -7,14 +7,19 @@ import type { CustomNextPage } from 'next/types';
 
 import { useRouter } from 'next/router';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import DelayedRedirection from '~/components/DelayedRedirection';
 import { useSignIn } from '~/services/auth';
 import { oauthProviders } from '~/services/auth/utils';
-import { createNoIndexPageMetaData, handleAxiosError } from '~/utils';
+import { useMyInfo } from '~/services/member';
+import {
+  createNoIndexPageMetaData,
+  handleAxiosError,
+  webStorage,
+} from '~/utils';
 import { routes } from '~/utils/routes';
 
 const metaTitle = '유저정보 확인';
@@ -30,13 +35,22 @@ const CallbackPage: CustomNextPage<
   const { code } = queryParams;
   const { mutateAsync: signIn } = useSignIn();
 
+  const [myInfoEnabled, setMyInfoEnabled] = useState(false);
+  const { data: myInfo } = useMyInfo({ enabled: myInfoEnabled, retry: 1 });
+
+  const redirectSignInReturnPage = async () => {
+    const returnPage = webStorage.getSignInReturnPage();
+    await router.replace(returnPage);
+    webStorage.clearSignInReturnPage();
+  };
+
   useEffect(() => {
-    if (!code) return;
+    if (!code || !!myInfo) return;
 
     const handleSignIn = async () => {
       try {
         await signIn({ code, oauthName: provider });
-        router.replace(routes.root());
+        setMyInfoEnabled(true);
       } catch (err) {
         handleAxiosError(err);
         router.replace(routes.auth.signIn());
@@ -44,11 +58,19 @@ const CallbackPage: CustomNextPage<
     };
 
     handleSignIn();
-  }, [code, provider, router, signIn]);
+  }, [code, provider, router, signIn, myInfo]);
+
+  if (!!myInfo) {
+    redirectSignInReturnPage();
+  }
 
   if (!code) {
     return (
-      <DelayedRedirection to={routes.auth.signIn()} shouldReplace={true} seconds={3}>
+      <DelayedRedirection
+        to={routes.auth.signIn()}
+        shouldReplace={true}
+        seconds={3}
+      >
         <FullPageLoader text={loaderText.checkUser} />
       </DelayedRedirection>
     );
