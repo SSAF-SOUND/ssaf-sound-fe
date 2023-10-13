@@ -1,5 +1,3 @@
-import type { OAuthProviders } from '~/services/auth/utils';
-
 import { article } from '~/utils/client-routes/article';
 import { auth } from '~/utils/client-routes/auth';
 import { lunch } from '~/utils/client-routes/lunch';

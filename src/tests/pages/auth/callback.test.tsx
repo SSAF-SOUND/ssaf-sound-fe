@@ -22,7 +22,7 @@ describe('Callback Page', () => {
     server.use(mockSignIn);
 
     await mockRouter.push({
-      pathname: routes.callback(OAUTH_PROVIDER),
+      pathname: routes.auth.callback(OAUTH_PROVIDER).pathname,
       query: {
         [ParamsKey.CODE]: CODE,
       },
@@ -41,7 +41,7 @@ describe('Callback Page', () => {
     server.use(mockSignInError);
 
     await mockRouter.push({
-      pathname: routes.callback(OAUTH_PROVIDER),
+      pathname: routes.auth.callback(OAUTH_PROVIDER).pathname,
       query: {
         [ParamsKey.CODE]: CODE,
       },
@@ -51,7 +51,7 @@ describe('Callback Page', () => {
 
     await waitFor(() => {
       expect(mockRouter).toMatchObject({
-        pathname: routes.signIn(),
+        pathname: routes.auth.signIn().pathname,
       });
     });
   });

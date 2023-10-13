@@ -45,7 +45,7 @@ const SignInPage = () => {
         openGraph={{
           title: metaTitle,
           description: metaDescription,
-          url: routes.signIn(),
+          url: routes.auth.signIn().pathname,
         }}
       />
 

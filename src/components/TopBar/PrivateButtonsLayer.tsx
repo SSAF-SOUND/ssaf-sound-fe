@@ -22,7 +22,7 @@ export const PrivateButtonsLayer = () => {
 
   const onClickSignInButton = () => {
     webStorage.setSignInReturnPage(getPathname());
-    router.push(routes.signIn());
+    router.push(routes.auth.signIn());
   };
 
   if (isFetching) {

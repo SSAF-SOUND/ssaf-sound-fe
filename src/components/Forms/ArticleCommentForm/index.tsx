@@ -206,7 +206,7 @@ const NotSignedInFallback = () => {
   const router = useRouter();
   const onClickSignInButton = () => {
     webStorage.setSignInReturnPage(getPathname());
-    router.push(routes.signIn());
+    router.push(routes.auth.signIn());
   };
 
   return (

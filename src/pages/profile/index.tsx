@@ -37,7 +37,7 @@ const MyProfilePage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
 
   if (!myInfo) {
-    router.replace(routes.signIn());
+    router.replace(routes.auth.signIn());
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 

@@ -5,7 +5,7 @@ import { routes } from '~/utils/routes';
 
 export const useCheckRegisterRequired = () => {
   const router = useRouter();
-  const userRegisterRoute = routes.userRegister();
+  const userRegisterRoute = routes.auth.userRegister().pathname;
   const { isRegisterRequired } = useMyAccountStatus();
   const isRegisterPage = router.pathname === userRegisterRoute;
 

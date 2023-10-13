@@ -39,7 +39,7 @@ const CallbackPage: CustomNextPage<
         router.replace(routes.root());
       } catch (err) {
         handleAxiosError(err);
-        router.replace(routes.signIn());
+        router.replace(routes.auth.signIn());
       }
     };
 
@@ -48,7 +48,7 @@ const CallbackPage: CustomNextPage<
 
   if (!code) {
     return (
-      <DelayedRedirection to={routes.signIn()} shouldReplace={true} seconds={3}>
+      <DelayedRedirection to={routes.auth.signIn()} shouldReplace={true} seconds={3}>
         <FullPageLoader text={loaderText.checkUser} />
       </DelayedRedirection>
     );
