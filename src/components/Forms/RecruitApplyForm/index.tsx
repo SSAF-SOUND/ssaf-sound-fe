@@ -43,7 +43,7 @@ export const RecruitApplyForm = (props: RecruitApplyFormProps) => {
     category,
     questions: [question],
   } = recruitDetail;
-  const hasQuestion = question.length > 0;
+  const hasQuestion = !!question;
 
   return (
     <FormProvider {...methods}>
