@@ -8,10 +8,12 @@ import { useEffect } from 'react';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import ArticleForm from '~/components/Forms/ArticleForm';
+import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
 import {
   useArticleCategories,
   useCreateArticle,
 } from '~/services/article/hooks';
+import { reconfirmArticleFormUnload } from '~/services/article/utils/reconfirmArticleFormUnload';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -29,6 +31,8 @@ const ArticleCreatePage: CustomNextPage = () => {
   const query = router.query as { categoryId: string };
   const { data: articleCategories } = useArticleCategories();
   const categoryId = Number(query.categoryId);
+
+  useUnloadReconfirmEffect();
 
   useEffect(() => {
     if (!articleCategories) return;
@@ -63,6 +67,12 @@ const ArticleCreatePage: CustomNextPage = () => {
     }
   };
 
+  const onClickTitleBarClose = () => {
+    if (reconfirmArticleFormUnload()) {
+      router.push(routes.article.category({ categoryId }));
+    }
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
@@ -71,7 +81,7 @@ const ArticleCreatePage: CustomNextPage = () => {
         <ArticleForm
           onValidSubmit={onValidSubmit}
           options={{
-            titleBarCloseRoute: routes.article.category({ categoryId }),
+            onClickTitleBarClose,
           }}
         />
       </div>
@@ -82,3 +92,4 @@ const ArticleCreatePage: CustomNextPage = () => {
 export default ArticleCreatePage;
 ArticleCreatePage.auth = createAuthGuard();
 ArticleCreatePage.meta = createNoIndexPageMetaData(metaTitle);
+ArticleCreatePage.mainLayoutStyle = { overflow: 'unset' };

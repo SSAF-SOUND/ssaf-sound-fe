@@ -8,6 +8,7 @@ import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import RedirectionGuide from '~/components/RedirectionGuide';
+import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
 import {
   useMyInfo,
   useMyPortfolio,
@@ -145,3 +146,4 @@ const portfolioSkillsToFormSkillsField = (
 export default PortfolioEditPage;
 PortfolioEditPage.auth = createAuthGuard();
 PortfolioEditPage.meta = createNoIndexPageMetaData(metaTitle);
+PortfolioEditPage.mainLayoutStyle = { overflow: 'unset' };
