@@ -10,6 +10,6 @@ export type ApproveRecruitApplicationApiData =
 export const approveRecruitApplication = (recruitApplicationId: number) => {
   const endpoint = endpoints.recruit.application.approve(recruitApplicationId);
   return privateAxios
-    .post<ApproveRecruitApplicationApiData>(endpoint, null)
+    .patch<ApproveRecruitApplicationApiData>(endpoint, null)
     .then((res) => res.data.data);
 };
