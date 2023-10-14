@@ -125,7 +125,7 @@ const RejectedApplicantsPage: CustomNextPage<RejectedApplicantsPageProps> = (
       <div css={selfCss}>
         <TitleBar.Default
           title={titleBarTitle}
-          onClickBackward={routes.recruit.applications.rejected(recruitId)}
+          onClickBackward={routes.recruit.applications.self(recruitId)}
           withoutClose
         />
 
