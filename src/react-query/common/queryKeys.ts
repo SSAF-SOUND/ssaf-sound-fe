@@ -6,11 +6,6 @@ import type {
 } from '~/services/recruit';
 import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruit';
 
-import {
-  defaultRecruitsPageCursor,
-  defaultRecruitsPageSize,
-} from '~/services/recruit/apis/constants';
-
 type JoinedRecruitsParams = { memberId: number } & Partial<
   Pick<RecruitSummariesQueryStringObject, 'category' | 'cursor' | 'size'>
 >;

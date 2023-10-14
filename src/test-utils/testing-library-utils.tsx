@@ -7,7 +7,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from '@testing-library/user-event';
 import { Toaster } from 'react-hot-toast';
 
 import AuthChecker from '~/components/AuthChecker';
