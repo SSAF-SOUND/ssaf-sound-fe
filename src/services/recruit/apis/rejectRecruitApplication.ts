@@ -10,6 +10,6 @@ export type RejectRecruitApplicationApiData =
 export const rejectRecruitApplication = (recruitApplicationId: number) => {
   const endpoint = endpoints.recruit.application.reject(recruitApplicationId);
   return privateAxios
-    .post<RejectRecruitApplicationApiData>(endpoint, null)
+    .patch<RejectRecruitApplicationApiData>(endpoint, null)
     .then((res) => res.data.data);
 };

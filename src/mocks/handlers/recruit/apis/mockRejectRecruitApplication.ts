@@ -11,7 +11,7 @@ const rejectRecruitApplicationEndpoint = composeUrls(
   // @ts-ignore
   endpoints.recruit.application.reject(':recruitApplicationId')
 );
-const rejectRecruitApplicationMethod = 'post';
+const rejectRecruitApplicationMethod = 'patch';
 
 export const mockRejectRecruitApplication = restSuccess<
   RejectRecruitApplicationApiData['data']
