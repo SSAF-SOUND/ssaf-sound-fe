@@ -1,4 +1,3 @@
-import type { LinkProps } from 'next/link';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { PortfolioFormValues } from '~/components/Forms/PortfolioForm/utils';
 import type { SubmitErrorHandlerWithErrorMessage } from '~/components/Forms/utils';

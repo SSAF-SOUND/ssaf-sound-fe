@@ -1,7 +1,4 @@
-import type {
-  GetJoinedRecruitsApiData,
-  GetRecruitsApiData,
-} from '~/services/recruit';
+import type { GetJoinedRecruitsApiData } from '~/services/recruit';
 
 import { rest } from 'msw';
 

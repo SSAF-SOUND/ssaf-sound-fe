@@ -11,7 +11,7 @@ import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIco
 import { useModal } from '~/components/GlobalModal';
 import SquareAvatar from '~/components/SquareAvatar';
 import { RecruitParts, useRecruitParticipants } from '~/services/recruit';
-import { colorMix, flex, fontCss, palettes, resetStyle } from '~/styles/utils';
+import { flex, fontCss, palettes, resetStyle } from '~/styles/utils';
 
 interface RecruitParticipantsProgressDetailProps {
   recruitId: number;

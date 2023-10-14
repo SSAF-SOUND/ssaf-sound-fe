@@ -1,15 +1,12 @@
 import type { GetRejectedRecruitApplicantsApiData } from '~/services/recruit';
 
-import { rest } from 'msw';
-
 import {
-  createMockRecruitApplicants,
   createMockRecruitDetail,
   createMockRejectedRecruitApplicants,
 } from '~/mocks/handlers/recruit/data';
-import { mockSuccess, restError, restSuccess } from '~/mocks/utils';
+import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { API_URL, composeUrls, concat, removeQueryParams } from '~/utils';
+import { API_URL, composeUrls, removeQueryParams } from '~/utils';
 
 const getRejectedRecruitApplicantsMethod = 'get';
 const getRejectedRecruitApplicantsEndpoint = removeQueryParams(

@@ -1,7 +1,5 @@
 import { css } from '@emotion/react';
 
-import { hideScrollBar } from './hideScrollBar';
-
 const button = () => {
   return css({
     whiteSpace: 'nowrap',
