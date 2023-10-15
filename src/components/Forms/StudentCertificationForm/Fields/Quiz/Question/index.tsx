@@ -1,12 +1,12 @@
 import type { StudentCertificationFormValues } from '~/components/Forms/StudentCertificationForm/utils';
 
 import { css } from '@emotion/react';
-import { useId, useMemo } from 'react';
+import { useId } from 'react';
 import { useWatch } from 'react-hook-form';
 
 import { SelectBox } from '~/components/Common/SelectBox';
 import { useStudentCertificationFormContext } from '~/components/Forms/StudentCertificationForm/utils';
-import { years } from '~/services/member';
+import { useYears } from '~/services/meta';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
 import Blank from './Blank';
@@ -20,12 +20,13 @@ const Question = () => {
     setValue,
     formState: { defaultValues: { year: defaultYear = 1 } = {} },
   } = useStudentCertificationFormContext();
-  const items = useMemo(() => years.map(String), []);
+  const { data: years } = useYears();
 
-  const year = useWatch<StudentCertificationFormValues>({
-    name: fieldName,
-    defaultValue: defaultYear,
-  }) as number;
+  const yearItems = years.map(String);
+  const year =
+    (useWatch<StudentCertificationFormValues>({
+      name: fieldName,
+    }) as number) ?? defaultYear;
 
   return (
     <div>
@@ -36,7 +37,7 @@ const Question = () => {
         <SelectBox
           id={selectBoxId}
           size="lg"
-          items={items}
+          items={yearItems}
           textAs={(item) => item + '기'}
           defaultValue={String(year)}
           onValueChange={(value) => setValue(fieldName, Number(value))}
@@ -46,19 +47,16 @@ const Question = () => {
       </div>
 
       <div css={questionCss}>
-        <div>
-          <p>
-            {'"'}
-            <QuestionMap year={year} />
-            {'"'}
-          </p>
-        </div>
-        <div>
-          <p>
-            빈칸 <Blank length={1} />에 들어갈 단어를
-          </p>
-          <p>입력해주세요.</p>
-        </div>
+        <p css={{ marginBottom: 16 }}>
+          {'"'}
+          <QuestionMap year={year} />
+          {'"'}
+        </p>
+        <p css={fontCss.style.B20}>{`빈칸에 들어갈 단어를 입력해주세요.`}</p>
+        <p css={fontCss.style.B20}>
+          <Blank length={1} />는 한글, <Blank length={1} isAlphabet />는
+          영문이며 대소문자는 상관없습니다.
+        </p>
         <p css={alertCss}>인증가능한 횟수는 총 3회 주어집니다!</p>
       </div>
     </div>
