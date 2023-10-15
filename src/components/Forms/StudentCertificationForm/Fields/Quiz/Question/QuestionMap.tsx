@@ -44,7 +44,7 @@ const QuestionMap = (props: QuestionMapProps) => {
     case 6:
       return (
         <span>
-          열정6기 <Blank length={3} />~<Blank length={2} />
+          열정6기 <Blank length={3} isAlphabet />~<Blank length={2} />
         </span>
       );
     case 7:
@@ -63,7 +63,7 @@ const QuestionMap = (props: QuestionMapProps) => {
     case 9:
       return (
         <span>
-          <Blank length={5} />~ 9기
+          <Blank length={5} isAlphabet />~ 9기
         </span>
       );
     case 10:
