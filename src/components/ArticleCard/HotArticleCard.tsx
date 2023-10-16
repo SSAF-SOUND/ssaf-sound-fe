@@ -66,7 +66,11 @@ const clampCss = css(
   lineClamp(1)
 );
 
-const articleTitleCss = css(fontCss.style.B14, clampCss);
+const articleTitleCss = css(
+  fontCss.style.B14,
+  fontCss.family.pretendard,
+  clampCss
+);
 
 const categoryCss = css({ color: palettes.point.purple }, fontCss.style.B18);
 

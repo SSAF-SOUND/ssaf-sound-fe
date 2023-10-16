@@ -42,7 +42,11 @@ const ArticleMain = (props: ArticleMainProps) => {
 
 export default ArticleMain;
 
-const titleCss = css(fontCss.style.B20, flex('center', '', 'row', 10));
+const titleCss = css(
+  fontCss.style.B20,
+  fontCss.family.pretendard,
+  flex('center', '', 'row', 10)
+);
 
 const modifyIndicator = css({ color: palettes.primary.dark });
 

@@ -15,5 +15,6 @@ export const RecruitCardTitle = (props: RecruitCardTitleProps) => {
 
 const selfCss = css(
   { color: palettes.font.grey, wordBreak: 'break-all' },
-  fontCss.style.B14
+  fontCss.style.B14,
+  fontCss.family.pretendard
 );
