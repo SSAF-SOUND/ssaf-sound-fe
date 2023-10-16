@@ -65,7 +65,7 @@ const clampCss = css(
   lineClamp(1)
 );
 
-const titleCss = css(fontCss.style.B18, clampCss);
+const titleCss = css(fontCss.style.B18, fontCss.family.pretendard, clampCss);
 
 const contentCss = css(fontCss.style.R14, fontCss.family.pretendard, clampCss);
 

@@ -13,4 +13,8 @@ export const RecruitTitle = (props: RecruitTitleProps) => {
   return <h2 css={selfCss} {...props} />;
 };
 
-const selfCss = css({ color: palettes.white }, fontCss.style.B28);
+const selfCss = css(
+  { color: palettes.white },
+  fontCss.style.B28,
+  fontCss.family.pretendard
+);
