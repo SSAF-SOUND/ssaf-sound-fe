@@ -29,13 +29,9 @@ export enum ResponseCode {
 
   // TODO: 값 수정
   APPLICATION_CANCELED = '03030303',
-
-  // TODO: 값 수정
-  NO_PERMISSIONS = '12313312',
 }
 
 export const GlobalSymbol = {
   QUIT_REQUEST_RETRY: Symbol(),
 };
 export type GlobalSymbol = keyof typeof GlobalSymbol;
-
