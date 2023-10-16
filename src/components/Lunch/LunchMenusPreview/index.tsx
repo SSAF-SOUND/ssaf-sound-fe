@@ -100,7 +100,7 @@ const menusCss = css({
 });
 
 const scrollRootCss = css({ width: '100%', paddingBottom: 24 });
-const scrollViewportContentCss = css(flex('center', 'flex-start', 'row', 16));
+const scrollViewportContentCss = css(flex('center', 'space-around', 'row', 16));
 
 const LunchMenusPreviewMenuDescriptionSkeleton = () => {
   const skeletonCount = 4;
