@@ -31,8 +31,10 @@ export const ArticleCard = memo((props: ArticleCardProps) => {
   return (
     <ArticleCardLink href={routes.article.detail(articleId)}>
       <h2 css={[titleCss, { marginBottom: 2 }]}>{title}</h2>
-
-      <p css={[contentCss, { marginBottom: 24 }]}>{strippedHtml}</p>
+      <p
+        css={[contentCss, { marginBottom: 24 }]}
+        dangerouslySetInnerHTML={{ __html: strippedHtml }}
+      />
 
       <div css={footerCss}>
         <div css={metaCss}>
@@ -65,7 +67,7 @@ const clampCss = css(
 
 const titleCss = css(fontCss.style.B18, clampCss);
 
-const contentCss = css(fontCss.style.R14, clampCss);
+const contentCss = css(fontCss.style.R14, fontCss.family.pretendard, clampCss);
 
 const footerCss = css(flex('center', 'space-between', 'row'));
 
