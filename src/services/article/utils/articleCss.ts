@@ -68,5 +68,6 @@ export const articleCss = css(
   linkCss,
   boldCss,
   codeCss,
-  fontCss.style.R14
+  fontCss.style.R14,
+  fontCss.family.pretendard
 );

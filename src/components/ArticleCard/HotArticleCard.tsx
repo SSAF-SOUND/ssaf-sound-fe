@@ -43,7 +43,10 @@ export const HotArticleCard = memo((props: HotArticleCardProps) => {
 
       <h2 css={[articleTitleCss, { marginBottom: 4 }]}>{articleTitle}</h2>
 
-      <p css={[contentCss, { marginBottom: 10 }]}>{strippedHtml}</p>
+      <p
+        css={[contentCss, { marginBottom: 10 }]}
+        dangerouslySetInnerHTML={{ __html: strippedHtml }}
+      />
 
       <div css={metaCss}>
         <span>{timeAgo(createdAt)}</span>
@@ -67,7 +70,7 @@ const articleTitleCss = css(fontCss.style.B14, clampCss);
 
 const categoryCss = css({ color: palettes.point.purple }, fontCss.style.B18);
 
-const contentCss = css(fontCss.style.R14, clampCss);
+const contentCss = css(fontCss.style.R14, fontCss.family.pretendard, clampCss);
 
 const headerCss = css(flex('center', 'space-between', 'row', 16));
 

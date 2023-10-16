@@ -71,7 +71,7 @@ const selfCss = css({
     borderBottom: 0,
   },
   [`& .${cn.editor}`]: {
-    fontFamily: fontCss.family.auto.fontFamily,
+    fontFamily: fontCss.family.pretendard.fontFamily,
     height: 450,
     '::before': {
       // placeholder 스타일
