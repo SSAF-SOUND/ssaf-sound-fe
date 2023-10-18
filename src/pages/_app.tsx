@@ -13,6 +13,7 @@ import Background from '~/components/Background';
 import { PageHead } from '~/components/Common/PageHead';
 import { GlobalModal } from '~/components/GlobalModal';
 import { MainLayout } from '~/components/Layout';
+import RouterProgress from '~/components/RouterProgress';
 import { useMSW } from '~/hooks';
 import { initServerMocks } from '~/mocks';
 import { getQueryClient } from '~/react-query/common';
@@ -39,6 +40,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
+        <RouterProgress />
         <GlobalStyles />
         <Background />
         <Toaster />
