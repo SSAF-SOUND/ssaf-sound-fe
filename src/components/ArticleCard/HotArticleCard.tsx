@@ -1,5 +1,7 @@
 import type { ArticleSummary } from '~/services/article/utils';
 
+import Image from 'next/image';
+
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
@@ -26,6 +28,7 @@ export const HotArticleCard = memo((props: HotArticleCardProps) => {
     likeCount,
     commentCount,
     postId: articleId,
+    thumbnail,
   } = article;
   const strippedHtml = useStripHtml(content);
 
@@ -41,12 +44,26 @@ export const HotArticleCard = memo((props: HotArticleCardProps) => {
         </div>
       </div>
 
-      <h2 css={[articleTitleCss, { marginBottom: 4 }]}>{articleTitle}</h2>
-
-      <p
-        css={[contentCss, { marginBottom: 10 }]}
-        dangerouslySetInnerHTML={{ __html: strippedHtml }}
-      />
+      <div css={flex('', 'space-between', 'row', 16)}>
+        <div>
+          <h2 css={[articleTitleCss, { marginBottom: 4 }]}>{articleTitle}</h2>
+          <p
+            css={[contentCss, { marginBottom: 16 }]}
+            dangerouslySetInnerHTML={{ __html: strippedHtml }}
+          />
+        </div>
+        {thumbnail && (
+          <div css={flex('center')}>
+            <Image
+              src={thumbnail}
+              alt=""
+              width={70}
+              height={70}
+              css={thumbnailCss}
+            />
+          </div>
+        )}
+      </div>
 
       <div css={metaCss}>
         <span>{timeAgo(createdAt)}</span>
@@ -81,3 +98,8 @@ const headerCss = css(flex('center', 'space-between', 'row', 16));
 const statsCss = css(flex('center', '', 'row', 8));
 
 const metaCss = css(fontCss.style.B14, flex('center', '', 'row', 8));
+
+const thumbnailCss = css({
+  borderRadius: 12,
+  border: `1px solid ${palettes.font.blueGrey}`,
+});
