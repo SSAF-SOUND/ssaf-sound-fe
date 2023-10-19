@@ -86,3 +86,4 @@ const ArticleEditPage: CustomNextPage = () => {
 export default ArticleEditPage;
 ArticleEditPage.auth = createAuthGuard();
 ArticleEditPage.meta = createNoIndexPageMetaData(metaTitle);
+ArticleEditPage.mainLayoutStyle = { overflow: 'unset' };

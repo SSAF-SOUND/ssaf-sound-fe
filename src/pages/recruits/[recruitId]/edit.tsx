@@ -102,6 +102,7 @@ const RecruitEditPage: CustomNextPage = () => {
 export default RecruitEditPage;
 RecruitEditPage.auth = createAuthGuard();
 RecruitEditPage.meta = createNoIndexPageMetaData(metaTitle);
+RecruitEditPage.mainLayoutStyle = { overflow: 'unset' };
 
 const marginForExpand = globalVars.mainLayoutPaddingX.var;
 

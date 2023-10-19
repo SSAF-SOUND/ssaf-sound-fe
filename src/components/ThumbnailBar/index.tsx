@@ -9,6 +9,7 @@ import Skeleton from 'react-loading-skeleton';
 import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
 import { Modal } from '~/components/Common/Modal';
+import { Scroll } from '~/components/Common/Scroll';
 import { flex, palettes } from '~/styles/utils';
 
 import Thumbnail from './Thumbnail';
@@ -53,23 +54,30 @@ const ThumbnailBar = (props: ThumbnailBarProps) => {
 
   return (
     <>
-      <ol css={selfCss} {...restProps}>
-        {thumbnails.map(({ thumbnailUrl, loading }, index) => (
-          <Thumbnail
-            loading={loading}
-            key={thumbnailUrl}
-            src={thumbnailUrl}
-            alt=""
-            size={thumbnailSize}
-            onClickThumbnail={() => {
-              openModal();
-              setSelectedIndex(index);
-            }}
-            onClickRemove={() => onClickRemoveThumbnail?.(index)}
-            disableRemove={disableRemove}
-          />
-        ))}
-      </ol>
+      <Scroll.Root css={{ width: '100%' }}>
+        <Scroll.Viewport>
+          <ol css={selfCss} {...restProps}>
+            {thumbnails.map(({ thumbnailUrl, loading }, index) => (
+              <Thumbnail
+                loading={loading}
+                key={thumbnailUrl}
+                src={thumbnailUrl}
+                alt=""
+                size={thumbnailSize}
+                onClickThumbnail={() => {
+                  openModal();
+                  setSelectedIndex(index);
+                }}
+                onClickRemove={() => onClickRemoveThumbnail?.(index)}
+                disableRemove={disableRemove}
+              />
+            ))}
+          </ol>
+        </Scroll.Viewport>
+        <Scroll.Bar orientation="horizontal" forceMount>
+          <Scroll.Thumb />
+        </Scroll.Bar>
+      </Scroll.Root>
       {hasThumbnail && (
         <Modal
           open={open}
@@ -111,9 +119,9 @@ const selfCss = css(
   {
     backgroundColor: palettes.white,
     width: '100%',
-    padding: 10,
+    padding: '24px 10px',
   },
-  flex('', '', 'row', 10, 'wrap')
+  flex('', '', 'row', 16)
 );
 
 const controlButtonsCss = css(flex('', '', 'row', 10));

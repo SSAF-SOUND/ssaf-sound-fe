@@ -3,7 +3,7 @@ import type { ArticleDetail } from '~/services/article';
 import { css } from '@emotion/react';
 
 import ThumbnailBar from '~/components/ThumbnailBar';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
 
 import ArticleContent from './ArticleContent';
 
@@ -29,12 +29,15 @@ const ArticleMain = (props: ArticleMainProps) => {
       </h2>
 
       <ArticleContent html={content} css={{ marginBottom: 20 }} />
+
       {hasImage && (
-        <ThumbnailBar
-          css={thumbnailBarCss}
-          thumbnails={thumbnails}
-          disableRemove
-        />
+        <div css={expandCss()}>
+          <ThumbnailBar
+            css={[thumbnailBarCss, { padding: 25 }]}
+            thumbnails={thumbnails}
+            disableRemove
+          />
+        </div>
       )}
     </div>
   );
@@ -53,4 +56,5 @@ const modifyIndicator = css({ color: palettes.primary.dark });
 const thumbnailBarCss = css({
   backgroundColor: palettes.background.grey,
   padding: 0,
+  paddingBottom: 24,
 });
