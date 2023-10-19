@@ -108,7 +108,7 @@ export const createMockArticleSummary = (id: number): ArticleSummary => {
     likeCount: faker.number.int(numberRange),
     nickname: anonymity ? '익명' : faker.animal.dog(),
     postId: id,
-    thumbnail: '',
+    thumbnail: 'https://images.unsplash.com/photo-1538991383142-36c4edeaffde?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZnJlZXxlbnwwfHwwfHx8MA%3D%3D',
   };
 };
 
