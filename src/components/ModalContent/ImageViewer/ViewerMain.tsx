@@ -40,7 +40,6 @@ const ViewerMain = (props: ViewerMainProps) => {
               <ImageLayer
                 src={src}
                 alt={alt}
-                transformHandlers={transformHandlers}
                 onResizeWindow={onResizeWindow}
               />
             </div>
