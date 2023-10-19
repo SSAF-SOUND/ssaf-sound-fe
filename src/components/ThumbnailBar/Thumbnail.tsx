@@ -39,17 +39,16 @@ const Thumbnail = (props: ThumbnailProps) => {
       <button
         type="button"
         css={imageContainerCss}
-        style={{ width: size, height: size }}
         onClick={handleClickThumbnail}
         data-thumbnail=""
       >
         {showSpinner && <ImageLoadIndicator />}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img css={imageCss} src={src} alt={alt} width={size} height={size} />
+        <img css={imageCss} src={src} alt={alt} />
       </button>
       {showRemoveButton && (
         <button type="button" css={removeButtonCss} onClick={onClickRemove}>
-          <Icon name="close" size={12} label="썸네일 삭제" />
+          <Icon name="close" size={16} label="썸네일 삭제" />
         </button>
       )}
     </li>
@@ -87,8 +86,8 @@ const imageContainerCss = css(
   {
     border: `1px solid ${palettes.black}`,
     padding: 0,
-    width: defaultSize,
-    height: defaultSize,
+    width: '100%',
+    height: '100%',
     position: 'relative',
     cursor: 'pointer',
     overflow: 'hidden',
@@ -102,19 +101,25 @@ const imageContainerCss = css(
       display: 'block',
     },
     ':focus-visible': {
-      outline: `2px solid ${palettes.primary.default}`,
+      outline: `4px solid ${palettes.primary.dark}`,
     },
   },
   inlineFlex('center', 'center')
 );
 
-const imageCss = css({ objectFit: 'cover' });
+const imageCss = css({
+  objectFit: 'cover',
+  minWidth: 140,
+  minHeight: 140,
+  width: 'min(180px, 35vw)',
+  height: 'min(180px, 35vw)',
+});
 
 const removeButtonCss = css(
   {
     cursor: 'pointer',
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     position: 'absolute',
     backgroundColor: palettes.grey4,
     borderRadius: '50%',
@@ -123,6 +128,9 @@ const removeButtonCss = css(
     border: `1px solid ${palettes.black}`,
     ':hover': {
       backgroundColor: palettes.white,
+    },
+    ':focus-visible': {
+      outline: `4px solid ${palettes.primary.dark}`,
     },
   },
   inlineFlex('center', 'center')
