@@ -28,7 +28,7 @@ export const createMockGetArticleDetail = (
 };
 
 export const mockGetArticleDetail = createMockGetArticleDetail(
-  createMockArticle(1)
+  createMockArticle(1, { mine: true })
 );
 
 export const mockGetArticleDetailError = restError(

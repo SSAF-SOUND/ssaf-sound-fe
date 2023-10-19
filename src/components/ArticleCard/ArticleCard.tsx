@@ -1,5 +1,7 @@
 import type { ArticleSummary } from '~/services/article';
 
+import Image from 'next/image';
+
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
@@ -25,16 +27,33 @@ export const ArticleCard = memo((props: ArticleCardProps) => {
     likeCount,
     commentCount,
     postId: articleId,
+    thumbnail,
   } = article;
   const strippedHtml = useStripHtml(content);
 
   return (
     <ArticleCardLink href={routes.article.detail(articleId)}>
-      <h2 css={[titleCss, { marginBottom: 2 }]}>{title}</h2>
-      <p
-        css={[contentCss, { marginBottom: 24 }]}
-        dangerouslySetInnerHTML={{ __html: strippedHtml }}
-      />
+      <div css={flex('', 'space-between', 'row', 16)}>
+        <div>
+          <h2 css={[titleCss, { marginBottom: 2 }]}>{title}</h2>
+          <p
+            css={[contentCss, { marginBottom: 24 }]}
+            dangerouslySetInnerHTML={{ __html: strippedHtml }}
+          />
+        </div>
+
+        {thumbnail && (
+          <div css={flex('center', 'flex-start')}>
+            <Image
+              src={thumbnail}
+              alt=""
+              width={70}
+              height={70}
+              css={thumbnailCss}
+            />
+          </div>
+        )}
+      </div>
 
       <div css={footerCss}>
         <div css={metaCss}>
@@ -73,6 +92,11 @@ const footerCss = css(flex('center', 'space-between', 'row'));
 
 const separatorCss = css({
   backgroundColor: palettes.font.blueGrey,
+});
+
+const thumbnailCss = css({
+  borderRadius: 12,
+  border: `1px solid ${palettes.font.blueGrey}`,
 });
 
 const metaCss = css(

@@ -1,22 +1,20 @@
-import type { ReactZoomPanPinchHandlers } from 'react-zoom-pan-pinch';
-
 import { css } from '@emotion/react';
-import { useLayoutEffect, useRef } from 'react';
-import { TransformComponent } from 'react-zoom-pan-pinch';
+import { memo, useLayoutEffect, useRef } from 'react';
+import { TransformComponent, useControls } from 'react-zoom-pan-pinch';
 
 import { flex } from '~/styles/utils';
 
 export interface ImageLayerProps {
   src: string;
   alt?: string;
-  transformHandlers: ReactZoomPanPinchHandlers;
   onResizeWindow: (scale: number) => void;
 }
 
 const transformerClassname = 'image-transformer';
 
-const ImageLayer = (props: ImageLayerProps) => {
-  const { src, alt = '', transformHandlers, onResizeWindow } = props;
+const ImageLayer = memo((props: ImageLayerProps) => {
+  const { centerView } = useControls();
+  const { src, alt = '', onResizeWindow } = props;
   const imageRef = useRef<HTMLImageElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
@@ -26,16 +24,15 @@ const ImageLayer = (props: ImageLayerProps) => {
     const onResize = handleResize(imageRef.current, imageContainerRef.current, {
       scaleFactor: 0.5,
       onCalculateScale: (scale) => {
-        transformHandlers.centerView(scale, 0);
+        centerView(scale, 0);
         onResizeWindow(scale);
       },
     });
 
     onResize();
-
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, [src, transformHandlers, onResizeWindow]);
+  }, [src, centerView, onResizeWindow]);
 
   return (
     <div css={imageContainerCss} ref={imageContainerRef}>
@@ -45,7 +42,9 @@ const ImageLayer = (props: ImageLayerProps) => {
       </TransformComponent>
     </div>
   );
-};
+});
+
+ImageLayer.displayName = 'ImageLayer';
 
 interface HandleResizeOptions {
   /** `scale`계산 이후 호출할 콜백함수 */
@@ -70,6 +69,11 @@ const handleResize: HandleResize =
     const scaleY = containerHeight / target.naturalHeight;
     const scale = Math.min(scaleX, scaleY) * scaleFactor;
 
+    console.log('containerWidth: ', containerWidth);
+    console.log('containerHeight: ', containerHeight);
+    console.log('scaleX: ', scaleX);
+    console.log('scaleY: ', scaleY);
+    console.log('scale: ', scale);
     /*
       NOTE:
 
