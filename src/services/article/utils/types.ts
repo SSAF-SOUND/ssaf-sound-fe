@@ -61,7 +61,7 @@ export interface ArticleSummary {
   createdAt: string;
   nickname: string;
   anonymity: boolean;
-  thumbnail: string; // 안 쓰임
+  thumbnail: string | null;
 }
 
 export interface HotArticleSummary extends ArticleSummary {}
