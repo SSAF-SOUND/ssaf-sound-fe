@@ -1,8 +1,10 @@
+import type { UserRegisterFormValues } from '~/components/Forms/UserRegisterForm/utils';
 import type { Term } from '~/services/meta/utils';
 
 import { css } from '@emotion/react';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { useId } from 'react';
+import { useId, useMemo } from 'react';
+import { useWatch } from 'react-hook-form';
 
 import { Button } from '~/components/Common/Button';
 import { Checkbox } from '~/components/Common/Checkbox';
@@ -27,7 +29,36 @@ export interface TermsProps {
 export const Terms = (props: TermsProps) => {
   const { terms, onComplete } = props;
   const { register, setValue } = useUserRegisterFormContext();
+
+  const requiredTermsIds = useMemo(
+    () =>
+      terms
+        .filter(({ required }) => required)
+        .map(({ termId }) => String(termId)),
+    [terms]
+  );
+  const agreedTermsIds = (useWatch<UserRegisterFormValues>({
+    name: fieldName,
+  }) ?? []) as string[];
+
   const agreeAllTermsCheckboxId = useId();
+
+  const onAgreedTermsIdChange = (value: string[]) =>
+    setValue(fieldName, value, { shouldDirty: true });
+
+  const allTermsAgreed = agreedTermsIds.length === terms.length;
+  const allRequiredTermsAgreed = requiredTermsIds.every((id) =>
+    agreedTermsIds.includes(id)
+  );
+
+  const onClickAgreeAllTerms = () => {
+    const nextAgreedTermsIds = allTermsAgreed
+      ? []
+      : terms.map(({ termId }) => termId).map(String);
+    setValue(fieldName, nextAgreedTermsIds, { shouldDirty: true });
+  };
+
+  register(fieldName);
 
   return (
     <>
@@ -38,7 +69,12 @@ export const Terms = (props: TermsProps) => {
 
         <div>
           <div css={agreeAllTermsRowCss}>
-            <Checkbox id={agreeAllTermsCheckboxId} size={40} />
+            <Checkbox
+              id={agreeAllTermsCheckboxId}
+              size={40}
+              checked={allTermsAgreed}
+              onCheckedChange={onClickAgreeAllTerms}
+            />
             <label
               htmlFor={agreeAllTermsCheckboxId}
               css={{ cursor: 'pointer', userSelect: 'none' }}
@@ -50,7 +86,8 @@ export const Terms = (props: TermsProps) => {
           <ToggleGroup.Root
             rovingFocus={false}
             type="multiple"
-            onValueChange={(d) => console.log(d)}
+            value={agreedTermsIds}
+            onValueChange={onAgreedTermsIdChange}
             css={termsContainerCss}
           >
             {terms.map((term) => (
@@ -67,7 +104,12 @@ export const Terms = (props: TermsProps) => {
       </div>
 
       <div>
-        <Button css={{ width: '100%' }} size="lg">
+        <Button
+          css={{ width: '100%' }}
+          size="lg"
+          disabled={!allRequiredTermsAgreed}
+          onClick={onComplete}
+        >
           다음으로
         </Button>
       </div>
