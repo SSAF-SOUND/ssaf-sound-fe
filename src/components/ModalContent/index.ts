@@ -5,3 +5,4 @@ export * from './ArticleCommentModalForm';
 export * from './Report';
 export * from './RecruitFilterModalForm';
 export * from './RecruitParticipantDetail';
+export * from './TermsOfService';
