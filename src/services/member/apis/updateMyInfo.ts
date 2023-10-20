@@ -12,6 +12,7 @@ export interface UpdateMyInfoParams {
   isMajor: boolean;
   year: number | undefined;
   campus: string | undefined;
+  agreedTermsIds: number[];
 }
 
 export interface UpdateMyInfoBody {
@@ -20,15 +21,17 @@ export interface UpdateMyInfoBody {
   isMajor: boolean;
   campus: string | undefined;
   semester: number | undefined;
+  termIds: number[];
 }
 
 export const updateMyInfo = (params: UpdateMyInfoParams) => {
   const endpoint = endpoints.user.myInfo();
-  const { year, ...restParams } = params;
+  const { year, agreedTermsIds, ...restParams } = params;
 
   const body: UpdateMyInfoBody = {
     ...restParams,
     semester: year,
+    termIds: agreedTermsIds,
   };
 
   return privateAxios

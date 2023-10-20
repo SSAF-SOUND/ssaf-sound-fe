@@ -57,8 +57,13 @@ const RegisterPage: CustomNextPage = () => {
   const onValidSubmit = async (formValues: UserRegisterFormValues) => {
     setShouldCheckUserInfo(false);
 
+    const { agreedTermsIds, ...restFormValues } = formValues;
+
     try {
-      await updateMyInfo(formValues);
+      await updateMyInfo({
+        ...restFormValues,
+        agreedTermsIds: agreedTermsIds.map(Number),
+      });
       await router.replace(routes.intro.studentCertification());
     } catch (err) {
       handleAxiosError(err);
