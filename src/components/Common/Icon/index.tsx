@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 
 import { css } from '@emotion/react';
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon';
+import { forwardRef } from 'react';
 import {
   AiFillApple,
   AiFillCaretDown,
@@ -137,18 +138,29 @@ export interface IconProps {
   className?: string;
 }
 
-export const Icon = (props: IconProps) => {
-  const { name, label = name, size = 24, color, style = {}, className } = props;
-  return (
-    <div
-      css={selfCss}
-      className={className}
-      style={{ fontSize: size, color, ...style }}
-      data-icon=""
-    >
-      <AccessibleIcon label={label}>{icons[name]}</AccessibleIcon>
-    </div>
-  );
-};
+export const Icon = forwardRef<HTMLDivElement, IconProps>(
+  (props: IconProps, ref) => {
+    const {
+      name,
+      label = name,
+      size = 24,
+      color,
+      style = {},
+      className,
+    } = props;
+    return (
+      <div
+        ref={ref}
+        css={selfCss}
+        className={className}
+        style={{ fontSize: size, color, ...style }}
+        data-icon=""
+      >
+        <AccessibleIcon label={label}>{icons[name]}</AccessibleIcon>
+      </div>
+    );
+  }
+);
 
+Icon.displayName = 'Icon';
 const selfCss = css(inlineFlex());
