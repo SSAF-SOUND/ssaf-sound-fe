@@ -32,3 +32,5 @@ export const sleep = (ms: number) => {
 export const isClient = typeof window !== 'undefined';
 
 export const identity = <T = any>(value: T) => value;
+
+export const refreshPage = () => window.location.reload();

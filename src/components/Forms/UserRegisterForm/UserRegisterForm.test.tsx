@@ -1,4 +1,6 @@
-import UserRegisterForm from '~/components/Forms/UserRegisterForm/index';
+import type { Term } from '~/services/meta';
+
+import UserRegisterForm from '~/components/Forms/UserRegisterForm';
 import { DefaultTitleBarIconLabel } from '~/components/TitleBar/DefaultTitleBar';
 import { createMockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateNickname';
 import { server } from '~/mocks/server';
@@ -7,9 +9,26 @@ import { customRender } from '~/test-utils';
 const renderUserRegisterForm = () => {
   const onValidSubmit = jest.fn();
   const onInvalidSubmit = jest.fn();
+  const mockTerms: Term[] = [
+    {
+      termId: 1,
+      required: true,
+      content: '필수 이용약관 콘텐츠',
+      termName: '필수 이용약관',
+      sequence: 1,
+    },
+    {
+      termId: 2,
+      required: false,
+      content: '선택 이용약관 콘텐츠',
+      termName: '선택 이용약관',
+      sequence: 2,
+    },
+  ];
 
   const screen = customRender(
     <UserRegisterForm
+      terms={mockTerms}
       onValidSubmit={onValidSubmit}
       onInvalidSubmit={onInvalidSubmit}
     />
@@ -21,11 +40,18 @@ const renderUserRegisterForm = () => {
     });
   };
 
-  const getQuestion0 = () => screen.getByText(/SSAFY인 이신가요?/);
-  const getQuestion1 = () => screen.getByText(/기수를 선택해주세요/);
-  const getQuestion2 = () => screen.getByText(/캠퍼스를 선택해주세요/);
-  const getQuestion3 = () => screen.getByText(/전공자이신가요?/);
-  const getQuestion4 = () => screen.getByText(/닉네임을 입력해주세요/);
+  const getQuestion0 = () => screen.getByText(/필수 이용약관에 동의해야합니다/);
+  const getQuestion1 = () => screen.getByText(/SSAFY인 이신가요?/);
+  const getQuestion2 = () => screen.getByText(/기수를 선택해주세요/);
+  const getQuestion3 = () => screen.getByText(/캠퍼스를 선택해주세요/);
+  const getQuestion4 = () => screen.getByText(/전공자이신가요?/);
+  const getQuestion5 = () => screen.getByText(/닉네임을 입력해주세요/);
+
+  const getAgreeAllTermsCheckbox = () => screen.getByLabelText(/전체 동의/);
+  const getRequiredTermCheckbox = () =>
+    screen.getByRole('checkbox', { name: /필수 이용약관 체크박스/ });
+  const getOptionalTermCheckbox = () =>
+    screen.getByRole('checkbox', { name: /선택 이용약관 체크박스/ });
 
   const getAnswerButtons = () => {
     return {
@@ -59,6 +85,7 @@ const renderUserRegisterForm = () => {
     });
 
   return {
+    screen,
     onValidSubmit,
     onInvalidSubmit,
     getBackwardButton,
@@ -67,6 +94,7 @@ const renderUserRegisterForm = () => {
     getQuestion2,
     getQuestion3,
     getQuestion4,
+    getQuestion5,
     getAnswerButtons,
     getNicknameInput,
     getSelectBox,
@@ -75,6 +103,9 @@ const renderUserRegisterForm = () => {
     getNicknameReconfirmModal,
     getFormSubmitButton,
     getErrorMessage,
+    getAgreeAllTermsCheckbox,
+    getRequiredTermCheckbox,
+    getOptionalTermCheckbox,
     user: screen.user,
   };
 };
@@ -86,35 +117,51 @@ const skipToPhase = async (
   phase: number,
   context: RenderedUserRegisterForm
 ) => {
-  const { getAnswerButtons, getSelectBox, getSelectBoxOption, user } = context;
+  const {
+    getAgreeAllTermsCheckbox,
+    getAnswerButtons,
+    getSelectBox,
+    getSelectBoxOption,
+    user,
+    screen,
+  } = context;
 
   if (phase <= 0) return;
 
-  // 0단계 skip
-  await user.click(getAnswerButtons().yes);
+  await user.click(getAgreeAllTermsCheckbox());
+  await user.click(screen.getByRole('button', { name: /다음으로/ }));
 
   if (phase <= 1) return;
 
-  // 1단계
-  const question1OptionText = '1기';
-  await user.click(getSelectBox());
-  await user.click(getSelectBoxOption(question1OptionText));
+  // 1단계 skip
+  await user.click(getAnswerButtons().yes);
 
   if (phase <= 2) return;
 
   // 2단계
-  const question2OptionText = /서울/;
+  const question1OptionText = '1기';
   await user.click(getSelectBox());
-  await user.click(getSelectBoxOption(question2OptionText));
+  await user.click(getSelectBoxOption(question1OptionText));
 
   if (phase <= 3) return;
 
   // 3단계
+  const question2OptionText = /서울/;
+  await user.click(getSelectBox());
+  await user.click(getSelectBoxOption(question2OptionText));
+
+  if (phase <= 4) return;
+
+  // 4단계
   await user.click(getAnswerButtons().yes);
 };
 
-describe('0단계 질문 - SSAFY 멤버 여부 체크', () => {
-  const rendered = renderUserRegisterForm();
+describe('0단계 질문 - 약관 동의', () => {
+  let rendered: RenderedUserRegisterForm;
+
+  beforeEach(() => {
+    rendered = renderUserRegisterForm();
+  });
 
   it('0단계 질문이 보인다.', () => {
     const { getQuestion0 } = rendered;
@@ -126,47 +173,50 @@ describe('0단계 질문 - SSAFY 멤버 여부 체크', () => {
     expect(getBackwardButton()).not.toBeInTheDocument();
   });
 
-  it('YES 버튼을 누르면 1단계 질문이 보이고, 1단계에서 뒤로가기를 누르면 0단계 질문으로 돌아간다.', async () => {
-    const rendered = renderUserRegisterForm();
+  it('필수 이용약관을 체크하지 않으면 다음 단계로 이동할 수 없고, 선택 이용약관은 체크하지 않아도 다음 단계로 이동할 수 있다.', async () => {
+    const { screen, getRequiredTermCheckbox, getOptionalTermCheckbox, user } =
+      rendered;
 
+    const nextPhaseButton = screen.getByRole('button', { name: /다음으로/ });
+    expect(nextPhaseButton).toBeInTheDocument();
+    expect(nextPhaseButton).toBeDisabled();
+
+    // 선택 약관 체크
+    await user.click(getOptionalTermCheckbox());
+    expect(nextPhaseButton).toBeDisabled();
+
+    // 필수 약관 체크
+    await user.click(getRequiredTermCheckbox());
+    expect(nextPhaseButton).not.toBeDisabled();
+
+    // 선택 약관 체크 해제
+    await user.click(getOptionalTermCheckbox());
+    expect(nextPhaseButton).not.toBeDisabled();
+  });
+
+  it('다음 단계로 이동하면 1단계 질문이 보이고, 1단계에서 뒤로가기를 누르면 0단계 질문으로 돌아온다.', async () => {
     const {
-      getAnswerButtons,
+      screen,
+      getRequiredTermCheckbox,
+      user,
       getQuestion0,
       getQuestion1,
       getBackwardButton,
-      user,
     } = rendered;
-    const { yes } = getAnswerButtons();
 
-    await user.click(yes);
+    const nextPhaseButton = screen.getByRole('button', { name: /다음으로/ });
+
+    // 필수 약관 체크
+    await user.click(getRequiredTermCheckbox());
+    await user.click(nextPhaseButton);
+
     expect(getQuestion1()).toBeInTheDocument();
-
-    await user.click(getBackwardButton() as HTMLElement);
-    expect(getQuestion0()).toBeInTheDocument();
-  });
-
-  it('NO 버튼을 누르면 3단계 질문이 보이고, 0단계에서 NO버튼을 눌러서 3단계로 넘어왔을 때, 3단계에서 뒤로가기를 누르면 0단계 질문으로 돌아간다.', async () => {
-    const rendered = renderUserRegisterForm();
-
-    const {
-      getAnswerButtons,
-      getBackwardButton,
-      getQuestion0,
-      getQuestion3,
-      user,
-    } = rendered;
-
-    const { no } = getAnswerButtons();
-
-    await user.click(no);
-    expect(getQuestion3()).toBeInTheDocument();
-
-    await user.click(getBackwardButton() as HTMLElement);
+    await user.click(getBackwardButton() as HTMLButtonElement);
     expect(getQuestion0()).toBeInTheDocument();
   });
 });
 
-describe('1단계 질문 - SSAFY 기수 선택', () => {
+describe('1단계 질문 - SSAFY 멤버 여부 체크', () => {
   let rendered: RenderedUserRegisterForm;
 
   beforeEach(async () => {
@@ -174,12 +224,65 @@ describe('1단계 질문 - SSAFY 기수 선택', () => {
     await skipToPhase(1, rendered);
   });
 
-  it('기수를 선택하면 2단계 질문으로 넘어가고, 2단계에서 뒤로가기 하면 1단계 질문으로 돌아온다.', async () => {
+  it('1단계 질문이 보인다.', () => {
+    const { getQuestion1 } = rendered;
+    expect(getQuestion1()).toBeInTheDocument();
+  });
+
+  it('YES 버튼을 누르면 2단계 질문이 보이고, 2단계에서 뒤로가기를 누르면 1단계 질문으로 돌아간다.', async () => {
+    const rendered = renderUserRegisterForm();
+
+    const {
+      getAnswerButtons,
+      getQuestion1,
+      getQuestion2,
+      getBackwardButton,
+      user,
+    } = rendered;
+    const { yes } = getAnswerButtons();
+
+    await user.click(yes);
+    expect(getQuestion2()).toBeInTheDocument();
+
+    await user.click(getBackwardButton() as HTMLElement);
+    expect(getQuestion1()).toBeInTheDocument();
+  });
+
+  it('NO 버튼을 누르면 4단계 질문이 보이고, 1단계에서 NO버튼을 눌러서 4단계로 넘어왔을 때, 4단계에서 뒤로가기를 누르면 1단계 질문으로 돌아간다.', async () => {
+    const rendered = renderUserRegisterForm();
+
+    const {
+      getAnswerButtons,
+      getBackwardButton,
+      getQuestion1,
+      getQuestion4,
+      user,
+    } = rendered;
+
+    const { no } = getAnswerButtons();
+
+    await user.click(no);
+    expect(getQuestion4()).toBeInTheDocument();
+
+    await user.click(getBackwardButton() as HTMLElement);
+    expect(getQuestion1()).toBeInTheDocument();
+  });
+});
+
+describe('2단계 질문 - SSAFY 기수 선택', () => {
+  let rendered: RenderedUserRegisterForm;
+
+  beforeEach(async () => {
+    rendered = renderUserRegisterForm();
+    await skipToPhase(2, rendered);
+  });
+
+  it('기수를 선택하면 3단계 질문으로 넘어가고, 3단계에서 뒤로가기 하면 2단계 질문으로 돌아온다.', async () => {
     const {
       getSelectBox,
       getSelectBoxOption,
-      getQuestion1,
       getQuestion2,
+      getQuestion3,
       getBackwardButton,
       user,
     } = rendered;
@@ -191,34 +294,6 @@ describe('1단계 질문 - SSAFY 기수 선택', () => {
     await user.click(selectBox);
     await user.click(getSelectBoxOption(optionText));
 
-    expect(getQuestion2()).toBeInTheDocument();
-
-    await user.click(getBackwardButton() as HTMLElement);
-    expect(getQuestion1()).toBeInTheDocument();
-  });
-});
-
-describe('2단계 질문 - SSAFY 캠퍼스 선택', () => {
-  let rendered: RenderedUserRegisterForm;
-
-  beforeEach(async () => {
-    rendered = renderUserRegisterForm();
-    await skipToPhase(2, rendered);
-  });
-
-  it('캠퍼스를 선택하면 3단계 질문으로 넘어가고, 3단계에서 뒤로가기 하면 2단계 질문으로 돌아온다.', async () => {
-    const {
-      getSelectBox,
-      getSelectBoxOption,
-      getQuestion2,
-      getQuestion3,
-      getBackwardButton,
-      user,
-    } = rendered;
-
-    const optionText = /서울/;
-    await user.click(getSelectBox());
-    await user.click(getSelectBoxOption(optionText));
     expect(getQuestion3()).toBeInTheDocument();
 
     await user.click(getBackwardButton() as HTMLElement);
@@ -226,7 +301,7 @@ describe('2단계 질문 - SSAFY 캠퍼스 선택', () => {
   });
 });
 
-describe('3단계 질문 - 전공자 여부 선택', () => {
+describe('3단계 질문 - SSAFY 캠퍼스 선택', () => {
   let rendered: RenderedUserRegisterForm;
 
   beforeEach(async () => {
@@ -234,32 +309,19 @@ describe('3단계 질문 - 전공자 여부 선택', () => {
     await skipToPhase(3, rendered);
   });
 
-  it('YES를 선택하면 4단계 질문으로 넘어가고, 뒤로가기를 누르면 3단계 질문으로 돌아온다.', async () => {
+  it('캠퍼스를 선택하면 4단계 질문으로 넘어가고, 4단계에서 뒤로가기 하면 3단계 질문으로 돌아온다.', async () => {
     const {
-      getAnswerButtons,
+      getSelectBox,
+      getSelectBoxOption,
       getQuestion3,
       getQuestion4,
       getBackwardButton,
       user,
     } = rendered;
 
-    await user.click(getAnswerButtons().yes);
-    expect(getQuestion4()).toBeInTheDocument();
-
-    await user.click(getBackwardButton() as HTMLElement);
-    expect(getQuestion3()).toBeInTheDocument();
-  });
-
-  it('NO를 선택하면 4단계 질문으로 넘어간다.', async () => {
-    const {
-      getAnswerButtons,
-      getQuestion3,
-      getQuestion4,
-      getBackwardButton,
-      user,
-    } = rendered;
-
-    await user.click(getAnswerButtons().no);
+    const optionText = /서울/;
+    await user.click(getSelectBox());
+    await user.click(getSelectBoxOption(optionText));
     expect(getQuestion4()).toBeInTheDocument();
 
     await user.click(getBackwardButton() as HTMLElement);
@@ -267,7 +329,48 @@ describe('3단계 질문 - 전공자 여부 선택', () => {
   });
 });
 
-describe('4단계 질문 - 닉네임 설정', () => {
+describe('4단계 질문 - 전공자 여부 선택', () => {
+  let rendered: RenderedUserRegisterForm;
+
+  beforeEach(async () => {
+    rendered = renderUserRegisterForm();
+    await skipToPhase(4, rendered);
+  });
+
+  it('YES를 선택하면 5단계 질문으로 넘어가고, 뒤로가기를 누르면 4단계 질문으로 돌아온다.', async () => {
+    const {
+      getAnswerButtons,
+      getQuestion4,
+      getQuestion5,
+      getBackwardButton,
+      user,
+    } = rendered;
+
+    await user.click(getAnswerButtons().yes);
+    expect(getQuestion5()).toBeInTheDocument();
+
+    await user.click(getBackwardButton() as HTMLElement);
+    expect(getQuestion4()).toBeInTheDocument();
+  });
+
+  it('NO를 선택하면 5단계 질문으로 넘어간다.', async () => {
+    const {
+      getAnswerButtons,
+      getQuestion4,
+      getQuestion5,
+      getBackwardButton,
+      user,
+    } = rendered;
+
+    await user.click(getAnswerButtons().no);
+    expect(getQuestion5()).toBeInTheDocument();
+
+    await user.click(getBackwardButton() as HTMLElement);
+    expect(getQuestion4()).toBeInTheDocument();
+  });
+});
+
+describe('5단계 질문 - 닉네임 설정', () => {
   let rendered: RenderedUserRegisterForm;
   const nickname = {
     valid: 'SSAF SOUND',
@@ -307,7 +410,7 @@ describe('4단계 질문 - 닉네임 설정', () => {
 
   beforeEach(async () => {
     rendered = renderUserRegisterForm();
-    await skipToPhase(4, rendered);
+    await skipToPhase(5, rendered);
   });
 
   describe('유효한 닉네임을 입력하고, 닉네임 검증 버튼을 눌렀을 때', () => {

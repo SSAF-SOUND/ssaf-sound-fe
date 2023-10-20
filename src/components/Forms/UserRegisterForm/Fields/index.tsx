@@ -2,6 +2,7 @@ import { Campus } from './Campus';
 import { IsMajor } from './IsMajor';
 import { IsMember } from './IsMember';
 import { Nickname } from './Nickname';
+import { Terms } from './Terms';
 import { Year } from './Year';
 
 export const UserRegisterFormFields = {
@@ -10,4 +11,5 @@ export const UserRegisterFormFields = {
   IsMajor,
   Campus,
   Nickname,
+  Terms,
 };

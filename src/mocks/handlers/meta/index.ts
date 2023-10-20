@@ -1,5 +1,6 @@
 import type { GetCampusesApiData } from '~/services/meta';
 
+import { mockGetTermsOfService } from '~/mocks/handlers/meta/apis/mockGetTermsOfService';
 import { restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { initialCampuses } from '~/services/meta/utils';
@@ -13,4 +14,4 @@ export const getCampuses = restSuccess<GetCampusesApiData['data']>(
   }
 );
 
-export const metaHandlers = [getCampuses];
+export const metaHandlers = [getCampuses, mockGetTermsOfService];

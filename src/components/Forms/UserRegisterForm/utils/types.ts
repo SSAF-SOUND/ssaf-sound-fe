@@ -4,4 +4,5 @@ export interface UserRegisterFormValues {
   isMajor: boolean;
   campus: string;
   year: number;
+  agreedTermsIds: string[];
 }
