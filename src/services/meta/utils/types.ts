@@ -20,3 +20,11 @@ export const initialCampuses = [
   { id: 4, name: SsafyCampus.GUMI },
   { id: 5, name: SsafyCampus.BUULGYEONG },
 ];
+
+export interface Term {
+  termId: number;
+  termName: string;
+  content: string;
+  required: boolean;
+  sequence: number;
+}

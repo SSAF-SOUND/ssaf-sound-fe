@@ -37,6 +37,7 @@ export const queryKeys = {
     self: () => ['meta'],
     campuses: () => [...queryKeys.meta.self(), 'campuses'],
     recruitTypes: () => [...queryKeys.meta.self(), 'recruitTypes'],
+    termsOfService: () => [...queryKeys.meta.self(), 'termsOfService'],
   },
   articles: {
     categories: () => ['articles', 'categories'],
@@ -268,6 +269,7 @@ export const endpoints = {
     campuses: () => '/meta/campuses' as const,
     skills: () => '/meta/skills' as const,
     recruitTypes: () => '/meta/recruit-types' as const,
+    termsOfService: () => '/terms' as const,
   },
   lunch: {
     list: ({ campus, date }: { campus: string; date: string }) => {
