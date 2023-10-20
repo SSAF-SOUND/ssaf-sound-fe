@@ -137,8 +137,8 @@ const TermRow = (props: TermRowProps) => {
   const prefix = required ? '(필수)' : '(선택)';
   return (
     <div css={termRowSelfCss}>
-      <ToggleGroup.Item asChild value={value} css={termCheckBoxCss}>
-        <Checkbox size={40} />
+      <ToggleGroup.Item value={value} css={termCheckBoxCss} asChild>
+        <Checkbox size={40} label={`${title} 체크박스`} />
       </ToggleGroup.Item>
       <Modal
         content={<TermsOfService title={title} html={content} />}
