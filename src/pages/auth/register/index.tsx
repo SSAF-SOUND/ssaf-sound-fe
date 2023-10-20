@@ -7,11 +7,14 @@ import { css, keyframes } from '@emotion/react';
 import { useEffect, useState } from 'react';
 
 import UserRegisterForm from 'src/components/Forms/UserRegisterForm';
+import { Button } from '~/components/Common/Button';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { Logo } from '~/components/Common/Logo';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { SsafyIcon } from '~/components/Common/SsafyIcon';
+import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIcon';
 import { useMyAccountStatus, useUpdateMyInfo } from '~/services/member';
+import { useTermsOfService } from '~/services/meta/hooks/useTermsOfService';
 import {
   flex,
   fontCss,
@@ -27,6 +30,7 @@ import {
   createAuthGuard,
   createNoIndexPageMetaData,
   handleAxiosError,
+  refreshPage,
 } from '~/utils';
 import { routes } from '~/utils/routes';
 
@@ -38,6 +42,12 @@ const RegisterPage: CustomNextPage = () => {
   const { isRegisterRequired } = useMyAccountStatus();
   const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
   const [shouldCheckUserInfo, setShouldCheckUserInfo] = useState(true);
+  const {
+    data: terms,
+    isError: isTermsError,
+    error: termsError,
+    isSuccess: isTermsSuccess,
+  } = useTermsOfService();
 
   if (shouldCheckUserInfo && !isRegisterRequired) {
     router.replace(routes.main());
@@ -60,11 +70,16 @@ const RegisterPage: CustomNextPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
-        <UserRegisterForm
-          options={{ titleBarTitle }}
-          onValidSubmit={onValidSubmit}
-          css={formCss}
-        />
+        {isTermsError && <TermsLoadingError error={termsError} />}
+
+        {isTermsSuccess && (
+          <UserRegisterForm
+            terms={terms}
+            options={{ titleBarTitle }}
+            onValidSubmit={onValidSubmit}
+            css={formCss}
+          />
+        )}
       </div>
 
       <Welcome />
@@ -76,7 +91,7 @@ export default RegisterPage;
 RegisterPage.auth = createAuthGuard({ unauthorized: routes.main() });
 RegisterPage.meta = createNoIndexPageMetaData(metaTitle);
 
-const selfCss = css(pageCss.minHeight, flex());
+const selfCss = css({ position: 'relative' }, pageCss.minHeight, flex());
 const formCss = css({ flexGrow: 1 });
 
 const Welcome = () => {
@@ -144,3 +159,19 @@ const overlayCss = css(
   position.xy('center', 'start', 'fixed'),
   flex('flex-start', 'center', 'column')
 );
+
+const TermsLoadingError = ({ error }: { error: unknown }) => {
+  return (
+    <div
+      css={[
+        { position: 'absolute', width: '100%', height: '100%' },
+        flex('center', 'center'),
+      ]}
+    >
+      <ErrorMessageWithSsafyIcon css={{ marginBottom: 24 }} error={error} />
+      <Button size="lg" css={{ width: '100%' }} onClick={refreshPage}>
+        페이지 새로고침
+      </Button>
+    </div>
+  );
+};

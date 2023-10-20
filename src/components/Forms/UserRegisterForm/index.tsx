@@ -1,5 +1,6 @@
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { UserRegisterFormValues } from '~/components/Forms/UserRegisterForm/utils';
+import type { Term } from '~/services/meta/utils';
 
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,6 +16,7 @@ export type UserRegisterFormOptions = Partial<{
 }>;
 
 export interface UserRegisterFormProps {
+  terms: Term[];
   onValidSubmit: SubmitHandler<UserRegisterFormValues>;
   onInvalidSubmit?: SubmitErrorHandler<UserRegisterFormValues>;
   defaultValues?: UserRegisterFormValues;
@@ -24,6 +26,7 @@ export interface UserRegisterFormProps {
 
 const UserRegisterForm = (props: UserRegisterFormProps) => {
   const {
+    terms,
     onValidSubmit,
     onInvalidSubmit,
     defaultValues,
@@ -44,7 +47,7 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
   const { handleSubmit } = methods;
 
   const onSubmit = handleSubmit(onValidSubmit, onInvalidSubmit);
-  const majorPhase = 3;
+  const majorPhase = 4;
   const pushNextPhase = () => pushPhase(currentPhase + 1);
   const fieldsLength = Object.keys(UserRegisterFormFields).length;
 
@@ -68,24 +71,30 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
       <FormProvider {...methods}>
         <form css={formCss} onSubmit={handleSubmit(onValidSubmit)}>
           {currentPhase === 0 && (
+            <UserRegisterFormFields.Terms
+              terms={terms}
+              onComplete={pushNextPhase}
+            />
+          )}
+          {currentPhase === 1 && (
             <UserRegisterFormFields.IsMember
               onTrue={pushNextPhase}
               onFalse={() => pushPhase(majorPhase)}
             />
           )}
-          {currentPhase === 1 && (
+          {currentPhase === 2 && (
             <UserRegisterFormFields.Year onSelect={pushNextPhase} />
           )}
-          {currentPhase === 2 && (
+          {currentPhase === 3 && (
             <UserRegisterFormFields.Campus onSelect={pushNextPhase} />
           )}
-          {currentPhase === 3 && (
+          {currentPhase === 4 && (
             <UserRegisterFormFields.IsMajor
               onFalse={pushNextPhase}
               onTrue={pushNextPhase}
             />
           )}
-          {currentPhase === 4 && (
+          {currentPhase === 5 && (
             <UserRegisterFormFields.Nickname onSubmit={onSubmit} />
           )}
         </form>
