@@ -118,7 +118,7 @@ export const Terms = (props: TermsProps) => {
 };
 
 const agreeAllTermsRowCss = css(
-  { padding: '12px 20px' },
+  { padding: '12px 12px' },
   fontCss.style.B24,
   flex('center', '', 'row', 12)
 );
@@ -144,10 +144,8 @@ const TermRow = (props: TermRowProps) => {
         content={<TermsOfService title={title} html={content} />}
         trigger={
           <Button variant="literal" css={termModalTriggerCss}>
-            <div css={fontCss.style.R20}>
-              <span css={{ marginRight: 12, color: palettes.primary.default }}>
-                {prefix}
-              </span>
+            <div css={[flex('center', '', 'row', 6), fontCss.style.R16]}>
+              <span css={{ color: palettes.primary.default }}>{prefix}</span>
               <span css={fontCss.style.B20}>{title}</span>
             </div>
             <Icon name="chevron.right" size={28} />
@@ -161,10 +159,10 @@ const TermRow = (props: TermRowProps) => {
 const termRowSelfCss = css(
   {
     backgroundColor: palettes.background.grey,
-    padding: '6px 20px',
+    padding: '6px 12px',
     borderRadius: 12,
   },
-  flex('center', '', 'row', 16),
+  flex('center', '', 'row', 6),
   fontCss.style.R20
 );
 
@@ -179,5 +177,5 @@ const termCheckBoxCss = css({
 
 const termModalTriggerCss = css(
   { width: '100%', padding: 0 },
-  flex('', 'space-between', 'row', 24)
+  flex('', 'space-between', 'row', 12)
 );
