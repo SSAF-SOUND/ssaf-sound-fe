@@ -4,7 +4,7 @@ import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
 import { Modal } from '~/components/Common/Modal';
 import { Scroll } from '~/components/Common/Scroll';
-import { flex, fontCss, palettes, position } from '~/styles/utils';
+import { fontCss, palettes, position } from '~/styles/utils';
 import { sanitizeHtml } from '~/utils';
 
 export interface TermsOfServiceProps {
