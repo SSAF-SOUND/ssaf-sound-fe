@@ -168,7 +168,6 @@ const RecruitApplyPage: CustomNextPage = () => {
         <TitleBar.Default
           withoutClose
           title={titleBarTitle}
-          onClickBackward={routes.recruit.detail(recruitId)}
           footer={
             <BreadCrumbs
               entries={[
