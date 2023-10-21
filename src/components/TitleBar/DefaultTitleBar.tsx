@@ -1,4 +1,4 @@
-import type { MouseEventHandler } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 import type { Route } from '~/types';
 
 import { useRouter } from 'next/router';
@@ -18,6 +18,7 @@ export interface DefaultTitleBarProps {
   withoutClose?: boolean;
   onClickBackward?: Route | MouseEventHandler<HTMLButtonElement>;
   onClickClose?: Route | MouseEventHandler<HTMLButtonElement>;
+  footer?: ReactNode;
 }
 
 export enum DefaultTitleBarIconLabel {
@@ -33,6 +34,7 @@ export const DefaultTitleBar = (props: DefaultTitleBarProps) => {
     withoutClose = false,
     onClickBackward,
     onClickClose,
+    footer,
     ...restProps
   } = props;
 
@@ -71,48 +73,51 @@ export const DefaultTitleBar = (props: DefaultTitleBarProps) => {
   };
 
   return (
-    <Bar
-      {...restProps}
-      css={selfCss}
-      left={
-        <IconButton
-          size={iconButtonSize}
-          css={withoutBackward && visuallyHiddenCss}
-          onClick={handleClickBackward}
-          aria-hidden={withoutBackward && 'true'}
-          disabled={withoutBackward}
-        >
-          <Icon
-            name="backward"
-            label={DefaultTitleBarIconLabel.BACKWARD}
-            size={iconSize}
-          />
-        </IconButton>
-      }
-      center={
-        <h2
-          css={withoutTitle && visuallyHiddenCss}
-          aria-hidden={withoutTitle && 'true'}
-        >
-          {title}
-        </h2>
-      }
-      right={
-        <IconButton
-          size={iconButtonSize}
-          css={withoutClose && visuallyHiddenCss}
-          onClick={handleClickClose}
-          aria-hidden={withoutClose && 'true'}
-          disabled={withoutClose}
-        >
-          <Icon
-            name="close"
-            label={DefaultTitleBarIconLabel.CLOSE}
-            size={iconSize}
-          />
-        </IconButton>
-      }
-    />
+    <div css={selfCss}>
+      <Bar
+        css={barCss}
+        {...restProps}
+        left={
+          <IconButton
+            size={iconButtonSize}
+            css={withoutBackward && visuallyHiddenCss}
+            onClick={handleClickBackward}
+            aria-hidden={withoutBackward && 'true'}
+            disabled={withoutBackward}
+          >
+            <Icon
+              name="backward"
+              label={DefaultTitleBarIconLabel.BACKWARD}
+              size={iconSize}
+            />
+          </IconButton>
+        }
+        center={
+          <h2
+            css={withoutTitle && visuallyHiddenCss}
+            aria-hidden={withoutTitle && 'true'}
+          >
+            {title}
+          </h2>
+        }
+        right={
+          <IconButton
+            size={iconButtonSize}
+            css={withoutClose && visuallyHiddenCss}
+            onClick={handleClickClose}
+            aria-hidden={withoutClose && 'true'}
+            disabled={withoutClose}
+          >
+            <Icon
+              name="close"
+              label={DefaultTitleBarIconLabel.CLOSE}
+              size={iconSize}
+            />
+          </IconButton>
+        }
+      />
+      {footer}
+    </div>
   );
 };
 
@@ -121,11 +126,14 @@ const iconButtonSize = iconSize + 8;
 
 const selfCss = css(
   {
-    padding: '0 25px',
     zIndex: zIndex.fixed.normal,
   },
   fixTopCenter
 );
+
+const barCss = css({
+  padding: '0 25px',
+});
 
 const visuallyHiddenCss = css({
   opacity: 0,
