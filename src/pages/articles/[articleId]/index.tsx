@@ -11,7 +11,7 @@ import Skeleton from 'react-loading-skeleton';
 import { Article } from '~/components/Article';
 import { ArticleError } from '~/components/Article/ArticleError';
 import ArticleComment from '~/components/ArticleComment';
-import { BreadCrumbs } from '~/components/BreadCrumbs';
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
@@ -127,7 +127,6 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
 export default ArticleDetailPage;
 
-const breadcrumbsHeight = 32;
 const selfCss = css({
   padding: `${titleBarHeight + breadcrumbsHeight}px 0 240px`,
 });

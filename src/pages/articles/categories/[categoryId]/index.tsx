@@ -11,7 +11,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { ArticleCard } from '~/components/ArticleCard';
-import { BreadCrumbs } from '~/components/BreadCrumbs';
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { CircleButton } from '~/components/Common/CircleButton';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
@@ -200,8 +200,7 @@ export default ArticleCategoryPage;
 
 /* css */
 
-const breadCrumbsHeight = 32;
-const searchBarTop = titleBarHeight + breadCrumbsHeight;
+const searchBarTop = titleBarHeight + breadcrumbsHeight;
 const searchBarContainerHeight = 72;
 const selfPaddingTop = searchBarTop + searchBarContainerHeight;
 

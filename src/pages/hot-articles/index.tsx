@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { HotArticleCard } from '~/components/ArticleCard';
-import { BreadCrumbs } from '~/components/BreadCrumbs';
+import { BreadCrumbs, breadcrumbsHeight } from "~/components/BreadCrumbs";
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
@@ -156,8 +156,7 @@ export default HotArticlesPage;
 /* css */
 
 const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
-const breadCrumbsHeight = 32;
-const searchBarTop = titleBarHeight + breadCrumbsHeight;
+const searchBarTop = titleBarHeight + breadcrumbsHeight;
 const searchBarContainerPaddingX = globalVars.mainLayoutPaddingX.var;
 const searchBarContainerHeight = 72;
 const searchBarZIndex = 10;

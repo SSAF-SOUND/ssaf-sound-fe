@@ -43,9 +43,15 @@ export const BreadCrumbs = (props: BreadCrumbsProps) => {
   );
 };
 
+export const breadcrumbsHeight = 32;
+
 const selfCss = css(
   flex('center', '', 'row', 8),
-  { padding: `0 25px`, backgroundColor: palettes.background.default },
+  {
+    padding: `0 25px`,
+    backgroundColor: palettes.background.default,
+    height: breadcrumbsHeight,
+  },
   fontCss.style.R14
 );
 
