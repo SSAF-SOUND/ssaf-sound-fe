@@ -29,7 +29,8 @@ const ImageLayer = memo((props: ImageLayerProps) => {
       },
     });
 
-    onResize();
+    const $image = imageRef.current;
+    $image.onload = () => onResize();
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, [src, centerView, onResizeWindow]);
