@@ -106,7 +106,7 @@ const RecruitApplyPage: CustomNextPage = () => {
             </>
           }
           redirectionText="마이페이지로 이동"
-          redirectionTo={routes.profile.self()}
+          redirectionTo={routes.recruit.appliedList({ category })}
         />
       </>
     );
