@@ -82,20 +82,19 @@ const ArticleCategoryPage = (
           css={fontCss.style.B16}
           title={categoryName}
           withoutClose
+          footer={
+            <BreadCrumbs
+              entries={[
+                { name: '게시판 목록', link: routes.article.categories() },
+                {
+                  name: categoryName,
+                  link: routes.article.category({ categoryId }),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
-
-        <div css={breadCrumbsCss}>
-          <BreadCrumbs
-            entries={[
-              { name: '게시판 목록', link: routes.article.categories() },
-              {
-                name: categoryName,
-                link: routes.article.category({ categoryId }),
-                active: true,
-              },
-            ]}
-          />
-        </div>
 
         <SearchBar categoryId={categoryId} />
 
@@ -201,7 +200,6 @@ export default ArticleCategoryPage;
 
 /* css */
 
-const breadCrumbsTop = titleBarHeight;
 const breadCrumbsHeight = 32;
 const searchBarTop = titleBarHeight + breadCrumbsHeight;
 const searchBarContainerHeight = 72;
@@ -215,20 +213,6 @@ const selfCss = css(
   { padding: `${selfPaddingTop}px 0 15px` },
   pageCss.minHeight,
   flex('', '', 'column')
-);
-
-const breadCrumbsCss = css(
-  {
-    width: '100%',
-    minWidth: pageMinWidth,
-    maxWidth: pageMaxWidth,
-    zIndex: fixedLayoutZIndex,
-    height: breadCrumbsHeight,
-    top: breadCrumbsTop,
-    padding: `0 ${globalVars.mainLayoutPaddingX.var}`,
-    backgroundColor: palettes.background.default,
-  },
-  position.x('center', 'fixed')
 );
 
 const searchBarContainerCss = css(
