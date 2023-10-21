@@ -2,15 +2,17 @@ import { css } from '@emotion/react';
 
 import { Bar } from '~/components/Common/Bar';
 import { Logo } from '~/components/Common/Logo';
-import { topBarHeight, fixTopCenter, zIndex } from '~/styles/utils';
+import { topBarHeight, fixTopCenter, zIndex, palettes } from '~/styles/utils';
 
 import { PrivateButtonsLayer } from './PrivateButtonsLayer';
 
 interface TopBarProps {
   className?: string;
+  withoutBorderBottom?: boolean;
 }
 
 const TopBar = (props: TopBarProps) => {
+  const { withoutBorderBottom } = props;
   /**
    * LATER
    *   const { data: notification } = useNotification();
@@ -18,7 +20,7 @@ const TopBar = (props: TopBarProps) => {
    */
   return (
     <Bar
-      css={selfCss}
+      css={[selfCss, !withoutBorderBottom && borderBottomCss]}
       {...props}
       left={<Logo navigateToMainPage />}
       right={<PrivateButtonsLayer />}
@@ -37,3 +39,7 @@ const selfCss = css(
   },
   fixTopCenter
 );
+
+const borderBottomCss = css({
+  borderBottom: `1px solid ${palettes.border.dark}`,
+});

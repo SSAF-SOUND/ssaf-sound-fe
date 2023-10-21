@@ -133,7 +133,7 @@ const selfCss = css(
   fixTopCenter
 );
 const selfBorderBottomCss = css({
-  borderBottom: `1px solid ${palettes.grey2}`,
+  borderBottom: `1px solid ${palettes.border.dark}`,
 });
 
 const barCss = css({
