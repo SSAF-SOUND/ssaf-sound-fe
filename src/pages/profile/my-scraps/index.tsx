@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Separator } from '~/components/Common/Separator';
@@ -39,7 +40,7 @@ import {
 
 const defaultTab = PossibleMyScrapsTabValue.ARTICLES;
 
-const titleBarTitle = '나의 스크랩';
+const titleBarTitle = '내 스크랩';
 const metaTitle = titleBarTitle;
 
 const getSafeTab = (category?: string) => {
@@ -85,7 +86,18 @@ const MyScrapsPage: CustomNextPage = () => {
         <TitleBar.Default
           withoutClose
           title={titleBarTitle}
-          onClickBackward={routes.profile.self()}
+          footer={
+            <BreadCrumbs
+              entries={[
+                { name: '프로필', link: routes.profile.self() },
+                {
+                  name: titleBarTitle,
+                  link: routes.profile.myScraps(),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
 
         <Tabs.Root
@@ -116,7 +128,7 @@ export default MyScrapsPage;
 MyScrapsPage.auth = createAuthGuard();
 MyScrapsPage.meta = createNoIndexPageMetaData(metaTitle);
 
-const tabListContainerTop = titleBarHeight;
+const tabListContainerTop = titleBarHeight + breadcrumbsHeight;
 const tabListContainerPaddingY = 16;
 const tabListHeight = 24;
 const tabListContainerZIndex = 2;

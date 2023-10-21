@@ -1,4 +1,4 @@
-import type { MouseEventHandler } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 import type { Route } from '~/types';
 
 import { useRouter } from 'next/router';
@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 import { Bar } from '~/components/Common/Bar';
 import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
-import { fixTopCenter, zIndex } from '~/styles/utils';
+import { fixTopCenter, palettes, zIndex } from '~/styles/utils';
 
 export interface DefaultTitleBarProps {
   title?: string;
@@ -18,6 +18,8 @@ export interface DefaultTitleBarProps {
   withoutClose?: boolean;
   onClickBackward?: Route | MouseEventHandler<HTMLButtonElement>;
   onClickClose?: Route | MouseEventHandler<HTMLButtonElement>;
+  footer?: ReactNode;
+  withoutBorderBottom?: boolean;
 }
 
 export enum DefaultTitleBarIconLabel {
@@ -31,8 +33,10 @@ export const DefaultTitleBar = (props: DefaultTitleBarProps) => {
     withoutBackward = false,
     withoutTitle = false,
     withoutClose = false,
+    withoutBorderBottom = false,
     onClickBackward,
     onClickClose,
+    footer,
     ...restProps
   } = props;
 
@@ -71,48 +75,53 @@ export const DefaultTitleBar = (props: DefaultTitleBarProps) => {
   };
 
   return (
-    <Bar
+    <div
+      css={[selfCss, !withoutBorderBottom && selfBorderBottomCss]}
       {...restProps}
-      css={selfCss}
-      left={
-        <IconButton
-          size={iconButtonSize}
-          css={withoutBackward && visuallyHiddenCss}
-          onClick={handleClickBackward}
-          aria-hidden={withoutBackward && 'true'}
-          disabled={withoutBackward}
-        >
-          <Icon
-            name="backward"
-            label={DefaultTitleBarIconLabel.BACKWARD}
-            size={iconSize}
-          />
-        </IconButton>
-      }
-      center={
-        <h2
-          css={withoutTitle && visuallyHiddenCss}
-          aria-hidden={withoutTitle && 'true'}
-        >
-          {title}
-        </h2>
-      }
-      right={
-        <IconButton
-          size={iconButtonSize}
-          css={withoutClose && visuallyHiddenCss}
-          onClick={handleClickClose}
-          aria-hidden={withoutClose && 'true'}
-          disabled={withoutClose}
-        >
-          <Icon
-            name="close"
-            label={DefaultTitleBarIconLabel.CLOSE}
-            size={iconSize}
-          />
-        </IconButton>
-      }
-    />
+    >
+      <Bar
+        css={barCss}
+        left={
+          <IconButton
+            size={iconButtonSize}
+            css={withoutBackward && visuallyHiddenCss}
+            onClick={handleClickBackward}
+            aria-hidden={withoutBackward && 'true'}
+            disabled={withoutBackward}
+          >
+            <Icon
+              name="backward"
+              label={DefaultTitleBarIconLabel.BACKWARD}
+              size={iconSize}
+            />
+          </IconButton>
+        }
+        center={
+          <h2
+            css={withoutTitle && visuallyHiddenCss}
+            aria-hidden={withoutTitle && 'true'}
+          >
+            {title}
+          </h2>
+        }
+        right={
+          <IconButton
+            size={iconButtonSize}
+            css={withoutClose && visuallyHiddenCss}
+            onClick={handleClickClose}
+            aria-hidden={withoutClose && 'true'}
+            disabled={withoutClose}
+          >
+            <Icon
+              name="close"
+              label={DefaultTitleBarIconLabel.CLOSE}
+              size={iconSize}
+            />
+          </IconButton>
+        }
+      />
+      {footer}
+    </div>
   );
 };
 
@@ -121,11 +130,17 @@ const iconButtonSize = iconSize + 8;
 
 const selfCss = css(
   {
-    padding: '0 25px',
     zIndex: zIndex.fixed.normal,
   },
   fixTopCenter
 );
+const selfBorderBottomCss = css({
+  borderBottom: `1px solid ${palettes.border.dark}`,
+});
+
+const barCss = css({
+  padding: '0 25px',
+});
 
 const visuallyHiddenCss = css({
   opacity: 0,

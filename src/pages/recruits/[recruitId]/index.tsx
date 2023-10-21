@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import ArticleComment from '~/components/ArticleComment';
+import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHead } from '~/components/Common/PageHead';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
@@ -99,10 +100,24 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
 
       <RecruitDetailLayout>
         <TitleBar.Default
-          onClickBackward={routes.recruit.list({ category })}
           css={{ marginBottom: 12 }}
           title={titleBarTitle}
           withoutClose
+          footer={
+            <BreadCrumbs
+              entries={[
+                {
+                  name: '리쿠르팅 조회',
+                  link: routes.recruit.list({ category }),
+                },
+                {
+                  name: '리쿠르팅 상세',
+                  link: routes.recruit.detail(recruitId),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
 
         <div css={{ marginBottom: 40 }}>

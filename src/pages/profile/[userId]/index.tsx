@@ -4,7 +4,8 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import NameCard from '~/components/NameCard';
@@ -90,7 +91,22 @@ const UserProfilePage: CustomNextPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <div css={selfCss}>
-        <TitleBar.Default title="프로필" withoutClose />
+        <TitleBar.Default
+          title="프로필"
+          withoutClose
+          footer={
+            <BreadCrumbs
+              entries={[
+                { name: '홈', link: routes.main() },
+                {
+                  name: '다른 사람의 프로필',
+                  link: routes.profile.detail(userId),
+                  active: true,
+                },
+              ]}
+            />
+          }
+        />
 
         <div css={userInfoLayerCss}>
           <NameCard userInfo={userInfo} css={nameCardCss} />
@@ -135,7 +151,7 @@ const privateProfileCss = css({ flexGrow: 1 });
 
 const selfCss = css(
   {
-    padding: `${topBarHeight + 30}px 0 ${gnbHeight + 30}px`,
+    padding: `${topBarHeight + breadcrumbsHeight + 30}px 0 ${gnbHeight + 30}px`,
   },
   pageCss.minHeight,
   flex('', '', 'column')

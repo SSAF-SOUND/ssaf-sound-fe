@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { forwardRef } from 'react';
 
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Tabs } from '~/components/Common/Tabs';
@@ -90,26 +91,43 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
       <PageHeadingText text={metaTitle} />
       <PageHead {...metaData} />
       <div css={selfCss}>
-        <TitleBar.Default
-          title={titleBarTitle}
-          withoutClose
-          onClickBackward={routes.profile.self({ tab: backwardRouteTab })}
-        />
-
         <Tabs.Root defaultValue={tabValue} onValueChange={onTabValueChange}>
-          <Tabs.List css={tabsListCss}>
-            {tabValues.map((tabValue) => (
-              <Tabs.Trigger
-                theme="white"
-                variant="fit"
-                css={[tabsTriggerCss, tabsColorCss[tabValue]]}
-                value={tabValue}
-                key={tabValue}
-              >
-                {tabTriggersTextMap[tabValue]}
-              </Tabs.Trigger>
-            ))}
-          </Tabs.List>
+          <TitleBar.Default
+            title={titleBarTitle}
+            withoutClose
+            footer={
+              <div>
+                <BreadCrumbs
+                  entries={[
+                    {
+                      name: '프로필',
+                      link: routes.profile.self({ tab: backwardRouteTab }),
+                    },
+                    {
+                      name: '신청한 리쿠르팅',
+                      link: routes.recruit.appliedList({
+                        category: recruitCategoryName,
+                      }),
+                      active: true,
+                    },
+                  ]}
+                />
+                <Tabs.List css={tabsListCss}>
+                  {tabValues.map((tabValue) => (
+                    <Tabs.Trigger
+                      theme="white"
+                      variant="fit"
+                      css={[tabsTriggerCss, tabsColorCss[tabValue]]}
+                      value={tabValue}
+                      key={tabValue}
+                    >
+                      {tabTriggersTextMap[tabValue]}
+                    </Tabs.Trigger>
+                  ))}
+                </Tabs.List>
+              </div>
+            }
+          />
 
           {tabValues.map((tabValue) => {
             const safeTabValue = MatchStatusSet.has(tabValue)
@@ -134,7 +152,7 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
 };
 
 const tabsListHeight = 48;
-const selfPaddingY = titleBarHeight + tabsListHeight;
+const selfPaddingY = titleBarHeight + tabsListHeight + breadcrumbsHeight;
 
 const selfCss = css(
   {
@@ -145,13 +163,10 @@ const selfCss = css(
 );
 
 const tabsListCss = css(
-  fixTopCenter,
   {
-    top: titleBarHeight,
     height: tabsListHeight,
     padding: '0 25px',
     backgroundColor: palettes.background.default,
-    zIndex: 2,
   },
   flex('center', 'flex-start', 'row', 20)
 );

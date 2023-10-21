@@ -1,5 +1,6 @@
 import type { MyInfoEditFormValues } from './utils';
 import type { LinkProps } from 'next/link';
+import type { ReactNode } from 'react';
 import type {
   SubmitErrorHandler,
   SubmitHandler,
@@ -29,6 +30,7 @@ const titleMap: Record<MyInfoEditFormFields, string> = {
 interface MyInfoEditFormPropsOptions {
   forceSsafyMemberToTrue: boolean;
   titleBarBackwardRoute: LinkProps['href'];
+  titleBarFooter: ReactNode;
 }
 
 type OriginalOnValidSubmit = SubmitHandler<MyInfoEditFormValues>;
@@ -53,7 +55,11 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
     onValidSubmit,
     onInvalidSubmit,
     className,
-    options: { forceSsafyMemberToTrue, titleBarBackwardRoute } = {},
+    options: {
+      forceSsafyMemberToTrue,
+      titleBarBackwardRoute,
+      titleBarFooter,
+    } = {},
   } = props;
 
   const methods = useForm<MyInfoEditFormValues>({
@@ -79,6 +85,7 @@ const MyInfoEditForm = (props: MyInfoEditFormProps) => {
           title={titleMap[field]}
           onClickBackward={titleBarBackwardRoute}
           withoutClose
+          footer={titleBarFooter}
         />
         {field === 'nickname' && (
           <Nickname
