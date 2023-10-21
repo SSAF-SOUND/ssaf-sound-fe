@@ -72,4 +72,7 @@ export const palettes = {
   grey5: '#F8F7F7',
   white: '#FFFFFF',
   white2: '#F5F5F5',
+  border: {
+    dark: '#5d5d5d',
+  },
 } as const;
