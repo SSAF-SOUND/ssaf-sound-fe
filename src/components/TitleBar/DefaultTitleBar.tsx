@@ -75,10 +75,12 @@ export const DefaultTitleBar = (props: DefaultTitleBarProps) => {
   };
 
   return (
-    <div css={[selfCss, !withoutBorderBottom && selfBorderBottomCss]}>
+    <div
+      css={[selfCss, !withoutBorderBottom && selfBorderBottomCss]}
+      {...restProps}
+    >
       <Bar
         css={barCss}
-        {...restProps}
         left={
           <IconButton
             size={iconButtonSize}
