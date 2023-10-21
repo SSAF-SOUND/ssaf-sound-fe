@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { useModal } from '~/components/GlobalModal';
 import MyInfoSettings from '~/components/MyInfoSettings';
@@ -55,7 +56,18 @@ const MyInfoSettingsPage: CustomNextPage = () => {
           <TitleBar.Default
             title="프로필 설정"
             withoutClose
-            onClickBackward={routes.profile.self()}
+            footer={
+              <BreadCrumbs
+                entries={[
+                  { name: '프로필', link: routes.profile.self() },
+                  {
+                    name: '내 정보 설정',
+                    link: routes.profile.myInfoSettings(),
+                    active: true,
+                  },
+                ]}
+              />
+            }
           />
 
           <nav css={[pageExpandCss, { marginBottom: 40 }]}>
@@ -133,7 +145,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
   );
 };
 
-const selfPaddingY = `${titleBarHeight + 30}px`;
+const selfPaddingY = `${titleBarHeight + breadcrumbsHeight + 30}px`;
 const selfCss = css(
   {
     padding: `${selfPaddingY} 0`,
