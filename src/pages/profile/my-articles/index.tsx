@@ -4,7 +4,8 @@ import type { ArticleSummary } from '~/services/article';
 import { css } from '@emotion/react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
-import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
@@ -37,7 +38,18 @@ const MyArticlesPage: CustomNextPage = () => {
         <TitleBar.Default
           withoutClose
           title={titleBarTitle}
-          onClickBackward={routes.profile.detail(myInfo.memberId)}
+          footer={
+            <BreadCrumbs
+              entries={[
+                { name: '프로필', link: routes.profile.self() },
+                {
+                  name: titleBarTitle,
+                  link: routes.profile.myArticles(),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
 
         <ArticleLayer />
@@ -45,7 +57,7 @@ const MyArticlesPage: CustomNextPage = () => {
     </>
   );
 };
-const selfPaddingTop = titleBarHeight + 24;
+const selfPaddingTop = titleBarHeight + breadcrumbsHeight + 24;
 const selfCss = css(
   { padding: `${selfPaddingTop}px 0 0` },
   pageCss.minHeight,
