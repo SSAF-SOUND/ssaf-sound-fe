@@ -8,7 +8,7 @@ import { css } from '@emotion/react';
 import { Bar } from '~/components/Common/Bar';
 import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
-import { fixTopCenter, zIndex } from '~/styles/utils';
+import { fixTopCenter, palettes, zIndex } from '~/styles/utils';
 
 export interface DefaultTitleBarProps {
   title?: string;
@@ -19,6 +19,7 @@ export interface DefaultTitleBarProps {
   onClickBackward?: Route | MouseEventHandler<HTMLButtonElement>;
   onClickClose?: Route | MouseEventHandler<HTMLButtonElement>;
   footer?: ReactNode;
+  withoutBorderBottom?: boolean;
 }
 
 export enum DefaultTitleBarIconLabel {
@@ -32,6 +33,7 @@ export const DefaultTitleBar = (props: DefaultTitleBarProps) => {
     withoutBackward = false,
     withoutTitle = false,
     withoutClose = false,
+    withoutBorderBottom = false,
     onClickBackward,
     onClickClose,
     footer,
@@ -73,7 +75,7 @@ export const DefaultTitleBar = (props: DefaultTitleBarProps) => {
   };
 
   return (
-    <div css={selfCss}>
+    <div css={[selfCss, !withoutBorderBottom && selfBorderBottomCss]}>
       <Bar
         css={barCss}
         {...restProps}
@@ -130,6 +132,9 @@ const selfCss = css(
   },
   fixTopCenter
 );
+const selfBorderBottomCss = css({
+  borderBottom: `1px solid ${palettes.grey2}`,
+});
 
 const barCss = css({
   padding: '0 25px',

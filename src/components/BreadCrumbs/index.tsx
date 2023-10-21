@@ -44,12 +44,12 @@ export const BreadCrumbs = (props: BreadCrumbsProps) => {
 };
 
 const selfCss = css(
-  flex('center', '', 'row', 4),
+  flex('center', '', 'row', 8),
   { padding: `0 25px`, backgroundColor: palettes.background.default },
   fontCss.style.R14
 );
 
-const linkCss = css(fontCss.style.R14);
+const linkCss = css({ padding: 0 }, fontCss.style.R14);
 const activeLinkCss = css(
   { color: palettes.primary.default },
   fontCss.style.B14
