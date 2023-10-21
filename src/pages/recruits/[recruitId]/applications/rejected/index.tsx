@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
@@ -125,8 +126,26 @@ const RejectedApplicantsPage: CustomNextPage<RejectedApplicantsPageProps> = (
       <div css={selfCss}>
         <TitleBar.Default
           title={titleBarTitle}
-          onClickBackward={routes.recruit.applications.self(recruitId)}
           withoutClose
+          footer={
+            <BreadCrumbs
+              entries={[
+                {
+                  name: '리쿠르팅 상세',
+                  link: routes.recruit.detail(recruitId),
+                },
+                {
+                  name: '신청 목록',
+                  link: routes.recruit.applications.self(recruitId),
+                },
+                {
+                  name: '거절한 신청 목록',
+                  link: routes.recruit.applications.rejected(recruitId),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
 
         <RecruitApplicantsCount
@@ -157,7 +176,7 @@ type Params = {
   recruitId: string;
 };
 
-const selfPaddingY = titleBarHeight + 30;
+const selfPaddingY = titleBarHeight + breadcrumbsHeight + 30;
 const selfCss = css(
   {
     padding: `${selfPaddingY}px 0`,
