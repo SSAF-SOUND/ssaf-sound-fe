@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
@@ -121,7 +122,21 @@ const MyRecruitApplicationPage: CustomNextPage<
         <TitleBar.Default
           title="리쿠르팅 신청내용"
           withoutClose
-          onClickBackward={routes.recruit.detail(recruitId)}
+          footer={
+            <BreadCrumbs
+              entries={[
+                {
+                  name: '리쿠르팅 상세',
+                  link: routes.recruit.detail(recruitId),
+                },
+                {
+                  name: '내 신청서',
+                  link: routes.recruit.applications.mine(recruitId),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
 
         <RecruitApplyFormHeader
@@ -156,7 +171,7 @@ type Params = Partial<{
 }>;
 
 const selfCss = css({
-  padding: `${titleBarHeight + 30}px 0`,
+  padding: `${titleBarHeight + breadcrumbsHeight + 30}px 0`,
 });
 
 export default MyRecruitApplicationPage;
