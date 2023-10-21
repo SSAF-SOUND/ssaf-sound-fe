@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
@@ -166,8 +167,23 @@ const RecruitApplyPage: CustomNextPage = () => {
       <div css={selfCss}>
         <TitleBar.Default
           withoutClose
-          onClickBackward={routes.recruit.detail(recruitId)}
           title={titleBarTitle}
+          onClickBackward={routes.recruit.detail(recruitId)}
+          footer={
+            <BreadCrumbs
+              entries={[
+                {
+                  name: '리쿠르팅 상세',
+                  link: routes.recruit.detail(recruitId),
+                },
+                {
+                  name: '신청하기',
+                  link: routes.recruit.apply(recruitId),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
 
         <RecruitApplyFormHeader
@@ -190,7 +206,7 @@ type Params = Partial<{
 }>;
 
 const selfCss = css({
-  padding: `${titleBarHeight + 30}px 0`,
+  padding: `${titleBarHeight + breadcrumbsHeight + 30}px 0`,
 });
 
 export default RecruitApplyPage;
