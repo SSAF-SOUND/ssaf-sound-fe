@@ -11,7 +11,7 @@ import { flex, fontCss, palettes } from '~/styles/utils';
 
 export interface BreadCrumbsEntry {
   name: string;
-  link: LinkProps['href'];
+  link?: LinkProps['href'];
   active?: boolean;
 }
 
@@ -32,7 +32,7 @@ export const BreadCrumbs = (props: BreadCrumbsProps) => {
             size="sm"
             css={[linkCss, active && activeLinkCss]}
           >
-            <Link href={link}>{name}</Link>
+            {link ? <Link href={link}>{name}</Link> : <span>{name}</span>}
           </Button>
           {index < entries.length - 1 && (
             <Icon name="chevron.right" size={16} />
