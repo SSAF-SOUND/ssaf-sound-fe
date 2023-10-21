@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
+import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import TitleBar from '~/components/TitleBar';
@@ -44,7 +45,19 @@ const DeleteAccountPage: CustomNextPage = () => {
         <TitleBar.Default
           title={titleBarTitle}
           withoutClose
-          onClickBackward={routes.profile.myInfoSettings()}
+          footer={
+            <BreadCrumbs
+              entries={[
+                { name: '프로필', link: routes.profile.self() },
+                { name: '내 정보 설정', link: routes.profile.myInfoSettings() },
+                {
+                  name: '회원 탈퇴',
+                  link: routes.profile.delete.account(),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
         <div css={descriptionCss}>
           <p>탈퇴 하시겠습니까?</p>
