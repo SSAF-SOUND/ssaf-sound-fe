@@ -17,12 +17,13 @@ export interface BreadCrumbsEntry {
 
 export interface BreadCrumbsProps {
   entries: BreadCrumbsEntry[];
+  className?: string;
 }
 
 export const BreadCrumbs = (props: BreadCrumbsProps) => {
-  const { entries } = props;
+  const { entries, ...restProps } = props;
   return (
-    <div css={selfCss}>
+    <div css={selfCss} {...restProps}>
       {entries.map(({ link, name, active }, index) => (
         <Fragment key={index}>
           <Button
@@ -42,7 +43,11 @@ export const BreadCrumbs = (props: BreadCrumbsProps) => {
   );
 };
 
-const selfCss = css(flex('center', '', 'row', 4), fontCss.style.R14);
+const selfCss = css(
+  flex('center', '', 'row', 4),
+  { padding: `0 25px`, backgroundColor: palettes.background.default },
+  fontCss.style.R14
+);
 
 const linkCss = css(fontCss.style.R14);
 const activeLinkCss = css(
