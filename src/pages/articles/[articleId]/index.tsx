@@ -11,6 +11,7 @@ import Skeleton from 'react-loading-skeleton';
 import { Article } from '~/components/Article';
 import { ArticleError } from '~/components/Article/ArticleError';
 import ArticleComment from '~/components/ArticleComment';
+import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
@@ -88,9 +89,24 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
           css={titleBarCss}
           title={articleCategoryTitle}
           withoutClose
-          onClickBackward={routes.article.category({
-            categoryId: articleCategoryId,
-          })}
+          footer={
+            <BreadCrumbs
+              entries={[
+                { name: '게시판 목록', link: routes.article.categories() },
+                {
+                  name: articleCategoryTitle,
+                  link: routes.article.category({
+                    categoryId: articleCategoryId,
+                  }),
+                },
+                {
+                  name: '게시글 상세',
+                  link: routes.article.detail(articleId),
+                  active: true,
+                },
+              ]}
+            />
+          }
         />
 
         <Article
@@ -111,8 +127,9 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
 export default ArticleDetailPage;
 
+const breadcrumbsHeight = 32;
 const selfCss = css({
-  padding: `${titleBarHeight}px 0 240px`,
+  padding: `${titleBarHeight + breadcrumbsHeight}px 0 240px`,
 });
 
 const articleCss = css({
