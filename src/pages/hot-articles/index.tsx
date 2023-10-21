@@ -8,6 +8,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { HotArticleCard } from '~/components/ArticleCard';
+import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
@@ -60,8 +61,15 @@ const HotArticlesPage = () => {
         <TitleBar.Default
           css={fontCss.style.B16}
           title={titleBarTitle}
-          onClickBackward={routes.article.categories()}
           withoutClose
+          footer={
+            <BreadCrumbs
+              entries={[
+                { name: '게시판 목록', link: routes.article.categories() },
+                { name: '핫 게시판', link: routes.article.hot(), active: true },
+              ]}
+            />
+          }
         />
 
         <SearchBar />
@@ -148,7 +156,8 @@ export default HotArticlesPage;
 /* css */
 
 const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
-const searchBarTop = titleBarHeight;
+const breadCrumbsHeight = 32;
+const searchBarTop = titleBarHeight + breadCrumbsHeight;
 const searchBarContainerPaddingX = globalVars.mainLayoutPaddingX.var;
 const searchBarContainerHeight = 72;
 const searchBarZIndex = 10;
