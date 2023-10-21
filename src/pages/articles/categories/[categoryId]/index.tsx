@@ -11,6 +11,7 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { ArticleCard } from '~/components/ArticleCard';
+import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { CircleButton } from '~/components/Common/CircleButton';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
@@ -33,8 +34,8 @@ import {
   flex,
   fontCss,
   globalVars,
+  pageCss,
   pageMaxWidth,
-  pageMinHeight,
   pageMinWidth,
   palettes,
   position,
@@ -56,9 +57,9 @@ const ArticleCategoryPage = (
   const isSignedIn = !!myInfo;
 
   const { data: articleCategories } = useArticleCategories();
-  const categoryName = articleCategories?.find(
-    (category) => category.boardId === categoryId
-  )?.title;
+  const categoryName =
+    articleCategories?.find((category) => category.boardId === categoryId)
+      ?.title ?? '게시판';
 
   const metaDescription = createMetaDescription(categoryName);
 
@@ -74,15 +75,27 @@ const ArticleCategoryPage = (
         }}
       />
 
-      <PageHeadingText text={categoryName ?? '게시판'} />
+      <PageHeadingText text={categoryName} />
 
       <div css={selfCss}>
         <TitleBar.Default
           css={fontCss.style.B16}
           title={categoryName}
-          onClickBackward={routes.article.categories()}
           withoutClose
         />
+
+        <div css={breadCrumbsCss}>
+          <BreadCrumbs
+            entries={[
+              { name: '게시판 목록', link: routes.article.categories() },
+              {
+                name: categoryName,
+                link: routes.article.category({ categoryId }),
+                active: true,
+              },
+            ]}
+          />
+        </div>
 
         <SearchBar categoryId={categoryId} />
 
@@ -188,22 +201,34 @@ export default ArticleCategoryPage;
 
 /* css */
 
-const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
-const searchBarTop = titleBarHeight;
-const searchBarContainerPaddingX = globalVars.mainLayoutPaddingX.var;
+const breadCrumbsTop = titleBarHeight;
+const breadCrumbsHeight = 32;
+const searchBarTop = titleBarHeight + breadCrumbsHeight;
 const searchBarContainerHeight = 72;
 const selfPaddingTop = searchBarTop + searchBarContainerHeight;
 
 // `Skeleton`의 `zIndex`는 1
-const searchBarZIndex = 10;
+const fixedLayoutZIndex = 10;
 const fabZIndex = 30;
 
 const selfCss = css(
-  {
-    padding: `${selfPaddingTop}px 0 15px`,
-    minHeight: selfMinHeight,
-  },
+  { padding: `${selfPaddingTop}px 0 15px` },
+  pageCss.minHeight,
   flex('', '', 'column')
+);
+
+const breadCrumbsCss = css(
+  {
+    width: '100%',
+    minWidth: pageMinWidth,
+    maxWidth: pageMaxWidth,
+    zIndex: fixedLayoutZIndex,
+    height: breadCrumbsHeight,
+    top: breadCrumbsTop,
+    padding: `0 ${globalVars.mainLayoutPaddingX.var}`,
+    backgroundColor: palettes.background.default,
+  },
+  position.x('center', 'fixed')
 );
 
 const searchBarContainerCss = css(
@@ -211,10 +236,10 @@ const searchBarContainerCss = css(
     width: '100%',
     minWidth: pageMinWidth,
     maxWidth: pageMaxWidth,
-    padding: `8px ${searchBarContainerPaddingX} 0`,
+    padding: `8px ${globalVars.mainLayoutPaddingX.var} 0`,
     height: searchBarContainerHeight,
     top: searchBarTop,
-    zIndex: searchBarZIndex,
+    zIndex: fixedLayoutZIndex,
     backgroundColor: palettes.background.default,
   },
   position.x('center', 'fixed')
