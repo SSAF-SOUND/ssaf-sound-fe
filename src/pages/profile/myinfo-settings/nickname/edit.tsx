@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { produce } from 'immer';
 
+import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
@@ -18,6 +19,7 @@ import {
   handleAxiosError,
   routes,
 } from '~/utils';
+import { EditableMyInfoFields } from '~/utils/client-routes/profile';
 
 const metaTitle = '닉네임 수정';
 
@@ -71,7 +73,24 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
           }}
           onValidSubmit={onValidSubmit}
           options={{
-            titleBarBackwardRoute: routes.profile.myInfoSettings(),
+            titleBarFooter: (
+              <BreadCrumbs
+                entries={[
+                  { name: '프로필', link: routes.profile.self() },
+                  {
+                    name: '내 정보 설정',
+                    link: routes.profile.myInfoSettings(),
+                  },
+                  {
+                    name: '닉네임',
+                    link: routes.profile.edit.myInfo(
+                      EditableMyInfoFields.NICKNAME
+                    ),
+                    active: true,
+                  },
+                ]}
+              />
+            ),
           }}
         />
       </div>

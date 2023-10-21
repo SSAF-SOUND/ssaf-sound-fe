@@ -7,6 +7,7 @@ import { css } from '@emotion/react';
 import { produce } from 'immer';
 import { isBoolean } from 'is-what';
 
+import { BreadCrumbs } from "~/components/BreadCrumbs";
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
@@ -24,6 +25,7 @@ import {
   handleAxiosError,
   routes,
 } from '~/utils';
+import { EditableMyInfoFields } from "~/utils/client-routes/profile";
 
 const metaTitle = 'SSAFY 기본 정보 수정';
 
@@ -104,7 +106,24 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
           onInvalidSubmit={onInvalidSubmit}
           options={{
             forceSsafyMemberToTrue: isCertified,
-            titleBarBackwardRoute: routes.profile.myInfoSettings(),
+            titleBarFooter: (
+              <BreadCrumbs
+                entries={[
+                  { name: '프로필', link: routes.profile.self() },
+                  {
+                    name: '내 정보 설정',
+                    link: routes.profile.myInfoSettings(),
+                  },
+                  {
+                    name: 'SSAFY 기본정보',
+                    link: routes.profile.edit.myInfo(
+                      EditableMyInfoFields.SSAFY_BASIC_INFO
+                    ),
+                    active: true,
+                  },
+                ]}
+              />
+            ),
           }}
         />
       </div>
