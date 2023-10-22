@@ -7,7 +7,9 @@ import { css } from '@emotion/react';
 
 import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
+import { Modal } from '~/components/Common/Modal';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Alert } from '~/components/ModalContent';
 import TitleBar from '~/components/TitleBar';
 import { useDeleteAccount } from '~/services/auth';
 import { flex, fontCss, pageMinHeight, titleBarHeight } from '~/styles/utils';
@@ -24,14 +26,17 @@ const metaTitle = titleBarTitle;
 
 const DeleteAccountPage: CustomNextPage = () => {
   const router = useRouter();
-  const { mutateAsync: deleteAccount, isLoading: isDeletingAccount } =
-    useDeleteAccount();
+  const {
+    mutateAsync: deleteAccount,
+    isLoading: isDeletingAccount,
+    isSuccess: accountDeleted,
+  } = useDeleteAccount();
 
   const handleDeleteAccount = async () => {
     try {
       await deleteAccount();
-      router.replace(routes.main());
       customToast.success('회원 탈퇴가 완료되었습니다.');
+      router.replace(routes.main());
     } catch (err) {
       handleAxiosError(err);
     }
@@ -61,21 +66,32 @@ const DeleteAccountPage: CustomNextPage = () => {
         />
         <div css={descriptionCss}>
           <p>탈퇴 하시겠습니까?</p>
-          {/*<p>이용 약관</p>*/}
         </div>
         <div css={buttonLayerCss}>
           <Button size="lg" variant="inverse" css={buttonCss} asChild>
             <Link href={routes.profile.myInfoSettings()}>아니오</Link>
           </Button>
-          {/* TODO: 재확인 모달 + 약관표시 */}
-          <Button
-            size="lg"
-            loading={isDeletingAccount}
-            css={buttonCss}
-            onClick={handleDeleteAccount}
-          >
-            네
-          </Button>
+          <Modal
+            trigger={
+              <Button
+                size="lg"
+                css={buttonCss}
+                disabled={accountDeleted}
+                loading={isDeletingAccount}
+              >
+                네
+              </Button>
+            }
+            content={
+              <Alert
+                actionText="회원 탈퇴"
+                cancelText="취소"
+                title="알림"
+                description="SSAF SOUND의 회원 탈퇴를 진행합니다."
+                onClickAction={handleDeleteAccount}
+              />
+            }
+          />
         </div>
       </div>
     </>
