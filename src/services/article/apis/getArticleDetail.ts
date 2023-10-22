@@ -1,3 +1,4 @@
+import type { AxiosRequestConfig } from 'axios';
 import type { ArticleDetail } from '~/services/article/utils';
 import type { ApiSuccessResponse } from '~/types';
 
@@ -7,6 +8,7 @@ import { isClient } from '~/utils/misc';
 
 interface GetArticleDetailOptions {
   publicRequest?: boolean;
+  config?: AxiosRequestConfig;
 }
 
 export type GetArticleDetailApiData = ApiSuccessResponse<{
@@ -17,12 +19,12 @@ export const getArticleDetail = (
   articleId: number,
   options: GetArticleDetailOptions = {}
 ) => {
-  const { publicRequest = !isClient } = options;
+  const { publicRequest = !isClient, config } = options;
   const endpoint = endpoints.articles.detail(articleId);
 
   const axiosInstance = publicRequest ? publicAxios : privateAxios;
 
   return axiosInstance
-    .get<GetArticleDetailApiData>(endpoint)
+    .get<GetArticleDetailApiData>(endpoint, config)
     .then((res) => res.data.data.post);
 };

@@ -5,6 +5,7 @@ import type {
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -226,6 +227,7 @@ type Params = {
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   context
 ) => {
+  const privateHttpConfig = { headers: context.req.headers };
   const articleId = Number(context.params?.articleId);
 
   // 0. articleId가 유효하지 않음 (숫자가 아님) -> notFound
@@ -240,7 +242,10 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   const dehydrate = prefetch({
     queryKey: queryKeys.articles.detail(articleId),
-    queryFn: () => getArticleDetail(articleId),
+    queryFn: () =>
+      getArticleDetail(articleId, {
+        config: privateHttpConfig,
+      }),
   });
 
   const { dehydratedState } = await dehydrate();
