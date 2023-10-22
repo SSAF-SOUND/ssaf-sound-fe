@@ -5,7 +5,7 @@ import { palettes } from '~/styles/utils';
 export const HotArticleCardSkeleton = () => {
   return (
     <Skeleton
-      height={164}
+      height={152}
       borderRadius={8}
       baseColor={palettes.font.grey}
       highlightColor={palettes.background.grey}

@@ -23,7 +23,7 @@ const selfCss = css({
   backgroundColor: palettes.font.grey,
   border: `1px solid ${palettes.grey.default}`,
   borderRadius: 8,
-  padding: '16px 20px',
+  padding: '10px 20px',
   transition: 'transform 300ms, outline 100ms',
   ':hover, :focus-visible': {
     transform: 'translate3d(3px, 0, 0)',
