@@ -5,7 +5,7 @@ import type {
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { Article } from '~/components/Article';
@@ -49,12 +49,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
     isError: isArticleDetailError,
     error: articleDetailError,
     isLoading: isArticleDetailLoading,
-    refetch,
   } = useArticleDetail(articleId);
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
 
   if (isArticleDetailLoading) {
     return <FullPageLoader text="게시글을 불러오는 중입니다." />;

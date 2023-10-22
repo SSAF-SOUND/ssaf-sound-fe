@@ -5,7 +5,7 @@ import type {
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import ArticleComment from '~/components/ArticleComment';
@@ -53,12 +53,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
     isLoading: isRecruitDetailLoading,
     isError: isRecruitDetailError,
     error: recruitDetailError,
-    refetch,
   } = useRecruitDetail(recruitId);
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
 
   if (isRecruitDetailLoading) {
     return <FullPageLoader text={loaderText.loadingData} />;
