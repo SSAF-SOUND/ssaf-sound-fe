@@ -5,7 +5,7 @@ import type {
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { Article } from '~/components/Article';
@@ -34,6 +34,7 @@ import {
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
+import { createAxiosCookieConfig } from '~/utils';
 import { handleAxiosError } from '~/utils/handleAxiosError';
 import { routes } from '~/utils/routes';
 import { stripHtmlTags } from '~/utils/stripHtmlTags';
@@ -48,12 +49,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
     isError: isArticleDetailError,
     error: articleDetailError,
     isLoading: isArticleDetailLoading,
-    refetch,
   } = useArticleDetail(articleId);
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
 
   if (isArticleDetailLoading) {
     return <FullPageLoader text="게시글을 불러오는 중입니다." />;
@@ -240,7 +236,11 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   const dehydrate = prefetch({
     queryKey: queryKeys.articles.detail(articleId),
-    queryFn: () => getArticleDetail(articleId),
+    queryFn: () =>
+      getArticleDetail(articleId, {
+        publicRequest: true,
+        config: createAxiosCookieConfig(context.req.headers.cookie),
+      }),
   });
 
   const { dehydratedState } = await dehydrate();

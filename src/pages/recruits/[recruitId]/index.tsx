@@ -5,7 +5,7 @@ import type {
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import ArticleComment from '~/components/ArticleComment';
@@ -34,6 +34,7 @@ import {
 } from '~/services/recruitComment';
 import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
 import {
+  createAxiosCookieConfig,
   ErrorMessage,
   getErrorResponse,
   handleAxiosError,
@@ -52,12 +53,7 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
     isLoading: isRecruitDetailLoading,
     isError: isRecruitDetailError,
     error: recruitDetailError,
-    refetch,
   } = useRecruitDetail(recruitId);
-
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
 
   if (isRecruitDetailLoading) {
     return <FullPageLoader text={loaderText.loadingData} />;
@@ -280,7 +276,11 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   const dehydrate = prefetch({
     queryKey: queryKeys.recruit.detail(recruitId),
-    queryFn: () => getRecruitDetail(recruitId, true),
+    queryFn: () =>
+      getRecruitDetail(recruitId, {
+        publicRequest: true, // 요청은 Private 이지만, 자동 재발급 프로세스를 막기 위해 publicRequest 사용
+        config: createAxiosCookieConfig(context.req.headers.cookie),
+      }),
   });
 
   const { dehydratedState } = await dehydrate();

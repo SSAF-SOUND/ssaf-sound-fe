@@ -2,6 +2,7 @@ import type {
   InternalAxiosRequestConfig,
   AxiosError,
   AxiosInstance,
+  AxiosRequestConfig,
 } from 'axios';
 import type { ApiErrorResponse } from '~/types';
 
@@ -42,16 +43,20 @@ const devPlugin = (config: InternalAxiosRequestConfig) => {
   }
 };
 
-const detectRequestInfiniteLoop = createRequestInfiniteLoopDetector(5, {
-  timerSeconds: 10,
-  onDetect: () => {
-    const errorMessage = isDevMode
-      ? '등록하지 않은 Mocking API가 있는지 확인해주세요! HTTP Method가 일치하지 않는 문제일 수도 있습니다.'
-      : '오류가 발생했습니다.';
-    customToast.clientError(errorMessage);
-    Sentry.captureException(new Error('Error: Detect request infinite loop'));
-  },
-});
+const requestCounterConsideredInfiniteLoop = 15;
+const detectRequestInfiniteLoop = createRequestInfiniteLoopDetector(
+  requestCounterConsideredInfiniteLoop,
+  {
+    timerSeconds: 10,
+    onDetect: () => {
+      const errorMessage = isDevMode
+        ? '등록하지 않은 Mocking API가 있는지 확인해주세요! HTTP Method가 일치하지 않는 문제일 수도 있습니다.'
+        : '오류가 발생했습니다.';
+      customToast.clientError(errorMessage);
+      Sentry.captureException(new Error('Error: Detect request infinite loop'));
+    },
+  }
+);
 
 export const configurePublicAxiosInterceptors = (
   axiosInstance: AxiosInstance
@@ -152,3 +157,13 @@ configurePrivateAxiosInterceptors(privateAxios, reissueToken, {
 });
 
 configurePublicAxiosInterceptors(publicAxios);
+
+export const createAxiosCookieConfig = (cookie?: string) => {
+  if (!cookie) return undefined;
+
+  return {
+    headers: {
+      Cookie: cookie,
+    },
+  } as AxiosRequestConfig;
+};
