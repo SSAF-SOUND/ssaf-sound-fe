@@ -43,7 +43,7 @@ const devPlugin = (config: InternalAxiosRequestConfig) => {
   }
 };
 
-const requestCounterConsideredInfiniteLoop = 15;
+const requestCounterConsideredInfiniteLoop = 5;
 const detectRequestInfiniteLoop = createRequestInfiniteLoopDetector(
   requestCounterConsideredInfiniteLoop,
   {
