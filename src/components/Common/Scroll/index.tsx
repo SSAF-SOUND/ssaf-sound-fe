@@ -63,8 +63,8 @@ const scrollThumbCss = css({
     transform: 'translate(-50%, -50%)',
     width: '100%',
     height: '100%',
-    minWidth: 44,
-    minHeight: 44,
+    minWidth: 24,
+    minHeight: 24,
   },
 });
 
