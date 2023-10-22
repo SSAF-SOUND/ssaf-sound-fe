@@ -34,6 +34,7 @@ import {
 } from '~/services/recruitComment';
 import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
 import {
+  createAxiosCookieConfig,
   ErrorMessage,
   getErrorResponse,
   handleAxiosError,
@@ -270,7 +271,6 @@ type Params = {
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   context
 ) => {
-  const privateHttpConfig = { headers: context.req.headers };
   const recruitId = Number(context.params?.recruitId);
 
   if (Number.isNaN(recruitId)) {
@@ -284,7 +284,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
     queryFn: () =>
       getRecruitDetail(recruitId, {
         publicRequest: true, // 요청은 Private 이지만, 자동 재발급 프로세스를 막기 위해 publicRequest 사용
-        config: privateHttpConfig,
+        config: createAxiosCookieConfig(context.req.headers.cookie),
       }),
   });
 

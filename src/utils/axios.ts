@@ -2,6 +2,7 @@ import type {
   InternalAxiosRequestConfig,
   AxiosError,
   AxiosInstance,
+  AxiosRequestConfig,
 } from 'axios';
 import type { ApiErrorResponse } from '~/types';
 
@@ -156,3 +157,13 @@ configurePrivateAxiosInterceptors(privateAxios, reissueToken, {
 });
 
 configurePublicAxiosInterceptors(publicAxios);
+
+export const createAxiosCookieConfig = (cookie?: string) => {
+  if (!cookie) return undefined;
+
+  return {
+    headers: {
+      Cookie: cookie,
+    },
+  } as AxiosRequestConfig;
+};

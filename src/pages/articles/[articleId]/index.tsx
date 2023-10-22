@@ -5,7 +5,6 @@ import type {
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -35,6 +34,7 @@ import {
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
+import { createAxiosCookieConfig } from '~/utils';
 import { handleAxiosError } from '~/utils/handleAxiosError';
 import { routes } from '~/utils/routes';
 import { stripHtmlTags } from '~/utils/stripHtmlTags';
@@ -227,7 +227,6 @@ type Params = {
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   context
 ) => {
-  const privateHttpConfig = { headers: context.req.headers };
   const articleId = Number(context.params?.articleId);
 
   // 0. articleId가 유효하지 않음 (숫자가 아님) -> notFound
@@ -244,7 +243,8 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
     queryKey: queryKeys.articles.detail(articleId),
     queryFn: () =>
       getArticleDetail(articleId, {
-        config: privateHttpConfig,
+        publicRequest: true,
+        config: createAxiosCookieConfig(context.req.headers.cookie),
       }),
   });
 
