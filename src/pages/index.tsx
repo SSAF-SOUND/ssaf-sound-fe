@@ -14,7 +14,7 @@ import { RecruitsPreview } from '~/components/RecruitsPreview';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import { toSSRSafeDehydratedState } from '~/react-query/server/toSSRSafeDehydratedState';
-import { getHotArticles } from '~/services/article/apis';
+import { getHotArticlesByCursor } from '~/services/article/apis';
 import { useMyInfo } from '~/services/member';
 import { getRecruits } from '~/services/recruit';
 import { globalVars, topBarHeight } from '~/styles/utils';
@@ -83,7 +83,7 @@ export const getStaticProps: GetStaticProps = async () => {
   await Promise.allSettled([
     queryClient.prefetchInfiniteQuery({
       queryKey: hotArticlesQueryKey,
-      queryFn: () => getHotArticles(),
+      queryFn: () => getHotArticlesByCursor(),
     }),
     queryClient.prefetchInfiniteQuery({
       queryKey: recruitsQueryKey,

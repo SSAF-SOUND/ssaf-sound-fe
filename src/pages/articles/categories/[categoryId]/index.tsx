@@ -24,9 +24,9 @@ import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import {
   getArticleCategories,
-  getArticles,
+  getArticlesByCursor,
   useArticleCategories,
-  useArticles,
+  useArticlesByCursor,
 } from '~/services/article';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import { useMyInfo } from '~/services/member';
@@ -126,7 +126,7 @@ interface ArticleLayerProps {
 const ArticleLayer = (props: ArticleLayerProps) => {
   const { categoryId, keyword } = props;
   const isValidKeyword = validateSearchKeyword(keyword);
-  const articlesInfiniteQuery = useArticles(categoryId, { keyword });
+  const articlesInfiniteQuery = useArticlesByCursor(categoryId, { keyword });
 
   const infiniteData = articlesInfiniteQuery.data
     ? articlesInfiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
@@ -280,7 +280,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
     queryClient.prefetchInfiniteQuery({
       queryKey: articleListQueryKey,
       queryFn: () =>
-        getArticles({
+        getArticlesByCursor({
           categoryId,
           keyword: keyword,
         }),

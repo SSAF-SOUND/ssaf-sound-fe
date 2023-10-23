@@ -10,28 +10,28 @@ import {
 import { publicAxios, privateAxios } from '~/utils/axios';
 import { isClient } from '~/utils/misc';
 
-export interface GetArticlesParams {
+export interface GetArticlesByCursorParams {
   categoryId: number;
   cursor?: number;
   size?: number;
   keyword?: string;
 }
 
-export type GetArticlesOptions = PublicRequestOption;
+export type GetArticlesByCursorOptions = PublicRequestOption;
 
-export type GetArticlesApiData = ApiSuccessResponse<{
+export type GetArticlesByCursorApiData = ApiSuccessResponse<{
   posts: ArticleSummary[];
   cursor: number | null;
 }>;
 
-export interface GetArticlesQueryParams extends InfiniteParams {
+export interface GetArticlesByCursorQueryParams extends InfiniteParams {
   boardId: number;
   keyword?: string;
 }
 
-export const getArticles = (
-  params: GetArticlesParams,
-  options: GetArticlesOptions = {}
+export const getArticlesByCursor = (
+  params: GetArticlesByCursorParams,
+  options: GetArticlesByCursorOptions = {}
 ) => {
   const { publicRequest = !isClient } = options;
   const {
@@ -41,10 +41,10 @@ export const getArticles = (
     keyword,
   } = params;
 
-  const endpoint = endpoints.articles.list({
+  const endpoint = endpoints.articles.listByCursor({
     keyword,
   });
-  const queryParams: GetArticlesQueryParams = {
+  const queryParams: GetArticlesByCursorQueryParams = {
     boardId: categoryId,
     cursor,
     size,
@@ -53,7 +53,7 @@ export const getArticles = (
 
   const axiosInstance = publicRequest ? publicAxios : privateAxios;
 
-  return axiosInstance<GetArticlesApiData>({
+  return axiosInstance<GetArticlesByCursorApiData>({
     method: 'get',
     url: endpoint,
     params: queryParams,

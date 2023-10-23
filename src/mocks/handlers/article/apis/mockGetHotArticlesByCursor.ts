@@ -1,4 +1,4 @@
-import type { GetHotArticlesApiData } from '~/services/article';
+import type { GetHotArticlesByCursorApiData } from '~/services/article';
 
 import { rest } from 'msw';
 
@@ -8,14 +8,14 @@ import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
 const getHotArticlesMethod = 'get';
-const getHotArticlesEndpoint = composeUrls(API_URL, endpoints.articles.hot());
+const getHotArticlesEndpoint = composeUrls(API_URL, endpoints.articles.hotByCursor());
 
-export const mockGetHotArticles = rest[getHotArticlesMethod](
+export const mockGetHotArticlesByCursor = rest[getHotArticlesMethod](
   getHotArticlesEndpoint,
   restInfiniteArticlesSuccess
 );
 
-export const mockGetHotArticlesError = restError(
+export const mockGetHotArticlesByCursorError = restError(
   getHotArticlesMethod,
   getHotArticlesEndpoint,
   {
@@ -28,6 +28,6 @@ const emptyHotArticles = {
   cursor: null,
 };
 
-export const mockGetEmptyHotArticles = restSuccess<
-  GetHotArticlesApiData['data']
+export const mockGetEmptyHotArticlesByCursor = restSuccess<
+  GetHotArticlesByCursorApiData['data']
 >(getHotArticlesMethod, getHotArticlesEndpoint, { data: emptyHotArticles });

@@ -1,4 +1,4 @@
-import type { GetHotArticlesApiData } from '~/services/article';
+import type { GetHotArticlesByCursorApiData } from '~/services/article';
 
 import { rest } from 'msw';
 
@@ -10,7 +10,7 @@ import { API_URL, composeUrls } from '~/utils';
 const getHotArticlesByKeywordMethod = 'get';
 const getHotArticlesByKeywordEndpoint = composeUrls(
   API_URL,
-  endpoints.articles.hot({
+  endpoints.articles.hotByCursor({
     keyword: 'keyword',
   })
 );
@@ -32,7 +32,7 @@ const emptyHotArticles = {
 };
 
 export const mockGetEmptyHotArticlesByKeyword = restSuccess<
-  GetHotArticlesApiData['data']
+  GetHotArticlesByCursorApiData['data']
 >(getHotArticlesByKeywordMethod, getHotArticlesByKeywordEndpoint, {
   data: emptyHotArticles,
 });

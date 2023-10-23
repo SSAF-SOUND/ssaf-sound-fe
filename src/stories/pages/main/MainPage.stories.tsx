@@ -3,9 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { produce } from 'immer';
 
 import {
-  mockGetEmptyHotArticles,
-  mockGetHotArticles,
-} from '~/mocks/handlers/article/apis/mockGetHotArticles';
+  mockGetEmptyHotArticlesByCursor,
+  mockGetHotArticlesByCursor,
+} from '~/mocks/handlers/article/apis/mockGetHotArticlesByCursor';
 import {
   mockGetEmptyLunchMenusWithPollStatus,
   mockGetLunchMenusWithPollStatus,
@@ -42,7 +42,7 @@ const meta: Meta<typeof MainPage> = {
     ...createMswParameters({
       member: [mockGetCertifiedSsafyMyInfo],
       lunch: [mockGetLunchMenusWithPollStatus],
-      article: [mockGetHotArticles],
+      article: [mockGetHotArticlesByCursor],
       recruit: [mockGetRecruits],
     }),
   },
@@ -121,7 +121,7 @@ export const Empty: MainPageStory = {
     msw: {
       handlers: {
         lunch: [mockGetEmptyLunchMenusWithPollStatus],
-        article: [mockGetEmptyHotArticles],
+        article: [mockGetEmptyHotArticlesByCursor],
         recruit: [mockGetEmptyRecruits],
       },
     },

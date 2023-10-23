@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import {
-  mockGetEmptyHotArticles,
-  mockGetHotArticlesError,
-} from '~/mocks/handlers/article/apis/mockGetHotArticles';
+  mockGetEmptyHotArticlesByCursor,
+  mockGetHotArticlesByCursorError,
+} from '~/mocks/handlers/article/apis/mockGetHotArticlesByCursor';
 import { mockGetEmptyHotArticlesByKeyword } from "~/mocks/handlers/article/apis/mockGetHotArticlesByKeyword";
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
@@ -43,7 +43,7 @@ export const FetchError: HotArticlesPageStory = {
   name: '핫 게시글 목록 불러오기 오류',
   parameters: {
     ...createMswParameters({
-      article: [mockGetHotArticlesError],
+      article: [mockGetHotArticlesByCursorError],
     }),
   },
 };
@@ -52,7 +52,7 @@ export const NotExist: HotArticlesPageStory = {
   name: '빈 핫 게시글 목록',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyHotArticles],
+      article: [mockGetEmptyHotArticlesByCursor],
     }),
   },
 };

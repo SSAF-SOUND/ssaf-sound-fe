@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { mockGetArticleCategories } from '~/mocks/handlers/article/apis/mockGetArticleCategories';
 import {
-  mockGetArticlesError,
-  mockGetEmptyArticles,
-} from '~/mocks/handlers/article/apis/mockGetArticles';
+  mockGetArticlesByCursorError,
+  mockGetEmptyArticlesByCursor,
+} from '~/mocks/handlers/article/apis/mockGetArticlesByCursor';
 import { mockGetEmptyArticlesByKeyword } from '~/mocks/handlers/article/apis/mockGetArticlesByKeyword';
 import {
   createMockGetMyInfo,
@@ -59,7 +59,7 @@ export const FetchError: ArticleCategoryPageStory = {
   name: '게시글 목록 불러오기 오류',
   parameters: {
     ...createMswParameters({
-      article: [mockGetArticlesError],
+      article: [mockGetArticlesByCursorError],
     }),
   },
 };
@@ -68,7 +68,7 @@ export const NotExist: ArticleCategoryPageStory = {
   name: '빈 게시글 목록',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyArticles],
+      article: [mockGetEmptyArticlesByCursor],
     }),
   },
 };

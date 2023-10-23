@@ -18,8 +18,8 @@ import NoSearchResults from '~/components/NoSearchResults';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
-import { getHotArticles } from '~/services/article/apis';
-import { useHotArticles } from '~/services/article/hooks';
+import { getHotArticlesByCursor } from '~/services/article/apis';
+import { useHotArticlesByCursor } from '~/services/article/hooks';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   flex,
@@ -89,7 +89,7 @@ interface HotArticleLayerProps {
 const HotArticleLayer = (props: HotArticleLayerProps) => {
   const { keyword } = props;
   const isValidKeyword = validateSearchKeyword(keyword);
-  const infiniteQuery = useHotArticles({ keyword });
+  const infiniteQuery = useHotArticlesByCursor({ keyword });
 
   const infiniteData = infiniteQuery.data
     ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
@@ -213,7 +213,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   await queryClient.prefetchInfiniteQuery({
     queryKey: hotArticleListQueryKey,
     queryFn: ({ pageParam }) =>
-      getHotArticles({
+      getHotArticlesByCursor({
         cursor: pageParam,
         keyword: safeKeyword,
       }),

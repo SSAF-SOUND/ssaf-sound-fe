@@ -1,29 +1,29 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { getArticles } from '~/services/article/apis';
+import { getHotArticlesByCursor } from '~/services/article/apis';
+import { toMs } from '~/utils';
 
-interface UseArticlesOptions {
+interface UseHotArticlesOptions {
   keyword: string;
 }
 
-export const useArticles = (
-  categoryId: number,
-  options: Partial<UseArticlesOptions> = {}
+export const useHotArticlesByCursor = (
+  options: Partial<UseHotArticlesOptions> = {}
 ) => {
   const { keyword } = options;
-  const queryKey = queryKeys.articles.list(categoryId, keyword);
+  const queryKey = queryKeys.articles.hot(keyword);
 
   return useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam }) =>
-      getArticles({
+      getHotArticlesByCursor({
         cursor: pageParam,
-        categoryId,
         keyword,
       }),
     getNextPageParam: (lastPage) => {
       return lastPage.cursor ?? undefined;
     },
+    staleTime: toMs(60),
   });
 };

@@ -1,5 +1,5 @@
 import type { ResponseComposition, RestContext, RestRequest } from 'msw';
-import type { GetArticlesApiData } from '~/services/article/apis';
+import type { GetArticlesByCursorApiData } from '~/services/article/apis';
 import type { ArticleSummary } from '~/services/article/utils';
 
 import { articleSummaries } from '~/mocks/handlers/article/data';
@@ -43,7 +43,7 @@ const infiniteArticlesHandler = (
 
     return res(
       ctx.delay(500),
-      ...mockSuccess<GetArticlesApiData['data']>(ctx, {
+      ...mockSuccess<GetArticlesByCursorApiData['data']>(ctx, {
         posts: data,
         cursor: nextCursor,
       })

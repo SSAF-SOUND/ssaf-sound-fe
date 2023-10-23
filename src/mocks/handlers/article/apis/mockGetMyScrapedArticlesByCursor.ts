@@ -1,4 +1,4 @@
-import type { GetMyScrapedArticlesApiData } from '~/services/article';
+import type { GetMyScrapedArticlesByCursorApiData } from '~/services/article';
 
 import { rest } from 'msw';
 
@@ -10,15 +10,15 @@ import { API_URL, composeUrls } from '~/utils';
 const getMyScrapedArticlesMethod = 'get';
 const getMyScrapedArticlesEndpoint = composeUrls(
   API_URL,
-  endpoints.articles.myScraped()
+  endpoints.articles.myScrapsByCursor()
 );
 
-export const mockGetMyScrapedArticles = rest[getMyScrapedArticlesMethod](
+export const mockGetMyScrapedArticlesByCursor = rest[getMyScrapedArticlesMethod](
   getMyScrapedArticlesEndpoint,
   restInfiniteArticlesSuccess
 );
 
-export const mockGetMyScrapedArticlesError = restError(
+export const mockGetMyScrapedArticlesByCursorError = restError(
   getMyScrapedArticlesMethod,
   getMyScrapedArticlesEndpoint,
   { message: 'mockGetMyScrapedArticles Error' }
@@ -29,8 +29,8 @@ const emptyArticles = {
   cursor: null,
 };
 
-export const mockGetEmptyMyScrapedArticles = restSuccess<
-  GetMyScrapedArticlesApiData['data']
+export const mockGetEmptyMyScrapedArticlesByCursor = restSuccess<
+  GetMyScrapedArticlesByCursorApiData['data']
 >(getMyScrapedArticlesMethod, getMyScrapedArticlesEndpoint, {
   data: emptyArticles,
 });

@@ -152,16 +152,16 @@ export const endpoints = {
   },
   articles: {
     categories: () => '/boards' as const,
-    list: (params: { keyword?: string } = {}) => {
+    listByCursor: (params: { keyword?: string } = {}) => {
       const { keyword } = params;
-      return keyword ? ('/posts/search' as const) : ('/posts' as const);
+      return keyword ? ('/posts/search/cursor' as const) : ('/posts/cursor' as const);
     },
-    hot: (params: { keyword?: string } = {}) => {
+    hotByCursor: (params: { keyword?: string } = {}) => {
       const { keyword } = params;
-      return keyword ? ('/posts/hot/search' as const) : ('/posts/hot' as const);
+      return keyword ? ('/posts/hot/search/cursor' as const) : ('/posts/hot/cursor' as const);
     },
-    mine: () => '/posts/my' as const,
-    myScraped: () => '/posts/my-scrap' as const,
+    mineByCursor: () => '/posts/my/cursor' as const,
+    myScrapsByCursor: () => '/posts/my-scrap/cursor' as const,
 
     create: (categoryId: number) => `/posts?boardId=${categoryId}` as const,
     detail: (articleId: number) => `/posts/${articleId}` as const,

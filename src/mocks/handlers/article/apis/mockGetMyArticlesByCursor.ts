@@ -1,4 +1,4 @@
-import type { GetMyArticlesApiData } from '~/services/article';
+import type { GetMyArticlesByCursorApiData } from '~/services/article';
 
 import { rest } from 'msw';
 
@@ -8,20 +8,20 @@ import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
 const getMyArticlesMethod = 'get';
-const getMyArticlesEndpoint = composeUrls(API_URL, endpoints.articles.mine());
+const getMyArticlesEndpoint = composeUrls(API_URL, endpoints.articles.mineByCursor());
 
-export const mockGetMyArticles = rest[getMyArticlesMethod](
+export const mockGetMyArticlesByCursor = rest[getMyArticlesMethod](
   getMyArticlesEndpoint,
   restInfiniteArticlesSuccess
 );
 
-export const mockGetMyArticlesError = restError(
+export const mockGetMyArticlesByCursorError = restError(
   getMyArticlesMethod,
   getMyArticlesEndpoint,
   { message: 'mockGetMyArticles Error' }
 );
 
-export const mockGetEmptyMyArticles = restSuccess<GetMyArticlesApiData['data']>(
+export const mockGetEmptyMyArticlesByCursor = restSuccess<GetMyArticlesByCursorApiData['data']>(
   getMyArticlesMethod,
   getMyArticlesEndpoint,
   { data: { cursor: null, posts: [] } }

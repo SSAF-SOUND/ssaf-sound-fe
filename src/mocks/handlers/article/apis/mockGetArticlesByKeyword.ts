@@ -1,4 +1,4 @@
-import type { GetArticlesApiData } from '~/services/article';
+import type { GetArticlesByCursorApiData } from '~/services/article';
 
 import { rest } from 'msw';
 
@@ -10,7 +10,7 @@ import { API_URL, composeUrls } from '~/utils';
 const getArticlesByKeywordMethod = 'get';
 const getArticlesByKeywordEndpoint = composeUrls(
   API_URL,
-  endpoints.articles.list({
+  endpoints.articles.listByCursor({
     keyword: 'keyword',
   })
 );
@@ -34,7 +34,7 @@ const emptyArticles = {
 };
 
 export const mockGetEmptyArticlesByKeyword = restSuccess<
-  GetArticlesApiData['data']
+  GetArticlesByCursorApiData['data']
 >(getArticlesByKeywordMethod, getArticlesByKeywordEndpoint, {
   data: emptyArticles,
 });
