@@ -75,7 +75,12 @@ export const queryKeys = {
     }: {
       searchKeyword?: string;
       page: number;
-    }) => ['articles', 'hot', 'offset', searchKeyword ?? null, page],
+    }) => [
+      ...queryKeys.articles.hotBase(),
+      'offset',
+      searchKeyword ?? null,
+      page,
+    ],
     detail: (articleId: number) => ['articles', articleId],
     mineBase: () => [...queryKeys.auth(), 'my-articles'],
     mineByCursor: () => [...queryKeys.articles.mineBase(), 'cursor'],
