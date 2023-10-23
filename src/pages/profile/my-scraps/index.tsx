@@ -16,7 +16,7 @@ import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
 import TitleBar from '~/components/TitleBar';
-import { useMyScrapedArticles } from '~/services/article';
+import { useMyScrapedArticlesByCursor } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import { useMyScrapedRecruits } from '~/services/recruit/hooks/useMyScrapedRecruits';
 import {
@@ -200,7 +200,7 @@ const tabTriggerCss = css({
 });
 
 const MyScrapedArticlesLayer = () => {
-  const infiniteQuery = useMyScrapedArticles();
+  const infiniteQuery = useMyScrapedArticlesByCursor();
   const infiniteData = infiniteQuery.data
     ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
     : ([] as ArticleSummary[]);

@@ -10,7 +10,7 @@ import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import TitleBar from '~/components/TitleBar';
-import { useMyArticles } from '~/services/article';
+import { useMyArticlesByCursor } from '~/services/article';
 import { useMyInfo } from '~/services/member';
 import { flex, pageCss, titleBarHeight } from '~/styles/utils';
 import {
@@ -69,7 +69,7 @@ MyArticlesPage.auth = createAuthGuard();
 MyArticlesPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const ArticleLayer = () => {
-  const infiniteQuery = useMyArticles();
+  const infiniteQuery = useMyArticlesByCursor();
   const infiniteData = infiniteQuery.data
     ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
     : ([] as ArticleSummary[]);
