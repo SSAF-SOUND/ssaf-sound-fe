@@ -1,3 +1,4 @@
+import type { LinkProps } from 'next/link';
 import type { FC, PropsWithChildren, ReactElement, ReactNode } from 'react';
 
 import Link from 'next/link';
@@ -47,18 +48,22 @@ interface PaginationRootProps {
 
   onClickPreviousButton?: (previousPage: number) => void;
   onClickNextButton?: (nextPage: number) => void;
+
+  /** 페이지 상태를 바인딩할 `router.query`의 키 */
   pageKey?: string;
+
+  /** 페이지가 범위를 벗어났을 때 보여줄 UI */
   invalidFallbackUI?: ReactNode;
 
-  /** `uncontrolled`로 사용할 때만 쓰입니다. */
+  /** `uncontrolled`로 사용할 때만 쓰입니다. `route.query`의 page 값이 바뀔 때 set 됩니다. */
   initialPage?: number;
 
   /**
-   * - controlled 로 사용할 때는 `page`, `onPageChange`를 함께 사용해야합니다.
-   * - `onPageChange`는 `page`값이 `undefined`인 경우엔 호출되지 않습니다.
+   * - controlled 로 사용할 때는 `page`, `onPageRouteValueChange`를 함께 사용해야합니다.
+   * - `onPageRouteValueChange`는 `page`값이 `undefined`인 경우엔 호출되지 않습니다.
    */
   page?: number;
-  onPageChange?: (page: number) => void;
+  onPageRouteValueChange?: (page: number) => void;
   disableOnPageChange?: boolean;
 
   truncStep?: number;
@@ -73,6 +78,7 @@ interface PaginationRootProps {
 const firstPage = 1;
 const defaultBoundaryCount = 1;
 const defaultSiblingCount = 1;
+
 const itemMinWidth = 32;
 const itemMinHeight = 32;
 const itemTextHeight = 24;
@@ -160,7 +166,7 @@ export const PaginationRoot = (props: PaginationRootProps) => {
 
     initialPage = 1,
     page: controlledCurrentPage,
-    onPageChange: onControlledCurrentPageChange,
+    onPageRouteValueChange,
     disableOnPageChange = false,
     truncStep = 5,
     leftTruncUI = defaultLeftTruncUI,
@@ -181,9 +187,9 @@ export const PaginationRoot = (props: PaginationRootProps) => {
     ? controlledCurrentPage
     : uncontrolledCurrentPage;
 
-  const onCurrentPageChange = useCallbackRef(
+  const handlePageRouteValueChange = useCallbackRef(
     controlledCurrentPage !== undefined
-      ? onControlledCurrentPageChange
+      ? onPageRouteValueChange
       : setUncontrolledCurrentPage
   );
 
@@ -238,11 +244,11 @@ export const PaginationRoot = (props: PaginationRootProps) => {
       ? firstPage
       : clamp(target, [firstPage, totalPageCount]);
 
-    onCurrentPageChange?.(safePageRouteValue);
+    handlePageRouteValueChange?.(safePageRouteValue);
   }, [
     pageRouteValue,
     totalPageCount,
-    onCurrentPageChange,
+    handlePageRouteValueChange,
     disableOnPageChange,
   ]);
 
@@ -294,7 +300,7 @@ export const PaginationRoot = (props: PaginationRootProps) => {
   );
 };
 
-export interface PaginationItemProps {
+export interface PaginationItemProps extends Partial<LinkProps> {
   page: number;
   children?: ReactNode;
   className?: string;
@@ -309,9 +315,9 @@ export const PaginationItem = (props: PaginationItemProps) => {
 
   return (
     <Link
-      {...restProps}
       css={[linkCss, isActive && activeLinkCss]}
       href={{ pathname, query: { ...router.query, [pageKey]: page } }}
+      {...restProps}
     >
       {children}
     </Link>
@@ -354,4 +360,4 @@ const Pagination = {
   Item: PaginationItem,
 };
 
-export { Pagination, usePaginationContext };
+export { Pagination, usePaginationContext, paginationClassnames };
