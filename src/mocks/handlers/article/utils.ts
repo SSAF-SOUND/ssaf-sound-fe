@@ -65,7 +65,7 @@ export const paginatedArticlesHandler = (
 
     return res(
       ctx.delay(0),
-      ctx.json<GetArticlesByOffsetApiData['data']>({
+      ...mockSuccess<GetArticlesByOffsetApiData['data']>(ctx, {
         posts: empty ? [] : articleSummaries.slice(0, 20),
         currentPage: page,
         totalPageCount,
