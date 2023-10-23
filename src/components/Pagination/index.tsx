@@ -6,8 +6,16 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
+import { Icon } from '~/components/Common/Icon';
 import { useCallbackRef } from '~/hooks/useCallbackRef';
+import { flex, fontCss, palettes } from '~/styles/utils';
 import { clamp, range } from '~/utils';
+
+const paginationClassnames = {
+  trunc: 'pagination-trunc',
+  leftTrunc: 'pagination-trunc__left',
+  rightTrunc: 'pagination-trunc__right',
+};
 
 interface PaginationContextValues {
   currentPage: number;
@@ -30,7 +38,11 @@ const usePaginationContext = () => {
 
 interface PaginationRootProps {
   totalPageCount: number;
+
+  /** 최솟값 0, default = 1 */
   siblingCount?: number; // 최소 0
+
+  /** 최솟값 0, default = 1 */
   boundaryCount?: number; // 최소 0
 
   onClickPreviousButton?: (previousPage: number) => void;
@@ -38,7 +50,7 @@ interface PaginationRootProps {
   pageKey?: string;
   invalidFallbackUI?: ReactNode;
 
-  /** uncontrolled */
+  /** `uncontrolled`로 사용할 때만 쓰입니다. */
   initialPage?: number;
 
   /**
@@ -50,20 +62,88 @@ interface PaginationRootProps {
   disableOnPageChange?: boolean;
 
   truncStep?: number;
-  leftTruncUI?: ReactNode;
-  rightTruncUI?: ReactNode;
+  leftTruncUI?: (page: number) => ReactElement;
+  rightTruncUI?: (page: number) => ReactElement;
+
+  /** key prop 필수 */
   itemUI?: (page: number) => ReactElement;
   ItemContainer?: FC;
 }
 
 const firstPage = 1;
-const defaultTruncUI = '...';
-const defaultItemUI = (page: number) => (
-  <PaginationItem page={page} key={page} />
+const defaultBoundaryCount = 1;
+const defaultSiblingCount = 1;
+const itemMinWidth = 32;
+const itemMinHeight = 32;
+const itemTextHeight = 24;
+
+const truncIconCss = css({
+  transition: 'opacity 100ms, transform 200ms',
+  [`.${paginationClassnames.trunc}:hover &`]: {
+    transform: `translate3d(0, -${itemTextHeight}px, 0)`,
+    opacity: 0,
+  },
+});
+const truncTextCss = css({
+  transition: 'opacity 100ms, transform 200ms',
+  position: 'absolute',
+  transform: `translate3d(0, ${itemTextHeight}px, 0)`,
+  opacity: 0,
+  [`.${paginationClassnames.trunc}:hover &`]: {
+    opacity: 1,
+    transform: 'translate3d(0, 0, 0)',
+  },
+  pointerEvents: 'none',
+});
+const truncCss = css({
+  height: itemMinHeight,
+  overflow: 'hidden',
+});
+
+const defaultLeftTruncUI = (page: number) => (
+  <li
+    className={[
+      paginationClassnames.trunc,
+      paginationClassnames.leftTrunc,
+    ].join(' ')}
+  >
+    <PaginationItem page={page} css={truncCss}>
+      <Icon
+        name="chevron.left.double"
+        size={itemTextHeight}
+        css={truncIconCss}
+        aria-hidden
+      />
+      <div css={truncTextCss}>{page}</div>
+    </PaginationItem>
+  </li>
 );
-const defaultItemContainer = (
+const defaultRightTruncUI = (page: number) => (
+  <li
+    className={[
+      paginationClassnames.trunc,
+      paginationClassnames.rightTrunc,
+    ].join(' ')}
+  >
+    <PaginationItem page={page}>
+      <Icon
+        name="chevron.right.double"
+        size={itemTextHeight}
+        css={truncIconCss}
+        aria-hidden
+      />
+      <div css={truncTextCss}>{page}</div>
+    </PaginationItem>
+  </li>
+);
+const defaultItemUI = (page: number) => (
+  <li>
+    <PaginationItem page={page} key={page} />
+  </li>
+);
+const DefaultItemContainer = (
   props: PropsWithChildren<{ className?: string }>
-) => <ul {...props} />;
+) => <ul css={itemContainerCss} {...props} />;
 
 // ANATOMY
 // leftBoundaries leftTrunc siblings rightTrunc rightBoundaries
@@ -74,8 +154,8 @@ export const PaginationRoot = (props: PaginationRootProps) => {
     totalPageCount,
     onClickPreviousButton,
     onClickNextButton,
-    boundaryCount: unsafeBoundaryCount = 1,
-    siblingCount: unsafeSiblingCount = 1,
+    boundaryCount: unsafeBoundaryCount = defaultBoundaryCount,
+    siblingCount: unsafeSiblingCount = defaultSiblingCount,
     invalidFallbackUI,
 
     initialPage = 1,
@@ -83,12 +163,12 @@ export const PaginationRoot = (props: PaginationRootProps) => {
     onPageChange: onControlledCurrentPageChange,
     disableOnPageChange = false,
     truncStep = 5,
-    leftTruncUI = defaultTruncUI,
-    rightTruncUI = defaultTruncUI,
+    leftTruncUI = defaultLeftTruncUI,
+    rightTruncUI = defaultRightTruncUI,
 
     // key prop 필수
     itemUI = defaultItemUI,
-    ItemContainer = defaultItemContainer,
+    ItemContainer = DefaultItemContainer,
   } = props;
 
   const router = useRouter();
@@ -188,11 +268,7 @@ export const PaginationRoot = (props: PaginationRootProps) => {
               range(leftBoundaryEnd + 1, siblingEnd).map(itemUI)
             ) : (
               <>
-                <PaginationItem
-                  page={Math.max(firstPage, currentPage - truncStep)}
-                >
-                  {leftTruncUI}
-                </PaginationItem>
+                {leftTruncUI(Math.max(firstPage, currentPage - truncStep))}
                 {range(siblingStart, siblingEnd).map(itemUI)}
               </>
             )}
@@ -201,11 +277,7 @@ export const PaginationRoot = (props: PaginationRootProps) => {
               range(siblingEnd + 1, rightBoundaryEnd).map(itemUI)
             ) : (
               <>
-                <PaginationItem
-                  page={Math.max(firstPage, currentPage + truncStep)}
-                >
-                  {rightTruncUI}
-                </PaginationItem>
+                {rightTruncUI(Math.max(firstPage, currentPage + truncStep))}
                 {range(rightBoundaryStart, rightBoundaryEnd).map(itemUI)}
               </>
             )}
@@ -236,23 +308,50 @@ export const PaginationItem = (props: PaginationItemProps) => {
   const isActive = currentPage === page;
 
   return (
-    <li {...restProps}>
-      <Link
-        css={[linkCss, isActive && activeLinkCss]}
-        href={{ pathname, query: { ...router.query, [pageKey]: page } }}
-      >
-        {children}
-      </Link>
-    </li>
+    <Link
+      {...restProps}
+      css={[linkCss, isActive && activeLinkCss]}
+      href={{ pathname, query: { ...router.query, [pageKey]: page } }}
+    >
+      {children}
+    </Link>
   );
 };
 
-const linkCss = css({});
-const activeLinkCss = css({});
+const itemContainerCss = css(flex('center', 'center', 'row', 6, 'wrap'));
+const linkCss = css(
+  {
+    userSelect: 'none',
+    transition: 'color 200ms, background-color 200ms',
+    minWidth: itemMinWidth,
+    minHeight: itemMinHeight,
+    padding: 4,
+    borderRadius: 8,
+    color: palettes.black,
+    backgroundColor: palettes.grey4,
+    '&:hover, &:focus-visible': {
+      backgroundColor: palettes.primary.light,
+    },
+    '&:active': {
+      backgroundColor: palettes.primary.dark,
+      color: palettes.white,
+    },
+  },
+  fontCss.style.R14,
+  flex('center', 'center')
+);
+const activeLinkCss = css(
+  {
+    color: palettes.white,
+    backgroundColor: palettes.primary.dark,
+    '&:hover, &:focus-visible': { backgroundColor: palettes.primary.dark },
+  },
+  fontCss.style.B14
+);
 
-export const Pagination = {
+const Pagination = {
   Root: PaginationRoot,
   Item: PaginationItem,
 };
 
-export { usePaginationContext };
+export { Pagination, usePaginationContext };
