@@ -29,5 +29,6 @@ export const useHotArticlesByOffset = (
         keyword,
       }),
     staleTime: toMs(30),
+    keepPreviousData: true,
   });
 };

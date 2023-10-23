@@ -19,5 +19,6 @@ export const useMyScrapedArticlesByOffset = (
     queryKey: queryKeys.articles.myScrapedByOffset({ page }),
     queryFn: () => getMyScrapedArticlesByOffset({ page }),
     staleTime: toMs(30),
+    keepPreviousData: true,
   });
 };

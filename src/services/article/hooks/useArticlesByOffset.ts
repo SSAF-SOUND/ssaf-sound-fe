@@ -30,5 +30,6 @@ export const useArticlesByOffset = (params: UseArticlesByOffsetParams) => {
         keyword,
       }),
     staleTime: toMs(30),
+    keepPreviousData: true,
   });
 };
