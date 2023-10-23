@@ -15,12 +15,12 @@ const getArticlesByKeywordEndpoint = composeUrls(
   })
 );
 
-export const mockGetArticlesByKeyword = rest[getArticlesByKeywordMethod](
+export const mockGetArticlesByKeywordByCursor = rest[getArticlesByKeywordMethod](
   getArticlesByKeywordEndpoint,
   restInfiniteArticlesSuccess
 );
 
-export const mockGetArticlesByKeywordError = restError(
+export const mockGetArticlesByKeywordByCursorError = restError(
   getArticlesByKeywordMethod,
   getArticlesByKeywordEndpoint,
   {
@@ -33,7 +33,7 @@ const emptyArticles = {
   cursor: null,
 };
 
-export const mockGetEmptyArticlesByKeyword = restSuccess<
+export const mockGetEmptyArticlesByKeywordByCursor = restSuccess<
   GetArticlesByCursorApiData['data']
 >(getArticlesByKeywordMethod, getArticlesByKeywordEndpoint, {
   data: emptyArticles,

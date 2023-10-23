@@ -15,12 +15,12 @@ const getHotArticlesByKeywordEndpoint = composeUrls(
   })
 );
 
-export const mockGetHotArticlesByKeyword = rest[getHotArticlesByKeywordMethod](
+export const mockGetHotArticlesByKeywordByCursor = rest[getHotArticlesByKeywordMethod](
   getHotArticlesByKeywordEndpoint,
   restInfiniteArticlesSuccess
 );
 
-export const mockGetHotArticlesByKeywordError = restError(
+export const mockGetHotArticlesByKeywordByCursorError = restError(
   getHotArticlesByKeywordMethod,
   getHotArticlesByKeywordEndpoint,
   { message: 'mockGetHotArticlesByKeyword Error' }
@@ -31,7 +31,7 @@ const emptyHotArticles = {
   cursor: null,
 };
 
-export const mockGetEmptyHotArticlesByKeyword = restSuccess<
+export const mockGetEmptyHotArticlesByKeywordByCursor = restSuccess<
   GetHotArticlesByCursorApiData['data']
 >(getHotArticlesByKeywordMethod, getHotArticlesByKeywordEndpoint, {
   data: emptyHotArticles,

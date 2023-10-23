@@ -1,9 +1,13 @@
 import type { ResponseComposition, RestContext, RestRequest } from 'msw';
-import type { GetArticlesByCursorApiData } from '~/services/article/apis';
+import type {
+  GetArticlesByCursorApiData,
+  GetArticlesByOffsetApiData,
+} from '~/services/article/apis';
 import type { ArticleSummary } from '~/services/article/utils';
 
 import { articleSummaries } from '~/mocks/handlers/article/data';
 import { mockError, mockSuccess } from '~/mocks/utils';
+import { defaultArticlesPageKey } from '~/services/article/apis';
 
 interface InfiniteArticlesHandlerOptions {
   error: boolean;
@@ -46,6 +50,25 @@ const infiniteArticlesHandler = (
       ...mockSuccess<GetArticlesByCursorApiData['data']>(ctx, {
         posts: data,
         cursor: nextCursor,
+      })
+    );
+  };
+};
+
+export const paginatedArticlesHandler = (
+  empty = false,
+  totalPageCount = 200
+) => {
+  return (req: RestRequest, res: ResponseComposition, ctx: RestContext) => {
+    const unsafePage = Number(req.url.searchParams.get(defaultArticlesPageKey));
+    const page = Number.isNaN(unsafePage) ? 1 : unsafePage;
+
+    return res(
+      ctx.delay(0),
+      ctx.json<GetArticlesByOffsetApiData['data']>({
+        posts: empty ? [] : articleSummaries.slice(0, 20),
+        currentPage: page,
+        totalPageCount,
       })
     );
   };
