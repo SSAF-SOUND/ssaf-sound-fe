@@ -9,7 +9,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { Icon } from '~/components/Common/Icon';
 import { useCallbackRef } from '~/hooks/useCallbackRef';
-import { flex, fontCss, palettes } from '~/styles/utils';
+import { colorMix, flex, fontCss, palettes } from '~/styles/utils';
 import { clamp, range } from '~/utils';
 
 const paginationClassnames = {
@@ -37,7 +37,7 @@ const usePaginationContext = () => {
   return context;
 };
 
-interface PaginationRootProps {
+export interface PaginationRootProps {
   totalPageCount: number;
 
   /** 최솟값 0, default = 1 */
@@ -67,89 +67,30 @@ interface PaginationRootProps {
   disableOnPageChange?: boolean;
 
   truncStep?: number;
-  leftTruncUI?: (page: number) => ReactElement;
-  rightTruncUI?: (page: number) => ReactElement;
+  leftTruncUI?: (
+    page: number,
+    currentPage: number,
+    lastPage: number
+  ) => ReactElement;
+  rightTruncUI?: (
+    page: number,
+    currentPage: number,
+    lastPage: number
+  ) => ReactElement;
 
   /** key prop 필수 */
-  itemUI?: (page: number) => ReactElement;
+  itemUI?: (
+    page: number,
+    currentPage: number,
+    lastPage: number
+  ) => ReactElement;
   ItemContainer?: FC;
+  className?: string;
 }
 
 const firstPage = 1;
 const defaultBoundaryCount = 1;
 const defaultSiblingCount = 1;
-
-const itemMinWidth = 32;
-const itemMinHeight = 32;
-const itemTextHeight = 24;
-
-const truncIconCss = css({
-  transition: 'opacity 100ms, transform 200ms',
-  [`.${paginationClassnames.trunc}:hover &`]: {
-    transform: `translate3d(0, -${itemTextHeight}px, 0)`,
-    opacity: 0,
-  },
-});
-const truncTextCss = css({
-  transition: 'opacity 100ms, transform 200ms',
-  position: 'absolute',
-  transform: `translate3d(0, ${itemTextHeight}px, 0)`,
-  opacity: 0,
-  [`.${paginationClassnames.trunc}:hover &`]: {
-    opacity: 1,
-    transform: 'translate3d(0, 0, 0)',
-  },
-  pointerEvents: 'none',
-});
-const truncCss = css({
-  height: itemMinHeight,
-  overflow: 'hidden',
-});
-
-const defaultLeftTruncUI = (page: number) => (
-  <li
-    className={[
-      paginationClassnames.trunc,
-      paginationClassnames.leftTrunc,
-    ].join(' ')}
-  >
-    <PaginationItem page={page} css={truncCss}>
-      <Icon
-        name="chevron.left.double"
-        size={itemTextHeight}
-        css={truncIconCss}
-        aria-hidden
-      />
-      <div css={truncTextCss}>{page}</div>
-    </PaginationItem>
-  </li>
-);
-const defaultRightTruncUI = (page: number) => (
-  <li
-    className={[
-      paginationClassnames.trunc,
-      paginationClassnames.rightTrunc,
-    ].join(' ')}
-  >
-    <PaginationItem page={page}>
-      <Icon
-        name="chevron.right.double"
-        size={itemTextHeight}
-        css={truncIconCss}
-        aria-hidden
-      />
-      <div css={truncTextCss}>{page}</div>
-    </PaginationItem>
-  </li>
-);
-const defaultItemUI = (page: number) => (
-  <li>
-    <PaginationItem page={page} key={page} />
-  </li>
-);
-const DefaultItemContainer = (
-  props: PropsWithChildren<{ className?: string }>
-) => <ul css={itemContainerCss} {...props} />;
 
 // ANATOMY
 // leftBoundaries leftTrunc siblings rightTrunc rightBoundaries
@@ -175,6 +116,7 @@ export const PaginationRoot = (props: PaginationRootProps) => {
     // key prop 필수
     itemUI = defaultItemUI,
     ItemContainer = DefaultItemContainer,
+    className,
   } = props;
 
   const router = useRouter();
@@ -257,7 +199,7 @@ export const PaginationRoot = (props: PaginationRootProps) => {
       {isInvalidPage && invalidFallbackUI ? (
         invalidFallbackUI
       ) : (
-        <nav>
+        <nav className={className}>
           <ItemContainer>
             {/*<li>*/}
             {/*  <IconButton*/}
@@ -268,23 +210,41 @@ export const PaginationRoot = (props: PaginationRootProps) => {
             {/*  </IconButton>*/}
             {/*</li>*/}
 
-            {range(leftBoundaryStart, leftBoundaryEnd).map(itemUI)}
+            {range(leftBoundaryStart, leftBoundaryEnd).map((page) =>
+              itemUI(page, currentPage, totalPageCount)
+            )}
 
             {skipLeftTrunc ? (
-              range(leftBoundaryEnd + 1, siblingEnd).map(itemUI)
+              range(leftBoundaryEnd + 1, siblingEnd).map((page) =>
+                itemUI(page, currentPage, totalPageCount)
+              )
             ) : (
               <>
-                {leftTruncUI(Math.max(firstPage, currentPage - truncStep))}
-                {range(siblingStart, siblingEnd).map(itemUI)}
+                {leftTruncUI(
+                  Math.max(firstPage, currentPage - truncStep),
+                  currentPage,
+                  totalPageCount
+                )}
+                {range(siblingStart, siblingEnd).map((page) =>
+                  itemUI(page, currentPage, totalPageCount)
+                )}
               </>
             )}
 
             {skipRightTrunc ? (
-              range(siblingEnd + 1, rightBoundaryEnd).map(itemUI)
+              range(siblingEnd + 1, rightBoundaryEnd).map((page) =>
+                itemUI(page, currentPage, totalPageCount)
+              )
             ) : (
               <>
-                {rightTruncUI(Math.max(firstPage, currentPage + truncStep))}
-                {range(rightBoundaryStart, rightBoundaryEnd).map(itemUI)}
+                {rightTruncUI(
+                  Math.max(firstPage, currentPage + truncStep),
+                  currentPage,
+                  totalPageCount
+                )}
+                {range(rightBoundaryStart, rightBoundaryEnd).map((page) =>
+                  itemUI(page, currentPage, totalPageCount)
+                )}
               </>
             )}
 
@@ -318,13 +278,61 @@ export const PaginationItem = (props: PaginationItemProps) => {
       css={[linkCss, isActive && activeLinkCss]}
       href={{ pathname, query: { ...router.query, [pageKey]: page } }}
       {...restProps}
+      aria-label={`${page}페이지로 이동`}
     >
       {children}
     </Link>
   );
 };
 
-const itemContainerCss = css(flex('center', 'center', 'row', 6, 'wrap'));
+const itemMinWidth = 32;
+const itemMinHeight = 32;
+const itemTextHeight = 24;
+
+const truncCss = css({
+  height: itemMinHeight,
+});
+
+const defaultLeftTruncUI = (page: number) => (
+  <li
+    className={[
+      paginationClassnames.trunc,
+      paginationClassnames.leftTrunc,
+    ].join(' ')}
+  >
+    <PaginationItem page={page} css={truncCss}>
+      <Icon name="chevron.left.double" size={itemTextHeight} aria-hidden />
+    </PaginationItem>
+  </li>
+);
+const defaultRightTruncUI = (page: number) => (
+  <li
+    className={[
+      paginationClassnames.trunc,
+      paginationClassnames.rightTrunc,
+    ].join(' ')}
+  >
+    <PaginationItem page={page} css={truncCss}>
+      <Icon name="chevron.right.double" size={itemTextHeight} aria-hidden />
+    </PaginationItem>
+  </li>
+);
+const defaultItemUI = (page: number, currentPage: number, lastPage: number) => (
+  <li>
+    <PaginationItem page={page} key={page}>
+      {page === lastPage && page >= 1000 ? (
+        <Icon name="last-page" label={String(page)} />
+      ) : (
+        page
+      )}
+    </PaginationItem>
+  </li>
+);
+const DefaultItemContainer = (
+  props: PropsWithChildren<{ className?: string }>
+) => <ul css={itemContainerCss} {...props} />;
+
+const itemContainerCss = css({}, flex('center', 'center', 'row', 8, 'wrap'));
 const linkCss = css(
   {
     userSelect: 'none',
@@ -333,23 +341,23 @@ const linkCss = css(
     minHeight: itemMinHeight,
     padding: 4,
     borderRadius: 8,
-    color: palettes.black,
-    backgroundColor: palettes.grey4,
+    color: palettes.white,
+    backgroundColor: colorMix('70%', palettes.background.grey, palettes.grey2),
     '&:hover, &:focus-visible': {
-      backgroundColor: palettes.primary.light,
+      backgroundColor: palettes.primary.dark,
     },
     '&:active': {
       backgroundColor: palettes.primary.dark,
-      color: palettes.white,
     },
   },
   fontCss.style.R14,
+  fontCss.family.pretendard,
   flex('center', 'center')
 );
 const activeLinkCss = css(
   {
     color: palettes.white,
-    backgroundColor: palettes.primary.dark,
+    backgroundColor: palettes.primary.darken,
     '&:hover, &:focus-visible': { backgroundColor: palettes.primary.dark },
   },
   fontCss.style.B14

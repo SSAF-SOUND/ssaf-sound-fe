@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import {
-  mockGetEmptyMyArticles,
-  mockGetMyArticles,
-  mockGetMyArticlesError,
-} from '~/mocks/handlers/article/apis/mockGetMyArticles';
+  mockGetEmptyMyArticlesByCursor,
+  mockGetMyArticlesByCursor,
+  mockGetMyArticlesByCursorError,
+} from '~/mocks/handlers/article/apis/mockGetMyArticlesByCursor';
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import MyArticlesPage from '~/pages/profile/my-articles';
@@ -39,7 +39,7 @@ export const Default: MyArticlesPageStory = {
   name: '정상',
   parameters: {
     ...createMswParameters({
-      article: [mockGetMyArticles],
+      article: [mockGetMyArticlesByCursor],
     }),
   },
 };
@@ -48,7 +48,7 @@ export const Empty: MyArticlesPageStory = {
   name: '빈 데이터',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyMyArticles],
+      article: [mockGetEmptyMyArticlesByCursor],
     }),
   },
 };
@@ -57,7 +57,7 @@ export const Error: MyArticlesPageStory = {
   name: '에러',
   parameters: {
     ...createMswParameters({
-      article: [mockGetMyArticlesError],
+      article: [mockGetMyArticlesByCursorError],
     }),
   },
 };

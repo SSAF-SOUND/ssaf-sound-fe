@@ -55,6 +55,8 @@ import {
   MdOutlineChat,
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
+  MdLastPage,
+  MdFirstPage,
 } from 'react-icons/md';
 import { RiKakaoTalkFill, RiSendPlane2Line } from 'react-icons/ri';
 import { TbPencilPlus, TbSquareRoundedCheckFilled } from 'react-icons/tb';
@@ -109,6 +111,8 @@ export const icons = {
   [`chevron.right.double`]: <MdKeyboardDoubleArrowRight />,
   [`arrow.right`]: <AiFillCaretRight />,
   [`arrow.down`]: <AiFillCaretDown />,
+  [`last-page`]: <MdLastPage />,
+  [`first-page`]: <MdFirstPage />,
 
   image: <BiImageAdd />,
   link: <MdLink />,

@@ -1,9 +1,9 @@
 import type { CustomNextPage } from 'next/types';
-import type { ArticleSummary } from '~/services/article';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { useState } from 'react';
 
 import { HotArticleCard } from '~/components/ArticleCard';
 import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
@@ -11,15 +11,25 @@ import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Separator } from '~/components/Common/Separator';
 import { Tabs } from '~/components/Common/Tabs';
+import { EmptyList } from '~/components/EmptyList';
 import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
+import { QueryItemList } from '~/components/QueryItemList';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
+import { ResponsivePagination } from '~/components/ResponsivePagination';
 import TitleBar from '~/components/TitleBar';
-import { useMyScrapedArticles } from '~/services/article';
+import {
+  defaultArticlesFirstPage,
+  defaultArticlesPageKey,
+  useMyScrapedArticlesByOffset,
+} from '~/services/article';
+import { toSafePageValue } from '~/services/common/utils/pagination';
 import { useMyInfo } from '~/services/member';
 import { useMyScrapedRecruits } from '~/services/recruit/hooks/useMyScrapedRecruits';
 import {
+  fixedFullWidth,
+  flex,
   pageCss,
   pageMaxWidth,
   pageMinWidth,
@@ -45,7 +55,7 @@ const metaTitle = titleBarTitle;
 
 const getSafeTab = (category?: string) => {
   if (PossibleMyScrapsTabValueSet.has(category as PossibleMyScrapsTabValue)) {
-    return category;
+    return category as PossibleMyScrapsTabValue;
   }
 
   return defaultTab;
@@ -53,27 +63,45 @@ const getSafeTab = (category?: string) => {
 
 const enum ParamsKey {
   TAB = 'tab',
+  PAGE = defaultArticlesPageKey,
 }
 
 type Params = {
-  [ParamsKey.TAB]: string;
+  [ParamsKey.TAB]?: string;
+  [ParamsKey.PAGE]?: PossibleMyScrapsTabValue;
 };
 
 const MyScrapsPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
   const router = useRouter();
-  const { tab } = router.query as Partial<Params>;
+  const { tab, page } = router.query as Params;
   const safeTab = getSafeTab(tab);
+  const safePage = toSafePageValue(page);
+  const [latestPages, setLatestPages] = useState({
+    [PossibleMyScrapsTabValue.ARTICLES]: defaultArticlesFirstPage,
+    [PossibleMyScrapsTabValue.RECRUITS]: defaultArticlesFirstPage,
+  });
 
   if (!myInfo) {
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 
   const onTabValueChange = (value: string) => {
+    const tabValue = value as PossibleMyScrapsTabValue;
+    const currentTab = safeTab;
+
+    const latestPageOfTargetTab = latestPages[tabValue];
+
+    setLatestPages((p) => ({
+      ...p,
+      [currentTab]: safePage,
+    }));
+
     router.replace({
       query: {
         ...router.query,
-        [ParamsKey.TAB]: value,
+        [ParamsKey.TAB]: tabValue,
+        [ParamsKey.PAGE]: latestPageOfTargetTab,
       },
     });
   };
@@ -110,13 +138,13 @@ const MyScrapsPage: CustomNextPage = () => {
             css={contentCss}
             value={PossibleMyScrapsTabValue.ARTICLES}
           >
-            <MyScrapedArticlesLayer />
+            <MyScrapedArticlesLayer page={safePage} />
           </Tabs.Content>
           <Tabs.Content
             css={contentCss}
             value={PossibleMyScrapsTabValue.RECRUITS}
           >
-            <MyScrapedRecruitsLayer />
+            <MyScrapedRecruitsLayer page={safePage} />
           </Tabs.Content>
         </Tabs.Root>
       </div>
@@ -129,12 +157,13 @@ MyScrapsPage.auth = createAuthGuard();
 MyScrapsPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const tabListContainerTop = titleBarHeight + breadcrumbsHeight;
-const tabListContainerPaddingY = 16;
+const tabListContainerPaddingY = 8;
 const tabListHeight = 24;
-const tabListContainerZIndex = 2;
-
-const selfPaddingTop =
-  tabListContainerTop + tabListHeight + tabListContainerPaddingY * 2 + 30;
+const fixedLayoutZIndex = 2;
+const paginationTop =
+  tabListContainerTop + tabListHeight + 2 * tabListContainerPaddingY;
+const paginationHeight = 32 + 24;
+const selfPaddingTop = paginationTop + paginationHeight;
 
 const selfCss = css(pageCss.minHeight, {
   padding: `${selfPaddingTop}px 0 0`,
@@ -147,6 +176,18 @@ const tabTriggersTextMap = {
 };
 
 const contentCss = css({});
+
+const paginationCss = css(
+  position.xy('center', 'start', 'fixed'),
+  fixedFullWidth,
+  flex('center', 'center', 'column'),
+  {
+    top: paginationTop,
+    zIndex: fixedLayoutZIndex,
+    height: paginationHeight,
+    backgroundColor: palettes.background.default,
+  }
+);
 
 const TabList = () => {
   return (
@@ -187,7 +228,7 @@ const tabListContainerCss = css(
     backgroundColor: palettes.background.default,
     padding: `${tabListContainerPaddingY}px 0`,
     top: tabListContainerTop,
-    zIndex: tabListContainerZIndex,
+    zIndex: fixedLayoutZIndex,
     minWidth: pageMinWidth,
     maxWidth: pageMaxWidth,
     width: '100%',
@@ -199,29 +240,61 @@ const tabTriggerCss = css({
   border: 0,
 });
 
-const MyScrapedArticlesLayer = () => {
-  const infiniteQuery = useMyScrapedArticles();
-  const infiniteData = infiniteQuery.data
-    ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
-    : ([] as ArticleSummary[]);
+interface MyScrapedArticlesLayerProps {
+  page: number;
+}
+
+const listContainerCss = css([
+  flex('', '', 'column', 16),
+  { paddingBottom: 120 },
+]);
+const MyScrapedArticlesLayer = (props: MyScrapedArticlesLayerProps) => {
+  const { page } = props;
+
+  const myScrapedArticlesQuery = useMyScrapedArticlesByOffset({ page });
 
   return (
-    <InfiniteList
-      data={infiniteData}
-      infiniteQuery={infiniteQuery}
+    <QueryItemList
+      css={listContainerCss}
+      query={myScrapedArticlesQuery}
       skeleton={<HotArticleCard.Skeleton />}
       skeletonCount={6}
-      useWindowScroll={true}
-      skeletonGap={16}
-      itemContent={(_, article) => <HotArticleCard article={article} />}
-      emptyElement={
-        <EmptyInfiniteList text="아직 스크랩한 게시글이 없습니다." />
-      }
+      render={(data) => {
+        const { currentPage, posts, totalPageCount } = data;
+        const isEmpty = posts.length === 0;
+        const isValidPage = currentPage <= totalPageCount;
+
+        return (
+          <>
+            <div css={paginationCss}>
+              <ResponsivePagination
+                totalPageCount={totalPageCount}
+                initialPage={currentPage}
+              />
+            </div>
+            {isEmpty ? (
+              isValidPage ? (
+                <EmptyList text="아직 스크랩한 게시글이 없습니다." />
+              ) : (
+                <EmptyList text="유효하지 않은 페이지입니다." />
+              )
+            ) : (
+              posts.map((post) => (
+                <HotArticleCard article={post} key={post.postId} />
+              ))
+            )}
+          </>
+        );
+      }}
     />
   );
 };
 
-const MyScrapedRecruitsLayer = () => {
+interface MyScrapedRecruitsLayerProps {
+  page: number;
+}
+const MyScrapedRecruitsLayer = (props: MyScrapedRecruitsLayerProps) => {
+  const { page } = props;
   const infiniteQuery = useMyScrapedRecruits();
   const infiniteData =
     infiniteQuery?.data?.pages.map(({ recruits }) => recruits).reduce(concat) ??

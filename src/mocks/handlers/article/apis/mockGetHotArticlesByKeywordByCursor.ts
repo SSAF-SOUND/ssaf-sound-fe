@@ -1,4 +1,4 @@
-import type { GetHotArticlesApiData } from '~/services/article';
+import type { GetHotArticlesByCursorApiData } from '~/services/article';
 
 import { rest } from 'msw';
 
@@ -10,17 +10,17 @@ import { API_URL, composeUrls } from '~/utils';
 const getHotArticlesByKeywordMethod = 'get';
 const getHotArticlesByKeywordEndpoint = composeUrls(
   API_URL,
-  endpoints.articles.hot({
+  endpoints.articles.hotByCursor({
     keyword: 'keyword',
   })
 );
 
-export const mockGetHotArticlesByKeyword = rest[getHotArticlesByKeywordMethod](
+export const mockGetHotArticlesByKeywordByCursor = rest[getHotArticlesByKeywordMethod](
   getHotArticlesByKeywordEndpoint,
   restInfiniteArticlesSuccess
 );
 
-export const mockGetHotArticlesByKeywordError = restError(
+export const mockGetHotArticlesByKeywordByCursorError = restError(
   getHotArticlesByKeywordMethod,
   getHotArticlesByKeywordEndpoint,
   { message: 'mockGetHotArticlesByKeyword Error' }
@@ -31,8 +31,8 @@ const emptyHotArticles = {
   cursor: null,
 };
 
-export const mockGetEmptyHotArticlesByKeyword = restSuccess<
-  GetHotArticlesApiData['data']
+export const mockGetEmptyHotArticlesByKeywordByCursor = restSuccess<
+  GetHotArticlesByCursorApiData['data']
 >(getHotArticlesByKeywordMethod, getHotArticlesByKeywordEndpoint, {
   data: emptyHotArticles,
 });

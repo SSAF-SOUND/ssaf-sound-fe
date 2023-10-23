@@ -41,16 +41,57 @@ export const queryKeys = {
   },
   articles: {
     categories: () => ['articles', 'categories'],
-    list: (categoryId: number, searchKeyword?: string) => [
-      'articles',
-      'category',
+    listBase: () => ['articles', 'category'],
+    listByCursor: (categoryId: number, searchKeyword?: string) => [
+      ...queryKeys.articles.listBase(),
       categoryId,
+      'cursor',
       searchKeyword ?? null,
     ],
-    hot: (searchKeyword?: string) => ['articles', 'hot', searchKeyword ?? null],
+    listByOffset: ({
+      categoryId,
+      searchKeyword,
+      page,
+    }: {
+      categoryId: number;
+      searchKeyword?: string;
+      page: number;
+    }) => [
+      ...queryKeys.articles.listBase(),
+      categoryId,
+      'offset',
+      searchKeyword ?? null,
+      page,
+    ],
+    hotBase: () => ['articles', 'hot'],
+    hotByCursor: (searchKeyword?: string) => [
+      ...queryKeys.articles.hotBase(),
+      'cursor',
+      searchKeyword ?? null,
+    ],
+    hotByOffset: ({
+      searchKeyword,
+      page,
+    }: {
+      searchKeyword?: string;
+      page: number;
+    }) => ['articles', 'hot', 'offset', searchKeyword ?? null, page],
     detail: (articleId: number) => ['articles', articleId],
-    mine: () => [...queryKeys.auth(), 'my-articles'],
-    myScraped: () => [...queryKeys.auth(), 'my-scraped-articles'],
+    mineBase: () => [...queryKeys.auth(), 'my-articles'],
+    mineByCursor: () => [...queryKeys.articles.mineBase(), 'cursor'],
+    mineByOffset: ({ page }: { page: number }) => [
+      ...queryKeys.articles.mineBase(),
+      'offset',
+      page,
+    ],
+    myScrapedBase: () => [...queryKeys.auth(), 'my-scraped-articles'],
+    myScrapedByCursor: () => [...queryKeys.articles.myScrapedBase(), 'cursor'],
+    myScrapedByOffset: ({ page }: { page: number }) => [
+      ...queryKeys.articles.myScrapedBase(),
+
+      'offset',
+      page,
+    ],
   },
   articleComments: {
     list: (articleId: number) => ['comments', articleId],
@@ -152,17 +193,34 @@ export const endpoints = {
   },
   articles: {
     categories: () => '/boards' as const,
-    list: (params: { keyword?: string } = {}) => {
+    listByCursor: (params: { keyword?: string } = {}) => {
       const { keyword } = params;
-      return keyword ? ('/posts/search' as const) : ('/posts' as const);
+      return keyword
+        ? ('/posts/search/cursor' as const)
+        : ('/posts/cursor' as const);
     },
-    hot: (params: { keyword?: string } = {}) => {
+    listByOffset: (params: { keyword?: string } = {}) => {
       const { keyword } = params;
-      return keyword ? ('/posts/hot/search' as const) : ('/posts/hot' as const);
+      return keyword
+        ? ('/posts/search/offset' as const)
+        : ('/posts/offset' as const);
     },
-    mine: () => '/posts/my' as const,
-    myScraped: () => '/posts/my-scrap' as const,
-
+    hotByCursor: (params: { keyword?: string } = {}) => {
+      const { keyword } = params;
+      return keyword
+        ? ('/posts/hot/search/cursor' as const)
+        : ('/posts/hot/cursor' as const);
+    },
+    hotByOffset: (params: { keyword?: string } = {}) => {
+      const { keyword } = params;
+      return keyword
+        ? ('/posts/hot/search/offset' as const)
+        : ('/posts/hot/offset' as const);
+    },
+    mineByCursor: () => '/posts/my/cursor' as const,
+    mineByOffset: () => '/posts/my/offset' as const,
+    myScrapsByCursor: () => '/posts/my-scrap/cursor' as const,
+    myScrapsByOffset: () => '/posts/my-scrap/offset' as const,
     create: (categoryId: number) => `/posts?boardId=${categoryId}` as const,
     detail: (articleId: number) => `/posts/${articleId}` as const,
     like: (articleId: number) =>

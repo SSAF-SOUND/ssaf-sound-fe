@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import {
-  mockGetEmptyMyScrapedArticles,
-  mockGetMyScrapedArticles,
-  mockGetMyScrapedArticlesError,
-} from '~/mocks/handlers/article/apis/mockGetMyScrapedArticles';
+  mockGetEmptyMyScrapedArticlesByCursor,
+  mockGetMyScrapedArticlesByCursor,
+  mockGetMyScrapedArticlesByCursorError,
+} from '~/mocks/handlers/article/apis/mockGetMyScrapedArticlesByCursor';
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import {
@@ -44,7 +44,7 @@ export const Default: MyScrapsPageStory = {
   name: '정상',
   parameters: {
     ...createMswParameters({
-      article: [mockGetMyScrapedArticles],
+      article: [mockGetMyScrapedArticlesByCursor],
       recruit: [mockGetMyScrapedRecruits],
     }),
   },
@@ -54,7 +54,7 @@ export const Empty: MyScrapsPageStory = {
   name: '빈 데이터',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyMyScrapedArticles],
+      article: [mockGetEmptyMyScrapedArticlesByCursor],
       recruit: [mockGetEmptyMyScrapedRecruits],
     }),
   },
@@ -64,7 +64,7 @@ export const Error: MyScrapsPageStory = {
   name: '에러',
   parameters: {
     ...createMswParameters({
-      article: [mockGetMyScrapedArticlesError],
+      article: [mockGetMyScrapedArticlesByCursorError],
       recruit: [mockGetMyScrapedRecruitsError],
     }),
   },

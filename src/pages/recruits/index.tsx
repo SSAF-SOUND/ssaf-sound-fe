@@ -73,7 +73,7 @@ const RecruitsPage = (props: Props) => {
   const router = useRouter();
   const routerQuery = router.query as Params;
 
-  const { query: safeQuery } = routes.recruit.list({
+  const { query: safeQuery, pathname } = routes.recruit.list({
     ...routerQuery,
     includeCompleted: stringToBoolean(
       routerQuery?.[ParamsKey.INCLUDE_COMPLETED]

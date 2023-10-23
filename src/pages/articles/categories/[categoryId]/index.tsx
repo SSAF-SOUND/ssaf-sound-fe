@@ -3,7 +3,10 @@ import type {
   InferGetServerSidePropsType,
 } from 'next/types';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
-import type { ArticleSummary } from '~/services/article';
+import type {
+  GetArticlesByOffsetApiData,
+  defaultArticlesPageKey,
+} from '~/services/article';
 
 import { useRouter } from 'next/router';
 
@@ -15,22 +18,29 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { CircleButton } from '~/components/Common/CircleButton';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { EmptyList } from '~/components/EmptyList';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
-import { InfiniteList } from '~/components/InfiniteList';
-import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import NoSearchResults from '~/components/NoSearchResults';
+import { QueryItemList } from '~/components/QueryItemList';
+import { ResponsivePagination } from '~/components/ResponsivePagination';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import {
+  defaultArticlesFirstPage,
   getArticleCategories,
-  getArticles,
+  getArticlesByOffset,
   useArticleCategories,
-  useArticles,
+  useArticlesByOffset,
 } from '~/services/article';
+import {
+  isValidPage,
+  toSafePageValue,
+} from '~/services/common/utils/pagination';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import { useMyInfo } from '~/services/member';
 import {
+  fixedFullWidth,
   flex,
   fontCss,
   globalVars,
@@ -41,7 +51,7 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { concat, customToast, routes } from '~/utils';
+import { customToast, routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
 const createMetaDescription = (categoryName = '게시판') =>
@@ -50,9 +60,9 @@ const createMetaDescription = (categoryName = '게시판') =>
 const ArticleCategoryPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
-  const { categoryId } = props;
+  const { categoryId, page } = props;
   const router = useRouter();
-  const { keyword } = router.query as QueryString;
+  const { keyword } = router.query as QueryParams;
   const { data: myInfo } = useMyInfo();
   const isSignedIn = !!myInfo;
 
@@ -99,7 +109,7 @@ const ArticleCategoryPage = (
         <SearchBar categoryId={categoryId} />
 
         <div css={articleContainerCss}>
-          <ArticleLayer categoryId={categoryId} keyword={keyword} />
+          <ArticleLayer categoryId={categoryId} keyword={keyword} page={page} />
         </div>
 
         {isSignedIn && (
@@ -121,34 +131,48 @@ const ArticleCategoryPage = (
 interface ArticleLayerProps {
   categoryId: number;
   keyword?: string;
+  page: number;
 }
 
 const ArticleLayer = (props: ArticleLayerProps) => {
-  const { categoryId, keyword } = props;
+  const { categoryId, keyword, page } = props;
   const isValidKeyword = validateSearchKeyword(keyword);
-  const articlesInfiniteQuery = useArticles(categoryId, { keyword });
-
-  const infiniteData = articlesInfiniteQuery.data
-    ? articlesInfiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
-    : ([] as ArticleSummary[]);
+  const articlesQuery = useArticlesByOffset({ categoryId, keyword, page });
 
   return (
-    <InfiniteList
-      data={infiniteData}
-      infiniteQuery={articlesInfiniteQuery}
-      skeleton={<ArticleCard.Skeleton />}
-      skeletonCount={6}
-      useWindowScroll={true}
-      skeletonGap={16}
-      itemContent={(index, article) => <ArticleCard article={article} />}
-      emptyElement={
-        isValidKeyword ? (
-          <NoSearchResults keyword={keyword} />
-        ) : (
-          <EmptyInfiniteList text="아직 게시글이 없습니다." />
-        )
-      }
-    />
+    <div>
+      <QueryItemList
+        css={[flex('', '', 'column', 16), { paddingBottom: 120 }]}
+        query={articlesQuery}
+        skeleton={<ArticleCard.Skeleton />}
+        skeletonCount={6}
+        render={(data) => {
+          const { currentPage, posts, totalPageCount } = data;
+          const isEmpty = posts.length === 0;
+          return (
+            <>
+              <div css={paginationCss}>
+                <ResponsivePagination
+                  totalPageCount={totalPageCount}
+                  initialPage={currentPage}
+                />
+              </div>
+              {isEmpty ? (
+                isValidKeyword ? (
+                  <NoSearchResults keyword={keyword} />
+                ) : (
+                  <EmptyList text="아직 게시글이 없습니다" />
+                )
+              ) : (
+                posts.map((post) => (
+                  <ArticleCard article={post} key={post.postId} />
+                ))
+              )}
+            </>
+          );
+        }}
+      />
+    </div>
   );
 };
 
@@ -159,7 +183,7 @@ interface SearchBarProps {
 const SearchBar = (props: SearchBarProps) => {
   const { categoryId } = props;
   const router = useRouter();
-  const { keyword: queryKeyword } = router.query as QueryString;
+  const { keyword: queryKeyword } = router.query as QueryParams;
   const isValidKeyword = validateSearchKeyword(queryKeyword);
   const defaultKeyword = isValidKeyword ? queryKeyword : '';
 
@@ -188,9 +212,7 @@ const SearchBar = (props: SearchBarProps) => {
       css={searchBarContainerCss}
       onValidSubmit={onValidSubmit}
       onInvalidSubmit={onInvalidSubmit}
-      defaultValues={{
-        keyword: defaultKeyword,
-      }}
+      defaultValues={{ keyword: defaultKeyword }}
       options={{ allowEmptyString: true }}
     />
   );
@@ -201,8 +223,11 @@ export default ArticleCategoryPage;
 /* css */
 
 const searchBarTop = titleBarHeight + breadcrumbsHeight;
-const searchBarContainerHeight = 72;
-const selfPaddingTop = searchBarTop + searchBarContainerHeight;
+const searchBarContainerHeight = 60;
+const paginationTop = searchBarTop + searchBarContainerHeight;
+const paginationHeight = 32 + 12;
+const selfPaddingTop =
+  searchBarTop + searchBarContainerHeight + paginationHeight;
 
 // `Skeleton`의 `zIndex`는 1
 const fixedLayoutZIndex = 10;
@@ -240,19 +265,31 @@ const fabContainerCss = css(flex('center', 'flex-end', 'row'));
 
 const fabCss = css({ position: 'fixed', bottom: 40, zIndex: fabZIndex });
 
+const paginationCss = css(
+  position.xy('center', 'start', 'fixed'),
+  fixedFullWidth,
+  {
+    top: paginationTop,
+    zIndex: fixedLayoutZIndex,
+    height: paginationHeight,
+    backgroundColor: palettes.background.default,
+  }
+);
+
 /* ssr */
 
 interface Props {
   categoryId: number;
+  page: number;
 }
 
-// `interface`로 작성하면, `GetServerSideProps`의 Generic에 할당이 안되어서, type으로 작성
 type Params = {
   categoryId: string;
 };
 
-type QueryString = Partial<{
+type QueryParams = Partial<{
   keyword: string;
+  [defaultArticlesPageKey]: string;
 }>;
 
 export const getServerSideProps: GetServerSideProps<Props, Params> = async (
@@ -261,28 +298,36 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const categoryId = Number(context.params?.categoryId);
   const isValidCategoryId = !Number.isNaN(categoryId);
 
-  const { keyword: queryKeyword } = context.query as QueryString;
-  const isValidKeyword = validateSearchKeyword(queryKeyword);
-  const keyword = isValidKeyword ? queryKeyword?.trim() : undefined;
+  const { keyword = '', page: unsafePage } = context.query as QueryParams;
 
-  if (!isValidCategoryId) {
+  const trimmedKeyword = keyword.trim();
+  const safeKeyword = validateSearchKeyword(trimmedKeyword)
+    ? trimmedKeyword
+    : undefined;
+
+  const page = toSafePageValue(unsafePage);
+
+  if (!isValidCategoryId || page < defaultArticlesFirstPage) {
     return {
       notFound: true,
     };
   }
 
-  /* prefetch start */
   const queryClient = new QueryClient();
-  const articleListQueryKey = queryKeys.articles.list(categoryId, keyword);
+  const articleListQueryKey = queryKeys.articles.listByOffset({
+    categoryId,
+    searchKeyword: safeKeyword,
+    page,
+  });
   const articleCategoriesQueryKey = queryKeys.articles.categories();
-
   await Promise.allSettled([
-    queryClient.prefetchInfiniteQuery({
+    queryClient.prefetchQuery({
       queryKey: articleListQueryKey,
       queryFn: () =>
-        getArticles({
+        getArticlesByOffset({
           categoryId,
-          keyword: keyword,
+          keyword: safeKeyword,
+          page,
         }),
     }),
     queryClient.prefetchQuery({
@@ -291,22 +336,22 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
     }),
   ]);
 
-  const { dehydratedState } = dehydrate(queryClient);
-  dehydratedState.queries.forEach((query) => {
-    // https://github.com/TanStack/query/issues/1458#issuecomment-1022396964
-    // eslint-disable-next-line
-    // @ts-ignore
-    if ('pageParams' in query.state.data) {
-      query.state.data.pageParams = [null];
-    }
-  });
+  const articles =
+    queryClient.getQueryData<GetArticlesByOffsetApiData['data']>(
+      articleListQueryKey
+    );
 
-  /* prefetch end */
+  if (articles && !isValidPage(articles)) {
+    return { notFound: true };
+  }
+
+  const { dehydratedState } = dehydrate(queryClient);
 
   return {
     props: {
       dehydratedState,
       categoryId,
+      page,
     },
   };
 };

@@ -7,8 +7,10 @@ import { updateArticle } from '~/services/article/apis';
 
 export const useUpdateArticle = (articleId: number) => {
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.articles.detail(articleId);
-  const onSuccess = () => queryClient.invalidateQueries(queryKey);
+  const onSuccess = () => {
+    queryClient.invalidateQueries(queryKeys.articles.detail(articleId));
+    queryClient.invalidateQueries(queryKeys.articles.mineBase());
+  };
 
   return useMutation({
     mutationFn: (payload: Omit<UpdateArticleParams, 'articleId'>) =>

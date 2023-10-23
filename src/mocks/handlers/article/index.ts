@@ -3,25 +3,37 @@
 import { mockCreateArticle } from '~/mocks/handlers/article/apis/mockCreateArticle';
 import { mockGetArticleCategories } from '~/mocks/handlers/article/apis/mockGetArticleCategories';
 import { mockGetArticleDetail } from '~/mocks/handlers/article/apis/mockGetArticleDetail';
-import { mockGetArticles } from '~/mocks/handlers/article/apis/mockGetArticles';
-import { mockGetArticlesByKeyword } from '~/mocks/handlers/article/apis/mockGetArticlesByKeyword';
-import { mockGetHotArticles } from '~/mocks/handlers/article/apis/mockGetHotArticles';
-import { mockGetHotArticlesByKeyword } from '~/mocks/handlers/article/apis/mockGetHotArticlesByKeyword';
-import { mockGetMyArticles } from '~/mocks/handlers/article/apis/mockGetMyArticles';
-import { mockGetMyScrapedArticles } from '~/mocks/handlers/article/apis/mockGetMyScrapedArticles';
+import { mockGetArticlesByKeywordByOffset } from '~/mocks/handlers/article/apis/mockGetArticlesByKeywordByOffset';
+import { mockGetArticlesByOffset } from '~/mocks/handlers/article/apis/mockGetArticlesByOffset';
+import { mockGetHotArticlesByKeywordByOffset } from '~/mocks/handlers/article/apis/mockGetHotArticlesByKeywordByOffset';
+import { mockGetHotArticlesByOffset } from '~/mocks/handlers/article/apis/mockGetHotArticlesByOffset';
+import { mockGetMyArticlesByOffset } from '~/mocks/handlers/article/apis/mockGetMyArticlesByOffset';
+import { mockGetMyScrapedArticlesByOffset } from '~/mocks/handlers/article/apis/mockGetMyScrapedArticlesByOffset';
 import { mockLikeArticle } from '~/mocks/handlers/article/apis/mockLikeArticle';
 import { mockRemoveArticle } from '~/mocks/handlers/article/apis/mockRemoveArticle';
 import { mockScrapArticle } from '~/mocks/handlers/article/apis/mockScrapArticle';
 import { mockUpdateArticle } from '~/mocks/handlers/article/apis/mockUpdateArticle';
 
 export const articleHandlers = [
-  mockGetMyArticles, // /posts/my
-  mockGetMyScrapedArticles, // /posts/my-scrap
+  // mockGetMyArticlesByCursor,
+  mockGetMyArticlesByOffset, // /posts/my/offset
+
+  // mockGetMyScrapedArticlesByCursor,
+  mockGetMyScrapedArticlesByOffset, // /posts/my-scrap/offset
   // getMyScrapedArticlesError,
-  mockGetHotArticles, // /posts/hot?
-  mockGetHotArticlesByKeyword, // /posts/hot/search?
-  mockGetArticlesByKeyword, // /posts/search?
-  mockGetArticles, // /posts?
+
+  // mockGetHotArticlesByCursor,
+  mockGetHotArticlesByOffset, // /posts/hot/offset
+
+  // mockGetHotArticlesByKeywordByCursor,
+  mockGetHotArticlesByKeywordByOffset, // posts/hot/search/offset
+
+  //mockGetArticlesByKeywordByCursor,
+  mockGetArticlesByKeywordByOffset, // /posts/search/offset
+
+  // mockGetArticlesByCursor,
+  mockGetArticlesByOffset, // /posts/offset
+
   // getArticlesError,
   mockGetArticleCategories,
   mockGetArticleDetail, // /posts/:id
