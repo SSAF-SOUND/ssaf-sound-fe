@@ -70,7 +70,7 @@ const MyArticlesPage: CustomNextPage = () => {
   );
 };
 
-const fixedLayoutZIndex = 10;
+const fixedLayoutZIndex = 2;
 const paginationTop = titleBarHeight + breadcrumbsHeight +1;
 const paginationHeight = 32 + 24;
 const selfPaddingTop = paginationTop + paginationHeight;
