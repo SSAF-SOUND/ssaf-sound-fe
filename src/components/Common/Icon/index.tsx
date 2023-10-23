@@ -53,6 +53,8 @@ import {
   MdOutlineSubdirectoryArrowRight,
   MdLogout,
   MdOutlineChat,
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
 import { RiKakaoTalkFill, RiSendPlane2Line } from 'react-icons/ri';
 import { TbPencilPlus, TbSquareRoundedCheckFilled } from 'react-icons/tb';
@@ -103,6 +105,8 @@ export const icons = {
   [`chevron.down`]: <MdKeyboardArrowDown />,
   [`chevron.right`]: <HiOutlineChevronRight />,
   [`chevron.left`]: <HiOutlineChevronLeft />,
+  [`chevron.left.double`]: <MdKeyboardDoubleArrowLeft />,
+  [`chevron.right.double`]: <MdKeyboardDoubleArrowRight />,
   [`arrow.right`]: <AiFillCaretRight />,
   [`arrow.down`]: <AiFillCaretDown />,
 
@@ -146,13 +150,13 @@ export const Icon = forwardRef<HTMLDivElement, IconProps>(
       size = 24,
       color,
       style = {},
-      className,
+      ...restProps
     } = props;
     return (
       <div
         ref={ref}
         css={selfCss}
-        className={className}
+        {...restProps}
         style={{ fontSize: size, color, ...style }}
         data-icon=""
       >
