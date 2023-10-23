@@ -79,78 +79,6 @@ const firstPage = 1;
 const defaultBoundaryCount = 1;
 const defaultSiblingCount = 1;
 
-const itemMinWidth = 32;
-const itemMinHeight = 32;
-const itemTextHeight = 24;
-
-const truncIconCss = css({
-  transition: 'opacity 100ms, transform 200ms',
-  [`.${paginationClassnames.trunc}:hover &`]: {
-    transform: `translate3d(0, -${itemTextHeight}px, 0)`,
-    opacity: 0,
-  },
-});
-const truncTextCss = css({
-  transition: 'opacity 100ms, transform 200ms',
-  position: 'absolute',
-  transform: `translate3d(0, ${itemTextHeight}px, 0)`,
-  opacity: 0,
-  [`.${paginationClassnames.trunc}:hover &`]: {
-    opacity: 1,
-    transform: 'translate3d(0, 0, 0)',
-  },
-  pointerEvents: 'none',
-});
-const truncCss = css({
-  height: itemMinHeight,
-  overflow: 'hidden',
-});
-
-const defaultLeftTruncUI = (page: number) => (
-  <li
-    className={[
-      paginationClassnames.trunc,
-      paginationClassnames.leftTrunc,
-    ].join(' ')}
-  >
-    <PaginationItem page={page} css={truncCss}>
-      <Icon
-        name="chevron.left.double"
-        size={itemTextHeight}
-        css={truncIconCss}
-        aria-hidden
-      />
-      <div css={truncTextCss}>{page}</div>
-    </PaginationItem>
-  </li>
-);
-const defaultRightTruncUI = (page: number) => (
-  <li
-    className={[
-      paginationClassnames.trunc,
-      paginationClassnames.rightTrunc,
-    ].join(' ')}
-  >
-    <PaginationItem page={page}>
-      <Icon
-        name="chevron.right.double"
-        size={itemTextHeight}
-        css={truncIconCss}
-        aria-hidden
-      />
-      <div css={truncTextCss}>{page}</div>
-    </PaginationItem>
-  </li>
-);
-const defaultItemUI = (page: number) => (
-  <li>
-    <PaginationItem page={page} key={page} />
-  </li>
-);
-const DefaultItemContainer = (
-  props: PropsWithChildren<{ className?: string }>
-) => <ul css={itemContainerCss} {...props} />;
-
 // ANATOMY
 // leftBoundaries leftTrunc siblings rightTrunc rightBoundaries
 
@@ -318,13 +246,55 @@ export const PaginationItem = (props: PaginationItemProps) => {
       css={[linkCss, isActive && activeLinkCss]}
       href={{ pathname, query: { ...router.query, [pageKey]: page } }}
       {...restProps}
+      aria-label={`${page}페이지로 이동`}
     >
       {children}
     </Link>
   );
 };
 
-const itemContainerCss = css(flex('center', 'center', 'row', 6, 'wrap'));
+const itemMinWidth = 32;
+const itemMinHeight = 32;
+const itemTextHeight = 24;
+
+const truncCss = css({
+  height: itemMinHeight,
+});
+
+const defaultLeftTruncUI = (page: number) => (
+  <li
+    className={[
+      paginationClassnames.trunc,
+      paginationClassnames.leftTrunc,
+    ].join(' ')}
+  >
+    <PaginationItem page={page} css={truncCss}>
+      <Icon name="chevron.left.double" size={itemTextHeight} aria-hidden />
+    </PaginationItem>
+  </li>
+);
+const defaultRightTruncUI = (page: number) => (
+  <li
+    className={[
+      paginationClassnames.trunc,
+      paginationClassnames.rightTrunc,
+    ].join(' ')}
+  >
+    <PaginationItem page={page} css={truncCss}>
+      <Icon name="chevron.right.double" size={itemTextHeight} aria-hidden />
+    </PaginationItem>
+  </li>
+);
+const defaultItemUI = (page: number) => (
+  <li>
+    <PaginationItem page={page} key={page} />
+  </li>
+);
+const DefaultItemContainer = (
+  props: PropsWithChildren<{ className?: string }>
+) => <ul css={itemContainerCss} {...props} />;
+
+const itemContainerCss = css({}, flex('center', 'center', 'row', 6, 'wrap'));
 const linkCss = css(
   {
     userSelect: 'none',
@@ -344,6 +314,7 @@ const linkCss = css(
     },
   },
   fontCss.style.R14,
+  fontCss.family.pretendard,
   flex('center', 'center')
 );
 const activeLinkCss = css(

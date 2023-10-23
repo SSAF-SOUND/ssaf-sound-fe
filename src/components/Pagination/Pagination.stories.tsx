@@ -42,7 +42,7 @@ export const Default: PaginationStory = {
             ].join(' ')}
             onClick={() => setCurrentPage(page)}
           >
-            <PaginationItem page={page}>
+            <PaginationItem page={page} css={truncCss}>
               <Icon
                 name="chevron.left.double"
                 size={itemTextHeight}
@@ -61,7 +61,7 @@ export const Default: PaginationStory = {
             ].join(' ')}
             onClick={() => setCurrentPage(page)}
           >
-            <PaginationItem page={page}>
+            <PaginationItem page={page} css={truncCss}>
               <Icon
                 name="chevron.right.double"
                 size={itemTextHeight}
@@ -85,6 +85,7 @@ const truncIconCss = css({
   [`.${paginationClassnames.trunc}:hover &`]: {
     transform: `translate3d(0, -${itemTextHeight}px, 0)`,
     opacity: 0,
+    position: 'absolute'
   },
 });
 const truncTextCss = css({
@@ -95,6 +96,7 @@ const truncTextCss = css({
   [`.${paginationClassnames.trunc}:hover &`]: {
     opacity: 1,
     transform: 'translate3d(0, 0, 0)',
+    position: 'unset'
   },
   pointerEvents: 'none',
 });
