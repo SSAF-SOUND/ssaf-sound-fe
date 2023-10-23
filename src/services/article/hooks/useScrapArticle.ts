@@ -35,7 +35,7 @@ export const useScrapArticle = (articleId: number) => {
       return { prevArticle: article };
     },
     onSuccess: ({ scraped, scrapCount }) => {
-      queryClient.invalidateQueries(queryKeys.articles.myScraped());
+      queryClient.invalidateQueries(queryKeys.articles.myScrapedBase());
       setArticleDetail((prevArticle) => {
         if (!prevArticle) return;
         return {

@@ -4,15 +4,15 @@ import { queryKeys } from '~/react-query/common';
 import { getHotArticlesByCursor } from '~/services/article/apis';
 import { toMs } from '~/utils';
 
-interface UseHotArticlesOptions {
+export interface UseHotArticlesByCursorOptions {
   keyword: string;
 }
 
 export const useHotArticlesByCursor = (
-  options: Partial<UseHotArticlesOptions> = {}
+  options: Partial<UseHotArticlesByCursorOptions> = {}
 ) => {
   const { keyword } = options;
-  const queryKey = queryKeys.articles.hot(keyword);
+  const queryKey = queryKeys.articles.hotByCursor(keyword);
 
   return useInfiniteQuery({
     queryKey,
@@ -24,6 +24,6 @@ export const useHotArticlesByCursor = (
     getNextPageParam: (lastPage) => {
       return lastPage.cursor ?? undefined;
     },
-    staleTime: toMs(60),
+    staleTime: toMs(30),
   });
 };
