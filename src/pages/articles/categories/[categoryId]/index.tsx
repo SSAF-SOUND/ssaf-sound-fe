@@ -27,6 +27,7 @@ import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
 import {
+  defaultArticlesFirstPage,
   getArticleCategories,
   getArticlesByOffset,
   useArticleCategories,
@@ -211,9 +212,7 @@ const SearchBar = (props: SearchBarProps) => {
       css={searchBarContainerCss}
       onValidSubmit={onValidSubmit}
       onInvalidSubmit={onInvalidSubmit}
-      defaultValues={{
-        keyword: defaultKeyword,
-      }}
+      defaultValues={{ keyword: defaultKeyword }}
       options={{ allowEmptyString: true }}
     />
   );
@@ -299,23 +298,25 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const categoryId = Number(context.params?.categoryId);
   const isValidCategoryId = !Number.isNaN(categoryId);
 
-  const { keyword: queryKeyword, page: unsafePage } =
-    context.query as QueryParams;
-  const isValidKeyword = validateSearchKeyword(queryKeyword);
-  const keyword = isValidKeyword ? queryKeyword?.trim() : undefined;
+  const { keyword = '', page: unsafePage } = context.query as QueryParams;
+
+  const trimmedKeyword = keyword.trim();
+  const safeKeyword = validateSearchKeyword(trimmedKeyword)
+    ? trimmedKeyword
+    : undefined;
+
   const page = toSafePageValue(unsafePage);
 
-  if (!isValidCategoryId) {
+  if (!isValidCategoryId || page < defaultArticlesFirstPage) {
     return {
       notFound: true,
     };
   }
 
-  /* prefetch start */
   const queryClient = new QueryClient();
   const articleListQueryKey = queryKeys.articles.listByOffset({
     categoryId,
-    searchKeyword: keyword,
+    searchKeyword: safeKeyword,
     page,
   });
   const articleCategoriesQueryKey = queryKeys.articles.categories();
@@ -325,7 +326,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
       queryFn: () =>
         getArticlesByOffset({
           categoryId,
-          keyword: keyword,
+          keyword: safeKeyword,
           page,
         }),
     }),
