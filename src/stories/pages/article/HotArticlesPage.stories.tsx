@@ -4,7 +4,7 @@ import {
   mockGetEmptyHotArticlesByCursor,
   mockGetHotArticlesByCursorError,
 } from '~/mocks/handlers/article/apis/mockGetHotArticlesByCursor';
-import { mockGetEmptyHotArticlesByKeyword } from "~/mocks/handlers/article/apis/mockGetHotArticlesByKeyword";
+import { mockGetEmptyHotArticlesByKeywordByCursor } from "~/mocks/handlers/article/apis/mockGetHotArticlesByKeywordByCursor";
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import HotArticlesPage from '~/pages/hot-articles';
@@ -61,7 +61,7 @@ export const NoSearchResult: HotArticlesPageStory = {
   name: '빈 핫 게시글 검색 목록',
   parameters: {
     ...createMswParameters({
-      article:[mockGetEmptyHotArticlesByKeyword],
+      article:[mockGetEmptyHotArticlesByKeywordByCursor],
     }),
     nextjs: {
       router: {

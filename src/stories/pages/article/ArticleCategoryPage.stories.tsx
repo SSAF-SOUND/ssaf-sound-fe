@@ -5,7 +5,7 @@ import {
   mockGetArticlesByCursorError,
   mockGetEmptyArticlesByCursor,
 } from '~/mocks/handlers/article/apis/mockGetArticlesByCursor';
-import { mockGetEmptyArticlesByKeyword } from '~/mocks/handlers/article/apis/mockGetArticlesByKeyword';
+import { mockGetEmptyArticlesByKeywordByCursor } from '~/mocks/handlers/article/apis/mockGetArticlesByKeywordByCursor';
 import {
   createMockGetMyInfo,
   mockGetMyInfoError,
@@ -77,7 +77,7 @@ export const NoSearchResult: ArticleCategoryPageStory = {
   name: '빈 게시글 검색 목록',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyArticlesByKeyword],
+      article: [mockGetEmptyArticlesByKeywordByCursor],
     }),
     nextjs: {
       router: {
