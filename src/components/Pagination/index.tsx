@@ -5,7 +5,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { Icon } from '~/components/Common/Icon';
 import { useCallbackRef } from '~/hooks/useCallbackRef';
@@ -78,7 +85,6 @@ export interface PaginationRootProps {
     lastPage: number
   ) => ReactElement;
 
-  /** key prop 필수 */
   itemUI?: (
     page: number,
     currentPage: number,
@@ -210,14 +216,18 @@ export const PaginationRoot = (props: PaginationRootProps) => {
             {/*  </IconButton>*/}
             {/*</li>*/}
 
-            {range(leftBoundaryStart, leftBoundaryEnd).map((page) =>
-              itemUI(page, currentPage, totalPageCount)
-            )}
+            {range(leftBoundaryStart, leftBoundaryEnd).map((page) => (
+              <Fragment key={page}>
+                {itemUI(page, currentPage, totalPageCount)}
+              </Fragment>
+            ))}
 
             {skipLeftTrunc ? (
-              range(leftBoundaryEnd + 1, siblingEnd).map((page) =>
-                itemUI(page, currentPage, totalPageCount)
-              )
+              range(leftBoundaryEnd + 1, siblingEnd).map((page) => (
+                <Fragment key={page}>
+                  {itemUI(page, currentPage, totalPageCount)}
+                </Fragment>
+              ))
             ) : (
               <>
                 {leftTruncUI(
@@ -225,16 +235,20 @@ export const PaginationRoot = (props: PaginationRootProps) => {
                   currentPage,
                   totalPageCount
                 )}
-                {range(siblingStart, siblingEnd).map((page) =>
-                  itemUI(page, currentPage, totalPageCount)
-                )}
+                {range(siblingStart, siblingEnd).map((page) => (
+                  <Fragment key={page}>
+                    {itemUI(page, currentPage, totalPageCount)}
+                  </Fragment>
+                ))}
               </>
             )}
 
             {skipRightTrunc ? (
-              range(siblingEnd + 1, rightBoundaryEnd).map((page) =>
-                itemUI(page, currentPage, totalPageCount)
-              )
+              range(siblingEnd + 1, rightBoundaryEnd).map((page) => (
+                <Fragment key={page}>
+                  {itemUI(page, currentPage, totalPageCount)}
+                </Fragment>
+              ))
             ) : (
               <>
                 {rightTruncUI(
@@ -242,9 +256,11 @@ export const PaginationRoot = (props: PaginationRootProps) => {
                   currentPage,
                   totalPageCount
                 )}
-                {range(rightBoundaryStart, rightBoundaryEnd).map((page) =>
-                  itemUI(page, currentPage, totalPageCount)
-                )}
+                {range(rightBoundaryStart, rightBoundaryEnd).map((page) => (
+                  <Fragment key={page}>
+                    {itemUI(page, currentPage, totalPageCount)}
+                  </Fragment>
+                ))}
               </>
             )}
 
