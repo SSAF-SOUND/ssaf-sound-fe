@@ -44,8 +44,8 @@ export const queryKeys = {
     listBase: () => ['articles', 'category'],
     listByCursor: (categoryId: number, searchKeyword?: string) => [
       ...queryKeys.articles.listBase(),
-      'cursor',
       categoryId,
+      'cursor',
       searchKeyword ?? null,
     ],
     listByOffset: ({
@@ -58,8 +58,8 @@ export const queryKeys = {
       page: number;
     }) => [
       ...queryKeys.articles.listBase(),
-      'offset',
       categoryId,
+      'offset',
       searchKeyword ?? null,
       page,
     ],
