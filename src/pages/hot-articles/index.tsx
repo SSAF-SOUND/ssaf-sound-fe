@@ -267,7 +267,10 @@ export const getServerSideProps: GetServerSideProps<
   }
 
   const queryClient = new QueryClient();
-  const hotArticleListQueryKey = queryKeys.articles.hotByCursor(safeKeyword);
+  const hotArticleListQueryKey = queryKeys.articles.hotByOffset({
+    searchKeyword: safeKeyword,
+    page,
+  });
 
   await queryClient.prefetchQuery({
     queryKey: hotArticleListQueryKey,
