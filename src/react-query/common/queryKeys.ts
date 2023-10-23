@@ -41,44 +41,56 @@ export const queryKeys = {
   },
   articles: {
     categories: () => ['articles', 'categories'],
+    listBase: () => ['articles', 'category'],
     listByCursor: (categoryId: number, searchKeyword?: string) => [
-      'articles',
-      'category',
+      ...queryKeys.articles.listBase(),
       'cursor',
       categoryId,
       searchKeyword ?? null,
     ],
-    listByOffset: (categoryId: number, searchKeyword?: string) => [
-      'articles',
-      'category',
+    listByOffset: ({
+      categoryId,
+      searchKeyword,
+      page,
+    }: {
+      categoryId: number;
+      searchKeyword?: string;
+      page: number;
+    }) => [
+      ...queryKeys.articles.listBase(),
       'offset',
       categoryId,
       searchKeyword ?? null,
+      page,
     ],
+    hotBase: () => ['articles', 'hot'],
     hotByCursor: (searchKeyword?: string) => [
-      'articles',
-      'hot',
+      ...queryKeys.articles.hotBase(),
       'cursor',
       searchKeyword ?? null,
     ],
-    hotByOffset: (searchKeyword?: string) => [
-      'articles',
-      'hot',
-      'offset',
-      searchKeyword ?? null,
-    ],
+    hotByOffset: ({
+      searchKeyword,
+      page,
+    }: {
+      searchKeyword?: string;
+      page: number;
+    }) => ['articles', 'hot', 'offset', searchKeyword ?? null, page],
     detail: (articleId: number) => ['articles', articleId],
-    mineByCursor: () => [...queryKeys.auth(), 'my-articles', 'cursor'],
-    mineByOffset: () => [...queryKeys.auth(), 'my-articles', 'offset'],
-    myScrapedByCursor: () => [
-      ...queryKeys.auth(),
-      'my-scraped-articles',
-      'cursor',
-    ],
-    myScrapedByOffset: () => [
-      ...queryKeys.auth(),
-      'my-scraped-articles',
+    mineBase: () => [...queryKeys.auth(), 'my-articles'],
+    mineByCursor: () => [...queryKeys.articles.mineBase(), 'cursor'],
+    mineByOffset: ({ page }: { page: number }) => [
+      ...queryKeys.articles.mineBase(),
       'offset',
+      page,
+    ],
+    myScrapedBase: () => [...queryKeys.auth(), 'my-scraped-articles'],
+    myScrapedByCursor: () => [...queryKeys.articles.myScrapedBase(), 'cursor'],
+    myScrapedByOffset: ({ page }: { page: number }) => [
+      ...queryKeys.articles.myScrapedBase(),
+
+      'offset',
+      page,
     ],
   },
   articleComments: {
