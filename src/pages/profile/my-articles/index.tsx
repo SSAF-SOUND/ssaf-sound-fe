@@ -1,5 +1,6 @@
 import type { CustomNextPage } from 'next/types';
-import type { ArticleSummary } from '~/services/article';
+
+import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
@@ -7,24 +8,35 @@ import { HotArticleCard } from '~/components/ArticleCard';
 import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
-import { InfiniteList } from '~/components/InfiniteList';
-import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
+import { EmptyList } from '~/components/EmptyList';
+import { QueryItemList } from '~/components/QueryItemList';
+import { ResponsivePagination } from '~/components/ResponsivePagination';
 import TitleBar from '~/components/TitleBar';
-import { useMyArticlesByCursor } from '~/services/article';
+import { useMyArticlesByOffset } from '~/services/article';
+import { toSafePageValue } from '~/services/common/utils/pagination';
 import { useMyInfo } from '~/services/member';
-import { flex, pageCss, titleBarHeight } from '~/styles/utils';
 import {
-  concat,
-  createAuthGuard,
-  createNoIndexPageMetaData,
-  routes,
-} from '~/utils';
+  fixedFullWidth,
+  flex,
+  pageCss,
+  palettes,
+  position,
+  titleBarHeight,
+} from '~/styles/utils';
+import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
+
+type QueryParams = {
+  page?: string;
+};
 
 const titleBarTitle = '내가 작성한 게시글';
 const metaTitle = titleBarTitle;
 
 const MyArticlesPage: CustomNextPage = () => {
   const { data: myInfo } = useMyInfo();
+  const router = useRouter();
+  const { page } = router.query as QueryParams;
+  const safePage = toSafePageValue(page);
 
   if (!myInfo) {
     return <FullPageLoader text={loaderText.checkUser} />;
@@ -52,41 +64,79 @@ const MyArticlesPage: CustomNextPage = () => {
           }
         />
 
-        <ArticleLayer />
+        <ArticleLayer page={safePage} />
       </div>
     </>
   );
 };
-const selfPaddingTop = titleBarHeight + breadcrumbsHeight + 24;
+
+const fixedLayoutZIndex = 10;
+const paginationTop = titleBarHeight + breadcrumbsHeight +1;
+const paginationHeight = 32 + 24;
+const selfPaddingTop = paginationTop + paginationHeight;
 const selfCss = css(
   { padding: `${selfPaddingTop}px 0 0` },
   pageCss.minHeight,
   flex('', '')
+);
+const paginationCss = css(
+  position.xy('center', 'start', 'fixed'),
+  fixedFullWidth,
+  flex('center', 'center', 'column'),
+  {
+    top: paginationTop,
+    zIndex: fixedLayoutZIndex,
+    height: paginationHeight,
+    backgroundColor: palettes.background.default,
+  }
 );
 
 export default MyArticlesPage;
 MyArticlesPage.auth = createAuthGuard();
 MyArticlesPage.meta = createNoIndexPageMetaData(metaTitle);
 
-const ArticleLayer = () => {
-  const infiniteQuery = useMyArticlesByCursor();
-  const infiniteData = infiniteQuery.data
-    ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
-    : ([] as ArticleSummary[]);
+interface ArticleLayerProps {
+  page: number;
+}
+const ArticleLayer = (props: ArticleLayerProps) => {
+  const { page } = props;
+
+  const myArticlesQuery = useMyArticlesByOffset({ page });
 
   return (
     <div css={articleContainerCss}>
-      <InfiniteList
-        data={infiniteData}
-        infiniteQuery={infiniteQuery}
+      <QueryItemList
+        css={[flex('', '', 'column', 16), { padding: '12px 0 120px' }]}
+        query={myArticlesQuery}
         skeleton={<HotArticleCard.Skeleton />}
         skeletonCount={6}
-        useWindowScroll={true}
-        skeletonGap={16}
-        itemContent={(index, article) => <HotArticleCard article={article} />}
-        emptyElement={
-          <EmptyInfiniteList text="아직 작성한 게시글이 없습니다." />
-        }
+        render={(data) => {
+          const { currentPage, posts, totalPageCount } = data;
+          const isEmpty = posts.length === 0;
+          const isValidPage = currentPage <= totalPageCount;
+
+          return (
+            <>
+              <div css={paginationCss}>
+                <ResponsivePagination
+                  totalPageCount={totalPageCount}
+                  initialPage={currentPage}
+                />
+              </div>
+              {isEmpty ? (
+                isValidPage ? (
+                  <EmptyList text="아직 작성한 게시글이 없습니다." />
+                ) : (
+                  <EmptyList text="유효하지 않은 페이지입니다." />
+                )
+              ) : (
+                posts.map((post) => (
+                  <HotArticleCard article={post} key={post.postId} />
+                ))
+              )}
+            </>
+          );
+        }}
       />
     </div>
   );

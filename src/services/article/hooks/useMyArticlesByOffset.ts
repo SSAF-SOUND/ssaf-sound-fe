@@ -19,5 +19,6 @@ export const useMyArticlesByOffset = (
     queryKey: queryKeys.articles.mineByOffset({ page }),
     queryFn: () => getMyArticlesByOffset({ page }),
     staleTime: toMs(30),
+    keepPreviousData: true,
   });
 };
