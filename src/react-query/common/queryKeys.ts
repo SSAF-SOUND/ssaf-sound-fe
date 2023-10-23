@@ -154,15 +154,32 @@ export const endpoints = {
     categories: () => '/boards' as const,
     listByCursor: (params: { keyword?: string } = {}) => {
       const { keyword } = params;
-      return keyword ? ('/posts/search/cursor' as const) : ('/posts/cursor' as const);
+      return keyword
+        ? ('/posts/search/cursor' as const)
+        : ('/posts/cursor' as const);
+    },
+    listByOffset: (params: { keyword?: string } = {}) => {
+      const { keyword } = params;
+      return keyword
+        ? ('/posts/search/offset' as const)
+        : ('/posts/offset' as const);
     },
     hotByCursor: (params: { keyword?: string } = {}) => {
       const { keyword } = params;
-      return keyword ? ('/posts/hot/search/cursor' as const) : ('/posts/hot/cursor' as const);
+      return keyword
+        ? ('/posts/hot/search/cursor' as const)
+        : ('/posts/hot/cursor' as const);
+    },
+    hotByOffset: (params: { keyword?: string } = {}) => {
+      const { keyword } = params;
+      return keyword
+        ? ('/posts/hot/search/offset' as const)
+        : ('/posts/hot/offset' as const);
     },
     mineByCursor: () => '/posts/my/cursor' as const,
+    mineByOffset: () => '/posts/my/offset' as const,
     myScrapsByCursor: () => '/posts/my-scrap/cursor' as const,
-
+    myScrapsByOffset: () => '/posts/my-scrap/offset' as const,
     create: (categoryId: number) => `/posts?boardId=${categoryId}` as const,
     detail: (articleId: number) => `/posts/${articleId}` as const,
     like: (articleId: number) =>

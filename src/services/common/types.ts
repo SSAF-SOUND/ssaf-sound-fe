@@ -13,6 +13,16 @@ export type InfiniteParams = {
   size: number;
 };
 
+export type PaginationParams = {
+  page?: number;
+  size: number;
+};
+
+export type PaginationStatus = {
+  currentPage: number;
+  totalPageCount: number;
+};
+
 export type PublicRequestOption = {
   publicRequest?: boolean;
 };
