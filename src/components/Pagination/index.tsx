@@ -320,7 +320,7 @@ const defaultRightTruncUI = (page: number) => (
 const defaultItemUI = (page: number, currentPage: number, lastPage: number) => (
   <li>
     <PaginationItem page={page} key={page}>
-      {page === lastPage ? (
+      {page === lastPage && page >= 1000 ? (
         <Icon name="last-page" label={String(page)} />
       ) : (
         page
