@@ -27,6 +27,7 @@ export type ArticlesPageRouteSegment = {
 };
 export type ArticlesPageRouteQuery = {
   keyword?: string;
+  page?: number;
 };
 
 const articlesPageRoute = (
@@ -43,9 +44,11 @@ const articlesPageRoute = (
 const toSafeArticlesPageRouteQuery = (
   query: ArticlesPageRouteQuery
 ): ArticlesPageRouteQuery => {
-  const { keyword } = query;
+  const { keyword, page } = query;
+
   return {
     keyword: toSafeKeyword(keyword),
+    page,
   };
 };
 
@@ -53,6 +56,7 @@ const toSafeArticlesPageRouteQuery = (
 
 export type HotArticlesPageRouteQuery = {
   keyword?: string;
+  page?: number;
 };
 
 const hotArticlesPageRoute = (query: HotArticlesPageRouteQuery = {}) => {
@@ -66,9 +70,10 @@ const hotArticlesPageRoute = (query: HotArticlesPageRouteQuery = {}) => {
 const toSafeHotArticlesPageRouteQuery = (
   query: HotArticlesPageRouteQuery
 ): HotArticlesPageRouteQuery => {
-  const { keyword } = query;
+  const { keyword, page } = query;
   return {
     keyword: toSafeKeyword(keyword),
+    page,
   };
 };
 
