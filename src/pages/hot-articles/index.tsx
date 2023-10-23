@@ -1,6 +1,12 @@
-import type { GetServerSideProps } from 'next/types';
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+} from 'next/types';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
-import type { ArticleSummary } from '~/services/article/utils';
+import type {
+  defaultArticlesPageKey,
+  GetHotArticlesByOffsetApiData,
+} from '~/services/article/apis';
 
 import { useRouter } from 'next/router';
 
@@ -8,20 +14,29 @@ import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
 import { HotArticleCard } from '~/components/ArticleCard';
-import { BreadCrumbs, breadcrumbsHeight } from "~/components/BreadCrumbs";
+import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { EmptyList } from '~/components/EmptyList';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
-import { InfiniteList } from '~/components/InfiniteList';
-import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import NoSearchResults from '~/components/NoSearchResults';
+import { QueryItemList } from '~/components/QueryItemList';
+import { ResponsivePagination } from '~/components/ResponsivePagination';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
-import { getHotArticlesByCursor } from '~/services/article/apis';
-import { useHotArticlesByCursor } from '~/services/article/hooks';
+import {
+  defaultArticlesFirstPage,
+  getHotArticlesByOffset,
+} from '~/services/article/apis';
+import { useHotArticlesByOffset } from '~/services/article/hooks';
+import {
+  isValidPage,
+  toSafePageValue,
+} from '~/services/common/utils/pagination';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
+  fixedFullWidth,
   flex,
   fontCss,
   globalVars,
@@ -32,16 +47,19 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { concat, customToast, routes } from '~/utils';
+import { customToast, routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
 const titleBarTitle = 'HOT 게시판';
 const metaTitle = titleBarTitle;
 const metaDescription = `${globalMetaData.description} 삼성 청년 SW 아카데미(SSAFY) 학생들의 최대 관심사를 모아볼 수 있는 Hot 게시판 기능을 이용해보세요.`;
 
-const HotArticlesPage = () => {
+const HotArticlesPage = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
+  const { page } = props;
   const router = useRouter();
-  const { keyword } = router.query as QueryString;
+  const { keyword } = router.query as QueryParams;
 
   return (
     <>
@@ -75,7 +93,7 @@ const HotArticlesPage = () => {
         <SearchBar />
 
         <div css={articleContainerCss}>
-          <HotArticleLayer keyword={keyword} />
+          <HotArticleLayer keyword={keyword} page={page} />
         </div>
       </div>
     </>
@@ -84,40 +102,54 @@ const HotArticlesPage = () => {
 
 interface HotArticleLayerProps {
   keyword?: string;
+  page: number;
 }
 
 const HotArticleLayer = (props: HotArticleLayerProps) => {
-  const { keyword } = props;
+  const { keyword, page } = props;
   const isValidKeyword = validateSearchKeyword(keyword);
-  const infiniteQuery = useHotArticlesByCursor({ keyword });
-
-  const infiniteData = infiniteQuery.data
-    ? infiniteQuery.data.pages.map(({ posts }) => posts).reduce(concat)
-    : ([] as ArticleSummary[]);
+  const hotArticlesQuery = useHotArticlesByOffset({ keyword, page });
 
   return (
-    <InfiniteList
-      data={infiniteData}
-      infiniteQuery={infiniteQuery}
-      skeleton={<HotArticleCard.Skeleton />}
-      skeletonCount={6}
-      useWindowScroll={true}
-      skeletonGap={16}
-      itemContent={(_, article) => <HotArticleCard article={article} />}
-      emptyElement={
-        isValidKeyword ? (
-          <NoSearchResults keyword={keyword} />
-        ) : (
-          <EmptyInfiniteList text="아직 핫 게시글이 없습니다." />
-        )
-      }
-    />
+    <div>
+      <QueryItemList
+        css={[flex('', '', 'column', 16), { paddingBottom: 120 }]}
+        query={hotArticlesQuery}
+        skeleton={<HotArticleCard.Skeleton />}
+        skeletonCount={6}
+        render={(data) => {
+          const { currentPage, posts, totalPageCount } = data;
+          const isEmpty = posts.length === 0;
+          return (
+            <>
+              <div css={paginationCss}>
+                <ResponsivePagination
+                  totalPageCount={totalPageCount}
+                  initialPage={currentPage}
+                />
+              </div>
+              {isEmpty ? (
+                isValidKeyword ? (
+                  <NoSearchResults keyword={keyword} />
+                ) : (
+                  <EmptyList text="아직 핫 게시글이 없습니다" />
+                )
+              ) : (
+                posts.map((post) => (
+                  <HotArticleCard article={post} key={post.postId} />
+                ))
+              )}
+            </>
+          );
+        }}
+      />
+    </div>
   );
 };
 
 const SearchBar = () => {
   const router = useRouter();
-  const { keyword: queryKeyword } = router.query as QueryString;
+  const { keyword: queryKeyword } = router.query as QueryParams;
   const isValidKeyword = validateSearchKeyword(queryKeyword);
   const defaultKeyword = isValidKeyword ? queryKeyword : '';
 
@@ -147,6 +179,7 @@ const SearchBar = () => {
       onValidSubmit={onValidSubmit}
       onInvalidSubmit={onInvalidSubmit}
       defaultValues={{ keyword: defaultKeyword }}
+      options={{ allowEmptyString: true }}
     />
   );
 };
@@ -158,9 +191,12 @@ export default HotArticlesPage;
 const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
 const searchBarTop = titleBarHeight + breadcrumbsHeight;
 const searchBarContainerPaddingX = globalVars.mainLayoutPaddingX.var;
-const searchBarContainerHeight = 72;
-const searchBarZIndex = 10;
-const selfPaddingTop = searchBarTop + searchBarContainerHeight;
+const searchBarContainerHeight = 60;
+const paginationTop = searchBarTop + searchBarContainerHeight;
+const paginationHeight = 32 + 12;
+const fixedLayoutZIndex = 10;
+const selfPaddingTop =
+  searchBarTop + searchBarContainerHeight + paginationHeight;
 
 const selfCss = css(
   {
@@ -178,7 +214,7 @@ const searchBarContainerCss = css(
     padding: `8px ${searchBarContainerPaddingX} 0`,
     height: searchBarContainerHeight,
     top: searchBarTop,
-    zIndex: searchBarZIndex,
+    zIndex: fixedLayoutZIndex,
     backgroundColor: palettes.background.default,
   },
   position.x('center', 'fixed')
@@ -192,48 +228,70 @@ const articleContainerCss = css({
   marginTop: 4,
 });
 
+const paginationCss = css(
+  position.xy('center', 'start', 'fixed'),
+  fixedFullWidth,
+  {
+    top: paginationTop,
+    zIndex: fixedLayoutZIndex,
+    height: paginationHeight,
+    backgroundColor: palettes.background.default,
+  }
+);
+
 /* ssr */
 
-type QueryString = Partial<{
+interface Props {
+  page: number;
+}
+
+type QueryParams = Partial<{
   keyword: string;
+  [defaultArticlesPageKey]: string;
 }>;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { keyword = '' } = context.query as QueryString;
+export const getServerSideProps: GetServerSideProps<
+  Props,
+  QueryParams
+> = async (context) => {
+  const { keyword = '', page: unsafePage } = context.query as QueryParams;
 
   const trimmedKeyword = keyword.trim();
   const safeKeyword = validateSearchKeyword(trimmedKeyword)
     ? trimmedKeyword
     : undefined;
+  const page = toSafePageValue(unsafePage);
 
-  /* prefetch start */
+  if (page < defaultArticlesFirstPage) {
+    return { notFound: true };
+  }
+
   const queryClient = new QueryClient();
   const hotArticleListQueryKey = queryKeys.articles.hotByCursor(safeKeyword);
 
-  await queryClient.prefetchInfiniteQuery({
+  await queryClient.prefetchQuery({
     queryKey: hotArticleListQueryKey,
-    queryFn: ({ pageParam }) =>
-      getHotArticlesByCursor({
-        cursor: pageParam,
+    queryFn: () =>
+      getHotArticlesByOffset({
+        page,
         keyword: safeKeyword,
       }),
   });
 
-  const { dehydratedState } = dehydrate(queryClient);
-  dehydratedState.queries.forEach((query) => {
-    // https://github.com/TanStack/query/issues/1458#issuecomment-1022396964
-    // eslint-disable-next-line
-    // @ts-ignore
-    if ('pageParams' in query.state.data) {
-      query.state.data.pageParams = [null];
-    }
-  });
+  const hotArticles = queryClient.getQueryData<
+    GetHotArticlesByOffsetApiData['data']
+  >(hotArticleListQueryKey);
 
-  /* prefetch end */
+  if (hotArticles && !isValidPage(hotArticles)) {
+    return { notFound: true };
+  }
+
+  const { dehydratedState } = dehydrate(queryClient);
 
   return {
     props: {
       dehydratedState,
+      page,
     },
   };
 };
