@@ -273,7 +273,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   /* prefetch start */
   const queryClient = new QueryClient();
-  const articleListQueryKey = queryKeys.articles.list(categoryId, keyword);
+  const articleListQueryKey = queryKeys.articles.listByCursor(categoryId, keyword);
   const articleCategoriesQueryKey = queryKeys.articles.categories();
 
   await Promise.allSettled([

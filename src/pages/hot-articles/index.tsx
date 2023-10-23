@@ -208,7 +208,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   /* prefetch start */
   const queryClient = new QueryClient();
-  const hotArticleListQueryKey = queryKeys.articles.hot(safeKeyword);
+  const hotArticleListQueryKey = queryKeys.articles.hotByCursor(safeKeyword);
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: hotArticleListQueryKey,

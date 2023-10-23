@@ -41,16 +41,45 @@ export const queryKeys = {
   },
   articles: {
     categories: () => ['articles', 'categories'],
-    list: (categoryId: number, searchKeyword?: string) => [
+    listByCursor: (categoryId: number, searchKeyword?: string) => [
       'articles',
       'category',
+      'cursor',
       categoryId,
       searchKeyword ?? null,
     ],
-    hot: (searchKeyword?: string) => ['articles', 'hot', searchKeyword ?? null],
+    listByOffset: (categoryId: number, searchKeyword?: string) => [
+      'articles',
+      'category',
+      'offset',
+      categoryId,
+      searchKeyword ?? null,
+    ],
+    hotByCursor: (searchKeyword?: string) => [
+      'articles',
+      'hot',
+      'cursor',
+      searchKeyword ?? null,
+    ],
+    hotByOffset: (searchKeyword?: string) => [
+      'articles',
+      'hot',
+      'offset',
+      searchKeyword ?? null,
+    ],
     detail: (articleId: number) => ['articles', articleId],
-    mine: () => [...queryKeys.auth(), 'my-articles'],
-    myScraped: () => [...queryKeys.auth(), 'my-scraped-articles'],
+    mineByCursor: () => [...queryKeys.auth(), 'my-articles', 'cursor'],
+    mineByOffset: () => [...queryKeys.auth(), 'my-articles', 'offset'],
+    myScrapedByCursor: () => [
+      ...queryKeys.auth(),
+      'my-scraped-articles',
+      'cursor',
+    ],
+    myScrapedByOffset: () => [
+      ...queryKeys.auth(),
+      'my-scraped-articles',
+      'offset',
+    ],
   },
   articleComments: {
     list: (articleId: number) => ['comments', articleId],

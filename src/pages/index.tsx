@@ -77,7 +77,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const recruitsQueryKey = JSON.parse(JSON.stringify(queryKeys.recruit.list()));
   const hotArticlesQueryKey = JSON.parse(
-    JSON.stringify(queryKeys.articles.hot())
+    JSON.stringify(queryKeys.articles.hotByCursor())
   );
 
   await Promise.allSettled([
