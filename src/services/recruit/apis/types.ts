@@ -1,4 +1,8 @@
-import type { ScrapStatus, InfiniteParams } from '~/services/common';
+import type {
+  ScrapStatus,
+  InfiniteParams,
+  PaginationParams,
+} from '~/services/common';
 import type { UserInfo } from '~/services/member';
 import type { SkillInfo } from '~/services/meta/utils';
 import type {
@@ -84,7 +88,9 @@ export interface AppliedRecruitSummary extends RecruitSummary {
   matchStatus: MatchStatus;
 }
 
-export interface RecruitSummariesQueryStringObject extends InfiniteParams {
+export interface RecruitSummariesQueryStringObject
+  extends InfiniteParams,
+    PaginationParams {
   keyword: string;
   category: RecruitCategoryName;
   includeCompleted: boolean;

@@ -6,9 +6,11 @@ import { queryKeys } from '~/react-query/common';
 import { getRecruitsByCursor } from '~/services/recruit/apis';
 import { toMs } from '~/utils/toMs';
 
-export type UseRecruitsOptions = Partial<RecruitsListPageRouteQuery>;
+export type UseRecruitsByCursorOptions = Partial<RecruitsListPageRouteQuery>;
 
-export const useRecruits = (options: UseRecruitsOptions = {}) => {
+export const useRecruitsByCursor = (
+  options: UseRecruitsByCursorOptions = {}
+) => {
   const { category, keyword, includeCompleted, recruitParts, skills } = options;
 
   const queryKey = queryKeys.recruit.listByCursor({

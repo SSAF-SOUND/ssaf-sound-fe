@@ -16,7 +16,7 @@ export const useMyScrapedArticlesByOffset = (
 ) => {
   const { page = defaultArticlesPageOffset } = params;
   return useQuery({
-    queryKey: queryKeys.articles.myScrapedByOffset({ page }),
+    queryKey: queryKeys.articles.myScrapsByOffset({ page }),
     queryFn: () => getMyScrapedArticlesByOffset({ page }),
     staleTime: toMs(30),
     keepPreviousData: true,

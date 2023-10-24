@@ -4,13 +4,14 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import { getMyScrapedRecruitsByCursor } from '~/services/recruit/apis';
+import {toMs} from "~/utils";
 
-interface UseMyScrapedRecruitsParams {
+export interface UseMyScrapedRecruitsByCursorParams {
   category?: RecruitCategoryName;
 }
 
-export const useMyScrapedRecruits = (
-  params: UseMyScrapedRecruitsParams = {}
+export const useMyScrapedRecruitsByCursor = (
+  params: UseMyScrapedRecruitsByCursorParams = {}
 ) => {
   const { category } = params;
   return useInfiniteQuery({
@@ -24,5 +25,7 @@ export const useMyScrapedRecruits = (
       if (lastPage.isLast) return undefined;
       return lastPage.nextCursor ?? undefined;
     },
+    staleTime: toMs(30),
+
   });
 };
