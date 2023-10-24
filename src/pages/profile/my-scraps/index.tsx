@@ -12,8 +12,6 @@ import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Separator } from '~/components/Common/Separator';
 import { Tabs } from '~/components/Common/Tabs';
 import { EmptyList } from '~/components/EmptyList';
-import { InfiniteList } from '~/components/InfiniteList';
-import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import { QueryItemList } from '~/components/QueryItemList';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
@@ -29,7 +27,7 @@ import {
   validatePage,
 } from '~/services/common/utils/pagination';
 import { useMyInfo } from '~/services/member';
-import { useMyScrapedRecruitsByCursor } from '~/services/recruit/hooks/useMyScrapedRecruitsByCursor';
+import { useMyScrapedRecruitsByOffset } from '~/services/recruit';
 import {
   fixedFullWidth,
   flex,
@@ -40,12 +38,7 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import {
-  concat,
-  createAuthGuard,
-  createNoIndexPageMetaData,
-  routes,
-} from '~/utils';
+import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 import {
   PossibleMyScrapsTabValue,
   PossibleMyScrapsTabValueSet,
@@ -89,24 +82,23 @@ const MyScrapsPage: CustomNextPage = () => {
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 
-  const onTabValueChange = (value: string) => {
-    const tabValue = value as PossibleMyScrapsTabValue;
+  const onTabValueChange = async (value: string) => {
+    const nextTabValue = value as PossibleMyScrapsTabValue;
     const currentTab = safeTab;
 
-    const latestPageOfTargetTab = latestPages[tabValue];
+    const latestPageOfTargetTab = latestPages[nextTabValue];
 
+    await router.push({
+      query: {
+        ...router.query,
+        [ParamsKey.TAB]: nextTabValue,
+        [ParamsKey.PAGE]: latestPageOfTargetTab,
+      },
+    });
     setLatestPages((p) => ({
       ...p,
       [currentTab]: safePage,
     }));
-
-    router.replace({
-      query: {
-        ...router.query,
-        [ParamsKey.TAB]: tabValue,
-        [ParamsKey.PAGE]: latestPageOfTargetTab,
-      },
-    });
   };
 
   return (
@@ -132,7 +124,7 @@ const MyScrapsPage: CustomNextPage = () => {
         />
 
         <Tabs.Root
-          defaultValue={safeTab}
+          value={safeTab}
           onValueChange={onTabValueChange}
           css={{ flexGrow: 1 }}
         >
@@ -298,29 +290,48 @@ interface MyScrapedRecruitsLayerProps {
 }
 const MyScrapedRecruitsLayer = (props: MyScrapedRecruitsLayerProps) => {
   const { page } = props;
-  const infiniteQuery = useMyScrapedRecruitsByCursor();
-  const infiniteData =
-    infiniteQuery?.data?.pages.map(({ recruits }) => recruits).reduce(concat) ??
-    [];
+  const myScrapedRecruitsQuery = useMyScrapedRecruitsByOffset({
+    page,
+  });
 
   return (
-    <InfiniteList
-      data={infiniteData}
-      infiniteQuery={infiniteQuery}
+    <QueryItemList
+      css={listContainerCss}
+      query={myScrapedRecruitsQuery}
       skeleton={<RecruitCardSkeleton size="md" />}
       skeletonCount={6}
-      useWindowScroll={true}
-      skeletonGap={16}
-      itemContent={(_, recruitSummary) => (
-        <RecruitCard
-          size="md"
-          withBadge={true}
-          recruitSummary={recruitSummary}
-        />
-      )}
-      emptyElement={
-        <EmptyInfiniteList text="아직 스크랩한 리쿠르팅이 없습니다." />
-      }
+      render={(data) => {
+        const { currentPage, recruits, totalPageCount } = data;
+        const isEmpty = recruits.length === 0;
+        const isValidPage = validatePage({ currentPage, totalPageCount });
+
+        return (
+          <>
+            <div css={paginationCss}>
+              <ResponsivePagination
+                totalPageCount={totalPageCount}
+                initialPage={currentPage}
+              />
+            </div>
+            {isEmpty ? (
+              isValidPage ? (
+                <EmptyList text="아직 스크랩한 게시글이 없습니다." />
+              ) : (
+                <EmptyList text="유효하지 않은 페이지입니다." />
+              )
+            ) : (
+              recruits.map((recruit) => (
+                <RecruitCard
+                  size="md"
+                  withBadge={true}
+                  recruitSummary={recruit}
+                  key={recruit.recruitId}
+                />
+              ))
+            )}
+          </>
+        );
+      }}
     />
   );
 };
