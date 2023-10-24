@@ -7,13 +7,16 @@ import type {
 import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruit';
 
 type JoinedRecruitsParams = { memberId: number } & Partial<
-  Pick<RecruitSummariesQueryStringObject, 'category' | 'cursor' | 'size'>
+  Pick<
+    RecruitSummariesQueryStringObject,
+    'category' | 'cursor' | 'size' | 'page'
+  >
 >;
 
 type AppliedRecruitsParams = Partial<
   { matchStatus: MatchStatus } & Pick<
     RecruitSummariesQueryStringObject,
-    'category' | 'cursor' | 'size'
+    'category' | 'cursor' | 'size' | 'page'
   >
 >;
 
@@ -21,6 +24,7 @@ type MyScrapedRecruitsParams = Partial<{
   category: RecruitCategoryName;
   cursor: number | null;
   size: number;
+  page: number;
 }>;
 
 export const queryKeys = {
@@ -89,11 +93,10 @@ export const queryKeys = {
       'offset',
       page,
     ],
-    myScrapedBase: () => [...queryKeys.auth(), 'my-scraped-articles'],
-    myScrapedByCursor: () => [...queryKeys.articles.myScrapedBase(), 'cursor'],
-    myScrapedByOffset: ({ page }: { page: number }) => [
-      ...queryKeys.articles.myScrapedBase(),
-
+    myScrapsBase: () => [...queryKeys.auth(), 'my-scraped-articles'],
+    myScrapsByCursor: () => [...queryKeys.articles.myScrapsBase(), 'cursor'],
+    myScrapsByOffset: ({ page }: { page: number }) => [
+      ...queryKeys.articles.myScrapsBase(),
       'offset',
       page,
     ],
@@ -116,31 +119,27 @@ export const queryKeys = {
       'participants',
     ],
     listBase: () => [...queryKeys.recruit.self()],
-    listByCursor: (params: RecruitsListPageRouteQuery = {}) => {
-      const { category, keyword, recruitParts, skills, includeCompleted } =
-        params;
-
-      return [
-        ...queryKeys.recruit.listBase(),
-        'cursor',
-        {
-          category,
-          keyword,
-          recruitParts,
-          skills,
-          includeCompleted,
-        },
-      ];
-    },
-
+    listByCursor: (params: Omit<RecruitsListPageRouteQuery, 'page'> = {}) => [
+      ...queryKeys.recruit.listBase(),
+      'cursor',
+      params,
+    ],
+    listByOffset: (params: RecruitsListPageRouteQuery = {}) => [
+      ...queryKeys.recruit.listBase(),
+      'offset',
+      params,
+    ],
     joinedListBase: () => [
       ...queryKeys.auth(),
       ...queryKeys.recruit.self(),
       'joined',
     ],
     joinedListByCursor: (
-      params: Omit<JoinedRecruitsParams, 'cursor' | 'size'>
+      params: Omit<JoinedRecruitsParams, 'cursor' | 'size' | 'page'>
     ) => [...queryKeys.recruit.joinedListBase(), 'cursor', params],
+    joinedListByOffset: (
+      params: Omit<JoinedRecruitsParams, 'cursor' | 'size'>
+    ) => [...queryKeys.recruit.joinedListBase(), 'offset', params],
 
     appliedListBase: () => [
       ...queryKeys.auth(),
@@ -149,8 +148,14 @@ export const queryKeys = {
     ],
     appliedListByCursor: {
       self: () => [...queryKeys.recruit.appliedListBase(), 'cursor'],
+      filter: (
+        params: Omit<AppliedRecruitsParams, 'cursor' | 'size' | 'page'>
+      ) => [...queryKeys.recruit.appliedListByCursor.self(), params],
+    },
+    appliedListByOffset: {
+      self: () => [...queryKeys.recruit.appliedListBase(), 'offset'],
       filter: (params: Omit<AppliedRecruitsParams, 'cursor' | 'size'>) => [
-        ...queryKeys.recruit.appliedListByCursor.self(),
+        ...queryKeys.recruit.appliedListByOffset.self(),
         params,
       ],
     },
@@ -158,7 +163,10 @@ export const queryKeys = {
     myScrapsBase: () => [...queryKeys.auth(), 'my-scraped-recruits'],
     myScrapsByCursor: (
       params: Pick<MyScrapedRecruitsParams, 'category'> = {}
-    ) => [...queryKeys.recruit.myScrapsBase(), params],
+    ) => [...queryKeys.recruit.myScrapsBase(), 'cursor', params],
+    myScrapsByOffset: (
+      params: Pick<MyScrapedRecruitsParams, 'page' | 'category'>
+    ) => [...queryKeys.recruit.myScrapsBase(), 'offset', params],
 
     application: {
       self: (recruitId: number) => [
@@ -297,8 +305,8 @@ export const endpoints = {
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
     complete: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/expired` as const,
-    listByCursor: () => `${endpoints.recruit.self()}/cursor`,
-    listByOffset: () => `${endpoints.recruit.self()}/offset`,
+    listByCursor: () => `${endpoints.recruit.self()}/cursor` as const,
+    listByOffset: () => `${endpoints.recruit.self()}/offset` as const,
     joinedListByCursor: () =>
       `${endpoints.recruit.self()}/joined/cursor` as const,
     joinedListByOffset: () =>
