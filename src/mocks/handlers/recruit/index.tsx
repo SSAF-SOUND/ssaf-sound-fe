@@ -27,18 +27,17 @@ export const recruitHandlers = [
   mockGetAppliedRecruitsByOffset,
   mockGetMyScrapedRecruitsByOffset,
   // getMyScrapedRecruitsError,
+  mockGetRecruitsByOffset, // /recruits/offset
 
   mockGetRecruitApplicants,
   mockCreateRecruit,
-  mockGetRecruitDetail,
+  mockGetRecruitDetail, // /recruits/:[id]
   // mockGetRecruitDetailError,
   mockGetRecruitParticipants,
   mockScrapRecruit,
   mockRemoveRecruit,
   mockUpdateRecruit,
   mockCompleteRecruit,
-
-  mockGetRecruitsByOffset,
 
   mockApplyRecruit,
   mockGetMyRecruitApplication, // /recruit-applications/mine
