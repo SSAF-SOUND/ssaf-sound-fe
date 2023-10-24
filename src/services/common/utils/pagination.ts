@@ -5,8 +5,14 @@ import {
   defaultArticlesPageOffset,
 } from '~/services/article/apis/constants';
 
-export const isValidPage = (params: PaginationStatus) => {
+export const validatePage = (params: PaginationStatus) => {
   const { currentPage, totalPageCount } = params;
+
+  // 아무런 데이터가 없는 경우
+  if (totalPageCount === 0 && currentPage === 1) {
+    return true;
+  }
+
   return (
     defaultArticlesFirstPage <= currentPage && currentPage <= totalPageCount
   );
