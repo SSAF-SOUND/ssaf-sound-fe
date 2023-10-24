@@ -11,7 +11,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Tabs } from '~/components/Common/Tabs';
-import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
+import { EmptyList } from '~/components/EmptyList';
 import { ProfileTabs } from '~/components/Profile';
 import { QueryItemList } from '~/components/QueryItemList';
 import {
@@ -184,7 +184,8 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
 
 const tabsListHeight = 48;
 const paginationTop = titleBarHeight + breadcrumbsHeight + tabsListHeight;
-const paginationHeight = 32 + 12;
+const paginationHeight = 32;
+const paginationPaggindY = 8;
 const fixedLayoutZIndex = 2;
 const selfPaddingY = paginationTop + paginationHeight;
 
@@ -226,7 +227,8 @@ const paginationCss = css(
   {
     top: paginationTop,
     zIndex: fixedLayoutZIndex,
-    height: paginationHeight,
+    padding: `${paginationPaggindY}px 0`,
+    minHeight: paginationHeight,
     backgroundColor: palettes.background.default,
   }
 );
@@ -285,12 +287,12 @@ const TabContentInner = (props: TabContentProps) => {
             <>
               <div css={paginationCss}>
                 <ResponsivePagination
-                  totalPageCount={totalPageCount}
+                  totalPageCount={111111}
                   initialPage={currentPage}
                 />
               </div>
               {isEmpty ? (
-                <EmptyInfiniteList
+                <EmptyList
                   text={
                     isValidPage
                       ? emptyRecruitsText
