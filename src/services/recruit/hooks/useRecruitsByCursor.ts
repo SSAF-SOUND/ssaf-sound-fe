@@ -3,15 +3,17 @@ import type { RecruitsListPageRouteQuery } from '~/utils/client-routes/recruit';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { getRecruits } from '~/services/recruit/apis';
+import { getRecruitsByCursor } from '~/services/recruit/apis';
 import { toMs } from '~/utils/toMs';
 
-export type UseRecruitsOptions = Partial<RecruitsListPageRouteQuery>;
+export type UseRecruitsByCursorOptions = Partial<RecruitsListPageRouteQuery>;
 
-export const useRecruits = (options: UseRecruitsOptions = {}) => {
+export const useRecruitsByCursor = (
+  options: UseRecruitsByCursorOptions = {}
+) => {
   const { category, keyword, includeCompleted, recruitParts, skills } = options;
 
-  const queryKey = queryKeys.recruit.list({
+  const queryKey = queryKeys.recruit.listByCursor({
     includeCompleted,
     keyword,
     recruitParts,
@@ -22,7 +24,7 @@ export const useRecruits = (options: UseRecruitsOptions = {}) => {
   return useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam }) =>
-      getRecruits({
+      getRecruitsByCursor({
         cursor: pageParam,
         keyword,
         includeCompleted,

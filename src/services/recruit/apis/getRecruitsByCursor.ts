@@ -16,15 +16,15 @@ import {
 } from '~/services/recruit/apis/constants';
 import { publicAxios } from '~/utils';
 
-export type GetRecruitsParams = Partial<
+export type GetRecruitsByCursorParams = Partial<
   RecruitsListPageRouteQuery & InfiniteParams
 >;
 
-export type GetRecruitsApiData = ApiSuccessResponse<
+export type GetRecruitsByCursorApiData = ApiSuccessResponse<
   { recruits: RecruitSummary[] } & RecruitCursorData
 >;
 
-export interface GetRecruitsQueryParams extends InfiniteParams {
+export interface GetRecruitsByCursorQueryParams extends InfiniteParams {
   category?: RecruitCategoryName;
   keyword?: string;
   isFinished?: boolean;
@@ -32,7 +32,7 @@ export interface GetRecruitsQueryParams extends InfiniteParams {
   skills?: SkillName | SkillName[];
 }
 
-export const getRecruits = (params: GetRecruitsParams = {}) => {
+export const getRecruitsByCursor = (params: GetRecruitsByCursorParams = {}) => {
   const {
     size = defaultRecruitsPageSize,
     cursor = defaultRecruitsPageCursor,
@@ -43,8 +43,8 @@ export const getRecruits = (params: GetRecruitsParams = {}) => {
     keyword,
   } = params;
 
-  const endpoint = endpoints.recruit.list();
-  const queryParams: GetRecruitsQueryParams = {
+  const endpoint = endpoints.recruit.listByCursor();
+  const queryParams: GetRecruitsByCursorQueryParams = {
     size,
     cursor,
     category,
@@ -54,7 +54,7 @@ export const getRecruits = (params: GetRecruitsParams = {}) => {
     keyword,
   };
 
-  return publicAxios<GetRecruitsApiData>({
+  return publicAxios<GetRecruitsByCursorApiData>({
     method: 'get',
     url: endpoint,
     params: queryParams,

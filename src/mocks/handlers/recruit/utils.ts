@@ -1,9 +1,11 @@
 import type { ResponseComposition, RestContext, RestRequest } from 'msw';
 import type {
-  GetAppliedRecruitsApiData,
-  GetRecruitsApiData,
+  GetAppliedRecruitsByCursorApiData,
+  GetRecruitsByCursorApiData,
+  GetRecruitsByOffsetApiData,
 } from '~/services/recruit';
 
+import { articleSummaries } from '~/mocks/handlers/article/data';
 import {
   appliedProjectRecruitSummaries,
   appliedStudyRecruitSummaries,
@@ -11,6 +13,10 @@ import {
   studyRecruitSummaries,
 } from '~/mocks/handlers/recruit/data';
 import { mockSuccess } from '~/mocks/utils';
+import {
+  defaultArticlesPageKey,
+  GetArticlesByOffsetApiData,
+} from '~/services/article';
 import { RecruitCategoryName } from '~/services/recruit';
 
 const infiniteRecruitsHandler = () => {
@@ -42,7 +48,7 @@ const infiniteRecruitsHandler = () => {
 
     return res(
       ctx.delay(100),
-      ...mockSuccess<GetRecruitsApiData['data']>(ctx, {
+      ...mockSuccess<GetRecruitsByCursorApiData['data']>(ctx, {
         recruits: data,
         nextCursor,
         isLast: isReachingEnd,
@@ -80,7 +86,7 @@ const infiniteAppliedRecruitsHandler = () => {
 
     return res(
       ctx.delay(500),
-      ...mockSuccess<GetAppliedRecruitsApiData['data']>(ctx, {
+      ...mockSuccess<GetAppliedRecruitsByCursorApiData['data']>(ctx, {
         recruits: data,
         nextCursor,
         isLast: isReachingEnd,
@@ -92,3 +98,22 @@ const infiniteAppliedRecruitsHandler = () => {
 export const restInfiniteRecruitsSuccess = infiniteRecruitsHandler();
 export const restInfiniteAppliedRecruitsSuccess =
   infiniteAppliedRecruitsHandler();
+
+export const paginatedRecruitsHandler = (
+  empty = false,
+  totalPageCount = 200
+) => {
+  return (req: RestRequest, res: ResponseComposition, ctx: RestContext) => {
+    const unsafePage = Number(req.url.searchParams.get(defaultArticlesPageKey));
+    const page = Number.isNaN(unsafePage) ? 1 : unsafePage;
+
+    return res(
+      ctx.delay(0),
+      ...mockSuccess<GetRecruitsByOffsetApiData['data']>(ctx, {
+        recruits: empty ? [] : projectRecruitSummaries.slice(0, 20),
+        currentPage: page,
+        totalPageCount,
+      })
+    );
+  };
+};

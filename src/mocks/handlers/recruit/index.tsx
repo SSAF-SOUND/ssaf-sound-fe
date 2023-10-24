@@ -4,15 +4,15 @@ import { mockCancelRecruitApplication } from '~/mocks/handlers/recruit/apis/mock
 import { mockCompleteRecruit } from '~/mocks/handlers/recruit/apis/mockCompleteRecruit';
 import { mockCreateRecruit } from '~/mocks/handlers/recruit/apis/mockCreateRecruit';
 import { mockExcludeRecruitParticipant } from '~/mocks/handlers/recruit/apis/mockExcludeRecruitParticipant';
-import { mockGetAppliedRecruits } from '~/mocks/handlers/recruit/apis/mockGetAppliedRecruits';
-import { mockGetJoinedRecruits } from '~/mocks/handlers/recruit/apis/mockGetJoinedRecruits';
+import { mockGetAppliedRecruitsByOffset } from '~/mocks/handlers/recruit/apis/mockGetAppliedRecruitsByOffset';
+import { mockGetJoinedRecruitsByOffset } from '~/mocks/handlers/recruit/apis/mockGetJoinedRecruitsByOffset';
 import { mockGetMyRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetMyRecruitApplication';
-import { mockGetMyScrapedRecruits } from '~/mocks/handlers/recruit/apis/mockGetMyScrapedRecruits';
+import { mockGetMyScrapedRecruitsByOffset } from '~/mocks/handlers/recruit/apis/mockGetMyScrapedRecruitsByOffset';
 import { mockGetRecruitApplicants } from '~/mocks/handlers/recruit/apis/mockGetRecruitApplicants';
 import { mockGetRecruitApplication } from '~/mocks/handlers/recruit/apis/mockGetRecruitApplication';
 import { mockGetRecruitDetail } from '~/mocks/handlers/recruit/apis/mockGetRecruitDetail';
 import { mockGetRecruitParticipants } from '~/mocks/handlers/recruit/apis/mockGetRecruitParticipants';
-import { mockGetRecruits } from '~/mocks/handlers/recruit/apis/mockGetRecruits';
+import { mockGetRecruitsByOffset } from '~/mocks/handlers/recruit/apis/mockGetRecruitsByOffset';
 import { mockGetRejectedRecruitApplicants } from '~/mocks/handlers/recruit/apis/mockGetRejectedRecruitApplicants';
 import { mockLikeRecruitApplication } from '~/mocks/handlers/recruit/apis/mockLikeRecruitApplication';
 import { mockRejectRecruitApplication } from '~/mocks/handlers/recruit/apis/mockRejectRecruitApplication';
@@ -23,22 +23,21 @@ import { mockUpdateRecruit } from '~/mocks/handlers/recruit/apis/mockUpdateRecru
 export const recruitHandlers = [
   //
   mockGetRejectedRecruitApplicants,
-  mockGetJoinedRecruits,
-  mockGetAppliedRecruits,
-  mockGetMyScrapedRecruits,
+  mockGetJoinedRecruitsByOffset,
+  mockGetAppliedRecruitsByOffset,
+  mockGetMyScrapedRecruitsByOffset,
   // getMyScrapedRecruitsError,
+  mockGetRecruitsByOffset, // /recruits/offset
 
   mockGetRecruitApplicants,
   mockCreateRecruit,
-  mockGetRecruitDetail,
+  mockGetRecruitDetail, // /recruits/:[id]
   // mockGetRecruitDetailError,
   mockGetRecruitParticipants,
   mockScrapRecruit,
   mockRemoveRecruit,
   mockUpdateRecruit,
   mockCompleteRecruit,
-
-  mockGetRecruits,
 
   mockApplyRecruit,
   mockGetMyRecruitApplication, // /recruit-applications/mine

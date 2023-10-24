@@ -3,26 +3,37 @@ import type { CustomNextPage } from 'next/types';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { useState } from 'react';
 
 import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import NameCard from '~/components/NameCard';
-import { getSafeProfileTabValue, Profile } from '~/components/Profile';
+import {
+  getSafeProfileTabValue,
+  Profile,
+  ProfileTabs,
+} from '~/components/Profile';
 import TitleBar from '~/components/TitleBar';
+import { toSafePageValue } from '~/services/common/utils/pagination';
 import {
   useMyInfo,
   useUserInfo,
   useUserProfileVisibility,
 } from '~/services/member';
-import { RecruitCategoryName } from '~/services/recruit';
+import {
+  defaultRecruitsFirstPage,
+  defaultRecruitsPageKey,
+  RecruitCategoryName,
+} from '~/services/recruit';
 import {
   expandCss,
   flex,
   globalVars,
   gnbHeight,
   pageCss,
+  titleBarHeight,
   topBarHeight,
 } from '~/styles/utils';
 import { createNoIndexPageMetaData, routes } from '~/utils';
@@ -34,13 +45,24 @@ const createMetaTitle = (username: string) => {
 const enum ParamsKey {
   USER_ID = 'userId',
   TAB = 'tab',
+  PAGE = defaultRecruitsPageKey,
 }
-type Params = Record<ParamsKey, string>;
+type Params = {
+  [ParamsKey.USER_ID]?: string;
+  [ParamsKey.TAB]?: ProfileTabs;
+  [ParamsKey.PAGE]?: string;
+};
 
 const UserProfilePage: CustomNextPage = () => {
   const router = useRouter();
   const query = router.query as Params;
   const userId = Number(query.userId);
+  const { page, tab } = query;
+  const [latestPages, setLatestPages] = useState({
+    [ProfileTabs.PROJECT]: defaultRecruitsFirstPage,
+    [ProfileTabs.STUDY]: defaultRecruitsFirstPage,
+    [ProfileTabs.PORTFOLIO]: undefined,
+  });
 
   const { data: myInfo, isLoading: isMyInfoLoading } = useMyInfo();
   const {
@@ -75,11 +97,33 @@ const UserProfilePage: CustomNextPage = () => {
 
   const isProfilePublic = userProfileVisibility.isPublic;
   const metaTitle = createMetaTitle(userInfo.nickname);
-  const tabValue = getSafeProfileTabValue(query.tab);
-  const onTabValueChange = (value: string) => {
-    router.replace({
-      query: { ...router.query, [ParamsKey.TAB]: value },
+  const safePage = toSafePageValue(page);
+  const safeTabValue = getSafeProfileTabValue(tab);
+
+  const onTabValueChange = async (value: string) => {
+    const nextTabValue = value as ProfileTabs;
+    const latestPageOfNextTabValue = latestPages[nextTabValue];
+    const previousTabValue = safeTabValue;
+
+    // 다음 탭이 "포트폴리오"라면 page값을 지움.
+    await router.push({
+      query: {
+        ...router.query,
+        [ParamsKey.TAB]: nextTabValue,
+        [ParamsKey.PAGE]: latestPageOfNextTabValue ?? [],
+      },
     });
+
+    if (
+      previousTabValue === ProfileTabs.PROJECT ||
+      previousTabValue === ProfileTabs.STUDY
+    ) {
+      setLatestPages((p) => ({
+        ...p,
+        [previousTabValue]: safePage,
+      }));
+      return;
+    }
   };
 
   const metaData = createNoIndexPageMetaData(metaTitle);
@@ -114,7 +158,7 @@ const UserProfilePage: CustomNextPage = () => {
 
         {isProfilePublic ? (
           <Profile.Tabs.Root
-            defaultValue={tabValue}
+            value={safeTabValue}
             onValueChange={onTabValueChange}
           >
             <Profile.Tabs.Triggers css={pageExpandCss} />
@@ -129,12 +173,16 @@ const UserProfilePage: CustomNextPage = () => {
               category={RecruitCategoryName.PROJECT}
               userId={userId}
               mine={false}
+              page={safePage}
+              paginationContainerStyle={paginationOverrideStyle}
             />
 
             <Profile.Tabs.JoinedRecruitsTabContent
               category={RecruitCategoryName.STUDY}
               userId={userId}
               mine={false}
+              page={safePage}
+              paginationContainerStyle={paginationOverrideStyle}
             />
           </Profile.Tabs.Root>
         ) : (
@@ -146,6 +194,7 @@ const UserProfilePage: CustomNextPage = () => {
 };
 
 export default UserProfilePage;
+UserProfilePage.mainLayoutStyle = { overflow: 'unset' };
 
 const privateProfileCss = css({ flexGrow: 1 });
 
@@ -156,6 +205,11 @@ const selfCss = css(
   pageCss.minHeight,
   flex('', '', 'column')
 );
+const paginationTop = titleBarHeight + breadcrumbsHeight;
+
+const paginationOverrideStyle = {
+  top: paginationTop,
+};
 
 const pageExpandCss = expandCss(globalVars.mainLayoutPaddingX.var);
 

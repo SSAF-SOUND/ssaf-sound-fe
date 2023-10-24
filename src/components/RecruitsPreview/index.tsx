@@ -5,7 +5,10 @@ import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCar
 import { RecruitsPreviewRecruitList } from '~/components/RecruitsPreview/RecruitsPreviewRecruitList';
 import { recruitPreviewMarginForExpandCssVar } from '~/components/RecruitsPreview/utils';
 import TitleBar from '~/components/TitleBar';
-import { defaultRecruitsPageSize, useRecruits } from '~/services/recruit';
+import {
+  defaultRecruitsPageSize,
+  useRecruitsByOffset,
+} from '~/services/recruit';
 import { flex } from '~/styles/utils';
 import { routes } from '~/utils';
 
@@ -22,10 +25,9 @@ export const RecruitsPreview = (props: RecruitsPreviewProps) => {
     isLoading: isRecruitsLoading,
     isError: isRecruitsError,
     isSuccess: isRecruitsSuccess,
-  } = useRecruits();
+  } = useRecruitsByOffset();
 
-  const latestRecruits =
-    recruits?.pages[0].recruits.slice(0, maxViewCount) ?? [];
+  const latestRecruits = recruits?.recruits.slice(0, maxViewCount) ?? [];
   const notExistRecruits = latestRecruits.length === 0;
 
   const style = {

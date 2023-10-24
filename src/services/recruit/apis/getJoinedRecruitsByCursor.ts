@@ -1,6 +1,6 @@
 import type { InfiniteParams } from '~/services/common';
 import type {
-  GetRecruitsApiData,
+  GetRecruitsByCursorApiData,
   RecruitCategoryName,
 } from '~/services/recruit';
 
@@ -11,21 +11,21 @@ import {
 } from '~/services/recruit';
 import { publicAxios } from '~/utils';
 
-export interface GetJoinedRecruitsParams {
+export interface GetJoinedRecruitsByCursorParams {
   userId: number;
   category?: RecruitCategoryName;
   cursor?: number;
   size?: number;
 }
 
-export type GetJoinedRecruitsApiData = GetRecruitsApiData;
+export type GetJoinedRecruitsByCursorApiData = GetRecruitsByCursorApiData;
 
-export interface GetJoinedRecruitsQueryParams extends InfiniteParams {
+export interface GetJoinedRecruitsByCursorQueryParams extends InfiniteParams {
   memberId: number;
   category?: RecruitCategoryName;
 }
 
-export const getJoinedRecruits = (params: GetJoinedRecruitsParams) => {
+export const getJoinedRecruitsByCursor = (params: GetJoinedRecruitsByCursorParams) => {
   const {
     cursor = defaultRecruitsPageCursor,
     size = defaultRecruitsPageSize,
@@ -33,15 +33,15 @@ export const getJoinedRecruits = (params: GetJoinedRecruitsParams) => {
     userId,
   } = params;
 
-  const endpoint = endpoints.recruit.joinedList();
-  const queryParams: GetJoinedRecruitsQueryParams = {
+  const endpoint = endpoints.recruit.joinedListByCursor();
+  const queryParams: GetJoinedRecruitsByCursorQueryParams = {
     memberId: userId,
     category,
     cursor,
     size,
   };
 
-  return publicAxios<GetJoinedRecruitsApiData>({
+  return publicAxios<GetJoinedRecruitsByCursorApiData>({
     method: 'get',
     url: endpoint,
     params: queryParams,

@@ -1,5 +1,5 @@
 import type { InfiniteParams } from '~/services/common';
-import type { GetRecruitsApiData } from '~/services/recruit';
+import type { GetRecruitsByCursorApiData } from '~/services/recruit';
 import type { RecruitCategoryName } from '~/services/recruit/utils';
 
 import { endpoints } from '~/react-query/common';
@@ -9,20 +9,21 @@ import {
 } from '~/services/recruit';
 import { privateAxios } from '~/utils';
 
-export interface GetMyScrapedRecruitsParams {
+export interface GetMyScrapedRecruitsByCursorParams {
   category?: RecruitCategoryName;
   cursor?: number;
   size?: number;
 }
 
-export interface GetMyScrapedRecruitsQueryParams extends InfiniteParams {
+export interface GetMyScrapedRecruitsByCursorQueryParams
+  extends InfiniteParams {
   category?: RecruitCategoryName;
 }
 
-export type GetMyScrapedRecruitsApiData = GetRecruitsApiData;
+export type GetMyScrapedRecruitsByCursorApiData = GetRecruitsByCursorApiData;
 
-export const getMyScrapedRecruits = (
-  params: GetMyScrapedRecruitsParams = {}
+export const getMyScrapedRecruitsByCursor = (
+  params: GetMyScrapedRecruitsByCursorParams = {}
 ) => {
   const {
     category,
@@ -30,14 +31,14 @@ export const getMyScrapedRecruits = (
     size = defaultRecruitsPageSize,
   } = params;
 
-  const endpoint = endpoints.recruit.myScraped();
-  const queryParams: GetMyScrapedRecruitsQueryParams = {
+  const endpoint = endpoints.recruit.myScrapsByCursor();
+  const queryParams: GetMyScrapedRecruitsByCursorQueryParams = {
     category,
     size,
     cursor,
   };
 
-  return privateAxios<GetMyScrapedRecruitsApiData>({
+  return privateAxios<GetMyScrapedRecruitsByCursorApiData>({
     method: 'get',
     url: endpoint,
     params: queryParams,

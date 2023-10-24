@@ -31,7 +31,7 @@ import {
 } from '~/services/article/apis';
 import { useHotArticlesByOffset } from '~/services/article/hooks';
 import {
-  isValidPage,
+  validatePage,
   toSafePageValue,
 } from '~/services/common/utils/pagination';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
@@ -267,7 +267,10 @@ export const getServerSideProps: GetServerSideProps<
   }
 
   const queryClient = new QueryClient();
-  const hotArticleListQueryKey = queryKeys.articles.hotByCursor(safeKeyword);
+  const hotArticleListQueryKey = queryKeys.articles.hotByOffset({
+    searchKeyword: safeKeyword,
+    page,
+  });
 
   await queryClient.prefetchQuery({
     queryKey: hotArticleListQueryKey,
@@ -282,7 +285,7 @@ export const getServerSideProps: GetServerSideProps<
     GetHotArticlesByOffsetApiData['data']
   >(hotArticleListQueryKey);
 
-  if (hotArticles && !isValidPage(hotArticles)) {
+  if (hotArticles && !validatePage(hotArticles)) {
     return { notFound: true };
   }
 

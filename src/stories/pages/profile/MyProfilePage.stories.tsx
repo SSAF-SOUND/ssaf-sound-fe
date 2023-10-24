@@ -7,9 +7,9 @@ import {
 } from '~/mocks/handlers/member/apis/mockGetMyPortfolio';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import {
-  mockGetEmptyJoinedRecruits,
-  mockGetJoinedRecruits,
-} from '~/mocks/handlers/recruit/apis/mockGetJoinedRecruits';
+  mockGetEmptyJoinedRecruitsByCursor,
+  mockGetJoinedRecruitsByCursor,
+} from '~/mocks/handlers/recruit/apis/mockGetJoinedRecruitsByCursor';
 import MyProfilePage from '~/pages/profile';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
@@ -43,7 +43,7 @@ export const Default: MyProfilePageStory = {
   parameters: {
     ...createMswParameters({
       member: [mockGetMyPortfolio],
-      recruit: [mockGetJoinedRecruits],
+      recruit: [mockGetJoinedRecruitsByCursor],
     }),
   },
 };
@@ -53,7 +53,7 @@ export const Empty: MyProfilePageStory = {
   parameters: {
     ...createMswParameters({
       member: [mockGetMyEmptyPortfolio],
-      recruit: [mockGetEmptyJoinedRecruits],
+      recruit: [mockGetEmptyJoinedRecruitsByCursor],
     }),
   },
 };

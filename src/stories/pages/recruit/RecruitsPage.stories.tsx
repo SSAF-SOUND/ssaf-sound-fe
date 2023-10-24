@@ -5,9 +5,9 @@ import {
   mockGetMyInfoError,
 } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import {
-  mockGetEmptyRecruits,
-  mockGetRecruits,
-} from '~/mocks/handlers/recruit/apis/mockGetRecruits';
+  mockGetEmptyRecruitsByCursor,
+  mockGetRecruitsByCursor,
+} from '~/mocks/handlers/recruit/apis/mockGetRecruitsByCursor';
 import RecruitsPage from '~/pages/recruits';
 import { RecruitCategoryName } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
@@ -27,7 +27,7 @@ const meta: Meta<typeof RecruitsPage> = {
     layout: 'fullscreen',
     ...createMswParameters({
       member: [mockGetCertifiedSsafyMyInfo],
-      recruit: [mockGetRecruits],
+      recruit: [mockGetRecruitsByCursor],
     }),
   },
 };
@@ -53,7 +53,7 @@ export const NotExist: RecruitsPageStory = {
   name: '빈 리쿠르팅 데이터',
   parameters: {
     ...createMswParameters({
-      recruit: [mockGetEmptyRecruits],
+      recruit: [mockGetEmptyRecruitsByCursor],
     }),
   },
 };

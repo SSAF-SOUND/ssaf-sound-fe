@@ -1,17 +1,26 @@
 import type { CustomNextPage } from 'next/types';
-import type { ProfileTabs } from '~/components/Profile';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { useState } from 'react';
 
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import NameCard from '~/components/NameCard';
 import NavigationGroup from '~/components/NavigationGroup';
-import { getSafeProfileTabValue, Profile } from '~/components/Profile';
+import {
+  getSafeProfileTabValue,
+  Profile,
+  ProfileTabs,
+} from '~/components/Profile';
+import { toSafePageValue } from '~/services/common/utils/pagination';
 import { useMyInfo } from '~/services/member';
-import { RecruitCategoryName } from '~/services/recruit';
+import {
+  defaultRecruitsFirstPage,
+  defaultRecruitsPageKey,
+  RecruitCategoryName,
+} from '~/services/recruit';
 import {
   expandCss,
   flex,
@@ -23,31 +32,61 @@ import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 
 const enum ParamsKey {
   TAB = 'tab',
+  PAGE = defaultRecruitsPageKey,
 }
 
 type Params = {
-  [ParamsKey.TAB]: ProfileTabs;
+  [ParamsKey.TAB]?: ProfileTabs;
+  [ParamsKey.PAGE]?: string;
 };
 
 const metaTitle = '내 프로필';
 
 const MyProfilePage: CustomNextPage = () => {
   const router = useRouter();
-  const query = router.query as Partial<Params>;
+  const query = router.query as Params;
+  const { page, tab } = query;
   const { data: myInfo } = useMyInfo();
+  const [latestPages, setLatestPages] = useState({
+    [ProfileTabs.PROJECT]: defaultRecruitsFirstPage,
+    [ProfileTabs.STUDY]: defaultRecruitsFirstPage,
+    [ProfileTabs.PORTFOLIO]: undefined,
+  });
 
   if (!myInfo) {
     router.replace(routes.auth.signIn());
     return <FullPageLoader text={loaderText.checkUser} />;
   }
 
-  const tabValue = getSafeProfileTabValue(query.tab);
-  const onTabValueChange = (value: string) => {
-    router.replace({
-      query: { ...router.query, [ParamsKey.TAB]: value },
+  const safePage = toSafePageValue(page);
+  const safeTabValue = getSafeProfileTabValue(tab);
+
+  const onTabValueChange = async (value: string) => {
+    const nextTabValue = value as ProfileTabs;
+    const latestPageOfNextTabValue = latestPages[nextTabValue];
+    const previousTabValue = safeTabValue;
+
+    // 다음 탭이 "포트폴리오"라면 page값을 지움.
+    await router.push({
+      query: {
+        ...router.query,
+        [ParamsKey.TAB]: nextTabValue,
+        [ParamsKey.PAGE]: latestPageOfNextTabValue ?? [],
+      },
     });
+
+    if (
+      previousTabValue === ProfileTabs.PROJECT ||
+      previousTabValue === ProfileTabs.STUDY
+    ) {
+      setLatestPages((p) => ({
+        ...p,
+        [previousTabValue]: safePage,
+      }));
+      return;
+    }
   };
-  const { memberId } = myInfo;
+  const { memberId: myId } = myInfo;
 
   return (
     <>
@@ -74,7 +113,7 @@ const MyProfilePage: CustomNextPage = () => {
         </div>
 
         <Profile.Tabs.Root
-          defaultValue={tabValue}
+          value={safeTabValue}
           onValueChange={onTabValueChange}
         >
           <Profile.Tabs.Triggers css={pageExpandCss} />
@@ -87,14 +126,16 @@ const MyProfilePage: CustomNextPage = () => {
 
           <Profile.Tabs.JoinedRecruitsTabContent
             category={RecruitCategoryName.PROJECT}
-            userId={memberId}
+            userId={myId}
             mine={true}
+            page={safePage}
           />
 
           <Profile.Tabs.JoinedRecruitsTabContent
             category={RecruitCategoryName.STUDY}
-            userId={memberId}
+            userId={myId}
             mine={true}
+            page={safePage}
           />
         </Profile.Tabs.Root>
       </div>
@@ -114,3 +155,4 @@ const myArticlesLayerCss = css(flex('', 'center', 'column', 8));
 export default MyProfilePage;
 MyProfilePage.auth = createAuthGuard();
 MyProfilePage.meta = createNoIndexPageMetaData(metaTitle);
+MyProfilePage.mainLayoutStyle = { overflow: 'unset' };

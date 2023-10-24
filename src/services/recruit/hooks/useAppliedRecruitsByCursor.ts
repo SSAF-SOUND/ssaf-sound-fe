@@ -3,19 +3,19 @@ import type { RecruitCategoryName , MatchStatus } from '~/services/recruit/utils
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { getAppliedRecruits } from '~/services/recruit/apis';
+import { getAppliedRecruitsByCursor } from '~/services/recruit/apis';
 
-interface UseAppliedRecruitsParams {
+export interface UseAppliedRecruitsByCursorParams {
   category?: RecruitCategoryName;
   matchStatus?: MatchStatus;
 }
 
-export const useAppliedRecruits = (params: UseAppliedRecruitsParams) => {
+export const useAppliedRecruitsByCursor = (params: UseAppliedRecruitsByCursorParams) => {
   const { matchStatus, category } = params;
   return useInfiniteQuery({
-    queryKey: queryKeys.recruit.appliedList.filter({ matchStatus, category }),
+    queryKey: queryKeys.recruit.appliedListByCursor.filter({ matchStatus, category }),
     queryFn: ({ pageParam }) =>
-      getAppliedRecruits({
+      getAppliedRecruitsByCursor({
         matchStatus,
         category,
         cursor: pageParam,

@@ -34,7 +34,7 @@ import {
   useArticlesByOffset,
 } from '~/services/article';
 import {
-  isValidPage,
+  validatePage,
   toSafePageValue,
 } from '~/services/common/utils/pagination';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
@@ -341,7 +341,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
       articleListQueryKey
     );
 
-  if (articles && !isValidPage(articles)) {
+  if (articles && !validatePage(articles)) {
     return { notFound: true };
   }
 

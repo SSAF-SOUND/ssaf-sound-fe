@@ -6,7 +6,7 @@ import { toMs } from '~/utils';
 
 export const useMyScrapedArticlesByCursor = () => {
   return useInfiniteQuery({
-    queryKey: queryKeys.articles.myScrapedByCursor(),
+    queryKey: queryKeys.articles.myScrapsByCursor(),
     queryFn: ({ pageParam }) =>
       getMyScrapedArticlesByCursor({ cursor: pageParam }),
     getNextPageParam: (lastPage) => {

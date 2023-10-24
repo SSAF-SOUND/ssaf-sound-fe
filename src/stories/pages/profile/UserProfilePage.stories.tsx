@@ -9,9 +9,9 @@ import {
 import { createMockGetUserProfileVisibility } from '~/mocks/handlers/member/apis/mockGetUserProfileVisibility';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import {
-  mockGetEmptyJoinedRecruits,
-  mockGetJoinedRecruits,
-} from '~/mocks/handlers/recruit/apis/mockGetJoinedRecruits';
+  mockGetEmptyJoinedRecruitsByCursor,
+  mockGetJoinedRecruitsByCursor,
+} from '~/mocks/handlers/recruit/apis/mockGetJoinedRecruitsByCursor';
 import ProfilePage from '~/pages/profile/[userId]';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
@@ -49,7 +49,7 @@ export const Default: ProfilePageStory = {
   parameters: {
     ...createMswParameters({
       member: [mockGetUserPortfolio, createMockGetUserProfileVisibility(true)],
-      recruit: [mockGetJoinedRecruits],
+      recruit: [mockGetJoinedRecruitsByCursor],
     }),
   },
 };
@@ -62,7 +62,7 @@ export const Empty: ProfilePageStory = {
         mockGetEmptyUserPortfolio,
         createMockGetUserProfileVisibility(true),
       ],
-      recruit: [mockGetEmptyJoinedRecruits],
+      recruit: [mockGetEmptyJoinedRecruitsByCursor],
     }),
   },
 };

@@ -2,6 +2,7 @@ import type { RecruitParts, SkillName } from '~/services/recruit/utils/types';
 
 import { isArray, isBoolean, isString } from 'is-what';
 
+import { toSafePageValue } from '~/services/common/utils/pagination';
 import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   ProjectPartsSet,
@@ -29,6 +30,7 @@ const recruitSelfRoute = () => createRoute('/recruits')();
 
 export type RecruitsListPageRouteQuery = {
   category?: RecruitCategoryName;
+  page?: number;
 
   includeCompleted?: boolean;
   recruitParts?: ProjectParts | ProjectParts[];
@@ -38,6 +40,8 @@ export type RecruitsListPageRouteQuery = {
 
 export type SafeRecruitsListPageRouteQuery = {
   category: RecruitCategoryName;
+  page: number;
+
   includeCompleted: boolean;
   recruitParts: ProjectParts[];
   skills: SkillName[];
@@ -54,7 +58,8 @@ const recruitListPageRoute = (query: RecruitsListPageRouteQuery = {}) => {
 const toSafeRecruitsListPageQuery = (
   query: RecruitsListPageRouteQuery
 ): SafeRecruitsListPageRouteQuery => {
-  const { category, keyword, recruitParts, skills, includeCompleted } = query;
+  const { category, keyword, recruitParts, skills, includeCompleted, page } =
+    query;
 
   const safeCategory = getSafeCategory(category);
   const safeKeyword =
@@ -73,12 +78,15 @@ const toSafeRecruitsListPageQuery = (
     (dirty) => dirty && SkillNameSet.has(dirty)
   ) as SkillName[];
 
+  const safePage = toSafePageValue(page);
+
   return {
     category: safeCategory,
     keyword: safeKeyword,
     includeCompleted: safeIncludeCompleted,
     recruitParts: safeRecruitParts,
     skills: safeSkills,
+    page: safePage,
   };
 };
 
@@ -166,10 +174,12 @@ const PossibleMatchStatusSet = new Set(
 export interface AppliedRecruitsPageRouteParams {
   category: RecruitCategoryName;
   matchStatus?: MatchStatus;
+  page?: number;
 }
 
 export type AppliedRecruitsPageRouteQuery = {
   matchStatus?: MatchStatus;
+  page?: number;
 };
 
 const appliedRecruitsPageRoute = (params: AppliedRecruitsPageRouteParams) => {
@@ -187,14 +197,16 @@ const appliedRecruitsPageRoute = (params: AppliedRecruitsPageRouteParams) => {
 const toSafeAppliedRecruitsPageRouteQuery = (
   query: AppliedRecruitsPageRouteQuery
 ): AppliedRecruitsPageRouteQuery => {
-  const { matchStatus } = query;
+  const { matchStatus, page } = query;
   const safeMatchStatus =
     matchStatus && PossibleMatchStatusSet.has(matchStatus)
       ? matchStatus
       : undefined;
+  const safePage = toSafePageValue(page);
 
   return {
     matchStatus: safeMatchStatus,
+    page: safePage,
   };
 };
 

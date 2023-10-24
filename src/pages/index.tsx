@@ -16,7 +16,7 @@ import { dehydrate } from '~/react-query/server';
 import { toSSRSafeDehydratedState } from '~/react-query/server/toSSRSafeDehydratedState';
 import { getHotArticlesByCursor } from '~/services/article/apis';
 import { useMyInfo } from '~/services/member';
-import { getRecruits } from '~/services/recruit';
+import { getRecruitsByCursor } from '~/services/recruit';
 import { globalVars, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
@@ -75,7 +75,7 @@ const selfCss = css({
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  const recruitsQueryKey = JSON.parse(JSON.stringify(queryKeys.recruit.list()));
+  const recruitsQueryKey = JSON.parse(JSON.stringify(queryKeys.recruit.listByCursor()));
   const hotArticlesQueryKey = JSON.parse(
     JSON.stringify(queryKeys.articles.hotByCursor())
   );
@@ -87,7 +87,7 @@ export const getStaticProps: GetStaticProps = async () => {
     }),
     queryClient.prefetchInfiniteQuery({
       queryKey: recruitsQueryKey,
-      queryFn: () => getRecruits(),
+      queryFn: () => getRecruitsByCursor(),
     }),
   ]);
 

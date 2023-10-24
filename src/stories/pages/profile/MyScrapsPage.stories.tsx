@@ -8,10 +8,10 @@ import {
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import {
-  mockGetEmptyMyScrapedRecruits,
-  mockGetMyScrapedRecruits,
-  mockGetMyScrapedRecruitsError,
-} from '~/mocks/handlers/recruit/apis/mockGetMyScrapedRecruits';
+  mockGetEmptyMyScrapedRecruitsByCursor,
+  mockGetMyScrapedRecruitsByCursor,
+  mockGetMyScrapedRecruitsByCursorError,
+} from '~/mocks/handlers/recruit/apis/mockGetMyScrapedRecruitsByCursor';
 import MyScrapsPage from '~/pages/profile/my-scraps';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
@@ -45,7 +45,7 @@ export const Default: MyScrapsPageStory = {
   parameters: {
     ...createMswParameters({
       article: [mockGetMyScrapedArticlesByCursor],
-      recruit: [mockGetMyScrapedRecruits],
+      recruit: [mockGetMyScrapedRecruitsByCursor],
     }),
   },
 };
@@ -55,7 +55,7 @@ export const Empty: MyScrapsPageStory = {
   parameters: {
     ...createMswParameters({
       article: [mockGetEmptyMyScrapedArticlesByCursor],
-      recruit: [mockGetEmptyMyScrapedRecruits],
+      recruit: [mockGetEmptyMyScrapedRecruitsByCursor],
     }),
   },
 };
@@ -65,7 +65,7 @@ export const Error: MyScrapsPageStory = {
   parameters: {
     ...createMswParameters({
       article: [mockGetMyScrapedArticlesByCursorError],
-      recruit: [mockGetMyScrapedRecruitsError],
+      recruit: [mockGetMyScrapedRecruitsByCursorError],
     }),
   },
 };
