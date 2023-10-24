@@ -98,7 +98,7 @@ export type RecruitSummariesQueryStringObjectWithoutInfiniteParams = Omit<
 >;
 
 export interface RecruitCursorData {
-  nextCursor: number | null;
+  nextCursor: number | null; // 필드 이름 next로 바뀜.
   isLast: boolean;
 }
 

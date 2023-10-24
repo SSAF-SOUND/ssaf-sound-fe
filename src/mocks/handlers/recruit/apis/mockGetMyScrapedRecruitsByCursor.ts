@@ -1,24 +1,24 @@
-import type { GetMyScrapedRecruitsApiData } from '~/services/recruit';
+import type { GetMyScrapedRecruitsByCursorApiData } from '~/services/recruit';
 
 import { rest } from 'msw';
 
 import { restInfiniteRecruitsSuccess } from '~/mocks/handlers/recruit/utils';
 import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
-import { API_URL, composeUrls, removeQueryParams } from '~/utils';
+import { API_URL, composeUrls } from '~/utils';
 
 const getMyScrapedRecruitsMethod = 'get';
 
-const getMyScrapedRecruitsEndpoint = removeQueryParams(
-  composeUrls(API_URL, endpoints.recruit.myScraped())
+const getMyScrapedRecruitsEndpoint = composeUrls(
+  API_URL,
+  endpoints.recruit.myScrapsByCursor()
 );
 
-export const mockGetMyScrapedRecruits = rest[getMyScrapedRecruitsMethod](
-  getMyScrapedRecruitsEndpoint,
-  restInfiniteRecruitsSuccess
-);
+export const mockGetMyScrapedRecruitsByCursor = rest[
+  getMyScrapedRecruitsMethod
+](getMyScrapedRecruitsEndpoint, restInfiniteRecruitsSuccess);
 
-export const mockGetMyScrapedRecruitsError = restError(
+export const mockGetMyScrapedRecruitsByCursorError = restError(
   'get',
   getMyScrapedRecruitsEndpoint,
   {
@@ -32,8 +32,8 @@ const emptyMyScrapedRecruits = {
   recruits: [],
 };
 
-export const mockGetEmptyMyScrapedRecruits = restSuccess<
-  GetMyScrapedRecruitsApiData['data']
+export const mockGetEmptyMyScrapedRecruitsByCursor = restSuccess<
+  GetMyScrapedRecruitsByCursorApiData['data']
 >(getMyScrapedRecruitsMethod, getMyScrapedRecruitsEndpoint, {
   data: emptyMyScrapedRecruits,
 });

@@ -17,9 +17,9 @@ import {
 } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { userInfo } from '~/mocks/handlers/member/data';
 import {
-  mockGetEmptyRecruits,
-  mockGetRecruits,
-} from '~/mocks/handlers/recruit/apis/mockGetRecruits';
+  mockGetEmptyRecruitsByCursor,
+  mockGetRecruitsByCursor,
+} from '~/mocks/handlers/recruit/apis/mockGetRecruitsByCursor';
 import MainPage from '~/pages';
 import { SsafyCampus } from '~/services/meta/utils';
 import { PageLayout } from '~/stories/Layout';
@@ -43,7 +43,7 @@ const meta: Meta<typeof MainPage> = {
       member: [mockGetCertifiedSsafyMyInfo],
       lunch: [mockGetLunchMenusWithPollStatus],
       article: [mockGetHotArticlesByCursor],
-      recruit: [mockGetRecruits],
+      recruit: [mockGetRecruitsByCursor],
     }),
   },
 };
@@ -122,7 +122,7 @@ export const Empty: MainPageStory = {
       handlers: {
         lunch: [mockGetEmptyLunchMenusWithPollStatus],
         article: [mockGetEmptyHotArticlesByCursor],
-        recruit: [mockGetEmptyRecruits],
+        recruit: [mockGetEmptyRecruitsByCursor],
       },
     },
   },

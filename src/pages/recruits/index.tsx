@@ -34,7 +34,7 @@ import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import { useMyInfo } from '~/services/member';
 import {
   getDisplayCategoryName,
-  getRecruits,
+  getRecruitsByCursor,
   getRecruitThemeByCategory,
   RecruitCategoryName,
   useRecruits,
@@ -427,12 +427,12 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
 
   const queryClient = new QueryClient();
   const recruitListQueryKey = JSON.parse(
-    JSON.stringify(queryKeys.recruit.list(query))
+    JSON.stringify(queryKeys.recruit.listByCursor(query))
   );
 
   await queryClient.prefetchInfiniteQuery({
     queryKey: recruitListQueryKey,
-    queryFn: () => getRecruits(query),
+    queryFn: () => getRecruitsByCursor(query),
   });
 
   const { dehydratedState } = dehydrate(queryClient);

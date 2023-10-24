@@ -3,7 +3,7 @@ import type { RecruitCategoryName } from '~/services/recruit';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { getJoinedRecruits } from '~/services/recruit/apis';
+import { getJoinedRecruitsByCursor } from '~/services/recruit/apis';
 
 export interface UseJoinedRecruits {
   userId: number;
@@ -13,9 +13,9 @@ export interface UseJoinedRecruits {
 export const useJoinedRecruits = (params: UseJoinedRecruits) => {
   const { userId, category } = params;
   return useInfiniteQuery({
-    queryKey: queryKeys.recruit.joinedList({ memberId: userId, category }),
+    queryKey: queryKeys.recruit.joinedListByCursor({ memberId: userId, category }),
     queryFn: ({ pageParam }) =>
-      getJoinedRecruits({
+      getJoinedRecruitsByCursor({
         userId,
         cursor: pageParam,
         category,

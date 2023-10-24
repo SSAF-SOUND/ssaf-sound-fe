@@ -1,4 +1,4 @@
-import type { GetJoinedRecruitsApiData } from '~/services/recruit';
+import type { GetJoinedRecruitsByCursorApiData } from '~/services/recruit';
 
 import { rest } from 'msw';
 
@@ -10,15 +10,15 @@ import { API_URL, composeUrls } from '~/utils';
 const getJoinedRecruitsMethod = 'get';
 const getJoinedRecruitsEndpoint = composeUrls(
   API_URL,
-  endpoints.recruit.joinedList()
+  endpoints.recruit.joinedListByCursor()
 );
 
-export const mockGetJoinedRecruits = rest[getJoinedRecruitsMethod](
+export const mockGetJoinedRecruitsByCursor = rest[getJoinedRecruitsMethod](
   getJoinedRecruitsEndpoint,
   restInfiniteRecruitsSuccess
 );
 
-export const mockGetJoinedRecruitsError = restError(
+export const mockGetJoinedRecruitsByCursorError = restError(
   getJoinedRecruitsMethod,
   getJoinedRecruitsEndpoint,
   {
@@ -31,8 +31,8 @@ export const emptyJoinedRecruits = {
   nextCursor: null,
   isLast: true,
 };
-export const mockGetEmptyJoinedRecruits = restSuccess<
-  GetJoinedRecruitsApiData['data']
+export const mockGetEmptyJoinedRecruitsByCursor = restSuccess<
+  GetJoinedRecruitsByCursorApiData['data']
 >(getJoinedRecruitsMethod, getJoinedRecruitsEndpoint, {
   data: emptyJoinedRecruits,
 });

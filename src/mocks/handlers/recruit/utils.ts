@@ -1,7 +1,7 @@
 import type { ResponseComposition, RestContext, RestRequest } from 'msw';
 import type {
-  GetAppliedRecruitsApiData,
-  GetRecruitsApiData,
+  GetAppliedRecruitsByCursorApiData,
+  GetRecruitsByCursorApiData,
 } from '~/services/recruit';
 
 import {
@@ -42,7 +42,7 @@ const infiniteRecruitsHandler = () => {
 
     return res(
       ctx.delay(100),
-      ...mockSuccess<GetRecruitsApiData['data']>(ctx, {
+      ...mockSuccess<GetRecruitsByCursorApiData['data']>(ctx, {
         recruits: data,
         nextCursor,
         isLast: isReachingEnd,
@@ -80,7 +80,7 @@ const infiniteAppliedRecruitsHandler = () => {
 
     return res(
       ctx.delay(500),
-      ...mockSuccess<GetAppliedRecruitsApiData['data']>(ctx, {
+      ...mockSuccess<GetAppliedRecruitsByCursorApiData['data']>(ctx, {
         recruits: data,
         nextCursor,
         isLast: isReachingEnd,

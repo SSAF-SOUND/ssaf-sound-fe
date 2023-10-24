@@ -16,23 +16,25 @@ import {
 } from '~/services/recruit/apis';
 import { privateAxios } from '~/utils';
 
-export interface GetAppliedRecruitsParams {
+export interface GetAppliedRecruitsByCursorParams {
   matchStatus?: MatchStatus;
   category?: RecruitCategoryName;
   cursor?: number;
   size?: number;
 }
 
-export interface GetAppliedRecruitsQueryParams extends InfiniteParams {
+export interface GetAppliedRecruitsByCursorQueryParams extends InfiniteParams {
   matchStatus?: MatchStatus;
   category?: RecruitCategoryName;
 }
 
-export type GetAppliedRecruitsApiData = ApiSuccessResponse<
+export type GetAppliedRecruitsByCursorApiData = ApiSuccessResponse<
   { recruits: AppliedRecruitSummary[] } & RecruitCursorData
 >;
 
-export const getAppliedRecruits = (params: GetAppliedRecruitsParams) => {
+export const getAppliedRecruitsByCursor = (
+  params: GetAppliedRecruitsByCursorParams
+) => {
   const {
     matchStatus,
     category,
@@ -40,15 +42,15 @@ export const getAppliedRecruits = (params: GetAppliedRecruitsParams) => {
     size = defaultRecruitsPageSize,
   } = params;
 
-  const endpoint = endpoints.recruit.appliedList();
-  const queryParams: GetAppliedRecruitsQueryParams = {
+  const endpoint = endpoints.recruit.appliedListByCursor();
+  const queryParams: GetAppliedRecruitsByCursorQueryParams = {
     matchStatus,
     category,
     cursor,
     size,
   };
 
-  return privateAxios<GetAppliedRecruitsApiData>({
+  return privateAxios<GetAppliedRecruitsByCursorApiData>({
     method: 'get',
     url: endpoint,
     params: queryParams,

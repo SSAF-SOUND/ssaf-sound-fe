@@ -1,4 +1,4 @@
-import type { GetRecruitsApiData } from '~/services/recruit';
+import type { GetRecruitsByCursorApiData } from '~/services/recruit';
 
 import { rest } from 'msw';
 
@@ -8,14 +8,17 @@ import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
 const getRecruitsMethod = 'get';
-const getRecruitsEndpoint = composeUrls(API_URL, endpoints.recruit.list());
+const getRecruitsEndpoint = composeUrls(
+  API_URL,
+  endpoints.recruit.listByCursor()
+);
 
-export const mockGetRecruits = rest[getRecruitsMethod](
+export const mockGetRecruitsByCursor = rest[getRecruitsMethod](
   getRecruitsEndpoint,
   restInfiniteRecruitsSuccess
 );
 
-export const mockGetRecruitsError = restError(
+export const mockGetRecruitsByCursorError = restError(
   getRecruitsMethod,
   getRecruitsEndpoint,
   {
@@ -29,10 +32,8 @@ const emptyRecruits = {
   isLast: true,
 };
 
-export const mockGetEmptyRecruits = restSuccess<GetRecruitsApiData['data']>(
-  getRecruitsMethod,
-  getRecruitsEndpoint,
-  {
-    data: emptyRecruits,
-  }
-);
+export const mockGetEmptyRecruitsByCursor = restSuccess<
+  GetRecruitsByCursorApiData['data']
+>(getRecruitsMethod, getRecruitsEndpoint, {
+  data: emptyRecruits,
+});

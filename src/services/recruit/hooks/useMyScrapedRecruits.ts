@@ -3,7 +3,7 @@ import type { RecruitCategoryName } from '~/services/recruit/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
-import { getMyScrapedRecruits } from '~/services/recruit/apis';
+import { getMyScrapedRecruitsByCursor } from '~/services/recruit/apis';
 
 interface UseMyScrapedRecruitsParams {
   category?: RecruitCategoryName;
@@ -14,9 +14,9 @@ export const useMyScrapedRecruits = (
 ) => {
   const { category } = params;
   return useInfiniteQuery({
-    queryKey: queryKeys.recruit.myScraped({ category }),
+    queryKey: queryKeys.recruit.myScrapsByCursor({ category }),
     queryFn: ({ pageParam }) =>
-      getMyScrapedRecruits({
+      getMyScrapedRecruitsByCursor({
         cursor: pageParam,
         category,
       }),

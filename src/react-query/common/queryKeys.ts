@@ -115,17 +115,14 @@ export const queryKeys = {
       ...queryKeys.recruit.detail(recruitId),
       'participants',
     ],
-    myScraped: (params: Pick<MyScrapedRecruitsParams, 'category'> = {}) => [
-      ...queryKeys.auth(),
-      'my-scraped-recruits',
-      params,
-    ],
-    list: (params: RecruitsListPageRouteQuery = {}) => {
+    listBase: () => [...queryKeys.recruit.self()],
+    listByCursor: (params: RecruitsListPageRouteQuery = {}) => {
       const { category, keyword, recruitParts, skills, includeCompleted } =
         params;
 
       return [
-        ...queryKeys.recruit.self(),
+        ...queryKeys.recruit.listBase(),
+        'cursor',
         {
           category,
           keyword,
@@ -135,16 +132,34 @@ export const queryKeys = {
         },
       ];
     },
-    joinedList: (params: Omit<JoinedRecruitsParams, 'cursor' | 'size'>) => {
-      return [...queryKeys.recruit.self(), 'joined', params];
-    },
-    appliedList: {
-      self: () => [...queryKeys.recruit.self(), 'applied'],
+
+    joinedListBase: () => [
+      ...queryKeys.auth(),
+      ...queryKeys.recruit.self(),
+      'joined',
+    ],
+    joinedListByCursor: (
+      params: Omit<JoinedRecruitsParams, 'cursor' | 'size'>
+    ) => [...queryKeys.recruit.joinedListBase(), 'cursor', params],
+
+    appliedListBase: () => [
+      ...queryKeys.auth(),
+      ...queryKeys.recruit.self(),
+      'applied',
+    ],
+    appliedListByCursor: {
+      self: () => [...queryKeys.recruit.appliedListBase(), 'cursor'],
       filter: (params: Omit<AppliedRecruitsParams, 'cursor' | 'size'>) => [
-        ...queryKeys.recruit.appliedList.self(),
+        ...queryKeys.recruit.appliedListByCursor.self(),
         params,
       ],
     },
+
+    myScrapsBase: () => [...queryKeys.auth(), 'my-scraped-recruits'],
+    myScrapsByCursor: (
+      params: Pick<MyScrapedRecruitsParams, 'category'> = {}
+    ) => [...queryKeys.recruit.myScrapsBase(), params],
+
     application: {
       self: (recruitId: number) => [
         ...queryKeys.recruit.detail(recruitId),
@@ -278,14 +293,22 @@ export const endpoints = {
       recruitApplicationId: number;
     }) =>
       `${endpoints.recruit.detail(recruitId)}/${recruitApplicationId}` as const,
-    myScraped: () => `/recruits/my-scrap` as const,
     scrap: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/scrap` as const,
     complete: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/expired` as const,
-    list: () => endpoints.recruit.self(),
-    joinedList: () => `${endpoints.recruit.self()}/joined` as const,
-    appliedList: () => `${endpoints.recruit.self()}/applied` as const,
+    listByCursor: () => `${endpoints.recruit.self()}/cursor`,
+    listByOffset: () => `${endpoints.recruit.self()}/offset`,
+    joinedListByCursor: () =>
+      `${endpoints.recruit.self()}/joined/cursor` as const,
+    joinedListByOffset: () =>
+      `${endpoints.recruit.self()}/joined/offset` as const,
+    appliedListByCursor: () =>
+      `${endpoints.recruit.self()}/applied/cursor` as const,
+    appliedListByOffset: () =>
+      `${endpoints.recruit.self()}/applied/offset` as const,
+    myScrapsByCursor: () => `/recruits/my-scrap/cursor` as const,
+    myScrapsByOffset: () => `/recruits/my-scrap/offset` as const,
 
     apply: (recruitId: number) =>
       `${endpoints.recruit.detail(recruitId)}/application` as const,

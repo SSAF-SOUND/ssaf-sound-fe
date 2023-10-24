@@ -36,7 +36,7 @@ export const useScrapRecruit = (recruitId: number) => {
       return { prevRecruit: recruit };
     },
     onSuccess: ({ scraped, scrapCount }) => {
-      queryClient.invalidateQueries(queryKeys.recruit.myScraped());
+      queryClient.invalidateQueries(queryKeys.recruit.myScrapsByCursor());
       setRecruitDetail((prevRecruit) => {
         if (!prevRecruit) return;
         return {

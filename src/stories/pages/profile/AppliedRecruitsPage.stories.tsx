@@ -3,10 +3,10 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import {
-  mockGetAppliedRecruits,
-  mockGetAppliedRecruitsError,
-  mockGetEmptyAppliedRecruits,
-} from '~/mocks/handlers/recruit/apis/mockGetAppliedRecruits';
+  mockGetAppliedRecruitsByCursor,
+  mockGetAppliedRecruitsByCursorError,
+  mockGetEmptyAppliedRecruitsByCursor,
+} from '~/mocks/handlers/recruit/apis/mockGetAppliedRecruitsByCursor';
 import AppliedRecruitsPage from '~/pages/profile/applied-recruits/[recruitCategoryName]';
 import { RecruitCategoryName } from '~/services/recruit';
 import { PageLayout } from '~/stories/Layout';
@@ -29,7 +29,7 @@ const meta: Meta<typeof AppliedRecruitsPage> = {
     ...createMswParameters({
       member: [],
       common: [createMockGetMyInfo(myInfo)],
-      recruit: [mockGetAppliedRecruits],
+      recruit: [mockGetAppliedRecruitsByCursor],
     }),
   },
   args: { recruitCategoryName: RecruitCategoryName.PROJECT },
@@ -47,7 +47,7 @@ export const Project__Empty: AppliedRecruitsPageStory = {
   name: '프로젝트 - 빈 데이터',
   parameters: {
     ...createMswParameters({
-      recruit: [mockGetEmptyAppliedRecruits],
+      recruit: [mockGetEmptyAppliedRecruitsByCursor],
     }),
   },
 };
@@ -61,7 +61,7 @@ export const Study__Empty: AppliedRecruitsPageStory = {
   name: '스터디 - 빈 데이터',
   parameters: {
     ...createMswParameters({
-      recruit: [mockGetEmptyAppliedRecruits],
+      recruit: [mockGetEmptyAppliedRecruitsByCursor],
     }),
   },
   args: { recruitCategoryName: RecruitCategoryName.STUDY },
@@ -71,7 +71,7 @@ export const Error: AppliedRecruitsPageStory = {
   name: '에러',
   parameters: {
     ...createMswParameters({
-      recruit: [mockGetAppliedRecruitsError],
+      recruit: [mockGetAppliedRecruitsByCursorError],
     }),
   },
 };
