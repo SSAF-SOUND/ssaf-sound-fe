@@ -1,26 +1,32 @@
+import type { CSSProperties } from 'react';
+
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
 
 import { Button } from '~/components/Common/Button';
 import { Tabs } from '~/components/Common/Tabs';
-import { InfiniteList } from '~/components/InfiniteList';
-import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
+import { EmptyList } from '~/components/EmptyList';
 import { ProfileTabs } from '~/components/Profile';
+import { QueryItemList } from '~/components/QueryItemList';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
+import { ResponsivePagination } from '~/components/ResponsivePagination';
+import { validatePage } from '~/services/common/utils/pagination';
 import {
   getDisplayCategoryName,
   RecruitCategoryName,
+  useJoinedRecruitsByOffset,
 } from '~/services/recruit';
-import { useJoinedRecruits } from '~/services/recruit/hooks/useJoinedRecruits';
-import { palettes, Theme } from '~/styles/utils';
-import { concat, routes } from '~/utils';
+import { flex, palettes, Theme, topBarHeight } from '~/styles/utils';
+import { routes } from '~/utils';
 
 interface JoinedRecruitsTabContentProps {
   category: RecruitCategoryName;
   userId: number;
   mine?: boolean;
+  page?: number;
+  paginationContainerStyle?: CSSProperties;
 }
 
 const getEmptyRecruitsText = (category: RecruitCategoryName) => {
@@ -47,14 +53,13 @@ export const JoinedRecruitsTabContent = (
 const JoinedRecruitsTabContentInner = (
   props: JoinedRecruitsTabContentProps
 ) => {
-  const { category, userId, mine } = props;
+  const { category, userId, mine, page, paginationContainerStyle } = props;
 
-  const infiniteQuery = useJoinedRecruits({ category, userId });
-  const { data: joinedRecruits } = infiniteQuery;
-
-  const infiniteData =
-    joinedRecruits?.pages.map(({ recruits }) => recruits).reduce(concat) ?? [];
-
+  const joinedRecruitsQuery = useJoinedRecruitsByOffset({
+    category,
+    userId,
+    page,
+  });
   const displayCategoryName = getDisplayCategoryName(category);
   const appliedRecruitRoute = routes.recruit.appliedList({ category });
 
@@ -70,26 +75,45 @@ const JoinedRecruitsTabContentInner = (
         </Button>
       )}
 
-      <InfiniteList
-        useWindowScroll={true}
-        data={infiniteData}
-        infiniteQuery={infiniteQuery}
+      <QueryItemList
+        css={[flex('', '', 'column', 16), { paddingBottom: 120 }]}
+        query={joinedRecruitsQuery}
         skeleton={<RecruitCardSkeleton size="md" />}
         skeletonCount={6}
-        itemContent={(index, recruitSummary) => {
+        render={(data) => {
+          const { currentPage, recruits, totalPageCount } = data;
+          const isEmpty = recruits.length === 0;
+          const isValidPage = validatePage({ currentPage, totalPageCount });
+
           return (
-            <RecruitCard
-              recruitSummary={recruitSummary}
-              withBadge={true}
-              size="md"
-            />
+            <>
+              <div css={paginationCss} style={paginationContainerStyle}>
+                <ResponsivePagination
+                  totalPageCount={totalPageCount}
+                  initialPage={currentPage}
+                />
+              </div>
+              {isEmpty ? (
+                <EmptyList
+                  text={
+                    isValidPage
+                      ? getEmptyRecruitsText(category)
+                      : '유효하지 않은 페이지입니다.'
+                  }
+                />
+              ) : (
+                recruits.map((recruit) => (
+                  <RecruitCard
+                    key={recruit.recruitId}
+                    recruitSummary={recruit}
+                    withBadge={true}
+                    size="md"
+                  />
+                ))
+              )}
+            </>
           );
         }}
-        emptyElement={
-          <div css={{ height: 250, position: 'relative' }}>
-            <EmptyInfiniteList text={getEmptyRecruitsText(category)} />
-          </div>
-        }
       />
     </div>
   );
@@ -99,3 +123,17 @@ const tabContentCss = css({
   padding: '20px 0',
 });
 const appliedRecruitsLinkCss = css({ borderRadius: 20, color: palettes.white });
+
+const fixedLayoutZIndex = 2;
+const paginationHeight = 32;
+const paginationCss = css(
+  {
+    position: 'sticky',
+    top: topBarHeight,
+    minHeight: paginationHeight,
+    padding: '8px 0',
+    backgroundColor: palettes.background.default,
+    zIndex: fixedLayoutZIndex,
+  },
+  flex('', 'center', 'column')
+);
