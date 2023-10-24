@@ -13,7 +13,10 @@ import { QueryItemList } from '~/components/QueryItemList';
 import { ResponsivePagination } from '~/components/ResponsivePagination';
 import TitleBar from '~/components/TitleBar';
 import { useMyArticlesByOffset } from '~/services/article';
-import { toSafePageValue } from '~/services/common/utils/pagination';
+import {
+  toSafePageValue,
+  validatePage,
+} from '~/services/common/utils/pagination';
 import { useMyInfo } from '~/services/member';
 import {
   fixedFullWidth,
@@ -71,7 +74,7 @@ const MyArticlesPage: CustomNextPage = () => {
 };
 
 const fixedLayoutZIndex = 2;
-const paginationTop = titleBarHeight + breadcrumbsHeight +1;
+const paginationTop = titleBarHeight + breadcrumbsHeight;
 const paginationHeight = 32 + 24;
 const selfPaddingTop = paginationTop + paginationHeight;
 const selfCss = css(
@@ -113,7 +116,7 @@ const ArticleLayer = (props: ArticleLayerProps) => {
         render={(data) => {
           const { currentPage, posts, totalPageCount } = data;
           const isEmpty = posts.length === 0;
-          const isValidPage = currentPage <= totalPageCount;
+          const isValidPage = validatePage({ currentPage, totalPageCount });
 
           return (
             <>

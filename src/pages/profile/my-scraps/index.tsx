@@ -24,9 +24,12 @@ import {
   defaultArticlesPageKey,
   useMyScrapedArticlesByOffset,
 } from '~/services/article';
-import { toSafePageValue } from '~/services/common/utils/pagination';
+import {
+  toSafePageValue,
+  validatePage,
+} from '~/services/common/utils/pagination';
 import { useMyInfo } from '~/services/member';
-import { useMyScrapedRecruits } from '~/services/recruit/hooks/useMyScrapedRecruits';
+import { useMyScrapedRecruitsByCursor } from '~/services/recruit/hooks/useMyScrapedRecruitsByCursor';
 import {
   fixedFullWidth,
   flex,
@@ -262,7 +265,7 @@ const MyScrapedArticlesLayer = (props: MyScrapedArticlesLayerProps) => {
       render={(data) => {
         const { currentPage, posts, totalPageCount } = data;
         const isEmpty = posts.length === 0;
-        const isValidPage = currentPage <= totalPageCount;
+        const isValidPage = validatePage({ currentPage, totalPageCount });
 
         return (
           <>
@@ -295,7 +298,7 @@ interface MyScrapedRecruitsLayerProps {
 }
 const MyScrapedRecruitsLayer = (props: MyScrapedRecruitsLayerProps) => {
   const { page } = props;
-  const infiniteQuery = useMyScrapedRecruits();
+  const infiniteQuery = useMyScrapedRecruitsByCursor();
   const infiniteData =
     infiniteQuery?.data?.pages.map(({ recruits }) => recruits).reduce(concat) ??
     [];
