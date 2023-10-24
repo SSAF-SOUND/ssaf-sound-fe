@@ -12,7 +12,7 @@ export const isValidPage = (params: PaginationStatus) => {
   );
 };
 
-export const toSafePageValue = (unsafePage?: string | string[]) => {
+export const toSafePageValue = (unsafePage?: string | string[] | number) => {
   unsafePage = Array.isArray(unsafePage) ? unsafePage[0] : unsafePage;
   const unsafePageNumber = Number(unsafePage);
   return Number.isNaN(unsafePageNumber)
