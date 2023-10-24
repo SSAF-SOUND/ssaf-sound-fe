@@ -6,7 +6,6 @@ import { css } from '@emotion/react';
 
 import { Button } from '~/components/Common/Button';
 import { Tabs } from '~/components/Common/Tabs';
-import { EmptyList } from '~/components/EmptyList';
 import { ProfileTabs } from '~/components/Profile';
 import { QueryItemList } from '~/components/QueryItemList';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
@@ -94,13 +93,11 @@ const JoinedRecruitsTabContentInner = (
                 />
               </div>
               {isEmpty ? (
-                <EmptyList
-                  text={
-                    isValidPage
-                      ? getEmptyRecruitsText(category)
-                      : '유효하지 않은 페이지입니다.'
-                  }
-                />
+                <div css={{ textAlign: 'center', padding: '50px 0' }}>
+                  {isValidPage
+                    ? getEmptyRecruitsText(category)
+                    : '유효하지 않은 페이지입니다.'}
+                </div>
               ) : (
                 recruits.map((recruit) => (
                   <RecruitCard

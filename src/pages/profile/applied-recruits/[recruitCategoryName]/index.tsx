@@ -287,7 +287,7 @@ const TabContentInner = (props: TabContentProps) => {
             <>
               <div css={paginationCss}>
                 <ResponsivePagination
-                  totalPageCount={111111}
+                  totalPageCount={totalPageCount}
                   initialPage={currentPage}
                 />
               </div>
