@@ -1,12 +1,17 @@
+import { isUndefined } from 'is-what';
+
 import { ProfileTabs, ProfileTabSet } from '~/components/Profile/utils';
+import { toSafePageValue } from '~/services/common/utils/pagination';
 import { createRoute } from '~/utils/client-routes/utils';
 
 export type ProfilePageRouteQuery = {
   tab?: string;
+  page?: number;
 };
 
 export type SafeProfilePageRouteQuery = {
   tab: ProfileTabs;
+  page?: number;
 };
 
 // ---------- profile self ----------
@@ -20,14 +25,16 @@ const profileSelfRoute = (query: ProfilePageRouteQuery = {}) => {
 const toSafeProfilePageRouteQuery = (
   query: ProfilePageRouteQuery
 ): SafeProfilePageRouteQuery => {
-  const { tab } = query;
+  const { tab, page } = query;
 
   const safeTab =
     !!tab && ProfileTabSet.has(tab)
       ? (tab as ProfileTabs)
       : ProfileTabs.PORTFOLIO;
 
-  return { tab: safeTab };
+  const safePage = isUndefined(page) ? page : toSafePageValue(page);
+
+  return { tab: safeTab, page: safePage };
 };
 
 // ---------- profile detail (user-profile) ----------;
@@ -64,10 +71,12 @@ export const PossibleMyScrapsTabValueSet = new Set<string>(
 
 export type MyScrapsRouteQuery = {
   tab?: string;
+  page?: number;
 };
 
 export type SafeMyScrapsRouteQuery = {
   tab: PossibleMyScrapsTabValue;
+  page: number;
 };
 
 const myScrapsRoute = (query: MyScrapsRouteQuery = {}) => {
@@ -80,13 +89,14 @@ const myScrapsRoute = (query: MyScrapsRouteQuery = {}) => {
 const toSafeMyScrapsRouteQuery = (
   query: MyScrapsRouteQuery
 ): SafeMyScrapsRouteQuery => {
-  const { tab } = query;
+  const { tab, page } = query;
   const safeTab =
     tab && PossibleMyScrapsTabValueSet.has(tab)
       ? (tab as PossibleMyScrapsTabValue)
       : PossibleMyScrapsTabValue.ARTICLES;
+  const safePage = toSafePageValue(page);
 
-  return { tab: safeTab };
+  return { tab: safeTab, page: safePage };
 };
 
 // ---------- myinfo edit ----------
