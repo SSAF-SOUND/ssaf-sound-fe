@@ -252,7 +252,7 @@ export const PaginationRoot = (props: PaginationRootProps) => {
             ) : (
               <>
                 {rightTruncUI(
-                  Math.min(firstPage, currentPage + truncStep),
+                  Math.min(totalPageCount, currentPage + truncStep),
                   currentPage,
                   totalPageCount
                 )}
