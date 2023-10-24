@@ -1,48 +1,49 @@
 import type { SerializedStyles } from '@emotion/react';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import type { CustomNextPage } from 'next/types';
-import type { ForwardedRef } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
-import { forwardRef } from 'react';
+import { useState } from 'react';
 
 import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Tabs } from '~/components/Common/Tabs';
-import { InfiniteList } from '~/components/InfiniteList';
 import EmptyInfiniteList from '~/components/InfiniteList/EmptyInfiniteList';
 import { ProfileTabs } from '~/components/Profile';
+import { QueryItemList } from '~/components/QueryItemList';
 import {
   AppliedRecruitCard,
   AppliedRecruitCardSkeleton,
 } from '~/components/Recruit/AppliedRecruitCard';
+import { ResponsivePagination } from '~/components/ResponsivePagination';
 import TitleBar from '~/components/TitleBar';
 import {
+  toSafePageValue,
+  validatePage,
+} from '~/services/common/utils/pagination';
+import {
+  defaultRecruitsFirstPage,
   getDisplayCategoryName,
   MatchStatus,
   MatchStatusSet,
   RecruitCategoryName,
+  useAppliedRecruitsByOffset,
 } from '~/services/recruit';
-import { useAppliedRecruits } from '~/services/recruit/hooks/useAppliedRecruits';
 import {
   colorMix,
   expandCss,
-  fixTopCenter,
+  fixedFullWidth,
   flex,
   fontCss,
   pageCss,
   palettes,
+  position,
   titleBarHeight,
 } from '~/styles/utils';
-import {
-  concat,
-  createAuthGuard,
-  createNoIndexPageMetaData,
-  routes,
-} from '~/utils';
+import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 
 const createMetaTitle = (str: string) => `신청한 ${str}`;
 
@@ -54,31 +55,58 @@ const tabTriggersTextMap = {
   [MatchStatus.REJECTED]: '거절 됨',
 } as const;
 
+type TabValues = keyof typeof tabTriggersTextMap;
 const tabValues = Object.keys(tabTriggersTextMap) as Array<
   keyof typeof tabTriggersTextMap
 >;
 const possibleTabValueSet = new Set<string | undefined>(tabValues);
+const toSafeTabValue = (unsafeValue?: string | string[]) => {
+  const targetTabValue = Array.isArray(unsafeValue)
+    ? unsafeValue[0]
+    : unsafeValue;
+
+  if (possibleTabValueSet.has(targetTabValue)) {
+    return targetTabValue as TabValues;
+  }
+  return defaultTabValue as TabValues;
+};
 
 const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
   const router = useRouter();
   const { recruitCategoryName } = props;
-  const query = router.query as Partial<Params>;
-  const displayCategoryName = getDisplayCategoryName(recruitCategoryName);
+  const query = router.query as Params;
+  const { page, matchStatus } = query;
 
+  const [latestPages, setLatestPages] = useState({
+    [defaultTabValue]: defaultRecruitsFirstPage,
+    [MatchStatus.PENDING]: defaultRecruitsFirstPage,
+    [MatchStatus.SUCCESS]: defaultRecruitsFirstPage,
+    [MatchStatus.REJECTED]: defaultRecruitsFirstPage,
+  });
+
+  const displayCategoryName = getDisplayCategoryName(recruitCategoryName);
   const metaTitle = createMetaTitle(displayCategoryName);
   const metaData = createNoIndexPageMetaData(metaTitle);
   const titleBarTitle = metaTitle;
 
-  const tabValue = possibleTabValueSet.has(query.matchStatus)
-    ? query.matchStatus
-    : defaultTabValue;
-  const onTabValueChange = (matchStatus: string) => {
-    router.replace({
+  const safePage = toSafePageValue(page);
+  const safeTabValue = toSafeTabValue(matchStatus);
+
+  const onTabValueChange = async (nextTabValue: string) => {
+    const matchStatus = nextTabValue as TabValues;
+    const latestPageOfMatchStatus = latestPages[matchStatus];
+
+    await router.push({
       query: {
         ...router.query,
         matchStatus,
+        page: latestPageOfMatchStatus,
       },
     });
+    setLatestPages((p) => ({
+      ...p,
+      [safeTabValue]: safePage,
+    }));
   };
 
   const backwardRouteTab =
@@ -89,9 +117,11 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
   return (
     <>
       <PageHeadingText text={metaTitle} />
+
       <PageHead {...metaData} />
+
       <div css={selfCss}>
-        <Tabs.Root defaultValue={tabValue} onValueChange={onTabValueChange}>
+        <Tabs.Root value={safeTabValue} onValueChange={onTabValueChange}>
           <TitleBar.Default
             title={titleBarTitle}
             withoutClose
@@ -141,6 +171,7 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
                   tabValue={tabValue}
                   matchStatus={safeTabValue}
                   category={recruitCategoryName}
+                  page={safePage}
                 />
               </Tabs.Content>
             );
@@ -152,7 +183,10 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
 };
 
 const tabsListHeight = 48;
-const selfPaddingY = titleBarHeight + tabsListHeight + breadcrumbsHeight;
+const paginationTop = titleBarHeight + breadcrumbsHeight + tabsListHeight;
+const paginationHeight = 32 + 12;
+const fixedLayoutZIndex = 2;
+const selfPaddingY = paginationTop + paginationHeight;
 
 const selfCss = css(
   {
@@ -185,6 +219,18 @@ const tabsColorCss: Record<keyof typeof tabTriggersTextMap, SerializedStyles> =
     [MatchStatus.REJECTED]: createTabsColorCss(palettes.secondary.default),
   };
 
+const paginationCss = css(
+  position.xy('center', 'start', 'fixed'),
+  fixedFullWidth,
+  flex('center', 'center', 'column'),
+  {
+    top: paginationTop,
+    zIndex: fixedLayoutZIndex,
+    height: paginationHeight,
+    backgroundColor: palettes.background.default,
+  }
+);
+
 export default AppliedRecruitsPage;
 AppliedRecruitsPage.auth = createAuthGuard();
 
@@ -197,6 +243,8 @@ const getEmptyRecruitText = (
       ? '신청한 스터디가'
       : '신청한 프로젝트가';
 
+  // tabValue가 MatchStatus중 하나라면, 필터링 정보가 없다는 안내메세지
+  // tabValue가 ALL 이라면, 아직 신청한 리쿠르팅 정보가 없다는 안내메세지
   const emptyRecruitsText = MatchStatusSet.has(tabValue)
     ? `조건에 맞는 ${categoryText} 없습니다.`
     : `아직 ${categoryText} 없습니다.`;
@@ -208,53 +256,72 @@ interface TabContentProps {
   category: RecruitCategoryName;
   matchStatus?: MatchStatus;
   tabValue: string;
+  page?: number;
 }
 
 const TabContentInner = (props: TabContentProps) => {
-  const { category, matchStatus, tabValue } = props;
-  const infiniteQuery = useAppliedRecruits({
+  const { category, matchStatus, tabValue, page } = props;
+  const appliedRecruitsQuery = useAppliedRecruitsByOffset({
     category,
     matchStatus,
+    page,
   });
-  const { data: appliedRecruits } = infiniteQuery;
-  const infiniteData =
-    appliedRecruits?.pages.map(({ recruits }) => recruits).reduce(concat) ?? [];
 
   const emptyRecruitsText = getEmptyRecruitText(category, tabValue);
 
   return (
     <div css={[{ padding: '10px 0' }, expandCss()]}>
-      <InfiniteList
-        data={infiniteData}
-        useWindowScroll={true}
-        infiniteQuery={infiniteQuery}
+      <QueryItemList
+        css={[listCss, { paddingBottom: 120 }]}
+        query={appliedRecruitsQuery}
         skeleton={<AppliedRecruitCardSkeleton />}
         skeletonCount={6}
-        itemContent={(_, appliedRecruit) => (
-          <AppliedRecruitCard appliedRecruit={appliedRecruit} />
-        )}
-        emptyElement={<EmptyInfiniteList text={emptyRecruitsText} />}
-        List={AppliedRecruitCardList}
-        skeletonGap={4}
+        render={(data) => {
+          const { currentPage, recruits, totalPageCount } = data;
+          const isEmpty = recruits.length === 0;
+          const isValidPage = validatePage({ currentPage, totalPageCount });
+
+          return (
+            <>
+              <div css={paginationCss}>
+                <ResponsivePagination
+                  totalPageCount={totalPageCount}
+                  initialPage={currentPage}
+                />
+              </div>
+              {isEmpty ? (
+                <EmptyInfiniteList
+                  text={
+                    isValidPage
+                      ? emptyRecruitsText
+                      : '유효하지 않은 페이지입니다.'
+                  }
+                />
+              ) : (
+                recruits.map((recruit) => (
+                  <AppliedRecruitCard
+                    key={recruit.recruitId}
+                    appliedRecruit={recruit}
+                  />
+                ))
+              )}
+            </>
+          );
+        }}
       />
     </div>
   );
 };
 
-const AppliedRecruitCardList = forwardRef(
-  (props, ref: ForwardedRef<HTMLDivElement>) => {
-    return <div css={listCss} {...props} ref={ref} />;
-  }
-);
-AppliedRecruitCardList.displayName = 'AppliedRecruitCardList';
 const listCss = css(flex('', '', 'column', 4));
 
 type Props = {
   recruitCategoryName: RecruitCategoryName;
 };
 type Params = {
-  recruitCategoryName: RecruitCategoryName;
-  matchStatus?: MatchStatus;
+  recruitCategoryName?: RecruitCategoryName;
+  matchStatus?: TabValues;
+  page?: string;
 };
 
 export const getStaticProps: GetStaticProps<Props, Params> = (context) => {
