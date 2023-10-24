@@ -17,6 +17,9 @@ const optimizationConfig = (config) => {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    scrollRestoration: true,
+  },
   async headers() {
     const headers = [];
     if (shouldNoIndex) {
