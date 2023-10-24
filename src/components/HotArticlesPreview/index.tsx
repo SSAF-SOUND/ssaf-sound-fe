@@ -4,7 +4,7 @@ import Skeleton from 'react-loading-skeleton';
 import { HotArticlesPreviewArticleItem } from '~/components/HotArticlesPreview/HotArticlesPreviewArticleItem';
 import { PreviewErrorCard } from '~/components/PreviewErrorCard';
 import TitleBar from '~/components/TitleBar';
-import { useHotArticlesByCursor } from '~/services/article/hooks';
+import { useHotArticlesByOffset } from '~/services/article/hooks';
 import { flex, palettes } from '~/styles/utils';
 import { routes } from '~/utils/routes';
 
@@ -19,10 +19,10 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
     isLoading: isHotArticlesLoading,
     isError: isHotArticlesError,
     isSuccess: isHotArticlesSuccess,
-  } = useHotArticlesByCursor();
+  } = useHotArticlesByOffset();
 
   const maxViewCount = 5;
-  const latestHotArticles = hotArticles?.pages[0].posts.slice(0, maxViewCount);
+  const latestHotArticles = hotArticles?.posts.slice(0, maxViewCount);
   const notExistHotArticles = latestHotArticles?.length === 0;
 
   return (
