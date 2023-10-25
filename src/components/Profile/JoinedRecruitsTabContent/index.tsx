@@ -86,12 +86,14 @@ const JoinedRecruitsTabContentInner = (
 
           return (
             <>
-              <div css={paginationCss} style={paginationContainerStyle}>
-                <ResponsivePagination
-                  totalPageCount={totalPageCount}
-                  initialPage={currentPage}
-                />
-              </div>
+              {totalPageCount > 0 && (
+                <div css={paginationCss} style={paginationContainerStyle}>
+                  <ResponsivePagination
+                    totalPageCount={totalPageCount}
+                    initialPage={currentPage}
+                  />
+                </div>
+              )}
               {isEmpty ? (
                 <div css={{ textAlign: 'center', padding: '50px 0' }}>
                   {isValidPage

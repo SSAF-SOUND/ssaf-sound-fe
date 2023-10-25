@@ -149,14 +149,17 @@ const ArticleLayer = (props: ArticleLayerProps) => {
         render={(data) => {
           const { currentPage, posts, totalPageCount } = data;
           const isEmpty = posts.length === 0;
+
           return (
             <>
-              <div css={paginationCss}>
-                <ResponsivePagination
-                  totalPageCount={totalPageCount}
-                  initialPage={currentPage}
-                />
-              </div>
+              {totalPageCount > 0 && (
+                <div css={paginationCss}>
+                  <ResponsivePagination
+                    totalPageCount={totalPageCount}
+                    initialPage={currentPage}
+                  />
+                </div>
+              )}
               {isEmpty ? (
                 isValidKeyword ? (
                   <NoSearchResults keyword={keyword} />
@@ -271,7 +274,7 @@ const paginationCss = css(
   {
     top: paginationTop,
     zIndex: fixedLayoutZIndex,
-    height: paginationHeight,
+    minHeight: paginationHeight,
     backgroundColor: palettes.background.default,
   }
 );

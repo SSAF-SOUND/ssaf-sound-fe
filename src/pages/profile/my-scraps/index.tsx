@@ -179,7 +179,7 @@ const paginationCss = css(
   {
     top: paginationTop,
     zIndex: fixedLayoutZIndex,
-    height: paginationHeight,
+    minHeight: paginationHeight,
     backgroundColor: palettes.background.default,
   }
 );
@@ -307,12 +307,14 @@ const MyScrapedRecruitsLayer = (props: MyScrapedRecruitsLayerProps) => {
 
         return (
           <>
-            <div css={paginationCss}>
-              <ResponsivePagination
-                totalPageCount={totalPageCount}
-                initialPage={currentPage}
-              />
-            </div>
+            {totalPageCount > 0 && (
+              <div css={paginationCss}>
+                <ResponsivePagination
+                  totalPageCount={totalPageCount}
+                  initialPage={currentPage}
+                />
+              </div>
+            )}
             {isEmpty ? (
               isValidPage ? (
                 <EmptyList text="아직 스크랩한 게시글이 없습니다." />
