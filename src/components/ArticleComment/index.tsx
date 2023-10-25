@@ -176,7 +176,29 @@ const ArticleComment = memo((props: ArticleCommentProps) => {
         {!deletedComment && (
           <>
             <header css={headerCss}>
-              <Name anonymous={anonymity} userInfo={userInfo} size="sm" />
+              <div>
+                <Name anonymous={anonymity} userInfo={userInfo} size="sm" />
+                {anonymity && mine && (
+                  <span
+                    css={[
+                      fontCss.style.R12,
+                      { color: palettes.warning.default, marginLeft: 4 },
+                    ]}
+                  >
+                    (나)
+                  </span>
+                )}
+                {modified && (
+                  <span
+                    css={[
+                      fontCss.style.B12,
+                      { color: palettes.primary.default, marginLeft: 4 },
+                    ]}
+                  >
+                    (수정됨)
+                  </span>
+                )}
+              </div>
 
               <div css={buttonLayerCss}>
                 {showReplyButton && (
