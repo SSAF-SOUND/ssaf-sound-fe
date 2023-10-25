@@ -185,7 +185,7 @@ const AppliedRecruitsPage: CustomNextPage<Props> = (props) => {
 const tabsListHeight = 48;
 const paginationTop = titleBarHeight + breadcrumbsHeight + tabsListHeight;
 const paginationHeight = 32;
-const paginationPaggindY = 8;
+const paginationPaddingY = 8;
 const fixedLayoutZIndex = 2;
 const selfPaddingY = paginationTop + paginationHeight;
 
@@ -227,7 +227,7 @@ const paginationCss = css(
   {
     top: paginationTop,
     zIndex: fixedLayoutZIndex,
-    padding: `${paginationPaggindY}px 0`,
+    padding: `${paginationPaddingY}px 0`,
     minHeight: paginationHeight,
     backgroundColor: palettes.background.default,
   }
@@ -285,12 +285,14 @@ const TabContentInner = (props: TabContentProps) => {
 
           return (
             <>
-              <div css={paginationCss}>
-                <ResponsivePagination
-                  totalPageCount={totalPageCount}
-                  initialPage={currentPage}
-                />
-              </div>
+              {totalPageCount > 0 && (
+                <div css={paginationCss}>
+                  <ResponsivePagination
+                    totalPageCount={totalPageCount}
+                    initialPage={currentPage}
+                  />
+                </div>
+              )}
               {isEmpty ? (
                 <EmptyList
                   text={

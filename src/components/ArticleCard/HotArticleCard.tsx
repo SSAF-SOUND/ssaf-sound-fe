@@ -10,6 +10,10 @@ import CommentStat from '~/components/ArticleCard/CommentStat';
 import LikeStat from '~/components/ArticleCard/LikeStat';
 import { Separator } from '~/components/Common/Separator';
 import { useStripHtml } from '~/hooks';
+import {
+  deletedUserDisplayNickname,
+  isDeletedUser,
+} from '~/services/member/utils/isDeletedUser';
 import { flex, fontCss, lineClamp, palettes } from '~/styles/utils';
 import { routes, timeAgo } from '~/utils';
 
@@ -31,6 +35,11 @@ export const HotArticleCard = memo((props: HotArticleCardProps) => {
     thumbnail,
   } = article;
   const strippedHtml = useStripHtml(content);
+  const displayNickname = isDeletedUser({ nickname }) ? (
+    <span css={{ color: palettes.grey3 }}>{deletedUserDisplayNickname}</span>
+  ) : (
+    <span>{nickname}</span>
+  );
 
   return (
     <ArticleCardLink href={routes.article.detail(articleId)}>
@@ -68,7 +77,7 @@ export const HotArticleCard = memo((props: HotArticleCardProps) => {
       <div css={metaCss}>
         <span>{timeAgo(createdAt)}</span>
         <Separator orientation="vertical" width={2} height={14} />
-        <span>{nickname}</span>
+        {displayNickname}
       </div>
     </ArticleCardLink>
   );

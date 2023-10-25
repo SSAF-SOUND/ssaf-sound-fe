@@ -5,6 +5,7 @@ import type {
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
+import { QueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -18,7 +19,7 @@ import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
-import { prefetch } from '~/react-query/server';
+import { dehydrate } from '~/react-query/server';
 import { getArticleDetail } from '~/services/article/apis';
 import { useArticleDetail } from '~/services/article/hooks';
 import {
@@ -34,7 +35,12 @@ import {
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
-import { createAxiosCookieConfig } from '~/utils';
+import {
+  createAxiosCookieConfig,
+  getErrorResponse,
+  notFoundPage,
+  ResponseCode,
+} from '~/utils';
 import { handleAxiosError } from '~/utils/handleAxiosError';
 import { routes } from '~/utils/routes';
 import { stripHtmlTags } from '~/utils/stripHtmlTags';
@@ -229,21 +235,28 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   // 2. 서버 오류
 
   if (Number.isNaN(articleId)) {
-    return {
-      notFound: true,
-    };
+    return notFoundPage;
   }
 
-  const dehydrate = prefetch({
-    queryKey: queryKeys.articles.detail(articleId),
-    queryFn: () =>
-      getArticleDetail(articleId, {
-        publicRequest: true,
-        config: createAxiosCookieConfig(context.req.headers.cookie),
-      }),
-  });
+  const queryClient = new QueryClient();
 
-  const { dehydratedState } = await dehydrate();
+  try {
+    await queryClient.fetchQuery({
+      queryKey: queryKeys.articles.detail(articleId),
+      queryFn: () =>
+        getArticleDetail(articleId, {
+          publicRequest: true,
+          config: createAxiosCookieConfig(context.req.headers.cookie),
+        }),
+    });
+  } catch (err) {
+    const errorResponse = getErrorResponse(err);
+    if (errorResponse?.code === ResponseCode.ARTICLE_NOT_FOUND) {
+      return notFoundPage;
+    }
+  }
+
+  const { dehydratedState } = dehydrate(queryClient);
 
   return {
     props: {

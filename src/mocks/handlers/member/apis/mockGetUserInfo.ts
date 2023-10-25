@@ -37,6 +37,10 @@ export const mockGetNonSsafyUserInfo = createMockGetUserInfo(
   mockUserInfo.nonSsafyUserInfo
 );
 
+export const mockGetDeletedUserInfo = createMockGetUserInfo(
+  mockUserInfo.deletedUserInfo
+);
+
 export const mockGetUserInfoError = restError(
   getUserInfoMethod,
   getUserInfoEndpoint,

@@ -3,9 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { produce } from 'immer';
 
 import {
-  mockGetEmptyHotArticlesByCursor,
-  mockGetHotArticlesByCursor,
-} from '~/mocks/handlers/article/apis/mockGetHotArticlesByCursor';
+  mockGetEmptyHotArticlesByOffset,
+  mockGetHotArticlesByOffset,
+} from '~/mocks/handlers/article/apis/mockGetHotArticlesByOffset';
 import {
   mockGetEmptyLunchMenusWithPollStatus,
   mockGetLunchMenusWithPollStatus,
@@ -17,9 +17,9 @@ import {
 } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { userInfo } from '~/mocks/handlers/member/data';
 import {
-  mockGetEmptyRecruitsByCursor,
-  mockGetRecruitsByCursor,
-} from '~/mocks/handlers/recruit/apis/mockGetRecruitsByCursor';
+  mockGetEmptyRecruitsByOffset,
+  mockGetRecruitsByOffset,
+} from '~/mocks/handlers/recruit/apis/mockGetRecruitsByOffset';
 import MainPage from '~/pages';
 import { SsafyCampus } from '~/services/meta/utils';
 import { PageLayout } from '~/stories/Layout';
@@ -42,8 +42,8 @@ const meta: Meta<typeof MainPage> = {
     ...createMswParameters({
       member: [mockGetCertifiedSsafyMyInfo],
       lunch: [mockGetLunchMenusWithPollStatus],
-      article: [mockGetHotArticlesByCursor],
-      recruit: [mockGetRecruitsByCursor],
+      article: [mockGetHotArticlesByOffset],
+      recruit: [mockGetRecruitsByOffset],
     }),
   },
 };
@@ -121,8 +121,8 @@ export const Empty: MainPageStory = {
     msw: {
       handlers: {
         lunch: [mockGetEmptyLunchMenusWithPollStatus],
-        article: [mockGetEmptyHotArticlesByCursor],
-        recruit: [mockGetEmptyRecruitsByCursor],
+        article: [mockGetEmptyHotArticlesByOffset],
+        recruit: [mockGetEmptyRecruitsByOffset],
       },
     },
   },

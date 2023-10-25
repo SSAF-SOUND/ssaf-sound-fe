@@ -3,6 +3,7 @@ import type { UserInfo } from '~/services/member';
 import { css } from '@emotion/react';
 
 import Name from '~/components/Name';
+import { isDeletedUser } from '~/services/member/utils/isDeletedUser';
 import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 export interface NameCardProps {
@@ -15,14 +16,12 @@ const NameCard = (props: NameCardProps) => {
   const { className, userInfo, withBackground = false } = props;
   const { ssafyInfo: { campus, semester } = {} } = userInfo;
   const hasSsafyInfo = campus && semester;
+  const isDeleted = isDeletedUser(userInfo);
 
   return (
     <div css={[selfCss, withBackground && backgroundCss]} className={className}>
-      {/* FIXME: Name Interface */}
-      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-      {/* @ts-ignore */}
       <Name userInfo={userInfo} size="lg" />
-      {hasSsafyInfo && (
+      {!isDeleted && hasSsafyInfo && (
         <div css={ssafyInfoCss}>{formatSsafyInfo(semester, campus)}</div>
       )}
     </div>

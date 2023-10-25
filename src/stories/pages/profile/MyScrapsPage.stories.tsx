@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import {
-  mockGetEmptyMyScrapedArticlesByCursor,
-  mockGetMyScrapedArticlesByCursor,
-  mockGetMyScrapedArticlesByCursorError,
-} from '~/mocks/handlers/article/apis/mockGetMyScrapedArticlesByCursor';
+  mockGetEmptyMyScrapedArticlesByOffset,
+  mockGetMyScrapedArticlesByOffset,
+  mockGetMyScrapedArticlesByOffsetError,
+} from '~/mocks/handlers/article/apis/mockGetMyScrapedArticlesByOffset';
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import {
-  mockGetEmptyMyScrapedRecruitsByCursor,
-  mockGetMyScrapedRecruitsByCursor,
-  mockGetMyScrapedRecruitsByCursorError,
-} from '~/mocks/handlers/recruit/apis/mockGetMyScrapedRecruitsByCursor';
+  mockGetEmptyMyScrapedRecruitsByOffset,
+  mockGetMyScrapedRecruitsByOffset,
+  mockGetMyScrapedRecruitsByOffsetError,
+} from '~/mocks/handlers/recruit/apis/mockGetMyScrapedRecruitsByOffset';
 import MyScrapsPage from '~/pages/profile/my-scraps';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
@@ -44,8 +44,8 @@ export const Default: MyScrapsPageStory = {
   name: '정상',
   parameters: {
     ...createMswParameters({
-      article: [mockGetMyScrapedArticlesByCursor],
-      recruit: [mockGetMyScrapedRecruitsByCursor],
+      article: [mockGetMyScrapedArticlesByOffset],
+      recruit: [mockGetMyScrapedRecruitsByOffset],
     }),
   },
 };
@@ -54,8 +54,8 @@ export const Empty: MyScrapsPageStory = {
   name: '빈 데이터',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyMyScrapedArticlesByCursor],
-      recruit: [mockGetEmptyMyScrapedRecruitsByCursor],
+      article: [mockGetEmptyMyScrapedArticlesByOffset],
+      recruit: [mockGetEmptyMyScrapedRecruitsByOffset],
     }),
   },
 };
@@ -64,8 +64,8 @@ export const Error: MyScrapsPageStory = {
   name: '에러',
   parameters: {
     ...createMswParameters({
-      article: [mockGetMyScrapedArticlesByCursorError],
-      recruit: [mockGetMyScrapedRecruitsByCursorError],
+      article: [mockGetMyScrapedArticlesByOffsetError],
+      recruit: [mockGetMyScrapedRecruitsByOffsetError],
     }),
   },
 };

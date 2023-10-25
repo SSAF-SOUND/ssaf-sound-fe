@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { Params } from '~/pages/profile/[userId]';
 
+import { ProfileTabs } from '~/components/Profile';
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { createMockGetUserInfo } from '~/mocks/handlers/member/apis/mockGetUserInfo';
 import {
@@ -9,10 +11,10 @@ import {
 import { createMockGetUserProfileVisibility } from '~/mocks/handlers/member/apis/mockGetUserProfileVisibility';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import {
-  mockGetEmptyJoinedRecruitsByCursor,
-  mockGetJoinedRecruitsByCursor,
-} from '~/mocks/handlers/recruit/apis/mockGetJoinedRecruitsByCursor';
-import ProfilePage from '~/pages/profile/[userId]';
+  mockGetEmptyJoinedRecruitsByOffset,
+  mockGetJoinedRecruitsByOffset,
+} from '~/mocks/handlers/recruit/apis/mockGetJoinedRecruitsByOffset';
+import ProfilePage, { ParamsKey } from '~/pages/profile/[userId]';
 import { PageLayout } from '~/stories/Layout';
 import { createMswParameters } from '~/stories/utils';
 
@@ -24,7 +26,7 @@ const meta: Meta<typeof ProfilePage> = {
   component: ProfilePage,
   decorators: [
     (Story) => (
-      <PageLayout>
+      <PageLayout css={{ overflow: 'unset' }}>
         <Story />
       </PageLayout>
     ),
@@ -42,28 +44,72 @@ const meta: Meta<typeof ProfilePage> = {
 
 export default meta;
 
+const getTabParameters = (tab: ProfileTabs) => {
+  return {
+    nextjs: {
+      router: {
+        query: {
+          [ParamsKey.TAB]: tab,
+        } as Params,
+      },
+    },
+  };
+};
+
 type ProfilePageStory = StoryObj<typeof ProfilePage>;
 
-export const Default: ProfilePageStory = {
-  name: '정상',
+export const Portfolio: ProfilePageStory = {
+  name: '포트폴리오',
   parameters: {
     ...createMswParameters({
       member: [mockGetUserPortfolio, createMockGetUserProfileVisibility(true)],
-      recruit: [mockGetJoinedRecruitsByCursor],
+      recruit: [mockGetJoinedRecruitsByOffset],
     }),
   },
 };
 
-export const Empty: ProfilePageStory = {
-  name: '빈 데이터',
+export const EmptyPortfolio: ProfilePageStory = {
+  name: '빈 포트폴리오',
   parameters: {
     ...createMswParameters({
       member: [
         mockGetEmptyUserPortfolio,
         createMockGetUserProfileVisibility(true),
       ],
-      recruit: [mockGetEmptyJoinedRecruitsByCursor],
+      recruit: [mockGetEmptyJoinedRecruitsByOffset],
     }),
+  },
+};
+
+export const JoinedProject: ProfilePageStory = {
+  name: '참여중인 프로젝트',
+  parameters: {
+    ...Portfolio.parameters,
+    ...getTabParameters(ProfileTabs.PROJECT),
+  },
+};
+
+export const EmptyJoinedProject: ProfilePageStory = {
+  name: '빈 참여중인 프로젝트',
+  parameters: {
+    ...EmptyPortfolio.parameters,
+    ...getTabParameters(ProfileTabs.PROJECT),
+  },
+};
+
+export const JoinedStudy: ProfilePageStory = {
+  name: '스터디',
+  parameters: {
+    ...Portfolio.parameters,
+    ...getTabParameters(ProfileTabs.STUDY),
+  },
+};
+
+export const EmptyJoinedStudy: ProfilePageStory = {
+  name: '빈 참여중인 스터디',
+  parameters: {
+    ...EmptyPortfolio.parameters,
+    ...getTabParameters(ProfileTabs.STUDY),
   },
 };
 

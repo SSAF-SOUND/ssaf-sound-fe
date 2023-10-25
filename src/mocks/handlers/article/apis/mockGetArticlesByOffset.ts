@@ -26,5 +26,5 @@ export const mockGetArticlesByOffsetError = restError(
 
 export const mockGetEmptyArticlesByOffset = rest[getArticlesMethod](
   getArticlesEndpoint,
-  paginatedArticlesHandler(true)
+  paginatedArticlesHandler(true, 0)
 );

@@ -34,3 +34,5 @@ export const isClient = typeof window !== 'undefined';
 export const identity = <T = any>(value: T) => value;
 
 export const refreshPage = () => window.location.reload();
+
+export const notFoundPage = { notFound:  true } as const;

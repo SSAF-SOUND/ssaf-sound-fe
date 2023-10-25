@@ -30,12 +30,12 @@ import {
 } from '~/styles/utils';
 import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 
-const enum ParamsKey {
+export const enum ParamsKey {
   TAB = 'tab',
   PAGE = defaultRecruitsPageKey,
 }
 
-type Params = {
+export type Params = {
   [ParamsKey.TAB]?: ProfileTabs;
   [ParamsKey.PAGE]?: string;
 };

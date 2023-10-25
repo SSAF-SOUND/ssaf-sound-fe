@@ -157,7 +157,7 @@ const paginationCss = css(
   {
     top: paginationTop,
     zIndex: fixedLayoutZIndex,
-    height: paginationHeight,
+    minHeight: paginationHeight,
     backgroundColor: palettes.background.default,
   }
 );
@@ -337,12 +337,14 @@ const RecruitsLayer = (props: RecruitsLayerProps) => {
           const isEmpty = recruits.length === 0;
           return (
             <>
-              <div css={paginationCss}>
-                <ResponsivePagination
-                  totalPageCount={totalPageCount}
-                  initialPage={currentPage}
-                />
-              </div>
+              {totalPageCount > 0 && (
+                <div css={paginationCss}>
+                  <ResponsivePagination
+                    totalPageCount={totalPageCount}
+                    initialPage={currentPage}
+                  />
+                </div>
+              )}
               {isEmpty ? (
                 <NoSearchResults
                   withKeyword={isValidKeyword}

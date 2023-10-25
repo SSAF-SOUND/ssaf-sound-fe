@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { mockGetEmptyHotArticlesByKeywordByOffset } from "~/mocks/handlers/article/apis/mockGetHotArticlesByKeywordByOffset";
 import {
-  mockGetEmptyHotArticlesByCursor,
-  mockGetHotArticlesByCursorError,
-} from '~/mocks/handlers/article/apis/mockGetHotArticlesByCursor';
-import { mockGetEmptyHotArticlesByKeywordByCursor } from "~/mocks/handlers/article/apis/mockGetHotArticlesByKeywordByCursor";
+  mockGetEmptyHotArticlesByOffset,
+  mockGetHotArticlesByOffsetError,
+} from '~/mocks/handlers/article/apis/mockGetHotArticlesByOffset';
 import { createMockGetMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { mockUserInfo } from '~/mocks/handlers/member/data';
 import HotArticlesPage from '~/pages/hot-articles';
@@ -43,7 +43,7 @@ export const FetchError: HotArticlesPageStory = {
   name: '핫 게시글 목록 불러오기 오류',
   parameters: {
     ...createMswParameters({
-      article: [mockGetHotArticlesByCursorError],
+      article: [mockGetHotArticlesByOffsetError],
     }),
   },
 };
@@ -52,7 +52,7 @@ export const NotExist: HotArticlesPageStory = {
   name: '빈 핫 게시글 목록',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyHotArticlesByCursor],
+      article: [mockGetEmptyHotArticlesByOffset],
     }),
   },
 };
@@ -61,7 +61,7 @@ export const NoSearchResult: HotArticlesPageStory = {
   name: '빈 핫 게시글 검색 목록',
   parameters: {
     ...createMswParameters({
-      article:[mockGetEmptyHotArticlesByKeywordByCursor],
+      article:[mockGetEmptyHotArticlesByKeywordByOffset],
     }),
     nextjs: {
       router: {

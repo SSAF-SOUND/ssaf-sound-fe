@@ -4,6 +4,7 @@ import { faker } from '@faker-js/faker';
 
 import { mockHtmlString } from '~/mocks/handlers/common';
 import { CertificationState, SsafyTrack } from '~/services/member';
+import { deletedUserNicknamePrefix } from '~/services/member/utils/isDeletedUser';
 import { SkillName } from '~/services/recruit';
 
 const initialUserInfo: UserInfo = {
@@ -47,11 +48,17 @@ const nonSsafyUserInfo: UserInfo = {
   ssafyInfo: undefined,
 };
 
+const deletedUserInfo: UserInfo = {
+  ...certifiedSsafyUserInfo,
+  nickname: deletedUserNicknamePrefix,
+};
+
 export const userInfo = {
   initialUserInfo,
   certifiedSsafyUserInfo,
   uncertifiedSsafyUserInfo,
   nonSsafyUserInfo,
+  deletedUserInfo,
 };
 
 export const mockEmptyPortfolio: UserPortfolio = {
@@ -106,4 +113,5 @@ export const mockUserInfo = {
   nonSsafyUserInfo,
   uncertifiedSsafyUserInfo,
   certifiedSsafyUserInfo,
+  deletedUserInfo,
 };
