@@ -8,13 +8,12 @@ import { API_URL, composeUrls } from '~/utils';
 const getHotArticlesByKeywordMethod = 'get';
 const getHotArticlesByKeywordEndpoint = composeUrls(
   API_URL,
-  endpoints.articles.hotByOffset({keyword: 'keyword'})
+  endpoints.articles.hotByOffset({ keyword: 'keyword' })
 );
 
-export const mockGetHotArticlesByKeywordByOffset = rest[getHotArticlesByKeywordMethod](
-  getHotArticlesByKeywordEndpoint,
-  paginatedArticlesHandler(false)
-);
+export const mockGetHotArticlesByKeywordByOffset = rest[
+  getHotArticlesByKeywordMethod
+](getHotArticlesByKeywordEndpoint, paginatedArticlesHandler(false));
 
 export const mockGetHotArticlesByKeywordByOffsetError = restError(
   getHotArticlesByKeywordMethod,
@@ -24,7 +23,6 @@ export const mockGetHotArticlesByKeywordByOffsetError = restError(
   }
 );
 
-export const mockGetEmptyHotArticlesByKeywordByOffset = rest[getHotArticlesByKeywordMethod](
-  getHotArticlesByKeywordEndpoint,
-  paginatedArticlesHandler(true)
-);
+export const mockGetEmptyHotArticlesByKeywordByOffset = rest[
+  getHotArticlesByKeywordMethod
+](getHotArticlesByKeywordEndpoint, paginatedArticlesHandler(true, 0));

@@ -25,4 +25,4 @@ export const mockGetArticlesByKeywordByOffsetError = restError(
 
 export const mockGetEmptyArticlesByKeywordByOffset = rest[
   getArticlesByKeywordMethod
-](getArticlesByKeywordEndpoint, paginatedArticlesHandler(true));
+](getArticlesByKeywordEndpoint, paginatedArticlesHandler(true, 0));
