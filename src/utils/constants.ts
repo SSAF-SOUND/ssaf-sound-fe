@@ -14,6 +14,7 @@ export enum ErrorMessage {
 export enum ResponseCode {
   //
   TOKEN_NOT_EXISTS = '401',
+  RESOURCE_NOT_FOUND = '404',
 
   //
   INTERNAL_SERVER_ERROR = '500',
@@ -28,8 +29,8 @@ export enum ResponseCode {
   EXCEEDED_ATTEMPTS_OF_STUDENT_CERTIFICATION = '712',
 
   //
-  NOT_EXIST_BOARD = '801',
-  NOT_EXIST_ARTICLE = '802',
+  BOARD_NOT_FOUND = '801',
+  ARTICLE_NOT_FOUND = '802',
 
   // TODO: 값 수정
   APPLICATION_CANCELED = '03030303',
