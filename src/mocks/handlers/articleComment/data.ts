@@ -52,3 +52,8 @@ export const createMockCommentDetail = (
 export const commentDetails = Array(10)
   .fill(undefined)
   .map((_, index) => createMockCommentDetail(index + 1));
+
+export const commentDetailWithDeletedAuthor: CommentDetail = {
+  ...createMockCommentDetail(100),
+  author: userInfo.deletedUserInfo,
+};

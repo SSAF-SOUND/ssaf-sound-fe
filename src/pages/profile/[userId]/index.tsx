@@ -23,6 +23,10 @@ import {
   useUserProfileVisibility,
 } from '~/services/member';
 import {
+  deletedUserDisplayNickname,
+  isDeletedUser,
+} from '~/services/member/utils/isDeletedUser';
+import {
   defaultRecruitsFirstPage,
   defaultRecruitsPageKey,
   RecruitCategoryName,
@@ -96,7 +100,10 @@ const UserProfilePage: CustomNextPage = () => {
   }
 
   const isProfilePublic = userProfileVisibility.isPublic;
-  const metaTitle = createMetaTitle(userInfo.nickname);
+  const isDeletedUserInfo = isDeletedUser(userInfo);
+  const metaTitle = createMetaTitle(
+    isDeletedUserInfo ? deletedUserDisplayNickname : userInfo.nickname
+  );
   const safePage = toSafePageValue(page);
   const safeTabValue = getSafeProfileTabValue(tab);
 
@@ -156,38 +163,39 @@ const UserProfilePage: CustomNextPage = () => {
           <NameCard userInfo={userInfo} css={nameCardCss} />
         </div>
 
-        {isProfilePublic ? (
-          <Profile.Tabs.Root
-            value={safeTabValue}
-            onValueChange={onTabValueChange}
-          >
-            <Profile.Tabs.Triggers css={pageExpandCss} />
+        {!isDeletedUserInfo &&
+          (isProfilePublic ? (
+            <Profile.Tabs.Root
+              value={safeTabValue}
+              onValueChange={onTabValueChange}
+            >
+              <Profile.Tabs.Triggers css={pageExpandCss} />
 
-            <Profile.Tabs.PortfolioTabContent
-              mine={false}
-              userId={userId}
-              marginForExpand={globalVars.mainLayoutPaddingX.var}
-            />
+              <Profile.Tabs.PortfolioTabContent
+                mine={false}
+                userId={userId}
+                marginForExpand={globalVars.mainLayoutPaddingX.var}
+              />
 
-            <Profile.Tabs.JoinedRecruitsTabContent
-              category={RecruitCategoryName.PROJECT}
-              userId={userId}
-              mine={false}
-              page={safePage}
-              paginationContainerStyle={paginationOverrideStyle}
-            />
+              <Profile.Tabs.JoinedRecruitsTabContent
+                category={RecruitCategoryName.PROJECT}
+                userId={userId}
+                mine={false}
+                page={safePage}
+                paginationContainerStyle={paginationOverrideStyle}
+              />
 
-            <Profile.Tabs.JoinedRecruitsTabContent
-              category={RecruitCategoryName.STUDY}
-              userId={userId}
-              mine={false}
-              page={safePage}
-              paginationContainerStyle={paginationOverrideStyle}
-            />
-          </Profile.Tabs.Root>
-        ) : (
-          <Profile.PrivateIndicator css={privateProfileCss} />
-        )}
+              <Profile.Tabs.JoinedRecruitsTabContent
+                category={RecruitCategoryName.STUDY}
+                userId={userId}
+                mine={false}
+                page={safePage}
+                paginationContainerStyle={paginationOverrideStyle}
+              />
+            </Profile.Tabs.Root>
+          ) : (
+            <Profile.PrivateIndicator css={privateProfileCss} />
+          ))}
       </div>
     </>
   );

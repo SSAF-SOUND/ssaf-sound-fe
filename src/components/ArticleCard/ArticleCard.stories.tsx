@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import type { ArticleSummary } from '~/services/article';
 
 import { createMockArticleSummary } from '~/mocks/handlers/article/data';
+import { deletedUserNicknamePrefix } from '~/services/member/utils/isDeletedUser';
 import { PageLayout } from '~/stories/Layout';
 
 import { ArticleCard, HotArticleCard } from './index';
@@ -45,12 +46,27 @@ const Render = (Component: FC<{ article: ArticleSummary }>) =>
     return <Component article={copiedArticleSummary} />;
   };
 
+const deletedUserNickname = deletedUserNicknamePrefix;
 export const Normal = {
+  name: '게시글 카드',
   args: defaultArgs,
   render: Render(ArticleCard),
 };
 
+export const Normal__DeletedUser = {
+  ...Normal,
+  name: '게시글 카드 (탈퇴한 유저)',
+  args: { ...defaultArgs, nickname: deletedUserNickname },
+};
+
 export const Hot = {
+  name: '핫 게시글 카드',
   args: defaultArgs,
   render: Render(HotArticleCard),
+};
+
+export const Hot__DeletedUser = {
+  ...Hot,
+  name: '핫 게시글 카드 (탈퇴한 유저)',
+  args: { ...defaultArgs, nickname: deletedUserNickname },
 };

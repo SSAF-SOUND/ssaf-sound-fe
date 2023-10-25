@@ -2,7 +2,10 @@ import type { Meta } from '@storybook/react';
 
 import { useEffect } from 'react';
 
-import { commentDetails } from '~/mocks/handlers/articleComment/data';
+import {
+  commentDetails,
+  commentDetailWithDeletedAuthor,
+} from '~/mocks/handlers/articleComment/data';
 import { userInfo } from '~/mocks/handlers/member/data';
 import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
@@ -39,11 +42,14 @@ export default meta;
 const CommentStoryComponent = (props: {
   mine?: boolean;
   isSignedIn?: boolean;
+  isDeletedUserInfo?: boolean;
 }) => {
-  const { mine = false, isSignedIn = false } = props;
+  const { mine = false, isSignedIn = false, isDeletedUserInfo } = props;
   const setMyInfo = useSetMyInfo();
 
-  const comment = { ...commentDetails[0], replies: [], mine };
+  const comment = isDeletedUserInfo
+    ? commentDetailWithDeletedAuthor
+    : { ...commentDetails[0], replies: [], mine };
 
   const myInfo = isSignedIn ? userInfo.certifiedSsafyUserInfo : null;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -55,6 +61,10 @@ const CommentStoryComponent = (props: {
 
 export const NotMine = () => {
   return <CommentStoryComponent isSignedIn mine={false} />;
+};
+
+export const DeletedAuthor = () => {
+  return <CommentStoryComponent isDeletedUserInfo={true} />;
 };
 
 export const Mine = () => {

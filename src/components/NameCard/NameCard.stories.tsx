@@ -3,6 +3,7 @@ import type { UserInfo } from '~/services/member';
 
 import { userInfo } from '~/mocks/handlers/member/data';
 import { SsafyTrack } from '~/services/member';
+import { deletedUserNicknamePrefix } from '~/services/member/utils/isDeletedUser';
 import { disableArgs } from '~/stories/utils';
 
 import NameCard from './index';
@@ -44,5 +45,13 @@ export const Default: NameCardStory = {
     user.ssafyInfo.majorTrack = track;
 
     return <NameCard userInfo={user} withBackground={withBackground} />;
+  },
+};
+
+export const DeletedUser: NameCardStory = {
+  ...Default,
+  args: {
+    ...Default.args,
+    nickname: deletedUserNicknamePrefix,
   },
 };

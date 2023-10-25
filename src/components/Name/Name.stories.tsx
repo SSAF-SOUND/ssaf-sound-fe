@@ -104,3 +104,7 @@ export const AnonymousName: NameStory = {
     return <Name userInfo={user} size={size} anonymous />;
   },
 };
+
+export const DeletedUser = () => {
+  return <Name userInfo={userInfo.deletedUserInfo} />;
+};

@@ -6,7 +6,11 @@ import { css } from '@emotion/react';
 import { Avatar } from '~/components/Common/Avatar';
 import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import { CertificationState } from '~/services/member/utils';
-import { fontCss, inlineFlex } from '~/styles/utils';
+import {
+  deletedUserDisplayNickname,
+  isDeletedUser,
+} from '~/services/member/utils/isDeletedUser';
+import { fontCss, inlineFlex, palettes } from '~/styles/utils';
 
 export interface NameProps {
   userInfo: NameUserInfo;
@@ -41,15 +45,22 @@ const Name = (props: NameProps) => {
     ssafyMember &&
     ssafyInfo?.certificationState === CertificationState.CERTIFIED;
 
+  const isDeleted = isDeletedUser({ nickname });
+  const displayNickname = isDeleted ? (
+    <span css={{ color: palettes.grey3 }}>{deletedUserDisplayNickname}</span>
+  ) : (
+    <span>{nickname}</span>
+  );
+
   return (
     <span css={selfCss} className={className}>
-      {withAvatar && (
+      {!isDeleted && withAvatar && (
         <Avatar size={size} userInfo={userInfo} anonymous={anonymous} />
       )}
       <span css={[textBaseCss, textCss[size], fontCss.family.auto]}>
-        {nickname}
+        {displayNickname}
       </span>
-      {showBadge && (
+      {!isDeleted && showBadge && (
         <SsafyIcon.Track
           name={ssafyInfo.majorTrack || 'fallback'}
           size={trackSize[size]}
