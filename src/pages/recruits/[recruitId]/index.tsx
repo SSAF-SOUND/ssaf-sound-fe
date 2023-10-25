@@ -5,6 +5,7 @@ import type {
 import type { ArticleCommentFormProps } from '~/components/Forms/ArticleCommentForm';
 
 import { css } from '@emotion/react';
+import { QueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -18,7 +19,7 @@ import { Recruit } from '~/components/Recruit/Recruit';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
-import { prefetch } from '~/react-query/server';
+import { dehydrate, prefetch } from '~/react-query/server';
 import { useMyInfo } from '~/services/member';
 import {
   getDisplayCategoryName,
@@ -38,6 +39,8 @@ import {
   ErrorMessage,
   getErrorResponse,
   handleAxiosError,
+  notFoundPage,
+  ResponseCode,
   routes,
 } from '~/utils';
 import { stripHtmlTags } from '~/utils/stripHtmlTags';
@@ -269,21 +272,27 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const recruitId = Number(context.params?.recruitId);
 
   if (Number.isNaN(recruitId)) {
-    return {
-      notFound: true,
-    };
+    return notFoundPage;
   }
 
-  const dehydrate = prefetch({
-    queryKey: queryKeys.recruit.detail(recruitId),
-    queryFn: () =>
-      getRecruitDetail(recruitId, {
-        publicRequest: true, // 요청은 Private 이지만, 자동 재발급 프로세스를 막기 위해 publicRequest 사용
-        config: createAxiosCookieConfig(context.req.headers.cookie),
-      }),
-  });
+  const queryClient = new QueryClient();
+  try {
+    await queryClient.fetchQuery({
+      queryKey: queryKeys.recruit.detail(recruitId),
+      queryFn: () =>
+        getRecruitDetail(recruitId, {
+          publicRequest: true, // 요청은 Private 이지만, 자동 재발급 프로세스를 막기 위해 publicRequest 사용
+          config: createAxiosCookieConfig(context.req.headers.cookie),
+        }),
+    });
+  } catch (err) {
+    const errorResponse = getErrorResponse(err);
+    if (errorResponse?.code === ResponseCode.RESOURCE_NOT_FOUND) {
+      return notFoundPage;
+    }
+  }
 
-  const { dehydratedState } = await dehydrate();
+  const { dehydratedState } = dehydrate(queryClient);
 
   return {
     props: {

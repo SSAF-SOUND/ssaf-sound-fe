@@ -3,10 +3,7 @@ import type {
   InferGetServerSidePropsType,
 } from 'next/types';
 import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
-import type {
-  GetArticlesByOffsetApiData,
-  defaultArticlesPageKey,
-} from '~/services/article';
+import type { defaultArticlesPageKey } from '~/services/article';
 
 import { useRouter } from 'next/router';
 
@@ -51,7 +48,13 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { customToast, routes } from '~/utils';
+import {
+  customToast,
+  getErrorResponse,
+  notFoundPage,
+  ResponseCode,
+  routes,
+} from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
 const createMetaDescription = (categoryName = '게시판') =>
@@ -311,9 +314,7 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
   const page = toSafePageValue(unsafePage);
 
   if (!isValidCategoryId || page < defaultArticlesFirstPage) {
-    return {
-      notFound: true,
-    };
+    return notFoundPage;
   }
 
   const queryClient = new QueryClient();
@@ -323,30 +324,34 @@ export const getServerSideProps: GetServerSideProps<Props, Params> = async (
     page,
   });
   const articleCategoriesQueryKey = queryKeys.articles.categories();
-  await Promise.allSettled([
-    queryClient.prefetchQuery({
-      queryKey: articleListQueryKey,
-      queryFn: () =>
-        getArticlesByOffset({
-          categoryId,
-          keyword: safeKeyword,
-          page,
-        }),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: articleCategoriesQueryKey,
-      queryFn: getArticleCategories,
-    }),
-  ]);
+  try {
+    const [articlesPromise] = await Promise.allSettled([
+      queryClient.fetchQuery({
+        queryKey: articleListQueryKey,
+        queryFn: () =>
+          getArticlesByOffset({
+            categoryId,
+            keyword: safeKeyword,
+            page,
+          }),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: articleCategoriesQueryKey,
+        queryFn: getArticleCategories,
+      }),
+    ]);
 
-  const articles =
-    queryClient.getQueryData<GetArticlesByOffsetApiData['data']>(
-      articleListQueryKey
-    );
-
-  if (articles && !validatePage(articles)) {
-    return { notFound: true };
-  }
+    if (articlesPromise.status === 'fulfilled') {
+      if (!validatePage(articlesPromise.value)) {
+        return notFoundPage;
+      }
+    } else {
+      const errorResponse = getErrorResponse(articlesPromise.reason);
+      if (errorResponse?.code === ResponseCode.BOARD_NOT_FOUND) {
+        return notFoundPage;
+      }
+    }
+  } catch (err) {}
 
   const { dehydratedState } = dehydrate(queryClient);
 
