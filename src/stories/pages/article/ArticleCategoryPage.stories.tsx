@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { mockGetArticleCategories } from '~/mocks/handlers/article/apis/mockGetArticleCategories';
+import { mockGetEmptyArticlesByKeywordByOffset } from '~/mocks/handlers/article/apis/mockGetArticlesByKeywordByOffset';
 import {
-  mockGetArticlesByCursorError,
-  mockGetEmptyArticlesByCursor,
-} from '~/mocks/handlers/article/apis/mockGetArticlesByCursor';
-import { mockGetEmptyArticlesByKeywordByCursor } from '~/mocks/handlers/article/apis/mockGetArticlesByKeywordByCursor';
+  mockGetArticlesByOffsetError,
+  mockGetEmptyArticlesByOffset,
+} from '~/mocks/handlers/article/apis/mockGetArticlesByOffset';
 import {
   createMockGetMyInfo,
   mockGetMyInfoError,
@@ -59,7 +59,7 @@ export const FetchError: ArticleCategoryPageStory = {
   name: '게시글 목록 불러오기 오류',
   parameters: {
     ...createMswParameters({
-      article: [mockGetArticlesByCursorError],
+      article: [mockGetArticlesByOffsetError],
     }),
   },
 };
@@ -68,7 +68,7 @@ export const NotExist: ArticleCategoryPageStory = {
   name: '빈 게시글 목록',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyArticlesByCursor],
+      article: [mockGetEmptyArticlesByOffset],
     }),
   },
 };
@@ -77,7 +77,7 @@ export const NoSearchResult: ArticleCategoryPageStory = {
   name: '빈 게시글 검색 목록',
   parameters: {
     ...createMswParameters({
-      article: [mockGetEmptyArticlesByKeywordByCursor],
+      article: [mockGetEmptyArticlesByKeywordByOffset],
     }),
     nextjs: {
       router: {
