@@ -24,7 +24,7 @@ export const mockGetMyScrapedArticlesByOffsetError = restError(
   }
 );
 
-export const mockGetMyScrapedEmptyArticlesByOffset = rest[getMyScrapedArticlesMethod](
+export const mockGetEmptyMyScrapedArticlesByOffset = rest[getMyScrapedArticlesMethod](
   getMyScrapedArticlesEndpoint,
   paginatedArticlesHandler(true)
 );
