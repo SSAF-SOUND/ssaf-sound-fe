@@ -42,12 +42,12 @@ const createMetaTitle = (username: string) => {
   return `${username} - 프로필`;
 };
 
-const enum ParamsKey {
+export const enum ParamsKey {
   USER_ID = 'userId',
   TAB = 'tab',
   PAGE = defaultRecruitsPageKey,
 }
-type Params = {
+export type Params = {
   [ParamsKey.USER_ID]?: string;
   [ParamsKey.TAB]?: ProfileTabs;
   [ParamsKey.PAGE]?: string;
