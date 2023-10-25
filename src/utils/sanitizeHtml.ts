@@ -17,6 +17,9 @@ const addHook = () => {
 
 addHook();
 
-export const sanitizeHtml = (dirty: string) => {
-  return DOMPurify.sanitize(dirty, { USE_PROFILES: { html: true } });
+export const sanitizeHtml = (dirty: string, allowedTags?: string[]) => {
+  const config = allowedTags
+    ? { ALLOWED_TAGS: allowedTags }
+    : { USE_PROFILES: { html: true } };
+  return DOMPurify.sanitize(dirty, config);
 };
