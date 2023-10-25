@@ -84,10 +84,12 @@ const DeleteAccountPage: CustomNextPage = () => {
             }
             content={
               <Alert
-                actionText="회원 탈퇴"
                 cancelText="취소"
-                title="알림"
-                description="SSAF SOUND의 회원 탈퇴를 진행합니다."
+                title="탈퇴 안내"
+                actionText="탈퇴합니다"
+                description={
+                  <div css={{ whiteSpace: 'pre-wrap' }}>{reconfirmMessage}</div>
+                }
                 onClickAction={handleDeleteAccount}
               />
             }
@@ -101,6 +103,8 @@ const DeleteAccountPage: CustomNextPage = () => {
 export default DeleteAccountPage;
 DeleteAccountPage.auth = createAuthGuard();
 DeleteAccountPage.meta = createNoIndexPageMetaData(metaTitle);
+
+const reconfirmMessage = `회원 탈퇴를 하는 경우, 3개월간 SSAF SOUND 재가입이 불가능합니다. \n\n회원 탈퇴시 등록하신 리쿠르팅과 리쿠르팅 신청 및 참여는 자동으로 삭제됩니다. \n작성하신 게시글은 자동 삭제 처리가 되지 않고, 익명 처리 후 SSAF SOUND에 귀속됩니다.`;
 
 const selfCss = css(
   {
