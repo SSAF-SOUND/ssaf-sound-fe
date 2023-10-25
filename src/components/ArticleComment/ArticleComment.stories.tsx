@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { useEffect } from 'react';
 
@@ -39,40 +39,58 @@ const meta: Meta<typeof ArticleComment> = {
 
 export default meta;
 
+type CommentStory = StoryObj<{ content?: string }>;
+
 const CommentStoryComponent = (props: {
   mine?: boolean;
   isSignedIn?: boolean;
   isDeletedUserInfo?: boolean;
+  content?: string;
 }) => {
-  const { mine = false, isSignedIn = false, isDeletedUserInfo } = props;
+  const {
+    mine = false,
+    isSignedIn = false,
+    isDeletedUserInfo,
+    content = commentDetails[0].content,
+  } = props;
   const setMyInfo = useSetMyInfo();
 
   const comment = isDeletedUserInfo
     ? commentDetailWithDeletedAuthor
-    : { ...commentDetails[0], replies: [], mine };
+    : { ...commentDetails[0], content, replies: [], mine };
 
-  const myInfo = isSignedIn ? userInfo.certifiedSsafyUserInfo : null;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  setMyInfo(myInfo);
+  useEffect(() => {
+    const myInfo = isSignedIn ? userInfo.certifiedSsafyUserInfo : null;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    setMyInfo(myInfo);
+  }, [isSignedIn, setMyInfo]);
 
   return <ArticleComment articleId={NaN} comment={comment} />;
 };
 
-export const NotMine = () => {
-  return <CommentStoryComponent isSignedIn mine={false} />;
+export const NotMine: CommentStory = {
+  args: { content: commentDetails[0].content },
+  render: (args) => <CommentStoryComponent isSignedIn mine={false} {...args} />,
 };
 
-export const DeletedAuthor = () => {
-  return <CommentStoryComponent isDeletedUserInfo={true} />;
+export const DeletedAuthor: CommentStory = {
+  args: { content: commentDetails[0].content },
+  render: (args) => (
+    <CommentStoryComponent isDeletedUserInfo={true} {...args} />
+  ),
 };
 
-export const Mine = () => {
-  return <CommentStoryComponent isSignedIn mine />;
+export const Mine: CommentStory = {
+  args: { content: commentDetails[0].content },
+  render: (args) => <CommentStoryComponent isSignedIn mine {...args} />,
 };
 
-export const NotSignedIn = () => {
-  return <CommentStoryComponent isSignedIn={false} mine={false} />;
+export const NotSignedIn: CommentStory = {
+  args: { content: commentDetails[0].content },
+  render: (args) => (
+    <CommentStoryComponent isSignedIn={false} mine={false} {...args} />
+  ),
 };
 
 export const MultipleComments = () => {
