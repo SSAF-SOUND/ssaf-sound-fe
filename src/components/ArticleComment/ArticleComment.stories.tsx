@@ -6,10 +6,11 @@ import {
   commentDetails,
   commentDetailWithDeletedAuthor,
 } from '~/mocks/handlers/articleComment/data';
+import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
 import { userInfo } from '~/mocks/handlers/member/data';
 import { useSetMyInfo } from '~/services/member';
 import { PageLayout } from '~/stories/Layout';
-import { disableArgs } from '~/stories/utils';
+import { createMswParameters, disableArgs } from '~/stories/utils';
 import { flex } from '~/styles/utils';
 
 import ArticleComment from './index';
@@ -39,32 +40,32 @@ const meta: Meta<typeof ArticleComment> = {
 
 export default meta;
 
-type CommentStory = StoryObj<{ content?: string }>;
+type CommentStory = StoryObj<{ content?: string; anonymous?: boolean }>;
 
 const CommentStoryComponent = (props: {
   mine?: boolean;
   isSignedIn?: boolean;
   isDeletedUserInfo?: boolean;
   content?: string;
+  anonymous?: boolean;
 }) => {
   const {
     mine = false,
     isSignedIn = false,
     isDeletedUserInfo,
+    anonymous = false,
     content = commentDetails[0].content,
   } = props;
-  const setMyInfo = useSetMyInfo();
 
   const comment = isDeletedUserInfo
     ? commentDetailWithDeletedAuthor
-    : { ...commentDetails[0], content, replies: [], mine };
-
-  useEffect(() => {
-    const myInfo = isSignedIn ? userInfo.certifiedSsafyUserInfo : null;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    setMyInfo(myInfo);
-  }, [isSignedIn, setMyInfo]);
+    : {
+        ...commentDetails[0],
+        content,
+        replies: [],
+        mine,
+        anonymity: anonymous,
+      };
 
   return <ArticleComment articleId={NaN} comment={comment} />;
 };
@@ -72,6 +73,11 @@ const CommentStoryComponent = (props: {
 export const NotMine: CommentStory = {
   args: { content: commentDetails[0].content },
   render: (args) => <CommentStoryComponent isSignedIn mine={false} {...args} />,
+  parameters: {
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+    }),
+  },
 };
 
 export const DeletedAuthor: CommentStory = {
@@ -79,11 +85,26 @@ export const DeletedAuthor: CommentStory = {
   render: (args) => (
     <CommentStoryComponent isDeletedUserInfo={true} {...args} />
   ),
+  parameters: {
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+    }),
+  },
 };
 
 export const Mine: CommentStory = {
   args: { content: commentDetails[0].content },
   render: (args) => <CommentStoryComponent isSignedIn mine {...args} />,
+  parameters: {
+    ...createMswParameters({
+      member: [mockGetCertifiedSsafyMyInfo],
+    }),
+  },
+};
+
+export const Mine__And__Anonymous: CommentStory = {
+  ...Mine,
+  args: { ...Mine.args, anonymous: true },
 };
 
 export const NotSignedIn: CommentStory = {
