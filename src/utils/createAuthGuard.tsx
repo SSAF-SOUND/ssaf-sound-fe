@@ -12,7 +12,7 @@ export const createAuthGuard = (
 ): NextPageAuthConfig => {
   const {
     role = 'user',
-    unauthorized = routes.unauthorized(),
+    unauthorized = routes.main(),
     loadingText = loaderText.checkUser,
   } = options;
   return {
