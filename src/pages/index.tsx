@@ -13,10 +13,9 @@ import NavigationGroup from '~/components/NavigationGroup';
 import { RecruitsPreview } from '~/components/RecruitsPreview';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
-import { toSSRSafeDehydratedState } from '~/react-query/server/toSSRSafeDehydratedState';
-import { getHotArticlesByCursor } from '~/services/article/apis';
+import { getHotArticlesByOffset } from '~/services/article/apis';
 import { useMyInfo } from '~/services/member';
-import { getRecruitsByCursor } from '~/services/recruit';
+import { getRecruitsByOffset } from '~/services/recruit';
 import { globalVars, topBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
@@ -75,28 +74,28 @@ const selfCss = css({
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  const recruitsQueryKey = JSON.parse(JSON.stringify(queryKeys.recruit.listByCursor()));
+  const recruitsQueryKey = JSON.parse(
+    JSON.stringify(queryKeys.recruit.listByOffset())
+  );
   const hotArticlesQueryKey = JSON.parse(
-    JSON.stringify(queryKeys.articles.hotByCursor())
+    JSON.stringify(queryKeys.articles.hotByOffset({ page: 1 }))
   );
 
   await Promise.allSettled([
-    queryClient.prefetchInfiniteQuery({
+    queryClient.prefetchQuery({
       queryKey: hotArticlesQueryKey,
-      queryFn: () => getHotArticlesByCursor(),
+      queryFn: () => getHotArticlesByOffset(),
     }),
-    queryClient.prefetchInfiniteQuery({
+    queryClient.prefetchQuery({
       queryKey: recruitsQueryKey,
-      queryFn: () => getRecruitsByCursor(),
+      queryFn: () => getRecruitsByOffset(),
     }),
   ]);
 
   const { dehydratedState } = dehydrate(queryClient);
+
   return {
-    props: {
-      dehydratedState:
-        toSSRSafeDehydratedState.infiniteQueries(dehydratedState),
-    },
+    props: { dehydratedState },
     revalidate: 30,
   };
 };
