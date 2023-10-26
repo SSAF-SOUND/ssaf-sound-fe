@@ -47,7 +47,7 @@ export interface UserBasicInfo {
 export type UserSsafyInfo =
   | {
       ssafyMember: null | false;
-      ssafyInfo?: undefined;
+      ssafyInfo?: undefined | null;
     }
   | {
       ssafyMember: true;
