@@ -1,6 +1,7 @@
 import type { UserInfo } from '~/services/member';
 
 import { css } from '@emotion/react';
+import { isNullOrUndefined } from 'is-what';
 
 import Name from '~/components/Name';
 import { isDeletedUser } from '~/services/member/utils/isDeletedUser';
@@ -14,15 +15,17 @@ export interface NameCardProps {
 
 const NameCard = (props: NameCardProps) => {
   const { className, userInfo, withBackground = false } = props;
-  const { ssafyInfo: { campus, semester } = {} } = userInfo;
-  const hasSsafyInfo = campus && semester;
+  const { ssafyInfo } = userInfo;
+  const hasSsafyInfo = !isNullOrUndefined(ssafyInfo);
   const isDeleted = isDeletedUser(userInfo);
 
   return (
     <div css={[selfCss, withBackground && backgroundCss]} className={className}>
       <Name userInfo={userInfo} size="lg" />
       {!isDeleted && hasSsafyInfo && (
-        <div css={ssafyInfoCss}>{formatSsafyInfo(semester, campus)}</div>
+        <div css={ssafyInfoCss}>
+          {formatSsafyInfo(ssafyInfo.semester, ssafyInfo.campus)}
+        </div>
       )}
     </div>
   );
