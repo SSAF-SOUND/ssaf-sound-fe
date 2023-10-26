@@ -1,3 +1,4 @@
+import type { KeyboardEventHandler } from 'react';
 import type { UseFieldArrayRemove } from 'react-hook-form';
 import type {
   PortfolioFormLink,
@@ -37,7 +38,7 @@ interface LinkFieldProps {
 
 const LinkField = (props: LinkFieldProps) => {
   const { index, remove } = props;
-  const { register } = usePortfolioFormContext();
+  const { register, setFocus } = usePortfolioFormContext();
   const fieldName = `${fieldArrayName}.${index}` as const;
   const linkTextFieldName = `${fieldName}.linkText` as const;
   const linkFieldName = `${fieldName}.link` as const;
@@ -47,6 +48,24 @@ const LinkField = (props: LinkFieldProps) => {
   }) as PortfolioFormLink;
 
   const removeField = () => remove(index);
+
+  const preventSubmitOnEnterKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    if (e.key === 'Enter') e.preventDefault();
+  };
+
+  const onPressEnterInLink: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    preventSubmitOnEnterKeyDown(e);
+    if (e.key === 'Enter') setFocus(linkTextFieldName);
+  };
+
+  const onPressEnterInLinkText: KeyboardEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    preventSubmitOnEnterKeyDown(e);
+    if (e.key === 'Enter') setFocus(`${fieldArrayName}.${index + 1}.link`);
+  };
 
   return (
     <div css={selfCss}>
@@ -59,11 +78,13 @@ const LinkField = (props: LinkFieldProps) => {
           inputType={'href'}
           css={linkFieldCss}
           {...register(linkFieldName, { validate: validateLink })}
+          onKeyDown={onPressEnterInLink}
         />
         <PortfolioLinkInputGroup.Input
           inputType={'text'}
           css={linkTextFieldCss}
           {...register(linkTextFieldName, { validate: validateLinkText })}
+          onKeyDown={onPressEnterInLinkText}
         />
         <IconButton
           onClick={removeField}
