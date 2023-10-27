@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { useCallback, useRef } from 'react';
 
 import { useIntersectionObserver } from '~/hooks';
+import { useCallbackRef } from '~/hooks/useCallbackRef';
 
 export interface IntersectionAreaProps {
   children: ReactNode;
@@ -15,14 +16,18 @@ export interface IntersectionAreaProps {
 export const IntersectionArea = (props: IntersectionAreaProps) => {
   const { onIntersection, offIntersection, ...restProps } = props;
   const ref = useRef<HTMLDivElement>(null);
+
+  const memoizedOnIntersection = useCallbackRef(onIntersection);
+  const memoizedOffIntersection = useCallbackRef(offIntersection);
+
   const intersectionCallback: IntersectionObserverCallback = useCallback(
     (entries) => {
       const [entry] = entries;
 
-      if (entry.isIntersecting) onIntersection?.();
-      else offIntersection?.();
+      if (entry.isIntersecting) memoizedOnIntersection?.();
+      else memoizedOffIntersection?.();
     },
-    [onIntersection, offIntersection]
+    [memoizedOnIntersection, memoizedOffIntersection]
   );
 
   useIntersectionObserver(ref, intersectionCallback);
