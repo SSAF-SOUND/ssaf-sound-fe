@@ -2,12 +2,7 @@ import type { ReactNode } from 'react';
 
 import { css } from '@emotion/react';
 
-import {
-  flex,
-  pageMinHeight,
-  pageMinWidth,
-  topBarHeight,
-} from '~/styles/utils';
+import { flex, pageCss, pageMinWidth, topBarHeight } from '~/styles/utils';
 
 interface LunchLayoutProps {
   children: ReactNode;
@@ -15,7 +10,7 @@ interface LunchLayoutProps {
 
 export const LunchLayout = (props: LunchLayoutProps) => {
   const { children } = props;
-  return <div css={selfCss}>{children}</div>;
+  return <main css={selfCss}>{children}</main>;
 };
 
 const selfPaddingY = topBarHeight + 44;
@@ -24,7 +19,7 @@ const selfCss = css(
   {
     padding: `${selfPaddingY}px 0`,
     minWidth: pageMinWidth,
-    minHeight: `max(${pageMinHeight}px, 100vh)`,
   },
+  pageCss.minHeight,
   flex('center', '', 'column', 40)
 );
