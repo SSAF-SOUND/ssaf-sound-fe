@@ -10,6 +10,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import {
   RecruitCompletedBar,
   recruitCompletedBarHeight,
@@ -30,6 +31,7 @@ import {
   fixTopCenter,
   flex,
   fontCss,
+  pageCss,
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
@@ -141,7 +143,7 @@ const RecruitApplicantsPage: CustomNextPage<RecruitApplicantsPageProps> = (
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={[selfCss, finishedRecruit && extendPaddingTopCss]}>
+      <main css={[selfCss, finishedRecruit && extendPaddingTopCss]}>
         <TitleBar.Default
           title={titleBarTitle}
           withoutClose
@@ -181,15 +183,20 @@ const RecruitApplicantsPage: CustomNextPage<RecruitApplicantsPageProps> = (
             />
           ))}
         </RecruitApplicantsAccordion.Root>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
 
 const selfPaddingY = titleBarHeight + breadcrumbsHeight + 10;
-const selfCss = css({
-  padding: `${selfPaddingY}px 0`,
-});
+const selfCss = css(
+  {
+    padding: `${selfPaddingY}px 0`,
+  },
+  pageCss.minHeight
+);
 
 const extendPaddingTopCss = css({
   paddingTop: `${selfPaddingY + recruitCompletedBarHeight}px`,

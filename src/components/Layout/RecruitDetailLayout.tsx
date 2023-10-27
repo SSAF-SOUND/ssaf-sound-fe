@@ -11,7 +11,7 @@ interface RecruitDetailLayoutProps {
 }
 
 export const RecruitDetailLayout = (props: RecruitDetailLayoutProps) => {
-  return <div css={selfCss} {...props} />;
+  return <main css={selfCss} {...props} />;
 };
 
 const selfPaddingY = titleBarHeight + breadcrumbsHeight + 12;

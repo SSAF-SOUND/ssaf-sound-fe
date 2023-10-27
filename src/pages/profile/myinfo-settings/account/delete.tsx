@@ -9,10 +9,17 @@ import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
 import { Modal } from '~/components/Common/Modal';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { Alert } from '~/components/ModalContent';
 import TitleBar from '~/components/TitleBar';
 import { useDeleteAccount } from '~/services/auth';
-import { flex, fontCss, pageMinHeight, titleBarHeight } from '~/styles/utils';
+import {
+  flex,
+  fontCss,
+  pageCss,
+  pageMinHeight,
+  titleBarHeight,
+} from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -46,7 +53,7 @@ const DeleteAccountPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={titleBarTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           title={titleBarTitle}
           withoutClose
@@ -95,7 +102,9 @@ const DeleteAccountPage: CustomNextPage = () => {
             }
           />
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
@@ -109,8 +118,9 @@ const reconfirmMessage = `회원 탈퇴를 하는 경우, 3개월간 SSAF SOUND 
 const selfCss = css(
   {
     padding: `${titleBarHeight}px 0`,
-    minHeight: `max(${pageMinHeight}px, 100vh)`,
   },
+  pageCss.minHeight,
+
   flex('', '', 'column')
 );
 const descriptionCss = css(

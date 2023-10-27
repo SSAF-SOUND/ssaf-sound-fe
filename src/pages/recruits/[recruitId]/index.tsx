@@ -13,6 +13,7 @@ import ArticleComment from '~/components/ArticleComment';
 import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHead } from '~/components/Common/PageHead';
+import { Footer } from '~/components/Footer';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import { RecruitDetailLayout } from '~/components/Layout';
 import { Recruit } from '~/components/Recruit/Recruit';
@@ -160,6 +161,8 @@ const RecruitDetailPage = (props: RecruitDetailPageProps) => {
 
         <RecruitCommentFormLayer recruitId={recruitId} />
       </RecruitDetailLayout>
+
+      <Footer />
     </>
   );
 };

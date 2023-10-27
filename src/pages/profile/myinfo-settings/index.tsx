@@ -6,6 +6,7 @@ import { css } from '@emotion/react';
 
 import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { useModal } from '~/components/GlobalModal';
 import MyInfoSettings from '~/components/MyInfoSettings';
 import TitleBar from '~/components/TitleBar';
@@ -21,6 +22,7 @@ import {
   expandCss,
   flex,
   globalVars,
+  pageCss,
   pageMinHeight,
   palettes,
   titleBarHeight,
@@ -51,7 +53,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <div>
           <TitleBar.Default
             title="프로필 설정"
@@ -140,7 +142,9 @@ const MyInfoSettingsPage: CustomNextPage = () => {
             회원 탈퇴
           </MyInfoSettings.NavItem>
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
@@ -149,9 +153,8 @@ const selfPaddingY = `${titleBarHeight + breadcrumbsHeight + 30}px`;
 const selfCss = css(
   {
     padding: `${selfPaddingY} 0`,
-    minHeight: pageMinHeight,
-    height: '100vh',
   },
+  pageCss.minHeight,
   flex('', '', 'column')
 );
 

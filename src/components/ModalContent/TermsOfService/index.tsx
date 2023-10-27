@@ -4,8 +4,8 @@ import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
 import { Modal } from '~/components/Common/Modal';
 import { Scroll } from '~/components/Common/Scroll';
+import { TermsDetail } from '~/components/TermsDetail';
 import { fontCss, palettes, position } from '~/styles/utils';
-import { sanitizeHtml } from '~/utils';
 
 export interface TermsOfServiceProps {
   title: string;
@@ -14,7 +14,6 @@ export interface TermsOfServiceProps {
 
 export const TermsOfService = (props: TermsOfServiceProps) => {
   const { title, html } = props;
-  const sanitizedHtml = sanitizeHtml(html);
 
   return (
     <section css={selfCss}>
@@ -30,10 +29,7 @@ export const TermsOfService = (props: TermsOfServiceProps) => {
 
         <Scroll.Viewport css={scrollViewportCss}>
           <Modal.Description asChild>
-            <article
-              css={termsDetailCss}
-              dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
-            />
+            <TermsDetail html={html} />
           </Modal.Description>
         </Scroll.Viewport>
 
@@ -74,27 +70,3 @@ const headerCss = css({
 const titleCss = css(fontCss.style.B24);
 
 const closeButtonCss = css(position.xy('start', 'center', 'absolute'));
-
-const termsDetailCss = css(fontCss.style.R16, {
-  '& h2': [fontCss.style.B24, { margin: '40px 0 10px' }],
-  '& p': { marginTop: 12, marginBottom: 12 },
-  '& ol': {
-    listStyleType: 'number',
-  },
-  '& ul': {
-    listStyleType: 'disc',
-  },
-  '& ol, & ul': {
-    paddingLeft: 32,
-    margin: '12px 0',
-  },
-  '& strong': {
-    display: 'block',
-    color: palettes.primary.default,
-    fontWeight: 700,
-  },
-  '& em': [
-    { fontStyle: 'italic', color: palettes.primary.default },
-    fontCss.style.B18,
-  ],
-});

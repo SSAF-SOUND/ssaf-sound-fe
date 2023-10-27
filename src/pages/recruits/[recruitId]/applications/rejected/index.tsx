@@ -9,6 +9,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { RecruitApplicantBar } from '~/components/RecruitApplicants';
 import { RecruitApplicantsCount } from '~/components/RecruitApplicants/RecruitApplicantsCount';
 import RedirectionGuide from '~/components/RedirectionGuide';
@@ -123,7 +124,7 @@ const RejectedApplicantsPage: CustomNextPage<RejectedApplicantsPageProps> = (
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           title={titleBarTitle}
           withoutClose
@@ -167,7 +168,9 @@ const RejectedApplicantsPage: CustomNextPage<RejectedApplicantsPageProps> = (
               />
             );
           })}
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

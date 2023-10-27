@@ -5,6 +5,7 @@ import type { RecruitCreatePageRouteQuery } from '~/utils/client-routes/recruit'
 import { useRouter } from 'next/router';
 
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import RecruitForm, {
   defaultRecruitFormValues,
 } from '~/components/Forms/RecruitForm';
@@ -76,7 +77,7 @@ const RecruitCreatePage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div>
+      <main>
         <RecruitForm
           onValidSubmit={onValidSubmit}
           onInvalidSubmit={onInvalidSubmit}
@@ -91,7 +92,9 @@ const RecruitCreatePage: CustomNextPage = () => {
             marginForExpand,
           }}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

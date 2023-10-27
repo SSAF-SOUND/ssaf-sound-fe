@@ -8,13 +8,9 @@ import { css } from '@emotion/react';
 import StudentCertificationForm, {
   defaultStudentCertificationFormValues,
 } from 'src/components/Forms/StudentCertificationForm';
-import {
-  FullPageLoader,
-  loaderText,
-} from '~/components/Common/FullPageLoader';
-import {
-  PageHeadingText,
-} from '~/components/Common/PageHeadingText';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
+import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { useModal } from '~/components/GlobalModal';
 import PreviewCertifiedMyInfo from '~/components/PreviewCertifiedMyInfo';
 import {
@@ -143,7 +139,7 @@ const StudentCertificationPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <StudentCertificationForm
           css={formCss}
           onValidSubmit={onValidSubmit}
@@ -152,7 +148,9 @@ const StudentCertificationPage: CustomNextPage = () => {
             year: myInfo.ssafyInfo.semester,
           }}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

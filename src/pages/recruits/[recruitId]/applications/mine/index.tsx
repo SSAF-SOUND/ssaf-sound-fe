@@ -13,6 +13,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import { RecruitApplyFormHeader } from '~/components/Forms/RecruitApplyForm/RecruitApplyFormHeader';
 import { useModal } from '~/components/GlobalModal';
@@ -118,7 +119,7 @@ const MyRecruitApplicationPage: CustomNextPage<
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           title="리쿠르팅 신청내용"
           withoutClose
@@ -161,7 +162,9 @@ const MyRecruitApplicationPage: CustomNextPage<
           recruitDetail={recruitDetail}
           myRecruitApplication={myRecruitApplication}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

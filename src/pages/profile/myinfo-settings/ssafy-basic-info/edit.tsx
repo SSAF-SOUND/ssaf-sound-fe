@@ -7,9 +7,10 @@ import { css } from '@emotion/react';
 import { produce } from 'immer';
 import { isBoolean } from 'is-what';
 
-import { BreadCrumbs } from "~/components/BreadCrumbs";
+import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import {
   CertificationState,
@@ -17,7 +18,7 @@ import {
   useSetMyInfo,
   useUpdateSsafyBasicInfo,
 } from '~/services/member';
-import { flex, titleBarHeight } from '~/styles/utils';
+import { flex, pageCss, titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -25,7 +26,7 @@ import {
   handleAxiosError,
   routes,
 } from '~/utils';
-import { EditableMyInfoFields } from "~/utils/client-routes/profile";
+import { EditableMyInfoFields } from '~/utils/client-routes/profile';
 
 const metaTitle = 'SSAFY 기본 정보 수정';
 
@@ -91,7 +92,7 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <MyInfoEditForm
           css={formCss}
           field="ssafyBasicInfo"
@@ -126,7 +127,9 @@ const MyInfoSettingsSsafyBasicInfoEditPage: CustomNextPage = () => {
             ),
           }}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
@@ -136,7 +139,8 @@ MyInfoSettingsSsafyBasicInfoEditPage.meta =
   createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css(
-  { padding: `${titleBarHeight}px 0`, height: '100vh' },
+  { padding: `${titleBarHeight}px 0` },
+  pageCss.minHeight,
   flex()
 );
 

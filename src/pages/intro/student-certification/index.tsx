@@ -7,6 +7,7 @@ import { Button } from '~/components/Common/Button';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
+import { Footer } from '~/components/Footer';
 import RollingAllTracks from '~/components/RollingAllTracks';
 import { CertificationState, useMyInfo } from '~/services/member';
 import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
@@ -30,7 +31,7 @@ const StudentCertificationIntroPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <div css={greetingLayerCss}>
           <p>반갑습니다!</p>
           <p>{myInfo.nickname}님</p>
@@ -83,7 +84,9 @@ const StudentCertificationIntroPage = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

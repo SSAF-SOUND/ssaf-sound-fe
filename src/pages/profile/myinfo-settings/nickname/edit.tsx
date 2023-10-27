@@ -9,9 +9,10 @@ import { produce } from 'immer';
 import { BreadCrumbs } from '~/components/BreadCrumbs';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import MyInfoEditForm from '~/components/Forms/MyInfoEditForm';
 import { useMyInfo, useSetMyInfo, useUpdateNickname } from '~/services/member';
-import { flex, titleBarHeight } from '~/styles/utils';
+import { flex, pageCss, titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
@@ -64,7 +65,7 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <MyInfoEditForm
           css={formCss}
           field="nickname"
@@ -93,7 +94,9 @@ const MyInfoSettingsNicknameEditPage: CustomNextPage = () => {
             ),
           }}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
@@ -103,7 +106,8 @@ MyInfoSettingsNicknameEditPage.auth = createAuthGuard();
 MyInfoSettingsNicknameEditPage.meta = createNoIndexPageMetaData(metaTitle);
 
 const selfCss = css(
-  { padding: `${titleBarHeight}px 0`, height: '100vh' },
+  { padding: `${titleBarHeight}px 0` },
+  pageCss.minHeight,
   flex()
 );
 
