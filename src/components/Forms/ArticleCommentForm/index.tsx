@@ -133,7 +133,7 @@ export default ArticleCommentForm;
 
 const defaultArticleCommentFormValues: ArticleCommentFormValues = {
   content: '',
-  anonymous: false,
+  anonymous: true,
 };
 
 const selfCss = css({

@@ -77,7 +77,7 @@ const ArticleForm = (props: ArticleFormProps) => {
 const defaultArticleFormValues: ArticleFormValues = {
   title: '',
   content: '',
-  anonymous: false,
+  anonymous: true,
   images: [],
 };
 
