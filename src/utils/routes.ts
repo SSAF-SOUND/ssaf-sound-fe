@@ -32,5 +32,5 @@ export const routes = {
   //
   lunch,
 
-  legal: () => '/legal',
+  legal: (termId: number) => `/legal/${termId}` as const,
 };

@@ -21,7 +21,7 @@ export const Footer = (props: ComponentPropsWithoutRef<'footer'>) => {
       </h2>
 
       <FooterRow>
-        <FooterInternalLink css={fontCss.style.B12} href={routes.legal()}>
+        <FooterInternalLink css={fontCss.style.B12} href={routes.legal(1)}>
           커뮤니티 이용 약관 및 개인정보 처리 방침
         </FooterInternalLink>
       </FooterRow>
