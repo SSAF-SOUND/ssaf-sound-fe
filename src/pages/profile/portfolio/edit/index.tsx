@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import PortfolioForm from 'src/components/Forms/PortfolioForm';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import UnloadReconfirmEffectSlot from '~/components/UnloadReconfirmEffectSlot';
 import {
@@ -109,7 +110,7 @@ const PortfolioEditPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div>
+      <main>
         <UnloadReconfirmEffectSlot>
           <PortfolioForm
             defaultValues={{
@@ -125,7 +126,9 @@ const PortfolioEditPage: CustomNextPage = () => {
             onValidSubmit={onValidSubmit}
           />
         </UnloadReconfirmEffectSlot>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

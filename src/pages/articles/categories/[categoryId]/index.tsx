@@ -16,6 +16,7 @@ import { CircleButton } from '~/components/Common/CircleButton';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { EmptyList } from '~/components/EmptyList';
+import { Footer } from '~/components/Footer';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import { QueryItemList } from '~/components/QueryItemList';
@@ -90,7 +91,7 @@ const ArticleCategoryPage = (
 
       <PageHeadingText text={categoryName} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           css={fontCss.style.B16}
           title={categoryName}
@@ -126,7 +127,9 @@ const ArticleCategoryPage = (
             />
           </div>
         )}
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

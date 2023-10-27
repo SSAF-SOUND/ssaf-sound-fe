@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import RecruitForm from '~/components/Forms/RecruitForm';
 import {
   convertRecruitDetailToRecruitFormValues,
@@ -92,9 +93,11 @@ const RecruitEditPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div>
+      <main>
         <RecruitFormLayer recruitDetail={recruitDetail} />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

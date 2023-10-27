@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { LunchLayout } from '~/components/Layout';
 import {
   LunchTabs,
@@ -102,6 +103,8 @@ const LunchPage = () => {
           dateSpecifier={safeDateSpecifier}
         />
       </LunchLayout>
+
+      <Footer />
     </>
   );
 };

@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import { RecruitApplyFormHeader } from '~/components/Forms/RecruitApplyForm/RecruitApplyFormHeader';
 import RedirectionGuide from '~/components/RedirectionGuide';
@@ -164,7 +165,7 @@ const RecruitApplyPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           withoutClose
           title={titleBarTitle}
@@ -195,7 +196,9 @@ const RecruitApplyPage: CustomNextPage = () => {
           onValidSubmit={onValidSubmit}
           onInvalidSubmit={onInvalidSubmit}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

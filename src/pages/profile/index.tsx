@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import NameCard from '~/components/NameCard';
 import NavigationGroup from '~/components/NavigationGroup';
 import {
@@ -26,6 +27,7 @@ import {
   flex,
   globalVars,
   gnbHeight,
+  pageCss,
   titleBarHeight,
 } from '~/styles/utils';
 import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
@@ -91,7 +93,7 @@ const MyProfilePage: CustomNextPage = () => {
   return (
     <>
       <PageHeadingText text={metaTitle} />
-      <div css={selfCss}>
+      <main css={selfCss}>
         <NavigationGroup />
 
         <div css={[userInfoLayerCss, { marginBottom: 44 }]}>
@@ -138,16 +140,19 @@ const MyProfilePage: CustomNextPage = () => {
             page={safePage}
           />
         </Profile.Tabs.Root>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
 
 const selfPaddingTop = titleBarHeight + 30;
 const selfPaddingBottom = gnbHeight + 30;
-const selfCss = css({
-  padding: `${selfPaddingTop}px 0 ${selfPaddingBottom}px`,
-});
+const selfCss = css(
+  { padding: `${selfPaddingTop}px 0 ${selfPaddingBottom}px` },
+  pageCss.minHeight
+);
 const userInfoLayerCss = css(flex('center', 'space-between', 'row', 12));
 const pageExpandCss = expandCss();
 const myArticlesLayerCss = css(flex('', 'center', 'column', 8));

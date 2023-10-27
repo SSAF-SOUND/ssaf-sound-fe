@@ -18,6 +18,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { EmptyList } from '~/components/EmptyList';
+import { Footer } from '~/components/Footer';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import { QueryItemList } from '~/components/QueryItemList';
@@ -40,8 +41,8 @@ import {
   flex,
   fontCss,
   globalVars,
+  pageCss,
   pageMaxWidth,
-  pageMinHeight,
   pageMinWidth,
   palettes,
   position,
@@ -75,7 +76,7 @@ const HotArticlesPage = (
 
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           css={fontCss.style.B16}
           title={titleBarTitle}
@@ -95,7 +96,9 @@ const HotArticlesPage = (
         <div css={articleContainerCss}>
           <HotArticleLayer keyword={keyword} page={page} />
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
@@ -190,7 +193,6 @@ export default HotArticlesPage;
 
 /* css */
 
-const selfMinHeight = `max(${pageMinHeight}px, 100vh)`;
 const searchBarTop = titleBarHeight + breadcrumbsHeight;
 const searchBarContainerPaddingX = globalVars.mainLayoutPaddingX.var;
 const searchBarContainerHeight = 60;
@@ -201,10 +203,8 @@ const selfPaddingTop =
   searchBarTop + searchBarContainerHeight + paginationHeight;
 
 const selfCss = css(
-  {
-    padding: `${selfPaddingTop}px 0px 15px`,
-    minHeight: selfMinHeight,
-  },
+  { padding: `${selfPaddingTop}px 0px 15px` },
+  pageCss.minHeight,
   flex('', '', 'column')
 );
 

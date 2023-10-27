@@ -13,6 +13,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { Button } from '~/components/Common/Button';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { RecruitApplyForm } from '~/components/Forms/RecruitApplyForm';
 import { FullDateTime } from '~/components/FullDateTime';
 import NameCard from '~/components/NameCard';
@@ -142,7 +143,7 @@ const RecruitApplicationPage: CustomNextPage<RecruitApplicationPageProps> = (
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           title={titleBarTitle}
           withoutClose
@@ -214,7 +215,9 @@ const RecruitApplicationPage: CustomNextPage<RecruitApplicationPageProps> = (
           recruitDetail={recruitDetail}
           recruitApplication={recruitApplication}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

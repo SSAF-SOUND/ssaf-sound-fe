@@ -20,6 +20,7 @@ import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Tabs } from '~/components/Common/Tabs';
 import { Toggle } from '~/components/Common/Toggle';
+import { Footer } from '~/components/Footer';
 import SearchBarForm from '~/components/Forms/SearchBarForm';
 import { RecruitFilterModalForm } from '~/components/ModalContent';
 import NavigationGroup from '~/components/NavigationGroup';
@@ -103,7 +104,7 @@ const RecruitsPage = (props: Props) => {
 
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <NavigationGroup />
 
         <div css={filterLayerCss}>
@@ -125,7 +126,9 @@ const RecruitsPage = (props: Props) => {
         </div>
 
         <RecruitsLayer query={safeQuery} />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

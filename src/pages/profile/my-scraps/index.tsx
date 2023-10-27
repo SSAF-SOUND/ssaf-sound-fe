@@ -12,6 +12,7 @@ import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Separator } from '~/components/Common/Separator';
 import { Tabs } from '~/components/Common/Tabs';
 import { EmptyList } from '~/components/EmptyList';
+import { Footer } from '~/components/Footer';
 import { QueryItemList } from '~/components/QueryItemList';
 import { RecruitCard } from '~/components/Recruit/RecruitCard';
 import { RecruitCardSkeleton } from '~/components/Recruit/RecruitCard/RecruitCardSkeleton';
@@ -105,7 +106,7 @@ const MyScrapsPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={titleBarTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           withoutClose
           title={titleBarTitle}
@@ -142,7 +143,9 @@ const MyScrapsPage: CustomNextPage = () => {
             <MyScrapedRecruitsLayer page={safePage} />
           </Tabs.Content>
         </Tabs.Root>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
@@ -160,10 +163,14 @@ const paginationTop =
 const paginationHeight = 32 + 24;
 const selfPaddingTop = paginationTop + paginationHeight;
 
-const selfCss = css(pageCss.minHeight, {
-  padding: `${selfPaddingTop}px 0 0`,
-  position: 'relative',
-});
+const selfCss = css(
+  pageCss.minHeight,
+  {
+    padding: `${selfPaddingTop}px 0 0`,
+    position: 'relative',
+  },
+  pageCss.minHeight
+);
 
 const tabTriggersTextMap = {
   [PossibleMyScrapsTabValue.ARTICLES]: '게시글',

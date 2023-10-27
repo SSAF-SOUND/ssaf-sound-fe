@@ -6,6 +6,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { Clock } from '~/components/Clock';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import { HotArticlesPreview } from '~/components/HotArticlesPreview';
 import { JsonLD } from '~/components/JsonLD';
 import { LunchMenusPreview } from '~/components/Lunch';
@@ -49,7 +50,7 @@ const MainPage = () => {
 
       <JsonLD object={siteNameSchema} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <NavigationGroup />
         <Clock css={{ marginBottom: 32 }} />
         <LunchMenusPreview css={{ marginBottom: 80 }} campus={myCampus} />
@@ -58,7 +59,9 @@ const MainPage = () => {
           css={{ marginBottom: 50 }}
           marginForExpand={globalVars.mainLayoutPaddingX.var}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

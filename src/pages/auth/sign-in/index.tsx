@@ -3,11 +3,12 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 
-import { FullPageLoader , loaderText } from '~/components/Common/FullPageLoader';
+import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { Logo } from '~/components/Common/Logo';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { SsafyIcon } from '~/components/Common/SsafyIcon';
+import { Footer } from '~/components/Footer';
 import SignInButton from '~/components/SignInButton';
 import TitleBar from '~/components/TitleBar';
 import { useMyInfo } from '~/services/member';
@@ -51,7 +52,7 @@ const SignInPage = () => {
 
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default withoutClose title={titleBarTitle} />
         <div css={logoContainerCss}>
           <SsafyIcon.LogoCharacter />
@@ -68,7 +69,9 @@ const SignInPage = () => {
             메인페이지로 바로가기
           </Link>
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

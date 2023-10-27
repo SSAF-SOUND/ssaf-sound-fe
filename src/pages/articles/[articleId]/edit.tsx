@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { ArticleError } from '~/components/Article/ArticleError';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import ArticleForm from '~/components/Forms/ArticleForm';
 import { useArticleDetail, useUpdateArticle } from '~/services/article/hooks';
 import { reconfirmArticleFormUnload } from '~/services/article/utils/reconfirmArticleFormUnload';
@@ -64,7 +65,7 @@ const ArticleEditPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div>
+      <main>
         <ArticleForm
           onValidSubmit={onValidSubmit}
           options={{
@@ -78,7 +79,9 @@ const ArticleEditPage: CustomNextPage = () => {
             anonymous: anonymity,
           }}
         />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

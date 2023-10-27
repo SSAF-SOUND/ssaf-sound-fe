@@ -13,6 +13,7 @@ import { Logo } from '~/components/Common/Logo';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { SsafyIcon } from '~/components/Common/SsafyIcon';
 import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIcon';
+import { Footer } from '~/components/Footer';
 import { useMyAccountStatus, useUpdateMyInfo } from '~/services/member';
 import { useTermsOfService } from '~/services/meta/hooks/useTermsOfService';
 import {
@@ -74,7 +75,7 @@ const RegisterPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         {isTermsError && <TermsLoadingError error={termsError} />}
 
         {isTermsSuccess && (
@@ -85,7 +86,7 @@ const RegisterPage: CustomNextPage = () => {
             css={formCss}
           />
         )}
-      </div>
+      </main>
 
       <Welcome />
     </>

@@ -9,6 +9,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import NameCard from '~/components/NameCard';
 import {
   getSafeProfileTabValue,
@@ -141,7 +142,7 @@ const UserProfilePage: CustomNextPage = () => {
 
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           title="프로필"
           withoutClose
@@ -196,7 +197,9 @@ const UserProfilePage: CustomNextPage = () => {
           ) : (
             <Profile.PrivateIndicator css={privateProfileCss} />
           ))}
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

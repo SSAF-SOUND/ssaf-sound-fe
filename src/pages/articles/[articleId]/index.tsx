@@ -16,6 +16,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
+import { Footer } from '~/components/Footer';
 import ArticleCommentForm from '~/components/Forms/ArticleCommentForm';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
@@ -86,7 +87,7 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
 
       <PageHeadingText text={metaTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           css={titleBarCss}
           title={articleCategoryTitle}
@@ -122,7 +123,9 @@ const ArticleDetailPage = (props: ArticleDetailPageProps) => {
         />
 
         <ArticleCommentFormLayer articleId={articleId} />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };

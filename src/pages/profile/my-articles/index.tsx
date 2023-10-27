@@ -9,6 +9,7 @@ import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { EmptyList } from '~/components/EmptyList';
+import { Footer } from "~/components/Footer";
 import { QueryItemList } from '~/components/QueryItemList';
 import { ResponsivePagination } from '~/components/ResponsivePagination';
 import TitleBar from '~/components/TitleBar';
@@ -49,7 +50,7 @@ const MyArticlesPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={titleBarTitle} />
 
-      <div css={selfCss}>
+      <main css={selfCss}>
         <TitleBar.Default
           withoutClose
           title={titleBarTitle}
@@ -68,7 +69,9 @@ const MyArticlesPage: CustomNextPage = () => {
         />
 
         <ArticleLayer page={safePage} />
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 };
