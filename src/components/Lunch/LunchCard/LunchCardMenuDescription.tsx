@@ -19,6 +19,8 @@ interface LunchCardMenuDescriptionProps {
   style?: CSSProperties;
 }
 
+const getPriorityValue = (order: number) => order <= 3;
+
 export const LunchCardMenuDescription = memo(
   (props: LunchCardMenuDescriptionProps) => {
     const { order, menu, ...restProps } = props;
@@ -38,6 +40,7 @@ export const LunchCardMenuDescription = memo(
             src={imagePath}
             alt={mainMenu}
             fallbackSrc={lunchImageFallback.src}
+            priority={getPriorityValue(order)}
             fill={true}
           />
         </div>
