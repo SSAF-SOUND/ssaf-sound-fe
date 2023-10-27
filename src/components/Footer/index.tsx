@@ -7,11 +7,11 @@ import { css } from '@emotion/react';
 
 import { Logo } from '~/components/Common/Logo';
 import { expandCss, fontCss, palettes } from '~/styles/utils';
-import { routes } from '~/utils';
+import { routes } from '~/utils/routes';
 
-export const Footer = () => {
+export const Footer = (props: ComponentPropsWithoutRef<'footer'>) => {
   return (
-    <footer css={selfCss}>
+    <footer css={selfCss} {...props}>
       <h2 css={{ marginBottom: 36 }}>
         <Logo size="sm" />
       </h2>
@@ -36,9 +36,9 @@ export const Footer = () => {
 
 const selfCss = css(
   {
-    padding: 10,
     backgroundColor: palettes.grey0,
     color: palettes.grey4,
+    padding: '60px 25px 180px',
   },
   fontCss.family.pretendard,
   fontCss.style.R12,
