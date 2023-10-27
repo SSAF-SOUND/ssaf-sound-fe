@@ -57,6 +57,7 @@ import {
   MdKeyboardDoubleArrowRight,
   MdLastPage,
   MdFirstPage,
+  MdKeyboardDoubleArrowDown,
 } from 'react-icons/md';
 import { RiKakaoTalkFill, RiSendPlane2Line } from 'react-icons/ri';
 import { TbPencilPlus, TbSquareRoundedCheckFilled } from 'react-icons/tb';
@@ -105,6 +106,7 @@ export const icons = {
   share: <MdIosShare />,
 
   [`chevron.down`]: <MdKeyboardArrowDown />,
+  [`chevron.down.double`]: <MdKeyboardDoubleArrowDown />,
   [`chevron.right`]: <HiOutlineChevronRight />,
   [`chevron.left`]: <HiOutlineChevronLeft />,
   [`chevron.left.double`]: <MdKeyboardDoubleArrowLeft />,
