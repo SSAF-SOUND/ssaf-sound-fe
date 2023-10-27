@@ -6,26 +6,30 @@ import Link from 'next/link';
 import { css } from '@emotion/react';
 
 import { Logo } from '~/components/Common/Logo';
-import { expandCss, fontCss, palettes } from '~/styles/utils';
+import { colorMix, expandCss, fontCss, palettes } from '~/styles/utils';
 import { routes } from '~/utils/routes';
+
+const teamMail = 'ssafsound@gmail.com';
 
 export const Footer = (props: ComponentPropsWithoutRef<'footer'>) => {
   return (
     <footer css={selfCss} {...props}>
       <h2 css={{ marginBottom: 36 }}>
-        <Logo size="sm" />
+        <Link href={routes.main()}>
+          <Logo size="sm" />
+        </Link>
       </h2>
 
       <FooterRow>
-        <FooterInternalLink css={fontCss.style.B12} href={routes.legal}>
+        <FooterInternalLink css={fontCss.style.B12} href={routes.legal()}>
           커뮤니티 이용 약관 및 개인정보 처리 방침
         </FooterInternalLink>
       </FooterRow>
 
       <FooterRow>
         <span>팀 연락처: </span>
-        <FooterExternalLink href="mailto:ssafsound@gmail.com">
-          ssafsound@gmail.com
+        <FooterExternalLink href={`mailto:${teamMail}`}>
+          {teamMail}
         </FooterExternalLink>
       </FooterRow>
 
@@ -36,9 +40,9 @@ export const Footer = (props: ComponentPropsWithoutRef<'footer'>) => {
 
 const selfCss = css(
   {
-    backgroundColor: palettes.grey0,
+    backgroundColor: colorMix('30%', palettes.grey0),
     color: palettes.grey4,
-    padding: '60px 25px 180px',
+    padding: '120px 25px 240px',
   },
   fontCss.family.pretendard,
   fontCss.style.R12,
@@ -59,9 +63,9 @@ const FooterExternalLink = (props: ComponentPropsWithoutRef<'a'>) => {
 
 const footerLinkCss = css({
   '&:hover, &:focus-visible': {
-    color: palettes.recruit.default,
+    color: palettes.warning.default,
   },
   '&:active': {
-    color: palettes.recruit.dark,
+    color: palettes.warning.dark,
   },
 });
