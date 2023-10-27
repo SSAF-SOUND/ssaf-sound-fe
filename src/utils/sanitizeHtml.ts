@@ -9,7 +9,10 @@ const addHook = () => {
         node.setAttribute('target', '_blank');
 
         const prevRelAttributes = node.getAttribute('rel');
-        node.setAttribute('rel', `${prevRelAttributes} ugc nofollow`);
+        const nextRelAttributes = [prevRelAttributes, 'ugc', 'nofollow']
+          .filter(Boolean)
+          .join(' ');
+        node.setAttribute('rel', nextRelAttributes);
       }
     });
   }
