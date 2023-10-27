@@ -19,12 +19,14 @@ import { fontCss, gnbHeight, pageCss, titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
 
 const LegalPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { termId } = props;
+  const { termSequence } = props;
   const { data } = useTermsOfService();
 
-  const tabValue = data?.every((term) => String(term.termId) !== termId)
-    ? String(data?.[0]?.termId)
-    : termId;
+  const selectedSequence = data?.every(
+    (term) => String(term.sequence) !== termSequence
+  )
+    ? String(data?.[0]?.sequence)
+    : termSequence;
 
   return (
     <>
@@ -34,15 +36,15 @@ const LegalPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
         <h2 css={[fontCss.style.B28, { marginBottom: 40 }]}>LEGAL</h2>
 
         {data ? (
-          <Tabs.Root value={tabValue}>
+          <Tabs.Root value={selectedSequence}>
             <Tabs.List css={{ flexWrap: 'wrap', gap: 12 }}>
               <Tabs.Border css={{ width: '150%', left: '-25%' }} />
-              {data.map(({ termName, termId }) => (
+              {data.map(({ termName, termId, sequence }) => (
                 <Tabs.TriggerWithLink
-                  href={routes.legal(termId)}
+                  href={routes.legal(sequence)}
                   variant="fit"
                   key={termId}
-                  value={String(termId)}
+                  value={String(sequence)}
                   css={fontCss.style.B14}
                 >
                   {termName}
@@ -50,8 +52,8 @@ const LegalPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
               ))}
             </Tabs.List>
 
-            {data.map(({ termId, content }) => (
-              <Tabs.Content value={String(termId)} key={termId}>
+            {data.map(({ termId, sequence, content }) => (
+              <Tabs.Content value={String(sequence)} key={termId}>
                 <TermsDetail html={content} />
               </Tabs.Content>
             ))}
@@ -76,19 +78,19 @@ const selfCss = css(
 );
 
 export const enum ParamsKey {
-  TERM_ID = 'termId',
+  TERM_SEQUENCE = 'termSequence',
 }
 
-export type Props = Pick<Params, ParamsKey.TERM_ID>;
+export type Props = Pick<Params, ParamsKey.TERM_SEQUENCE>;
 
 export type Params = {
-  [ParamsKey.TERM_ID]?: string;
+  [ParamsKey.TERM_SEQUENCE]?: string;
 };
 
 export const getStaticProps: GetStaticProps<Props, Params> = async (
   context
 ) => {
-  const termId = context.params?.termId;
+  const termSequence = context.params?.[ParamsKey.TERM_SEQUENCE];
 
   const dehydrate = prefetch({
     queryKey: queryKeys.meta.termsOfService(),
@@ -100,17 +102,17 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (
   return {
     props: {
       dehydratedState,
-      termId,
+      termSequence,
     },
   };
 };
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const termsOfService = await getTermsOfService();
-  const paths = termsOfService.map(({ termId }) => {
+  const paths = termsOfService.map(({ sequence }) => {
     return {
       params: {
-        termId: String(termId),
+        termSequence: String(sequence),
       },
     };
   });
