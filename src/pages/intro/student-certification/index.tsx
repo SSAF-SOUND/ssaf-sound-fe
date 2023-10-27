@@ -2,15 +2,26 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
+import { useState } from 'react';
 
 import { Button } from '~/components/Common/Button';
 import { FullPageLoader, loaderText } from '~/components/Common/FullPageLoader';
+import { Icon } from '~/components/Common/Icon';
+import { IntersectionArea } from '~/components/Common/IntersectionArea';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { SsafyIcon, TrackSize } from '~/components/Common/SsafyIcon';
 import { Footer } from '~/components/Footer';
 import RollingAllTracks from '~/components/RollingAllTracks';
 import { CertificationState, useMyInfo } from '~/services/member';
-import { expandCss, flex, fontCss, palettes } from '~/styles/utils';
+import {
+  expandCss,
+  fixedFullWidth,
+  flex,
+  fontCss,
+  palettes,
+  position,
+  zIndex,
+} from '~/styles/utils';
 import { createAuthGuard, createNoIndexPageMetaData, routes } from '~/utils';
 
 const metaTitle = '학생 인증 가이드';
@@ -18,6 +29,7 @@ const metaTitle = '학생 인증 가이드';
 const StudentCertificationIntroPage = () => {
   const router = useRouter();
   const { data: myInfo } = useMyInfo();
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   if (!myInfo) {
     router.replace(routes.unauthorized());
@@ -32,10 +44,25 @@ const StudentCertificationIntroPage = () => {
       <PageHeadingText text={metaTitle} />
 
       <main css={selfCss}>
-        <div css={greetingLayerCss}>
-          <p>반갑습니다!</p>
-          <p>{myInfo.nickname}님</p>
+        <div
+          css={[
+            scrollDownIndicatorContainerCss,
+            !showScrollIndicator && { opacity: 0 },
+          ]}
+        >
+          <ScrollDownIndicator />
+          <ScrollDownIndicator />
         </div>
+
+        <IntersectionArea
+          onIntersection={() => setShowScrollIndicator(true)}
+          offIntersection={() => setShowScrollIndicator(false)}
+        >
+          <div css={greetingLayerCss}>
+            <p>반갑습니다!</p>
+            <p>{myInfo.nickname}님</p>
+          </div>
+        </IntersectionArea>
 
         <SsafyIcon.Track size={TrackSize.LG2} />
 
@@ -130,3 +157,27 @@ const buttonLayerCss = css(
   fontCss.style.B28,
   flex('stretch', 'center', 'column', 12)
 );
+
+const ScrollDownIndicator = () => {
+  return (
+    <div css={flex('center', 'center', 'column', 6)}>
+      <span css={fontCss.style.B16}>스크롤</span>
+      <Icon
+        name="chevron.down.double"
+        size={40}
+        label="스크롤 아래로 내려주세요"
+      />
+    </div>
+  );
+};
+const scrollDownIndicatorContainerCss = css([
+  position.xy('center', 'end', 'fixed'),
+  fixedFullWidth,
+  flex('center', 'space-between', 'row'),
+  {
+    bottom: 60,
+    padding: 24,
+    transition: 'opacity 200ms',
+    zIndex: zIndex.fixed.normal,
+  },
+]);
