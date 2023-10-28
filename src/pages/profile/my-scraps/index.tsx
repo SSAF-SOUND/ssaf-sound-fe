@@ -32,6 +32,7 @@ import { useMyScrapedRecruitsByOffset } from '~/services/recruit';
 import {
   fixedFullWidth,
   flex,
+  fontCss,
   pageCss,
   pageMaxWidth,
   pageMinWidth,
@@ -210,7 +211,7 @@ const TabList = () => {
 
 const tabListCss = css({
   height: tabListHeight,
-  width: 250,
+  width: 300,
   margin: '0 auto',
 });
 
@@ -238,9 +239,7 @@ const tabListContainerCss = css(
   position.x('center', 'fixed')
 );
 
-const tabTriggerCss = css({
-  border: 0,
-});
+const tabTriggerCss = css({ border: 0 }, fontCss.style.B18);
 
 interface MyScrapedArticlesLayerProps {
   page: number;
@@ -248,7 +247,7 @@ interface MyScrapedArticlesLayerProps {
 
 const listContainerCss = css([
   flex('', '', 'column', 16),
-  { paddingBottom: 120 },
+  { paddingBottom: 120, paddingTop: 10 },
 ]);
 const MyScrapedArticlesLayer = (props: MyScrapedArticlesLayerProps) => {
   const { page } = props;

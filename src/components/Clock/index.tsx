@@ -1,12 +1,17 @@
+import type dayjs from 'dayjs';
+
 import { css } from '@emotion/react';
-import dayjs from 'dayjs';
+import { isServer } from '@tanstack/query-core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 
 import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 import { flex, fontCss, palettes } from '~/styles/utils';
+import { DayOfWeek } from '~/utils/DayOfWeek';
 import { getDuration } from '~/utils/getDuration';
 import { isBetweenTimes } from '~/utils/isBetweenTimes';
 import { toMs } from '~/utils/toMs';
+import { toSeoulDate } from '~/utils/toSeoulDate';
 
 const getDayjsTime = (
   instance: dayjs.Dayjs,
@@ -51,8 +56,7 @@ type CheckInOutInfo = {
   diffDateString?: string;
 };
 
-const useCheckInOutInfo = (date: Date) => {
-  const current = dayjs(date);
+const useCheckInOutInfo = (current: dayjs.Dayjs) => {
   const currentDateString = current.format('YY월 MM일 (ddd)');
   const memoKey = currentDateString;
 
@@ -62,8 +66,16 @@ const useCheckInOutInfo = (date: Date) => {
     [memoKey]
   );
 
-  const checkInStart = useMemo(() => getCheckInStart(current), [memoKey]);
-  const checkInEnd = useMemo(() => getCheckInEnd(current), [memoKey]);
+  const checkInStart = useMemo(
+    () => getCheckInStart(current),
+    // eslint-disable-next-line
+    [memoKey]
+  );
+  const checkInEnd = useMemo(
+    () => getCheckInEnd(current),
+    // eslint-disable-next-line
+    [memoKey]
+  );
   const before30MinutesCheckOut = useMemo(
     () => get30MinutesBeforeCheckOut(current),
     // eslint-disable-next-line
@@ -140,11 +152,16 @@ export interface TimeViewerProps {
   className?: string;
 }
 
-export const TimeViewer = (props: TimeViewerProps) => {
+export const SeoulTimeViewer = (props: TimeViewerProps) => {
   const { dateTime, ...restProps } = props;
-  const todayString = dayjs(dateTime).locale('ko').format('MM월 DD일 (ddd)');
-  const formattedDateTimeString = dayjs(dateTime).format('hh:mm:ss');
-  const checkInOutStatus = useCheckInOutInfo(dateTime);
+  const seoulDate = toSeoulDate(dateTime);
+  const todayString = seoulDate.locale('ko').format('MM월 DD일 (ddd)');
+  const formattedDateTimeString = seoulDate.format('hh:mm:ss');
+  const isWeekend =
+    seoulDate.day() === DayOfWeek.SATURDAY ||
+    seoulDate.day() === DayOfWeek.SUNDAY;
+
+  const checkInOutStatus = useCheckInOutInfo(seoulDate);
 
   return (
     <section css={selfCss} {...restProps}>
@@ -153,9 +170,9 @@ export const TimeViewer = (props: TimeViewerProps) => {
       </VisuallyHidden>
 
       <div css={dateTimeContainerCss}>
-        <div css={todayCss}>{todayString}</div>
+        <div css={todayCss}>{todayString} </div>
         <div css={timeCss}>{formattedDateTimeString}</div>
-        <CheckInOutMessage info={checkInOutStatus} />
+        {!isWeekend && <CheckInOutMessage info={checkInOutStatus} />}
       </div>
     </section>
   );
@@ -164,8 +181,18 @@ export const TimeViewer = (props: TimeViewerProps) => {
 export interface ClockProps {
   className?: string;
 }
+
 export const Clock = (props: ClockProps) => {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [isClient, setIsClient] = useState(!isServer);
+
+  useEffect(() => {
+    if (isServer) {
+      return;
+    }
+
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -175,7 +202,21 @@ export const Clock = (props: ClockProps) => {
     return () => clearInterval(timer);
   }, [setCurrentDateTime]);
 
-  return <TimeViewer {...props} dateTime={currentDateTime} />;
+  return isClient ? (
+    <SeoulTimeViewer {...props} dateTime={currentDateTime} />
+  ) : (
+    <Skeleton
+      css={{
+        height: 134,
+        width: '100%',
+        marginBottom: 32,
+        borderRadius: 32,
+        border: `1px solid ${palettes.primary.default}`,
+      }}
+      baseColor={palettes.background.grey}
+      highlightColor={palettes.background.default}
+    />
+  );
 };
 
 interface CheckInOutMessageProps {
@@ -191,7 +232,7 @@ const CheckInOutMessage = (props: CheckInOutMessageProps) => {
     <div css={messageCss}>
       {status === CheckInOutStatus.READY_TO_CHECK_IN ? (
         <span css={{ color: palettes.primary.default }}>
-          입실까지 {diffDateString}
+          입실 시작까지 {diffDateString}
         </span>
       ) : status === CheckInOutStatus.CHECK_IN ? (
         <span css={{ color: palettes.primary.dark }}>
@@ -199,7 +240,7 @@ const CheckInOutMessage = (props: CheckInOutMessageProps) => {
         </span>
       ) : status === CheckInOutStatus.READY_TO_CHECK_OUT ? (
         <span css={{ color: palettes.secondary.default }}>
-          퇴실까지 {diffDateString}
+          퇴실 시작까지 {diffDateString}
         </span>
       ) : status === CheckInOutStatus.CHECK_OUT ? (
         <span css={{ color: palettes.secondary.dark }}>

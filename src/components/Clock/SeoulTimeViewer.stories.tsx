@@ -1,27 +1,47 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { ComponentPropsWithoutRef } from 'react';
 
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 import { PageLayout } from '~/stories/Layout';
 import { flex, fontCss, palettes } from '~/styles/utils';
 
-import { Clock, TimeViewer } from './index';
+import { Clock, SeoulTimeViewer } from './index';
 
 interface TimeViewerStoryComponentProps {
   hours: number;
   minutes: number;
   seconds: number;
+  day?: number;
 
   showDescriptions?: boolean;
 }
 
-const TimeViewerStoryComponent = (props: TimeViewerStoryComponentProps) => {
-  const { hours, minutes, seconds, showDescriptions = false } = props;
+const SeoulTimeViewerStoryComponent = (
+  props: TimeViewerStoryComponentProps
+) => {
+  const { hours, minutes, seconds, showDescriptions = false, day = 1 } = props;
 
   return (
     <div>
-      <TimeViewer
+      <SeoulTimeViewer
         css={{ marginBottom: 24 }}
-        dateTime={new Date(2000, 0, 1, hours, minutes, seconds)}
+        dateTime={
+          new Date(
+            dayjs()
+              .tz('Asia/Seoul')
+              .set('h', hours)
+              .set('m', minutes)
+              .set('s', seconds)
+              .set('d', day)
+              .format()
+          )
+        }
       />
 
       {showDescriptions && (
@@ -51,9 +71,9 @@ const TimeViewerStoryComponent = (props: TimeViewerStoryComponentProps) => {
   );
 };
 
-const meta: Meta<typeof TimeViewerStoryComponent> = {
-  title: 'Notification/TimeViewer',
-  component: TimeViewerStoryComponent,
+const meta: Meta<typeof SeoulTimeViewerStoryComponent> = {
+  title: 'Notification/SeoulTimeViewer',
+  component: SeoulTimeViewerStoryComponent,
   decorators: [
     (Story) => (
       <PageLayout>
@@ -80,23 +100,40 @@ export const Variations = () => {
   return (
     <div css={flex('stretch', 'center', 'column', 20)}>
       <Wrapper>
-        <TimeViewerStoryComponent hours={8} minutes={0} seconds={0} />
-        <TimeViewerStoryComponent hours={8} minutes={29} seconds={59} />
+        <SeoulTimeViewerStoryComponent hours={8} minutes={0} seconds={0} />
+        <SeoulTimeViewerStoryComponent hours={8} minutes={29} seconds={59} />
       </Wrapper>
 
       <Wrapper>
-        <TimeViewerStoryComponent hours={8} minutes={30} seconds={0} />
-        <TimeViewerStoryComponent hours={8} minutes={59} seconds={59} />
+        <SeoulTimeViewerStoryComponent hours={8} minutes={30} seconds={0} />
+        <SeoulTimeViewerStoryComponent hours={8} minutes={59} seconds={59} />
       </Wrapper>
 
       <Wrapper>
-        <TimeViewerStoryComponent hours={17} minutes={30} seconds={0} />
-        <TimeViewerStoryComponent hours={17} minutes={59} seconds={59} />
+        <SeoulTimeViewerStoryComponent hours={17} minutes={30} seconds={0} />
+        <SeoulTimeViewerStoryComponent hours={17} minutes={59} seconds={59} />
       </Wrapper>
 
       <Wrapper>
-        <TimeViewerStoryComponent hours={18} minutes={0} seconds={0} />
-        <TimeViewerStoryComponent hours={18} minutes={29} seconds={59} />
+        <SeoulTimeViewerStoryComponent hours={18} minutes={0} seconds={0} />
+        <SeoulTimeViewerStoryComponent hours={18} minutes={29} seconds={59} />
+      </Wrapper>
+
+      <Wrapper>
+        <div>주말에는 입/퇴실 시간 표시 안 됨</div>
+
+        <SeoulTimeViewerStoryComponent
+          hours={8}
+          minutes={0}
+          seconds={0}
+          day={0}
+        />
+        <SeoulTimeViewerStoryComponent
+          hours={8}
+          minutes={29}
+          seconds={59}
+          day={6}
+        />
       </Wrapper>
     </div>
   );
