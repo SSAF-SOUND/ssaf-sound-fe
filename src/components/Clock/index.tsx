@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
+import { isServer } from '@tanstack/query-core';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 
 import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 import { flex, fontCss, palettes } from '~/styles/utils';
@@ -62,8 +64,16 @@ const useCheckInOutInfo = (date: Date) => {
     [memoKey]
   );
 
-  const checkInStart = useMemo(() => getCheckInStart(current), [memoKey]);
-  const checkInEnd = useMemo(() => getCheckInEnd(current), [memoKey]);
+  const checkInStart = useMemo(
+    () => getCheckInStart(current),
+    // eslint-disable-next-line
+    [memoKey]
+  );
+  const checkInEnd = useMemo(
+    () => getCheckInEnd(current),
+    // eslint-disable-next-line
+    [memoKey]
+  );
   const before30MinutesCheckOut = useMemo(
     () => get30MinutesBeforeCheckOut(current),
     // eslint-disable-next-line
@@ -164,8 +174,18 @@ export const TimeViewer = (props: TimeViewerProps) => {
 export interface ClockProps {
   className?: string;
 }
+
 export const Clock = (props: ClockProps) => {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  const [isClient, setIsClient] = useState(!isServer);
+
+  useEffect(() => {
+    if (isServer) {
+      return;
+    }
+
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -175,7 +195,21 @@ export const Clock = (props: ClockProps) => {
     return () => clearInterval(timer);
   }, [setCurrentDateTime]);
 
-  return <TimeViewer {...props} dateTime={currentDateTime} />;
+  return isClient ? (
+    <TimeViewer {...props} dateTime={currentDateTime} />
+  ) : (
+    <Skeleton
+      css={{
+        height: 134,
+        width: '100%',
+        marginBottom: 32,
+        borderRadius: 32,
+        border: `1px solid ${palettes.primary.default}`,
+      }}
+      baseColor={palettes.background.grey}
+      highlightColor={palettes.background.default}
+    />
+  );
 };
 
 interface CheckInOutMessageProps {
