@@ -9,8 +9,7 @@ import type { ApiErrorResponse } from '~/types';
 import * as Sentry from '@sentry/nextjs';
 import axios, { isAxiosError } from 'axios';
 
-import { reissueToken, signOut } from '~/services/auth';
-import { clearPrivateData } from '~/utils/clearPrivateData';
+import { reissueToken } from '~/services/auth';
 import { createRequestInfiniteLoopDetector } from '~/utils/createRequestInfiniteLoopDetector';
 import { customToast } from '~/utils/customToast';
 import { qsStringify } from '~/utils/qsUtils';
@@ -49,14 +48,12 @@ const detectRequestInfiniteLoop = createRequestInfiniteLoopDetector(
   requestCounterConsideredInfiniteLoop,
   {
     timerSeconds: 10,
-    onDetect: async () => {
+    onDetect: () => {
       const errorMessage = isDevMode
         ? '등록하지 않은 Mocking API가 있는지 확인해주세요! HTTP Method가 일치하지 않는 문제일 수도 있습니다.'
         : '오류가 발생했습니다.';
       customToast.clientError(errorMessage);
       Sentry.captureException(new Error('Error: Detect request infinite loop'));
-      await signOut();
-      clearPrivateData();
     },
   }
 );
