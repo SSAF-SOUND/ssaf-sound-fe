@@ -7,6 +7,7 @@ import type {
 import { css } from '@emotion/react';
 
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
+import { PageHead } from '~/components/Common/PageHead';
 import { Tabs } from '~/components/Common/Tabs';
 import { Footer } from '~/components/Footer';
 import NavigationGroup from '~/components/NavigationGroup';
@@ -17,6 +18,7 @@ import { getTermsOfService } from '~/services/meta';
 import { useTermsOfService } from '~/services/meta/hooks/useTermsOfService';
 import { fontCss, gnbHeight, pageCss, titleBarHeight } from '~/styles/utils';
 import { routes } from '~/utils';
+import { stripHtmlTags } from '~/utils/stripHtmlTags';
 
 const LegalPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { termSequence } = props;
@@ -28,8 +30,20 @@ const LegalPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     ? String(data?.[0]?.sequence)
     : termSequence;
 
+  const selectedTerm = data?.find(
+    ({ sequence }) => String(sequence) === selectedSequence
+  );
+
   return (
     <>
+      <PageHead
+        title={selectedTerm?.termName}
+        description={stripHtmlTags(selectedTerm?.content.slice(0, 400) ?? '')}
+        openGraph={{
+          url: routes.legal(Number(selectedSequence)),
+        }}
+      />가
+
       <main css={selfCss}>
         <NavigationGroup />
 
