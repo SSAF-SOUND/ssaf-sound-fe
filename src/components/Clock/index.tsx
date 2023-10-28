@@ -7,6 +7,7 @@ import Skeleton from 'react-loading-skeleton';
 
 import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 import { flex, fontCss, palettes } from '~/styles/utils';
+import { DayOfWeek } from '~/utils/DayOfWeek';
 import { getDuration } from '~/utils/getDuration';
 import { isBetweenTimes } from '~/utils/isBetweenTimes';
 import { toMs } from '~/utils/toMs';
@@ -151,11 +152,15 @@ export interface TimeViewerProps {
   className?: string;
 }
 
-export const TimeViewer = (props: TimeViewerProps) => {
+export const SeoulTimeViewer = (props: TimeViewerProps) => {
   const { dateTime, ...restProps } = props;
   const seoulDate = toSeoulDate(dateTime);
   const todayString = seoulDate.locale('ko').format('MM월 DD일 (ddd)');
   const formattedDateTimeString = seoulDate.format('hh:mm:ss');
+  const isWeekend =
+    seoulDate.day() === DayOfWeek.SATURDAY ||
+    seoulDate.day() === DayOfWeek.SUNDAY;
+
   const checkInOutStatus = useCheckInOutInfo(seoulDate);
 
   return (
@@ -167,7 +172,7 @@ export const TimeViewer = (props: TimeViewerProps) => {
       <div css={dateTimeContainerCss}>
         <div css={todayCss}>{todayString} </div>
         <div css={timeCss}>{formattedDateTimeString}</div>
-        <CheckInOutMessage info={checkInOutStatus} />
+        {!isWeekend && <CheckInOutMessage info={checkInOutStatus} />}
       </div>
     </section>
   );
@@ -198,7 +203,7 @@ export const Clock = (props: ClockProps) => {
   }, [setCurrentDateTime]);
 
   return isClient ? (
-    <TimeViewer {...props} dateTime={currentDateTime} />
+    <SeoulTimeViewer {...props} dateTime={currentDateTime} />
   ) : (
     <Skeleton
       css={{
