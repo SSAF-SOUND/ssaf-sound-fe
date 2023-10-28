@@ -1,6 +1,7 @@
+import type dayjs from 'dayjs';
+
 import { css } from '@emotion/react';
 import { isServer } from '@tanstack/query-core';
-import dayjs from 'dayjs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -9,6 +10,7 @@ import { flex, fontCss, palettes } from '~/styles/utils';
 import { getDuration } from '~/utils/getDuration';
 import { isBetweenTimes } from '~/utils/isBetweenTimes';
 import { toMs } from '~/utils/toMs';
+import { toSeoulDate } from '~/utils/toSeoulDate';
 
 const getDayjsTime = (
   instance: dayjs.Dayjs,
@@ -53,8 +55,7 @@ type CheckInOutInfo = {
   diffDateString?: string;
 };
 
-const useCheckInOutInfo = (date: Date) => {
-  const current = dayjs(date);
+const useCheckInOutInfo = (current: dayjs.Dayjs) => {
   const currentDateString = current.format('YY월 MM일 (ddd)');
   const memoKey = currentDateString;
 
@@ -152,9 +153,10 @@ export interface TimeViewerProps {
 
 export const TimeViewer = (props: TimeViewerProps) => {
   const { dateTime, ...restProps } = props;
-  const todayString = dayjs(dateTime).locale('ko').format('MM월 DD일 (ddd)');
-  const formattedDateTimeString = dayjs(dateTime).format('hh:mm:ss');
-  const checkInOutStatus = useCheckInOutInfo(dateTime);
+  const seoulDate = toSeoulDate(dateTime);
+  const todayString = seoulDate.locale('ko').format('MM월 DD일 (ddd)');
+  const formattedDateTimeString = seoulDate.format('hh:mm:ss');
+  const checkInOutStatus = useCheckInOutInfo(seoulDate);
 
   return (
     <section css={selfCss} {...restProps}>
@@ -163,7 +165,7 @@ export const TimeViewer = (props: TimeViewerProps) => {
       </VisuallyHidden>
 
       <div css={dateTimeContainerCss}>
-        <div css={todayCss}>{todayString}</div>
+        <div css={todayCss}>{todayString} </div>
         <div css={timeCss}>{formattedDateTimeString}</div>
         <CheckInOutMessage info={checkInOutStatus} />
       </div>
