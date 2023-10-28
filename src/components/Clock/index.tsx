@@ -225,7 +225,7 @@ const CheckInOutMessage = (props: CheckInOutMessageProps) => {
     <div css={messageCss}>
       {status === CheckInOutStatus.READY_TO_CHECK_IN ? (
         <span css={{ color: palettes.primary.default }}>
-          입실까지 {diffDateString}
+          입실 시작까지 {diffDateString}
         </span>
       ) : status === CheckInOutStatus.CHECK_IN ? (
         <span css={{ color: palettes.primary.dark }}>
@@ -233,7 +233,7 @@ const CheckInOutMessage = (props: CheckInOutMessageProps) => {
         </span>
       ) : status === CheckInOutStatus.READY_TO_CHECK_OUT ? (
         <span css={{ color: palettes.secondary.default }}>
-          퇴실까지 {diffDateString}
+          퇴실 시작까지 {diffDateString}
         </span>
       ) : status === CheckInOutStatus.CHECK_OUT ? (
         <span css={{ color: palettes.secondary.dark }}>
