@@ -1,9 +1,7 @@
 import type dayjs from 'dayjs';
 
 import { css } from '@emotion/react';
-import { isServer } from '@tanstack/query-core';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
 
 import { VisuallyHidden } from '~/components/Common/VisuallyHidden';
 import { flex, fontCss, palettes } from '~/styles/utils';
@@ -170,8 +168,10 @@ export const SeoulTimeViewer = (props: TimeViewerProps) => {
       </VisuallyHidden>
 
       <div css={dateTimeContainerCss}>
-        <div css={todayCss}>{todayString} </div>
-        <div css={timeCss}>{formattedDateTimeString}</div>
+        <div css={todayCss}>{todayString}</div>
+        <div css={timeCss} suppressHydrationWarning={true}>
+          {formattedDateTimeString}
+        </div>
         {!isWeekend && <CheckInOutMessage info={checkInOutStatus} />}
       </div>
     </section>
@@ -184,15 +184,6 @@ export interface ClockProps {
 
 export const Clock = (props: ClockProps) => {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
-  const [isClient, setIsClient] = useState(!isServer);
-
-  useEffect(() => {
-    if (isServer) {
-      return;
-    }
-
-    setIsClient(true);
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -202,21 +193,7 @@ export const Clock = (props: ClockProps) => {
     return () => clearInterval(timer);
   }, [setCurrentDateTime]);
 
-  return isClient ? (
-    <SeoulTimeViewer {...props} dateTime={currentDateTime} />
-  ) : (
-    <Skeleton
-      css={{
-        height: 134,
-        width: '100%',
-        marginBottom: 32,
-        borderRadius: 32,
-        border: `1px solid ${palettes.primary.default}`,
-      }}
-      baseColor={palettes.background.grey}
-      highlightColor={palettes.background.default}
-    />
-  );
+  return <SeoulTimeViewer {...props} dateTime={currentDateTime} />;
 };
 
 interface CheckInOutMessageProps {
