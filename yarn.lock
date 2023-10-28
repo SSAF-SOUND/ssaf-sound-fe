@@ -7911,6 +7911,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/gtag.js@npm:^0.0.17":
+  version: 0.0.17
+  resolution: "@types/gtag.js@npm:0.0.17"
+  checksum: 9ba341f7ad8b4539606956af1592027dc7846a2f39950aa11f4b987fd959444777f7364d1089871c80019f011cb7b7a523e2f816e8b6fe19e66db0e82e6cbd88
+  languageName: node
+  linkType: hard
+
 "@types/html-minifier-terser@npm:^6.0.0":
   version: 6.1.0
   resolution: "@types/html-minifier-terser@npm:6.1.0"
@@ -20791,6 +20798,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.1.3
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.5.1
+    "@types/gtag.js": ^0.0.17
     "@types/js-cookie": ^3
     "@types/node": 18.16.3
     "@types/prettier": ^2
