@@ -13,9 +13,5 @@ export const getTermsOfService = () => {
 
   return publicAxios
     .get<GetTermsOfServiceApiData>(endpoint)
-    .then((res) => res.data.data.termElements)
-    .then((res)=>{
-      console.log(res)
-      return res;
-    });
+    .then((res) => res.data.data.termElements);
 };
