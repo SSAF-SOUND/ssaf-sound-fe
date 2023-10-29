@@ -2,6 +2,7 @@ import type { CustomNextPage } from 'next/types';
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { ClipLoader } from 'react-spinners';
 
 import { Button } from '~/components/Common/Button';
 import { Icon } from '~/components/Common/Icon';
@@ -23,7 +24,7 @@ const PageRevalidationPage: CustomNextPage = () => {
   const {
     handleSubmit,
     register,
-    formState: { isSubmitSuccessful },
+    formState: { isSubmitSuccessful, isSubmitting },
   } = useForm<PageRevalidationFormValues>();
   const { mutateAsync: revalidatePage } = useRevalidatePage();
   const [revalidateSuccess, setRevalidateSuccess] = useState(false);
@@ -68,25 +69,31 @@ const PageRevalidationPage: CustomNextPage = () => {
           Revalidate
         </Button>
       </form>
-
-      {isSubmitSuccessful && (
-        <div>
-          <p
-            css={[
-              flex('center', '', 'row'),
-              fontCss.style.R14,
-              {
-                color: revalidateSuccess
-                  ? palettes.success.default
-                  : palettes.error.default,
-              },
-            ]}
-          >
-            <Icon name="chevron.right.double" size={18} />
-            {revalidateResultMessage}
-          </p>
-        </div>
-      )}
+      <div>
+        {isSubmitting ? (
+          <div css={flex('center', '', 'row', 4)}>
+            <ClipLoader size={18} color={palettes.white} />
+            <span>Revalidating...</span>
+          </div>
+        ) : (
+          isSubmitSuccessful && (
+            <p
+              css={[
+                flex('center', '', 'row'),
+                fontCss.style.R14,
+                {
+                  color: revalidateSuccess
+                    ? palettes.success.default
+                    : palettes.error.default,
+                },
+              ]}
+            >
+              <Icon name="chevron.right.double" size={24} />
+              {revalidateResultMessage}
+            </p>
+          )
+        )}
+      </div>
     </div>
   );
 };
