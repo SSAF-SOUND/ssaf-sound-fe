@@ -1,4 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type {
+  RevalidatePageBody,
+  RevalidatePageParamsApiData,
+} from '~/services/admin/apis/revalidatePage';
+
+import { REVALIDATE_PAGE_TOKEN } from '~/utils/constants';
 
 const createResponse = (revalidated: boolean, message: string) => ({
   revalidated,
@@ -7,11 +13,12 @@ const createResponse = (revalidated: boolean, message: string) => ({
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<RevalidatePageParamsApiData>
 ) {
   if (req.method === 'POST') {
-    const { path, token } = req.body as { path: string; token: string };
-    if (token !== process.env.REVALIDATE_TOKEN) {
+    const { path, token } = req.body as RevalidatePageBody;
+
+    if (token !== REVALIDATE_PAGE_TOKEN) {
       return res.status(401).json(createResponse(false, 'Invalid token'));
     }
 
