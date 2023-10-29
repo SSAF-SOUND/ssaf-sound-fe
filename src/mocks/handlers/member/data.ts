@@ -53,12 +53,18 @@ const deletedUserInfo: UserInfo = {
   nickname: deletedUserNicknamePrefix,
 };
 
+const adminUserInfo: UserInfo = {
+  ...certifiedSsafyUserInfo,
+  memberRole: 'admin',
+};
+
 export const userInfo = {
   initialUserInfo,
   certifiedSsafyUserInfo,
   uncertifiedSsafyUserInfo,
   nonSsafyUserInfo,
   deletedUserInfo,
+  adminUserInfo,
 };
 
 export const mockEmptyPortfolio: UserPortfolio = {
@@ -114,4 +120,5 @@ export const mockUserInfo = {
   uncertifiedSsafyUserInfo,
   certifiedSsafyUserInfo,
   deletedUserInfo,
+  adminUserInfo,
 };

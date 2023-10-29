@@ -4,12 +4,14 @@ import type { PropsWithChildren } from 'react';
 
 import Link from 'next/link';
 
+import TitleBar from '~/components/TitleBar';
 import { fontCss, palettes } from '~/styles/utils';
 import { createAuthGuard, createNoIndexPageMetaData } from '~/utils';
 
 const AdminPage: CustomNextPage = () => {
   return (
-    <div css={[fontCss.family.pretendard, { padding: '20px 0' }]}>
+    <div css={[fontCss.family.pretendard, { padding: '80px 0' }]}>
+      <TitleBar.Default title="관리자" withoutClose />
       <section>
         <h2 css={fontCss.style.B24}>하위 디렉토리</h2>
 
@@ -33,6 +35,8 @@ const StyledLink = (props: LinkProps & PropsWithChildren) => {
           padding: '10px 0',
           display: 'block',
           color: palettes.success.default,
+          '&:hover, &:focus-visible': { textDecoration: 'underline' },
+          '&:active': { textDecoration: 'none' },
         },
       ]}
       {...props}

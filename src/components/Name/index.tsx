@@ -55,7 +55,12 @@ const Name = (props: NameProps) => {
   return (
     <span css={selfCss} className={className}>
       {!isDeleted && withAvatar && (
-        <Avatar size={size} userInfo={userInfo} anonymous={anonymous} />
+        <Avatar
+          size={size}
+          userInfo={userInfo}
+          anonymous={anonymous}
+          css={{ flexShrink: 0 }}
+        />
       )}
       <span css={[textBaseCss, textCss[size], fontCss.family.auto]}>
         {displayNickname}
@@ -73,14 +78,14 @@ const Name = (props: NameProps) => {
 const selfCss = css(inlineFlex('center', '', 'row', 2));
 
 const textBaseCss = css({
-  maxWidth: 230,
-  wordBreak: 'break-word',
+  maxWidth: 260,
+  wordBreak: 'break-all',
 });
 
 const textCss: Record<NameSize, SerializedStyles> = {
   sm: css(fontCss.style.B12),
   md: css(fontCss.style.B18),
-  lg: css(fontCss.style.B40),
+  lg: css(fontCss.style.B28),
 };
 
 const trackSize: Record<NameSize, TrackSize> = {

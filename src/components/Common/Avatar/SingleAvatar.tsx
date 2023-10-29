@@ -67,7 +67,7 @@ export const sizeCss: Record<AvatarSize, SerializedStyles> = {
   sm: css({ width: 16, height: 16 }),
   md: css({ width: 20, height: 20 }),
   md2: css({ width: 30, height: 30 }),
-  lg: css({ width: 40, height: 40 }),
+  lg: css({ width: 36, height: 36 }),
 };
 
 const lineHeightCss = css({ lineHeight: 1 });

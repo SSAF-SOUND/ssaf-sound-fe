@@ -1,5 +1,5 @@
 import { mockCertifyStudent } from '~/mocks/handlers/member/apis/mockCertifyStudent';
-import { mockGetCertifiedSsafyMyInfo } from '~/mocks/handlers/member/apis/mockGetMyInfo';
+import { mockGetAdminMyInfo, mockGetCertifiedSsafyMyInfo } from "~/mocks/handlers/member/apis/mockGetMyInfo";
 import { mockGetMyPortfolio } from '~/mocks/handlers/member/apis/mockGetMyPortfolio';
 import { mockGetProfileVisibility } from '~/mocks/handlers/member/apis/mockGetProfileVisibility';
 import { mockGetCertifiedUserInfo } from '~/mocks/handlers/member/apis/mockGetUserInfo';
@@ -16,6 +16,7 @@ import { mockValidateNickname } from '~/mocks/handlers/member/apis/mockValidateN
 
 export const memberHandlers = [
   mockGetCertifiedSsafyMyInfo,
+  // mockGetAdminMyInfo,
   mockValidateNickname,
   mockUpdateMyInfo,
   mockCertifyStudent,
