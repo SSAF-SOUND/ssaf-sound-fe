@@ -1,7 +1,10 @@
 const fallback = 'http://localhost:8081';
 const devEnvStrings = ['preview', 'development'];
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || fallback;
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || fallback as string;
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL as string;
+export const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID as string;
+export const REVALIDATE_PAGE_TOKEN = process.env.REVALIDATE_TOKEN as string;
 
 export const isDevMode =
   devEnvStrings.includes(process.env.NODE_ENV) ||
