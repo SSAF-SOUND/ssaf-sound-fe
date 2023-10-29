@@ -19,7 +19,7 @@ export type RevalidatePageParamsApiData = {
 
 export const revalidatePage = (params: RevalidatePageParams) => {
   const { path, token } = params;
-  const endpoint = adminEndpoints.revalidatePage(path);
+  const endpoint = adminEndpoints.revalidatePage();
   const body: RevalidatePageBody = {
     path,
     token,
