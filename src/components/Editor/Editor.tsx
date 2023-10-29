@@ -1,3 +1,4 @@
+import type { DeltaStatic } from 'quill';
 import type { ReactQuillProps } from 'react-quill';
 
 import dynamic from 'next/dynamic';
@@ -9,6 +10,7 @@ import { editorClassnames as cn } from '~/components/Editor/editorClassnames';
 import EditorSkeleton from '~/components/Editor/EditorSkeleton';
 import { articleCss } from '~/services/article';
 import { fontCss, palettes } from '~/styles/utils';
+import { regex } from '~/utils';
 
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false,
@@ -32,6 +34,31 @@ const Editor = (props: EditorProps) => {
   );
 };
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#node.text_node
+const TEXT_NODE = 3;
+
+// https://github.com/quilljs/quill/issues/109#issuecomment-278181150
+const convertUrlTextToLink = (node: Text, delta: DeltaStatic) => {
+  if (typeof node.data !== 'string') return;
+  const matches = node.data.match(regex.looseUrl);
+
+  if (matches && matches.length > 0) {
+    const ops = [];
+    let str = node.data;
+    matches.forEach((match) => {
+      const split = str.split(match);
+      const beforeLink = split.shift();
+      ops.push({ insert: beforeLink });
+      ops.push({ insert: match, attributes: { link: match } });
+      str = split.join(match);
+    });
+    ops.push({ insert: str });
+    delta.ops = ops;
+  }
+
+  return delta;
+};
+
 const modules = {
   toolbar: {
     container: [
@@ -42,6 +69,9 @@ const modules = {
       ['link'],
       ['clean'],
     ],
+  },
+  clipboard: {
+    matchers: [[TEXT_NODE, convertUrlTextToLink]],
   },
 };
 
