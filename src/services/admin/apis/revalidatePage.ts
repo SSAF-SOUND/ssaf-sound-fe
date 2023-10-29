@@ -30,5 +30,5 @@ export const revalidatePage = (params: RevalidatePageParams) => {
     url: endpoint,
     method: 'post',
     data: body,
-  });
+  }).then((res) => res.data);
 };

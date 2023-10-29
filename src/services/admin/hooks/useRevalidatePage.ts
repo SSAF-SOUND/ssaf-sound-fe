@@ -6,8 +6,8 @@ import { revalidatePage } from '~/services/admin/apis/revalidatePage';
 
 export interface UseRevalidatePageParams extends RevalidatePageBody {}
 
-export const useRevalidatePage = (params: UseRevalidatePageParams) => {
+export const useRevalidatePage = () => {
   return useMutation({
-    mutationFn: () => revalidatePage(params),
+    mutationFn: (params: UseRevalidatePageParams) => revalidatePage(params),
   });
 };
