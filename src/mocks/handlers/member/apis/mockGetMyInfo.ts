@@ -32,6 +32,10 @@ export const mockGetCertifiedSsafyMyInfo = createMockGetMyInfo(
   mockUserInfo.certifiedSsafyUserInfo
 );
 
+export const mockGetAdminMyInfo = createMockGetMyInfo(
+  mockUserInfo.adminUserInfo
+);
+
 export const mockGetMyInfoError = restError(
   getMyInfoMethod,
   getMyInfoEndpoint,
