@@ -106,7 +106,7 @@ module.exports = withSentryConfig(
     // Suppresses source map uploading logs during build
     silent: true,
 
-    org: 'mjsdo',
+    org: 'ssafsound',
     project: 'ssaf-sound-fe',
   },
   {
