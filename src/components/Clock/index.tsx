@@ -154,7 +154,7 @@ export const SeoulTimeViewer = (props: TimeViewerProps) => {
   const { dateTime, ...restProps } = props;
   const seoulDate = toSeoulDate(dateTime);
   const todayString = seoulDate.locale('ko').format('MM월 DD일 (ddd)');
-  const formattedDateTimeString = seoulDate.format('hh:mm:ss');
+  const formattedDateTimeString = seoulDate.format('HH:mm:ss');
   const isWeekend =
     seoulDate.day() === DayOfWeek.SATURDAY ||
     seoulDate.day() === DayOfWeek.SUNDAY;
