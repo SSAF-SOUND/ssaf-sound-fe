@@ -16,7 +16,7 @@ export const getDateDiff = (endDate: Dayjs) => {
 export const formatDateTime = (dateString: string) => {
   const dayjsInstance = dayjs(dateString);
   const formattedDate = dayjsInstance.format('MM-DD');
-  const formattedTime = dayjsInstance.format('hh:mm');
+  const formattedTime = dayjsInstance.format('HH:mm');
 
   return {
     date: formattedDate,
