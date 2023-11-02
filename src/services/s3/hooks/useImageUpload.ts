@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/nextjs';
+import { isAxiosError } from 'axios';
 import { produce } from 'immer';
 import { useState } from 'react';
 
@@ -27,13 +29,15 @@ export const useImageUpload = (
   options: Partial<UseImageUploadOptions> = {}
 ) => {
   const { maxImageCount = 3, initialImages = () => [] } = options;
+  const [isConverting, setIsConverting] = useState(false);
   const [images, setImages] = useState<ImageState[]>(initialImages);
   const { mutateAsync: createPreSignedUrl, isLoading: isCreatingPreSignedUrl } =
     useCreatePreSignedUrl();
   const { mutateAsync: uploadImageToS3, isLoading: isUploadingImageToS3 } =
     useUploadImageToS3();
 
-  const isUploading = isCreatingPreSignedUrl || isUploadingImageToS3;
+  const isUploading =
+    isConverting || isCreatingPreSignedUrl || isUploadingImageToS3;
 
   const uploadImage = async (file: File) => {
     if (maxImageCount <= images.length) {
@@ -77,15 +81,23 @@ export const useImageUpload = (
     }
 
     openImageUploader({
+      onConvertStart: () => setIsConverting(true),
+      onConvertEnd: () => setIsConverting(false),
       onLoadImage: async (file) => {
         await uploadImage(file);
       },
       onError: (err) => {
         if (typeof err === 'string') {
           customToast.clientError(err);
-        } else {
-          handleAxiosError(err);
         }
+
+        if (isAxiosError(err)) {
+          handleAxiosError(err);
+          return;
+        }
+
+        console.error(err);
+        Sentry.captureException(err);
       },
     });
   };
@@ -95,5 +107,6 @@ export const useImageUpload = (
     setImages,
     isUploading,
     handleOpenImageUploader,
+    isConverting,
   };
 };
