@@ -7,12 +7,18 @@ import { Theme } from '~/styles/utils';
 interface CustomToolbarItemProps {
   name: IconNames;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 const ToolBarItem = (props: CustomToolbarItemProps) => {
-  const { name, onClick } = props;
+  const { name, onClick, disabled = false } = props;
   return (
-    <IconButton theme={Theme.BLACK} size={32} onClick={onClick}>
+    <IconButton
+      theme={Theme.BLACK}
+      size={32}
+      onClick={onClick}
+      disabled={disabled}
+    >
       <Icon name={name} size={24} />
     </IconButton>
   );
