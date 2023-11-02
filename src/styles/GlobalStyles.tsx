@@ -3,6 +3,7 @@ import React, { memo } from 'react';
 
 import { globalVars, palettes } from '~/styles/utils';
 import { createThemePalettes } from '~/styles/utils/themeColorVars';
+import { toastClassnames } from '~/utils/toast-classnames';
 
 const GlobalStyles = memo(() => {
   return (
@@ -162,6 +163,13 @@ const customBaseCss = css`
   a {
     text-decoration: none;
     color: inherit;
+  }
+
+  .${toastClassnames.promiseToastRoot} {
+    padding: 0;
+    & > div {
+      margin: 0;
+    }
   }
 `;
 
