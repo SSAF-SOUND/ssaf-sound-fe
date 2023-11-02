@@ -27,8 +27,8 @@ const selfCss = css(
     cursor: 'pointer',
     transition: 'transform 200ms',
     backgroundColor: palettes.white,
-    padding: 10,
-    paddingLeft: 6,
+    padding: 16,
+    paddingLeft: 10,
     margin: '-4px -10px', // 기본 스타일때문에.
     ':hover': {
       transform: 'translate3d(0, -2px, 0)',
@@ -36,6 +36,8 @@ const selfCss = css(
     ':active': {
       transform: 'translate3d(0, 2px, 0)',
     },
+    borderRadius: 12,
+    wordBreak: 'break-all',
   },
   fontCss.family.auto,
   fontCss.style.B12,
