@@ -3,13 +3,25 @@ import { css } from '@emotion/react';
 import { fontCss, palettes } from '~/styles/utils';
 
 const headingCss = css({
-  '& h1': [{ margin: '10px 0 15px' }, fontCss.style.B24],
-  '& h2': [{ margin: '5px 0 10px' }, fontCss.style.B20],
-  '& h3': [{ margin: '0 0 5px' }, fontCss.style.B18],
+  '& h1': [
+    { margin: '10px 0 15px' },
+    { fontSize: '28px !important' },
+    fontCss.style.B28,
+  ],
+  '& h2': [
+    { margin: '5px 0 10px' },
+    { fontSize: '24px !important' },
+    fontCss.style.B24,
+  ],
+  '& h3': [
+    { margin: '0 0 5px' },
+    { fontSize: '20px !important' },
+    fontCss.style.B20,
+  ],
 });
 
 const paragraphCss = css({
-  '& p': fontCss.style.R14,
+  '& p': fontCss.style.R16,
 });
 
 const listCss = css({
@@ -68,6 +80,6 @@ export const articleCss = css(
   linkCss,
   boldCss,
   codeCss,
-  fontCss.style.R14,
+  fontCss.style.R16,
   fontCss.family.pretendard
 );

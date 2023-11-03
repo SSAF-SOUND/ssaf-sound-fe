@@ -1,7 +1,7 @@
 import { css, Global } from '@emotion/react';
 import React, { memo } from 'react';
 
-import { globalVars, palettes } from '~/styles/utils';
+import { globalVars, palettes, titleBarHeight } from '~/styles/utils';
 import { createThemePalettes } from '~/styles/utils/themeColorVars';
 import { toastClassnames } from '~/utils/toast-classnames';
 
@@ -147,6 +147,7 @@ const customBaseCss = css`
     min-width: 320px;
     background: ${palettes.background.default};
     color: ${palettes.white};
+    scroll-padding-top: ${titleBarHeight}px;
   }
 
   button {

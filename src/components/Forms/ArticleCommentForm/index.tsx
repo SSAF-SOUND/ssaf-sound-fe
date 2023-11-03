@@ -168,7 +168,7 @@ const textAreaCss = css(
     minHeight: 48,
     maxHeight: 240,
   },
-  fontCss.style.R14
+  fontCss.style.R16
 );
 
 const submitButtonCss = css({

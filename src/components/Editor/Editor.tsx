@@ -106,6 +106,7 @@ const selfCss = css({
     '::before': {
       // placeholder 스타일
       fontStyle: 'normal',
+      fontSize: 16,
     },
   },
 });
