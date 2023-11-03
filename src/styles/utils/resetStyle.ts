@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 
 const button = () => {
   return css({
-    whiteSpace: 'nowrap',
     userSelect: 'none',
     overflow: 'hidden',
 
