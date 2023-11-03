@@ -1,3 +1,4 @@
+import type { ComponentPropsWithoutRef } from 'react';
 import type { Toast } from 'react-hot-toast';
 
 import toast from 'react-hot-toast';
@@ -7,7 +8,7 @@ import { palettes } from '~/styles/utils';
 
 import ToastRoot from './ToastRoot';
 
-interface ServerErrorToastProps {
+interface ServerErrorToastProps extends ComponentPropsWithoutRef<'button'> {
   t?: Toast;
   onClick?: () => void;
   clientMessage?: string;
@@ -22,6 +23,7 @@ const ServerErrorToast = (props: ServerErrorToastProps) => {
     clientMessage = '',
     serverMessage = '',
     showServerMessage = false,
+    ...restProps
   } = props;
 
   const shouldShowServerMessage = showServerMessage && serverMessage;
@@ -31,6 +33,7 @@ const ServerErrorToast = (props: ServerErrorToastProps) => {
     <ToastRoot
       icon={<Icon name="close" color={palettes.error.default} size={24} />}
       onClick={handleClick}
+      {...restProps}
     >
       {clientMessage && <p>{clientMessage}</p>}
       {shouldShowServerMessage && <p>{serverMessage}</p>}

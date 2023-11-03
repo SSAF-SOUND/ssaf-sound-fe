@@ -2,6 +2,7 @@ import toast from 'react-hot-toast';
 
 import { Toast } from '~/components/Common/Toast';
 import { getErrorResponse } from '~/utils/handleAxiosError';
+import { toastClassnames } from '~/utils/toast-classnames';
 
 const clientErrorToast = (message: string) => {
   return toast((t) => <Toast.ServerError clientMessage={message} t={t} />);
@@ -12,10 +13,11 @@ const successToast = (message: string) => {
 };
 
 const promiseToast = (
-  promise: Promise<void>,
+  // eslint-disable-next-line
+  promise: Promise<any>,
   messages: {
     loading: string;
-    success: string;
+    success?: string;
     error?: string;
   }
 ) => {
@@ -31,9 +33,9 @@ const promiseToast = (
     promise,
     {
       loading: <Toast.Loading message={loadingMessage} />,
-      success: (
+      success: successMessage ? (
         <Toast.Success onClick={onClickSettledToast} message={successMessage} />
-      ),
+      ) : null,
       error: (err) => {
         const errorResponse = getErrorResponse(err);
         const errorResponseMessage =
@@ -47,7 +49,12 @@ const promiseToast = (
         );
       },
     },
-    { icon: null, id }
+    {
+      icon: null,
+      id,
+      style: { padding: 0 },
+      className: toastClassnames.promiseToastRoot,
+    }
   );
 };
 

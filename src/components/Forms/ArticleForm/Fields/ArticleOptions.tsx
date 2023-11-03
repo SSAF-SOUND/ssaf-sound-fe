@@ -101,7 +101,11 @@ export const ArticleOptions = () => {
       )}
 
       <Editor.ToolBar css={optionsBarCss}>
-        <Editor.ToolBarItem name="image" onClick={handleOpenImageUploader} />
+        <Editor.ToolBarItem
+          name="image"
+          onClick={handleOpenImageUploader}
+          disabled={isUploading}
+        />
 
         <label css={anonymousLayerCss}>
           <Checkbox
