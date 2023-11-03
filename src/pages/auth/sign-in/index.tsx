@@ -63,7 +63,7 @@ const SignInPage = () => {
           <SignInButton.Google />
           <SignInButton.GitHub />
           <SignInButton.Kakao />
-          <SignInButton.Apple />
+          {/*<SignInButton.Apple />*/}
 
           <Link href={routes.main()} css={mainPageLinkCss}>
             메인페이지로 바로가기
