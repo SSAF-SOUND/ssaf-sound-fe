@@ -50,9 +50,9 @@ const selfCss = css(
 );
 
 const sizeCss = {
-  sm: css({ height: 36 }, fontCss.style.R12),
-  md: css({ height: 44 }, fontCss.style.R14),
-  lg: css({ height: 52 }, fontCss.style.R16),
+  sm: css({ height: 36 }, fontCss.style.R14),
+  md: css({ height: 44 }, fontCss.style.R16),
+  lg: css({ height: 52 }, fontCss.style.R18),
 };
 
 const roundedCss = css({
