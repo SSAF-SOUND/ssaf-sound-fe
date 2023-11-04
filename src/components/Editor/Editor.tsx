@@ -100,13 +100,16 @@ const selfCss = css({
     border: editorBorder,
     borderBottom: 0,
   },
-  [`& .${cn.editor}`]: {
-    fontFamily: fontCss.family.pretendard.fontFamily,
-    height: 450,
-    '::before': {
-      // placeholder 스타일
-      fontStyle: 'normal',
-      fontSize: 16,
+  [`& .${cn.editor}`]: [
+    {
+      fontFamily: fontCss.family.pretendard.fontFamily,
+      height: 450,
+      '::before': {
+        // placeholder 스타일
+        fontStyle: 'normal',
+        fontSize: 16,
+      },
     },
-  },
+    fontCss.style.R16,
+  ],
 });
