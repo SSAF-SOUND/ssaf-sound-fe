@@ -23,7 +23,6 @@ import {
   flex,
   globalVars,
   pageCss,
-  pageMinHeight,
   palettes,
   titleBarHeight,
 } from '~/styles/utils';
@@ -131,7 +130,7 @@ const MyInfoSettingsPage: CustomNextPage = () => {
           <div css={[separatorCss, { marginBottom: 20 }]} />
 
           <MyInfoSettings.NavButton
-            onClick={openSignOutReconfirmModal}
+            onClick={() => openSignOutReconfirmModal()}
             disabled={isSigningOut}
             css={cursorCss}
           >
