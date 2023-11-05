@@ -51,7 +51,7 @@ const titleCss = css(
   flex('center', '', 'row', 10)
 );
 
-const modifyIndicator = css({ color: palettes.primary.dark });
+const modifyIndicator = css({ color: palettes.primary.dark, flexShrink: 0 });
 
 const thumbnailBarCss = css({
   padding: 24,
