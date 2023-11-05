@@ -1,10 +1,13 @@
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils';
+import type { ArticleCategory } from '~/services/article';
 
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { ArticleCategories } from '~/components/Forms/ArticleForm/Fields/ArticleCategories';
 import TitleBar from '~/components/TitleBar';
+import { articleCategories } from '~/mocks/handlers/article/data';
 import { titleBarHeight } from '~/styles/utils';
 
 import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
@@ -12,6 +15,8 @@ import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
 interface ArticleFormOptions {
   onClickTitleBarClose: () => void;
   titleBarText: string;
+  disableArticleCategorySelection: boolean;
+  defaultArticleCategoryId: number;
 }
 
 type OriginalOnInvalidSubmit = SubmitErrorHandler<ArticleFormValues>;
@@ -26,6 +31,7 @@ export interface ArticleFormProps {
   onValidSubmit: SubmitHandler<ArticleFormValues>;
   onInvalidSubmit?: OnInvalidSubmit;
   options?: Partial<ArticleFormOptions>;
+  articleCategories: ArticleCategory[];
 }
 
 const ArticleForm = (props: ArticleFormProps) => {
@@ -33,7 +39,12 @@ const ArticleForm = (props: ArticleFormProps) => {
     defaultValues = defaultArticleFormValues,
     onValidSubmit,
     onInvalidSubmit,
-    options: { onClickTitleBarClose, titleBarText = '게시글 쓰기' } = {},
+    options: {
+      onClickTitleBarClose,
+      titleBarText = '게시글 쓰기',
+      disableArticleCategorySelection = false,
+      defaultArticleCategoryId = 1,
+    } = {},
   } = props;
 
   const methods = useForm<ArticleFormValues>({
@@ -49,7 +60,8 @@ const ArticleForm = (props: ArticleFormProps) => {
     const errorMessage =
       errors.title?.message ||
       errors.content?.message ||
-      errors.images?.message;
+      errors.images?.message ||
+      errors.category?.message;
 
     onInvalidSubmit?.(errorMessage, errors, event);
   };
@@ -67,6 +79,11 @@ const ArticleForm = (props: ArticleFormProps) => {
           onClickClose={onClickTitleBarClose}
         />
         <ArticleTitle />
+        <ArticleCategories
+          articleCategories={articleCategories}
+          defaultArticleCategoryId={defaultArticleCategoryId}
+          disabled={disableArticleCategorySelection}
+        />
         <ArticleContent />
         <ArticleOptions />
       </form>
@@ -79,6 +96,7 @@ const defaultArticleFormValues: ArticleFormValues = {
   content: '',
   anonymous: true,
   images: [],
+  category: 1,
 };
 
 export default ArticleForm;
