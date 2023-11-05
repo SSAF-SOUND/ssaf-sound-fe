@@ -75,6 +75,47 @@ const lengthCss = css(
   fontCss.style.B16
 );
 
+export const CustomToolbar = () => {
+  const { images, handleOpenImageUploader, setImages } = useImageUpload({
+    initialImages: [],
+    maxImageCount: 5,
+  });
+
+  const hasImages = Boolean(images.length);
+  const { openModal, closeModal } = useModal();
+  const openRemoveThumbnailReconfirmModal = (index: number) => {
+    openModal('alert', {
+      title: '알림',
+      actionText: '삭제',
+      description: '썸네일을 삭제합니다.',
+      cancelText: '취소',
+      onClickAction: () => {
+        setImages((p) => p.filter((_, i) => i !== index));
+        closeModal();
+      },
+      onClickCancel: closeModal,
+    });
+  };
+
+  return (
+    <div>
+      {hasImages && (
+        <ThumbnailBar
+          css={thumbnailBarCss}
+          thumbnails={images.map(({ imageUrl, thumbnailUrl }) => ({
+            thumbnailUrl,
+            loading: !imageUrl,
+          }))}
+          onClickRemoveThumbnail={openRemoveThumbnailReconfirmModal}
+        />
+      )}
+      <Editor.ToolBar css={{ borderTop: 0 }}>
+        <Editor.ToolBarItem name="image" onClick={handleOpenImageUploader} />
+      </Editor.ToolBar>
+    </div>
+  );
+};
+
 export const OtherOptions = () => {
   const { images, handleOpenImageUploader, setImages } = useImageUpload({
     initialImages: [],
