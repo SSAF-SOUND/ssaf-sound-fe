@@ -7,6 +7,11 @@ interface UseSignOutReconfirmModalOptions {
   onSignOutSuccess: () => void;
 }
 
+interface OpenSignOutReconfirmModalParams {
+  description?: string;
+  actionText?: string;
+}
+
 export const useSignOutReconfirmModal = (
   options: Partial<UseSignOutReconfirmModalOptions> = {}
 ) => {
@@ -26,14 +31,20 @@ export const useSignOutReconfirmModal = (
     }
   };
 
-  const openSignOutReconfirmModal = () => {
+  const openSignOutReconfirmModal = (
+    params: OpenSignOutReconfirmModalParams = {}
+  ) => {
     if (!myInfo) return;
+    const {
+      description = `${myInfo?.nickname}님 로그아웃 하시겠습니까?`,
+      actionText = '로그아웃',
+    } = params;
 
     openModal('alert', {
       title: '알림',
-      description: `${myInfo?.nickname}님 로그아웃 하시겠습니까?`,
+      description,
       cancelText: '취소',
-      actionText: '로그아웃',
+      actionText,
       onClickAction: handleClickAction,
       onClickCancel: closeModal,
     });
