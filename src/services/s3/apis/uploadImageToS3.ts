@@ -14,9 +14,6 @@ export const uploadImageToS3 = (params: UploadImageToS3Params) => {
 
   return publicAxios
     .put<UploadImageToS3ApiData>(url, file, {
-      headers: {
-        'Content-Type': 'image/webp',
-      },
       baseURL: '',
     })
     .then((res) => res.data);

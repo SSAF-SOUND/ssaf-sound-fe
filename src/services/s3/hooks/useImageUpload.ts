@@ -29,15 +29,13 @@ export const useImageUpload = (
   options: Partial<UseImageUploadOptions> = {}
 ) => {
   const { maxImageCount = 3, initialImages = () => [] } = options;
-  const [isConverting, setIsConverting] = useState(false);
   const [images, setImages] = useState<ImageState[]>(initialImages);
   const { mutateAsync: createPreSignedUrl, isLoading: isCreatingPreSignedUrl } =
     useCreatePreSignedUrl();
   const { mutateAsync: uploadImageToS3, isLoading: isUploadingImageToS3 } =
     useUploadImageToS3();
 
-  const isUploading =
-    isConverting || isCreatingPreSignedUrl || isUploadingImageToS3;
+  const isUploading = isCreatingPreSignedUrl || isUploadingImageToS3;
 
   const uploadImage = async (file: File) => {
     if (maxImageCount <= images.length) {
@@ -81,8 +79,6 @@ export const useImageUpload = (
     }
 
     openImageUploader({
-      onConvertStart: () => setIsConverting(true),
-      onConvertEnd: () => setIsConverting(false),
       onLoadImage: async (file) => {
         await uploadImage(file);
       },
@@ -107,6 +103,5 @@ export const useImageUpload = (
     setImages,
     isUploading,
     handleOpenImageUploader,
-    isConverting,
   };
 };
