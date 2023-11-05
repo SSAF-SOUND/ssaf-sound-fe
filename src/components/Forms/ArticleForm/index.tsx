@@ -16,7 +16,6 @@ interface ArticleFormOptions {
   onClickTitleBarClose: () => void;
   titleBarText: string;
   disableArticleCategorySelection: boolean;
-  defaultArticleCategoryId: number;
 }
 
 type OriginalOnInvalidSubmit = SubmitErrorHandler<ArticleFormValues>;
@@ -43,7 +42,6 @@ const ArticleForm = (props: ArticleFormProps) => {
       onClickTitleBarClose,
       titleBarText = '게시글 쓰기',
       disableArticleCategorySelection = false,
-      defaultArticleCategoryId = 1,
     } = {},
   } = props;
 
@@ -81,7 +79,6 @@ const ArticleForm = (props: ArticleFormProps) => {
         <ArticleTitle />
         <ArticleCategories
           articleCategories={articleCategories}
-          defaultArticleCategoryId={defaultArticleCategoryId}
           disabled={disableArticleCategorySelection}
         />
         <ArticleContent />
@@ -91,7 +88,7 @@ const ArticleForm = (props: ArticleFormProps) => {
   );
 };
 
-const defaultArticleFormValues: ArticleFormValues = {
+export const defaultArticleFormValues: ArticleFormValues = {
   title: '',
   content: '',
   anonymous: true,

@@ -8,7 +8,9 @@ import { useEffect } from 'react';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Footer } from '~/components/Footer';
-import ArticleForm from '~/components/Forms/ArticleForm';
+import ArticleForm, {
+  defaultArticleFormValues,
+} from '~/components/Forms/ArticleForm';
 import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
 import {
   useArticleCategories,
@@ -90,9 +92,12 @@ const ArticleCreatePage: CustomNextPage = () => {
           articleCategories={articleCategories}
           onValidSubmit={onValidSubmit}
           onInvalidSubmit={onInvalidSubmit}
+          defaultValues={{
+            ...defaultArticleFormValues,
+            category: categoryId,
+          }}
           options={{
             onClickTitleBarClose,
-            defaultArticleCategoryId: categoryId,
           }}
         />
       </main>

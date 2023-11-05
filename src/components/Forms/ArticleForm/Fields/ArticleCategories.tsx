@@ -12,13 +12,16 @@ const fieldName = 'category';
 
 interface ArticleCategoriesProps {
   articleCategories: ArticleCategory[];
-  defaultArticleCategoryId?: number;
   disabled?: boolean;
 }
 
 export const ArticleCategories = (props: ArticleCategoriesProps) => {
-  const { register, setValue } = useArticleFormContext();
-  const { defaultArticleCategoryId, articleCategories, disabled } = props;
+  const {
+    register,
+    setValue,
+    formState: { defaultValues: { category: defaultCategoryId } = {} },
+  } = useArticleFormContext();
+  const { articleCategories, disabled } = props;
   const articleCategoryIdsSet = useMemo(
     () => new Set(articleCategories.map(({ boardId }) => boardId)),
     [articleCategories]
@@ -27,8 +30,8 @@ export const ArticleCategories = (props: ArticleCategoriesProps) => {
     if (categoryId === undefined || categoryId === null) return false;
     return articleCategoryIdsSet.has(categoryId);
   };
-  const defaultValue = validateCategory(defaultArticleCategoryId)
-    ? String(defaultArticleCategoryId)
+  const defaultValue = validateCategory(defaultCategoryId)
+    ? String(defaultCategoryId)
     : String(articleCategories[0].boardId);
 
   register(fieldName, {
