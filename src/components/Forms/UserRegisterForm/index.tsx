@@ -13,6 +13,7 @@ import { flex, palettes, titleBarHeight } from '~/styles/utils';
 
 export type UserRegisterFormOptions = Partial<{
   titleBarTitle: string;
+  onClickClose?: () => void;
 }>;
 
 export interface UserRegisterFormProps {
@@ -33,7 +34,7 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
     className,
     options = {},
   } = props;
-  const { titleBarTitle } = options;
+  const { titleBarTitle, onClickClose } = options;
   const methods = useForm({
     defaultValues,
   });
@@ -55,9 +56,9 @@ const UserRegisterForm = (props: UserRegisterFormProps) => {
     <div css={selfCss} className={className}>
       <TitleBar.Default
         title={titleBarTitle}
-        withoutClose
         withoutBackward={currentPhase === 0}
         onClickBackward={popPhase}
+        onClickClose={onClickClose}
       />
 
       <ProgressBar
