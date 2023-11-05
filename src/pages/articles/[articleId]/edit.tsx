@@ -8,7 +8,11 @@ import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Footer } from '~/components/Footer';
 import ArticleForm from '~/components/Forms/ArticleForm';
-import { useArticleDetail, useUpdateArticle } from '~/services/article/hooks';
+import {
+  useArticleCategories,
+  useArticleDetail,
+  useUpdateArticle,
+} from '~/services/article/hooks';
 import { reconfirmArticleFormUnload } from '~/services/article/utils/reconfirmArticleFormUnload';
 import { createAuthGuard } from '~/utils/createAuthGuard';
 import { createNoIndexPageMetaData } from '~/utils/createNoIndexPageMetaData';
@@ -27,17 +31,24 @@ const ArticleEditPage: CustomNextPage = () => {
     isError: isArticleDetailError,
     error: articleDetailError,
   } = useArticleDetail(articleId);
+  const {
+    data: articleCategories,
+    isLoading: isArticleCategoriesLoading,
+    isError: isArticleCategoriesError,
+    error: articleCategoriesError,
+  } = useArticleCategories();
   const { mutateAsync: updateArticle } = useUpdateArticle(articleId);
 
-  if (isArticleDetailLoading) {
+  if (isArticleDetailLoading || isArticleCategoriesLoading) {
     return <FullPageLoader text="데이터를 불러오는 중입니다." />;
   }
 
-  if (isArticleDetailError) {
-    return <ArticleError error={articleDetailError} />;
+  if (isArticleDetailError || isArticleCategoriesError) {
+    const error = articleDetailError ?? articleCategoriesError;
+    return <ArticleError error={error} />;
   }
 
-  const { mine, title, content, images, anonymity } = articleDetail;
+  const { mine, title, content, images, anonymity, boardId } = articleDetail;
 
   if (!mine) {
     router.replace(routes.unauthorized());
@@ -65,19 +76,22 @@ const ArticleEditPage: CustomNextPage = () => {
     <>
       <PageHeadingText text={metaTitle} />
 
-      <main>
+      <main css={{ paddingTop: 10 }}>
         <ArticleForm
           onValidSubmit={onValidSubmit}
           options={{
             titleBarText: '게시글 수정',
             onClickTitleBarClose,
+            disableArticleCategorySelection: true,
           }}
           defaultValues={{
+            category: boardId,
             title,
             content,
             images,
             anonymous: anonymity,
           }}
+          articleCategories={articleCategories}
         />
       </main>
 
