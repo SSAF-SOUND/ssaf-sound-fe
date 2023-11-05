@@ -148,23 +148,24 @@ const RecruitApplicantsPage: CustomNextPage<RecruitApplicantsPageProps> = (
           title={titleBarTitle}
           withoutClose
           footer={
-            <BreadCrumbs
-              entries={[
-                {
-                  name: '리쿠르팅 상세',
-                  link: routes.recruit.detail(recruitId),
-                },
-                {
-                  name: '신청 목록',
-                  link: routes.recruit.applications.self(recruitId),
-                  active: true,
-                },
-              ]}
-            />
+            <>
+              <BreadCrumbs
+                entries={[
+                  {
+                    name: '리쿠르팅 상세',
+                    link: routes.recruit.detail(recruitId),
+                  },
+                  {
+                    name: '신청 목록',
+                    link: routes.recruit.applications.self(recruitId),
+                    active: true,
+                  },
+                ]}
+              />
+              {finishedRecruit && <RecruitCompletedBar />}
+            </>
           }
         />
-
-        {finishedRecruit && <RecruitCompletedBar css={completedBarCss} />}
 
         <div css={headerCss}>
           <p css={categoryNameCss}>
@@ -200,9 +201,6 @@ const selfCss = css(
 
 const extendPaddingTopCss = css({
   paddingTop: `${selfPaddingY + recruitCompletedBarHeight}px`,
-});
-const completedBarCss = css(fixTopCenter, {
-  top: titleBarHeight,
 });
 
 const headerCss = css(
