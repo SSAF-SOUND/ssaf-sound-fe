@@ -1,10 +1,13 @@
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import type { ArticleFormValues } from '~/components/Forms/ArticleForm/utils';
+import type { ArticleCategory } from '~/services/article';
 
 import { css } from '@emotion/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { ArticleCategories } from '~/components/Forms/ArticleForm/Fields/ArticleCategories';
 import TitleBar from '~/components/TitleBar';
+import { articleCategories } from '~/mocks/handlers/article/data';
 import { titleBarHeight } from '~/styles/utils';
 
 import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
@@ -12,6 +15,7 @@ import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
 interface ArticleFormOptions {
   onClickTitleBarClose: () => void;
   titleBarText: string;
+  disableArticleCategorySelection: boolean;
 }
 
 type OriginalOnInvalidSubmit = SubmitErrorHandler<ArticleFormValues>;
@@ -26,6 +30,7 @@ export interface ArticleFormProps {
   onValidSubmit: SubmitHandler<ArticleFormValues>;
   onInvalidSubmit?: OnInvalidSubmit;
   options?: Partial<ArticleFormOptions>;
+  articleCategories: ArticleCategory[];
 }
 
 const ArticleForm = (props: ArticleFormProps) => {
@@ -33,7 +38,11 @@ const ArticleForm = (props: ArticleFormProps) => {
     defaultValues = defaultArticleFormValues,
     onValidSubmit,
     onInvalidSubmit,
-    options: { onClickTitleBarClose, titleBarText = '게시글 쓰기' } = {},
+    options: {
+      onClickTitleBarClose,
+      titleBarText = '게시글 쓰기',
+      disableArticleCategorySelection = false,
+    } = {},
   } = props;
 
   const methods = useForm<ArticleFormValues>({
@@ -42,14 +51,15 @@ const ArticleForm = (props: ArticleFormProps) => {
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = methods;
 
   const handleInvalidSubmit: OriginalOnInvalidSubmit = (errors, event) => {
     const errorMessage =
       errors.title?.message ||
       errors.content?.message ||
-      errors.images?.message;
+      errors.images?.message ||
+      errors.category?.message;
 
     onInvalidSubmit?.(errorMessage, errors, event);
   };
@@ -64,9 +74,14 @@ const ArticleForm = (props: ArticleFormProps) => {
           title={titleBarText}
           submitButtonText="완료"
           isSubmitting={isSubmitting}
+          isSubmitDisabled={!isDirty}
           onClickClose={onClickTitleBarClose}
         />
         <ArticleTitle />
+        <ArticleCategories
+          articleCategories={articleCategories}
+          disabled={disableArticleCategorySelection}
+        />
         <ArticleContent />
         <ArticleOptions />
       </form>
@@ -74,11 +89,12 @@ const ArticleForm = (props: ArticleFormProps) => {
   );
 };
 
-const defaultArticleFormValues: ArticleFormValues = {
+export const defaultArticleFormValues: ArticleFormValues = {
   title: '',
   content: '',
   anonymous: true,
   images: [],
+  category: 1,
 };
 
 export default ArticleForm;

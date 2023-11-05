@@ -11512,7 +11512,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dequal@npm:^2.0.2":
+"dequal@npm:^2.0.2, dequal@npm:^2.0.3":
   version: 2.0.3
   resolution: "dequal@npm:2.0.3"
   checksum: 8679b850e1a3d0ebbc46ee780d5df7b478c23f335887464023a631d1b9af051ad4a6595a44220f9ff8ff95a8ddccf019b5ad778a976fd7bbf77383d36f412f90
@@ -20861,6 +20861,7 @@ __metadata:
     cypress: ^13.2.0
     cypress-real-events: ^1.10.3
     dayjs: ^1.11.8
+    dequal: ^2.0.3
     eslint: 8.39.0
     eslint-config-next: 13.3.4
     eslint-config-prettier: ^8.8.0

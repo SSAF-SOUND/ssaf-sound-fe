@@ -3,6 +3,7 @@ export interface ArticleFormValues {
   content: string;
   anonymous: boolean;
   images: ArticleImage[];
+  category: number;
 }
 
 export interface ArticleImage {

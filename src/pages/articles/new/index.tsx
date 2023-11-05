@@ -8,7 +8,9 @@ import { useEffect } from 'react';
 import { FullPageLoader } from '~/components/Common/FullPageLoader';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Footer } from '~/components/Footer';
-import ArticleForm from '~/components/Forms/ArticleForm';
+import ArticleForm, {
+  defaultArticleFormValues,
+} from '~/components/Forms/ArticleForm';
 import { useUnloadReconfirmEffect } from '~/hooks/useUnloadReconfirmEffect';
 import {
   useArticleCategories,
@@ -18,6 +20,7 @@ import { reconfirmArticleFormUnload } from '~/services/article/utils/reconfirmAr
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
+  customToast,
   handleAxiosError,
   routes,
 } from '~/utils';
@@ -58,8 +61,8 @@ const ArticleCreatePage: CustomNextPage = () => {
   ) => {
     try {
       const articleId = await createArticle({
-        categoryId,
         ...formValues,
+        categoryId: formValues.category,
       });
 
       await router.replace(routes.article.detail(articleId));
@@ -74,13 +77,25 @@ const ArticleCreatePage: CustomNextPage = () => {
     }
   };
 
+  const onInvalidSubmit = (
+    message = '유효하지 않은 필드가 있는지 확인해주세요'
+  ) => {
+    customToast.clientError(message);
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
 
-      <main>
+      <main css={{ paddingTop: 10 }}>
         <ArticleForm
+          articleCategories={articleCategories}
           onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
+          defaultValues={{
+            ...defaultArticleFormValues,
+            category: categoryId,
+          }}
           options={{
             onClickTitleBarClose,
           }}
