@@ -5,17 +5,21 @@ import { useRouter } from 'next/router';
 
 import { css } from '@emotion/react';
 import { useMemo } from 'react';
-import { MdHome, MdArticle, MdGroupAdd, MdAccountCircle } from 'react-icons/md';
+import { MdAccountCircle, MdArticle, MdGroupAdd, MdHome } from 'react-icons/md';
 
+import {
+  useWindowScrollDirection,
+  WindowScrollDirection,
+} from '~/hooks/useWindowScrollDirection';
 import { useMyInfo } from '~/services/member';
 import {
+  colorMix,
+  fixBottomCenter,
   flex,
   fontCss,
   gnbHeight,
   palettes,
-  fixBottomCenter,
   zIndex,
-  colorMix,
 } from '~/styles/utils';
 import { routes } from '~/utils';
 
@@ -46,6 +50,11 @@ const createNavigationDetail = (
 
 export const Gnb = (props: GnbProps) => {
   const { className } = props;
+  const { windowScrollDirection } = useWindowScrollDirection(
+    WindowScrollDirection.UP
+  );
+  const hide = windowScrollDirection === WindowScrollDirection.DOWN;
+
   const navItems = useMemo(
     () => [
       createNavigationDetail('홈', <MdHome />, routes.main()),
@@ -74,7 +83,10 @@ export const Gnb = (props: GnbProps) => {
   const isSignedIn = !!myInfo;
 
   return (
-    <nav css={selfCss} className={className}>
+    <nav
+      css={[selfCss, hide && hideSelfCss, hoverSelfCss]}
+      className={className}
+    >
       <div css={itemContainerCss}>
         {navItems.map((navItem) => {
           const { text, icon, pathname: itemPathname, auth } = navItem;
@@ -102,7 +114,7 @@ export const Gnb = (props: GnbProps) => {
 };
 
 const selfCss = css(fixBottomCenter, {
-  transition: 'opacity 200ms',
+  transition: 'opacity 200ms, transform 200ms',
   borderTopLeftRadius: 15,
   borderTopRightRadius: 15,
   overflow: 'hidden',
@@ -111,6 +123,16 @@ const selfCss = css(fixBottomCenter, {
   background: palettes.white,
   color: palettes.black,
   zIndex: zIndex.fixed.normal,
+});
+
+const hideSelfCss = css({
+  transform: `translate3d(-50%, ${gnbHeight - 10}px, 0)`,
+});
+
+const hoverSelfCss = css({
+  '&:hover, &:focus-visible': {
+    transform: `translate3d(-50%, 0, 0)`,
+  },
 });
 
 const itemContainerCss = css(
