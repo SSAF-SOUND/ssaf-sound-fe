@@ -51,7 +51,7 @@ const ArticleForm = (props: ArticleFormProps) => {
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = methods;
 
   const handleInvalidSubmit: OriginalOnInvalidSubmit = (errors, event) => {
@@ -74,6 +74,7 @@ const ArticleForm = (props: ArticleFormProps) => {
           title={titleBarText}
           submitButtonText="완료"
           isSubmitting={isSubmitting}
+          isSubmitDisabled={!isDirty}
           onClickClose={onClickTitleBarClose}
         />
         <ArticleTitle />
