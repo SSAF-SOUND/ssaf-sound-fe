@@ -13,7 +13,7 @@ import { Logo } from '~/components/Common/Logo';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { SsafyIcon } from '~/components/Common/SsafyIcon';
 import { ErrorMessageWithSsafyIcon } from '~/components/ErrorMessageWithSsafyIcon';
-import { Footer } from '~/components/Footer';
+import { useSignOutReconfirmModal } from '~/hooks';
 import { useMyAccountStatus, useUpdateMyInfo } from '~/services/member';
 import { useTermsOfService } from '~/services/meta/hooks/useTermsOfService';
 import {
@@ -41,6 +41,7 @@ const titleBarTitle = metaTitle;
 const RegisterPage: CustomNextPage = () => {
   const router = useRouter();
   const { isRegisterRequired } = useMyAccountStatus();
+  const { openSignOutReconfirmModal } = useSignOutReconfirmModal();
   const { mutateAsync: updateMyInfo } = useUpdateMyInfo();
   const [shouldCheckUserInfo, setShouldCheckUserInfo] = useState(true);
   const {
@@ -71,6 +72,13 @@ const RegisterPage: CustomNextPage = () => {
     }
   };
 
+  const onClickClose = () => {
+    openSignOutReconfirmModal({
+      actionText: '종료',
+      description: '회원가입을 종료합니다.',
+    });
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
@@ -81,7 +89,7 @@ const RegisterPage: CustomNextPage = () => {
         {isTermsSuccess && (
           <UserRegisterForm
             terms={terms}
-            options={{ titleBarTitle }}
+            options={{ titleBarTitle, onClickClose }}
             onValidSubmit={onValidSubmit}
             css={formCss}
           />
