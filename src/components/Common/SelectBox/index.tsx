@@ -156,8 +156,11 @@ export const SelectBox = <D,>(props: SelectBoxProps<D>) => {
                   sizeCss[size],
                   itemTextAlignCss[itemTextAlign],
                 ]}
+                className={cn.item}
               >
-                <Select.ItemText>{text}</Select.ItemText>
+                <Select.ItemText className={cn.itemText}>
+                  {text}
+                </Select.ItemText>
               </Select.Item>
             );
           })}
