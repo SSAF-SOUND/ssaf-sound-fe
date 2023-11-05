@@ -18,6 +18,7 @@ import { reconfirmArticleFormUnload } from '~/services/article/utils/reconfirmAr
 import {
   createAuthGuard,
   createNoIndexPageMetaData,
+  customToast,
   handleAxiosError,
   routes,
 } from '~/utils';
@@ -58,8 +59,8 @@ const ArticleCreatePage: CustomNextPage = () => {
   ) => {
     try {
       const articleId = await createArticle({
-        categoryId,
         ...formValues,
+        categoryId: formValues.category,
       });
 
       await router.replace(routes.article.detail(articleId));
@@ -74,15 +75,24 @@ const ArticleCreatePage: CustomNextPage = () => {
     }
   };
 
+  const onInvalidSubmit = (
+    message = '유효하지 않은 필드가 있는지 확인해주세요'
+  ) => {
+    customToast.clientError(message);
+  };
+
   return (
     <>
       <PageHeadingText text={metaTitle} />
 
-      <main>
+      <main css={{ paddingTop: 10 }}>
         <ArticleForm
+          articleCategories={articleCategories}
           onValidSubmit={onValidSubmit}
+          onInvalidSubmit={onInvalidSubmit}
           options={{
             onClickTitleBarClose,
+            defaultArticleCategoryId: categoryId,
           }}
         />
       </main>
