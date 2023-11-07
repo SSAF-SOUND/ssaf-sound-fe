@@ -7,7 +7,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ArticleCategories } from '~/components/Forms/ArticleForm/Fields/ArticleCategories';
 import TitleBar from '~/components/TitleBar';
-import { articleCategories } from '~/mocks/handlers/article/data';
 import { titleBarHeight } from '~/styles/utils';
 
 import { ArticleTitle, ArticleContent, ArticleOptions } from './Fields';
@@ -35,6 +34,7 @@ export interface ArticleFormProps {
 
 const ArticleForm = (props: ArticleFormProps) => {
   const {
+    articleCategories,
     defaultValues = defaultArticleFormValues,
     onValidSubmit,
     onInvalidSubmit,
