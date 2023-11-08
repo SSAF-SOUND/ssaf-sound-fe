@@ -2,7 +2,6 @@ import type {
   GetServerSideProps,
   InferGetServerSidePropsType,
 } from 'next/types';
-import type { SearchBarFormProps } from '~/components/Forms/SearchBarForm';
 import type {
   defaultArticlesPageKey,
   GetHotArticlesByOffsetApiData,
@@ -19,10 +18,10 @@ import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { EmptyList } from '~/components/EmptyList';
 import { Footer } from '~/components/Footer';
-import SearchBarForm from '~/components/Forms/SearchBarForm';
 import NoSearchResults from '~/components/NoSearchResults';
 import { QueryItemList } from '~/components/QueryItemList';
 import { ResponsivePagination } from '~/components/ResponsivePagination';
+import { SearchBar } from '~/components/SearchBar';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
@@ -35,20 +34,18 @@ import {
   validatePage,
   toSafePageValue,
 } from '~/services/common/utils/pagination';
-import { validateSearchKeyword } from '~/services/common/utils/searchBar';
+import { toSafeSearchKeyword } from '~/services/common/utils/searchBar';
 import {
   fixedFullWidth,
   flex,
   fontCss,
   globalVars,
   pageCss,
-  pageMaxWidth,
-  pageMinWidth,
   palettes,
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { customToast, routes } from '~/utils';
+import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
 
 const titleBarTitle = 'HOT 게시판';
@@ -60,7 +57,12 @@ const HotArticlesPage = (
 ) => {
   const { page } = props;
   const router = useRouter();
-  const { keyword } = router.query as QueryParams;
+  const { keyword: unsafeKeyword = '' } = router.query as QueryParams;
+  const keyword = toSafeSearchKeyword({ keyword: unsafeKeyword });
+
+  const handleSearch = (keyword: string) => {
+    router.push(routes.article.hot({ keyword }));
+  };
 
   return (
     <>
@@ -85,13 +87,21 @@ const HotArticlesPage = (
             <BreadCrumbs
               entries={[
                 { name: '게시판 목록', link: routes.article.categories() },
-                { name: '핫 게시판', link: routes.article.hot(), active: true },
+                {
+                  name: 'HOT 게시판',
+                  link: routes.article.hot(),
+                  active: true,
+                },
               ]}
             />
           }
         />
 
-        <SearchBar />
+        <SearchBar
+          css={searchBarContainerCss}
+          keyword={keyword}
+          onSubmit={handleSearch}
+        />
 
         <div css={articleContainerCss}>
           <HotArticleLayer keyword={keyword} page={page} />
@@ -104,87 +114,48 @@ const HotArticlesPage = (
 };
 
 interface HotArticleLayerProps {
-  keyword?: string;
+  keyword: string;
   page: number;
 }
 
 const HotArticleLayer = (props: HotArticleLayerProps) => {
   const { keyword, page } = props;
-  const isValidKeyword = validateSearchKeyword(keyword);
+  const hasKeyword = !!keyword.length;
   const hotArticlesQuery = useHotArticlesByOffset({ keyword, page });
 
   return (
-    <div>
-      <QueryItemList
-        css={[flex('', '', 'column', 16), { paddingBottom: 120 }]}
-        query={hotArticlesQuery}
-        skeleton={<HotArticleCard.Skeleton />}
-        skeletonCount={6}
-        render={(data) => {
-          const { currentPage, posts, totalPageCount } = data;
-          const isEmpty = posts.length === 0;
-          return (
-            <>
-              {totalPageCount > 0 && (
-                <div css={paginationCss}>
-                  <ResponsivePagination
-                    totalPageCount={totalPageCount}
-                    initialPage={currentPage}
-                  />
-                </div>
-              )}
-              {isEmpty ? (
-                isValidKeyword ? (
-                  <NoSearchResults keyword={keyword} />
-                ) : (
-                  <EmptyList text="아직 핫 게시글이 없습니다" />
-                )
+    <QueryItemList
+      css={[flex('', '', 'column', 16), { paddingBottom: 120 }]}
+      query={hotArticlesQuery}
+      skeleton={<HotArticleCard.Skeleton />}
+      skeletonCount={6}
+      render={(data) => {
+        const { currentPage, posts, totalPageCount } = data;
+        const isEmpty = posts.length === 0;
+        return (
+          <>
+            {totalPageCount > 0 && (
+              <div css={paginationCss}>
+                <ResponsivePagination
+                  totalPageCount={totalPageCount}
+                  initialPage={currentPage}
+                />
+              </div>
+            )}
+            {isEmpty ? (
+              hasKeyword ? (
+                <NoSearchResults keyword={keyword} />
               ) : (
-                posts.map((post) => (
-                  <HotArticleCard article={post} key={post.postId} />
-                ))
-              )}
-            </>
-          );
-        }}
-      />
-    </div>
-  );
-};
-
-const SearchBar = () => {
-  const router = useRouter();
-  const { keyword: queryKeyword } = router.query as QueryParams;
-  const isValidKeyword = validateSearchKeyword(queryKeyword);
-  const defaultKeyword = isValidKeyword ? queryKeyword : '';
-
-  const onValidSubmit: SearchBarFormProps['onValidSubmit'] = async (
-    reset,
-    formValues
-  ) => {
-    const { keyword } = formValues;
-    if (keyword === queryKeyword) {
-      return;
-    }
-    reset({ keyword });
-    await router.push(routes.article.hot({ keyword }));
-  };
-
-  const onInvalidSubmit: SearchBarFormProps['onInvalidSubmit'] = (
-    errorMessage
-  ) => {
-    if (errorMessage) {
-      customToast.clientError(errorMessage);
-    }
-  };
-
-  return (
-    <SearchBarForm
-      css={searchBarContainerCss}
-      onValidSubmit={onValidSubmit}
-      onInvalidSubmit={onInvalidSubmit}
-      defaultValues={{ keyword: defaultKeyword }}
-      options={{ allowEmptyString: true }}
+                <EmptyList text="아직 핫 게시글이 없습니다" />
+              )
+            ) : (
+              posts.map((post) => (
+                <HotArticleCard article={post} key={post.postId} />
+              ))
+            )}
+          </>
+        );
+      }}
     />
   );
 };
@@ -210,15 +181,13 @@ const selfCss = css(
 
 const searchBarContainerCss = css(
   {
-    width: '100%',
-    minWidth: pageMinWidth,
-    maxWidth: pageMaxWidth,
     padding: `8px ${searchBarContainerPaddingX} 0`,
     height: searchBarContainerHeight,
     top: searchBarTop,
     zIndex: fixedLayoutZIndex,
     backgroundColor: palettes.background.default,
   },
+  fixedFullWidth,
   position.x('center', 'fixed')
 );
 
@@ -258,19 +227,18 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context) => {
   const { keyword = '', page: unsafePage } = context.query as QueryParams;
 
-  const trimmedKeyword = keyword.trim();
-  const safeKeyword = validateSearchKeyword(trimmedKeyword)
-    ? trimmedKeyword
-    : undefined;
+  const safeKeyword = toSafeSearchKeyword({ keyword });
+  const hasKeyword = !!safeKeyword.length;
   const page = toSafePageValue(unsafePage);
 
+  // note: 페이지 범위 서버에서 판단해야 한다고 생각함
   if (page < defaultArticlesFirstPage) {
     return { notFound: true };
   }
 
   const queryClient = new QueryClient();
   const hotArticleListQueryKey = queryKeys.articles.hotByOffset({
-    searchKeyword: safeKeyword,
+    searchKeyword: hasKeyword ? safeKeyword : undefined,
     page,
   });
 
@@ -283,6 +251,7 @@ export const getServerSideProps: GetServerSideProps<
       }),
   });
 
+  // note: 페이지 범위 서버에서 판단해야 한다고 생각함
   const hotArticles = queryClient.getQueryData<
     GetHotArticlesByOffsetApiData['data']
   >(hotArticleListQueryKey);
