@@ -42,7 +42,7 @@ const selfCss = css(
   {
     backgroundColor: colorMix('30%', palettes.grey0),
     color: palettes.grey4,
-    padding: '120px 25px 240px',
+    padding: '40px 25px 90px',
   },
   fontCss.family.pretendard,
   fontCss.style.R12,
