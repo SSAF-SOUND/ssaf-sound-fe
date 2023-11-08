@@ -73,7 +73,7 @@ const ArticleCreatePage: CustomNextPage = () => {
 
   const onClickTitleBarClose = () => {
     if (reconfirmArticleFormUnload()) {
-      router.push(routes.article.category({ categoryId }));
+      router.back();
     }
   };
 
@@ -96,9 +96,7 @@ const ArticleCreatePage: CustomNextPage = () => {
             ...defaultArticleFormValues,
             category: categoryId,
           }}
-          options={{
-            onClickTitleBarClose,
-          }}
+          options={{ onClickTitleBarClose }}
         />
       </main>
 
