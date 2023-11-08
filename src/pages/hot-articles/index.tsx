@@ -14,6 +14,7 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { HotArticleCard } from '~/components/ArticleCard';
 import { BreadCrumbs, breadcrumbsHeight } from '~/components/BreadCrumbs';
+import { CircleButton } from '~/components/Common/CircleButton';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { EmptyList } from '~/components/EmptyList';
@@ -35,6 +36,7 @@ import {
   toSafePageValue,
 } from '~/services/common/utils/pagination';
 import { toSafeSearchKeyword } from '~/services/common/utils/searchBar';
+import { useMyInfo } from '~/services/member';
 import {
   fixedFullWidth,
   flex,
@@ -45,8 +47,8 @@ import {
   position,
   titleBarHeight,
 } from '~/styles/utils';
-import { routes } from '~/utils';
 import { globalMetaData } from '~/utils/metadata';
+import { routes } from '~/utils/routes';
 
 const titleBarTitle = 'HOT 게시판';
 const metaTitle = titleBarTitle;
@@ -56,6 +58,8 @@ const HotArticlesPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const { page } = props;
+  const { data: myInfo } = useMyInfo();
+  const isSignedIn = !!myInfo;
   const router = useRouter();
   const { keyword: unsafeKeyword = '' } = router.query as QueryParams;
   const keyword = toSafeSearchKeyword({ keyword: unsafeKeyword });
@@ -106,6 +110,18 @@ const HotArticlesPage = (
         <div css={articleContainerCss}>
           <HotArticleLayer keyword={keyword} page={page} />
         </div>
+
+        {isSignedIn && (
+          <div css={fabContainerCss}>
+            <CircleButton
+              css={fabCss}
+              name="pencil.plus"
+              label="게시글 작성 버튼"
+              asLink
+              href={routes.article.create()}
+            />
+          </div>
+        )}
       </main>
 
       <Footer />
@@ -209,6 +225,14 @@ const paginationCss = css(
     backgroundColor: palettes.background.default,
   }
 );
+
+const fabContainerCss = css(flex('center', 'flex-end', 'row'));
+
+const fabCss = css({
+  position: 'fixed',
+  bottom: 40,
+  zIndex: fixedLayoutZIndex,
+});
 
 /* ssr */
 
