@@ -14,12 +14,17 @@ import NavigationGroup from '~/components/NavigationGroup';
 import { RecruitsPreview } from '~/components/RecruitsPreview';
 import { queryKeys } from '~/react-query/common';
 import { dehydrate } from '~/react-query/server';
+import {
+  getAllArticlesByOffset,
+  useAllArticlesByOffset,
+  useHotArticlesByOffset,
+} from '~/services/article';
 import { getHotArticlesByOffset } from '~/services/article/apis';
 import { useMyInfo } from '~/services/member';
 import { getRecruitsByOffset } from '~/services/recruit';
-import { globalVars, topBarHeight } from '~/styles/utils';
-import { routes } from '~/utils';
+import { expandCss, globalVars, palettes, topBarHeight } from '~/styles/utils';
 import { globalMetaData } from '~/utils/metadata';
+import { routes } from '~/utils/routes';
 
 const metaTitle = '홈';
 const metaDescription = `${globalMetaData.description} 점심 메뉴, 리쿠르팅, 핫 게시글 등 다양한 SSAF SOUND의 기능을 활용해보세요.`;
@@ -33,6 +38,8 @@ const siteNameSchema = {
 const MainPage = () => {
   const { data: myInfo } = useMyInfo();
   const myCampus = myInfo?.ssafyInfo?.campus;
+  const hotArticlesQuery = useHotArticlesByOffset();
+  const allArticlesQuery = useAllArticlesByOffset();
 
   return (
     <>
@@ -54,7 +61,25 @@ const MainPage = () => {
         <NavigationGroup />
         <Clock css={{ marginBottom: 32 }} />
         <LunchMenusPreview css={{ marginBottom: 80 }} campus={myCampus} />
-        <ArticlesPreview css={{ marginBottom: 50 }} />
+
+        <Divider />
+        <ArticlesPreview
+          css={{ marginBottom: 50 }}
+          articlesQuery={hotArticlesQuery}
+          title={'HOT 게시글'}
+          moreLinkRoute={routes.article.hot()}
+        />
+
+        <Divider />
+        <ArticlesPreview
+          css={{ marginBottom: 50 }}
+          articlesQuery={allArticlesQuery}
+          title={'전체 게시글'}
+          moreLinkRoute={routes.article.all()}
+          maxViewCount={5}
+        />
+
+        <Divider />
         <RecruitsPreview
           css={{ marginBottom: 50 }}
           marginForExpand={globalVars.mainLayoutPaddingX.var}
@@ -65,6 +90,19 @@ const MainPage = () => {
     </>
   );
 };
+
+const Divider = () => (
+  <div
+    css={[
+      expandCss(),
+      {
+        height: 2,
+        background: palettes.background.grey,
+        marginBottom: 10,
+      },
+    ]}
+  />
+);
 
 export default MainPage;
 
@@ -83,11 +121,18 @@ export const getStaticProps: GetStaticProps = async () => {
   const hotArticlesQueryKey = JSON.parse(
     JSON.stringify(queryKeys.articles.hotByOffset({ page: 1 }))
   );
+  const allArticlesQueryKey = JSON.parse(
+    JSON.stringify(queryKeys.articles.allListByOffset({ page: 1 }))
+  );
 
   await Promise.allSettled([
     queryClient.prefetchQuery({
       queryKey: hotArticlesQueryKey,
       queryFn: () => getHotArticlesByOffset(),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: allArticlesQueryKey,
+      queryFn: () => getAllArticlesByOffset(),
     }),
     queryClient.prefetchQuery({
       queryKey: recruitsQueryKey,
