@@ -22,7 +22,7 @@ const ImageLayer = memo((props: ImageLayerProps) => {
     if (!imageRef.current || !imageContainerRef.current) return;
 
     const onResize = handleResize(imageRef.current, imageContainerRef.current, {
-      scaleFactor: 0.5,
+      scaleFactor: 0.9,
       onCalculateScale: (scale) => {
         centerView(scale, 0);
         onResizeWindow(scale);
