@@ -1,18 +1,18 @@
 import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
-import { HotArticlesPreviewArticleItem } from '~/components/HotArticlesPreview/HotArticlesPreviewArticleItem';
+import { ArticlesPreviewArticleItem } from '~/components/ArticlesPreview/ArticlesPreviewArticleItem';
 import { PreviewErrorCard } from '~/components/PreviewErrorCard';
 import TitleBar from '~/components/TitleBar';
 import { useHotArticlesByOffset } from '~/services/article/hooks';
 import { flex, palettes } from '~/styles/utils';
 import { routes } from '~/utils/routes';
 
-export interface HotArticlesPreviewProps {
+export interface ArticlesPreviewProps {
   className?: string;
 }
 
-export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
+export const ArticlesPreview = (props: ArticlesPreviewProps) => {
   const { className } = props;
   const {
     data: hotArticles,
@@ -34,7 +34,7 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
       />
 
       <div css={articlesContainerCss}>
-        {isHotArticlesLoading && <HotArticlesPreviewSkeleton />}
+        {isHotArticlesLoading && <ArticlesPreviewSkeleton />}
 
         {isHotArticlesError && (
           <PreviewErrorCard
@@ -48,7 +48,7 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
             <NotExistHotArticles />
           ) : (
             latestHotArticles?.map((article) => (
-              <HotArticlesPreviewArticleItem
+              <ArticlesPreviewArticleItem
                 key={article.postId}
                 article={article}
               />
@@ -61,7 +61,7 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
 
 const articlesContainerCss = css(flex('', '', 'column'));
 
-const HotArticlesPreviewSkeleton = () => {
+const ArticlesPreviewSkeleton = () => {
   const skeletonCount = 5;
   return (
     <Skeleton

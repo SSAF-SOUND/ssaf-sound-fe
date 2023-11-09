@@ -3,11 +3,11 @@ import type { GetStaticProps } from 'next';
 import { css } from '@emotion/react';
 import { QueryClient } from '@tanstack/react-query';
 
+import { ArticlesPreview } from '~/components/ArticlesPreview';
 import { Clock } from '~/components/Clock';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Footer } from '~/components/Footer';
-import { HotArticlesPreview } from '~/components/HotArticlesPreview';
 import { JsonLD } from '~/components/JsonLD';
 import { LunchMenusPreview } from '~/components/Lunch';
 import NavigationGroup from '~/components/NavigationGroup';
@@ -54,7 +54,7 @@ const MainPage = () => {
         <NavigationGroup />
         <Clock css={{ marginBottom: 32 }} />
         <LunchMenusPreview css={{ marginBottom: 80 }} campus={myCampus} />
-        <HotArticlesPreview css={{ marginBottom: 50 }} />
+        <ArticlesPreview css={{ marginBottom: 50 }} />
         <RecruitsPreview
           css={{ marginBottom: 50 }}
           marginForExpand={globalVars.mainLayoutPaddingX.var}
