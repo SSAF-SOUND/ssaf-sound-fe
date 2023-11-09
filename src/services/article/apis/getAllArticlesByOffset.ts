@@ -32,7 +32,7 @@ export interface GetAllArticlesByOffsetQueryParams extends PaginationParams {
 }
 
 export const getAllArticlesByOffset = (
-  params: GetAllArticlesByOffsetParams,
+  params: GetAllArticlesByOffsetParams = {},
   options: GetAllArticlesByOffsetOptions = {}
 ) => {
   const { publicRequest = !isClient } = options;
