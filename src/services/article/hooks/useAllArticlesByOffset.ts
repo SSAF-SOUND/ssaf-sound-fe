@@ -13,7 +13,7 @@ export interface UseAllArticlesByOffsetParams {
 }
 
 export const useAllArticlesByOffset = (
-  params: UseAllArticlesByOffsetParams
+  params: UseAllArticlesByOffsetParams = {}
 ) => {
   const { keyword, page = defaultArticlesPageOffset } = params;
   const queryKey = queryKeys.articles.allListByOffset({
