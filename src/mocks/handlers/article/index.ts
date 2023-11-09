@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { mockCreateArticle } from '~/mocks/handlers/article/apis/mockCreateArticle';
+import { mockGetAllArticlesByKeywordByOffset } from '~/mocks/handlers/article/apis/mockGetAllArticlesByKeywordByOffset';
+import { mockGetAllArticlesByOffset } from '~/mocks/handlers/article/apis/mockGetAllArticlesByOffset';
 import { mockGetArticleCategories } from '~/mocks/handlers/article/apis/mockGetArticleCategories';
 import { mockGetArticleDetail } from '~/mocks/handlers/article/apis/mockGetArticleDetail';
 import { mockGetArticlesByKeywordByOffset } from '~/mocks/handlers/article/apis/mockGetArticlesByKeywordByOffset';
@@ -15,6 +17,8 @@ import { mockScrapArticle } from '~/mocks/handlers/article/apis/mockScrapArticle
 import { mockUpdateArticle } from '~/mocks/handlers/article/apis/mockUpdateArticle';
 
 export const articleHandlers = [
+  mockGetAllArticlesByOffset, // /posts/all/offset
+  mockGetAllArticlesByKeywordByOffset, // /posts/all/search/offset
   // mockGetMyArticlesByCursor,
   mockGetMyArticlesByOffset, // /posts/my/offset
 

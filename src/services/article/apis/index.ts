@@ -1,5 +1,6 @@
 export * from './constants';
 export * from './createArticle';
+export * from './getAllArticlesByOffset';
 export * from './getArticleCategories';
 export * from './getArticleDetail';
 export * from './getArticlesByCursor';

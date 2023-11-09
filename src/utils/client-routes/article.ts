@@ -4,6 +4,7 @@ import { validateSearchKeyword } from '~/services/common/utils/searchBar';
 import { createRoute } from '~/utils/client-routes/utils';
 
 const toSafeKeyword = (keyword?: string) => {
+  // FIXME: 문자열이 아니거나, 빈 문자열이라면 undefined로 만들기
   return isString(keyword) && validateSearchKeyword(keyword.trim())
     ? keyword
     : undefined;
@@ -77,6 +78,22 @@ const toSafeHotArticlesPageRouteQuery = (
   };
 };
 
+// ---------- article all ----------
+
+export type AllArticlesPageRouteQuery = {
+  keyword?: string;
+  page?: number;
+};
+
+const allArticlesPageRoute = (query: AllArticlesPageRouteQuery = {}) => {
+  const pathname = '/all-articles';
+
+  return createRoute<AllArticlesPageRouteQuery>(pathname)(
+    // note: 핫 게시글과 동일한 쿼리 파라미터 사용
+    toSafeHotArticlesPageRouteQuery(query)
+  );
+};
+
 // ---------- article detail ----------
 
 const articleDetailPageRoute = (articleId: number) => {
@@ -108,6 +125,7 @@ export const article = {
   self: articleSelfRoute,
   categories: articleCategoriesPageRoute,
   category: articlesPageRoute,
+  all: allArticlesPageRoute,
   hot: hotArticlesPageRoute,
   detail: articleDetailPageRoute,
   edit: articleEditPageRoute,
