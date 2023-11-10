@@ -11,3 +11,7 @@ export const range = (min: number, max: number) => {
     .fill(undefined)
     .map((_, index) => index + min);
 };
+
+export const deduplicate = <T extends unknown[]>(arr: T) => {
+  return [...new Set(arr)] as T;
+};
