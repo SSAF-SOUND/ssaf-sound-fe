@@ -1,13 +1,13 @@
 import type { ArticleSummary } from '~/services/article';
 
-import Image from 'next/image';
-
 import { css } from '@emotion/react';
 import { memo } from 'react';
 
+import articleCardImageFallback from '~/assets/images/lunch-image-fallback.png';
 import ArticleCardLink from '~/components/ArticleCard/ArticleCardLink';
 import CommentStat from '~/components/ArticleCard/CommentStat';
 import LikeStat from '~/components/ArticleCard/LikeStat';
+import { ImageWithFallback } from '~/components/Common/ImageWithFallback';
 import { Separator } from '~/components/Common/Separator';
 import { useStripHtml } from '~/hooks';
 import {
@@ -54,7 +54,8 @@ export const ArticleCard = memo((props: ArticleCardProps) => {
 
         {thumbnail && (
           <div css={flex('center', 'flex-start')}>
-            <Image
+            <ImageWithFallback
+              fallbackSrc={articleCardImageFallback.src}
               src={thumbnail}
               alt=""
               width={70}
