@@ -42,11 +42,13 @@ export const getAllArticlesByOffset = (
     keyword,
   } = params;
 
-  const endpoint = endpoints.articles.allListByOffset({ keyword });
+  const endpoint = endpoints.articles.allListByOffset({
+    keyword,
+  });
   const queryParams: GetAllArticlesByOffsetQueryParams = {
     page,
     size,
-    keyword,
+    keyword: keyword || undefined,
   };
 
   const axiosInstance = publicRequest ? publicAxios : privateAxios;
