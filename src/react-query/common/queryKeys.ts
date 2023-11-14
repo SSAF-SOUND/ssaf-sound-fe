@@ -55,7 +55,7 @@ export const queryKeys = {
     }) => [
       ...queryKeys.articles.allListBase(),
       'offset',
-      searchKeyword ?? null,
+      searchKeyword || null,
       page,
     ],
     listBase: () => ['articles', 'category'],
@@ -63,7 +63,7 @@ export const queryKeys = {
       ...queryKeys.articles.listBase(),
       categoryId,
       'cursor',
-      searchKeyword ?? null,
+      searchKeyword || null,
     ],
     listByOffset: ({
       categoryId,
@@ -77,14 +77,14 @@ export const queryKeys = {
       ...queryKeys.articles.listBase(),
       categoryId,
       'offset',
-      searchKeyword ?? null,
+      searchKeyword || null,
       page,
     ],
     hotBase: () => ['articles', 'hot'],
     hotByCursor: (searchKeyword?: string) => [
       ...queryKeys.articles.hotBase(),
       'cursor',
-      searchKeyword ?? null,
+      searchKeyword || null,
     ],
     hotByOffset: ({
       searchKeyword,
@@ -95,7 +95,7 @@ export const queryKeys = {
     }) => [
       ...queryKeys.articles.hotBase(),
       'offset',
-      searchKeyword ?? null,
+      searchKeyword || null,
       page,
     ],
     detail: (articleId: number) => ['articles', articleId],
