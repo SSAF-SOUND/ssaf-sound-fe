@@ -252,7 +252,6 @@ export const getServerSideProps: GetServerSideProps<
   const { keyword = '', page: unsafePage } = context.query as QueryParams;
 
   const safeKeyword = toSafeSearchKeyword({ keyword });
-  const hasKeyword = !!safeKeyword.length;
   const page = toSafePageValue(unsafePage);
 
   // note: 페이지 범위 서버에서 판단해야 한다고 생각함
@@ -262,7 +261,7 @@ export const getServerSideProps: GetServerSideProps<
 
   const queryClient = new QueryClient();
   const allArticleListQueryKey = queryKeys.articles.allListByOffset({
-    searchKeyword: hasKeyword ? safeKeyword : undefined,
+    searchKeyword: safeKeyword,
     page,
   });
 
