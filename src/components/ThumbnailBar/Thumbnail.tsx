@@ -24,7 +24,6 @@ const Thumbnail = (props: ThumbnailProps) => {
     src,
     alt,
     loading = false,
-    size = defaultSize,
     onClickThumbnail,
     onClickRemove,
     disableRemove = false,

@@ -12,7 +12,6 @@ import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Tabs } from '~/components/Common/Tabs';
 import { EmptyList } from '~/components/EmptyList';
-import { Footer } from '~/components/Footer';
 import { ProfileTabs } from '~/components/Profile';
 import { QueryItemList } from '~/components/QueryItemList';
 import {

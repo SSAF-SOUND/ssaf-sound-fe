@@ -9,7 +9,7 @@ import { ArticleIconButton } from '~/components/Article/ArticleIconButton';
 import { Separator } from '~/components/Common/Separator';
 import { useModal } from '~/components/GlobalModal';
 import Name from '~/components/Name';
-import { useRemoveArticle } from '~/services/article';
+import { useRemoveArticle } from '~/services/article/hooks';
 import { useCommonBottomMenuModal } from '~/services/common';
 import { useMyInfo } from '~/services/member';
 import { populateDefaultUserInfo } from '~/services/member/utils/popoulateDefaultUserInfo';
@@ -36,6 +36,7 @@ const ArticleHeader = (props: ArticleHeaderProps) => {
     postId: articleId,
     boardId: categoryId,
   } = articleDetail;
+  console.log(articleDetail)
   const { date, time } = formatDateTime(createdAt);
   const { mutateAsync: removeArticle } = useRemoveArticle(articleId);
   const { mutateAsync: reportArticle } = useReport();

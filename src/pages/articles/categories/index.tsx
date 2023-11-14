@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { css } from '@emotion/react';
 
 import { ArticleCategoryCard } from '~/components/ArticleCategoryCard';
+import { Button } from '~/components/Common/Button';
 import { PageHead } from '~/components/Common/PageHead';
 import { PageHeadingText } from '~/components/Common/PageHeadingText';
 import { Footer } from '~/components/Footer';
@@ -11,7 +12,7 @@ import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleCategories } from '~/services/article/apis';
 import { useArticleCategories } from '~/services/article/hooks';
-import { flex, fontCss, pageCss, palettes, topBarHeight } from '~/styles/utils';
+import { flex, pageCss, palettes, Theme, topBarHeight } from '~/styles/utils';
 import { globalMetaData } from '~/utils/metadata';
 import { routes } from '~/utils/routes';
 
@@ -38,13 +39,26 @@ const ArticleCategoriesPage = () => {
       <main css={selfCss}>
         <NavigationGroup />
 
-        <div css={hotArticlesPageLinkLayerCss}>
-          <Link
-            href={routes.article.hot()}
-            css={[hotArticlesPageLinkCss, { marginBottom: 56 }]}
+        <div css={extraLinkContainerCss}>
+          <Button
+            asChild
+            variant="literal"
+            css={{ color: palettes.primary.default }}
           >
-            Hot 게시글
-          </Link>
+            <Link css={extraLinkCss} href={routes.article.all()}>
+              전체 게시판
+            </Link>
+          </Button>
+          <Button
+            asChild
+            variant="literal"
+            theme={Theme.SECONDARY}
+            css={{ color: palettes.secondary.dark }}
+          >
+            <Link css={extraLinkCss} href={routes.article.hot()}>
+              HOT 게시판
+            </Link>
+          </Button>
         </div>
 
         <div css={categoriesCss}>
@@ -76,16 +90,12 @@ export default ArticleCategoriesPage;
 
 const selfCss = css({ padding: `${topBarHeight + 40}px 0` }, pageCss.minHeight);
 
-const hotArticlesPageLinkLayerCss = css(flex('center', 'flex-end', 'row'));
-
-const hotArticlesPageLinkCss = css(
-  {
-    color: palettes.secondary.dark,
-    '&:hover, &:focus-visible': { color: palettes.secondary.default },
-    '&:active': { color: palettes.secondary.dark },
-  },
-  fontCss.style.B16
+const extraLinkContainerCss = css(
+  { marginBottom: 56 },
+  flex('center', 'space-between', 'row')
 );
+
+const extraLinkCss = css({});
 
 const categoriesCss = css(flex('', '', 'column', 12));
 

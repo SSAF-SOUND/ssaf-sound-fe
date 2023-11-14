@@ -45,12 +45,25 @@ export const queryKeys = {
   },
   articles: {
     categories: () => ['articles', 'categories'],
+    allListBase: () => ['articles', 'all'],
+    allListByOffset: ({
+      searchKeyword,
+      page,
+    }: {
+      searchKeyword?: string;
+      page: number;
+    }) => [
+      ...queryKeys.articles.allListBase(),
+      'offset',
+      searchKeyword || null,
+      page,
+    ],
     listBase: () => ['articles', 'category'],
     listByCursor: (categoryId: number, searchKeyword?: string) => [
       ...queryKeys.articles.listBase(),
       categoryId,
       'cursor',
-      searchKeyword ?? null,
+      searchKeyword || null,
     ],
     listByOffset: ({
       categoryId,
@@ -64,14 +77,14 @@ export const queryKeys = {
       ...queryKeys.articles.listBase(),
       categoryId,
       'offset',
-      searchKeyword ?? null,
+      searchKeyword || null,
       page,
     ],
     hotBase: () => ['articles', 'hot'],
     hotByCursor: (searchKeyword?: string) => [
       ...queryKeys.articles.hotBase(),
       'cursor',
-      searchKeyword ?? null,
+      searchKeyword || null,
     ],
     hotByOffset: ({
       searchKeyword,
@@ -82,7 +95,7 @@ export const queryKeys = {
     }) => [
       ...queryKeys.articles.hotBase(),
       'offset',
-      searchKeyword ?? null,
+      searchKeyword || null,
       page,
     ],
     detail: (articleId: number) => ['articles', articleId],
@@ -221,6 +234,12 @@ export const endpoints = {
   },
   articles: {
     categories: () => '/boards' as const,
+    allListByOffset: (params: { keyword?: string } = {}) => {
+      const { keyword } = params;
+      return keyword
+        ? ('/posts/all/search/offset' as const)
+        : ('/posts/all/offset' as const);
+    },
     listByCursor: (params: { keyword?: string } = {}) => {
       const { keyword } = params;
       return keyword

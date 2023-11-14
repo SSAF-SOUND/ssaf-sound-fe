@@ -1,54 +1,66 @@
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { LinkProps } from 'next/link';
+import type { GetArticlesByOffsetApiData } from '~/services/article';
+
 import { css } from '@emotion/react';
 import Skeleton from 'react-loading-skeleton';
 
-import { HotArticlesPreviewArticleItem } from '~/components/HotArticlesPreview/HotArticlesPreviewArticleItem';
+import { ArticlesPreviewArticleItem } from '~/components/ArticlesPreview/ArticlesPreviewArticleItem';
 import { PreviewErrorCard } from '~/components/PreviewErrorCard';
 import TitleBar from '~/components/TitleBar';
-import { useHotArticlesByOffset } from '~/services/article/hooks';
 import { flex, palettes } from '~/styles/utils';
-import { routes } from '~/utils/routes';
 
-export interface HotArticlesPreviewProps {
+export interface ArticlesPreviewProps {
   className?: string;
+  articlesQuery: UseQueryResult<GetArticlesByOffsetApiData['data']>;
+  title: string;
+  moreLinkRoute: LinkProps['href'];
+  maxViewCount?: number;
 }
 
-export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
-  const { className } = props;
+export const ArticlesPreview = (props: ArticlesPreviewProps) => {
   const {
-    data: hotArticles,
-    isLoading: isHotArticlesLoading,
-    isError: isHotArticlesError,
-    isSuccess: isHotArticlesSuccess,
-  } = useHotArticlesByOffset();
+    className,
+    articlesQuery,
+    title,
+    moreLinkRoute,
+    maxViewCount = 5,
+  } = props;
 
-  const maxViewCount = 5;
-  const latestHotArticles = hotArticles?.posts.slice(0, maxViewCount);
+  const {
+    data: articles,
+    isLoading: isArticlesLoading,
+    isError: isArticlesError,
+    isSuccess: isArticlesSuccess,
+  } = articlesQuery;
+
+  const latestHotArticles = articles?.posts.slice(0, maxViewCount);
   const notExistHotArticles = latestHotArticles?.length === 0;
 
   return (
     <div className={className}>
       <TitleBar.Preview
-        title="HOT 게시글"
-        moreLinkRoute={routes.article.hot()}
+        title={title}
+        moreLinkRoute={moreLinkRoute}
         css={{ marginBottom: 16 }}
       />
 
       <div css={articlesContainerCss}>
-        {isHotArticlesLoading && <HotArticlesPreviewSkeleton />}
+        {isArticlesLoading && <ArticlesPreviewSkeleton />}
 
-        {isHotArticlesError && (
+        {isArticlesError && (
           <PreviewErrorCard
             css={{ height: 200 }}
             errorMessage={`핫 게시글 목록을 불러오는 중 오류가 발생했습니다`}
           />
         )}
 
-        {isHotArticlesSuccess &&
+        {isArticlesSuccess &&
           (notExistHotArticles ? (
             <NotExistHotArticles />
           ) : (
             latestHotArticles?.map((article) => (
-              <HotArticlesPreviewArticleItem
+              <ArticlesPreviewArticleItem
                 key={article.postId}
                 article={article}
               />
@@ -61,7 +73,7 @@ export const HotArticlesPreview = (props: HotArticlesPreviewProps) => {
 
 const articlesContainerCss = css(flex('', '', 'column'));
 
-const HotArticlesPreviewSkeleton = () => {
+const ArticlesPreviewSkeleton = () => {
   const skeletonCount = 5;
   return (
     <Skeleton

@@ -13,13 +13,7 @@ import { Footer } from '~/components/Footer';
 import { Alert } from '~/components/ModalContent';
 import TitleBar from '~/components/TitleBar';
 import { useDeleteAccount } from '~/services/auth';
-import {
-  flex,
-  fontCss,
-  pageCss,
-  pageMinHeight,
-  titleBarHeight,
-} from '~/styles/utils';
+import { flex, fontCss, pageCss, titleBarHeight } from '~/styles/utils';
 import {
   createAuthGuard,
   createNoIndexPageMetaData,

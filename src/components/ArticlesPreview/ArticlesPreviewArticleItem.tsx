@@ -9,12 +9,12 @@ import { Icon } from '~/components/Common/Icon';
 import { expandCss, flex, fontCss, lineClamp, palettes } from '~/styles/utils';
 import { routes } from '~/utils';
 
-export interface HotArticlesPreviewArticleItemProps {
+export interface ArticlesPreviewArticleItemProps {
   article: ArticleSummary;
 }
 
-export const HotArticlesPreviewArticleItem = (
-  props: HotArticlesPreviewArticleItemProps
+export const ArticlesPreviewArticleItem = (
+  props: ArticlesPreviewArticleItemProps
 ) => {
   const { article } = props;
   const { boardTitle, title, likeCount, commentCount, postId } = article;
