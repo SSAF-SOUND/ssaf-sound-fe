@@ -1,5 +1,3 @@
-import type { CSSProperties } from 'react';
-
 import NextNProgress from 'nextjs-progressbar';
 
 import { palettes, zIndex } from '~/styles/utils';

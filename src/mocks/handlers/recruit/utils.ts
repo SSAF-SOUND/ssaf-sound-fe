@@ -5,7 +5,6 @@ import type {
   GetRecruitsByOffsetApiData,
 } from '~/services/recruit';
 
-import { articleSummaries } from '~/mocks/handlers/article/data';
 import {
   appliedProjectRecruitSummaries,
   appliedStudyRecruitSummaries,
@@ -13,10 +12,7 @@ import {
   studyRecruitSummaries,
 } from '~/mocks/handlers/recruit/data';
 import { mockSuccess } from '~/mocks/utils';
-import {
-  defaultArticlesPageKey,
-  GetArticlesByOffsetApiData,
-} from '~/services/article';
+import { defaultArticlesPageKey } from '~/services/article';
 import { RecruitCategoryName } from '~/services/recruit';
 
 const infiniteRecruitsHandler = () => {

@@ -20,7 +20,7 @@ import { Recruit } from '~/components/Recruit/Recruit';
 import RedirectionGuide from '~/components/RedirectionGuide';
 import TitleBar from '~/components/TitleBar';
 import { queryKeys } from '~/react-query/common';
-import { dehydrate, prefetch } from '~/react-query/server';
+import { dehydrate } from '~/react-query/server';
 import { useMyInfo } from '~/services/member';
 import {
   getDisplayCategoryName,

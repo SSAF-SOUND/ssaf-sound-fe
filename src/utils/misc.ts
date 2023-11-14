@@ -1,4 +1,4 @@
-// eslint-disable-next-line
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type Noop = (...args: any[]) => any;
 export const noop: Noop = () => {};
 

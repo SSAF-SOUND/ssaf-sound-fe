@@ -28,7 +28,6 @@ import {
   useRecruitDetail,
 } from '~/services/recruit';
 import {
-  fixTopCenter,
   flex,
   fontCss,
   pageCss,

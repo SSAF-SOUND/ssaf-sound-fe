@@ -12,14 +12,7 @@ import { queryKeys } from '~/react-query/common';
 import { prefetch } from '~/react-query/server';
 import { getArticleCategories } from '~/services/article/apis';
 import { useArticleCategories } from '~/services/article/hooks';
-import {
-  flex,
-  fontCss,
-  pageCss,
-  palettes,
-  Theme,
-  topBarHeight,
-} from '~/styles/utils';
+import { flex, pageCss, palettes, Theme, topBarHeight } from '~/styles/utils';
 import { globalMetaData } from '~/utils/metadata';
 import { routes } from '~/utils/routes';
 

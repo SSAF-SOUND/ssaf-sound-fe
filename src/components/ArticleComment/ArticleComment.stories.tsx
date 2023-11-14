@@ -51,7 +51,6 @@ const CommentStoryComponent = (props: {
 }) => {
   const {
     mine = false,
-    isSignedIn = false,
     isDeletedUserInfo,
     anonymous = false,
     content = commentDetails[0].content,
