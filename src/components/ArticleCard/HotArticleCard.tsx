@@ -110,6 +110,7 @@ const statsCss = css(flex('center', '', 'row', 8));
 const metaCss = css(fontCss.style.B14, flex('center', '', 'row', 8));
 
 const thumbnailCss = css({
+  objectFit: 'cover',
   borderRadius: 12,
   border: `1px solid ${palettes.font.blueGrey}`,
 });
