@@ -106,6 +106,7 @@ const separatorCss = css({
 });
 
 const thumbnailCss = css({
+  objectFit: 'cover',
   borderRadius: 12,
   border: `1px solid ${palettes.font.blueGrey}`,
 });
