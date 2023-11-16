@@ -34,7 +34,9 @@ const ArticleCreatePage: CustomNextPage = () => {
 
   const query = router.query as { categoryId: string };
   const { data: articleCategories } = useArticleCategories();
-  const categoryId = Number(query.categoryId);
+  const categoryId = Number(
+    query.categoryId ?? defaultArticleFormValues.category
+  );
 
   useUnloadReconfirmEffect();
 
