@@ -12,6 +12,8 @@ export interface LunchMenusPreviewMenuDescriptionProps {
   menu: LunchMenuDetail;
 }
 
+const imageSize = 110;
+
 export const LunchMenusPreviewMenuDescription = (
   props: LunchMenusPreviewMenuDescriptionProps
 ) => {
@@ -32,12 +34,13 @@ export const LunchMenusPreviewMenuDescription = (
             src={imagePath}
             fallbackSrc={lunchImageFallback.src}
             alt={mainMenu}
-            fill={true}
+            width={imageSize}
+            height={imageSize}
             priority={true}
           />
 
           <strong className={cn.mainMenu} css={mainMenuCss}>
-            {mainMenu}
+            {mainMenu}dd
           </strong>
         </div>
       </RadixToggle.Root>
@@ -57,8 +60,6 @@ const likeLayerCss = css(flex('center', '', 'row'), fontCss.style.B16);
 
 const imageContainerCss = css({
   position: 'relative',
-  width: 110,
-  height: 110,
   overflow: 'hidden',
   borderRadius: '50%',
   transition: 'background-color 200ms',
@@ -67,8 +68,6 @@ const imageContainerCss = css({
 const imageCss = css({
   display: 'block',
   objectFit: 'cover',
-  width: '100%',
-  height: '100%',
   transition: 'opacity 200ms',
   opacity: 1,
 });
@@ -78,11 +77,12 @@ const mainMenuCss = css(
     display: 'block',
     position: 'absolute',
     wordBreak: 'break-all',
-    width: '100%',
-    height: '100%',
     padding: 4,
     color: palettes.white,
     opacity: 0,
+    width: '100%',
+    height: '100%',
+    top: 0,
     transition: 'opacity 200ms',
     textAlign: 'center',
   },
