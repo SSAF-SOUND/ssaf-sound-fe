@@ -40,7 +40,7 @@ export const LunchMenusPreviewMenuDescription = (
           />
 
           <strong className={cn.mainMenu} css={mainMenuCss}>
-            {mainMenu}dd
+            {mainMenu}
           </strong>
         </div>
       </RadixToggle.Root>
