@@ -16,7 +16,7 @@ export interface ViewerMainProps {
 const ViewerMain = (props: ViewerMainProps) => {
   const { src, alt = '' } = props;
   const [minScale, setMinScale] = useState(0.1);
-  const maxScale = 2;
+  const maxScale = minScale + 2;
   const scaleStep = 0.4;
 
   const onResizeWindow = useCallback((scale: number) => setMinScale(scale), []);
