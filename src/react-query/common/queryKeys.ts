@@ -394,4 +394,10 @@ export const endpoints = {
     error: () => `/lunch/error` as const,
   },
   report: () => '/report' as const,
+  notification: {
+    self: () => '/notification' as const,
+    hasNew: () => `${endpoints.notification.self()}/new` as const,
+    listByCursor: () => `${endpoints.notification.self()}/cursor` as const,
+    listByOffset: () => `${endpoints.notification.self()}/offset` as const,
+  },
 };
