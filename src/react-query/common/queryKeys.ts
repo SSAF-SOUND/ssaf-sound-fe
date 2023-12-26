@@ -220,6 +220,16 @@ export const queryKeys = {
       dateSpecifier: LunchDateSpecifier;
     }) => [...queryKeys.lunch.self(), campus, dateSpecifier],
   },
+  notification: {
+    self: () => [...queryKeys.auth(), 'notification'],
+    hasNew: () => [...queryKeys.notification.self(), 'hasNew'],
+    listByCursor: () => [...queryKeys.notification.self(), 'cursor'],
+    listByOffset: ({ page }: { page: number }) => [
+      ...queryKeys.notification.self(),
+      'offset',
+      page,
+    ],
+  },
 };
 
 export const endpoints = {
