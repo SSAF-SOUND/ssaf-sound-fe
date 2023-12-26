@@ -19,7 +19,14 @@ import {
   useHasNewNotifications,
   useResetNotificationsByCursor,
 } from '~/services/notifications';
-import { colorMix, flex, fontCss, palettes, Theme } from '~/styles/utils';
+import {
+  colorMix,
+  flex,
+  fontCss,
+  inlineFlex,
+  palettes,
+  Theme,
+} from '~/styles/utils';
 import { routes, toMs } from '~/utils';
 
 export const NotificationPopover = () => {
@@ -176,22 +183,23 @@ const notificationsRefreshButtonSelfCss = css([
 
 const NotificationPageLink = () => {
   return (
-    <Link
-      href={routes.notification.self()}
-      css={[
-        fontCss.style.B14,
-        flex('center', 'right', 'row'),
-        {
-          marginBottom: 24,
-          padding: '0 16px',
-          color: palettes.primary.default,
-          textDecoration: 'underline',
-        },
-      ]}
-    >
-      알림 목록 페이지로
-      <Icon name="chevron.right" size={16} />
-    </Link>
+    <div css={flex('center', 'flex-end', 'row')}>
+      <Link
+        href={routes.notification.self()}
+        css={[
+          fontCss.style.B14,
+          {
+            marginBottom: 24,
+            padding: '0 16px',
+            color: palettes.primary.default,
+            textDecoration: 'underline',
+          },
+        ]}
+      >
+        알림 목록 페이지로
+        <Icon name="chevron.right" size={16} />
+      </Link>
+    </div>
   );
 };
 interface NotificationsLayerProps {
