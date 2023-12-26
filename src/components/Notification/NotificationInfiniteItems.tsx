@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, PropsWithChildren } from 'react';
 
+import { css } from '@emotion/react';
 import { useEffect, forwardRef } from 'react';
 
 import { InfiniteList } from '~/components/InfiniteList';
@@ -11,7 +12,7 @@ import {
   useNotificationsByCursor,
   useResetNotificationsByCursor,
 } from '~/services/notifications';
-import { flex } from '~/styles/utils';
+import { flex, fontCss, position } from '~/styles/utils';
 import { concat } from '~/utils';
 
 interface NotificationItemsProps {
@@ -47,7 +48,7 @@ export const NotificationInfiniteItems = (props: NotificationItemsProps) => {
       skeletonGap={6}
       itemContent={(index, data) => <NotificationItem notification={data} />}
       List={NotificationList}
-      emptyElement={<>Empty</>}
+      emptyElement={EmptyNotification}
       customScrollParent={scrollParent}
     />
   );
@@ -61,3 +62,11 @@ const NotificationList = forwardRef<
 });
 
 NotificationList.displayName = 'NotificationList';
+
+const emptyNotificationSelfCss = css([
+  fontCss.style.B14,
+  position.xy('center', 'center', 'absolute'),
+]);
+const EmptyNotification = (
+  <div css={emptyNotificationSelfCss}>알림이 없습니다</div>
+);
