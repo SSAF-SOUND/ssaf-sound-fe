@@ -3,28 +3,25 @@ import type { PopoverContentProps } from '@radix-ui/react-popover';
 import { css, keyframes } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
 import { atom, useAtom } from 'jotai';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Dot } from '~/components/Common/Dot';
 import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
 import { Scroll } from '~/components/Common/Scroll';
-import { SsafyIcon } from '~/components/Common/SsafyIcon';
+import { NotificationInfiniteItems } from '~/components/Notification/NotificationInfiniteItems';
 import {
-  useCheckNewNotifications,
   useHasNewNotifications,
+  useResetNotificationsByCursor,
 } from '~/services/notifications';
-import {
-  colorMix,
-  flex,
-  fontCss,
-  lineClamp,
-  palettes,
-  Theme,
-} from '~/styles/utils';
+import { colorMix, flex, fontCss, palettes, Theme } from '~/styles/utils';
 import { toMs } from '~/utils';
 
 const openAtom = atom(false);
+
+// hasNewNotifications Query Data를 미러링
+// -> setQueryData로 수동 업데이트하면, refetchInterval이 초기화되기 때문에
+const readMarkAtom = atom(false);
 
 const usePopoverOpen = () => {
   const [open, setOpen] = useAtom(openAtom);
@@ -34,19 +31,37 @@ const usePopoverOpen = () => {
   const togglePopover = useCallback(() => setOpen((o) => !o), [setOpen]);
   return { open, openPopover, closePopover, togglePopover, setOpen };
 };
+const useReadMark = () => {
+  const [readMark, setReadMark] = useAtom(readMarkAtom);
+
+  const markAsRead = () => setReadMark(true);
+  const markAsUnread = () => setReadMark(false);
+  const setUnreadMark = useCallback(
+    (v: boolean) => setReadMark(!v),
+    [setReadMark]
+  );
+
+  return {
+    unread: !readMark,
+    markAsRead,
+    markAsUnread,
+    setReadMark,
+    setUnreadMark,
+  };
+};
 
 export const NotificationPopover = () => {
   const { closePopover, togglePopover, open } = usePopoverOpen();
 
   const triggerClassName = 'notification-trigger';
-  const { data: hasNewNotifications } = useHasNewNotifications({
+  const { data: hasNewNotifications, isRefetching } = useHasNewNotifications({
     refetchInterval: toMs(10),
   });
-  const checkNewNotifications = useCheckNewNotifications();
-
+  const { unread, setUnreadMark, markAsRead } = useReadMark();
   const ref = useRef<HTMLButtonElement>(null);
-  const showNotificationRefreshButton = hasNewNotifications && open;
-  const showHasNewNotificationsMark = hasNewNotifications && !open;
+
+  const showNotificationRefreshButton = open && unread;
+  const showUnreadMark = !open && unread;
 
   const onPointerDownOutsideContent: PopoverContentProps['onPointerDownOutside'] =
     (e) => {
@@ -58,12 +73,19 @@ export const NotificationPopover = () => {
   const handleClickTrigger = () => {
     togglePopover();
     if (!open) {
-      checkNewNotifications();
+      markAsRead();
     }
   };
 
+  useEffect(() => {
+    // refetching = true -> false (== refetching이 완료되었을 때)
+    if (!isRefetching) {
+      setUnreadMark(hasNewNotifications ?? false);
+    }
+  }, [isRefetching, hasNewNotifications, setUnreadMark]);
+
   return (
-    <Popover.Root open={true}>
+    <Popover.Root open={open}>
       <Popover.Trigger
         asChild
         className={triggerClassName}
@@ -71,7 +93,7 @@ export const NotificationPopover = () => {
       >
         <IconButton size={32} ref={ref} css={{ position: 'relative' }}>
           <Icon name="notification" size={28} />
-          {showHasNewNotificationsMark && (
+          {showUnreadMark && (
             <Dot
               theme={Theme.SECONDARY}
               css={{ position: 'absolute', right: 1, top: 1 }}
@@ -89,33 +111,9 @@ export const NotificationPopover = () => {
         onPointerDownOutside={onPointerDownOutsideContent}
       >
         <Scroll.Root>
-          <Scroll.Viewport css={viewportCss}>
-            <div
-              css={[
-                fontCss.style.B14,
-                flex('center', 'right', 'row'),
-                {
-                  marginBottom: 24,
-                  padding: '0 16px',
-                  color: palettes.primary.default,
-                  textDecoration: 'underline',
-                },
-              ]}
-            >
-              알림 목록 페이지로
-              <Icon name="chevron.right" size={16} />
-            </div>
-            <div css={flex('', '', 'column', 6)}>
-              <NotificationItem message="아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서" />
-              <NotificationItem message="아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서" />
-              <NotificationItem message="아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서" />
-              <NotificationItem message="아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서" />
-              <NotificationItem message="아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서" />
-              <NotificationItem message="아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서아니오늘 싸피에서" />
-            </div>
-          </Scroll.Viewport>
-
-          {showNotificationRefreshButton && <NotificationsRefreshButton />}
+          <NotificationsLayer
+            showNotificationsRefreshButton={showNotificationRefreshButton}
+          />
 
           <Scroll.Bar
             css={{
@@ -171,54 +169,16 @@ const viewportCss = css({
   transition: 'padding 500ms',
 });
 
-interface NotificationItem {
-  message: string;
+interface NotificationsRefreshButtonProps {
+  handleReset: () => void;
 }
-const NotificationItem = (props: NotificationItem) => {
-  const { message } = props;
 
-  return (
-    <div css={notificationItemSelfCss}>
-      <div css={notificationMessageCss}>
-        <SsafyIcon.LogoCharacter
-          size={20}
-          css={{ position: 'relative', bottom: -4, marginRight: 6 }}
-        />
-        {message.repeat(10)}
-      </div>
-      <Icon name="chevron.right" size={24} />
-    </div>
-  );
-};
-
-const notificationItemSelfCss = css([
-  flex('center', 'center', 'row', 8),
-  {
-    padding: '10px 16px 10px 20px',
-    height: 96,
-    transition: 'background 200ms',
-    cursor: 'pointer',
-    background: colorMix(
-      '50%',
-      palettes.background.grey,
-      palettes.background.default
-    ),
-    '&:hover': {
-      background: palettes.primary.darkest,
-    },
-  },
-]);
-const notificationMessageCss = css([
-  fontCss.style.B14,
-  { wordBreak: 'break-word' },
-  lineClamp(3),
-]);
-
-const NotificationsRefreshButton = () => {
+const NotificationsRefreshButton = (props: NotificationsRefreshButtonProps) => {
+  const { handleReset } = props;
   return (
     <button
       type="button"
-      onClick={() => {}}
+      onClick={handleReset}
       css={notificationsRefreshButtonSelfCss}
     >
       <Icon name="refresh" size={20} />
@@ -227,7 +187,7 @@ const NotificationsRefreshButton = () => {
   );
 };
 
-const a = keyframes`
+const fadeIn = keyframes`
   from {
     opacity: 0;
   }
@@ -241,8 +201,10 @@ const notificationsRefreshButtonSelfCss = css([
   flex('center', '', 'row', 8),
   {
     transition: 'background 200ms',
-    background: palettes.majorDark,
+    background: colorMix('50%', palettes.majorDark, palettes.major),
     color: palettes.font.default,
+    borderLeft: 0,
+    borderRight: 0,
     position: 'absolute',
     top: 10,
     left: 1,
@@ -250,10 +212,61 @@ const notificationsRefreshButtonSelfCss = css([
     overflow: 'hidden',
     width: 'calc(100% - 2px)',
     padding: '0 10px',
-    animation: `${a} 500ms ease-in`,
+    animation: `${fadeIn} 500ms ease-in`,
     cursor: 'pointer',
     '&:active': {
       background: palettes.major,
     },
   },
 ]);
+
+const NotificationPageLink = () => {
+  return (
+    <div
+      css={[
+        fontCss.style.B14,
+        flex('center', 'right', 'row'),
+        {
+          marginBottom: 24,
+          padding: '0 16px',
+          color: palettes.primary.default,
+          textDecoration: 'underline',
+        },
+      ]}
+    >
+      알림 목록 페이지로
+      <Icon name="chevron.right" size={16} />
+    </div>
+  );
+};
+interface NotificationsLayerProps {
+  showNotificationsRefreshButton?: boolean;
+}
+const NotificationsLayer = (props: NotificationsLayerProps) => {
+  const { showNotificationsRefreshButton = false } = props;
+  const [scrollParent, setScrollParent] = useState<HTMLDivElement | null>(null);
+  const { markAsRead } = useReadMark();
+  const reset = useResetNotificationsByCursor();
+
+  const onClickReset = () => {
+    if (scrollParent) {
+      scrollParent.scrollTop = 0;
+    }
+    reset();
+    markAsRead();
+  };
+
+  return (
+    <>
+      <Scroll.Viewport ref={setScrollParent} css={viewportCss}>
+        <NotificationPageLink />
+        {scrollParent && (
+          <NotificationInfiniteItems scrollParent={scrollParent} />
+        )}
+      </Scroll.Viewport>
+      {showNotificationsRefreshButton && (
+        <NotificationsRefreshButton handleReset={onClickReset} />
+      )}
+    </>
+  );
+};
