@@ -2,13 +2,16 @@ import type { PopoverContentProps } from '@radix-ui/react-popover';
 
 import { css, keyframes } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
-import { atom, useAtom } from 'jotai';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Dot } from '~/components/Common/Dot';
 import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
 import { Scroll } from '~/components/Common/Scroll';
+import {
+  useNotificationPopoverOpen,
+  useNotificationReadMark,
+} from '~/components/Notification/atoms';
 import { NotificationInfiniteItems } from '~/components/Notification/NotificationInfiniteItems';
 import {
   useHasNewNotifications,
@@ -17,47 +20,14 @@ import {
 import { colorMix, flex, fontCss, palettes, Theme } from '~/styles/utils';
 import { toMs } from '~/utils';
 
-const openAtom = atom(false);
-
-// hasNewNotifications Query Data를 미러링
-// -> setQueryData로 수동 업데이트하면, refetchInterval이 초기화되기 때문에
-const readMarkAtom = atom(false);
-
-const usePopoverOpen = () => {
-  const [open, setOpen] = useAtom(openAtom);
-
-  const openPopover = useCallback(() => setOpen(true), [setOpen]);
-  const closePopover = useCallback(() => setOpen(false), [setOpen]);
-  const togglePopover = useCallback(() => setOpen((o) => !o), [setOpen]);
-  return { open, openPopover, closePopover, togglePopover, setOpen };
-};
-const useReadMark = () => {
-  const [readMark, setReadMark] = useAtom(readMarkAtom);
-
-  const markAsRead = () => setReadMark(true);
-  const markAsUnread = () => setReadMark(false);
-  const setUnreadMark = useCallback(
-    (v: boolean) => setReadMark(!v),
-    [setReadMark]
-  );
-
-  return {
-    unread: !readMark,
-    markAsRead,
-    markAsUnread,
-    setReadMark,
-    setUnreadMark,
-  };
-};
-
 export const NotificationPopover = () => {
-  const { closePopover, togglePopover, open } = usePopoverOpen();
+  const { closePopover, togglePopover, open } = useNotificationPopoverOpen();
 
   const triggerClassName = 'notification-trigger';
   const { data: hasNewNotifications, isRefetching } = useHasNewNotifications({
     refetchInterval: toMs(10),
   });
-  const { unread, setUnreadMark, markAsRead } = useReadMark();
+  const { unread, setUnreadMark, markAsRead } = useNotificationReadMark();
   const ref = useRef<HTMLButtonElement>(null);
 
   const showNotificationRefreshButton = open && unread;
@@ -83,6 +53,10 @@ export const NotificationPopover = () => {
       setUnreadMark(hasNewNotifications ?? false);
     }
   }, [isRefetching, hasNewNotifications, setUnreadMark]);
+
+  useEffect(() => {
+    return () => closePopover();
+  }, [closePopover]);
 
   return (
     <Popover.Root open={open}>
@@ -223,7 +197,7 @@ interface NotificationsLayerProps {
 const NotificationsLayer = (props: NotificationsLayerProps) => {
   const { showNotificationsRefreshButton = false } = props;
   const [scrollParent, setScrollParent] = useState<HTMLDivElement | null>(null);
-  const { markAsRead } = useReadMark();
+  const { markAsRead } = useNotificationReadMark();
   const reset = useResetNotificationsByCursor();
 
   const onClickReset = () => {
