@@ -40,28 +40,38 @@ const getLink: GetLinkPath = (params) => {
 
 export interface NotificationItem {
   notification: NotificationDetail;
+  className?: string;
+  maxLine?: number;
 }
 export const NotificationItem = memo((props: NotificationItem) => {
-  const { notification } = props;
+  const { notification, maxLine = 3, ...restProps } = props;
   const { message, serviceType, read, contentId } = notification;
   const link = getLink({ serviceCategory: serviceType, id: contentId });
   const hasLink = !!link;
   const messageNode = (
-    <NotificationMessage read={read} message={message} hasLink={!!link} />
+    <NotificationMessage
+      read={read}
+      message={message}
+      hasLink={!!link}
+      maxLine={maxLine}
+    />
   );
 
   return hasLink ? (
-    <Link href={link} css={[selfCss, linkItemCss]}>
+    <Link href={link} css={[selfCss, linkItemCss]} {...restProps}>
       {messageNode}
     </Link>
   ) : (
-    <div css={selfCss}>{messageNode}</div>
+    <div css={selfCss} {...restProps}>
+      {messageNode}
+    </div>
   );
 });
 NotificationItem.displayName = 'NotificationItem';
 
 const itemHeight = 86;
 const selfCss = css([
+  fontCss.style.B14,
   flex('center', 'center', 'row', 8),
   {
     position: 'relative',
@@ -79,12 +89,13 @@ const linkItemCss = css({
   },
 });
 
-export const NotificationItemSkeleton = () => {
+export const NotificationItemSkeleton = (props: { className?: string }) => {
   return (
     <Skeleton
       css={[{ height: itemHeight, zIndex: 0, gap: 0 }]}
       baseColor={palettes.background.grey}
       enableAnimation={false}
+      {...props}
     />
   );
 };
@@ -93,9 +104,10 @@ interface NotificationMessageProps {
   read: boolean;
   message: string;
   hasLink?: boolean;
+  maxLine: number;
 }
 const NotificationMessage = memo((props: NotificationMessageProps) => {
-  const { read, message, hasLink = false } = props;
+  const { read, message, hasLink = false, maxLine } = props;
   return (
     <>
       {!read && (
@@ -104,7 +116,7 @@ const NotificationMessage = memo((props: NotificationMessageProps) => {
           css={{ position: 'absolute', left: 6, top: 12 }}
         />
       )}
-      <div css={messageCss}>
+      <div css={[messageCss, lineClamp(maxLine)]}>
         <SsafyIcon.LogoCharacter
           size={20}
           css={{ position: 'relative', bottom: -4, marginRight: 6 }}
@@ -117,8 +129,4 @@ const NotificationMessage = memo((props: NotificationMessageProps) => {
 });
 NotificationMessage.displayName = 'NotificationMessage';
 
-const messageCss = css([
-  fontCss.style.B14,
-  { wordBreak: 'break-all' },
-  lineClamp(3),
-]);
+const messageCss = css({ wordBreak: 'break-all' });

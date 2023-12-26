@@ -1,5 +1,7 @@
 import type { PopoverContentProps } from '@radix-ui/react-popover';
 
+import Link from 'next/link';
+
 import { css, keyframes } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
 import { useEffect, useRef, useState } from 'react';
@@ -18,7 +20,7 @@ import {
   useResetNotificationsByCursor,
 } from '~/services/notifications';
 import { colorMix, flex, fontCss, palettes, Theme } from '~/styles/utils';
-import { toMs } from '~/utils';
+import { routes, toMs } from '~/utils';
 
 export const NotificationPopover = () => {
   const { closePopover, togglePopover, open } = useNotificationPopoverOpen();
@@ -174,7 +176,8 @@ const notificationsRefreshButtonSelfCss = css([
 
 const NotificationPageLink = () => {
   return (
-    <div
+    <Link
+      href={routes.notification.self()}
       css={[
         fontCss.style.B14,
         flex('center', 'right', 'row'),
@@ -188,7 +191,7 @@ const NotificationPageLink = () => {
     >
       알림 목록 페이지로
       <Icon name="chevron.right" size={16} />
-    </div>
+    </Link>
   );
 };
 interface NotificationsLayerProps {
