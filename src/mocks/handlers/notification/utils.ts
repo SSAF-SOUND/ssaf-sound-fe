@@ -5,6 +5,8 @@ import type {
   GetNotificationsByOffsetApiData,
 } from '~/services/notifications/apis';
 
+import arrayShuffle from 'array-shuffle';
+
 import { mockNotifications } from '~/mocks/handlers/notification/data';
 import { mockError, mockSuccess } from '~/mocks/utils';
 import { defaultNotificationsPageKey } from '~/services/notifications/apis';
@@ -47,7 +49,7 @@ const infiniteNotificationsHandler = (
     const nextCursor = isReachingEnd ? null : lastArticleSummary.notificationId;
 
     return res(
-      ctx.delay(500),
+      ctx.delay(0),
       ...mockSuccess<GetNotificationsByCursorApiData['data']>(ctx, {
         notifications: data,
         cursor: nextCursor,
@@ -67,9 +69,11 @@ export const paginatedNotificationsHandler = (
     const page = Number.isNaN(unsafePage) ? 1 : unsafePage;
 
     return res(
-      ctx.delay(0),
+      ctx.delay(500),
       ...mockSuccess<GetNotificationsByOffsetApiData['data']>(ctx, {
-        notifications: empty ? [] : mockNotifications.slice(0, 20),
+        notifications: empty
+          ? []
+          : arrayShuffle(mockNotifications.slice(0, 20)),
         currentPage: page,
         totalPageCount,
       })

@@ -24,7 +24,7 @@ export const createMockNotification = (
   } = options;
   return {
     notificationId: id,
-    message: '아니오늘 싸피에서'.repeat(4),
+    message: faker.lorem.lines(2),
     contentId,
     serviceType: serviceCategory,
     notificationType: notificationCategory,
