@@ -116,7 +116,7 @@ export const InfiniteList = <T,>(props: InfiniteListProps<T>) => {
   return (
     <>
       <Virtuoso
-        css={virtuosoCss}
+        css={{ marginBottom: skeletonGap }}
         className={className}
         useWindowScroll={useWindowScroll}
         data={data}
@@ -166,7 +166,6 @@ const Skeletons = memo((props: SkeletonsProps) => {
 Skeletons.displayName = 'Skeleton';
 
 const itemGap = 16;
-const virtuosoCss = css({ marginBottom: itemGap });
 const listCss = css(flex('', '', 'column', itemGap));
 const skeletonsCss = (gap: number) =>
   css({ marginBottom: gap }, flex('', '', 'column', gap));
