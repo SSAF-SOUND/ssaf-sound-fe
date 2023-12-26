@@ -18,5 +18,5 @@ export interface NotificationDetail {
   serviceType: NotificationServiceCategory;
   notificationType: NotificationCategory;
   read: boolean;
-  createAt: string;
+  createdAt: string;
 }

@@ -29,7 +29,7 @@ export const createMockNotification = (
     serviceType: serviceCategory,
     notificationType: notificationCategory,
     read,
-    createAt: faker.date.past().toISOString(),
+    createdAt: faker.date.past().toISOString(),
   };
 };
 
