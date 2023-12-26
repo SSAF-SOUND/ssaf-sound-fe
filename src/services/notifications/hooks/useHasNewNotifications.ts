@@ -24,7 +24,7 @@ export const useHasNewNotifications = (
 export const useCheckNewNotifications = () => {
   const queryClient = useQueryClient();
   const checkNewNotifications = () =>
-    queryClient.setQueryData<boolean>(queryKeys.notification.hasNew(), true);
+    queryClient.setQueryData<boolean>(queryKeys.notification.hasNew(), false);
 
   return checkNewNotifications;
 };
