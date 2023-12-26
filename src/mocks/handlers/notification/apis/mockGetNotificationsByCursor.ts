@@ -1,7 +1,9 @@
+import type { GetNotificationsByCursorApiData } from '~/services/notifications';
+
 import { rest } from 'msw';
 
 import { restInfiniteNotificationsSuccess } from '~/mocks/handlers/notification/utils';
-import { restError } from '~/mocks/utils';
+import { restError, restSuccess } from '~/mocks/utils';
 import { endpoints } from '~/react-query/common';
 import { API_URL, composeUrls } from '~/utils';
 
@@ -22,3 +24,13 @@ export const mockGetNotificationsByCursorError = restError(
     message: 'mockGetHasNewNotification Error',
   }
 );
+
+const emptyNotifications = {
+  notifications: [],
+  cursor: null,
+};
+export const mockGetEmptyNotificationsByCursor = restSuccess<
+  GetNotificationsByCursorApiData['data']
+>(mockGetNotificationsByCursorMethod, mockGetNotificationsByCursorEndpoint, {
+  data: emptyNotifications,
+});

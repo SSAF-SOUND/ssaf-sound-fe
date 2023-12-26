@@ -187,6 +187,7 @@ const NotificationPageLink = () => {
       <Link
         href={routes.notification.self()}
         css={[
+          flex('center', '', 'row'),
           fontCss.style.B14,
           {
             marginBottom: 24,
