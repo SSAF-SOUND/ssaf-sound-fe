@@ -7,7 +7,7 @@ import { API_URL, composeUrls } from '~/utils';
 const mockGetHasNewNotificationsMethod = 'get';
 const mockGetHasNewNotificationsEndpoint = composeUrls(
   API_URL,
-  endpoints.user.studentCertification()
+  endpoints.notification.hasNew()
 );
 
 export const mockGetHasNewNotifications = restSuccess<
