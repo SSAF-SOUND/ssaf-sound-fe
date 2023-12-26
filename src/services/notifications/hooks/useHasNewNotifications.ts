@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '~/react-query/common';
 import { getHasNewNotifications } from '~/services/notifications';
@@ -19,12 +19,4 @@ export const useHasNewNotifications = (
     refetchInterval,
     enabled,
   });
-};
-
-export const useCheckNewNotifications = () => {
-  const queryClient = useQueryClient();
-  const checkNewNotifications = () =>
-    queryClient.setQueryData<boolean>(queryKeys.notification.hasNew(), false);
-
-  return checkNewNotifications;
 };
