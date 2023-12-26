@@ -146,28 +146,6 @@ const contentCss = css({
     outline: 0,
   },
 });
-const viewportCss = css({
-  minWidth: 380,
-  maxWidth: 440,
-  width: '50vw',
-  minHeight: 500,
-  maxHeight: 700,
-  height: '50vh',
-  background: colorMix(
-    '90%',
-    palettes.background.default,
-    palettes.background.grey
-  ),
-  position: 'relative',
-  color: palettes.font.default,
-  animation: `${scaleIn} 0.2s ease-in-out`,
-  boxShadow: '10px 10px 20px #272b32, -10px -10px 40px #353a44',
-  overscrollBehavior: 'contain',
-  padding: '60px 0',
-  borderRadius: 12,
-  border: `1px solid ${palettes.font.blueGrey}`,
-  transition: 'padding 500ms',
-});
 
 interface NotificationsRefreshButtonProps {
   handleReset: () => void;
@@ -270,3 +248,26 @@ const NotificationsLayer = (props: NotificationsLayerProps) => {
     </>
   );
 };
+
+const viewportCss = css({
+  minWidth: 380,
+  maxWidth: 440,
+  width: '50vw',
+  minHeight: 500,
+  maxHeight: 700,
+  height: '50vh',
+  background: colorMix(
+    '80%',
+    palettes.background.default,
+    palettes.background.grey
+  ),
+  position: 'relative',
+  color: palettes.font.default,
+  animation: `${scaleIn} 0.2s ease-in-out`,
+  boxShadow: '10px 10px 20px #272b32, -10px -10px 40px #353a44',
+  overscrollBehavior: 'contain',
+  padding: '60px 0',
+  borderRadius: 12,
+  border: `1px solid ${palettes.font.blueGrey}`,
+  transition: 'padding 500ms',
+});
