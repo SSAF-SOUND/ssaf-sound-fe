@@ -22,6 +22,7 @@ import {
   palettes,
   Theme,
 } from '~/styles/utils';
+import { toMs } from '~/utils';
 
 const openAtom = atom(false);
 
@@ -39,7 +40,7 @@ export const NotificationPopover = () => {
 
   const triggerClassName = 'notification-trigger';
   const { data: hasNewNotifications } = useHasNewNotifications({
-    refetchInterval: 1000,
+    refetchInterval: toMs(10),
   });
   const checkNewNotifications = useCheckNewNotifications();
 
@@ -70,7 +71,7 @@ export const NotificationPopover = () => {
       >
         <IconButton size={32} ref={ref} css={{ position: 'relative' }}>
           <Icon name="notification" size={28} />
-          {!showHasNewNotificationsMark && (
+          {showHasNewNotificationsMark && (
             <Dot
               theme={Theme.SECONDARY}
               css={{ position: 'absolute', right: 1, top: 1 }}
