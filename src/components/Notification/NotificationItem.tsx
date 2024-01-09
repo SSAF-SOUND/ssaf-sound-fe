@@ -121,7 +121,7 @@ const NotificationMessage = memo((props: NotificationMessageProps) => {
           size={20}
           css={{ position: 'relative', bottom: -4, marginRight: 6 }}
         />
-        {message.repeat(3)}
+        {message}
       </div>
       {hasLink && <Icon name="chevron.right" size={24} />}
     </>
