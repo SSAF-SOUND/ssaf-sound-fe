@@ -72,7 +72,7 @@ NotificationItem.displayName = 'NotificationItem';
 const itemHeight = 86;
 const selfCss = css([
   fontCss.style.B14,
-  flex('center', 'center', 'row', 8),
+  flex('center', 'space-between', 'row', 8),
   {
     position: 'relative',
     padding: '8px 16px 8px 20px',
@@ -129,4 +129,4 @@ const NotificationMessage = memo((props: NotificationMessageProps) => {
 });
 NotificationMessage.displayName = 'NotificationMessage';
 
-const messageCss = css({ wordBreak: 'break-all' });
+const messageCss = css([{ wordBreak: 'break-all' }]);
