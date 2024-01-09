@@ -15,6 +15,7 @@ import {
   lunchHandlers,
   recruitHandlers,
   reportHandlers,
+  notificationHandlers,
 } from '../src/mocks/handlers';
 import { palettes } from '../src/styles/utils';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -63,6 +64,7 @@ const preview: Preview = {
         lunch: lunchHandlers,
         recruit: recruitHandlers,
         report: reportHandlers,
+        notification: notificationHandlers,
       },
     },
   },

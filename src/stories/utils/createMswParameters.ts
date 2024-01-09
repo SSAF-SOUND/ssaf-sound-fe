@@ -11,7 +11,8 @@ type HandlerCategory =
   | 'lunch'
   | 'recruit'
   | 'report'
-  | 'common';
+  | 'common'
+  | 'notification';
 
 type CreateMswParametersParams = Partial<
   Record<HandlerCategory, RestHandler[]>

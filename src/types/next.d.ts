@@ -1,10 +1,9 @@
 import type { AppProps } from 'next/app';
 import type { NextPage, NextComponentType, NextPageContext } from 'next/types';
 import type { ReactElement } from 'react';
-import type { PageHeadProps } from '~/components/Common';
+import type { PageHeadProps } from '~/components/Common/PageHead';
 import type { MainLayoutProps } from '~/components/Layout/MainLayout';
 import type { UserRole } from '~/services/member';
-
 
 type NextPageConfig = {
   auth: {

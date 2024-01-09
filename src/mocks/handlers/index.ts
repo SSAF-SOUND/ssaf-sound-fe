@@ -8,3 +8,4 @@ export * from './article';
 export * from './s3';
 export * from './lunch';
 export * from './report';
+export * from './notification';

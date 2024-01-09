@@ -9,6 +9,7 @@ import { DevSignInModalTrigger } from '~/components/__dev__/DevSignInModalTrigge
 import { Dot } from '~/components/Common/Dot';
 import { Icon } from '~/components/Common/Icon';
 import { IconButton } from '~/components/Common/IconButton';
+import { NotificationPopover } from '~/components/Notification';
 import { useSignOutReconfirmModal } from '~/hooks';
 import { useMyInfo } from '~/services/member';
 import { flex, palettes } from '~/styles/utils';
@@ -34,18 +35,7 @@ export const PrivateButtonsLayer = () => {
       <DevSignInModalTrigger />
       {isSignedIn ? (
         <>
-          {/*<PrivateButton*/}
-          {/*  onClick={() => {}}*/}
-          {/*  iconName="notification"*/}
-          {/*  label="알림"*/}
-          {/*  hasUnreadMessage={false}*/}
-          {/*/>*/}
-          {/*<PrivateButton*/}
-          {/*  onClick={() => {}}*/}
-          {/*  iconName="chat"*/}
-          {/*  label="쪽지"*/}
-          {/*  hasUnreadMessage={false}*/}
-          {/*/>*/}
+          <NotificationPopover />
           <PrivateButton
             iconName="signOut"
             label="로그아웃"

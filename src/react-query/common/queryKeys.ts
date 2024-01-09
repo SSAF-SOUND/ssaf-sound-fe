@@ -220,6 +220,16 @@ export const queryKeys = {
       dateSpecifier: LunchDateSpecifier;
     }) => [...queryKeys.lunch.self(), campus, dateSpecifier],
   },
+  notification: {
+    self: () => [...queryKeys.auth(), 'notification'],
+    hasNew: () => [...queryKeys.notification.self(), 'hasNew'],
+    listByCursor: () => [...queryKeys.notification.self(), 'cursor'],
+    listByOffset: ({ page }: { page: number }) => [
+      ...queryKeys.notification.self(),
+      'offset',
+      page,
+    ],
+  },
 };
 
 export const endpoints = {
@@ -394,4 +404,10 @@ export const endpoints = {
     error: () => `/lunch/error` as const,
   },
   report: () => '/report' as const,
+  notification: {
+    self: () => '/notification' as const,
+    hasNew: () => `${endpoints.notification.self()}/new` as const,
+    listByCursor: () => `${endpoints.notification.self()}/cursor` as const,
+    listByOffset: () => `${endpoints.notification.self()}/offset` as const,
+  },
 };

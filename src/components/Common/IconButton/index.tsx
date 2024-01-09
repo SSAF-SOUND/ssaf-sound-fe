@@ -2,6 +2,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 
 import { css } from '@emotion/react';
 import { Slot } from '@radix-ui/react-slot';
+import { forwardRef } from 'react';
 
 import { Theme, colorMix, inlineFlex } from '~/styles/utils';
 import { themeColorVars } from '~/styles/utils/themeColorVars';
@@ -17,27 +18,30 @@ export interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
   asChild?: boolean;
 }
 
-export const IconButton = (props: IconButtonProps) => {
-  const {
-    theme = Theme.WHITE,
-    size = 'auto',
-    asChild = false,
-    ...restProps
-  } = props;
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+  (props, ref) => {
+    const {
+      theme = Theme.WHITE,
+      size = 'auto',
+      asChild = false,
+      ...restProps
+    } = props;
 
-  const Component = asChild ? Slot : 'button';
-  if (Component === 'button') restProps.type = restProps.type || 'button';
+    const Component = asChild ? Slot : 'button';
+    if (Component === 'button') restProps.type = restProps.type || 'button';
 
-  return (
-    <Component
-      style={{ width: size, height: size }}
-      css={selfCss}
-      {...restProps}
-      data-theme={theme}
-    />
-  );
-};
-
+    return (
+      <Component
+        ref={ref}
+        style={{ width: size, height: size }}
+        css={selfCss}
+        {...restProps}
+        data-theme={theme}
+      />
+    );
+  }
+);
+IconButton.displayName = 'IconButton';
 export default IconButton;
 
 const selfCss = css(

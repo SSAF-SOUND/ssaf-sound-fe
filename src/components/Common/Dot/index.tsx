@@ -8,17 +8,24 @@ type DotSize = 'sm' | 'md' | 'lg';
 export interface DotProps {
   theme?: DotTheme;
   size?: DotSize;
+  className?: string;
 }
 
 export const Dot = (props: DotProps) => {
-  const { theme = 'primary', size = 'sm' } = props;
-  return <div data-theme={theme} css={[selfCss, themeCss, sizeCss[size]]} />;
+  const { theme = 'primary', size = 'sm', className } = props;
+  return (
+    <div
+      data-theme={theme}
+      className={className}
+      css={[selfCss, themeCss, sizeCss[size]]}
+    />
+  );
 };
 
 const selfCss = css({ borderRadius: '50%' }, inlineFlex());
 
 const themeCss = css({
-  backgroundColor: themeColorVars.mainColor.var,
+  backgroundColor: themeColorVars.mainDarkColor.var,
 });
 
 const sizeCss = {
