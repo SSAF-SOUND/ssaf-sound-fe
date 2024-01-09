@@ -68,7 +68,7 @@ const NotificationsLayer = () => {
   const safePage = toSafePageValue(page);
   const notificationsQuery = useNotificationsByOffset({ page: safePage });
 
-  const itemHeight = 140;
+  const itemHeight = 152;
 
   return (
     <div css={expandCss()}>

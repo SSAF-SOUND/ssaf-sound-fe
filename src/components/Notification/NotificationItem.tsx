@@ -4,6 +4,7 @@ import type { NotificationDetail } from '~/services/notifications';
 import Link from 'next/link';
 
 import { css } from '@emotion/react';
+import dayjs from 'dayjs';
 import { memo } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -45,13 +46,14 @@ export interface NotificationItem {
 }
 export const NotificationItem = memo((props: NotificationItem) => {
   const { notification, maxLine = 3, ...restProps } = props;
-  const { message, serviceType, read, contentId } = notification;
+  const { message, serviceType, read, contentId, createdAt } = notification;
   const link = getLink({ serviceCategory: serviceType, id: contentId });
   const hasLink = !!link;
   const messageNode = (
     <NotificationMessage
       read={read}
       message={message}
+      createdAt={createdAt}
       hasLink={!!link}
       maxLine={maxLine}
     />
@@ -69,10 +71,10 @@ export const NotificationItem = memo((props: NotificationItem) => {
 });
 NotificationItem.displayName = 'NotificationItem';
 
-const itemHeight = 86;
+const itemHeight = 112;
 const selfCss = css([
   fontCss.style.B14,
-  flex('center', 'space-between', 'row', 8),
+  flex('', 'center', 'column', 8),
   {
     position: 'relative',
     padding: '8px 16px 8px 20px',
@@ -105,28 +107,48 @@ interface NotificationMessageProps {
   message: string;
   hasLink?: boolean;
   maxLine: number;
+  createdAt: string;
 }
 const NotificationMessage = memo((props: NotificationMessageProps) => {
-  const { read, message, hasLink = false, maxLine } = props;
+  const { read, message, hasLink = false, maxLine, createdAt } = props;
+  const formattedCreatedAt = dayjs(createdAt).format('YYYY-MM-DD  HH:MM');
+
   return (
     <>
-      {!read && (
-        <Dot
-          theme={Theme.SECONDARY}
-          css={{ position: 'absolute', left: 6, top: 12 }}
-        />
-      )}
-      <div css={[messageCss, lineClamp(maxLine)]}>
-        <SsafyIcon.LogoCharacter
-          size={20}
-          css={{ position: 'relative', bottom: -4, marginRight: 6 }}
-        />
-        {message}
+      <div css={messageSelfCss}>
+        {!read && (
+          <Dot
+            theme={Theme.SECONDARY}
+            css={{ position: 'absolute', left: 6, top: 12 }}
+          />
+        )}
+        <div css={[messageCss, lineClamp(maxLine)]}>
+          <SsafyIcon.LogoCharacter
+            size={20}
+            css={{ position: 'relative', bottom: -4, marginRight: 6 }}
+          />
+          {message}
+        </div>
+        {hasLink && <Icon name="chevron.right" size={24} />}
       </div>
-      {hasLink && <Icon name="chevron.right" size={24} />}
+
+      <div css={messageDateCss}>{formattedCreatedAt}</div>
     </>
   );
 });
 NotificationMessage.displayName = 'NotificationMessage';
 
+const messageSelfCss = css([
+  flex('center', 'space-between', 'row', 8),
+  { flexGrow: 1 },
+]);
 const messageCss = css([{ wordBreak: 'break-all' }]);
+const messageDateCss = css([
+  {
+    color: palettes.font.blueGrey,
+    textAlign: 'right',
+    whiteSpace: 'pre-wrap',
+  },
+  fontCss.style.B12,
+  fontCss.family.pretendard,
+]);
