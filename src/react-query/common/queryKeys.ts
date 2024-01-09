@@ -405,7 +405,7 @@ export const endpoints = {
   },
   report: () => '/report' as const,
   notification: {
-    self: () => '/notification' as const,
+    self: () => '/notifications' as const,
     hasNew: () => `${endpoints.notification.self()}/new` as const,
     listByCursor: () => `${endpoints.notification.self()}/cursor` as const,
     listByOffset: () => `${endpoints.notification.self()}/offset` as const,
