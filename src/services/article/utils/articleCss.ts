@@ -26,13 +26,19 @@ const paragraphCss = css({
 
 const listCss = css({
   '& ol': {
-    listStyleType: 'number',
+    listStyleType: 'number !important',
   },
   '& ul': {
     listStyleType: 'disc',
   },
   '& ol, & ul': {
-    paddingLeft: 20,
+    paddingLeft: `20px !important`,
+    '> li': {
+      paddingLeft: `0 !important`,
+    },
+    '> li::before': {
+      content: '""',
+    },
   },
 });
 
