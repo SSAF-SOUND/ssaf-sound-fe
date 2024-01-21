@@ -36,9 +36,6 @@ const listCss = css({
     '> li': {
       paddingLeft: `0 !important`,
     },
-    '> li::before': {
-      content: '""',
-    },
   },
 });
 
