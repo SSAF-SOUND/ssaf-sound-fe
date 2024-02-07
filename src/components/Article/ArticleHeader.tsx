@@ -36,7 +36,6 @@ const ArticleHeader = (props: ArticleHeaderProps) => {
     postId: articleId,
     boardId: categoryId,
   } = articleDetail;
-  console.log(articleDetail)
   const { date, time } = formatDateTime(createdAt);
   const { mutateAsync: removeArticle } = useRemoveArticle(articleId);
   const { mutateAsync: reportArticle } = useReport();
