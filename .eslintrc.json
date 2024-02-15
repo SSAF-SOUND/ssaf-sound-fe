@@ -23,6 +23,8 @@
     "plugin:storybook/recommended"
   ],
   "rules": {
+    "import/named": "off",
+    "import/namespace": "off",
     "no-console": "off",
     "no-duplicate-imports": "off",
     "@typescript-eslint/no-empty-function": "off",

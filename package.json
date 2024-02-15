@@ -34,6 +34,7 @@
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@sentry/nextjs": "^7.77.0",
     "@tanstack/react-query": "^4.29.5",
+    "@types/quill": "^2.0.14",
     "axios": "^1.4.0",
     "dayjs": "^1.11.8",
     "dequal": "^2.0.3",
@@ -61,7 +62,7 @@
     "striptags": "^3.2.0",
     "unique-names-generator": "^4.7.1"
   },
-  "packageManager": "yarn@3.5.1",
+  "packageManager": "pnpm@8.15.2",
   "devDependencies": {
     "@emotion/babel-preset-css-prop": "^11.11.0",
     "@faker-js/faker": "^8.0.2",

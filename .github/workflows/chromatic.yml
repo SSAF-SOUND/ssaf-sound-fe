@@ -27,12 +27,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: 'Install Dependencies'
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
+        run: pnpm install
       - name: 'Deploy'
         id: chromatic
         uses: chromaui/action@v1

@@ -1,5 +1,4 @@
-import type { DeltaStatic } from 'quill';
-import type { ReactQuillProps } from 'react-quill';
+import type { ReactQuillProps, UnprivilegedEditor } from 'react-quill';
 
 import dynamic from 'next/dynamic';
 
@@ -11,6 +10,8 @@ import EditorSkeleton from '~/components/Editor/EditorSkeleton';
 import { articleCss } from '~/services/article';
 import { fontCss, palettes } from '~/styles/utils';
 import { regex } from '~/utils';
+
+type DeltaStatic = ReturnType<UnprivilegedEditor['getContents']>;
 
 const ReactQuill = dynamic(import('react-quill'), {
   ssr: false,

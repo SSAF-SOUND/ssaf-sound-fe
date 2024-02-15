@@ -1,5 +1,4 @@
-import type { QueryKey } from '@tanstack/query-core';
-import type { UseQueryOptions } from '@tanstack/react-query/src/types';
+import type { QueryKey, UseQueryOptions } from '@tanstack/react-query';
 
 import { useQuery } from '@tanstack/react-query';
 

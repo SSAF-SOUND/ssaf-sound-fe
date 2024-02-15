@@ -19,14 +19,7 @@ import {
   useHasNewNotifications,
   useResetNotificationsByCursor,
 } from '~/services/notifications';
-import {
-  colorMix,
-  flex,
-  fontCss,
-  inlineFlex,
-  palettes,
-  Theme,
-} from '~/styles/utils';
+import { colorMix, flex, fontCss, palettes, Theme } from '~/styles/utils';
 import { routes, toMs } from '~/utils';
 
 export const NotificationPopover = () => {
